@@ -1,0 +1,65 @@
+---
+/**
+ * ResponsiveImage - Optimized image component
+ * Handles srcset, lazy loading, width/height for CLS, decoding
+ */
+interface Props {
+  src: string
+  alt: string
+  width: number
+  height: number
+  sizes?: string
+  srcset?: string
+  loading?: 'lazy' | 'eager'
+  decoding?: 'async' | 'sync' | 'auto'
+  fetchpriority?: 'high' | 'low' | 'auto'
+  class?: string
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  sizes = '100vw',
+  srcset,
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority = 'auto',
+  class: className
+} = Astro.props
+
+// Generate srcset if not provided and src looks like a resizable path
+const generateSrcset = (_baseSrc: string): string | undefined => {
+  // Only generate for local images without existing srcset
+  if (srcset || _baseSrc.startsWith('http') || _baseSrc.startsWith('data:')) {
+    return srcset
+  }
+
+  // Return undefined - let build tool handle srcset generation
+  // This is a placeholder for Astro Image optimization
+  return undefined
+}
+
+const computedSrcset = generateSrcset(src)
+---
+
+<img
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  sizes={computedSrcset ? sizes : undefined}
+  srcset={computedSrcset}
+  loading={loading}
+  decoding={decoding}
+  fetchpriority={fetchpriority}
+  class={className}
+/>
+
+<style>
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

@@ -1,0 +1,315 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { comarcas, getPueblosByComarca } from '../data/pueblos-almeria';
+
+const webCategories = [
+  {
+    title: "Desarrollo Web (PVP)",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+    description: "Arquitecturas digitales robustas, rápidas y orientadas a resultados.",
+    items: [
+      { name: "Landing Page de Alta Conversión", price: "450€" },
+      { name: "Web Corporativa Premium (Multi-sección)", price: "850€" },
+      { name: "Tienda Online / E-commerce Pro", price: "1200€" },
+      { name: "Portal de Noticias / Media Digital", price: "950€" },
+      { name: "Desarrollo de Software / SaaS a medida", price: "2500€" },
+      { name: "Intranet / Panel de Gestión Interna", price: "1500€" }
+    ]
+  },
+  {
+    title: "Soporte & Optimización",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77z"/></svg>`,
+    description: "Mantenimiento proactivo para que tu web nunca deje de vender.",
+    items: [
+      { name: "Optimización de Carga (Core Web Vitals)", price: "180€" },
+      { name: "Auditoría SEO Técnica & UX", price: "350€" },
+      { name: "Migración de Hosting & Seguridad", price: "120€" },
+      { name: "Integración de Pasarelas de Pago", price: "300€" },
+      { name: "Hora de Soporte Técnico Especializado", price: "60€" }
+    ]
+  }
+];
+---
+
+<BaseLayout
+  title="Diseño Web Almería | Desarrollo de Páginas Web y Tiendas Online 2026"
+  description="Expertos en desarrollo web en Almería. Páginas corporativas, e-commerce (tiendas online) y aplicaciones web de alto rendimiento. Resultados garantizados y diseño premium."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Desarrollo Web y SEO",
+    "provider": {
+      "@type": "Organization",
+      "name": "Platanito Rico",
+      "url": "https://platanitorico.com"
+    },
+    "description": "Desarrollo de páginas web, tiendas online y optimización SEO en Almería.",
+    "areaServed": {
+      "@type": "State",
+      "name": "Almería"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Catálogo de Desarrollo Web",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Landing Pages de Alta Conversión"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "E-commerce Pro"
+          }
+        }
+      ]
+    }
+  }}
+>
+  <Header />
+
+  <main class="pt-20">
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-24">
+      <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-blue-950/20 via-zinc-950/90 to-zinc-950"></div>
+      
+      <div class="container-premium relative z-10 text-center">
+        <div class="badge-premium mb-8 inline-flex animate-fade-up">
+          <span class="text-blue-400 font-bold uppercase tracking-[0.2em] text-[10px]">Cloud & Performance</span>
+        </div>
+        <h1 class="heading-display mb-8 animate-fade-up stagger-1">
+          Ingeniería Web que
+          <span class="block text-gradient mt-2">Acelera tu Crecimiento</span>
+        </h1>
+        <p class="text-xl text-zinc-400 max-w-3xl mx-auto mb-12 animate-fade-up stagger-2 leading-relaxed">
+          Somos el referente en <strong>diseño web en Almería</strong>. No usamos plantillas; creamos experiencias digitales ultrarrápidas bajo tecnologías de última generación para posicionarte en el #1 de Google.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-up stagger-3">
+            <a href="#catalogo" class="btn-premium px-12 !bg-blue-600 hover:!bg-blue-700">Ver Lista de Precios</a>
+            <a href="#packs" class="btn-premium !bg-emerald-500/10 !border-emerald-500/20 !text-emerald-400 px-12">Planes Web Mensuales</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Authority & Tech Section -->
+    <section class="py-24 bg-zinc-900/20 relative border-y border-white/5">
+        <div class="container-premium">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-black text-white mb-8">Por qué somos diferentes en <span class="text-blue-400">Diseño Web</span></h2>
+                <div class="grid md:grid-cols-3 gap-8 text-left">
+                    <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/5">
+                        <h4 class="text-white font-bold mb-3 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            Performance Real
+                        </h4>
+                        <p class="text-zinc-500 text-sm">Puntuaciones de 90+ en Google Lighthouse. Velocidad de carga inferior a 1s para un SEO imbatible.</p>
+                    </div>
+                    <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/5">
+                        <h4 class="text-white font-bold mb-3 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                            Sin Permanencia
+                        </h4>
+                        <p class="text-zinc-500 text-sm">Tu web es tuya. Entregamos el código fuente y propiedad total del dominio y hosting.</p>
+                    </div>
+                    <div class="p-8 rounded-2xl bg-white/[0.02] border border-white/5">
+                        <h4 class="text-white font-bold mb-3 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            Mobile First
+                        </h4>
+                        <p class="text-zinc-500 text-sm">El 80% de tus clientes vendrá por móvil. Diseñamos para el pulgar, no solo para el ojo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complete Catalog -->
+    <section id="catalogo" class="section-premium relative">
+      <div class="container-premium">
+        <div class="text-center mb-24">
+            <h2 class="text-5xl font-black text-white mb-6">Lista de <span class="text-gradient">Tarifas Web</span></h2>
+            <p class="text-zinc-500 max-w-2xl mx-auto italic">
+                Precios únicos por proyecto. Incluyen primer año de soporte básico y optimización SEO inicial de la estructura.
+            </p>
+        </div>
+
+        <div class="space-y-32">
+            {webCategories.map((cat, idx) => (
+                <div class="animate-fade-up" style={`animation-delay: ${idx * 0.1}s`}>
+                    <div class="flex items-center gap-6 mb-12">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
+                            <div class="w-full h-full rounded-[14px] bg-zinc-950 flex items-center justify-center">
+                                <Fragment set:html={cat.icon} />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-black text-white mb-2">{cat.title}</h3>
+                            <p class="text-zinc-500">{cat.description}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-4">
+                        {cat.items.map(item => (
+                            <div class="flex justify-between items-center py-4 border-b border-white/5 group hover:bg-white/[0.02] px-4 rounded-lg transition-all">
+                                <span class="text-sm text-zinc-400 group-hover:text-white transition-colors">{item.name}</span>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest uppercase">Inversión</span>
+                                    <span class="text-lg font-black text-white">{item.price}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Monthly Web Plans -->
+    <section id="packs" class="section-premium bg-zinc-950 border-t border-white/5 relative overflow-hidden">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"></div>
+        
+        <div class="container-premium text-center mb-20">
+            <div class="badge-premium mb-6 bg-emerald-500/10 !text-emerald-400 !border-none">Web as a Service</div>
+            <h2 class="text-5xl font-black text-white mb-6">Planes de <span class="text-gradient">Gestión Mensual</span></h2>
+            <p class="text-zinc-500 max-w-2xl mx-auto text-lg leading-relaxed">Olvídate del mantenimiento técnico. Tu web siempre actualizada, segura y volando.</p>
+        </div>
+
+        <div class="container-premium grid lg:grid-cols-3 gap-8">
+             <!-- Pack Mini Web -->
+            <div class="gradient-border-card group">
+                <div class="gradient-border-card-inner p-10 flex flex-col h-full bg-zinc-900/40 relative">
+                    <h4 class="text-zinc-500 uppercase font-black tracking-tighter mb-4 text-xs">Landing / One Page</h4>
+                    <div class="text-5xl font-black text-white mb-2">50€ <span class="text-base text-zinc-600 font-bold">/ mes</span></div>
+                    <p class="text-emerald-400 text-[10px] font-bold mb-10 uppercase tracking-widest italic">Presencia Básica & Ágil</p>
+                    
+                    <ul class="space-y-4 mb-10 text-left flex-1 border-t border-white/10 pt-8">
+                        {["Diseño One-Page", "Hosting Premium Incluido", "Dominio .es/.com", "Certificado SSL (https)", "Soporte Técnico Mail"].map(li => (
+                            <li class="flex items-start gap-3 text-xs text-zinc-400">
+                                <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                                {li}
+                            </li>
+                        ))}
+                    </ul>
+                    <a href="/#contacto" class="btn-premium !py-4 w-full text-center !bg-zinc-800 hover:!bg-zinc-700">Contratar Mini</a>
+                </div>
+            </div>
+
+            <!-- Pack Corporate -->
+            <div class="gradient-border-card group scale-105 z-10">
+                <div class="gradient-border-card-inner p-10 flex flex-col h-full bg-zinc-950/60 relative border-blue-500/30">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[9px] font-black px-4 py-1.5 rounded-full whitespace-nowrap">EL MÁS POPULAR</div>
+                    <h4 class="text-blue-400 uppercase font-black tracking-tighter mb-4 text-xs">Web Corporativa Pro</h4>
+                    <div class="text-5xl font-black text-white mb-2">120€ <span class="text-base text-zinc-600 font-bold">/ mes</span></div>
+                    <p class="text-emerald-400 text-[10px] font-bold mb-10 uppercase tracking-widest italic">Crecimiento Empresarial</p>
+                    
+                    <ul class="space-y-4 mb-10 text-left flex-1 border-t border-white/10 pt-8">
+                        {["Web de hasta 10 secciones", "Gestión de Contenidos (Blog)", "SEO Local Posicionamiento", "1h de cambios mensuales", "Copias de seguridad diarias"].map(li => (
+                            <li class="flex items-start gap-4 text-sm text-zinc-300">
+                                <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                                {li}
+                            </li>
+                        ))}
+                    </ul>
+                    <a href="/#contacto" class="btn-premium !py-4 w-full bg-gradient-to-r from-blue-600 to-indigo-600 border-none">Elevar mi Negocio</a>
+                </div>
+            </div>
+
+            <!-- Pack E-commerce / News -->
+            <div class="gradient-border-card group">
+                <div class="gradient-border-card-inner p-10 flex flex-col h-full bg-zinc-900/40 relative">
+                    <h4 class="text-zinc-500 uppercase font-black tracking-tighter mb-4 text-xs">E-commerce / Media Pro</h4>
+                    <div class="text-5xl font-black text-white mb-2">250€ <span class="text-base text-zinc-600 font-bold">/ mes</span></div>
+                    <p class="text-emerald-400 text-[10px] font-bold mb-10 uppercase tracking-widest italic">Ventas & Tráfico Masivo</p>
+                    
+                    <ul class="space-y-4 mb-10 text-left flex-1 border-t border-white/10 pt-8">
+                        {["Tienda Full o Portal Noticias", "Optimización de Conversión", "Mantenimiento Ecommerce", "Soporte Prioritario 24/7", "Informes de Rendimiento"].map(li => (
+                            <li class="flex items-start gap-3 text-xs text-zinc-400">
+                                <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+                                {li}
+                            </li>
+                        ))}
+                    </ul>
+                    <a href="/#contacto" class="btn-premium !py-4 w-full text-center !bg-zinc-800 hover:!bg-zinc-700">Gestionar Mi Web</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regional Coverage (Dropdowns) -->
+    <section id="zonas" class="py-24 relative overflow-hidden bg-zinc-950">
+        <div class="absolute inset-0 bg-dotted-pattern opacity-10"></div>
+        <div class="container-premium relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-white mb-6">Presencia Local: <span class="text-gradient">Diseño Web en Almería</span></h2>
+                <p class="text-zinc-500 text-lg max-w-2xl mx-auto">Selecciona tu ubicación para ver cómo podemos ayudarte a dominar el mercado local de tu zona.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto space-y-4">
+                {comarcas.map((comarca) => {
+                    const pueblos = getPueblosByComarca(comarca);
+                    if (pueblos.length === 0) return null;
+                    
+                    return (
+                        <details class="group rounded-2xl bg-white/[0.02] border border-white/10 open:bg-white/[0.04] transition-all duration-300">
+                            <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-lg font-bold text-white uppercase tracking-tighter">{comarca}</span>
+                                    <span class="text-[10px] text-zinc-500 bg-zinc-900 px-2 py-1 rounded-md border border-zinc-800 font-black">{pueblos.length} LOCALIDADES</span>
+                                </div>
+                                <span class="group-open:rotate-180 transition-transform duration-300 text-zinc-500">
+                                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </span>
+                            </summary>
+                            <div class="p-6 pt-0 border-t border-white/5 flex flex-wrap gap-2 mt-2">
+                                {pueblos.map((pueblo) => (
+                                    <a 
+                                        href={`/diseno-web/${pueblo.slug}`}
+                                        class="inline-block px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/5 text-[11px] font-bold text-zinc-500 hover:text-white hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-200"
+                                    >
+                                        {pueblo.nombre.toUpperCase()}
+                                    </a>
+                                ))}
+                            </div>
+                        </details>
+                    );
+                })}
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="contacto" class="section-premium text-center">
+      <div class="container-premium">
+        <div class="max-w-3xl mx-auto p-12 rounded-3xl bg-white/[0.02] border border-white/5 backdrop-blur-md">
+          <h2 class="text-3xl font-black text-white mb-6">¿Preparado para el siguiente nivel?</h2>
+          <p class="text-zinc-400 text-lg mb-8 italic">No vendemos webs. Construimos motores de facturación digital.</p>
+          <a href="/#contacto" class="btn-premium px-12 group">
+            <span class="flex items-center gap-2">
+                Solicitar Auditoría Web Gratis
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  
+  <Footer />
+</BaseLayout>

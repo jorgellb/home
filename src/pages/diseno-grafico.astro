@@ -1,0 +1,312 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+const pricingCategories = [
+  {
+    title: "Identidad Corporativa",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+    description: "La base de tu éxito. Creamos marcas con alma y coherencia visual.",
+    items: [
+      { name: "Identidad Completa (Logo + Manual + 5 Aplicaciones)", price: "750€" },
+      { name: "Rediseño de Identidad Corporativa", price: "600€" },
+      { name: "Diseño de Logotipo Único", price: "250€" },
+      { name: "Vectorización de Logotipo", price: "50€" },
+      { name: "Refrescamiento de Marca", price: "180€" },
+      { name: "Manual de Identidad Visual", price: "400€" },
+      { name: "Naming Corporativo", price: "250€" },
+      { name: "Slogan / Lema de Marca", price: "200€" }
+    ]
+  },
+  {
+    title: "Señalética y Exterior",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h10l3 5H4l3-5zM5 7v13a2 2 0 002 2h10a2 2 0 002-2V7H5z"/></svg>`,
+    description: "Impacto visual en el mundo real. Diseño especializado para gran formato.",
+    items: [
+      { name: "Señalética Permanente Edificios", price: "900€" },
+      { name: "Señalética Temporal Eventos", price: "720€" },
+      { name: "Lateral Autobús / Gráfica", price: "650€" },
+      { name: "Rotulación Bus Completo", price: "1000€" },
+      { name: "Rotulación Vehículos Comerciales", price: "588€" },
+      { name: "Cartel de Exteriores", price: "250€" },
+      { name: "Diseño Fachada de Local", price: "700€" },
+      { name: "Diseño de Valla Publicitaria", price: "420€" },
+      { name: "Diseño de Stand Corporativo", price: "330€" },
+      { name: "Diseño de Pendón / Roller", price: "100€" }
+    ]
+  },
+  {
+    title: "Editorial y Maquetación",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+    description: "Expertos en diseño editorial digital e impreso. Jerarquía y legibilidad.",
+    items: [
+      { name: "Maquetación de Revistas (Por página)", price: "16€" },
+      { name: "Página de Catálogo Comercial", price: "25€" },
+      { name: "Brochure Corporativo (10 pág)", price: "460€" },
+      { name: "Brochure Corporativo (20 pág)", price: "620€" },
+      { name: "Póster / Cartel Publicitario", price: "210€" },
+      { name: "Folleto Díptico", price: "210€" },
+      { name: "Folleto Tríptico", price: "250€" },
+      { name: "Portada de Libro o Revista", price: "200€" },
+      { name: "Texto Corrido / Novela (Pág)", price: "0,8€" },
+      { name: "Maquetación Técnica (Tablas/Img) (Pág)", price: "5€" }
+    ]
+  },
+  {
+    title: "Papelería Comercial",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>`,
+    description: "Todo lo que tu empresa necesita para el día a día. Profesionalidad tangible.",
+    items: [
+      { name: "Kit Papelería Básica", price: "240€" },
+      { name: "Kit Papelería Comercial Plus", price: "220€" },
+      { name: "Carpeta Institucional", price: "70€" },
+      { name: "Hojas Membretadas & Sobres", price: "42€" },
+      { name: "Tarjetas de Presentación", price: "25€" },
+      { name: "Diseño de Página Compuesta", price: "30€" },
+      { name: "Flyer / Volante (1 Cara)", price: "120€" },
+      { name: "Flyer / Volante (2 Caras)", price: "160€" }
+    ]
+  },
+  {
+    title: "Marketing y Web",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+    description: "Tu marca en el ecosistema digital. Banners, publicidad y estrategia.",
+    items: [
+      { name: "Campaña Ads (5 Img + 1 Video)", price: "450€" },
+      { name: "Campaña Ads (5 Imágenes)", price: "350€" },
+      { name: "Administración SEM Mensual", price: "300€" },
+      { name: "Keyword Research Estratégico", price: "320€" },
+      { name: "Set de Banners Web / Display", price: "180€" },
+      { name: "Gráfica para Newsletters", price: "60€" },
+      { name: "Diseño de Landing Page (Mockup)", price: "250€" }
+    ]
+  }
+];
+---
+
+<BaseLayout
+  title="Agencia de Diseño Gráfico en Almería | Identidad de Marca y Branding"
+  description="Tarifas oficiales de diseño gráfico profesional en Almería. Identidad corporativa, logotipos, señalética, diseño editorial y marketing digital. Impulsa tu imagen de marca."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Diseño Gráfico",
+    "provider": {
+      "@type": "Organization",
+      "name": "Platanito Rico",
+      "url": "https://platanitorico.com"
+    },
+    "description": "Servicios de branding, logotipos y diseño editorial profesional en Almería.",
+    "areaServed": {
+      "@type": "State",
+      "name": "Almería"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Catálogo de Diseño Gráfico",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Identidad Corporativa Completa"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Diseño de Logotipo Único"
+          }
+        }
+      ]
+    }
+  }}
+>
+  <Header />
+
+  <main class="pt-20">
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-24">
+      <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-zinc-950/90 to-zinc-950"></div>
+      
+      <div class="container-premium relative z-10 text-center">
+        <div class="badge-premium mb-8 inline-flex animate-fade-up">
+          <span class="text-purple-400 font-bold uppercase tracking-[0.2em] text-[10px]">Almería Creative Studio</span>
+        </div>
+        <h1 class="heading-display mb-8 animate-fade-up stagger-1">
+          Diseño que vende,
+          <span class="block text-gradient mt-2">Tarifas Transparentes</span>
+        </h1>
+        <p class="text-xl text-zinc-400 max-w-3xl mx-auto mb-12 animate-fade-up stagger-2 leading-relaxed">
+          Especialistas en <strong>Identidad Corporativa, Editorial y Señalética</strong>. 
+          Enfocados solo en el diseño premium. La impresión se gestiona de forma independiente.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-up stagger-3">
+            <a href="#catalogo" class="btn-premium px-12">Ver Catálogo Completo</a>
+            <a href="#packs" class="btn-premium !bg-emerald-500/10 !border-emerald-500/20 !text-emerald-400 px-12">Packs Ahorro Total</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO & Identity Section -->
+    <section class="py-24 bg-zinc-900/20 relative">
+        <div class="container-premium">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-black text-white mb-8">Expertos en <span class="text-purple-400">Comunicación Visual</span> en Almería</h2>
+                <p class="text-zinc-400 text-lg leading-relaxed mb-12">
+                   Desde el diseño de un <strong>logotipo profesional</strong> hasta la <strong>maquetación de catálogos</strong> de cientos de páginas o la rotulación de flotas de autobuses. En Platanito Rico cubrimos todo el espectro del diseño gráfico moderno con un enfoque técnico y artístico.
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {["Identidad", "Señalética", "Editorial", "Web Ads"].map(tag => (
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-zinc-500 uppercase tracking-widest">{tag}</div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complete Catalog -->
+    <section id="catalogo" class="section-premium relative">
+      <div class="container-premium">
+        <div class="text-center mb-24">
+            <h2 class="text-5xl font-black text-white mb-6">Tarifas <span class="text-gradient">Profesionales</span></h2>
+            <p class="text-zinc-500 max-w-2xl mx-auto italics">
+                Precios base por diseño. Gestión de imprenta, materiales y soportes presupuestados aparte según volumen y calidades.
+            </p>
+        </div>
+
+        <div class="space-y-32">
+            {pricingCategories.map((cat, idx) => (
+                <div class="animate-fade-up" style={`animation-delay: ${idx * 0.1}s`}>
+                    <div class="flex items-center gap-6 mb-12">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 p-0.5">
+                            <div class="w-full h-full rounded-[14px] bg-zinc-950 flex items-center justify-center">
+                                <div class="w-8 h-8 text-white" set:html={cat.icon} />
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-black text-white mb-2">{cat.title}</h3>
+                            <p class="text-zinc-500">{cat.description}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-4">
+                        {cat.items.map(item => (
+                            <div class="flex justify-between items-center py-4 border-b border-white/5 group hover:bg-white/[0.02] px-4 rounded-lg transition-all">
+                                <span class="text-sm text-zinc-400 group-hover:text-white transition-colors">{item.name}</span>
+                                <div class="flex items-center gap-4">
+                                    <span class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Desde</span>
+                                    <span class="text-lg font-black text-white">{item.price}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Saving Hub -->
+    <section id="packs" class="section-premium bg-zinc-950 border-t border-white/5 relative overflow-hidden">
+        <div class="absolute inset-0 bg-purple-500/5 blur-[150px] -z-10"></div>
+        
+        <div class="container-premium text-center mb-24">
+            <div class="badge-premium mb-6 !bg-emerald-500/10 !text-emerald-400 !border-none">Packs Máximo Ahorro</div>
+            <h2 class="text-5xl font-black text-white mb-6">Suscripciones <span class="text-gradient">Creativas</span></h2>
+            <p class="text-zinc-500 max-w-2xl mx-auto">Ideal para empresas con necesidades constantes de diseño y marketing.</p>
+        </div>
+
+        <div class="container-premium grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+             <!-- Pack Digital Plus -->
+            <div class="gradient-border-card group">
+                <div class="gradient-border-card-inner p-10 flex flex-col h-full bg-zinc-900/20">
+                    <h4 class="text-zinc-500 uppercase font-black tracking-tighter mb-4">Pack Digital 360</h4>
+                    <div class="text-6xl font-black text-white mb-2">450€ <span class="text-lg text-zinc-600 font-bold">/ mes</span></div>
+                    <p class="text-emerald-400 text-xs font-bold mb-8 italic">Ahorro estimado: 200€/mes</p>
+                    
+                    <ul class="space-y-4 mb-12 text-left flex-1 border-t border-white/5 pt-8">
+                        {[
+                            "Administración SEM Mensual",
+                            "10 Post / Stories para RRSS",
+                            "Actualización Banners Web",
+                            "Diseño de Newsletters",
+                            "Prioridad de Entrega 24h"
+                        ].map(li => (
+                            <li class="flex items-center gap-3 text-sm text-zinc-400 italic">
+                                <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg>
+                                {li}
+                            </li>
+                        ))}
+                    </ul>
+                    <a href="/#contacto" class="btn-premium !py-4 w-full">Seleccionar Digital</a>
+                </div>
+            </div>
+
+            <!-- Pack Branding & Print VIP -->
+            <div class="gradient-border-card group">
+                <div class="gradient-border-card-inner p-10 flex flex-col h-full bg-zinc-950/40 relative border-purple-500/20">
+                    <div class="absolute -top-4 right-8 bg-purple-600 text-white text-[10px] font-black px-4 py-1 rounded-full">EL MÁS COMPLETO</div>
+                    <h4 class="text-purple-400 uppercase font-black tracking-tighter mb-4">Branding & Editorial VIP</h4>
+                    <div class="text-6xl font-black text-white mb-2">850€ <span class="text-lg text-zinc-600 font-bold">/ mes</span></div>
+                    <p class="text-emerald-400 text-xs font-bold mb-8 italic">Ahorro estimado: 450€/mes</p>
+                    
+                    <ul class="space-y-4 mb-12 text-left flex-1 border-t border-white/5 pt-8">
+                        {[
+                            "Mantenimiento Identidad Visual",
+                            "Hasta 20 pág de Maquetación",
+                            "Diseño de Papelería Ilimitada",
+                            "Gráfica para Eventos & Stands",
+                            "Consultoría Creativa Directa"
+                        ].map(li => (
+                            <li class="flex items-center gap-3 text-sm text-zinc-300">
+                                <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg>
+                                {li}
+                            </li>
+                        ))}
+                    </ul>
+                    <a href="/#contacto" class="btn-premium !py-4 w-full bg-gradient-to-r from-purple-600 to-indigo-700">Seleccionar Full Agency</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Strip/Banner -->
+    <section class="py-20 relative overflow-hidden bg-zinc-950">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        <div class="container-premium relative z-10 text-center">
+            <div class="inline-flex gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-700 items-center justify-center flex-wrap">
+                <span class="text-zinc-300 font-bold text-2xl tracking-tighter">ADOBE PS</span>
+                <span class="text-zinc-300 font-bold text-2xl tracking-tighter">ILLUSTRATOR</span>
+                <span class="text-zinc-300 font-bold text-2xl tracking-tighter">INDESIGN</span>
+                <span class="text-zinc-300 font-bold text-2xl tracking-tighter">FIGMA</span>
+                <span class="text-zinc-300 font-bold text-2xl tracking-tighter">AFTER EFFECTS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section id="contacto" class="section-premium text-center">
+      <div class="container-premium">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="heading-section mb-6">Empecemos tu proyecto</h2>
+          <p class="text-zinc-400 text-lg mb-8 italic">Precios finales sin sorpresas. Diseño premium garantizado.</p>
+          <a href="/#contacto" class="btn-premium group">
+            <span class="relative z-10 flex items-center">
+                Contactar Ahora
+                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  
+  <Footer />
+</BaseLayout>

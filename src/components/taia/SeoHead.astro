@@ -1,0 +1,70 @@
+---
+// SEO Head Component - Outputs meta tags for SEO
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article' | 'product';
+  noindex?: boolean;
+  canonical?: string;
+  lang?: string;
+  alternates?: Array<{ hreflang: string; href: string }>;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { 
+  title, 
+  description, 
+  image, 
+  type = 'website',
+  noindex = false,
+  canonical,
+  lang = 'es',
+  alternates,
+  jsonLd
+} = Astro.props;
+
+const siteName = 'Platanito Rico';
+const fullTitle = `${title} | ${siteName}`;
+const siteUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+const canonicalUrl = canonical || siteUrl;
+const ogImage = image || '/og-image.jpg';
+const currentLang = lang === 'es' ? 'es_ES' : 'en_US';
+---
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
+<meta name="description" content={description} />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Robots -->
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={currentLang} />
+<meta property="og:site_name" content={siteName} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalUrl} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Hreflang (Multi-language) -->
+{alternates?.map(alt => (
+  <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+))}
+
+<!-- JSON-LD Structured Data -->
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

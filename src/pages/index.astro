@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Hero from '../components/sections/Hero.astro';
+import Problem from '../components/sections/Problem.astro';
+import Solution from '../components/sections/Solution.astro';
+import Process from '../components/sections/Process.astro';
+import Portfolio from '../components/sections/Portfolio.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import Technology from '../components/sections/Technology.astro';
+import Pricing from '../components/sections/Pricing.astro';
+import FAQ from '../components/sections/FAQ.astro';
+import Contact from '../components/sections/Contact.astro';
+import { getCollection } from 'astro:content';
+
+// Get services from content collection
+const servicesCollection = await getCollection('services');
+const services = servicesCollection
+  .filter(service => !service.data.draft)
+  .sort((a, b) => (a.data.order || 999) - (b.data.order || 999));
+
+// Get testimonials from content collection
+const testimonialsCollection = await getCollection('testimonials');
+const testimonials = testimonialsCollection
+  .filter(t => !t.data.draft)
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .map(t => ({
+    name: t.data.name,
+    role: t.data.role,
+    company: t.data.company,
+    companyUrl: t.data.companyUrl,
+    text: t.data.text,
+    rating: t.data.rating,
+    image: t.data.image,
+    imageAlt: t.data.imageAlt,
+  }));
+
+// Get pricing from content collection
+const pricingCollection = await getCollection('pricing');
+const pricingData = pricingCollection[0];
+const plans = pricingData?.data?.plans || [];
+---
+
+<BaseLayout
+  title="Soluciones Digitales Integrales en Almería | Diseño Web, Vídeo y SEO"
+  description="Expertos en diseño web, producción audiovisual, marketing digital y SEO. Agencia full-service en Almería. Páginas web modernas, rápidas y optimizadas para Google."
+  image="/images/og-home.jpg"
+  type="website"
+  lang="es"
+  alternates={[
+    { hreflang: 'es', href: 'https://platanitorico.com/' },
+    { hreflang: 'en', href: 'https://platanitorico.com/en/' },
+    { hreflang: 'x-default', href: 'https://platanitorico.com/' }
+  ]}
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    'name': 'Platanito Rico',
+    'url': 'https://platanitorico.com',
+    'logo': 'https://platanitorico.com/logo.png',
+    'description': 'Agencia digital full-service: diseno web, produccion audiovisual, marketing digital y SEO en Almeria',
+    'contactPoint': {
+      '@type': 'ContactPoint',
+      'telephone': '+34657085019',
+      'contactType': 'customer service',
+      'availableLanguage': ['es', 'en'],
+      'areaServed': 'ES'
+    },
+    'address': {
+      '@type': 'PostalAddress',
+      'streetAddress': 'Ctra de Ronda, 82',
+      'addressLocality': 'Vera',
+      'addressRegion': 'Almeria',
+      'postalCode': '04620',
+      'addressCountry': 'ES'
+    }
+  }}
+>
+  <Header />
+  
+  <main id="main-content" class="pt-20">
+    <Hero />
+    <Problem />
+    <Solution services={services} />
+    <Process />
+    <Portfolio />
+    <Testimonials testimonials={testimonials} />
+    <Technology />
+    <Pricing plans={plans} />
+    <FAQ />
+    <Contact />
+  </main>
+  
+  <Footer />
+</BaseLayout>
