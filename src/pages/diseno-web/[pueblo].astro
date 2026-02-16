@@ -1,0 +1,490 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import { pueblos, getPuebloBySlug, type Pueblo } from '../../data/pueblos-almeria';
+
+export async function getStaticPaths() {
+  return pueblos.map((pueblo) => ({
+    params: { pueblo: pueblo.slug },
+    props: { pueblo },
+  }));
+}
+
+interface Props {
+  pueblo: Pueblo;
+}
+
+const { pueblo } = Astro.props;
+
+// Servicios con iconos premium
+const servicios = [
+  {
+    titulo: 'Diseño Web Profesional',
+    descripcion: `Creamos sitios web únicos y personalizados para empresas y negocios de ${pueblo.nombre}. Diseño moderno, responsive y optimizado para convertir visitantes en clientes.`,
+    icon: 'globe',
+    beneficios: ['Diseño 100% personalizado', 'Adaptable a todos los dispositivos', 'Velocidad de carga optimizada', 'Experiencia de usuario premium']
+  },
+  {
+    titulo: 'Desarrollo Web a Medida',
+    descripcion: `Desarrollamos soluciones web avanzadas para negocios de ${pueblo.nombre}. Desde tiendas online hasta aplicaciones web complejas con las últimas tecnologías.`,
+    icon: 'code',
+    beneficios: ['Código limpio y escalable', 'Integraciones personalizadas', 'Panel de administración', 'Soporte técnico continuo']
+  },
+  {
+    titulo: 'SEO y Posicionamiento',
+    descripcion: `Posicionamos tu negocio de ${pueblo.nombre} en las primeras posiciones de Google. Estrategias SEO locales para atraer clientes de tu zona.`,
+    icon: 'chart',
+    beneficios: [`SEO local para ${pueblo.nombre}`, 'Optimización On-Page', 'Link building estratégico', 'Informes mensuales']
+  },
+  {
+    titulo: 'Marketing Digital',
+    descripcion: `Estrategias de marketing digital adaptadas a negocios de ${pueblo.nombre}. Redes sociales, publicidad online y contenido que conecta con tu audiencia.`,
+    icon: 'megaphone',
+    beneficios: ['Gestión de redes sociales', 'Campañas de publicidad', 'Email marketing', 'Contenido estratégico']
+  },
+  {
+    titulo: 'Tiendas Online',
+    descripcion: `Crea tu tienda online y vende tus productos desde ${pueblo.nombre} a toda España. Plataformas seguras, fáciles de gestionar y listas para vender.`,
+    icon: 'cart',
+    beneficios: ['Catálogo de productos', 'Pasarelas de pago seguras', 'Gestión de inventario', 'Envíos automatizados']
+  },
+  {
+    titulo: 'Mantenimiento Web',
+    descripcion: `Mantenemos tu web siempre actualizada, segura y funcionando perfectamente. Servicio de mantenimiento profesional para empresas de ${pueblo.nombre}.`,
+    icon: 'shield',
+    beneficios: ['Actualizaciones de seguridad', 'Copias de seguridad', 'Soporte prioritario', 'Monitorización 24/7']
+  }
+];
+
+// Razones para elegirnos
+const razones = [
+  { titulo: 'Conocemos la zona', descripcion: `Trabajamos con negocios de ${pueblo.comarca} y entendemos las necesidades locales.`, icon: 'map' },
+  { titulo: 'Resultados garantizados', descripcion: 'Nuestros clientes mejoran su presencia online y aumentan sus ventas.', icon: 'trending' },
+  { titulo: 'Atención personalizada', descripcion: 'Trato directo, sin intermediarios. Tu proyecto es nuestra prioridad.', icon: 'users' },
+  { titulo: 'Tecnología puntera', descripcion: 'Utilizamos las últimas tecnologías para webs rápidas y modernas.', icon: 'rocket' },
+];
+
+// Proceso de trabajo
+const proceso = [
+  { paso: 1, titulo: 'Consulta gratuita', descripcion: 'Analizamos tu negocio y objetivos sin compromiso' },
+  { paso: 2, titulo: 'Propuesta personalizada', descripcion: 'Diseñamos una solución a medida para tu proyecto' },
+  { paso: 3, titulo: 'Desarrollo', descripcion: 'Creamos tu web con revisión continua y feedback' },
+  { paso: 4, titulo: 'Lanzamiento', descripcion: 'Publicamos tu web y te formamos para gestionarla' },
+];
+
+// SEO Meta
+const title = `Diseño Web en ${pueblo.nombre} | Desarrollo Web y SEO`;
+const description = `Agencia de diseño web en ${pueblo.nombre}, ${pueblo.comarca}. Creamos páginas web profesionales, tiendas online y estrategias SEO para posicionar tu negocio en Google. Presupuesto sin compromiso.`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image="/images/og-diseno-web.jpg"
+  type="website"
+  lang="es"
+  jsonLd={[
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://platanitorico.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Diseño Web Almería",
+          "item": "https://platanitorico.com/desarrollo-web"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": pueblo.nombre,
+          "item": `https://platanitorico.com/diseno-web/${pueblo.slug}`
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Diseño Web",
+      "name": `Diseño Web en ${pueblo.nombre}`,
+      "description": description,
+      "url": `https://platanitorico.com/diseno-web/${pueblo.slug}`,
+      "areaServed": {
+        "@type": "City",
+        "name": pueblo.nombre,
+        "containedInPlace": {
+          "@type": "AdministrativeArea",
+          "name": pueblo.comarca
+        }
+      },
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Platanito Rico",
+        "url": "https://platanitorico.com",
+        "telephone": "+34657085019",
+        "email": "hola@platanitorico.com",
+        "priceRange": "€€",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Ctra de Ronda, 82",
+          "addressLocality": "Vera",
+          "addressRegion": "Almería",
+          "postalCode": "04620",
+          "addressCountry": "ES"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "37.2450",
+          "longitude": "-1.8614"
+        },
+        "openingHoursSpecification": {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": `Servicios Web en ${pueblo.nombre}`,
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Diseño Web Profesional",
+              "description": `Sitios web personalizados para empresas de ${pueblo.nombre}`
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "SEO Local",
+              "description": `Posicionamiento en Google para negocios de ${pueblo.nombre}`
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Tienda Online",
+              "description": `E-commerce para vender desde ${pueblo.nombre}`
+            }
+          }
+        ]
+      }
+    }
+  ]}
+>
+  <Header />
+  
+  <main id="main-content" class="pt-20">
+    <!-- Hero Section -->
+    <section class="relative py-24 lg:py-32 overflow-hidden">
+      <!-- Background -->
+      <div class="absolute inset-0 bg-white"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+      
+      <!-- Glow Orbs -->
+      <div class="absolute top-0 right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[150px]"></div>
+      <div class="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[150px]"></div>
+      
+      <div class="relative max-w-6xl mx-auto px-6">
+        <!-- Breadcrumb -->
+        <nav class="mb-8 animate-fade-up">
+          <ol class="flex items-center gap-2 text-sm text-slate-500">
+            <li><a href="/" class="hover:text-purple-400 transition-colors">Inicio</a></li>
+            <li><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></li>
+            <li><span class="text-slate-400">Diseño Web</span></li>
+            <li><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></li>
+            <li><span class="text-purple-400">{pueblo.nombre}</span></li>
+          </ol>
+        </nav>
+        
+        <!-- Badge -->
+        <div class="flex items-center gap-4 mb-8 animate-fade-up stagger-1">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-sm text-slate-600">
+            <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+            {pueblo.comarca}
+          </span>
+          {pueblo.destacado && (
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 text-sm text-purple-400">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+              </svg>
+              Localidad destacada
+            </span>
+          )}
+        </div>
+        
+        <!-- Title -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 animate-fade-up stagger-2">
+          Diseño Web en <br/>
+          <span class="text-gradient">{pueblo.nombre}</span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mb-8 leading-relaxed animate-fade-up stagger-3">
+          {pueblo.descripcion}. Creamos <strong class="text-slate-900">páginas web profesionales</strong> que impulsan tu negocio y te posicionan en Google.
+        </p>
+        
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-3 mb-10 animate-fade-up stagger-4">
+          {pueblo.caracteristicas.map((tag) => (
+            <span class="px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-sm text-slate-600">
+              {tag}
+            </span>
+          ))}
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4 animate-fade-up stagger-5">
+          <a 
+            href="/#contacto"
+            class="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-violet-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1 transition-all duration-300"
+          >
+            <span>Solicitar presupuesto</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a 
+            href="tel:+34657085019"
+            class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-slate-100 text-slate-900 font-semibold hover:bg-slate-200 hover:-translate-y-1 transition-all duration-300"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+            </svg>
+            <span>Llamar ahora</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Servicios Section -->
+    <section class="relative py-24 overflow-hidden">
+      <div class="absolute inset-0 bg-slate-50"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+      
+      <div class="relative max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-sm text-slate-500 mb-8">
+            <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Servicios en {pueblo.nombre}
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Soluciones digitales <span class="text-gradient">completas</span>
+          </h2>
+          <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+            Ofrecemos todos los servicios que tu negocio en {pueblo.nombre} necesita para triunfar en internet.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {servicios.map((servicio, index) => (
+            <article class="group relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-purple-500/30 transition-all duration-500">
+              <!-- Icon -->
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 p-0.5 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                <div class="w-full h-full rounded-[14px] bg-slate-50 flex items-center justify-center text-slate-900">
+                  {servicio.icon === 'globe' && (
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+                    </svg>
+                  )}
+                  {servicio.icon === 'code' && (
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                    </svg>
+                  )}
+                  {servicio.icon === 'chart' && (
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                    </svg>
+                  )}
+                  {servicio.icon === 'megaphone' && (
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
+                    </svg>
+                  )}
+                  {servicio.icon === 'cart' && (
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                    </svg>
+                  )}
+                  {servicio.icon === 'shield' && (
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              
+              <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-gradient transition-all duration-300">
+                {servicio.titulo}
+              </h3>
+              
+              <p class="text-slate-600 text-sm leading-relaxed mb-5">
+                {servicio.descripcion}
+              </p>
+              
+              <ul class="space-y-2">
+                {servicio.beneficios.map((beneficio) => (
+                  <li class="flex items-center gap-2 text-sm text-slate-500">
+                    <svg class="w-4 h-4 text-purple-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {beneficio}
+                  </li>
+                ))}
+              </ul>
+              
+              <!-- Hover Glow -->
+              <div class="absolute -inset-px rounded-3xl bg-gradient-to-r from-purple-500 to-violet-600 opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-700 -z-10"></div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Por que elegirnos -->
+    <section class="relative py-24 overflow-hidden">
+      <div class="absolute inset-0 bg-white"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[150px]"></div>
+      
+      <div class="relative max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-sm text-slate-500 mb-8">
+            <svg class="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+            </svg>
+            Ventajas exclusivas
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Por qué <span class="text-gradient">elegirnos</span>
+          </h2>
+          <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+            Somos tu agencia de confianza para proyectos web en {pueblo.nombre} y toda la provincia de Almería.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {razones.map((razon, index) => (
+            <div class="text-center p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-purple-500/30 transition-all duration-500">
+              <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-purple-500 to-violet-600 p-0.5 mb-6">
+                <div class="w-full h-full rounded-[12px] bg-slate-50 flex items-center justify-center text-slate-900">
+                  {razon.icon === 'map' && (
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+                    </svg>
+                  )}
+                  {razon.icon === 'trending' && (
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                    </svg>
+                  )}
+                  {razon.icon === 'users' && (
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+                    </svg>
+                  )}
+                  {razon.icon === 'rocket' && (
+                    <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-3">{razon.titulo}</h3>
+              <p class="text-sm text-slate-500">{razon.descripcion}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Proceso -->
+    <section class="relative py-24 overflow-hidden">
+      <div class="absolute inset-0 bg-slate-50"></div>
+      
+      <div class="relative max-w-4xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-sm text-slate-500 mb-8">
+            <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
+            Proceso simple
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Cómo <span class="text-gradient">trabajamos</span>
+          </h2>
+        </div>
+        
+        <div class="space-y-6">
+          {proceso.map((item, index) => (
+            <div class="flex gap-6 items-start p-6 rounded-2xl bg-white border border-slate-200 hover:border-purple-500/30 transition-all duration-300">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                {item.paso}
+              </div>
+              <div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">{item.titulo}</h3>
+              <p class="text-slate-600">{item.descripcion}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA Final -->
+    <section class="relative py-24 overflow-hidden">
+      <div class="absolute inset-0 bg-white"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-purple-500/5 to-transparent"></div>
+      
+      <div class="relative max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+          ¿Listo para impulsar tu negocio en <span class="text-gradient">{pueblo.nombre}</span>?
+        </h2>
+        <p class="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
+          Contacta con nosotros hoy y recibe un presupuesto personalizado sin compromiso. Tu éxito online empieza aquí.
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <a 
+            href="/#contacto"
+            class="group inline-flex items-center gap-3 px-10 py-5 rounded-full bg-gradient-to-r from-purple-500 to-violet-600 text-white font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-1 transition-all duration-300"
+          >
+            <span>Solicitar presupuesto gratis</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a 
+            href="https://wa.me/34657085019"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-3 px-10 py-5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-semibold text-lg hover:bg-emerald-500/20 hover:-translate-y-1 transition-all duration-300"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>

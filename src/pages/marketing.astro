@@ -1,0 +1,507 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+
+
+const marketingCategories = [
+  {
+    title: "SEM & Publicidad",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
+    description: "Captación inmediata de clientes mediante campañas de pago optimizadas.",
+    items: [
+      { name: "Campaña Meta Ads (5 Img + 1 Video)", price: "450€", popular: true },
+      { name: "Campaña Meta Ads (5 imágenes)", price: "350€", popular: false },
+      { name: "Administración SEM Mensual", price: "300€", popular: true },
+      { name: "Creación Campaña SEM Pro", price: "300€", popular: false },
+      { name: "Configuración Píxel & Conversiones", price: "180€", popular: false },
+      { name: "Auditoría Cuenta Publicitaria", price: "150€", popular: false }
+    ]
+  },
+  {
+    title: "SEO & Estrategia",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>`,
+    description: "Visibilidad a largo plazo. Dominamos los resultados de Google.",
+    items: [
+      { name: "Keyword Research Extendido", price: "320€", popular: true },
+      { name: "Auditoría SEO Técnica Completa", price: "450€", popular: true },
+      { name: "Estrategia Local My Business", price: "120€", popular: false },
+      { name: "Optimización On-Page", price: "150€", popular: false },
+      { name: "Plan Link Building Mensual", price: "280€", popular: false },
+      { name: "SEO Técnico Mensual", price: "200€", popular: false }
+    ]
+  },
+  {
+    title: "Redes Sociales",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
+    description: "Construimos comunidades fieles y humanas para tu marca.",
+    items: [
+      { name: "Plan Social Media Estratégico", price: "400€", popular: true },
+      { name: "Gestión 3 RRSS (12 contenidos)", price: "350€", popular: true },
+      { name: "Gestión 2 RRSS (8 contenidos)", price: "250€", popular: false },
+      { name: "Diseño Parrilla Visual", price: "180€", popular: false },
+      { name: "Moderación Comentarios & DM", price: "90€", popular: false },
+      { name: "Informe Métricas & Análisis", price: "60€", popular: false }
+    ]
+  },
+  {
+    title: "Email & Funnels",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/><path d="M22 6l-10 7L2 6"/></svg>`,
+    description: "Ventas automatizadas y fidelización de base de datos.",
+    items: [
+      { name: "Diseño & Copy Newsletter", price: "80€", popular: false },
+      { name: "Configuración CRM / Email Auto", price: "220€", popular: true },
+      { name: "Lead Magnet (Ebook/Guía)", price: "150€", popular: false },
+      { name: "Funnel Ventas Básico", price: "400€", popular: true },
+      { name: "Copywriting Página Ventas", price: "250€", popular: false }
+    ]
+  }
+];
+
+const differentiators = [
+  { title: "ROI Medio x3.5", description: "Retorno de inversión en campañas publicitarias.", icon: "📈", gradient: "from-orange-500 to-amber-500" },
+  { title: "+40% Conversión", description: "Mejora media en tasa de conversión web.", icon: "🎯", gradient: "from-amber-500 to-orange-500" },
+  { title: "SEO Garantizado", description: "Posicionamiento orgánico sostenible.", icon: "🔍", gradient: "from-orange-400 to-amber-400" },
+  { title: "Data-Driven", description: "Decisiones basadas en datos reales.", icon: "📊", gradient: "from-amber-400 to-orange-500" }
+];
+
+const monthlyPacks = [
+  {
+    name: "Pack Growth Digital",
+    price: "490€",
+    description: "Visibilidad & Ventas",
+    features: ["Administración SEM (Google & Meta)", "Gestión 2 Redes Sociales", "8 Diseños Creativos Mensuales", "1 Newsletter / Email Mensual", "Dashboard Métricas 24/7"],
+    popular: false
+  },
+  {
+    name: "Pack Scale VIP 360",
+    price: "890€",
+    description: "Dominación Total del Mercado",
+    features: ["Estrategia SEM Avanzada Multi-Canal", "SEO Mensual (Técnico + Contenidos)", "Gestión 4 Redes Sociales + Reels", "Email Marketing & Automatización", "Reunión Estratégica Quincenal", "Copywriting Landing Pages"],
+    popular: true
+  }
+];
+---
+
+<BaseLayout
+  title="Agencia Marketing Digital Almería | SEO, Ads y Redes Sociales"
+  description="Consultoría marketing digital en Almería. SEO, Meta Ads, Google Ads y gestión redes sociales. Precios transparentes. Resultados garantizados."
+  type="service"
+  keywords="marketing digital almería, seo almería, google ads, meta ads, redes sociales, consultoría marketing"
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Marketing Digital y SEO",
+    "provider": {
+      "@type": "Organization",
+      "name": "Platanito Rico",
+      "url": "https://platanitorico.com"
+    },
+    "description": "Servicios de marketing digital, SEO, publicidad online y gestión de redes sociales en Almería.",
+    "areaServed": { "@type": "State", "name": "Almería" },
+    "serviceType": "Digital Marketing"
+  }}
+>
+  <Header />
+  
+  <!-- Breadcrumb Navigation -->
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Marketing Digital' }
+  ]} />
+
+  <main class="pt-0">
+    <!-- Hero Section - Magic Edition with Team Image -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+      <!-- Background Image Layer -->
+      <div class="absolute inset-0 z-0">
+        <img 
+          src="/imagenes/equipo-marketing-web.jpg" 
+          alt="Equipo de marketing digital Platanito Rico" 
+          class="w-full h-full object-cover"
+          width="1920"
+          height="1080"
+        />
+      </div>
+      
+      <!-- Dark Overlay for Text Readability -->
+      <div class="absolute inset-0 z-[1] bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-orange-900/65"></div>
+      
+      <!-- Vignette Effect -->
+      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)]"></div>
+      
+      <!-- Floating Orbs -->
+      <div class="absolute top-20 -left-20 w-[500px] h-[500px] bg-orange-500/30 rounded-full blur-[100px] animate-orb-float z-[3]"></div>
+      <div class="absolute bottom-20 -right-20 w-[400px] h-[400px] bg-amber-500/30 rounded-full blur-[80px] animate-orb-float-reverse z-[3]"></div>
+      
+      <!-- Animated Light Rays -->
+      <div class="absolute inset-0 overflow-hidden z-[3]">
+        <div class="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-orange-400/20 via-transparent to-transparent transform -rotate-12 animate-light-ray"></div>
+        <div class="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-amber-400/15 via-transparent to-transparent transform rotate-6 animate-light-ray" style="animation-delay: 1s;"></div>
+        <div class="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-orange-300/20 via-transparent to-transparent transform -rotate-6 animate-light-ray" style="animation-delay: 2s;"></div>
+      </div>
+      
+      <div class="container-premium relative z-10 py-24">
+        <div class="max-w-5xl mx-auto text-center">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg mb-8 animate-fade-in-up">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-medium text-white/90">Data-Driven Marketing</span>
+          </div>
+          
+          <!-- Heading -->
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
+            Marketing que multiplica,
+            <span class="block mt-2 bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400 bg-clip-text text-transparent">no solo divide</span>
+          </h1>
+          
+          <!-- Description -->
+          <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+            Especialistas en <strong class="text-white">Performance, SEO y Social Ads</strong>. 
+            Estrategias enfocadas a objetivos de facturación reales.
+          </p>
+          
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <a href="#catalogo" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full overflow-hidden shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+              <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
+              <span class="relative">Ver Precios</span>
+              <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="#packs" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300">
+              Packs de Crecimiento
+            </a>
+          </div>
+          
+          <!-- Stats -->
+          <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">x3.5</div>
+              <div class="text-sm text-white/70">ROI Medio Ads</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">+40%</div>
+              <div class="text-sm text-white/70">Conversión Web</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">100%</div>
+              <div class="text-sm text-white/70">Data-Driven</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">24/7</div>
+              <div class="text-sm text-white/70">Dashboard Métricas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Differentiators Section -->
+    <section class="py-24 bg-slate-50/50 relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,107,0,0.05)_0%,transparent_50%)]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+            Tu Socio en <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Escalabilidad Digital</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Nos centramos en el ROI. Cada euro invertido se traduce en visibilidad, leads y ventas.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {differentiators.map((item, index) => (
+            <div 
+              class="group relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-orange-300 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-2"
+              style={`animation-delay: ${0.1 * index}s`}
+            >
+              <div class={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${item.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left rounded-t-3xl`}></div>
+              <div class="text-4xl mb-4">{item.icon}</div>
+              <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors">{item.title}</h3>
+              <p class="text-slate-500 text-sm leading-relaxed">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Catalog -->
+    <section id="catalogo" class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-orange-50/30 to-white"></div>
+      <div class="absolute top-40 right-0 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-[100px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Precios Transparentes
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Tarifas de <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Marketing Digital</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Costes de presupuesto publicitario (ad spend) se pagan directamente a las plataformas.
+          </p>
+        </div>
+        
+        <div class="space-y-24">
+          {marketingCategories.map((cat, idx) => (
+            <div class="animate-fade-in-up" style={`animation-delay: ${idx * 0.1}s`}>
+              <div class="flex items-center gap-6 mb-12">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-0.5 shadow-lg shadow-orange-500/20">
+                  <div class="w-full h-full rounded-[14px] bg-white flex items-center justify-center">
+                    <div class="w-8 h-8 text-slate-900" set:html={cat.icon} />
+                  </div>
+                </div>
+                <div>
+                  <h3 class="text-3xl font-bold text-slate-900 mb-2">{cat.title}</h3>
+                  <p class="text-slate-500">{cat.description}</p>
+                </div>
+              </div>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                {cat.items.map((item) => (
+                  <div class={`group flex justify-between items-center p-6 rounded-2xl border transition-all duration-300 ${item.popular ? 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200 shadow-lg shadow-orange-500/5' : 'bg-white border-slate-200 hover:border-orange-300 hover:shadow-lg'}`}>
+                    <div class="flex items-center gap-4">
+                      {item.popular && (
+                        <span class="px-2 py-1 rounded-full bg-orange-500 text-white text-[10px] font-bold uppercase">Popular</span>
+                      )}
+                      <span class="text-slate-700 font-medium">{item.name}</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <span class="text-xs text-slate-400 uppercase tracking-wider hidden sm:block">Desde</span>
+                      <span class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">{item.price}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Monthly Packs -->
+    <section id="packs" class="py-32 relative overflow-hidden bg-slate-50">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(255,165,0,0.08)_0%,transparent_50%)]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-orange-200 shadow-lg shadow-orange-500/10 mb-6">
+            <span class="text-sm font-medium text-orange-700">Packs Estratégicos</span>
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Packs de <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Impacto Mensual</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Externaliza tu marketing y ahorra hasta un <strong>40% mensual</strong>.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {monthlyPacks.map((pack, index) => (
+            <div class={`group relative rounded-3xl transition-all duration-500 ${pack.popular ? 'scale-105 z-10' : 'hover:-translate-y-2'}`}>
+              {pack.popular && (
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold rounded-full shadow-lg">
+                  MÁXIMA ESCALABILIDAD
+                </div>
+              )}
+              
+              <div class={`h-full rounded-3xl p-8 flex flex-col ${pack.popular ? 'bg-white border-2 border-orange-300 shadow-2xl shadow-orange-500/20' : 'bg-white border border-slate-200 hover:border-orange-300 hover:shadow-xl'}`}>
+                <div class="mb-8">
+                  <h4 class={`text-sm font-bold uppercase tracking-wider mb-4 ${pack.popular ? 'text-orange-600' : 'text-slate-400'}`}>
+                    {pack.name}
+                  </h4>
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-5xl font-bold text-slate-900">{pack.price}</span>
+                    <span class="text-slate-400">/mes</span>
+                  </div>
+                  <p class="text-sm text-slate-500 mt-2">{pack.description}</p>
+                </div>
+                
+                <ul class="space-y-4 mb-10 flex-1">
+                  {pack.features.map((feature) => (
+                    <li class="flex items-start gap-3 text-sm text-slate-600">
+                      <svg class={`w-5 h-5 flex-shrink-0 ${pack.popular ? 'text-orange-500' : 'text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <a 
+                  href="/#contacto"
+                  class={`w-full py-4 rounded-full font-semibold text-center transition-all duration-300 ${pack.popular ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40' : 'bg-slate-900 text-white hover:bg-orange-500'}`}
+                >
+                  {pack.popular ? 'Activar Scale VIP' : 'Contratar Growth'}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-orange-400/20 to-transparent rounded-full blur-[100px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="p-12 rounded-3xl bg-white border border-orange-200 shadow-2xl shadow-orange-500/10">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              ¿Quieres vender más?
+            </h2>
+            <p class="text-xl text-slate-500 mb-10">
+              Analizamos tu tráfico y competencia para crear la <span class="text-orange-600 font-semibold">estrategia perfecta</span>.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/#contacto" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                Solicitar Consultoría Gratis
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 font-semibold rounded-full border border-slate-200 hover:border-orange-300 transition-all duration-300">
+                <svg class="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Llamar Ahora
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes orb-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+  @keyframes orb-float-reverse {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-30px, 30px) scale(1.05); }
+    66% { transform: translate(20px, -20px) scale(0.95); }
+  }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes light-ray {
+    0%, 100% { opacity: 0; transform: translateY(-100%) rotate(var(--tw-rotate)); }
+    50% { opacity: 1; }
+  }
+  .animate-gradient-shift {
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+  }
+  .animate-orb-float {
+    animation: orb-float 20s ease-in-out infinite;
+  }
+  .animate-orb-float-reverse {
+    animation: orb-float-reverse 25s ease-in-out infinite;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  .animate-light-ray {
+    animation: light-ray 8s ease-in-out infinite;
+  }
+</style>
+
+<script is:inline>
+  const canvas = document.getElementById('particleCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    /** @type {any[]} */
+    let particles = [];
+    let isActive = true;
+    
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.color = Math.random() > 0.5 ? '255, 107, 0' : '255, 165, 0';
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+    
+    function init() {
+      resize();
+      particles = [];
+      const count = window.innerWidth < 768 ? 15 : 25;
+      for (let i = 0; i < count; i++) particles.push(new Particle());
+    }
+    
+    function animate() {
+      if (!isActive) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      particles.forEach((p1, i) => {
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p1.x - p2.x, dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 107, 0, ${0.1 * (1 - dist / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+      });
+      requestAnimationFrame(animate);
+    }
+    
+    document.addEventListener('visibilitychange', () => {
+      isActive = !document.hidden;
+      if (isActive) animate();
+    });
+    window.addEventListener('resize', init);
+    init();
+    animate();
+  }
+</script>

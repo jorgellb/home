@@ -1,0 +1,152 @@
+---
+const services = [
+  { 
+    href: '/desarrollo-web', 
+    label: 'Desarrollo Web', 
+    desc: 'Webs que venden',
+    icon: `<path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>`,
+    color: 'from-blue-500 to-indigo-600'
+  },
+  { 
+    href: '/diseno-grafico', 
+    label: 'Diseño Gráfico', 
+    desc: 'Imagen de marca',
+    icon: `<path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>`,
+    color: 'from-violet-500 to-purple-600'
+  },
+  { 
+    href: '/marketing', 
+    label: 'Marketing Digital', 
+    desc: 'Multiplica ventas',
+    icon: `<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>`,
+    color: 'from-orange-500 to-red-600'
+  },
+  { 
+    href: '/audiovisual', 
+    label: 'Audiovisual', 
+    desc: 'Vídeo y Foto',
+    icon: `<rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/>`,
+    color: 'from-blue-600 to-cyan-500'
+  },
+  { 
+    href: '/soporte', 
+    label: 'Mantenimiento', 
+    desc: 'Siempre seguro',
+    icon: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,
+    color: 'from-rose-500 to-pink-600'
+  },
+];
+---
+
+<div class="fixed bottom-6 left-6 z-50 flex flex-col-reverse items-start gap-5" id="quick-services">
+  <!-- Ultra Premium Toggle Button -->
+  <button 
+    id="quick-services-toggle"
+    class="group relative flex items-center justify-center w-14 h-14 rounded-2xl overflow-hidden shadow-[0_15px_30px_-10px_rgba(132,204,22,0.5)] transition-all duration-500 pointer-events-auto active:scale-90"
+    aria-label="Explorar servicios"
+  >
+    <!-- Background Layers -->
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-amber-600"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+    
+    <!-- Rotating Icon -->
+    <div class="relative z-10 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]" id="toggle-icon">
+        <svg class="w-8 h-8 text-white stroke-[2.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+    </div>
+    
+    <!-- Pulse effect when closed -->
+    <div class="absolute inset-0 rounded-2xl ring-4 ring-orange-500/20 group-hover:ring-orange-500/40 animate-pulse transition-all"></div>
+  </button>
+
+  <!-- Items Mega Container -->
+  <div 
+    id="quick-services-menu"
+    class="flex flex-col-reverse items-start gap-2.5 opacity-0 translate-y-6 pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]"
+  >
+    {services.map((service, index) => (
+      <a 
+        href={service.href}
+        class="group/item relative flex items-center gap-4 p-1.5 pr-6 rounded-2xl bg-white/80 backdrop-blur-2xl border border-slate-200 hover:border-slate-300 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] transition-all duration-300"
+        style={`transition-delay: ${index * 40}ms`}
+      >
+        <!-- Icon Shell -->
+        <div class={`w-11 h-11 rounded-xl bg-gradient-to-br ${service.color} p-[1px] transition-transform duration-300 group-hover/item:scale-110 group-hover/item:rotate-3`}>
+            <div class="w-full h-full rounded-[10px] bg-slate-900 flex items-center justify-center">
+                <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" set:html={service.icon} />
+            </div>
+        </div>
+
+        <!-- Label & Description -->
+        <div class="flex flex-col">
+          <span class="text-xs font-black text-slate-900 uppercase tracking-widest group-hover/item:text-orange-600 transition-colors">
+            {service.label}
+          </span>
+          <span class="text-[9px] text-slate-500 font-medium group-hover/item:text-slate-600 transition-colors">
+            {service.desc}
+          </span>
+        </div>
+
+        <!-- Hover glow -->
+        <div class={`absolute inset-0 -z-10 bg-gradient-to-r ${service.color} opacity-0 group-hover/item:opacity-5 blur-xl transition-opacity duration-500 rounded-2xl`}></div>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  #quick-services.open #quick-services-menu {
+    opacity: 1;
+    translate: 0 0;
+    pointer-events: auto;
+  }
+  
+  #quick-services.open #toggle-icon {
+    transform: rotate(135deg) scale(0.85);
+  }
+
+  /* Entrance animation enhancement */
+  #quick-services.open a {
+    animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Interactive floating effect */
+  #quick-services-menu a:hover {
+    transform: translateX(8px);
+  }
+</style>
+
+<script>
+  const toggleBtn = document.getElementById('quick-services-toggle');
+  const container = document.getElementById('quick-services');
+
+  toggleBtn?.addEventListener('click', () => {
+    container?.classList.toggle('open');
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!container?.contains(e.target as Node)) {
+      container?.classList.remove('open');
+    }
+  });
+
+  // Close on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      container?.classList.remove('open');
+    }
+  });
+</script>

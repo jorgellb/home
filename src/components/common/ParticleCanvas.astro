@@ -1,0 +1,163 @@
+---
+// Optimized Particle Canvas - Respects prefers-reduced-motion
+interface Props {
+  id?: string;
+  color?: string;
+  secondaryColor?: string;
+  particleCount?: number;
+}
+
+const { 
+  id = 'particleCanvas',
+  color = '255, 107, 0',
+  secondaryColor = '255, 165, 0',
+  particleCount = 25
+} = Astro.props;
+---
+
+<canvas 
+  id={id} 
+  class="absolute inset-0 w-full h-full pointer-events-none z-0"
+  data-particles
+  data-color={color}
+  data-secondary-color={secondaryColor}
+  data-count={particleCount}
+></canvas>
+
+<script is:inline define:vars={{ canvasId: id }}>
+  (function() {
+    // Check for reduced motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return; // Don't run animations
+    }
+    
+    // Check for touch devices - reduce particles
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+    
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const color = canvas.dataset.color || '255, 107, 0';
+    const secondaryColor = canvas.dataset.secondaryColor || '255, 165, 0';
+    const baseCount = parseInt(canvas.dataset.count || '25');
+    const count = isTouch ? Math.floor(baseCount * 0.6) : baseCount;
+    
+    let particles = [];
+    let animationId;
+    let isActive = true;
+    let frameCount = 0;
+    const targetFPS = 30;
+    const frameInterval = Math.floor(60 / targetFPS);
+    
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.color = Math.random() > 0.5 ? color : secondaryColor;
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+    
+    function init() {
+      resize();
+      particles = [];
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+    
+    function animate() {
+      if (!isActive) return;
+      
+      // Throttle to target FPS
+      frameCount++;
+      if (frameCount % frameInterval !== 0) {
+        animationId = requestAnimationFrame(animate);
+        return;
+      }
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      
+      // Draw connections (limited for performance)
+      if (!isTouch) {
+        for (let i = 0; i < particles.length; i++) {
+          let connections = 0;
+          for (let j = i + 1; j < particles.length && connections < 3; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(${color}, ${0.1 * (1 - distance / 100)})`;
+              ctx.lineWidth = 0.5;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+              connections++;
+            }
+          }
+        }
+      }
+      
+      animationId = requestAnimationFrame(animate);
+    }
+    
+    // Visibility handling
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        isActive = false;
+        cancelAnimationFrame(animationId);
+      } else {
+        isActive = true;
+        animate();
+      }
+    });
+    
+    // Resize handling
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(resize, 200);
+    });
+    
+    // Initialize
+    init();
+    animate();
+  })();
+</script>

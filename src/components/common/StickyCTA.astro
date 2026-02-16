@@ -1,0 +1,61 @@
+---
+// Sticky CTA - Mobile-optimized conversion element
+---
+
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 shadow-lg lg:hidden" id="sticky-cta">
+  <a href="/contacto" class="flex items-center justify-between px-4 py-3 max-w-lg mx-auto">
+    <!-- Left: Value proposition -->
+    <div class="flex-1 pr-4">
+      <p class="text-xs text-slate-500 mb-0.5">¿Tienes un proyecto?</p>
+      <p class="text-sm font-semibold text-slate-900">Te llamamos gratis</p>
+    </div>
+    
+    <!-- Right: CTA Button -->
+    <div class="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-semibold rounded-full shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 transition-all active:scale-95">
+      <span>Contactar</span>
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+      </svg>
+    </div>
+  </a>
+</div>
+
+<script is:inline>
+  // Hide sticky CTA when footer is visible
+  document.addEventListener('DOMContentLoaded', () => {
+    const stickyCTA = document.getElementById('sticky-cta');
+    const footer = document.querySelector('footer');
+    
+    if (!stickyCTA || !footer) return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            stickyCTA.style.transform = 'translateY(100%)';
+            stickyCTA.style.opacity = '0';
+          } else {
+            stickyCTA.style.transform = 'translateY(0)';
+            stickyCTA.style.opacity = '1';
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    
+    observer.observe(footer);
+  });
+</script>
+
+<style>
+  #sticky-cta {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  /* Safe area for iOS */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #sticky-cta {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+</style>

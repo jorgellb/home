@@ -1,0 +1,1033 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import { comarcas, getPueblosByComarca } from '../data/pueblos-almeria';
+
+const webCategories = [
+  {
+    title: "Desarrollo Web Profesional",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+    description: "Arquitecturas digitales robustas, rápidas y orientadas a resultados medibles.",
+    items: [
+      { name: "Landing Page de Alta Conversión", price: "450€", popular: false },
+      { name: "Web Corporativa Premium (5-10 páginas)", price: "850€", popular: true },
+      { name: "Tienda Online / E-commerce Pro", price: "1.200€", popular: true },
+      { name: "Portal de Noticias / Media Digital", price: "950€", popular: false },
+      { name: "Web App a Medida", price: "2.500€", popular: false },
+      { name: "Intranet / Panel de Gestión", price: "1.500€", popular: false }
+    ]
+  },
+  {
+    title: "Optimización & Soporte",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.77 3.77z"/></svg>`,
+    description: "Mantenimiento proactivo para que tu web nunca deje de vender.",
+    items: [
+      { name: "Optimización Core Web Vitals", price: "180€", popular: false },
+      { name: "Auditoría SEO Técnica Completa", price: "350€", popular: true },
+      { name: "Migración de Hosting Profesional", price: "120€", popular: false },
+      { name: "Integración Pasarelas de Pago", price: "300€", popular: false }
+    ]
+  }
+];
+
+const differentiators = [
+  {
+    title: "Performance Real",
+    description: "Puntuaciones 90+ en Google Lighthouse. Carga inferior a 1 segundo.",
+    icon: "⚡",
+    gradient: "from-orange-500 to-amber-500"
+  },
+  {
+    title: "Sin Permanencia",
+    description: "Tu web es 100% tuya. Código fuente, dominio y hosting a tu nombre.",
+    icon: "🔓",
+    gradient: "from-amber-500 to-orange-500"
+  },
+  {
+    title: "Mobile First",
+    description: "El 80% de tráfico es móvil. Diseñamos para el pulgar, no solo para el ojo.",
+    icon: "📱",
+    gradient: "from-orange-400 to-amber-400"
+  },
+  {
+    title: "SEO Integrado",
+    description: "Estructura optimizada desde el primer día para posicionarte en Google.",
+    icon: "🎯",
+    gradient: "from-amber-400 to-orange-500"
+  }
+];
+
+const maintenancePlans = [
+  {
+    name: "Mantenimiento Web Básico",
+    price: "49€",
+    period: "mes",
+    description: "Ideal para webs corporativas y blogs. Mantén tu web segura y actualizada sin preocupaciones.",
+    features: [
+      "Actualizaciones semanales (plugins, temas, core)",
+      "Copias de seguridad diarias automáticas",
+      "Certificado SSL gratuito",
+      "Monitorización 24/7 (check cada 5 min)",
+      "Alojamiento + correo profesional",
+      "5 horas de cambios incluidas/mes",
+      "Soporte email L-V (9h-14h / 17h-20h)",
+      "Protección básica anti-spam y malware"
+    ],
+    popular: false,
+    badge: "Para empezar"
+  },
+  {
+    name: "Mantenimiento Profesional",
+    price: "79€",
+    period: "mes",
+    description: "Para empresas que necesitan gestión continua y cambios mensuales incluidos.",
+    features: [
+      "Todo lo del plan Básico",
+      "20 horas de cambios incluidas/mes",
+      "Alojamiento + correo profesional",
+      "Optimización Core Web Vitals",
+      "Soporte telefónico L-V (10h-14h)",
+      "Auditoría SEO técnica mensual",
+      "Recuperación garantizada <48h",
+      "Informe mensual de rendimiento"
+    ],
+    popular: true,
+    badge: "Más contratado"
+  },
+  {
+    name: "Mantenimiento Tienda Online",
+    price: "149€",
+    period: "mes",
+    description: "Máxima protección para e-commerce. Backups frecuentes y recuperación ultra-rápida.",
+    features: [
+      "Todo lo del plan Profesional",
+      "Copias de seguridad semanales",
+      "Alojamiento + correo profesional",
+      "Minitareas ilimitadas (hasta 15 min)",
+      "Soporte prioritario 24/7",
+      "Recuperación garantizada <24h",
+      "Protección RGPD y cookies incluida",
+      "Seguridad avanzada anti-hackeos"
+    ],
+    popular: false,
+    badge: "Para e-commerce"
+  }
+];
+---
+
+<BaseLayout
+  title="Diseño Web Almería | Desarrollo Web Profesional y Tiendas Online"
+  description="Expertos en diseño web en Almería desde 450€. Webs corporativas, tiendas online y aplicaciones web optimizadas para Google. Entrega en 1-2 semanas. ¡Presupuesto gratis!"
+  type="service"
+  preload={[
+    { href: '/images/portfolio/clinica-koral.jpg', as: 'image' }
+  ]}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Diseño Web y Desarrollo",
+    "provider": {
+      "@type": "Organization",
+      "name": "Platanito Rico",
+      "url": "https://platanitorico.com"
+    },
+    "description": "Desarrollo de páginas web, tiendas online y optimización SEO en Almería.",
+    "areaServed": { "@type": "State", "name": "Almería" }
+  }}
+>
+  <Header />
+  
+  <!-- Breadcrumb Navigation -->
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Diseño Web' }
+  ]} />
+
+  <main class="pt-0">
+    <!-- Hero Section - Magic Edition with Team Image -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+      <!-- Background Image Layer -->
+      <div class="absolute inset-0 z-0">
+        <img 
+          src="/imagenes/equipo-desarrollo-web-calidad.jpg" 
+          alt="Equipo de desarrollo web Platanito Rico" 
+          class="w-full h-full object-cover"
+          width="1920"
+          height="1080"
+        />
+      </div>
+      
+      <!-- Dark Overlay for Text Readability -->
+      <div class="absolute inset-0 z-[1] bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-orange-900/65"></div>
+      
+      <!-- Vignette Effect -->
+      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)]"></div>
+      
+      <!-- Floating Orbs -->
+      <div class="absolute top-20 -left-20 w-[500px] h-[500px] bg-orange-500/30 rounded-full blur-[100px] animate-orb-float z-[3]"></div>
+      <div class="absolute bottom-20 -right-20 w-[400px] h-[400px] bg-amber-500/30 rounded-full blur-[80px] animate-orb-float-reverse z-[3]"></div>
+      
+      <!-- Animated Light Rays -->
+      <div class="absolute inset-0 overflow-hidden z-[3]">
+        <div class="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-orange-400/20 via-transparent to-transparent transform -rotate-12 animate-light-ray"></div>
+        <div class="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-amber-400/15 via-transparent to-transparent transform rotate-6 animate-light-ray" style="animation-delay: 1s;"></div>
+        <div class="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-orange-300/20 via-transparent to-transparent transform -rotate-6 animate-light-ray" style="animation-delay: 2s;"></div>
+      </div>
+      
+      <div class="container-premium relative z-10 py-24">
+        <div class="max-w-5xl mx-auto text-center">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg mb-8 animate-fade-in-up">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-medium text-white/90">Especialistas en Almería</span>
+          </div>
+          
+          <!-- Heading -->
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
+            Desarrollo Web que
+            <span class="block mt-2 bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400 bg-clip-text text-transparent">impulsa tu negocio</span>
+          </h1>
+          
+          <!-- Description -->
+          <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+            Somos el referente en <strong class="text-white">diseño web en Almería</strong>. 
+            Creamos experiencias digitales ultrarrápidas para posicionarte en el #1 de Google.
+          </p>
+          
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <a href="#catalogo" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full overflow-hidden shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+              <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
+              <span class="relative">Ver Precios</span>
+              <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="#packs" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300">
+              Planes Mensuales
+            </a>
+          </div>
+          
+          <!-- Stats -->
+          <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">50+</div>
+              <div class="text-sm text-white/70">Webs entregadas</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">&lt;1s</div>
+              <div class="text-sm text-white/70">Tiempo de carga</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">90+</div>
+              <div class="text-sm text-white/70">Score Lighthouse</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">100%</div>
+              <div class="text-sm text-white/70">Sin permanencia</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Differentiators Section - Magic Edition -->
+    <section class="py-32 relative overflow-hidden" id="por-que-elegirnos">
+      {/* Animated Background */}
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-orange-50/30"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,107,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,0,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+      
+      {/* Floating Orbs */}
+      <div class="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-orange-400/10 to-amber-300/5 rounded-full blur-[80px] animate-pulse"></div>
+      <div class="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-br from-amber-400/10 to-orange-300/5 rounded-full blur-[100px] animate-pulse" style="animation-delay: 1s;"></div>
+      
+      <div class="container-premium relative z-10">
+        {/* Header with Badge */}
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-orange-200 shadow-lg shadow-orange-500/10 mb-8">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-semibold text-orange-700 uppercase tracking-wider">Diferenciales Clave</span>
+          </div>
+          
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+            Por qué elegirnos para tu<br />
+            <span class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 bg-clip-text text-transparent">proyecto web</span>
+          </h2>
+          <p class="text-xl md:text-2xl text-slate-500 max-w-3xl mx-auto leading-relaxed">
+            No creamos webs bonitas. <span class="font-semibold text-slate-700">Creamos máquinas de conversión</span> optimizadas para resultados reales.
+          </p>
+        </div>
+        
+        {/* Cards Grid */}
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          {differentiators.map((item, index) => (
+            <div 
+              class="group relative"
+              style={`animation-delay: ${0.15 * index}s`}
+            >
+              {/* Glow Effect */}
+              <div class={`absolute -inset-0.5 bg-gradient-to-r ${item.gradient} rounded-3xl opacity-0 group-hover:opacity-40 blur transition duration-700 group-hover:duration-500`}></div>
+              
+              <div class="relative h-full p-8 rounded-3xl bg-white border border-slate-200 hover:border-transparent transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 overflow-hidden">
+                {/* Top Gradient Bar */}
+                <div class={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${item.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
+                
+                {/* Background Pattern */}
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Icon Container */}
+                <div class={`relative w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${item.gradient} p-0.5 shadow-lg group-hover:shadow-xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
+                  <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center">
+                    <span class="text-3xl group-hover:scale-110 transition-transform duration-500">{item.icon}</span>
+                  </div>
+                </div>
+                
+                {/* Title */}
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors duration-300">{item.title}</h3>
+                
+                {/* Description */}
+                <p class="text-slate-500 leading-relaxed text-sm">{item.description}</p>
+                
+                {/* Bottom Hover Line */}
+                <div class={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${item.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-right`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Bottom CTA */}
+        <div class="mt-16 text-center">
+          <p class="text-slate-400 text-sm mb-4">¿Todavía tienes dudas?</p>
+          <a href="#catalogo" class="inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group">
+            <span>Ver nuestros precios</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Catalog -->
+    <section id="catalogo" class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-orange-50/30 to-white"></div>
+      <div class="absolute top-40 right-0 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-[100px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Precios Transparentes
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Tarifas de <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Desarrollo Web</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Incluyen primer año de soporte básico y optimización SEO inicial.
+          </p>
+        </div>
+        
+        <div class="space-y-24">
+          {webCategories.map((cat, idx) => (
+            <div class="animate-fade-in-up" style={`animation-delay: ${idx * 0.1}s`}>
+              <div class="flex items-center gap-6 mb-12">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-0.5 shadow-lg shadow-orange-500/20">
+                  <div class="w-full h-full rounded-[14px] bg-white flex items-center justify-center">
+                    <div class="w-8 h-8 text-slate-900" set:html={cat.icon} />
+                  </div>
+                </div>
+                <div>
+                  <h3 class="text-3xl font-bold text-slate-900 mb-2">{cat.title}</h3>
+                  <p class="text-slate-500">{cat.description}</p>
+                </div>
+              </div>
+              
+              <div class="grid md:grid-cols-2 gap-4">
+                {cat.items.map((item) => (
+                  <div class={`group flex justify-between items-center p-6 rounded-2xl border transition-all duration-300 ${item.popular ? 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200 shadow-lg shadow-orange-500/5' : 'bg-white border-slate-200 hover:border-orange-300 hover:shadow-lg'}`}>
+                    <div class="flex items-center gap-4">
+                      {item.popular && (
+                        <span class="px-2 py-1 rounded-full bg-orange-500 text-white text-[10px] font-bold uppercase">Popular</span>
+                      )}
+                      <span class="text-slate-700 font-medium">{item.name}</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <span class="text-xs text-slate-400 uppercase tracking-wider hidden sm:block">Desde</span>
+                      <span class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">{item.price}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Maintenance Plans -->
+    <section id="mantenimiento" class="py-32 relative overflow-hidden bg-slate-50">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(255,165,0,0.08)_0%,transparent_50%)]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-orange-200 shadow-lg shadow-orange-500/10 mb-6">
+            <span class="text-sm font-medium text-orange-700">Sin permanencia</span>
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Mantenimiento Web <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Mensual</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-3xl mx-auto mb-8">
+            Olvídate del mantenimiento técnico. Tu web siempre actualizada, segura y optimizada. 
+            Especialistas en <strong>WordPress, Joomla y PrestaShop</strong>.
+          </p>
+          <p class="text-slate-600 max-w-2xl mx-auto">
+            Desde <strong>49€/mes</strong>. Incluye hosting, SSL, copias de seguridad y soporte técnico real. 
+            Sin letra pequeña ni costes ocultos.
+          </p>
+        </div>
+        
+        <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {maintenancePlans.map((plan, index) => (
+            <div class={`group relative rounded-3xl transition-all duration-500 ${plan.popular ? 'scale-105 z-10' : 'hover:-translate-y-2'}`}>
+              {plan.popular && (
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold rounded-full shadow-lg">
+                  {plan.badge}
+                </div>
+              )}
+              
+              <div class={`h-full rounded-3xl p-8 flex flex-col ${plan.popular ? 'bg-white border-2 border-orange-300 shadow-2xl shadow-orange-500/20' : 'bg-white border border-slate-200 hover:border-orange-300 hover:shadow-xl'}`}>
+                <div class="mb-6">
+                  <h4 class={`text-sm font-bold uppercase tracking-wider mb-2 ${plan.popular ? 'text-orange-600' : 'text-slate-400'}`}>
+                    {plan.name}
+                  </h4>
+                  <div class="flex items-baseline gap-1 mb-3">
+                    <span class="text-5xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">{plan.price}</span>
+                    <span class="text-slate-400">/{plan.period}</span>
+                  </div>
+                  <p class="text-sm text-slate-600 leading-relaxed">{plan.description}</p>
+                </div>
+                
+                <ul class="space-y-3 mb-8 flex-1">
+                  {plan.features.map((feature) => (
+                    <li class="flex items-start gap-3 text-sm text-slate-600">
+                      <svg class={`w-5 h-5 flex-shrink-0 ${plan.popular ? 'text-orange-500' : 'text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <a 
+                  href="/contacto"
+                  class={`w-full py-4 rounded-full font-semibold text-center transition-all duration-300 ${plan.popular ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40' : 'bg-slate-900 text-white hover:bg-orange-500'}`}
+                >
+                  {plan.popular ? 'Contratar Ahora' : 'Elegir Plan'}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <!-- Trust Elements -->
+        <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div class="text-center p-4 rounded-2xl bg-white border border-slate-200">
+            <div class="text-2xl font-bold text-orange-500 mb-1">24/7</div>
+            <div class="text-xs text-slate-500">Monitorización</div>
+          </div>
+          <div class="text-center p-4 rounded-2xl bg-white border border-slate-200">
+            <div class="text-2xl font-bold text-orange-500 mb-1">&lt;24h</div>
+            <div class="text-xs text-slate-500">Recuperación</div>
+          </div>
+          <div class="text-center p-4 rounded-2xl bg-white border border-slate-200">
+            <div class="text-2xl font-bold text-orange-500 mb-1">0€</div>
+            <div class="text-xs text-slate-500">Permanencia</div>
+          </div>
+          <div class="text-center p-4 rounded-2xl bg-white border border-slate-200">
+            <div class="text-2xl font-bold text-orange-500 mb-1">100%</div>
+            <div class="text-xs text-slate-500">Seguro</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO Content: Mantenimiento Web - Magic Edition -->
+    <section class="py-32 relative overflow-hidden bg-slate-50" id="mantenimiento-seo">
+      {/* Animated Background */}
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-orange-50/30 to-white"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,107,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,0,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      
+      {/* Floating Orbs */}
+      <div class="absolute top-20 left-10 w-72 h-72 bg-orange-400/10 rounded-full blur-[100px] animate-pulse"></div>
+      <div class="absolute bottom-20 right-10 w-96 h-96 bg-amber-400/10 rounded-full blur-[120px] animate-pulse" style="animation-delay: 1s;"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-orange-500/5 to-amber-500/5 rounded-full blur-[150px]"></div>
+
+      <div class="container-premium relative z-10">
+        {/* Header with Badge */}
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-orange-200 shadow-lg shadow-orange-500/10 mb-8 animate-fade-in-up">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-semibold text-orange-700 uppercase tracking-wider">Servicio Premium</span>
+          </div>
+          
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+            ¿Qué incluye nuestro
+            <span class="relative inline-block mx-2">
+              <span class="relative z-10 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 bg-clip-text text-transparent">
+                mantenimiento web?
+              </span>
+              <svg class="absolute -bottom-3 left-0 w-full h-4 text-orange-300/60" viewBox="0 0 200 12" preserveAspectRatio="none">
+                <path d="M0,6 Q50,0 100,6 T200,6" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </h2>
+          
+          <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Especialistas en <span class="font-semibold text-slate-900">WordPress, Joomla y PrestaShop</span> desde <span class="text-2xl font-bold text-orange-500">49€/mes</span>. 
+            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-semibold ml-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Sin permanencia
+            </span>
+          </p>
+        </div>
+
+        {/* Feature Cards Grid */}
+        <div class="grid md:grid-cols-2 gap-8 mb-20 max-w-5xl mx-auto">
+          {/* Card 1: Seguridad */}
+          <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl opacity-0 group-hover:opacity-30 blur transition duration-500"></div>
+            <div class="relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-orange-300 transition-all duration-500 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1 overflow-hidden">
+              {/* Background Pattern */}
+              <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-orange-500/5 to-transparent rounded-bl-full"></div>
+              
+              {/* Icon Container */}
+              <div class="relative w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-0.5 shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 group-hover:scale-110 transition-all duration-500">
+                <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center text-3xl">
+                  🛡️
+                </div>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-orange-600 transition-colors">
+                Seguridad Blindada
+              </h3>
+              
+              <p class="text-slate-600 leading-relaxed mb-4">
+                Una web desactualizada es un imán para hackers. Nuestro <strong class="text-slate-900">mantenimiento web profesional</strong> incluye:
+              </p>
+              
+              <ul class="space-y-3">
+                {['Revisión de seguridad continua', 'Protección anti-malware', 'Vigilancia cada 5 minutos', 'Blindaje contra intrusiones'].map((item) => (
+                  <li class="flex items-center gap-3 text-slate-600">
+                    <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              {/* Hover Effect Line */}
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-amber-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+            </div>
+          </div>
+
+          {/* Card 2: Backups */}
+          <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-3xl opacity-0 group-hover:opacity-30 blur transition duration-500"></div>
+            <div class="relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-blue-300 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 overflow-hidden">
+              <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/5 to-transparent rounded-bl-full"></div>
+              
+              <div class="relative w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 p-0.5 shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 group-hover:scale-110 transition-all duration-500">
+                <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center text-3xl">
+                  💾
+                </div>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors">
+                Copias de Seguridad
+              </h3>
+              
+              <p class="text-slate-600 leading-relaxed mb-4">
+                Tu información siempre a salvo con nuestro sistema de <strong class="text-slate-900">backups diarios automáticos</strong>:
+              </p>
+              
+              <ul class="space-y-3">
+                {['Backups automáticos diarios', 'Almacenamiento externo seguro', 'Recuperación en <24h (48h básico)', 'Copias mensuales descargables'].map((item) => (
+                  <li class="flex items-center gap-3 text-slate-600">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+            </div>
+          </div>
+
+          {/* Card 3: Velocidad */}
+          <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-3xl opacity-0 group-hover:opacity-30 blur transition duration-500"></div>
+            <div class="relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-yellow-300 transition-all duration-500 hover:shadow-2xl hover:shadow-yellow-500/10 hover:-translate-y-1 overflow-hidden">
+              <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-yellow-500/5 to-transparent rounded-bl-full"></div>
+              
+              <div class="relative w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-yellow-500 to-orange-500 p-0.5 shadow-lg shadow-yellow-500/20 group-hover:shadow-yellow-500/40 group-hover:scale-110 transition-all duration-500">
+                <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center text-3xl">
+                  ⚡
+                </div>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-yellow-600 transition-colors">
+                Máxima Velocidad
+              </h3>
+              
+              <p class="text-slate-600 leading-relaxed mb-4">
+                Google penaliza webs lentas. Incluimos <strong class="text-slate-900">servidores físicos dedicados</strong>:
+              </p>
+              
+              <ul class="space-y-3">
+                {['Carga en <1 segundo', 'Sin virtualización', 'Optimización de imágenes', 'Cache avanzado'].map((item) => (
+                  <li class="flex items-center gap-3 text-slate-600">
+                    <div class="w-6 h-6 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+            </div>
+          </div>
+
+          {/* Card 4: Soporte */}
+          <div class="group relative">
+            <div class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-3xl opacity-0 group-hover:opacity-30 blur transition duration-500"></div>
+            <div class="relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-green-300 transition-all duration-500 hover:shadow-2xl hover:shadow-green-500/10 hover:-translate-y-1 overflow-hidden">
+              <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-green-500/5 to-transparent rounded-bl-full"></div>
+              
+              <div class="relative w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 p-0.5 shadow-lg shadow-green-500/20 group-hover:shadow-green-500/40 group-hover:scale-110 transition-all duration-500">
+                <div class="w-full h-full rounded-2xl bg-white flex items-center justify-center text-3xl">
+                  📞
+                </div>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-green-600 transition-colors">
+                Soporte Técnico Real
+              </h3>
+              
+              <p class="text-slate-600 leading-relaxed mb-4">
+                ¿Cansado de empresas que solo responden por email? <strong class="text-slate-900">Nosotros atendemos por teléfono</strong>:
+              </p>
+              
+              <ul class="space-y-3">
+                {['Programadores expertos', 'Respuesta garantizada', 'Sin marketers ni diseñadores', 'Horario comercial extendido'].map((item) => (
+                  <li class="flex items-center gap-3 text-slate-600">
+                    <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                      </svg>
+                    </div>
+                    <span class="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Central Feature Block */}
+        <div class="relative max-w-4xl mx-auto mb-20">
+          <div class="absolute -inset-1 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 rounded-3xl opacity-20 blur-lg"></div>
+          <div class="relative p-10 md:p-12 rounded-3xl bg-white border border-orange-200 shadow-2xl shadow-orange-500/10 overflow-hidden">
+            {/* Decorative Elements */}
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/10 to-amber-500/10 rounded-bl-full"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-orange-500/5 to-transparent rounded-tr-full"></div>
+            
+            <div class="relative">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white text-2xl shadow-lg">
+                  🔄
+                </div>
+                <h3 class="text-3xl font-bold text-slate-900">
+                  Actualizaciones Constantes
+                </h3>
+              </div>
+              
+              <p class="text-lg text-slate-600 leading-relaxed mb-6">
+                WordPress, plugins, temas... nosotros nos encargamos de <span class="font-semibold text-orange-600">todas las actualizaciones técnicas semanalmente</span>. Si algún componente se resiste o genera conflictos, lo solucionamos sin coste adicional.
+              </p>
+              
+              <div class="grid md:grid-cols-3 gap-4">
+                {[
+                  { icon: '🔒', text: 'Certificado SSL', desc: 'Renovación automática' },
+                  { icon: '📧', text: 'Correos corporativos', desc: 'Gestión completa' },
+                  { icon: '🛡️', text: 'RGPD & Cookies', desc: 'Protección legal' },
+                  { icon: '🛑', text: 'Anti-spam', desc: 'Formularios protegidos' },
+                  { icon: '🌐', text: 'Dominio', desc: 'Renovación incluida' },
+                  { icon: '⚡', text: 'Optimización', desc: 'Continua mejoras' }
+                ].map((item) => (
+                  <div class="flex items-start gap-3 p-4 rounded-xl bg-slate-50 hover:bg-orange-50 transition-colors group/item">
+                    <span class="text-2xl group-hover/item:scale-110 transition-transform">{item.icon}</span>
+                    <div>
+                      <div class="font-semibold text-slate-900 text-sm">{item.text}</div>
+                      <div class="text-xs text-slate-500">{item.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Why Choose Us */}
+        <div class="max-w-4xl mx-auto mb-20">
+          <div class="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 text-white overflow-hidden">
+            {/* Glow Effect */}
+            <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-[100px]"></div>
+            
+            <div class="relative">
+              <h3 class="text-2xl md:text-3xl font-bold mb-6">
+                ¿Por qué contratar mantenimiento web profesional?
+              </h3>
+              
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                  <p class="text-slate-300 leading-relaxed">
+                    Mantener una web activa no significa que todo esté hecho. Como un coche, necesita revisión periódica para seguir funcionando bien.
+                  </p>
+                  <p class="text-slate-300 leading-relaxed">
+                    Una web sin mantenimiento puede perder posiciones en Google, sufrir ataques de seguridad o quedar obsoleta técnicamente.
+                  </p>
+                </div>
+                <div class="space-y-4">
+                  <p class="text-slate-300 leading-relaxed">
+                    Nuestros <strong class="text-orange-400">precios de mantenimiento web</strong> son transparentes: desde 49€/mes con todo incluido.
+                  </p>
+                  <p class="text-slate-300 leading-relaxed">
+                    Sin permanencia, sin costes ocultos. Puedes contratar mes a mes o anual con descuento.
+                  </p>
+                </div>
+              </div>
+              
+              {/* CTA */}
+              <div class="mt-8 flex flex-wrap gap-4">
+                <a href="/contacto" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-orange-500/30 transition-all">
+                  Solicitar información
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                  </svg>
+                </a>
+                <span class="inline-flex items-center gap-2 px-4 py-3 text-slate-400 text-sm">
+                  <svg class="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  También trabajamos en tu servidor
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Row */}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          {[
+            { value: '60%', label: 'Ahorro reparando a tiempo', color: 'from-green-400 to-emerald-400', icon: '💰' },
+            { value: '99.9%', label: 'Uptime garantizado', color: 'from-blue-400 to-cyan-400', icon: '📊' },
+            { value: '<24h', label: 'Recuperación garantizada', color: 'from-orange-400 to-amber-400', icon: '🚀' },
+            { value: '0€', label: 'Sin permanencia', color: 'from-purple-400 to-pink-400', icon: '🔓' }
+          ].map((stat, index) => (
+            <div class="group relative text-center p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div class={`absolute inset-0 rounded-2xl bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
+              <div class="text-3xl mb-3">{stat.icon}</div>
+              <div class={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform`}>
+                {stat.value}
+              </div>
+              <div class="text-sm text-slate-600 font-medium">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Regional Coverage -->
+    <section id="zonas" class="py-32 relative overflow-hidden bg-white">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,107,0,0.05)_0%,transparent_50%)]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+            Diseño Web en <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">toda Almería</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Selecciona tu zona para ver cómo podemos ayudarte a dominar el mercado local.
+          </p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto space-y-4">
+          {comarcas.map((comarca) => {
+            const pueblos = getPueblosByComarca(comarca);
+            if (pueblos.length === 0) return null;
+            
+            return (
+              <details class="group rounded-2xl bg-slate-50 border border-slate-200 open:bg-white open:shadow-lg transition-all duration-300">
+                <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white">
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span class="text-lg font-bold text-slate-900">{comarca}</span>
+                      <span class="ml-3 text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-full">{pueblos.length} localidades</span>
+                    </div>
+                  </div>
+                  <span class="group-open:rotate-180 transition-transform duration-300 text-slate-400">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </span>
+                </summary>
+                <div class="p-6 pt-0 border-t border-slate-100">
+                  <div class="flex flex-wrap gap-2 mt-4">
+                    {pueblos.map((pueblo) => (
+                      <a 
+                        href={`/diseno-web/${pueblo.slug}`}
+                        class="px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-slate-600 hover:text-orange-600 hover:border-orange-300 hover:bg-orange-50 transition-all duration-200"
+                      >
+                        {pueblo.nombre}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </details>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-orange-400/20 to-transparent rounded-full blur-[100px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="p-12 rounded-3xl bg-white border border-orange-200 shadow-2xl shadow-orange-500/10">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              ¿Listo para tu nueva web?
+            </h2>
+            <p class="text-xl text-slate-500 mb-10">
+              No vendemos webs. Construimos <span class="text-orange-600 font-semibold">motores de facturación digital</span>.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contacto" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              Solicitar Presupuesto Gratis
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 font-semibold rounded-full border border-slate-200 hover:border-orange-300 transition-all duration-300">
+                <svg class="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Llamar Ahora
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  @keyframes orb-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+  
+  @keyframes orb-float-reverse {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-30px, 30px) scale(1.05); }
+    66% { transform: translate(20px, -20px) scale(0.95); }
+  }
+  
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes light-ray {
+    0%, 100% { opacity: 0; transform: translateY(-100%) rotate(var(--tw-rotate)); }
+    50% { opacity: 1; }
+  }
+  
+  .animate-gradient-shift {
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+  }
+  
+  .animate-orb-float {
+    animation: orb-float 20s ease-in-out infinite;
+  }
+  
+  .animate-orb-float-reverse {
+    animation: orb-float-reverse 25s ease-in-out infinite;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .animate-light-ray {
+    animation: light-ray 8s ease-in-out infinite;
+  }
+</style>
+
+<script is:inline>
+  // Particle System
+  const canvas = document.getElementById('particleCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    /** @type {any[]} */
+    let particles = [];
+    /** @type {number} */
+    let animationId;
+    let isActive = true;
+    
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+        this.color = Math.random() > 0.5 ? '255, 107, 0' : '255, 165, 0';
+      }
+      
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+    
+    function init() {
+      resize();
+      particles = [];
+      const particleCount = window.innerWidth < 768 ? 15 : 25;
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+    
+    function animate() {
+      if (!isActive) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      
+      // Draw connections
+      particles.forEach((p1, i) => {
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(255, 107, 0, ${0.1 * (1 - distance / 100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+      });
+      
+      animationId = requestAnimationFrame(animate);
+    }
+    
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        isActive = false;
+        cancelAnimationFrame(animationId);
+      } else {
+        isActive = true;
+        animate();
+      }
+    });
+    
+    window.addEventListener('resize', () => {
+      resize();
+      init();
+    });
+    
+    init();
+    animate();
+  }
+</script>

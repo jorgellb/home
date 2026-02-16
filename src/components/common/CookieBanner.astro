@@ -1,0 +1,67 @@
+---
+---
+<div id="cookie-banner" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-xl opacity-0 translate-y-10 invisible transition-all duration-700">
+  <div class="relative overflow-hidden rounded-3xl bg-white/80 backdrop-blur-3xl border border-slate-200 shadow-[0_20px_50px_rgba(0,0,0,0.1)] p-6">
+    <!-- Decorative background -->
+    <div class="absolute top-0 right-0 -mr-12 -mt-12 w-24 h-24 bg-lime-500/20 rounded-full blur-3xl"></div>
+    
+    <div class="relative z-10">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-lime-500 to-green-600 p-0.5">
+          <div class="w-full h-full rounded-[9px] bg-white flex items-center justify-center">
+            <span class="text-xl">🍪</span>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Configuración de Cookies</h3>
+          <p class="text-[10px] text-lime-600 font-medium">Privacidad mínima garantizada</p>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed mb-6">
+        Utilizamos cookies propias y de terceros para mejorar tu experiencia. Al aceptar, nos ayudas a optimizar la web. Puedes leer más en nuestra <a href="/cookies/" class="text-slate-900 hover:text-lime-600 underline transition-colors">Política de Cookies</a>.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3">
+        <button id="accept-cookies" class="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-lime-500 to-green-600 text-white text-xs font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all outline-none">
+          Aceptar todas
+        </button>
+        <button id="reject-cookies" class="flex-1 px-6 py-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold uppercase tracking-widest hover:bg-slate-200 hover:text-slate-900 active:scale-95 transition-all outline-none">
+          Solo esenciales
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('accept-cookies');
+  const rejectBtn = document.getElementById('reject-cookies');
+
+  const COOKIE_KEY = 'platanito_cookies_accepted';
+
+  function showBanner() {
+    banner?.classList.remove('opacity-0', 'translate-y-10', 'invisible');
+    banner?.classList.add('opacity-100', 'translate-y-0', 'visible');
+  }
+
+  function hideBanner() {
+    banner?.classList.add('opacity-0', 'translate-y-10', 'invisible');
+    banner?.classList.remove('opacity-100', 'translate-y-0', 'visible');
+  }
+
+  function setChoice(choice: string) {
+    localStorage.setItem(COOKIE_KEY, choice);
+    hideBanner();
+  }
+
+  // Check if choice already exists
+  if (!localStorage.getItem(COOKIE_KEY)) {
+    // Small delay for better UX
+    setTimeout(showBanner, 2000);
+  }
+
+  acceptBtn?.addEventListener('click', () => setChoice('all'));
+  rejectBtn?.addEventListener('click', () => setChoice('essential'));
+</script>

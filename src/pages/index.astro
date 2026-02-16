@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Hero from '../components/sections/Hero.astro';
+import Problem from '../components/sections/Problem.astro';
+import Solution from '../components/sections/Solution.astro';
+import Process from '../components/sections/Process.astro';
+import Portfolio from '../components/sections/Portfolio.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import Technology from '../components/sections/Technology.astro';
+import FAQ from '../components/sections/FAQ.astro';
+import Contact from '../components/sections/Contact.astro';
+import { getCollection } from 'astro:content';
+
+// Get services from content collection
+const servicesCollection = await getCollection('services');
+const services = servicesCollection
+  .filter(service => !service.data.draft)
+  .sort((a, b) => (a.data.order || 999) - (b.data.order || 999));
+
+// Get testimonials from content collection
+const testimonialsCollection = await getCollection('testimonials');
+const testimonials = testimonialsCollection
+  .filter(t => !t.data.draft)
+  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
+  .map(t => ({
+    name: t.data.name,
+    role: t.data.role,
+    company: t.data.company,
+    companyUrl: t.data.companyUrl,
+    text: t.data.text,
+    rating: t.data.rating,
+    image: t.data.image,
+    imageAlt: t.data.imageAlt,
+  }));
+
+
+---
+
+<BaseLayout
+  title="Soluciones Digitales: Diseño Web, Vídeo y SEO"
+  description="Agencia digital en Almería experta en diseño web, marketing y producción audiovisual. Creamos webs rápidas y optimizadas para Google."
+  image="/images/og-home.jpg"
+  type="website"
+  lang="es"
+  alternates={[
+    { hreflang: 'es', href: 'https://platanitorico.com/' },
+    { hreflang: 'en', href: 'https://platanitorico.com/en/' },
+    { hreflang: 'x-default', href: 'https://platanitorico.com/' }
+  ]}
+  jsonLd={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      'name': 'Platanito Rico',
+      'url': 'https://platanitorico.com',
+      'logo': 'https://platanitorico.com/favicon.svg',
+      'description': 'Agencia digital full-service: diseño web, producción audiovisual, marketing digital y SEO en Almería',
+      'sameAs': [
+        'https://www.instagram.com/platanitorico/',
+        'https://www.linkedin.com/company/platanitorico/'
+      ],
+      'contactPoint': {
+        '@type': 'ContactPoint',
+        'telephone': '+34657085019',
+        'contactType': 'customer service',
+        'availableLanguage': ['es', 'en'],
+        'areaServed': 'ES'
+      },
+      'address': {
+        '@type': 'PostalAddress',
+        'streetAddress': 'Ctra de Ronda, 82',
+        'addressLocality': 'Vera',
+        'addressRegion': 'Almería',
+        'postalCode': '04620',
+        'addressCountry': 'ES'
+      }
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      'name': 'Platanito Rico',
+      'url': 'https://platanitorico.com',
+      'potentialAction': {
+        '@type': 'SearchAction',
+        'target': 'https://platanitorico.com/?s={search_term_string}',
+        'query-input': 'required name=search_term_string'
+      }
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': '¿Cuánto tiempo tarda una web?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Entre 1 y 2 semanas según la complejidad del proyecto. Proyectos simples pueden estar listos en una semana, mientras que webs más complejas pueden tardar hasta 2 semanas.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': '¿Incluye dominio y hosting?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'El dominio lo contratas tú (recomendamos que sea tuyo para que tengas control total). El hosting está incluido gratis durante el primer año en todos nuestros planes.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': '¿Puedo gestionar la web yo mismo?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Sí, absolutamente. Te entregamos todas las credenciales y documentación detallada para que puedas gestionar tu web de forma autónoma. También ofrecemos formación si la necesitas.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': '¿Ofrecen mantenimiento?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Sí, ofrecemos planes de mantenimiento desde 50 EUR/mes que incluyen actualizaciones de seguridad, backups diarios, monitorización 24/7 y soporte prioritario.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': '¿Qué formas de pago aceptan?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Aceptamos transferencia bancaria, PayPal y tarjeta de crédito/débito. El proceso es simple: 50% al inicio del proyecto y 50% a la entrega final.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': '¿Qué pasa si no me gusta el resultado?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Trabajamos con revisiones incluidas en cada plan. Si después de las revisiones no estás satisfecho, te devolvemos el 50% del primer pago. Nuestra prioridad es tu satisfacción.'
+          }
+        }
+      ]
+    }
+  ]}
+>
+  <Header />
+  
+  <main id="main-content" class="pt-20">
+    <Hero />
+    <Problem />
+    <Solution services={services} />
+    <Process />
+    <Portfolio />
+    <Testimonials testimonials={testimonials} />
+    <Technology />
+    <FAQ />
+    <Contact />
+  </main>
+  
+  <Footer />
+</BaseLayout>

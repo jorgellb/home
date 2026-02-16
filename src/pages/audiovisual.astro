@@ -1,0 +1,623 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+const droneFeatures = [
+  {
+    icon: '🎥',
+    title: 'Sensor Hasselblad 4/3',
+    desc: 'Calidad cinematográfica profesional con rango dinámico de 12.8 stops'
+  },
+  {
+    icon: '🚁',
+    title: 'Ómnidireccional',
+    desc: 'Detección de obstáculos en todas direcciones para vuelo seguro'
+  },
+  {
+    icon: '⚡',
+    title: '43 Minutos Vuelo',
+    desc: 'Máxima autonomía para capturar tomas épicas sin prisas'
+  },
+  {
+    icon: '🎯',
+    title: 'Apple ProRes',
+    desc: 'Grabación en formatos profesionales para máxima calidad de post'
+  }
+];
+
+const services = [
+  {
+    title: 'Video Corporativo con Dron',
+    price: '1.200€',
+    desc: 'Tomas aéreas cinematográficas + material terrestre 4K. Ideal para empresas que quieren destacar.',
+    features: ['Dron Mavic 3 Pro 4K', '2 cámaras terrestres', 'Edición profesional', 'Música licenciada'],
+    popular: true
+  },
+  {
+    title: 'Spot Publicitario Aéreo',
+    price: '1.500€',
+    desc: 'Producción completa con planificación, storyboard y tomas aéreas impactantes.',
+    features: ['Pre-producción', 'Storyboard', 'Dron 4K + cámara', 'Color grading'],
+    popular: true
+  },
+  {
+    title: 'Tomas Aéreas Sueltas',
+    price: '350€',
+    desc: 'Pack de planos aéreos espectaculares para integrar en tus proyectos.',
+    features: ['30 minutos de vuelo', 'Entrega en 48h', 'Formatos 4K/1080p', 'Color correction'],
+    popular: false
+  },
+  {
+    title: 'Tour Virtual 360°',
+    price: '850€',
+    desc: 'Recorridos inmersivos con perspectiva aérea y terrestre para inmobiliarias.',
+    features: ['Dron + cámara 360°', 'Hotspots interactivos', 'Hosting incluido', 'VR compatible'],
+    popular: false
+  }
+];
+
+const reelServices = [
+  {
+    title: 'Pack Reels Virales',
+    price: '450€',
+    desc: '5 reels optimizados para Instagram/TikTok con tomas aéreas que detienen el scroll.',
+    features: ['Formato 9:16', 'Música trending', 'Subtítulos animados', 'Entrega 24h']
+  },
+  {
+    title: 'Video Producto Premium',
+    price: '280€',
+    desc: 'Showcase dinámico con planos cenitales y movimientos envolventes.',
+    features: ['Dron + slider', 'Iluminación pro', 'Motion graphics', '3 revisiones']
+  }
+];
+
+const motionServices = [
+  {
+    title: 'Logo Animation 3D',
+    price: '350€',
+    desc: 'Tu logo cobra vida con animaciones cinematográficas y motion graphics avanzados.',
+    features: ['Animación 3D', 'Partículas y efectos', 'Render 4K', 'Formatos adaptados']
+  },
+  {
+    title: 'Video Explicativo',
+    price: '750€',
+    desc: 'Combina video real con motion graphics para comunicar tu mensaje con impacto.',
+    features: ['Guion creativo', 'Storyboard', 'Animación 2D/3D', 'Voice over']
+  }
+];
+
+const photoServices = [
+  {
+    title: 'Fotografía Aérea',
+    price: '250€',
+    desc: 'Fotos profesionales desde el cielo con el mejor dron del mercado.',
+    features: ['20MP Hasselblad', 'RAW + JPG', 'Edición incluida', 'Entrega 48h']
+  },
+  {
+    title: 'Sesión Corporativa',
+    price: '400€',
+    desc: 'Retratos profesionales + tomas aéreas de instalaciones.',
+    features: ['Equipo de iluminación', 'Dron para exteriores', '50 fotos editadas', 'Galería online']
+  }
+];
+
+const processSteps = [
+  {
+    num: '01',
+    title: 'Briefing Creativo',
+    desc: 'Nos cuentas tu visión. Analizamos ubicación, tiempos y necesidades técnicas.',
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>',
+    color: 'from-orange-400 to-amber-400',
+    glow: 'shadow-orange-500/50'
+  },
+  {
+    num: '02',
+    title: 'Planificación Vuelo',
+    desc: 'Estudiamos espacio aéreo, permisos si son necesarios y condiciones óptimas.',
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7M15 4l-6 3"/></svg>',
+    color: 'from-amber-400 to-orange-500',
+    glow: 'shadow-amber-500/50'
+  },
+  {
+    num: '03',
+    title: 'Producción 4K',
+    desc: 'Día de rodaje con Mavic 3 Pro. Múltiples tomas para asegurar el plano perfecto.',
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4z"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>',
+    color: 'from-orange-500 to-red-500',
+    glow: 'shadow-orange-600/50'
+  },
+  {
+    num: '04',
+    title: 'Post-Producción',
+    desc: 'Color grading, estabilización, edición y entrega en formatos profesionales.',
+    icon: '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>',
+    color: 'from-red-500 to-pink-500',
+    glow: 'shadow-red-500/50'
+  }
+];
+
+const stats = [
+  { value: '4K', label: 'Resolución Máxima' },
+  { value: '43min', label: 'Autonomía Vuelo' },
+  { value: '12.8', label: 'Stops Rango Dinámico' },
+  { value: '48h', label: 'Entrega Express' }
+];
+---
+
+<BaseLayout 
+  title="Productora Audiovisual Almería | Dron 4K Mavic 3 Pro" 
+  description="Servicios de video profesional con dron 4K en Almería. Producción audiovisual corporativa, spots y fotografía aérea."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Producción Audiovisual Dron 4K",
+    "provider": { "@type": "Organization", "name": "Platanito Rico", "url": "https://platanitorico.com" },
+    "description": "Servicios de video profesional con dron 4K, spots publicitarios y fotografía aérea en Almería.",
+    "areaServed": { "@type": "State", "name": "Almería" },
+    "offers": { "@type": "Offer", "price": "1200", "priceCurrency": "EUR" }
+  }}
+>
+  <div class="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+    <div class="absolute top-20 right-10 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-40 left-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+  </div>
+
+  <Header />
+  <main class="pt-20 relative overflow-hidden">
+    <!-- Hero Section - Magic Edition with Team Image -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+      <!-- Background Image Layer -->
+      <div class="absolute inset-0 z-0">
+        <img 
+          src="/imagenes/audiovisuales-dron-video.jpg" 
+          alt="Producción audiovisual con dron en Almería" 
+          class="w-full h-full object-cover"
+          width="1920"
+          height="1080"
+        />
+      </div>
+      
+      <!-- Dark Overlay for Text Readability -->
+      <div class="absolute inset-0 z-[1] bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-orange-900/65"></div>
+      
+      <!-- Vignette Effect -->
+      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)]"></div>
+      
+      <!-- Floating Orbs -->
+      <div class="absolute top-20 -left-20 w-[500px] h-[500px] bg-orange-500/30 rounded-full blur-[100px] animate-orb-float z-[3]"></div>
+      <div class="absolute bottom-20 -right-20 w-[400px] h-[400px] bg-amber-500/30 rounded-full blur-[80px] animate-orb-float-reverse z-[3]"></div>
+      
+      <!-- Animated Light Rays -->
+      <div class="absolute inset-0 overflow-hidden z-[3]">
+        <div class="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-orange-400/20 via-transparent to-transparent transform -rotate-12 animate-light-ray"></div>
+        <div class="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-amber-400/15 via-transparent to-transparent transform rotate-6 animate-light-ray" style="animation-delay: 1s;"></div>
+        <div class="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-orange-300/20 via-transparent to-transparent transform -rotate-6 animate-light-ray" style="animation-delay: 2s;"></div>
+      </div>
+
+      <div class="container-premium relative z-10 py-24">
+        <div class="max-w-6xl mx-auto text-center">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg mb-8">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-medium text-white/90">Dron Mavic 3 Pro 4K Disponible</span>
+          </div>
+          
+          <h1 class="text-5xl md:text-6xl lg:text-8xl font-bold text-white mb-8 leading-tight">
+            Perspectivas que<br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400">elevan tu marca</span>
+          </h1>
+          
+          <p class="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Producción audiovisual profesional con el <strong class="text-white">Dron Mavic 3 Pro 4K</strong>. 
+            Tomas aéreas cinematográficas que dejan huella en Almería y provincia.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <a href="#servicios" class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-semibold text-lg overflow-hidden transition-transform hover:scale-105 shadow-xl shadow-orange-500/30">
+              <span class="relative z-10">Ver Servicios con Dron</span>
+              <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </a>
+            <a href="#proceso" class="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/20 transition-colors">
+              Cómo Trabajamos
+            </a>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            {stats.map(stat => (
+              <div class="text-center p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+                <div class="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
+                <div class="text-sm text-white/70">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-24 relative overflow-hidden">
+      <div class="absolute -right-20 top-20 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl"></div>
+      <div class="container-premium relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span class="text-orange-500 font-semibold tracking-wide uppercase text-sm">Equipo Profesional</span>
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mt-4 mb-6">
+              DJI Mavic 3 Pro<br/>
+              <span class="text-slate-400">La referencia mundial</span>
+            </h2>
+            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+              El dron más avanzado de DJI con <strong>triple cámara Hasselblad</strong>. 
+              Capturamos tomas aéreas con calidad de cine: 5.1K video, sensor 4/3 CMOS, 
+              y estabilización gimbal de 3 ejes. Tus proyectos merecen esta calidad.
+            </p>
+            
+            <div class="grid sm:grid-cols-2 gap-4">
+              {droneFeatures.map(feature => (
+                <div class="flex gap-4 p-4 rounded-xl bg-white border border-slate-200 hover:border-orange-300 hover:shadow-lg hover:shadow-orange-100 transition-all group">
+                  <div class="text-3xl group-hover:scale-110 transition-transform">{feature.icon}</div>
+                  <div>
+                    <h4 class="font-bold text-slate-900">{feature.title}</h4>
+                    <p class="text-sm text-slate-500 mt-1">{feature.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div class="relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl rotate-3 opacity-20"></div>
+            <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 text-white overflow-hidden">
+              <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/20 rounded-full blur-3xl"></div>
+              <div class="relative z-10">
+                <div class="text-6xl mb-4">🚁</div>
+                <h3 class="text-2xl font-bold mb-4">¿Por qué elegir tomas con dron?</h3>
+                <ul class="space-y-3">
+                  <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    <span>Perspectivas imposibles de conseguir de otra forma</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    <span>Impacto visual inmediato que engancha al espectador</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    <span>Diferenciación total respecto a la competencia</span>
+                  </li>
+                  <li class="flex items-center gap-3">
+                    <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    <span>Versatilidad para todo tipo de proyectos</span>
+                  </li>
+                </ul>
+                <div class="mt-6 pt-6 border-t border-slate-700">
+                  <p class="text-sm text-slate-400">Operadores certificados y seguros de responsabilidad civil incluido</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios" class="py-24 bg-slate-50 relative">
+      <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23f97316%22%20fill-opacity%3D%220.03%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="text-orange-500 font-semibold tracking-wide uppercase text-sm">Servicios con Dron 4K</span>
+          <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mt-4 mb-6">
+            Producción Audiovisual<br/>Profesional
+          </h2>
+          <p class="text-lg text-slate-600">
+            Desde videos corporativos hasta spots publicitarios. Todas nuestras producciones 
+            incluyen la opción de tomas aéreas con Mavic 3 Pro 4K.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          {services.map((service, idx) => (
+            <div class={`group relative p-8 rounded-3xl bg-white border-2 transition-all duration-300 hover:shadow-2xl ${service.popular ? 'border-orange-400 shadow-xl shadow-orange-100' : 'border-slate-200 hover:border-orange-300'}`}>
+              {service.popular && (
+                <div class="absolute -top-4 left-8 px-4 py-1 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-bold rounded-full">
+                  Más Solicitado
+                </div>
+              )}
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-2xl font-bold text-slate-900 group-hover:text-orange-600 transition-colors">{service.title}</h3>
+                <span class="text-3xl font-bold text-orange-600">{service.price}</span>
+              </div>
+              <p class="text-slate-600 mb-6">{service.desc}</p>
+              <ul class="space-y-3 mb-8">
+                {service.features.map(feature => (
+                  <li class="flex items-center gap-3 text-slate-700">
+                    <svg class="w-5 h-5 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <a 
+                href="/contacto" 
+                class={`w-full py-4 rounded-xl font-semibold text-center block transition-all duration-300 ${service.popular ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:shadow-lg hover:shadow-orange-500/30' : 'bg-slate-100 text-slate-700 hover:bg-orange-100 hover:text-orange-700'}`}
+              >
+                Solicitar Información
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-24 relative overflow-hidden">
+      <div class="container-premium">
+        <div class="grid lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-1">
+            <span class="text-orange-500 font-semibold tracking-wide uppercase text-sm">Más Servicios</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-4 mb-6">
+              Contenido para Redes y Motion Graphics
+            </h2>
+            <p class="text-slate-600 mb-8">
+              Complementa tu estrategia audiovisual con contenido optimizado para redes sociales 
+              y animaciones profesionales.
+            </p>
+            <a href="/contacto" class="inline-flex items-center gap-2 text-orange-600 font-semibold hover:gap-4 transition-all">
+              Consultar Pack Personalizado
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+          
+          <div class="lg:col-span-2 space-y-8">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <span class="text-2xl">📱</span> Reels y Social Media
+              </h3>
+              <div class="grid sm:grid-cols-2 gap-4">
+                {reelServices.map(service => (
+                  <div class="p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 hover:shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                      <h4 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">{service.title}</h4>
+                      <span class="text-xl font-bold text-orange-600">{service.price}</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4">{service.desc}</p>
+                    <ul class="space-y-1">
+                      {service.features.map(f => (
+                        <li class="text-sm text-slate-500 flex items-center gap-2">
+                          <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <span class="text-2xl">✨</span> Motion Graphics
+              </h3>
+              <div class="grid sm:grid-cols-2 gap-4">
+                {motionServices.map(service => (
+                  <div class="p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 hover:shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                      <h4 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">{service.title}</h4>
+                      <span class="text-xl font-bold text-orange-600">{service.price}</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4">{service.desc}</p>
+                    <ul class="space-y-1">
+                      {service.features.map(f => (
+                        <li class="text-sm text-slate-500 flex items-center gap-2">
+                          <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <span class="text-2xl">📸</span> Fotografía Profesional
+              </h3>
+              <div class="grid sm:grid-cols-2 gap-4">
+                {photoServices.map(service => (
+                  <div class="p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-300 hover:shadow-lg transition-all group">
+                    <div class="flex justify-between items-start mb-3">
+                      <h4 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">{service.title}</h4>
+                      <span class="text-xl font-bold text-orange-600">{service.price}</span>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-4">{service.desc}</p>
+                    <ul class="space-y-1">
+                      {service.features.map(f => (
+                        <li class="text-sm text-slate-500 flex items-center gap-2">
+                          <span class="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="proceso" class="py-24 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 text-white relative overflow-hidden">
+      <!-- Animated background elements -->
+      <div class="absolute inset-0">
+        <div class="absolute top-20 left-10 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 rounded-full blur-3xl"></div>
+        <!-- Floating particles -->
+        <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-orange-400 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+        <div class="absolute top-3/4 right-1/4 w-3 h-3 bg-amber-400 rounded-full animate-ping" style="animation-duration: 4s; animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-1/3 left-2/3 w-2 h-2 bg-orange-500 rounded-full animate-ping" style="animation-duration: 3.5s; animation-delay: 1s;"></div>
+      </div>
+      
+      <!-- Grid pattern overlay -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+            <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+            <span class="text-sm font-medium text-orange-400">Proceso Certificado</span>
+          </div>
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mt-4 mb-6">
+            De la <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">idea</span> al <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">cielo</span><br/>
+            <span class="text-3xl md:text-4xl text-slate-400">en 4 pasos mágicos</span>
+          </h2>
+          <p class="text-lg text-slate-400 leading-relaxed">
+            Metodología probada para garantizar resultados espectaculares en cada proyecto.<br/>
+            <span class="text-orange-400">Despegamos en 1-2 semanas.</span>
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {processSteps.map((step, idx) => (
+            <div class="group relative">
+              <!-- Connection line -->
+              {idx < processSteps.length - 1 && (
+                <div class="hidden lg:block absolute top-16 left-[60%] w-[80%] h-0.5">
+                  <div class="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-transparent"></div>
+                  <div class="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 animate-pulse" style="clip-path: polygon(0 0, 20% 0, 20% 100%, 0 100%); animation: slideRight 2s ease-in-out infinite;"></div>
+                </div>
+              )}
+              
+              <!-- Card -->
+              <div class="relative p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-orange-500/50 transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-orange-500/20 h-full">
+                <!-- Glow effect on hover -->
+                <div class={`absolute inset-0 rounded-3xl bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-xl`}></div>
+                
+                <!-- Number badge with animation -->
+                <div class="relative mb-6">
+                  <div class={`absolute -inset-2 bg-gradient-to-r ${step.color} rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-opacity duration-500`}></div>
+                  <div class={`relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} text-white shadow-lg ${step.glow} group-hover:scale-110 transition-transform duration-500`}>
+                    <Fragment set:html={step.icon} />
+                  </div>
+                  <!-- Step number floating -->
+                  <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-slate-800 border border-white/20 flex items-center justify-center text-sm font-bold text-orange-400">
+                    {step.num}
+                  </div>
+                </div>
+                
+                <!-- Content -->
+                <h3 class="text-xl font-bold mb-3 group-hover:text-orange-400 transition-colors duration-300">
+                  {step.title}
+                </h3>
+                <p class="text-slate-400 text-sm leading-relaxed group-hover:text-slate-300 transition-colors">
+                  {step.desc}
+                </p>
+                
+                <!-- Animated arrow for connection -->
+                {idx < processSteps.length - 1 && (
+                  <div class="hidden lg:flex absolute -right-4 top-16 w-8 h-8 items-center justify-center text-orange-500/30 group-hover:text-orange-500 transition-colors">
+                    <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="animation-duration: 2s;">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                  </div>
+                )}
+                
+                <!-- Check indicator on hover -->
+                <div class="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <!-- Bottom decoration line -->
+        <div class="mt-16 flex justify-center">
+          <div class="flex items-center gap-4">
+            <div class="w-24 h-0.5 bg-gradient-to-r from-transparent to-orange-500/50"></div>
+            <div class="w-3 h-3 rounded-full bg-orange-500 animate-pulse"></div>
+            <div class="w-3 h-3 rounded-full bg-amber-500 animate-pulse" style="animation-delay: 0.2s;"></div>
+            <div class="w-3 h-3 rounded-full bg-orange-400 animate-pulse" style="animation-delay: 0.4s;"></div>
+            <div class="w-24 h-0.5 bg-gradient-to-l from-transparent to-orange-500/50"></div>
+          </div>
+        </div>
+      </div>
+      
+      <style>
+        @keyframes slideRight {
+          0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+          50% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+          100% { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); }
+        }
+        @keyframes orb-float {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+          33% { transform: translate(30px, -30px) scale(1.05); opacity: 0.4; }
+          66% { transform: translate(-20px, 20px) scale(0.95); opacity: 0.3; }
+        }
+        @keyframes orb-float-reverse {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+          33% { transform: translate(-30px, 30px) scale(1.05); opacity: 0.4; }
+          66% { transform: translate(20px, -20px) scale(0.95); opacity: 0.3; }
+        }
+        @keyframes light-ray {
+          0%, 100% { opacity: 0; transform: translateY(-100%) rotate(var(--tw-rotate)); }
+          50% { opacity: 1; }
+        }
+        .animate-orb-float {
+          animation: orb-float 20s ease-in-out infinite;
+        }
+        .animate-orb-float-reverse {
+          animation: orb-float-reverse 25s ease-in-out infinite;
+        }
+        .animate-light-ray {
+          animation: light-ray 8s ease-in-out infinite;
+        }
+      </style>
+    </section>
+
+    <section class="py-24 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-orange-50 via-white to-amber-50"></div>
+      <div class="container-premium relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+            ¿Listo para elevar tu proyecto?
+          </h2>
+          <p class="text-xl text-slate-600 mb-12">
+            Las tomas aéreas con dron 4K marcan la diferencia. Contáctanos y cuéntanos tu idea.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contacto" class="group relative px-10 py-5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-bold text-lg overflow-hidden transition-all hover:shadow-2xl hover:shadow-orange-500/30 hover:scale-105">
+              <span class="relative z-10 flex items-center justify-center gap-2">
+                Solicitar Presupuesto
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+              </span>
+            </a>
+            <a href="tel:+34600123456" class="px-10 py-5 border-2 border-slate-300 text-slate-700 rounded-full font-bold text-lg hover:border-orange-500 hover:text-orange-600 transition-all">
+              Llamar Ahora
+            </a>
+          </div>
+
+          <div class="mt-12 flex flex-wrap justify-center gap-8 text-sm text-slate-500">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              Respuesta en 24h
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              Presupuesto sin compromiso
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              Operadores certificados
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

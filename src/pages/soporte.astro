@@ -1,0 +1,598 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+const maintenanceDetails = [
+  {
+    title: "Seguridad Proactiva",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    description: "Protegemos tu sitio contra ataques, malware y vulnerabilidades antes de que ocurran.",
+    features: [
+      "Escaneo de malware diario automático",
+      "Firewall de aplicación web (WAF)",
+      "Protección DDoS y anti-spam",
+      "Actualizaciones de seguridad en <24h",
+      "Certificado SSL Enterprise gratuito"
+    ]
+  },
+  {
+    title: "Optimización Continua",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
+    description: "Tu web no solo se mantiene, se mejora constantemente para máximo rendimiento.",
+    features: [
+      "Caché avanzada a nivel servidor",
+      "Optimización de bases de datos",
+      "Compresión de imágenes sin pérdida",
+      "Monitorización Core Web Vitals",
+      "Mejora continua de velocidad"
+    ]
+  },
+  {
+    title: "Continuidad Garantizada",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.99 6.57 2.57L21 8M21 3v5h-5"/></svg>`,
+    description: "Backups frecuentes y recuperación inmediata para que tu negocio nunca pare.",
+    features: [
+      "Backups diarios automáticos",
+      "Almacenamiento en nube externa",
+      "Recuperación completa garantizada",
+      "Migraciones de servidor incluidas",
+      "Uptime monitor 24/7/365"
+    ]
+  }
+];
+
+const maintenancePlans = [
+  {
+    name: "Mantenimiento Básico",
+    price: "39€",
+    period: "mes",
+    badge: "Para empezar",
+    description: "Ideal para webs corporativas, blogs y sitios informativos que necesitan mantenimiento esencial.",
+    features: [
+      "Alojamiento web + correo profesional",
+      "Actualizaciones de seguridad",
+      "Copias de seguridad diarias",
+      "Certificado SSL gratuito",
+      "5 horas de cambios incluidas/mes",
+      "Soporte por email (48h)",
+      "Monitorización 24/7"
+    ],
+    cta: "Contratar Básico",
+    popular: false
+  },
+  {
+    name: "Mantenimiento Profesional",
+    price: "79€",
+    period: "mes",
+    badge: "Más contratado",
+    description: "Para empresas que dependen de su web y necesitan gestión continua con cambios mensuales.",
+    features: [
+      "Alojamiento web + correo profesional",
+      "20 horas de cambios incluidas/mes",
+      "Optimización Core Web Vitals",
+      "Auditoría SEO técnica mensual",
+      "Soporte telefónico L-V",
+      "Recuperación garantizada <48h",
+      "Informe mensual de rendimiento"
+    ],
+    cta: "Contratar Profesional",
+    popular: true
+  },
+  {
+    name: "Mantenimiento Tienda Online",
+    price: "149€",
+    period: "mes",
+    badge: "Para e-commerce",
+    description: "Máxima protección para tiendas online PrestaShop y WooCommerce con prioridad absoluta.",
+    features: [
+      "Todo del plan Profesional",
+      "Alojamiento optimizado e-commerce",
+      "Minitareas ilimitadas (hasta 15 min)",
+      "Gestión de catálogo incluida",
+      "Soporte prioritario 24/7",
+      "Recuperación garantizada <24h",
+      "Protección RGPD avanzada"
+    ],
+    cta: "Contratar E-commerce",
+    popular: false
+  }
+];
+
+const metrics = [
+  { label: "Uptime Garantizado", value: "99.9%", width: "99.9%" },
+  { label: "Tiempo de Respuesta", value: "<4h", width: "95%" },
+  { label: "Webs Protegidas", value: "100%", width: "100%" }
+];
+
+const faqItems = [
+  {
+    question: "¿Todas las páginas web necesitan mantenimiento?",
+    answer: "Absolutamente sí. Las páginas web, como cualquier software, requieren mantenimiento continuo. El proyecto online no termina al publicar la web, es cuando realmente comienza. Todas las webs necesitan atención periódica, ya sea para renovar información, actualizar seguridad o realizar labores de marketing digital. Las tiendas online en PrestaShop y WooCommerce requieren aún más cuidado para mantenerse competitivas y seguras."
+  },
+  {
+    question: "¿Por qué contratar un servicio de mantenimiento web profesional?",
+    answer: "Contratar mantenimiento web profesional te permite: seguir alcanzando objetivos de negocio con una herramienta eficaz y actualizada; aprovechar nuevas oportunidades tecnológicas que impulsan tu negocio; mejorar la imagen de marca mostrando un sitio fresco y moderno; garantizar la seguridad frente a ataques con actualizaciones constantes; mejorar el posicionamiento SEO adaptándote a los requisitos de los buscadores; y contar con asesoramiento experto para resolver dudas y tareas complejas."
+  },
+  {
+    question: "¿Qué incluye nuestro servicio de mantenimiento web?",
+    answer: "Nuestro servicio de mantenimiento web incluye: actualizaciones de contenidos y seguridad; cambios de imágenes y textos; publicación de noticias y artículos; creación de enlaces internos; actualización de datos de contacto; mejora de velocidad de carga; traslados a otros servidores; revisión de funcionamiento; configuración de copias de seguridad; gestión de cuentas de correo; formación para utilizar tu web; y mucho más según las necesidades de tu proyecto."
+  },
+  {
+    question: "¿Cuánto cuesta el mantenimiento de una web?",
+    answer: "El costo del mantenimiento web depende del esfuerzo necesario para tu proyecto. Ofrecemos planes desde 39€/mes para mantenimiento básico de webs corporativas, hasta 149€/mes para mantenimiento de tiendas online como PrestaShop o WooCommerce. También disponemos de planes personalizados adaptados a tus necesidades específicas. El precio varía según la plataforma (WordPress, PrestaShop, Joomla), las funcionalidades de tu sitio y las horas de asesoramiento requeridas."
+  }
+];
+
+const benefits = [
+  {
+    icon: "🎯",
+    title: "Alcanza tus objetivos",
+    description: "Una web bien mantenida es una herramienta eficaz que te permite cumplir tus metas de negocio con mayor seguridad y adaptarse a las necesidades crecientes de tu empresa."
+  },
+  {
+    icon: "🚀",
+    title: "Aprovecha la tecnología",
+    description: "El mundo digital evoluciona constantemente. Con nuestro mantenimiento tendrás acceso a herramientas actualizadas que permiten soluciones innovadoras para impulsar tu negocio."
+  },
+  {
+    icon: "✨",
+    title: "Mejora tu imagen de marca",
+    description: "Una web actualizada muestra profesionalidad y frescura. Demuestra que tu empresa va al ritmo de las novedades digitales y se preocupa por ofrecer la mejor experiencia."
+  },
+  {
+    icon: "🛡️",
+    title: "Seguridad garantizada",
+    description: "Las webs desarrolladas con código abierto requieren actualizaciones constantes para garantizar seguridad frente a ataques. Prevenimos daños y mantenemos respaldos de recuperación."
+  },
+  {
+    icon: "📈",
+    title: "Mejor posicionamiento SEO",
+    description: "Si tu web no se adapta a los requisitos exigentes de Google, la competencia te adelantará. Mantener tu web actualizada con estrategias SEO es esencial para destacar."
+  },
+  {
+    icon: "👨‍💻",
+    title: "Asesoramiento experto",
+    description: "Aunque muchas webs permiten modificaciones sin programar, contar con profesionales te permite resolver dudas, tareas complejas e incluir nuevas soluciones rentables."
+  }
+];
+---
+
+<BaseLayout
+  title="Mantenimiento Web Almería | Soporte Técnico Profesional 24/7"
+  description="Servicio de mantenimiento web profesional en Almería. Soporte técnico WordPress, PrestaShop y WooCommerce. Actualizaciones, seguridad y backups. Planes desde 39€/mes."
+  type="service"
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Mantenimiento Web Profesional",
+    "provider": {
+      "@type": "Organization",
+      "name": "Platanito Rico",
+      "url": "https://platanitorico.com"
+    },
+    "description": "Servicio completo de mantenimiento web, soporte técnico, actualizaciones de seguridad y optimización para WordPress, PrestaShop y tiendas online.",
+    "areaServed": { "@type": "State", "name": "Almería" },
+    "offers": {
+      "@type": "AggregateOffer",
+      "lowPrice": "39",
+      "highPrice": "149",
+      "priceCurrency": "EUR"
+    }
+  }}
+>
+  <Header />
+
+  <main class="pt-20">
+    <!-- Hero Section - Magic Edition with Team Image -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
+      <!-- Background Image Layer -->
+      <div class="absolute inset-0 z-0">
+        <img 
+          src="/imagenes/mantenimiento-web-profesional.jpg" 
+          alt="Equipo de mantenimiento web profesional Platanito Rico" 
+          class="w-full h-full object-cover"
+          width="1920"
+          height="1080"
+        />
+      </div>
+      
+      <!-- Dark Overlay for Text Readability -->
+      <div class="absolute inset-0 z-[1] bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-orange-900/65"></div>
+      
+      <!-- Vignette Effect -->
+      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)]"></div>
+      
+      <!-- Floating Orbs -->
+      <div class="absolute top-20 -left-20 w-[500px] h-[500px] bg-orange-500/30 rounded-full blur-[100px] animate-orb-float z-[3]"></div>
+      <div class="absolute bottom-20 -right-20 w-[400px] h-[400px] bg-amber-500/30 rounded-full blur-[80px] animate-orb-float-reverse z-[3]"></div>
+      
+      <!-- Animated Light Rays -->
+      <div class="absolute inset-0 overflow-hidden z-[3]">
+        <div class="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-orange-400/20 via-transparent to-transparent transform -rotate-12 animate-light-ray"></div>
+        <div class="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-amber-400/15 via-transparent to-transparent transform rotate-6 animate-light-ray" style="animation-delay: 1s;"></div>
+        <div class="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-orange-300/20 via-transparent to-transparent transform -rotate-6 animate-light-ray" style="animation-delay: 2s;"></div>
+      </div>
+      
+      <div class="container-premium relative z-10 py-24">
+        <div class="max-w-5xl mx-auto text-center">
+          <!-- Badge -->
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg mb-8 animate-fade-in-up">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-medium text-white/90">Soporte Técnico Especializado</span>
+          </div>
+          
+          <!-- Heading -->
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
+            Mantenimiento Web
+            <span class="block mt-2 bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400 bg-clip-text text-transparent">Profesional</span>
+          </h1>
+          
+          <!-- Description -->
+          <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+            <strong class="text-white">¿Tu página web necesita mantenimiento?</strong> Sí, como cualquier software, requiere actualizaciones constantes. 
+            Especialistas en <strong class="text-white">WordPress, PrestaShop y WooCommerce</strong> en Almería.
+          </p>
+          
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <a href="#planes" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full overflow-hidden shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+              <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
+              <span class="relative">Ver Planes y Precios</span>
+              <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="#servicio" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300">
+              ¿Qué incluye?
+            </a>
+          </div>
+          
+          <!-- Stats -->
+          <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">99.9%</div>
+              <div class="text-sm text-white/70">Uptime Garantizado</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">&lt;4h</div>
+              <div class="text-sm text-white/70">Tiempo Respuesta</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">24/7</div>
+              <div class="text-sm text-white/70">Monitorización</div>
+            </div>
+            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
+              <div class="text-3xl font-bold text-white mb-1">15+</div>
+              <div class="text-sm text-white/70">Años Experiencia</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Maintenance Section -->
+    <section id="por-que" class="py-32 relative overflow-hidden bg-slate-50">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,107,0,0.05)_0%,transparent_50%)]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-orange-200 shadow-lg shadow-orange-500/10 mb-8">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span class="text-sm font-semibold text-orange-700 uppercase tracking-wider">Beneficios Clave</span>
+          </div>
+          
+          <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+            ¿Por qué contratar <span class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 bg-clip-text text-transparent">mantenimiento web</span>?
+          </h2>
+          <p class="text-xl md:text-2xl text-slate-500 max-w-3xl mx-auto leading-relaxed">
+            El proyecto de un negocio online no termina al publicar la web, <span class="font-semibold text-slate-700">es cuando realmente comienza</span>.
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {benefits.map((benefit, index) => (
+            <div 
+              class="group relative"
+              style={`animation-delay: ${0.15 * index}s`}
+            >
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl opacity-0 group-hover:opacity-40 blur transition duration-700 group-hover:duration-500"></div>
+              
+              <div class="relative h-full p-8 rounded-3xl bg-white border border-slate-200 hover:border-transparent transition-all duration-500 hover:shadow-2xl hover:-translate-y-3 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div class="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500">{benefit.icon}</div>
+                
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors duration-300">{benefit.title}</h3>
+                
+                <p class="text-slate-500 leading-relaxed text-sm">{benefit.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Details -->
+    <section id="servicio" class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-orange-50/30 to-white"></div>
+      <div class="absolute top-40 right-0 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-[100px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Nuestro Servicio
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            ¿Qué incluye nuestro <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">servicio</span>?
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Delega en nosotros todas las tareas técnicas y de gestión de tu web.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          {maintenanceDetails.map((detail, idx) => (
+            <div class="group relative p-8 rounded-3xl bg-white border border-slate-200 hover:border-orange-300 transition-all duration-500 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-2 animate-fade-in-up" style={`animation-delay: ${idx * 0.1}s`}>
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-0.5 shadow-lg shadow-orange-500/20 mb-8 group-hover:scale-110 transition-transform">
+                <div class="w-full h-full rounded-[14px] bg-white flex items-center justify-center">
+                  <div class="w-8 h-8 text-slate-900" set:html={detail.icon} />
+                </div>
+              </div>
+              <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-orange-600 transition-colors">{detail.title}</h3>
+              <p class="text-slate-500 mb-8 text-sm leading-relaxed">{detail.description}</p>
+              <ul class="space-y-4">
+                {detail.features.map(feature => (
+                  <li class="flex items-start gap-3 text-sm text-slate-600">
+                    <svg class="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Maintenance Plans -->
+    <section id="planes" class="py-32 relative overflow-hidden bg-slate-50">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(255,165,0,0.08)_0%,transparent_50%)]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="text-center mb-20">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-orange-200 shadow-lg shadow-orange-500/10 mb-6">
+            <span class="text-sm font-medium text-orange-700">Planes y Precios</span>
+          </div>
+          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+            Planes de <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Mantenimiento Web</span>
+          </h2>
+          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
+            Elige el plan que mejor se adapte a las necesidades de tu web o tienda online.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {maintenancePlans.map((plan, index) => (
+            <div class={`group relative rounded-3xl transition-all duration-500 ${plan.popular ? 'scale-105 z-10' : 'hover:-translate-y-2'}`}>
+              {plan.popular && (
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold rounded-full shadow-lg">
+                  {plan.badge}
+                </div>
+              )}
+              
+              <div class={`h-full rounded-3xl p-8 flex flex-col ${plan.popular ? 'bg-white border-2 border-orange-300 shadow-2xl shadow-orange-500/20' : 'bg-white border border-slate-200 hover:border-orange-300 hover:shadow-xl'}`}>
+                <h4 class={`text-sm font-bold uppercase tracking-wider mb-4 ${plan.popular ? 'text-orange-600' : 'text-slate-400'}`}>
+                  {plan.name}
+                </h4>
+                <div class="flex items-baseline gap-1 mb-2">
+                  <span class="text-5xl font-bold text-slate-900">{plan.price}</span>
+                  <span class="text-slate-400">/ {plan.period}</span>
+                </div>
+                <p class="text-sm text-slate-500 mb-8">{plan.description}</p>
+                
+                <ul class="space-y-4 mb-10 flex-1">
+                  {plan.features.map(feature => (
+                    <li class="flex items-start gap-3 text-sm text-slate-600">
+                      <svg class={`w-5 h-5 flex-shrink-0 ${plan.popular ? 'text-orange-500' : 'text-slate-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <a 
+                  href="/contacto"
+                  class={`w-full py-4 rounded-full font-semibold text-center transition-all duration-300 ${plan.popular ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40' : 'bg-slate-900 text-white hover:bg-orange-500'}`}
+                >
+                  {plan.cta}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <!-- Additional Info -->
+        <div class="mt-16 text-center">
+          <p class="text-slate-500 mb-4">¿Necesitas un plan personalizado?</p>
+          <p class="text-slate-600 max-w-2xl mx-auto mb-6">
+            También ofrecemos planes de mantenimiento a medida donde adaptamos el presupuesto a las necesidades específicas de tu proyecto. 
+            El precio varía según la plataforma utilizada (WordPress, PrestaShop, WooCommerce, Drupal) y las funcionalidades de tu sitio web.
+          </p>
+          <a href="/contacto" class="inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group">
+            <span>Solicitar presupuesto personalizado</span>
+            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-32 relative overflow-hidden">
+      <div class="container-premium">
+        <div class="max-w-4xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              Preguntas <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Frecuentes</span>
+            </h2>
+            <p class="text-xl text-slate-500">
+              Resolvemos tus dudas sobre el mantenimiento web profesional.
+            </p>
+          </div>
+          
+          <div class="space-y-6">
+            {faqItems.map((item, index) => (
+              <details class="group rounded-2xl bg-white border border-slate-200 open:border-orange-300 open:shadow-lg transition-all duration-300">
+                <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                  <span class="text-lg font-semibold text-slate-900 group-hover:text-orange-600 transition-colors">{item.question}</span>
+                  <span class="group-open:rotate-180 transition-transform duration-300 text-orange-500">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </span>
+                </summary>
+                <div class="px-6 pb-6 border-t border-slate-100">
+                  <p class="text-slate-600 leading-relaxed mt-4">{item.answer}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="py-32 relative overflow-hidden bg-slate-50">
+      <div class="container-premium">
+        <div class="max-w-5xl mx-auto">
+          <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-8">
+                ¿Qué sucede en el <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">mantenimiento real</span>?
+              </h2>
+              <div class="space-y-8">
+                <div>
+                  <h4 class="text-slate-900 font-bold mb-2">Monitorización de Salud</h4>
+                  <p class="text-slate-500 text-sm">Revisamos logs de servidor, errores 404 y latencia de base de datos en tiempo real para detectar problemas antes de que afecten a tus visitantes.</p>
+                </div>
+                <div>
+                  <h4 class="text-slate-900 font-bold mb-2">Higiene de Datos</h4>
+                  <p class="text-slate-500 text-sm">Limpiamos revisiones, optimizamos tablas SQL y eliminamos archivos temporales que ralentizan tu web.</p>
+                </div>
+                <div>
+                  <h4 class="text-slate-900 font-bold mb-2">Protección de Reputación</h4>
+                  <p class="text-slate-500 text-sm">Evitamos que tu web entre en listas negras de Google por malware o problemas de seguridad que dañen tu SEO.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="relative">
+              <div class="absolute inset-0 bg-orange-500/10 blur-[100px] rounded-full"></div>
+              <div class="relative p-8 rounded-3xl bg-white border border-orange-200 shadow-xl">
+                <h4 class="text-slate-900 font-bold mb-6 uppercase tracking-widest text-xs">Métricas de Estabilidad</h4>
+                <div class="space-y-6">
+                  {metrics.map(metric => (
+                    <div>
+                      <div class="flex justify-between items-center mb-2">
+                        <span class="text-slate-600 text-sm">{metric.label}</span>
+                        <span class="text-orange-500 font-bold">{metric.value}</span>
+                      </div>
+                      <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-1000" style={`width: ${metric.width}`}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5"></div>
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-orange-400/20 to-transparent rounded-full blur-[100px]"></div>
+      
+      <div class="container-premium relative z-10">
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="p-12 rounded-3xl bg-white border border-orange-200 shadow-2xl shadow-orange-500/10">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              ¿Listo para mantener tu web segura?
+            </h2>
+            <p class="text-xl text-slate-500 mb-10">
+              Una web sin mantenimiento es una web vulnerable. <span class="text-orange-600 font-semibold">Asegura tu inversión digital</span> con profesionales.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/contacto" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                Solicitar Información
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 font-semibold rounded-full border border-slate-200 hover:border-orange-300 transition-all duration-300">
+                <svg class="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Llamar Ahora
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  @keyframes orb-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+  @keyframes orb-float-reverse {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-30px, 30px) scale(1.05); }
+    66% { transform: translate(20px, -20px) scale(0.95); }
+  }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes light-ray {
+    0%, 100% { opacity: 0; transform: translateY(-100%) rotate(var(--tw-rotate)); }
+    50% { opacity: 1; }
+  }
+  .animate-orb-float {
+    animation: orb-float 20s ease-in-out infinite;
+  }
+  .animate-orb-float-reverse {
+    animation: orb-float-reverse 25s ease-in-out infinite;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+    opacity: 0;
+  }
+  .animate-light-ray {
+    animation: light-ray 8s ease-in-out infinite;
+  }
+</style>
+
+
