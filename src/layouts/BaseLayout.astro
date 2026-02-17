@@ -51,12 +51,12 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <!-- Preconnects -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
+
     <!-- Preload critical assets -->
     {preload.map(resource => (
       <link rel="preload" href={resource.href} as={resource.as} type={resource.type} crossorigin />
@@ -95,9 +95,12 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={imageAlt} />
     
-    <!-- Google Fonts - Optimized -->
+    <!-- Google Fonts - Optimized (Non-blocking) -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/imagenes/icon.png" />
