@@ -85,4 +85,33 @@ const pricing = defineCollection({
   }),
 });
 
-export const collections = { services, testimonials, pricing };
+const posts = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
+  schema: z.object({
+    title: z.string().min(1).max(100),
+    slug: z.string().regex(/^[a-z0-9-]+$/),
+    excerpt: z.string().max(300).optional(),
+    body: z.string().optional(),
+    seo: z.object({
+      title: z.string().min(1).max(60),
+      description: z.string().min(1).max(160),
+      canonical: z.string().url().optional(),
+      noindex: z.boolean().optional().default(false),
+      keywords: z.array(z.string()).max(10).optional(),
+      image: z.string().optional(),
+      imageAlt: z.string().min(5).max(100).optional(),
+    }),
+    featuredImage: z.string().optional(),
+    featuredImageAlt: z.string().optional(),
+    categories: z.array(z.string()).optional().default([]),
+    tags: z.array(z.string()).optional().default([]),
+    author: z.string().optional().default('Platanito Rico'),
+    draft: z.boolean().optional().default(false),
+    publishedAt: z.coerce.date(),
+    updatedAt: z.coerce.date().optional(),
+    readingTime: z.number().int().positive().optional(),
+    lang: z.enum(['es', 'en']).default('es'),
+  }),
+});
+
+export const collections = { services, testimonials, pricing, posts };
