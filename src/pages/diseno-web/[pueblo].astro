@@ -2,11 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
 import { pueblos, getPuebloBySlug, type Pueblo } from '../../data/pueblos-almeria';
 
 export async function getStaticPaths() {
   return pueblos
-    .filter((pueblo) => pueblo.slug !== 'almeria')
+    .filter((pueblo) => pueblo.slug !== 'almeria' && pueblo.slug !== 'mojacar' && pueblo.slug !== 'huercal-overa' && pueblo.slug !== 'albox')
     .map((pueblo) => ({
       params: { pueblo: pueblo.slug },
       props: { pueblo },
@@ -1575,17 +1576,7 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
             <div class="grid lg:grid-cols-5 gap-8 items-stretch">
               <!-- Mapa -->
               <div class="lg:col-span-3 relative rounded-3xl overflow-hidden shadow-xl border border-slate-200" style="min-height: 420px;">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50939.86994826!2d-2.4852!3d36.8381!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd7a9e9be24f6861%3A0x4aacaeba0db5d1e0!2sAlmer%C3%ADa!5e0!3m2!1ses!2ses!4v1700000000000!5m2!1ses!2ses"
-                  width="100%"
-                  height="100%"
-                  style="border: 0; min-height: 420px;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  title="Mapa de Almería - Platanito Rico Diseño Web"
-                  class="w-full h-full"
-                ></iframe>
+                {pueblo.coords && <InteractiveMap center={pueblo.coords} zoom={13} pitch={25} bearing={-15} />}
               </div>
 
               <!-- Info lateral -->
@@ -2194,17 +2185,7 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
             <div class="grid lg:grid-cols-5 gap-8 items-stretch">
               <!-- Mapa -->
               <div class="lg:col-span-3 relative rounded-3xl overflow-hidden shadow-xl border border-slate-200" style="min-height: 420px;">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50711.238491820546!2d-1.8973710500000002!3d37.2471618!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd707474a2bd0175%3A0x63ce951fd42add95!2s04620%20Vera%2C%20Almer%C3%ADa!5e0!3m2!1ses!2ses!4v1700000000001!5m2!1ses!2ses"
-                  width="100%"
-                  height="100%"
-                  style="border: 0; min-height: 420px;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  title="Mapa de Vera - Platanito Rico Diseño Web"
-                  class="w-full h-full"
-                ></iframe>
+                {pueblo.coords && <InteractiveMap center={pueblo.coords} zoom={13} pitch={25} bearing={-15} />}
               </div>
 
               <!-- Info lateral -->
@@ -2769,17 +2750,7 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
             <div class="grid lg:grid-cols-5 gap-8 items-stretch">
               <!-- Mapa Mojacar (37.1404, -1.8504) -->
               <div class="lg:col-span-3 relative rounded-3xl overflow-hidden shadow-xl border border-slate-200" style="min-height: 420px;">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12693.308272993077!2d-1.8601568288597143!3d37.138883733038675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd701235921869e5%3A0xe75852dc1d4df326!2s04638%20Moj%C3%A1car%2C%20Almer%C3%ADa!5e0!3m2!1ses!2ses!4v1700000000002!5m2!1ses!2ses"
-                  width="100%"
-                  height="100%"
-                  style="border: 0; min-height: 420px;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  title="Mapa de Mojácar - Diseño Web Platanito Rico"
-                  class="w-full h-full"
-                ></iframe>
+                {pueblo.coords && <InteractiveMap center={pueblo.coords} zoom={13} pitch={25} bearing={-15} />}
               </div>
 
               <!-- Info lateral -->
@@ -3218,17 +3189,7 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
             <div class="grid lg:grid-cols-5 gap-8 items-stretch">
               <!-- Mapa Garrucha (~37.1825, -1.8228) -->
               <div class="lg:col-span-3 relative rounded-3xl overflow-hidden shadow-xl border border-slate-200" style="min-height: 420px;">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1583.565431698224!2d-1.822810!3d37.182510!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd70732c510dbdbb%3A0xc66519ebcd7ecaa2!2s04630%20Garrucha%2C%20Almer%C3%ADa!5e0!3m2!1ses!2ses!4v1700000000003!5m2!1ses!2ses"
-                  width="100%"
-                  height="100%"
-                  style="border: 0; min-height: 420px;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  title="Mapa de Garrucha - Diseño Web Platanito Rico"
-                  class="w-full h-full"
-                ></iframe>
+                {pueblo.coords && <InteractiveMap center={pueblo.coords} zoom={14} pitch={20} bearing={-10} />}
               </div>
 
               <!-- Info lateral -->
@@ -3914,17 +3875,7 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
             <div class="grid lg:grid-cols-5 gap-8 items-stretch">
               <!-- Mapa Huércal-Overa (37.3859, -1.9413) -->
               <div class="lg:col-span-3 relative rounded-3xl overflow-hidden shadow-xl border border-slate-200" style="min-height: 420px;">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50628.97543212356!2d-1.9713!3d37.3859!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd7632a4a9b6a5cd%3A0x40d4d9dfe3ab6bb0!2s04600%20Hu%C3%A9rcal-Overa%2C%20Almer%C3%ADa!5e0!3m2!1ses!2ses!4v1700000000003!5m2!1ses!2ses"
-                  width="100%"
-                  height="100%"
-                  style="border: 0; min-height: 420px;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  title="Mapa de Huércal-Overa - Diseño Web Platanito Rico"
-                  class="w-full h-full"
-                ></iframe>
+                {pueblo.coords && <InteractiveMap center={pueblo.coords} zoom={13} pitch={25} bearing={-15} />}
               </div>
 
               <!-- Info lateral -->

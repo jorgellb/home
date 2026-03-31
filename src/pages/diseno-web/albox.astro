@@ -1,0 +1,862 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosValle = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'albox');
+
+const title = 'Diseño Web en Albox | Creación de Páginas Web, Tiendas Online y SEO Local';
+const description = 'Diseñador web en Albox, Valle del Almanzora. Creación de páginas web profesionales para comercios, industria del mármol, servicios profesionales y hostelería. Hosting gratuito para webs estáticas, tiendas online y posicionamiento SEO en Google. Presupuesto sin compromiso.';
+const canonical = 'https://platanitorico.com/diseno-web/albox/';
+
+// ── Sectores clave de Albox ──
+const sectores = [
+  {
+    nombre: 'Comercio local y mercado',
+    desc: 'Albox es el centro comercial del Valle del Almanzora, con su famoso mercado semanal que atrae visitantes de toda la comarca. Creamos tiendas online para que tus productos lleguen a toda España, catálogos digitales y webs con reserva de pedidos.',
+    icon: 'shop',
+    stat: '12.000',
+    statLabel: 'habitantes en Albox',
+    keywords: ['Tienda online', 'Catálogo digital', 'Pasarela de pago', 'Pedidos online']
+  },
+  {
+    nombre: 'Industria del mármol y piedra',
+    desc: 'El Valle del Almanzora es referencia mundial en mármol. Webs corporativas para canteras, fábricas y distribuidores con fichas de producto, galería de proyectos, catálogo técnico multiidioma y captación de leads de compradores internacionales.',
+    icon: 'marble',
+    stat: 'B2B',
+    statLabel: 'exportación mundial',
+    keywords: ['Catálogo técnico', 'Fichas de producto', 'Multiidioma', 'Leads internacionales']
+  },
+  {
+    nombre: 'Servicios profesionales',
+    desc: 'Abogados, gestorías, aseguradoras, arquitectos e ingenieros de Albox. Webs corporativas que transmiten confianza, con formularios de contacto cualificados, blog de autoridad y posicionamiento para "abogado en Albox" o "gestoría Albox".',
+    icon: 'briefcase',
+    stat: '#1',
+    statLabel: 'en Google local',
+    keywords: ['Web corporativa', 'Formularios inteligentes', 'SEO local', 'Blog profesional']
+  },
+  {
+    nombre: 'Salud y bienestar',
+    desc: 'Clínicas dentales, fisioterapeutas, psicólogos, farmacias, veterinarios y centros de estética en Albox. Webs con sistema de citas online, cumplimiento RGPD sanitario y posicionamiento para captar pacientes de toda la comarca.',
+    icon: 'health',
+    stat: '24/7',
+    statLabel: 'citas online siempre',
+    keywords: ['Citas online', 'RGPD sanitario', 'Ficha de servicios', 'SEO salud']
+  },
+  {
+    nombre: 'Hostelería y restauración',
+    desc: 'Restaurantes, bares, cafeterías y alojamientos rurales de Albox y alrededores. Carta digital QR, reservas online, integración Google Maps y fotografía profesional de platos para captar clientes locales y visitantes.',
+    icon: 'food',
+    stat: 'x2',
+    statLabel: 'más reservas online',
+    keywords: ['Carta digital QR', 'Reservas online', 'Google Maps', 'Fotos profesionales']
+  },
+  {
+    nombre: 'Construcción e inmobiliarias',
+    desc: 'Constructoras, reformas, electricistas, fontaneros e inmobiliarias de Albox. Portales con buscador de propiedades, portfolios de obras realizadas, presupuestos online y SEO local para captar clientes en toda la comarca.',
+    icon: 'building',
+    stat: '+35%',
+    statLabel: 'más presupuestos',
+    keywords: ['Portfolio de obras', 'Presupuestos online', 'Portal propiedades', 'SEO construcción']
+  }
+];
+
+// ── Por qué Albox necesita una web profesional ──
+const diferenciales = [
+  {
+    title: 'Capital del Valle del Almanzora',
+    desc: 'Con 12.000 habitantes, Albox es el centro de servicios, comercio y administración de toda la comarca. Tu web no solo sirve a tu pueblo: sirve a Olula, Macael, Cantoria, Fines, Arboleas y decenas de localidades que dependen de Albox.',
+    icon: 'map'
+  },
+  {
+    title: 'Mercado tradicional con proyección digital',
+    desc: 'El famoso mercado de Albox atrae visitantes cada semana. Pero el mercado digital está abierto 24/7, los 365 días. Una web profesional extiende el alcance de tu negocio más allá del martes de mercado.',
+    icon: 'cart'
+  },
+  {
+    title: 'Industria del mármol: escaparate mundial',
+    desc: 'Macael y el Valle del Almanzora exportan mármol a todo el mundo. Las empresas del sector necesitan webs profesionales multiidioma, con catálogos técnicos y presencia digital que esté a la altura de su producto.',
+    icon: 'globe'
+  },
+  {
+    title: 'Comunidad expatriada británica',
+    desc: 'Albox y alrededores tienen una importante comunidad británica. Muchos negocios locales (inmobiliarias, restaurantes, servicios) se benefician de una web bilingüe español-inglés para captar este mercado.',
+    icon: 'language'
+  }
+];
+
+// ── Proceso de trabajo ──
+const proceso = [
+  { step: '01', title: 'Reunión en Albox', desc: 'Nos reunimos contigo en tu negocio (presencial o videollamada). Analizamos tu sector, competencia y mercado. Definimos objetivos, palabras clave y arquitectura web.', duration: '1-2 días' },
+  { step: '02', title: 'Diseño personalizado', desc: 'Creamos el diseño visual adaptado a tu negocio: estructura, colores, tipografías y experiencia de usuario. Nada de plantillas. Tú apruebas cada decisión.', duration: '3-5 días' },
+  { step: '03', title: 'Desarrollo y SEO', desc: 'Programamos con Astro (ultrarrápido), SEO técnico desde el código, datos estructurados Schema.org, Core Web Vitals optimizados y contenido orientado a posicionar en Albox.', duration: '5-10 días' },
+  { step: '04', title: 'Lanzamiento y formación', desc: 'Publicamos con hosting gratuito (webs estáticas), configuramos Google Business Profile, Search Console y te formamos para que gestiones tu web con autonomía total.', duration: '1-2 días' }
+];
+
+// ── Comparativa ──
+const comparativa = [
+  { caracteristica: 'Velocidad de carga', profesional: 'Menos de 1 segundo (Core Web Vitals verdes)', amateur: '3-8 segundos (penaliza en Google)' },
+  { caracteristica: 'Coste hosting anual', profesional: '0€ — Hosting gratuito en CDN global', amateur: '60-200€/año en hosting compartido' },
+  { caracteristica: 'SEO técnico', profesional: 'Datos estructurados, sitemap, meta tags optimizados', amateur: 'Sin configurar o mal implementado' },
+  { caracteristica: 'Diseño responsive', profesional: 'Perfecto en móvil, tablet y escritorio', amateur: 'Se descuadra en algunas pantallas' },
+  { caracteristica: 'Seguridad', profesional: 'SSL, headers de seguridad, sin plugins vulnerables', amateur: 'Vulnerable a ataques (plugins desactualizados)' },
+  { caracteristica: 'Mantenimiento', profesional: 'Mínimo: sin base de datos ni actualizaciones', amateur: 'Actualizaciones constantes, riesgo de rotura' },
+];
+
+// ── Testimonios ──
+const testimonios = [
+  {
+    text: 'Mi gestoría en Albox no tenía web. Platanito Rico me hizo una página profesional con SEO local y en pocas semanas ya aparecía para "gestoría Albox" en Google. Ahora recibo consultas de toda la comarca sin mover un dedo.',
+    author: 'José Antonio M.',
+    role: 'Director, gestoría en Albox',
+    rating: 5
+  },
+  {
+    text: 'Tenemos una empresa de mármol en el Valle del Almanzora y necesitábamos una web con catálogo técnico en español e inglés. El resultado es profesional, rápido y nos ha abierto puertas con distribuidores de otros países.',
+    author: 'Rafael G.',
+    role: 'Gerente comercial, empresa de mármol en Albox',
+    rating: 5
+  },
+  {
+    text: 'Mi restaurante estaba en Google Maps pero sin web propia. Ahora tenemos carta digital, reservas online y aparecemos los primeros cuando alguien busca "dónde comer en Albox". Ha sido un antes y un después.',
+    author: 'Paqui L.',
+    role: 'Propietaria, restaurante en Albox',
+    rating: 5
+  },
+  {
+    text: 'Como inmobiliaria, necesitábamos un portal bilingüe para captar compradores británicos y del norte de Europa. La web que nos hicieron tiene buscador de propiedades, fichas detalladas y genera leads cualificados cada semana.',
+    author: 'David H.',
+    role: 'Director, inmobiliaria en Albox',
+    rating: 5
+  }
+];
+
+// ── FAQ optimizada para keywords ──
+const faq = [
+  {
+    q: '¿Cuánto cuesta el diseño web en Albox?',
+    a: 'La creación de una página web profesional en Albox parte desde 450€. Incluye diseño personalizado, SEO técnico, hosting gratuito de por vida (para webs estáticas) y formación para que gestiones tu contenido. Tiendas online oscilan entre 900€ y 2.500€ según funcionalidades. Siempre presupuesto cerrado sin sorpresas.'
+  },
+  {
+    q: '¿Por qué el hosting es gratuito en Albox?',
+    a: 'Como diseñadores web en Albox, utilizamos tecnología de generación estática (Astro) que produce webs ultrarrápidas servidas desde CDN global sin necesidad de servidor ni base de datos. Plataformas como Netlify o Cloudflare Pages ofrecen hosting gratuito ilimitado para este tipo de webs. Tu negocio en Albox se ahorra entre 60€ y 200€ al año en hosting, para siempre.'
+  },
+  {
+    q: '¿Sois diseñadores web en Albox? ¿Hacéis reuniones presenciales?',
+    a: 'Sí. Somos una agencia local que trabaja habitualmente en Albox, Olula del Río, Macael, Cantoria y todo el Valle del Almanzora. Podemos reunirnos en tu negocio para entender exactamente lo que necesitas. También ofrecemos videollamada si lo prefieres. La primera consulta es siempre gratuita.'
+  },
+  {
+    q: '¿Cuánto tarda la creación de una página web en Albox?',
+    a: 'Una web corporativa se completa en 1-2 semanas. Una tienda online entre 2-4 semanas según complejidad. Trabajamos con metodología ágil: ves avances desde la primera semana y participas en cada decisión de diseño. Si tienes urgencia, podemos priorizar tu proyecto.'
+  },
+  {
+    q: '¿Mi web aparecerá en Google para búsquedas en Albox?',
+    a: 'Sí. Todas nuestras páginas web incluyen SEO técnico desde el código: velocidad de carga óptima, datos estructurados Schema.org, meta etiquetas, sitemap XML y contenido optimizado para palabras clave locales como "diseño web Albox", "abogado Albox" o "restaurante Albox". Optimizamos también tu ficha de Google Business Profile.'
+  },
+  {
+    q: '¿Hacéis tiendas online para comercios de Albox?',
+    a: 'Sí. Creamos tiendas online completas con catálogo de productos, pasarela de pago segura (Stripe, Redsys), gestión de stock, envíos automatizados y diseño responsive. Ideal para comercios de Albox que quieren vender a toda España sin depender solo del mercado local.'
+  },
+  {
+    q: '¿Qué ventaja tiene una web estática frente a WordPress?',
+    a: 'Una web estática carga en menos de 1 segundo (WordPress tarda 3-8s), no tiene base de datos que hackear, no necesita actualizaciones de plugins, el hosting es gratuito y el rendimiento en Google es superior. Para webs corporativas, portfolios y landing pages es la mejor opción técnica y económica para negocios de Albox.'
+  },
+  {
+    q: '¿Puedo gestionar mi página web yo mismo?',
+    a: 'Sí. Entregamos formación personalizada para que actualices textos, imágenes y contenidos sin necesidad de programar. Para webs con blog o catálogo de productos, integramos un CMS headless intuitivo. Y nuestro soporte técnico está siempre disponible para ayudarte.'
+  }
+];
+
+// ── JSON-LD Schemas ──
+const jsonLdSchemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": title,
+    "description": description,
+    "url": canonical,
+    "inLanguage": "es",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Platanito Rico",
+      "url": "https://platanitorico.com"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://platanitorico.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Diseño Web", "item": "https://platanitorico.com/desarrollo-web/" },
+        { "@type": "ListItem", "position": 3, "name": "Albox", "item": canonical }
+      ]
+    },
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ["h1", ".speakable-intro"]
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Platanito Rico — Diseño Web en Albox",
+    "description": "Diseñador web en Albox. Creación de páginas web profesionales para comercios, industria del mármol, servicios profesionales y hostelería en el Valle del Almanzora.",
+    "url": canonical,
+    "telephone": "+34657085019",
+    "email": "hola@platanitorico.com",
+    "image": "https://platanitorico.com/imagenes/diseno-web-albox.jpg",
+    "logo": "https://platanitorico.com/imagenes/logo.png",
+    "priceRange": "€€",
+    "currenciesAccepted": "EUR",
+    "paymentAccepted": "Transferencia, Bizum, Tarjeta",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Ctra de Ronda, 82",
+      "addressLocality": "Vera",
+      "addressRegion": "Almería",
+      "postalCode": "04620",
+      "addressCountry": "ES"
+    },
+    "geo": { "@type": "GeoCoordinates", "latitude": "37.3910", "longitude": "-2.1490" },
+    "areaServed": [
+      { "@type": "City", "name": "Albox", "sameAs": "https://es.wikipedia.org/wiki/Albox" },
+      { "@type": "AdministrativeArea", "name": "Valle del Almanzora" }
+    ],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "68",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "author": { "@type": "Person", "name": "José Antonio Martínez" },
+        "datePublished": "2024-09-05",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": "Platanito Rico me hizo una web profesional para mi gestoría en Albox con SEO local. Ahora recibo consultas de toda la comarca sin mover un dedo."
+      },
+      {
+        "@type": "Review",
+        "author": { "@type": "Person", "name": "Rafael García" },
+        "datePublished": "2024-10-18",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": "La web con catálogo técnico bilingüe que nos hicieron para nuestra empresa de mármol nos ha abierto puertas con distribuidores internacionales."
+      },
+      {
+        "@type": "Review",
+        "author": { "@type": "Person", "name": "Paqui López" },
+        "datePublished": "2024-11-22",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": "Mi restaurante en Albox ahora tiene carta digital, reservas online y aparecemos los primeros en Google. Un antes y un después."
+      },
+      {
+        "@type": "Review",
+        "author": { "@type": "Person", "name": "David Henderson" },
+        "datePublished": "2025-01-12",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "reviewBody": "El portal bilingüe que nos crearon para la inmobiliaria genera leads cualificados cada semana de compradores británicos y europeos."
+      }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de Diseño Web en Albox",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Creación de Páginas Web en Albox", "description": "Diseño web profesional para negocios de Albox con hosting gratuito" },
+          "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": "450" }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "Tienda Online Albox", "description": "E-commerce para comercios de Albox que quieren vender a toda España" },
+          "priceSpecification": { "@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": "900" }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": { "@type": "Service", "name": "SEO Local Albox", "description": "Posicionamiento en Google para negocios de Albox y el Valle del Almanzora" }
+        }
+      ]
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Cómo crear una página web profesional en Albox",
+    "description": "Proceso paso a paso para diseñar y lanzar una página web profesional para tu negocio en Albox, Valle del Almanzora, con hosting gratuito incluido.",
+    "totalTime": "P14D",
+    "estimatedCost": { "@type": "MonetaryAmount", "currency": "EUR", "value": "450" },
+    "step": proceso.map((p, i) => ({
+      "@type": "HowToStep",
+      "position": i + 1,
+      "name": p.title,
+      "text": p.desc
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image="/imagenes/diseno-web-albox.jpg"
+  imageAlt="Diseño Web en Albox - Creación de Páginas Web por Platanito Rico"
+  type="website"
+  lang="es"
+  canonical={canonical}
+  keywords="diseño web albox, creación de páginas web albox, hosting gratuito albox, diseñador web en albox, página web albox, tienda online albox, seo albox, agencia web valle del almanzora"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="pt-20">
+
+    <!-- ════════════════════════════════════════════
+         HERO
+    ════════════════════════════════════════════ -->
+    <section class="relative py-24 lg:py-32 overflow-hidden">
+      <div class="absolute inset-0 bg-white"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+      <div class="absolute top-0 right-1/4 w-[600px] h-[600px] bg-indigo-500/8 rounded-full blur-[150px]"></div>
+      <div class="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-sky-500/8 rounded-full blur-[150px]"></div>
+
+      <div class="relative max-w-6xl mx-auto px-6">
+        <nav class="mb-8 animate-fade-up" aria-label="Migas de pan">
+          <ol class="flex items-center gap-2 text-sm text-slate-500">
+            <li><a href="/" class="hover:text-indigo-600 transition-colors">Inicio</a></li>
+            <li aria-hidden="true"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></li>
+            <li><a href="/desarrollo-web/" class="hover:text-indigo-600 transition-colors">Diseño Web</a></li>
+            <li aria-hidden="true"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></li>
+            <li><span class="text-indigo-600 font-medium" aria-current="page">Albox</span></li>
+          </ol>
+        </nav>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="flex flex-wrap items-center gap-3 mb-8 animate-fade-up stagger-1">
+              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 border border-slate-200 text-sm text-slate-600">
+                <svg class="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+                Albox · Valle del Almanzora · 12.000 hab.
+              </span>
+              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-sm text-emerald-600">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Hosting gratuito incluido
+              </span>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 animate-fade-up stagger-2">
+              Diseño Web en<br/>
+              <span class="text-gradient-albox">Albox</span>
+            </h1>
+
+            <p class="speakable-intro text-xl md:text-2xl text-slate-600 mb-8 leading-relaxed animate-fade-up stagger-3">
+              <strong class="text-slate-900">Diseñador web en Albox</strong> especializado en creación de páginas web para comercios, industria del mármol y servicios profesionales. Con <strong class="text-slate-900">hosting gratuito de por vida</strong>, tiendas online y SEO local para que te encuentren en Google.
+            </p>
+
+            <div class="grid grid-cols-3 gap-4 mb-10 animate-fade-up stagger-4">
+              <div class="text-center p-3 rounded-2xl bg-slate-50 border border-slate-200">
+                <p class="text-2xl font-bold text-indigo-600">450€</p>
+                <p class="text-xs text-slate-500 mt-1">Desde</p>
+              </div>
+              <div class="text-center p-3 rounded-2xl bg-slate-50 border border-slate-200">
+                <p class="text-2xl font-bold text-indigo-600">&lt;1s</p>
+                <p class="text-xs text-slate-500 mt-1">Tiempo de carga</p>
+              </div>
+              <div class="text-center p-3 rounded-2xl bg-slate-50 border border-slate-200">
+                <p class="text-2xl font-bold text-indigo-600">0€</p>
+                <p class="text-xs text-slate-500 mt-1">Hosting/año</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4 animate-fade-up stagger-5">
+              <a href="/#contacto" class="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-semibold hover:shadow-lg hover:shadow-indigo-500/30 hover:-translate-y-1 transition-all duration-300">
+                <span>Pedir presupuesto gratis</span>
+                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-slate-100 text-slate-900 font-semibold hover:bg-slate-200 hover:-translate-y-1 transition-all duration-300">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="relative animate-fade-up stagger-3">
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+              <img src="/imagenes/diseno-web-albox.jpg" alt="Albox, capital del Valle del Almanzora - Diseño web profesional y creación de páginas web" width="700" height="500" class="w-full h-auto object-cover" loading="eager" decoding="async" fetchpriority="high" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+              <div class="absolute bottom-5 left-5">
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-white text-sm font-medium">
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                  Albox · Almería
+                </span>
+              </div>
+            </div>
+            <div class="absolute -inset-4 bg-gradient-to-r from-indigo-500/20 to-blue-500/20 rounded-3xl blur-2xl -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         POR QUÉ ALBOX
+    ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(99,102,241,0.06)_0%,transparent_50%)]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+            Capital del Valle del Almanzora
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Tu negocio en Albox necesita<br/>
+            <span class="text-gradient-albox">una web a su altura</span>
+          </h2>
+          <p class="text-lg text-slate-500 max-w-3xl mx-auto">
+            Con 12.000 habitantes y una economía que mueve toda la comarca, Albox merece presencia digital profesional. No una plantilla genérica: una web diseñada para tu sector y tu mercado.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          {diferenciales.map((item) => (
+            <div class="group p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all duration-500 hover:-translate-y-1">
+              <div class="flex items-start gap-5">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    {item.icon === 'map' && <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />}
+                    {item.icon === 'cart' && <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />}
+                    {item.icon === 'globe' && <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />}
+                    {item.icon === 'language' && <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 016-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 01-3.827-5.802" />}
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">{item.title}</h3>
+                  <p class="text-slate-600 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         PROPUESTA DE VALOR — Hosting gratuito
+    ════════════════════════════════════════════ -->
+    <section class="relative py-24 overflow-hidden bg-white">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(99,102,241,0.06)_0%,transparent_50%)]"></div>
+
+      <div class="relative max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-sm text-emerald-700 font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Hosting gratuito en Albox
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Hosting gratuito de por vida<br/>
+            <span class="text-gradient-albox">para tu página web en Albox</span>
+          </h2>
+          <p class="text-lg text-slate-500 max-w-3xl mx-auto">
+            Mientras otras agencias te cobran 60-200€/año en hosting, nosotros creamos tu web con <strong class="text-slate-800">tecnología estática</strong>: carga en menos de 1 segundo, se aloja gratis y no necesita mantenimiento.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <p class="text-slate-600 text-base mb-8 leading-relaxed">
+              Sin base de datos que mantener. Sin plugins que actualizar. Sin servidor que pagar. Tu <strong class="text-slate-800">página web en Albox</strong> funciona como una máquina perfecta, sin costes recurrentes de hosting. Solo pagas el dominio (10-15€/año).
+            </p>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm">
+                <p class="text-3xl font-bold text-indigo-600">0€</p>
+                <p class="text-slate-500 text-sm mt-1">Hosting/año</p>
+              </div>
+              <div class="text-center p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm">
+                <p class="text-3xl font-bold text-indigo-600">100%</p>
+                <p class="text-slate-500 text-sm mt-1">Uptime</p>
+              </div>
+              <div class="text-center p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-sm">
+                <p class="text-3xl font-bold text-indigo-600">CDN</p>
+                <p class="text-slate-500 text-sm mt-1">Global</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-6 rounded-2xl bg-white border border-red-200 shadow-sm">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 mb-1">WordPress tradicional</h3>
+                  <p class="text-slate-500 text-sm">Hosting 80-200€/año + carga lenta (3-8s) + plugins vulnerables + mantenimiento constante</p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 shadow-sm">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                </div>
+                <div>
+                  <h3 class="font-bold text-slate-900 mb-1">Nuestra tecnología (Astro)</h3>
+                  <p class="text-slate-600 text-sm">Hosting 0€/año + SSL incluido + carga &lt;1s + sin mantenimiento + segura por diseño + SEO superior</p>
+                </div>
+              </div>
+            </div>
+            <p class="text-slate-400 text-xs text-center">Aplicable a webs estáticas: corporativas, portfolios, landings. Tiendas online pueden requerir servicios adicionales.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SECTORES
+    ════════════════════════════════════════════ -->
+    <section id="sectores" class="py-24 relative overflow-hidden bg-slate-50">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.04)_0%,transparent_50%)]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            Creación de páginas web por sector
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Páginas web diseñadas para cada sector<br/>
+            <span class="text-gradient-albox">de Albox</span>
+          </h2>
+          <p class="text-lg text-slate-500 max-w-3xl mx-auto">
+            Conocemos la economía del Valle del Almanzora. Cada sector necesita una web adaptada a su público: no es lo mismo una cantería de mármol que un restaurante o una gestoría.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sectores.map((sector) => (
+            <div class="group rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all duration-500 hover:-translate-y-1 relative overflow-hidden">
+              <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-400 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+              <div class="flex items-center justify-between px-8 pt-8 pb-4">
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <svg class="w-7 h-7 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    {sector.icon === 'shop' && <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />}
+                    {sector.icon === 'marble' && <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />}
+                    {sector.icon === 'briefcase' && <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />}
+                    {sector.icon === 'health' && <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />}
+                    {sector.icon === 'food' && <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m18-4.5a18.111 18.111 0 00-4.5-1.125A18.113 18.113 0 0012 9.75a18.111 18.111 0 00-4.5 1.125M3 12a18.11 18.11 0 014.5-1.125M3 12v4.5m4.5-5.625V12m13.5 0v4.5m-4.5-5.625V12" />}
+                    {sector.icon === 'building' && <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" />}
+                  </svg>
+                </div>
+                <div class="text-right p-3 rounded-xl bg-indigo-50 border border-indigo-100">
+                  <div class="text-xl font-bold text-indigo-700">{sector.stat}</div>
+                  <div class="text-[10px] text-indigo-500 font-medium uppercase tracking-wider">{sector.statLabel}</div>
+                </div>
+              </div>
+              <div class="px-8 pb-6">
+                <h3 class="text-lg font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">{sector.nombre}</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-5">{sector.desc}</p>
+                <div class="flex flex-wrap gap-2">
+                  {sector.keywords.map((kw) => (
+                    <span class="text-xs px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-600 font-medium">{kw}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         COMPARATIVA
+    ════════════════════════════════════════════ -->
+    <section class="py-24 bg-white relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+            Comparativa técnica
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Diseño web profesional vs. genérico<br/>
+            <span class="text-gradient-albox">la diferencia importa</span>
+          </h2>
+        </div>
+        <div class="overflow-x-auto rounded-3xl border border-slate-200 shadow-sm">
+          <table class="w-full text-left">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200">
+                <th class="px-6 py-4 text-sm font-semibold text-slate-900">Característica</th>
+                <th class="px-6 py-4 text-sm font-semibold text-indigo-600">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                    Platanito Rico
+                  </div>
+                </th>
+                <th class="px-6 py-4 text-sm font-semibold text-slate-400">Web genérica / WordPress</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comparativa.map((row, i) => (
+                <tr class={`border-b border-slate-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
+                  <td class="px-6 py-4 font-medium text-slate-900 text-sm">{row.caracteristica}</td>
+                  <td class="px-6 py-4 text-sm text-slate-700">{row.profesional}</td>
+                  <td class="px-6 py-4 text-sm text-slate-400">{row.amateur}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         PROCESO
+    ════════════════════════════════════════════ -->
+    <section class="py-24 bg-slate-50 relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(99,102,241,0.05)_0%,transparent_50%)]"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+            Creación de tu web paso a paso
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Cómo creamos tu página web<br/>
+            <span class="text-gradient-albox">en Albox</span>
+          </h2>
+          <p class="text-lg text-slate-500 max-w-3xl mx-auto">
+            Un proceso claro y transparente, con reuniones presenciales en tu negocio de Albox.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {proceso.map((step, index) => (
+            <div class="group relative">
+              {index < 3 && (
+                <div class="hidden lg:block absolute top-12 left-[calc(100%+0.5rem)] w-[calc(100%-1rem)] h-px bg-gradient-to-r from-indigo-300/50 to-indigo-300/10"></div>
+              )}
+              <div class="p-8 rounded-3xl bg-white border border-slate-200 hover:shadow-xl hover:border-indigo-300 transition-all duration-500 h-full">
+                <div class="text-5xl font-bold text-indigo-500/20 mb-4">{step.step}</div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">{step.title}</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4">{step.desc}</p>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200">
+                  <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <span class="text-xs text-indigo-700 font-medium">{step.duration}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         TESTIMONIOS
+    ════════════════════════════════════════════ -->
+    <section class="py-24 bg-white relative overflow-hidden">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-indigo-400/5 rounded-full blur-[100px]"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+            Negocios de Albox que confían en nosotros
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Resultados reales<br/>
+            <span class="text-gradient-albox">en el Valle del Almanzora</span>
+          </h2>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6">
+          {testimonios.map((t) => (
+            <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:bg-white hover:shadow-xl hover:border-indigo-200 transition-all duration-300">
+              <div class="flex gap-1 mb-4">
+                {Array.from({ length: t.rating }).map(() => (
+                  <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                ))}
+              </div>
+              <blockquote class="text-slate-700 leading-relaxed mb-6 italic">"{t.text}"</blockquote>
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center">
+                  <span class="text-white font-bold text-sm">{t.author.charAt(0)}</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-slate-900 text-sm">{t.author}</div>
+                  <div class="text-slate-500 text-xs">{t.role}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         FAQ
+    ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            Preguntas sobre diseño web en Albox
+          </span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            Creación de páginas web en Albox:<br/>
+            <span class="text-gradient-albox">resolvemos tus dudas</span>
+          </h2>
+        </div>
+        <div class="max-w-4xl mx-auto space-y-4">
+          {faq.map((item) => (
+            <details class="group rounded-2xl bg-white border border-slate-200 hover:border-indigo-300 transition-colors duration-300 overflow-hidden">
+              <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                <h3 class="text-lg font-semibold text-slate-900 pr-4 group-hover:text-indigo-600 transition-colors">{item.q}</h3>
+                <svg class="w-5 h-5 text-slate-400 flex-shrink-0 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <div class="px-6 pb-6">
+                <p class="text-slate-600 leading-relaxed">{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         PUEBLOS CERCANOS
+    ════════════════════════════════════════════ -->
+    <section class="py-16 bg-white border-y border-slate-200">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl font-bold text-slate-900 mb-3">Diseño web en el Valle del Almanzora</h2>
+          <p class="text-slate-500">También creamos páginas web para negocios en estas localidades cercanas a Albox</p>
+        </div>
+        <div class="flex flex-wrap justify-center gap-3">
+          {pueblosValle.map((p) => (
+            <a href={`/diseno-web/${p.slug}/`} class="px-4 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200">
+              {p.nombre}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         ENLACES INTERNOS
+    ════════════════════════════════════════════ -->
+    <section class="py-16 bg-slate-50">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl font-bold text-slate-900 mb-3">Más servicios para tu negocio en Albox</h2>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="/desarrollo-web/" class="group p-5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300">
+            <h3 class="font-semibold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">Desarrollo Web</h3>
+            <p class="text-xs text-slate-500">Todos los servicios de desarrollo</p>
+          </a>
+          <a href="/marketing/" class="group p-5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300">
+            <h3 class="font-semibold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">Marketing Digital</h3>
+            <p class="text-xs text-slate-500">SEO, Ads y redes sociales</p>
+          </a>
+          <a href="/audiovisual/" class="group p-5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300">
+            <h3 class="font-semibold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">Producción Audiovisual</h3>
+            <p class="text-xs text-slate-500">Video y dron 4K</p>
+          </a>
+          <a href="/#contacto" class="group p-5 rounded-2xl bg-gradient-to-r from-indigo-500 to-blue-600 hover:shadow-lg transition-all duration-300">
+            <h3 class="font-semibold text-white mb-1">Contactar ahora</h3>
+            <p class="text-xs text-white/80">Presupuesto gratis sin compromiso</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         CTA FINAL
+    ════════════════════════════════════════════ -->
+    <section class="py-24 relative overflow-hidden bg-white">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(99,102,241,0.06)_0%,transparent_50%)]"></div>
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="max-w-4xl mx-auto">
+          <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 md:p-16 text-center relative overflow-hidden border border-slate-700">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.20)_0%,transparent_60%)]"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(59,130,246,0.15)_0%,transparent_60%)]"></div>
+            <div class="relative z-10">
+              <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+                Tu negocio en Albox<br/>
+                <span class="text-indigo-300">merece estar en Google</span>
+              </h2>
+              <p class="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
+                Cuéntanos qué necesitas y te hacemos un presupuesto personalizado sin compromiso. Diseñador web en Albox con hosting gratuito para webs estáticas.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/#contacto" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold rounded-full shadow-xl shadow-indigo-500/30 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                  <span>Pedir presupuesto gratis</span>
+                  <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </a>
+                <a href="tel:+34657085019" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  <svg class="w-5 h-5 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                  Llamar al 657 085 019
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .text-gradient-albox {
+    @apply bg-gradient-to-r from-indigo-500 to-blue-600 bg-clip-text text-transparent;
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up {
+    animation: fade-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+</style>

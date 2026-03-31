@@ -1,0 +1,98 @@
+---
+interface Props {
+  center: [number, number];
+  zoom?: number;
+  pitch?: number;
+  bearing?: number;
+  height?: string;
+}
+
+const { center, zoom = 13, pitch = 25, bearing = -15, height = "420px" } = Astro.props;
+const mapId = `map-${Math.random().toString(36).substring(7)}`;
+---
+
+<section class="map-section">
+  <div 
+    id={mapId} 
+    class="maplibre-map rounded-3xl overflow-hidden"
+    style={`height: ${height};`}
+    data-center={JSON.stringify(center)}
+    data-zoom={zoom}
+    data-pitch={pitch}
+    data-bearing={bearing}
+  ></div>
+</section>
+
+<style>
+  .map-section {
+    --map-bg: #0a1628;
+    --map-border: rgba(200, 164, 90, 0.15);
+    --map-primary: #c8a45a;
+  }
+
+  .maplibre-map {
+    width: 100%;
+    background: var(--map-bg);
+    border: 1px solid var(--map-border);
+  }
+</style>
+
+<script>
+  function initMapLibreMaps() {
+    const maps = document.querySelectorAll('.maplibre-map');
+    
+    maps.forEach(async (mapContainer) => {
+      const element = mapContainer as HTMLElement;
+      if (element.querySelector('.maplibregl-map')) return;
+
+      const center = JSON.parse(element.dataset.center || '[0, 0]');
+      const zoom = parseFloat(element.dataset.zoom || '13');
+      const pitch = parseFloat(element.dataset.pitch || '25');
+      const bearing = parseFloat(element.dataset.bearing || '-15');
+
+      const L = await import('https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js');
+
+      new L.Map({
+        container: element,
+        style: {
+          version: 8,
+          sources: {
+            'carto-dark': {
+              type: 'raster',
+              tiles: [
+                'https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
+                'https://b.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
+                'https://c.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
+                'https://d.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
+              ],
+              tileSize: 256,
+              attribution: '&copy; CARTO'
+            }
+          },
+          layers: [{
+            id: 'carto-dark-layer',
+            type: 'raster',
+            source: 'carto-dark',
+            minzoom: 0,
+            maxzoom: 19
+          }]
+        },
+        center: center,
+        zoom: zoom,
+        pitch: pitch,
+        bearing: bearing,
+        interactive: true,
+        attributionControl: false
+      });
+
+      (L as any).NavigationControl && new (L as any).NavigationControl({ showCompass: false });
+    });
+  }
+
+  initMapLibreMaps();
+  document.addEventListener('astro:page-load', initMapLibreMaps);
+</script>
+
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
+</style>
