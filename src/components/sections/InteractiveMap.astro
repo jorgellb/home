@@ -18,28 +18,71 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
 ---
 
 <section class="map-premium-section">
-  <div 
-    id={mapId} 
-    class="maplibre-map rounded-3xl overflow-hidden"
-    style={`height: ${height};`}
-    data-center={JSON.stringify(center)}
-    data-zoom={zoom}
-    data-pitch={pitch}
-    data-bearing={bearing}
-    data-label={label || ''}
-    data-puntos={JSON.stringify(puntosInteres)}
-  ></div>
+  <div class="map-inner-container">
+    <div 
+      id={mapId} 
+      class="maplibre-map"
+      style={`height: ${height};`}
+      data-center={JSON.stringify(center)}
+      data-zoom={zoom}
+      data-pitch={pitch}
+      data-bearing={bearing}
+      data-label={label || ''}
+      data-puntos={JSON.stringify(puntosInteres)}
+    ></div>
+    
+    <div class="map-vignette"></div>
+  </div>
   
   <div class="map-frame-accent">
-    <svg class="frame-corner tl" viewBox="0 0 40 40"><path d="M0 20 L0 5 Q0 0 5 0 L20 0" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="5" cy="5" r="2" fill="currentColor"/></svg>
-    <svg class="frame-corner tr" viewBox="0 0 40 40"><path d="M40 20 L40 5 Q40 0 35 0 L20 0" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="35" cy="5" r="2" fill="currentColor"/></svg>
-    <svg class="frame-corner bl" viewBox="0 0 40 40"><path d="M0 20 L0 35 Q0 40 5 40 L20 40" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="5" cy="35" r="2" fill="currentColor"/></svg>
-    <svg class="frame-corner br" viewBox="0 0 40 40"><path d="M40 20 L40 35 Q40 40 35 40 L20 40" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="35" cy="35" r="2" fill="currentColor"/></svg>
+    <!-- Corner TL -->
+    <div class="corner-ornament tl">
+      <svg viewBox="0 0 50 50" class="drop-shadow-glow">
+        <path class="ornament-path-outer" d="M2,50 V15 C2,5 5,2 15,2 H50" />
+        <path class="ornament-path-inner" d="M10,50 V20 C10,12 12,10 20,10 H50" />
+        <path class="ornament-path-accent" d="M0,35 V15 C0,5 5,0 15,0 H35" />
+        <circle class="ornament-dot pulse" cx="6" cy="6" r="3" />
+        <circle class="ornament-dot-inner" cx="6" cy="6" r="1" />
+      </svg>
+    </div>
+    <!-- Corner TR -->
+    <div class="corner-ornament tr">
+      <svg viewBox="0 0 50 50" class="drop-shadow-glow">
+        <path class="ornament-path-outer" d="M2,50 V15 C2,5 5,2 15,2 H50" />
+        <path class="ornament-path-inner" d="M10,50 V20 C10,12 12,10 20,10 H50" />
+        <path class="ornament-path-accent" d="M0,35 V15 C0,5 5,0 15,0 H35" />
+        <circle class="ornament-dot pulse" cx="6" cy="6" r="3" />
+        <circle class="ornament-dot-inner" cx="6" cy="6" r="1" />
+      </svg>
+    </div>
+    <!-- Corner BL -->
+    <div class="corner-ornament bl">
+      <svg viewBox="0 0 50 50" class="drop-shadow-glow">
+        <path class="ornament-path-outer" d="M2,50 V15 C2,5 5,2 15,2 H50" />
+        <path class="ornament-path-inner" d="M10,50 V20 C10,12 12,10 20,10 H50" />
+        <path class="ornament-path-accent" d="M0,35 V15 C0,5 5,0 15,0 H35" />
+        <circle class="ornament-dot pulse" cx="6" cy="6" r="3" />
+        <circle class="ornament-dot-inner" cx="6" cy="6" r="1" />
+      </svg>
+    </div>
+    <!-- Corner BR -->
+    <div class="corner-ornament br">
+      <svg viewBox="0 0 50 50" class="drop-shadow-glow">
+        <path class="ornament-path-outer" d="M2,50 V15 C2,5 5,2 15,2 H50" />
+        <path class="ornament-path-inner" d="M10,50 V20 C10,12 12,10 20,10 H50" />
+        <path class="ornament-path-accent" d="M0,35 V15 C0,5 5,0 15,0 H35" />
+        <circle class="ornament-dot pulse" cx="6" cy="6" r="3" />
+        <circle class="ornament-dot-inner" cx="6" cy="6" r="1" />
+      </svg>
+    </div>
   </div>
   
   <div class="map-magic-particles">
-    {Array.from({ length: 8 }).map((_, i) => (
-      <div class="particle" style={`--delay: ${i * 0.5}s; --x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%;`}></div>
+    {Array.from({ length: 15 }).map((_, i) => (
+      <div 
+        class="magic-sparkle" 
+        style={`--delay: ${i * 0.5}s; --x: ${Math.random() * 100}%; --y: ${Math.random() * 100}%; --size: ${1.5 + Math.random() * 3.5}px; --duration: ${4 + Math.random() * 4}s;`}
+      ></div>
     ))}
   </div>
 </section>
@@ -49,38 +92,123 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
 <style>
   .map-premium-section {
     position: relative;
-    --map-primary: #c8a45a;
-    --map-gold: #e4c97a;
-    --map-dark: #1a1f2e;
+    --map-gold-light: #fff3d0;
+    --map-gold-main: #d4af37;
+    --map-gold-dark: #b8860b;
+    --map-gold-glow: rgba(212, 175, 55, 0.4);
+    padding: 20px; /* Más espacio para los ornamentos premium */
+    margin: 3rem 0;
+  }
+
+  .map-inner-container {
+    position: relative;
+    border-radius: 40px;
+    overflow: hidden;
+    background: #f8f9fa;
+    box-shadow: 
+      0 0 0 1px rgba(212, 175, 55, 0.2),
+      0 30px 70px -20px rgba(0, 0, 0, 0.3),
+      0 0 100px rgba(212, 175, 55, 0.08);
   }
 
   .maplibre-map {
     width: 100%;
-    border-radius: 24px;
-    box-shadow: 
-      0 0 0 1px rgba(200, 164, 90, 0.15),
-      0 8px 32px rgba(0, 0, 0, 0.12),
-      0 0 60px rgba(200, 164, 90, 0.08);
+    border-radius: 40px;
+  }
+
+  .map-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.1);
+    background: radial-gradient(circle at center, transparent 40%, rgba(212, 175, 55, 0.03) 100%);
+    z-index: 2;
   }
 
   .map-frame-accent {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 10;
+    z-index: 20;
   }
 
-  .frame-corner {
+  .corner-ornament {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    color: var(--map-primary);
+    width: 70px;
+    height: 70px;
+    color: var(--map-gold-main);
+    z-index: 30;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .frame-corner.tl { top: 0; left: 0; }
-  .frame-corner.tr { top: 0; right: 0; transform: scaleX(-1); }
-  .frame-corner.bl { bottom: 0; left: 0; transform: scaleY(-1); }
-  .frame-corner.br { bottom: 0; right: 0; transform: scale(-1); }
+  .drop-shadow-glow {
+    filter: drop-shadow(0 0 12px var(--map-gold-glow));
+  }
+
+  .corner-ornament svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ornament-path-outer {
+    fill: none;
+    stroke: var(--map-gold-dark);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    opacity: 0.8;
+  }
+
+  .ornament-path-inner {
+    fill: none;
+    stroke: var(--map-gold-main);
+    stroke-width: 1.25;
+    stroke-dasharray: 200;
+    stroke-dashoffset: 0;
+    animation: ornament-draw 10s linear infinite;
+  }
+
+  .ornament-path-accent {
+    fill: none;
+    stroke: var(--map-gold-light);
+    stroke-width: 0.75;
+    opacity: 0.9;
+  }
+
+  .ornament-dot {
+    fill: var(--map-gold-main);
+  }
+
+  .ornament-dot.pulse {
+    animation: dot-pulse 2s ease-in-out infinite;
+  }
+
+  .ornament-dot-inner {
+    fill: white;
+  }
+
+  .corner-ornament.tl { top: -4px; left: -4px; }
+  .corner-ornament.tr { top: -4px; right: -4px; transform: scaleX(-1); }
+  .corner-ornament.bl { bottom: -4px; left: -4px; transform: scaleY(-1); }
+  .corner-ornament.br { bottom: -4px; right: -4px; transform: scale(-1); }
+
+  .map-premium-section:hover .corner-ornament {
+    transform: scale(1.15);
+  }
+  .map-premium-section:hover .corner-ornament.tl { transform: translate(-4px, -4px) scale(1.15); }
+  .map-premium-section:hover .corner-ornament.tr { transform: translate(4px, -4px) scaleX(-1.15) scaleY(1.15); }
+  .map-premium-section:hover .corner-ornament.bl { transform: translate(-4px, 4px) scaleX(1.15) scaleY(-1.15); }
+  .map-premium-section:hover .corner-ornament.br { transform: translate(4px, 4px) scale(-1.15); }
+
+  @keyframes ornament-draw {
+    0% { stroke-dashoffset: 400; }
+    50% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -400; }
+  }
+
+  @keyframes dot-pulse {
+    0%, 100% { r: 3; opacity: 1; filter: blur(0px); }
+    50% { r: 5; opacity: 0.6; filter: blur(2px); }
+  }
 
   .map-magic-particles {
     position: absolute;
@@ -90,34 +218,26 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
     z-index: 5;
   }
 
-  .particle {
+  .magic-sparkle {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--map-primary);
+    width: var(--size);
+    height: var(--size);
+    background: white;
     border-radius: 50%;
     left: var(--x);
     top: var(--y);
     opacity: 0;
-    animation: particle-float 4s ease-in-out infinite;
+    box-shadow: 0 0 12px 3px var(--map-gold-light);
+    animation: sparkle-float var(--duration) linear infinite;
     animation-delay: var(--delay);
   }
 
-  @keyframes particle-float {
-    0%, 100% { 
-      transform: translateY(0) scale(0); 
-      opacity: 0; 
-    }
-    20% { 
-      opacity: 0.8; 
-    }
-    50% { 
-      transform: translateY(-30px) scale(1); 
-      opacity: 0.4; 
-    }
-    80% { 
-      opacity: 0.2; 
-    }
+  @keyframes sparkle-float {
+    0% { transform: translate(0, 0) scale(0); opacity: 0; }
+    10% { opacity: 0.9; }
+    50% { transform: translate(calc(var(--size) * 10), -60px) scale(1.2); opacity: 0.6; }
+    90% { opacity: 0.9; }
+    100% { transform: translate(calc(var(--size) * 20), -120px) scale(0); opacity: 0; }
   }
 
   :global(.maplibregl-ctrl-group) {
@@ -177,25 +297,27 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
 
   :global(.magic-label) {
     position: absolute;
-    top: -55px;
+    top: -65px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(145deg, #0f1318 0%, #1e2633 100%);
-    border: 1px solid rgba(200, 164, 90, 0.5);
-    border-radius: 16px;
-    padding: 12px 20px;
+    background: rgba(15, 19, 24, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(200, 164, 90, 0.4);
+    border-radius: 20px;
+    padding: 10px 24px;
     color: #ffffff;
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     box-shadow: 
-      0 8px 32px rgba(0,0,0,0.5),
-      0 0 40px rgba(200, 164, 90, 0.2),
-      inset 0 1px 0 rgba(255,255,255,0.1);
+      0 10px 30px rgba(0,0,0,0.4),
+      0 0 20px rgba(200, 164, 90, 0.2);
     white-space: nowrap;
     z-index: 100;
-    animation: label-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: label-appear 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   :global(.magic-label::before) {
@@ -206,39 +328,44 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
     transform: translateX(-50%);
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 10px solid rgba(200, 164, 90, 0.5);
+    border-top: 10px solid rgba(200, 164, 90, 0.4);
   }
 
   :global(.magic-label::after) {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -8.5px;
     left: 50%;
     transform: translateX(-50%);
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid #0f1318;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 9px solid rgba(15, 19, 24, 0.8);
   }
 
   @keyframes label-appear {
-    from { opacity: 0; transform: translateX(-50%) translateY(15px) scale(0.8); }
+    from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.9); }
     to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
   }
 
   :global(.poi-marker) {
     position: relative;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   :global(.poi-marker .poi-dot) {
-    width: 12px;
-    height: 12px;
-    background: var(--map-primary);
+    width: 10px;
+    height: 10px;
+    background: var(--map-gold-main);
     border: 2px solid #ffffff;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    animation: poi-pulse 2s ease-in-out infinite;
+    box-shadow: 
+      0 0 10px var(--map-gold-main),
+      0 2px 8px rgba(0,0,0,0.3);
+    animation: poi-pulse 2.5s ease-in-out infinite;
   }
 
   :global(.poi-label) {
@@ -246,35 +373,38 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
     top: -35px;
     left: 50%;
     transform: translateX(-50%);
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 6px 12px;
+    background: white;
+    border: 1px solid var(--map-border);
+    border-radius: 10px;
+    padding: 6px 14px;
     color: #1a1f2e;
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 12px;
+    font-family: var(--font-space-grotesk, 'Space Grotesk'), sans-serif;
+    font-size: 13px;
     font-weight: 600;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     opacity: 0;
-    transition: opacity 0.3s;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   :global(.poi-marker:hover .poi-label) {
     opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
   }
 
   @keyframes poi-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 10px var(--map-gold-main); }
+    50% { transform: scale(1.3); box-shadow: 0 0 20px var(--map-gold-main); }
   }
 
   :global(.area-ripple) {
-    animation: ripple-expand 3s ease-out infinite;
+    animation: ripple-expand 4s ease-out infinite;
   }
 
   @keyframes ripple-expand {
-    0% { r: 10; opacity: 0.5; }
-    100% { r: 50; opacity: 0; }
+    0% { r: 10; opacity: 0.6; }
+    100% { r: 60; opacity: 0; }
   }
 </style>
 
@@ -288,27 +418,28 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
       <svg class="outer-ring" viewBox="0 0 80 80">
         <defs>
           <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#c8a45a"/>
-            <stop offset="100%" stop-color="#a07d2e"/>
+            <stop offset="0%" stop-color="#f5e6b3"/>
+            <stop offset="50%" stop-color="#c8a45a"/>
+            <stop offset="100%" stop-color="#8a6d29"/>
           </linearGradient>
         </defs>
-        <circle cx="40" cy="40" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="1" stroke-dasharray="4 6" opacity="0.4"/>
-        <circle cx="40" cy="40" r="28" fill="none" stroke="url(#ringGrad)" stroke-width="0.5" stroke-dasharray="2 8" opacity="0.3"/>
+        <circle cx="40" cy="40" r="38" fill="none" stroke="url(#ringGrad)" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.5"/>
+        <circle cx="40" cy="40" r="30" fill="none" stroke="url(#ringGrad)" stroke-width="0.5" stroke-dasharray="2 10" opacity="0.3"/>
       </svg>
-      <svg class="pulse-core" width="50" height="50" viewBox="0 0 50 50">
-        <circle cx="25" cy="25" r="20" fill="rgba(200, 164, 90, 0.15)"/>
-        <circle cx="25" cy="25" r="12" fill="rgba(200, 164, 90, 0.25)"/>
+      <svg class="pulse-core" width="60" height="60" viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="25" fill="rgba(200, 164, 90, 0.1)"/>
+        <circle cx="30" cy="30" r="15" fill="rgba(200, 164, 90, 0.2)"/>
       </svg>
-      <svg class="main-pin" width="36" height="48" viewBox="0 0 36 48">
+      <svg class="main-pin" width="40" height="52" viewBox="0 0 36 48">
         <defs>
           <linearGradient id="pinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#e4c97a"/>
-            <stop offset="40%" stop-color="#c8a45a"/>
-            <stop offset="100%" stop-color="#a07d2e"/>
+            <stop offset="0%" stop-color="#f5e6b3"/>
+            <stop offset="45%" stop-color="#c8a45a"/>
+            <stop offset="100%" stop-color="#8a6d29"/>
           </linearGradient>
-          <filter id="pinGlow">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feFlood flood-color="#c8a45a" flood-opacity="0.5"/>
+          <filter id="pinGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feFlood flood-color="#c8a45a" flood-opacity="0.6"/>
             <feComposite in2="blur" operator="in"/>
             <feMerge>
               <feMergeNode/>
@@ -317,9 +448,9 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
           </filter>
         </defs>
         <path d="M18 0 C5.372 0 0 9.16 0 18 C0 30 18 48 18 48 C18 48 36 30 36 18 C36 9.16 30.628 0 18 0Z" fill="url(#pinGrad)" filter="url(#pinGlow)"/>
-        <circle cx="18" cy="16" r="9" fill="#ffffff"/>
-        <circle cx="18" cy="16" r="5.5" fill="#c8a45a"/>
-        <ellipse cx="15" cy="13" rx="2" ry="1.5" fill="rgba(255,255,255,0.7)"/>
+        <circle cx="18" cy="16" r="10" fill="#ffffff"/>
+        <circle cx="18" cy="16" r="6" fill="#c8a45a"/>
+        <path d="M15 13 Q16 11 18 13" stroke="white" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.8"/>
       </svg>
       ${label ? `<div class="magic-label">${label}</div>` : ''}
     `;
@@ -346,7 +477,9 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
     
     maps.forEach((mapContainer) => {
       const element = mapContainer;
-      if (element.querySelector('.maplibregl-canvas')) return;
+      // Evitar reinicialización si ya existe
+      if (element.classList.contains('maplibre-initialized')) return;
+      element.classList.add('maplibre-initialized');
 
       const center = JSON.parse(element.dataset.center || '[0, 0]');
       const zoom = parseFloat(element.dataset.zoom || '13');
@@ -355,115 +488,113 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
       const label = element.dataset.label || '';
       const puntos = JSON.parse(element.dataset.puntos || '[]');
 
-      const map = new maplibregl.Map({
-        container: element,
-        style: {
-          version: 8,
-          name: 'Premium Light',
-          sources: {
-            'carto-light': {
+      try {
+        const map = new maplibregl.Map({
+          container: element,
+          style: {
+            version: 8,
+            name: 'Premium Light',
+            sources: {
+              'carto-light': {
+                type: 'raster',
+                tiles: [
+                  'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                  'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                  'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                  'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+                ],
+                tileSize: 256
+              }
+            },
+            layers: [{
+              id: 'carto-light-layer',
               type: 'raster',
-              tiles: [
-                'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
-              ],
-              tileSize: 256
-            }
-          },
-          layers: [{
-            id: 'carto-light-layer',
-            type: 'raster',
-            source: 'carto-light',
-            minzoom: 0,
-            maxzoom: 19,
-            paint: {
-              'raster-saturation': -0.05,
-              'raster-brightness-min': 0.45,
-              'raster-brightness-max': 1
-            }
-          }]
-        },
-        center: center,
-        zoom: zoom,
-        pitch: pitch,
-        bearing: bearing,
-        interactive: true,
-        attributionControl: false
-      });
-
-      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
-
-      map.on('load', () => {
-        // Área mágica con ondas concéntricas
-        map.addSource('magic-area', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [{
-              type: 'Feature',
-              geometry: { type: 'Point', coordinates: center }
+              source: 'carto-light',
+              minzoom: 0,
+              maxzoom: 19,
+              paint: {
+                'raster-saturation': -0.1,
+                'raster-contrast': 0.1,
+                'raster-brightness-min': 0.3
+              }
             }]
-          }
+          },
+          center: center,
+          zoom: zoom,
+          pitch: pitch,
+          bearing: bearing,
+          interactive: true,
+          attributionControl: false
         });
 
-        map.addLayer({
-          id: 'area-glow-outer',
-          type: 'circle',
-          source: 'magic-area',
-          paint: {
-            'circle-radius': [10, 25, 45, 70],
-            'circle-color': 'rgba(200, 164, 90, 0.05)',
-            'circle-opacity': [0.3, 0.2, 0.1, 0],
-            'circle-blur': 0.8
-          }
-        });
+        map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
-        map.addLayer({
-          id: 'area-glow-inner',
-          type: 'circle',
-          source: 'magic-area',
-          paint: {
-            'circle-radius': 20,
-            'circle-color': 'rgba(200, 164, 90, 0.2)',
-            'circle-blur': 0.4
-          }
-        });
+        map.on('load', () => {
+          // Área mágica con ondas concéntricas
+          map.addSource('magic-area', {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [{
+                type: 'Feature',
+                geometry: { type: 'Point', coordinates: center }
+              }]
+            }
+          });
 
-        map.addLayer({
-          id: 'area-border',
-          type: 'circle',
-          source: 'magic-area',
-          paint: {
-            'circle-radius': 28,
-            'circle-color': 'transparent',
-            'circle-stroke-color': 'rgba(200, 164, 90, 0.4)',
-            'circle-stroke-width': 1.5,
-            'circle-blur': 0.2
-          }
-        });
+          map.addLayer({
+            id: 'area-glow-outer',
+            type: 'circle',
+            source: 'magic-area',
+            paint: {
+              'circle-radius': [15, 30, 50, 80],
+              'circle-color': 'rgba(200, 164, 90, 0.08)',
+              'circle-blur': 0.8
+            }
+          });
 
-        // Marcador principal mágico
-        const magicMarker = createMagicMarker(label);
-        new maplibregl.Marker({ element: magicMarker, anchor: 'bottom' })
-          .setLngLat(center)
-          .addTo(map);
+          map.addLayer({
+            id: 'area-border',
+            type: 'circle',
+            source: 'magic-area',
+            paint: {
+              'circle-radius': 32,
+              'circle-color': 'transparent',
+              'circle-stroke-color': 'rgba(200, 164, 90, 0.5)',
+              'circle-stroke-width': 1,
+              'circle-blur': 0.1
+            }
+          });
 
-        // Puntos de interés adicionales
-        puntos.forEach((punto) => {
-          const poiMarker = createPoiMarker(punto.nombre);
-          new maplibregl.Marker({ element: poiMarker, anchor: 'center' })
-            .setLngLat(punto.coords)
+          // Marcador principal mágico
+          const magicMarker = createMagicMarker(label);
+          new maplibregl.Marker({ element: magicMarker, anchor: 'bottom' })
+            .setLngLat(center)
             .addTo(map);
+
+          // Puntos de interés adicionales
+          puntos.forEach((punto) => {
+            const poiMarker = createPoiMarker(punto.nombre);
+            new maplibregl.Marker({ element: poiMarker, anchor: 'center' })
+              .setLngLat(punto.coords)
+              .addTo(map);
+          });
+          
+          // Forzar resize para evitar mapas grises
+          setTimeout(() => map.resize(), 300);
         });
-      });
+      } catch (err) {
+        console.error('Error initializing map:', err);
+      }
     });
   }
 
+  // Soporte para transiciones de Astro (View Transitions)
+  document.addEventListener('astro:page-load', initMapLibreMaps);
+  
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(initMapLibreMaps, 150));
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initMapLibreMaps, 200));
   } else {
-    setTimeout(initMapLibreMaps, 150);
+    setTimeout(initMapLibreMaps, 200);
   }
-</script>
+</script>ript>
