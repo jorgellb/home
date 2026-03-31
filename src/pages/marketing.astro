@@ -4,641 +4,820 @@ import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumb from '../components/common/Breadcrumb.astro';
 
+const title = 'Agencia Marketing Digital en Almería | SEO, Ads y Redes Sociales';
+const description = 'Marketing digital orientado a resultados en Almería. SEO, Google Ads, Meta Ads, redes sociales y estrategia de contenidos. Deja de invertir a ciegas y empieza a vender. Presupuesto sin compromiso.';
+const canonical = 'https://platanitorico.com/marketing/';
 
-const marketingCategories = [
+// ── Servicios de marketing (SIN PRECIOS) ──
+const services = [
   {
-    title: "SEM & Publicidad",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`,
-    description: "Captación inmediata de clientes mediante campañas de pago optimizadas.",
-    items: [
-      { name: "Campaña Meta Ads (5 Img + 1 Video)", price: "450€", popular: true },
-      { name: "Campaña Meta Ads (5 imágenes)", price: "350€", popular: false },
-      { name: "Administración SEM Mensual", price: "300€", popular: true },
-      { name: "Creación Campaña SEM Pro", price: "300€", popular: false },
-      { name: "Configuración Píxel & Conversiones", price: "180€", popular: false },
-      { name: "Auditoría Cuenta Publicitaria", price: "150€", popular: false }
-    ]
+    title: 'SEM & Publicidad Online',
+    desc: 'Campañas de Google Ads y Meta Ads optimizadas para captar clientes ahora mismo. Controlamos cada euro para que convierta.',
+    icon: 'megaphone',
+    features: ['Google Ads (Search, Display, Shopping)', 'Meta Ads (Facebook e Instagram)', 'LinkedIn Ads para B2B', 'Configuración de píxeles y conversiones', 'Optimización continua de campañas', 'Remarketing y audiencias personalizadas'],
+    result: 'Clientes nuevos desde el primer día con retorno medible'
   },
   {
-    title: "SEO & Estrategia",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>`,
-    description: "Visibilidad a largo plazo. Dominamos los resultados de Google.",
-    items: [
-      { name: "Keyword Research Extendido", price: "320€", popular: true },
-      { name: "Auditoría SEO Técnica Completa", price: "450€", popular: true },
-      { name: "Estrategia Local My Business", price: "120€", popular: false },
-      { name: "Optimización On-Page", price: "150€", popular: false },
-      { name: "Plan Link Building Mensual", price: "280€", popular: false },
-      { name: "SEO Técnico Mensual", price: "200€", popular: false }
-    ]
+    title: 'SEO & Posicionamiento Web',
+    desc: 'Aparece en Google cuando tus clientes buscan lo que vendes. Estrategia orgánica que genera tráfico constante sin pagar por cada clic.',
+    icon: 'search',
+    features: ['Auditoría SEO técnica completa', 'Keyword research estratégico', 'Optimización on-page y contenidos', 'Link building ético y sostenible', 'SEO local y Google Business Profile', 'Informes de posicionamiento mensuales'],
+    result: 'Tráfico orgánico que crece mes a mes sin depender de anuncios'
   },
   {
-    title: "Redes Sociales",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
-    description: "Construimos comunidades fieles y humanas para tu marca.",
-    items: [
-      { name: "Plan Social Media Estratégico", price: "400€", popular: true },
-      { name: "Gestión 3 RRSS (12 contenidos)", price: "350€", popular: true },
-      { name: "Gestión 2 RRSS (8 contenidos)", price: "250€", popular: false },
-      { name: "Diseño Parrilla Visual", price: "180€", popular: false },
-      { name: "Moderación Comentarios & DM", price: "90€", popular: false },
-      { name: "Informe Métricas & Análisis", price: "60€", popular: false }
-    ]
+    title: 'Redes Sociales',
+    desc: 'Construimos una comunidad real alrededor de tu marca. Contenido que conecta, engancha y convierte seguidores en clientes.',
+    icon: 'share',
+    features: ['Estrategia de contenidos personalizada', 'Gestión de Instagram, Facebook, LinkedIn y TikTok', 'Diseño de creatividades y reels', 'Calendario editorial mensual', 'Moderación de comentarios y DMs', 'Análisis de métricas y crecimiento'],
+    result: 'Presencia profesional que genera confianza y ventas'
   },
   {
-    title: "Email & Funnels",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/><path d="M22 6l-10 7L2 6"/></svg>`,
-    description: "Ventas automatizadas y fidelización de base de datos.",
-    items: [
-      { name: "Diseño & Copy Newsletter", price: "80€", popular: false },
-      { name: "Configuración CRM / Email Auto", price: "220€", popular: true },
-      { name: "Lead Magnet (Ebook/Guía)", price: "150€", popular: false },
-      { name: "Funnel Ventas Básico", price: "400€", popular: true },
-      { name: "Copywriting Página Ventas", price: "250€", popular: false }
-    ]
+    title: 'Email Marketing & Automatización',
+    desc: 'Convierte tu base de datos en una máquina de ventas automática. Secuencias que nutren, fidelizan y recuperan clientes perdidos.',
+    icon: 'mail',
+    features: ['Diseño de newsletters profesionales', 'Automatizaciones de email (welcome, carrito, reactivación)', 'Segmentación avanzada de audiencias', 'Lead magnets y funnels de captación', 'A/B testing de asuntos y contenido', 'Integración con CRM'],
+    result: 'Ventas recurrentes sin invertir en publicidad adicional'
   }
 ];
 
-const differentiators = [
-  { 
-    title: "ROI Medio x3.5", 
-    description: "Retorno de inversión comprobado en campañas publicitarias.", 
-    detail: "Cada euro invertido genera 3.5€ de retorno promedio",
-    icon: "📈", 
-    gradient: "from-orange-500 to-amber-500",
-    metric: "350%",
-    label: "ROI"
+// ── Proceso de trabajo ──
+const process = [
+  {
+    step: '01',
+    title: 'Auditoría gratuita',
+    desc: 'Analizamos tu web, competencia, posicionamiento actual y oportunidades de mercado. Te decimos exactamente dónde estás perdiendo clientes.',
+    duration: '1-2 días'
   },
-  { 
-    title: "+40% Conversión", 
-    description: "Mejora media en tasa de conversión web optimizada.", 
-    detail: "Optimización CRO basada en análisis de comportamiento",
-    icon: "🎯", 
-    gradient: "from-amber-500 to-orange-500",
-    metric: "+40%",
-    label: "Conversión"
+  {
+    step: '02',
+    title: 'Estrategia personalizada',
+    desc: 'Diseñamos un plan de acción adaptado a tu negocio, presupuesto y objetivos. Sin plantillas genéricas: cada estrategia es única.',
+    duration: '3-5 días'
   },
-  { 
-    title: "SEO Garantizado", 
-    description: "Posicionamiento orgánico sostenible y escalable.", 
-    detail: "Estrategias white-hat con resultados medibles",
-    icon: "🔍", 
-    gradient: "from-orange-400 to-amber-400",
-    metric: "Top 3",
-    label: "Google"
+  {
+    step: '03',
+    title: 'Ejecución y optimización',
+    desc: 'Lanzamos campañas, optimizamos tu SEO y gestionamos tus redes. Cada semana ajustamos para mejorar resultados.',
+    duration: 'Continuo'
   },
-  { 
-    title: "Data-Driven", 
-    description: "Decisiones basadas en datos reales, no intuiciones.", 
-    detail: "Dashboard en tiempo real con métricas clave",
-    icon: "📊", 
-    gradient: "from-amber-400 to-orange-500",
-    metric: "24/7",
-    label: "Analytics"
-  },
-  { 
-    title: "Soporte Premium", 
-    description: "Atención personalizada y respuesta inmediata.", 
-    detail: "Gestor de cuenta dedicado para tu proyecto",
-    icon: "💎", 
-    gradient: "from-orange-500 to-amber-600",
-    metric: "<2h",
-    label: "Respuesta"
-  },
-  { 
-    title: "Creatividad Ilimitada", 
-    description: "Diseños que destacan y convierten.", 
-    detail: "Equipo creativo especializado en performance",
-    icon: "🎨", 
-    gradient: "from-amber-500 to-orange-400",
-    metric: "∞",
-    label: "Creatividad"
+  {
+    step: '04',
+    title: 'Informes y resultados',
+    desc: 'Dashboard en tiempo real con las métricas que importan. Reuniones periódicas para revisar resultados y ajustar la estrategia.',
+    duration: 'Mensual'
   }
 ];
 
-const monthlyPacks = [
+// ── Sectores con los que trabajamos ──
+const sectors = [
+  { title: 'Hostelería y turismo', desc: 'Restaurantes, hoteles y casas rurales que quieren llenar mesas y habitaciones todo el año.', icon: 'hotel' },
+  { title: 'Inmobiliarias', desc: 'Agencias que necesitan captar propietarios vendedores y compradores cualificados.', icon: 'building' },
+  { title: 'E-commerce', desc: 'Tiendas online que quieren escalar ventas con publicidad rentable y SEO que convierte.', icon: 'cart' },
+  { title: 'Servicios profesionales', desc: 'Abogados, clínicas, consultorías y profesionales que necesitan un flujo constante de clientes.', icon: 'briefcase' },
+  { title: 'Construcción y reformas', desc: 'Empresas de obra y reformas que quieren presupuestos de calidad, no curiosos.', icon: 'hammer' },
+  { title: 'Agricultura y exportación', desc: 'Cooperativas y productores que quieren abrir mercados nacionales e internacionales.', icon: 'leaf' }
+];
+
+// ── Testimonios ──
+const testimonials = [
   {
-    name: "Pack Growth Digital",
-    price: "490€",
-    description: "Visibilidad & Ventas",
-    features: [
-      "✨ Administración SEM (Google & Meta)",
-      "📱 Gestión 2 Redes Sociales (Instagram + Facebook)",
-      "🎨 8 Diseños Creativos Mensuales",
-      "📧 1 Newsletter / Email Mensual",
-      "📊 Dashboard Métricas en Tiempo Real 24/7",
-      "🎯 Optimización de Campañas Semanal",
-      "📈 Informe de Resultados Mensual",
-      "💬 Soporte por WhatsApp Business",
-      "🔍 Keyword Research Básico",
-      "📝 Copywriting para Anuncios"
-    ],
-    popular: false,
-    savings: "Ahorra 35%",
-    color: "blue"
+    text: 'Llevábamos dos años invirtiendo en Google Ads sin control. Desde que trabajan nuestra cuenta, hemos triplicado los leads manteniendo el mismo presupuesto.',
+    author: 'María L.',
+    role: 'Directora comercial, inmobiliaria en Almería',
+    rating: 5
   },
   {
-    name: "Pack Scale VIP 360",
-    price: "890€",
-    description: "Dominación Total del Mercado",
-    features: [
-      "🚀 Estrategia SEM Avanzada Multi-Canal (Google, Meta, LinkedIn)",
-      "🔍 SEO Mensual (Técnico + Contenidos + Link Building)",
-      "📱 Gestión 4 Redes Sociales + Reels + Stories",
-      "📧 Email Marketing & Automatización Completa",
-      "🎯 Reunión Estratégica Quincenal con Equipo",
-      "✍️ Copywriting Landing Pages + Páginas de Venta",
-      "🎨 15 Diseños Creativos Premium Mensuales",
-      "📊 Dashboard Personalizado con KPIs Avanzados",
-      "🎥 1 Video Promocional Mensual (hasta 60s)",
-      "💎 Gestor de Cuenta Dedicado",
-      "🔔 Alertas y Notificaciones en Tiempo Real",
-      "📈 A/B Testing Continuo de Campañas",
-      "🎁 Lead Magnet Trimestral (Ebook/Guía)",
-      "🌐 Optimización Web Mensual (CRO)",
-      "📱 Configuración Píxeles & Conversiones Avanzadas",
-      "🎯 Retargeting Estratégico Multi-Plataforma",
-      "📝 Blog Post SEO Optimizado Mensual",
-      "💬 Moderación Comentarios & DMs Diaria",
-      "🔥 Acceso Prioritario a Nuevas Features",
-      "📞 Soporte Premium 24/7"
-    ],
-    popular: true,
-    savings: "Ahorra 42%",
-    color: "orange"
+    text: 'Nos gestionan redes sociales e email marketing. En 6 meses hemos pasado de 200 a 2.400 seguidores reales y las reservas online han subido un 45%.',
+    author: 'Antonio R.',
+    role: 'Propietario, restaurante en Mojácar',
+    rating: 5
   },
   {
-    name: "Pack Enterprise Pro",
-    price: "1.490€",
-    description: "Solución Corporativa Completa",
-    features: [
-      "🏢 Todo lo incluido en Scale VIP 360",
-      "🎯 Estrategia de Marca Completa (Branding)",
-      "📊 Business Intelligence & Análisis Predictivo",
-      "🎥 2 Videos Profesionales Mensuales",
-      "🌍 Gestión 6+ Redes Sociales Globales",
-      "📱 App Móvil de Seguimiento Personalizada",
-      "👥 Equipo Dedicado (Account Manager + Strategist)",
-      "🎓 Formación Mensual para tu Equipo",
-      "🔐 Auditoría de Seguridad Digital",
-      "🌐 Expansión Internacional (Multi-idioma)",
-      "📈 Consultoría Estratégica Semanal",
-      "🎨 Diseño Ilimitado (Gráfico + Web)",
-      "🔊 Campañas de Influencer Marketing",
-      "📺 Publicidad en Medios Tradicionales",
-      "🎯 Growth Hacking & Experimentación",
-      "💼 Integración CRM Empresarial",
-      "🚀 Lanzamiento de Productos/Servicios",
-      "📊 Reportes Ejecutivos Semanales",
-      "🏆 Garantía de Resultados por Contrato",
-      "⚡ Respuesta en menos de 1 hora"
-    ],
-    popular: false,
-    savings: "Ahorra 48%",
-    color: "purple"
+    text: 'El SEO local que nos hicieron fue clave. Ahora aparecemos los primeros en Google Maps y recibimos 3-4 llamadas diarias de clientes nuevos.',
+    author: 'Carmen D.',
+    role: 'Gerente, clínica dental en Roquetas de Mar',
+    rating: 5
+  },
+  {
+    text: 'Probamos con otra agencia y no vimos resultados. Con Platanito Rico todo cambió: dashboard transparente, reuniones claras y resultados desde el segundo mes.',
+    author: 'Javier M.',
+    role: 'CEO, empresa de reformas en Almería',
+    rating: 5
+  }
+];
+
+// ── FAQ ──
+const faq = [
+  {
+    q: '¿Cuánto tarda en verse resultados en marketing digital?',
+    a: 'Depende del canal. En campañas de publicidad (SEM) los resultados son inmediatos, desde la primera semana. En SEO, los primeros resultados llegan entre 2-4 meses, con resultados sólidos a partir del sexto mes. En redes sociales, el crecimiento orgánico es progresivo pero acelerado con la estrategia correcta.'
+  },
+  {
+    q: '¿Necesito un presupuesto mínimo para publicidad?',
+    a: 'Recomendamos un mínimo de 300€/mes de inversión publicitaria para campañas locales en Almería. Para e-commerce o mercados más amplios, lo ideal es partir de 500-1.000€/mes. Nosotros optimizamos cada euro para que rinda al máximo.'
+  },
+  {
+    q: '¿Puedo ver qué hacéis con mi dinero en todo momento?',
+    a: 'Absolutamente. Tienes acceso a un dashboard en tiempo real donde ves exactamente cuánto se invierte, cuántos clics recibes, cuántos leads generas y cuánto cuesta cada conversión. Además, hacemos reuniones periódicas para revisar resultados juntos.'
+  },
+  {
+    q: '¿Gestionáis las redes sociales de cualquier sector?',
+    a: 'Sí, aunque estamos especializados en hostelería, inmobiliarias, e-commerce, servicios profesionales y construcción en la provincia de Almería. Conocemos el mercado local y sabemos qué funciona para cada tipo de negocio.'
+  },
+  {
+    q: '¿Qué diferencia hay entre SEO y SEM?',
+    a: 'SEO es posicionamiento orgánico: aparecer en Google sin pagar por clic. Es una inversión a medio-largo plazo con resultados duraderos. SEM es publicidad de pago: apareces al instante pero pagas por cada clic. Lo ideal es combinar ambos para tener resultados inmediatos mientras construyes autoridad orgánica.'
+  },
+  {
+    q: '¿Hay permanencia en vuestros servicios?',
+    a: 'No. Trabajamos sin permanencia porque confiamos en nuestros resultados. Si en algún momento quieres cancelar, puedes hacerlo cuando quieras. Nuestros clientes se quedan porque ven resultados, no porque estén atados.'
+  },
+  {
+    q: '¿También hacéis la página web?',
+    a: 'Sí. Somos agencia de diseño web y marketing digital. Si necesitas una web optimizada para convertir visitas en clientes, la diseñamos con tecnología estática de última generación, hosting gratuito de por vida y velocidad de carga perfecta. Es la base ideal para cualquier estrategia de marketing.'
+  },
+  {
+    q: '¿Cómo sé si mi marketing actual está funcionando?',
+    a: 'Te hacemos una auditoría gratuita donde analizamos tu web, tus campañas, tu SEO y tu presencia en redes. Te decimos exactamente qué está funcionando, qué no, y dónde estás perdiendo dinero. Sin compromiso.'
+  }
+];
+
+// ── JSON-LD Schemas ──
+const jsonLdSchemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": title,
+    "description": description,
+    "url": canonical,
+    "inLanguage": "es",
+    "isPartOf": { "@type": "WebSite", "name": "Platanito Rico", "url": "https://platanitorico.com" },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://platanitorico.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Marketing Digital", "item": canonical }
+      ]
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Platanito Rico — Marketing Digital en Almería",
+    "description": "Agencia de marketing digital especializada en SEO, publicidad online, redes sociales y estrategia de contenidos para empresas en Almería.",
+    "url": canonical,
+    "telephone": "+34657085019",
+    "email": "hola@platanitorico.com",
+    "address": { "@type": "PostalAddress", "addressLocality": "Almería", "addressRegion": "Andalucía", "addressCountry": "ES" },
+    "geo": { "@type": "GeoCoordinates", "latitude": 36.834, "longitude": -2.4637 },
+    "areaServed": { "@type": "State", "name": "Almería" },
+    "priceRange": "€€",
+    "openingHoursSpecification": { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "19:00" },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios de Marketing Digital",
+      "itemListElement": services.map(s => ({
+        "@type": "Offer",
+        "itemOffered": { "@type": "Service", "name": s.title, "description": s.desc }
+      }))
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "Cómo funciona nuestro servicio de marketing digital",
+    "description": "Proceso de trabajo de marketing digital: desde la auditoría inicial hasta los resultados medibles.",
+    "step": process.map((p, i) => ({
+      "@type": "HowToStep",
+      "position": i + 1,
+      "name": p.title,
+      "text": p.desc
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": { "@type": "Answer", "text": f.a }
+    }))
   }
 ];
 ---
 
 <BaseLayout
-  title="Agencia Marketing Digital Almería | SEO, Ads y Redes Sociales"
-  description="Consultoría marketing digital en Almería. SEO, Meta Ads, Google Ads y gestión redes sociales. Precios transparentes. Resultados garantizados."
+  title={title}
+  description={description}
   type="service"
-  keywords="marketing digital almería, seo almería, google ads, meta ads, redes sociales, consultoría marketing"
-  jsonLd={{
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "Marketing Digital y SEO",
-    "provider": {
-      "@type": "Organization",
-      "name": "Platanito Rico",
-      "url": "https://platanitorico.com"
-    },
-    "description": "Servicios de marketing digital, SEO, publicidad online y gestión de redes sociales en Almería.",
-    "areaServed": { "@type": "State", "name": "Almería" },
-    "serviceType": "Digital Marketing"
-  }}
+  canonical={canonical}
+  keywords="marketing digital almería, seo almería, google ads almería, meta ads, redes sociales almería, agencia marketing, publicidad online"
+  jsonLd={jsonLdSchemas}
 >
   <Header />
-  
-  <!-- Breadcrumb Navigation -->
+
   <Breadcrumb items={[
     { label: 'Inicio', href: '/' },
     { label: 'Marketing Digital' }
   ]} />
 
   <main class="pt-0">
-    <!-- Hero Section - Magic Edition with Team Image -->
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- HERO — Empathy-driven para el cliente frustrado -->
+    <!-- ════════════════════════════════════════════ -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
-      <!-- Background Image Layer -->
       <div class="absolute inset-0 z-0">
-        <img 
-          src="/imagenes/equipo-marketing-web.jpg" 
-          alt="Equipo de marketing digital Platanito Rico" 
+        <img
+          src="/imagenes/equipo-marketing-web.jpg"
+          alt="Equipo de marketing digital Platanito Rico trabajando en estrategia"
           class="w-full h-full object-cover"
           width="1920"
           height="1080"
         />
       </div>
-      
-      <!-- Dark Overlay for Text Readability -->
-      <div class="absolute inset-0 z-[1] bg-gradient-to-br from-slate-900/85 via-slate-900/75 to-orange-900/65"></div>
-      
-      <!-- Vignette Effect -->
-      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)]"></div>
-      
-      <!-- Floating Orbs -->
-      <div class="absolute top-20 -left-20 w-[500px] h-[500px] bg-orange-500/30 rounded-full blur-[100px] animate-orb-float z-[3]"></div>
-      <div class="absolute bottom-20 -right-20 w-[400px] h-[400px] bg-amber-500/30 rounded-full blur-[80px] animate-orb-float-reverse z-[3]"></div>
-      
-      <!-- Animated Light Rays -->
-      <div class="absolute inset-0 overflow-hidden z-[3]">
-        <div class="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-orange-400/20 via-transparent to-transparent transform -rotate-12 animate-light-ray"></div>
-        <div class="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-amber-400/15 via-transparent to-transparent transform rotate-6 animate-light-ray" style="animation-delay: 1s;"></div>
-        <div class="absolute top-0 right-1/3 w-1 h-full bg-gradient-to-b from-orange-300/20 via-transparent to-transparent transform -rotate-6 animate-light-ray" style="animation-delay: 2s;"></div>
-      </div>
-      
-      <div class="container-premium relative z-10 py-24">
-        <div class="max-w-5xl mx-auto text-center">
+      <div class="absolute inset-0 z-[1] bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-orange-900/70"></div>
+      <div class="absolute inset-0 z-[2] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]"></div>
+
+      <!-- Orbs decorativos -->
+      <div class="absolute top-20 -left-20 w-[500px] h-[500px] bg-orange-500/20 rounded-full blur-[120px] animate-orb-float z-[3]"></div>
+      <div class="absolute bottom-20 -right-20 w-[400px] h-[400px] bg-amber-500/20 rounded-full blur-[100px] animate-orb-float-reverse z-[3]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10 py-24">
+        <div class="max-w-4xl mx-auto text-center">
           <!-- Badge -->
           <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg mb-8 animate-fade-in-up">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
             </span>
-            <span class="text-sm font-medium text-white/90">Data-Driven Marketing</span>
+            <span class="text-sm font-medium text-white/90">Marketing orientado a resultados</span>
           </div>
-          
-          <!-- Heading -->
-          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
-            Marketing que multiplica,
-            <span class="block mt-2 bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400 bg-clip-text text-transparent">no solo divide</span>
+
+          <h1 class="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-8 leading-[1.1] animate-fade-in-up" style="animation-delay: 0.1s;">
+            Inviertes en marketing
+            <span class="block mt-2 bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400 bg-clip-text text-transparent">y no ves resultados?</span>
           </h1>
-          
-          <!-- Description -->
-          <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
-            Especialistas en <strong class="text-white">Performance, SEO y Social Ads</strong>. 
-            Estrategias enfocadas a objetivos de facturación reales.
+
+          <p class="text-lg md:text-xl text-white/80 max-w-3xl mx-auto mb-6 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+            Sabemos lo que se siente. Pagas agencias, pruebas campañas, publicas en redes... y el teléfono sigue sin sonar.
+            <strong class="text-white">Nosotros cambiamos eso.</strong>
           </p>
-          
+          <p class="text-base md:text-lg text-white/60 max-w-2xl mx-auto mb-12 animate-fade-in-up" style="animation-delay: 0.25s;">
+            Estrategias de SEO, publicidad y redes sociales diseñadas para una cosa: <strong class="text-orange-300">que vendas más</strong>.
+          </p>
+
           <!-- CTAs -->
           <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.3s;">
-            <a href="#catalogo" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full overflow-hidden shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+            <a href="/#contacto" class="group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full overflow-hidden shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
               <span class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></span>
-              <span class="relative">Ver Precios</span>
+              <span class="relative">Pedir auditoría gratuita</span>
               <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
-            <a href="#packs" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300">
-              Packs de Crecimiento
+            <a href="tel:+34657085019" class="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              657 085 019
             </a>
           </div>
-          
+
           <!-- Stats -->
-          <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in-up" style="animation-delay: 0.4s;">
-            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
-              <div class="text-3xl font-bold text-white mb-1">x3.5</div>
-              <div class="text-sm text-white/70">ROI Medio Ads</div>
+          <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+              <div class="text-2xl md:text-3xl font-bold text-white mb-1">x3.5</div>
+              <div class="text-xs text-white/70">ROI medio en Ads</div>
             </div>
-            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
-              <div class="text-3xl font-bold text-white mb-1">+40%</div>
-              <div class="text-sm text-white/70">Conversión Web</div>
+            <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+              <div class="text-2xl md:text-3xl font-bold text-white mb-1">+40%</div>
+              <div class="text-xs text-white/70">Mejora en conversión</div>
             </div>
-            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
-              <div class="text-3xl font-bold text-white mb-1">100%</div>
-              <div class="text-sm text-white/70">Data-Driven</div>
+            <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+              <div class="text-2xl md:text-3xl font-bold text-white mb-1">Top 3</div>
+              <div class="text-xs text-white/70">Google para clientes</div>
             </div>
-            <div class="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/15 transition-colors">
-              <div class="text-3xl font-bold text-white mb-1">24/7</div>
-              <div class="text-sm text-white/70">Dashboard Métricas</div>
+            <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+              <div class="text-2xl md:text-3xl font-bold text-white mb-1">0</div>
+              <div class="text-xs text-white/70">Permanencia</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Differentiators Section - PREMIUM MAGIC EDITION -->
-    <section class="py-32 bg-gradient-to-b from-slate-50 via-white to-slate-50 relative overflow-hidden">
-      <!-- Animated Background Elements -->
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(255,107,0,0.08)_0%,transparent_40%)]"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(255,165,0,0.06)_0%,transparent_40%)]"></div>
-      
-      <!-- Floating Orbs -->
-      <div class="absolute top-20 left-10 w-72 h-72 bg-orange-400/10 rounded-full blur-[100px] animate-orb-float"></div>
-      <div class="absolute bottom-20 right-10 w-96 h-96 bg-amber-400/10 rounded-full blur-[120px] animate-orb-float-reverse"></div>
-      
-      <div class="container-premium relative z-10">
-        <div class="text-center mb-20">
-          <!-- Badge -->
-          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/80 backdrop-blur-xl border border-orange-200/50 shadow-xl shadow-orange-500/10 mb-8">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
-            </span>
-            <span class="text-sm font-bold text-orange-700 uppercase tracking-wider">Por qué Platanito Rico</span>
+    <!-- ════════════════════════════════════════════ -->
+    <!-- EL PROBLEMA — Empatía con el cliente frustrado -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,107,0,0.05)_0%,transparent_50%)]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            Te suena esto?
           </div>
-          
-          <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-8 leading-tight">
-            Tu Socio en <br/>
-            <span class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-clip-text text-transparent animate-gradient-shift">Escalabilidad Digital</span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Si tu marketing no vende,<br/>
+            <span class="text-red-500">el problema no eres tú</span>
           </h2>
-          <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Nos centramos en el <strong class="text-orange-600">ROI</strong>. Cada euro invertido se traduce en <strong class="text-orange-600">visibilidad, leads y ventas</strong> reales.
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {[
+            { problem: 'Pagas una agencia que solo te manda informes bonitos pero no ves más ventas', icon: 'chart-down' },
+            { problem: 'Publicas en redes todos los días y solo dan like tus amigos y familiares', icon: 'thumbs-down' },
+            { problem: 'Hiciste campañas en Google y solo conseguiste clics de curiosos que no compran', icon: 'cursor' },
+            { problem: 'Tu competencia aparece en Google antes que tú y no sabes por qué', icon: 'trending-down' },
+            { problem: 'Tienes una web bonita pero no genera ni un contacto al mes', icon: 'ghost' },
+            { problem: 'No sabes si lo que inviertes está funcionando o es dinero tirado', icon: 'question' }
+          ].map((item) => (
+            <div class="p-6 rounded-2xl bg-white border border-red-100 shadow-sm hover:shadow-lg hover:border-red-200 transition-all duration-300">
+              <div class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-4">
+                <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              <p class="text-slate-700 leading-relaxed">{item.problem}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Transición empática -->
+        <div class="max-w-3xl mx-auto text-center p-10 rounded-3xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200">
+          <p class="text-xl md:text-2xl text-slate-800 leading-relaxed mb-4">
+            El marketing digital <strong class="text-orange-600">sí funciona</strong>. Pero necesitas a alguien que sepa lo que hace, que mida cada acción y que tenga un solo objetivo:
+          </p>
+          <p class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+            Que suene tu teléfono.
           </p>
         </div>
-        
-        <!-- Grid de Diferenciadores - 3 columnas -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {differentiators.map((item, index) => (
-            <div 
-              class="group relative"
-              style={`animation-delay: ${0.1 * index}s`}
-            >
-              <!-- Card con Glassmorphism -->
-              <div class="relative h-full p-8 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/20 shadow-xl shadow-slate-900/5 hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-700 hover:-translate-y-2 overflow-hidden">
-                <!-- Gradient Bar Top -->
-                <div class={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${item.gradient} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
-                
-                <!-- Glow Effect on Hover -->
-                <div class={`absolute -inset-px rounded-3xl bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-700 -z-10`}></div>
-                
-                <!-- Icon with 3D Effect -->
-                <div class="relative mb-6">
-                  <div class={`w-20 h-20 rounded-2xl bg-gradient-to-br ${item.gradient} p-0.5 shadow-lg shadow-orange-500/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
-                    <div class="w-full h-full rounded-[14px] bg-white/90 backdrop-blur-sm flex items-center justify-center">
-                      <span class="text-4xl filter drop-shadow-lg">{item.icon}</span>
-                    </div>
-                  </div>
-                  
-                  <!-- Floating Metric Badge -->
-                  <div class="absolute -top-2 -right-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-lg shadow-orange-500/40 group-hover:scale-110 transition-transform duration-300">
-                    {item.metric}
-                  </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SERVICIOS — Sin precios, orientados a resultado -->
+    <!-- ════════════════════════════════════════════ -->
+    <section id="servicios" class="py-24 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-white via-orange-50/20 to-white"></div>
+      <div class="absolute top-40 right-0 w-[500px] h-[500px] bg-orange-400/8 rounded-full blur-[100px]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Qué hacemos por ti
+          </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Servicios que generan<br/>
+            <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">ventas reales</span>
+          </h2>
+          <p class="text-lg text-slate-500 max-w-2xl mx-auto">
+            Cada servicio está diseñado para un objetivo claro: que tu inversión se traduzca en clientes y facturación.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          {services.map((service) => (
+            <div class="group relative p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-orange-200 transition-all duration-500 hover:-translate-y-1 overflow-hidden">
+              <!-- Gradient bar -->
+              <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-amber-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+
+              <!-- Icon -->
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                {service.icon === 'megaphone' && (
+                  <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46" />
+                  </svg>
+                )}
+                {service.icon === 'search' && (
+                  <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+                )}
+                {service.icon === 'share' && (
+                  <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                  </svg>
+                )}
+                {service.icon === 'mail' && (
+                  <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="text-2xl font-bold text-slate-900 mb-3 group-hover:text-orange-600 transition-colors">{service.title}</h3>
+              <p class="text-slate-600 mb-6 leading-relaxed">{service.desc}</p>
+
+              <!-- Features -->
+              <ul class="space-y-2 mb-6">
+                {service.features.map((feature) => (
+                  <li class="flex items-start gap-2 text-sm text-slate-600">
+                    <svg class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <!-- Result -->
+              <div class="p-4 rounded-xl bg-orange-50 border border-orange-100">
+                <p class="text-sm text-orange-800 font-medium flex items-start gap-2">
+                  <svg class="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  {service.result}
+                </p>
+              </div>
+
+              <!-- CTA -->
+              <a href="/#contacto" class="mt-6 inline-flex items-center gap-2 text-orange-600 font-semibold text-sm hover:text-orange-700 transition-colors group/cta">
+                Pedir presupuesto
+                <svg class="w-4 h-4 group-hover/cta:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- PROCESO — Cómo trabajamos, fácil de entender -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-slate-900 to-slate-800 relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,107,0,0.15)_0%,transparent_50%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,165,0,0.1)_0%,transparent_50%)]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            Proceso claro y transparente
+          </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+            Así conseguimos que<br/>
+            <span class="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">vendas más</span>
+          </h2>
+          <p class="text-lg text-white/60 max-w-2xl mx-auto">
+            Sin letra pequeña, sin sorpresas. Cuatro pasos para transformar tu marketing.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {process.map((step, index) => (
+            <div class="group relative">
+              <!-- Connector line -->
+              {index < 3 && (
+                <div class="hidden lg:block absolute top-12 left-[calc(100%+0.5rem)] w-[calc(100%-1rem)] h-px bg-gradient-to-r from-orange-500/50 to-orange-500/10"></div>
+              )}
+
+              <div class="p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-orange-500/30 transition-all duration-500 h-full">
+                <!-- Step number -->
+                <div class="text-5xl font-bold bg-gradient-to-b from-orange-400 to-orange-600 bg-clip-text text-transparent mb-4">
+                  {step.step}
                 </div>
-                
-                <!-- Content -->
-                <div class="space-y-3">
-                  <h3 class="text-2xl font-bold text-slate-900 group-hover:text-orange-600 transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                  <p class="text-slate-600 text-sm leading-relaxed">
-                    {item.description}
-                  </p>
-                  <p class="text-xs text-slate-400 italic pt-2 border-t border-slate-100">
-                    {item.detail}
-                  </p>
-                </div>
-                
-                <!-- Bottom Label -->
-                <div class="mt-6 pt-4 border-t border-slate-100">
-                  <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">{item.label}</span>
+
+                <h3 class="text-xl font-bold text-white mb-3">{step.title}</h3>
+                <p class="text-white/60 text-sm leading-relaxed mb-4">{step.desc}</p>
+
+                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/20 border border-orange-500/30">
+                  <svg class="w-3.5 h-3.5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span class="text-xs text-orange-300 font-medium">{step.duration}</span>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        
-        <!-- CTA Banner -->
-        <div class="relative mt-16 p-10 rounded-3xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 overflow-hidden shadow-2xl shadow-orange-500/30">
-          <!-- Animated Background Pattern -->
-          <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] bg-[length:250%_250%] animate-gradient-shift"></div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- POR QUÉ NOSOTROS — Diferenciadores con datos -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_30%,rgba(255,107,0,0.06)_0%,transparent_40%)]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+            Por qué Platanito Rico
           </div>
-          
-          <div class="relative z-10 text-center">
-            <h3 class="text-3xl md:text-4xl font-bold text-white mb-4">
-              ¿Listo para multiplicar tus resultados?
-            </h3>
-            <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-              Únete a las empresas que ya están escalando con estrategias data-driven
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="#catalogo" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-orange-600 font-bold rounded-full shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                Ver Precios
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-              <a href="/#contacto" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white font-bold rounded-full border-2 border-white/20 hover:bg-slate-800 transition-all duration-300">
-                Consultoría Gratis
-              </a>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            No somos otra agencia más.<br/>
+            <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Somos tu departamento de marketing.</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[
+            { title: 'Sin permanencia', desc: 'Te quedas porque ves resultados, no porque estés atado a un contrato. Mes a mes, sin letra pequeña.', metric: '0 meses', label: 'Compromiso', icon: 'unlock' },
+            { title: 'Dashboard en tiempo real', desc: 'Ves exactamente qué hacemos, cuánto invertimos y qué resultados genera cada euro. Total transparencia.', metric: '24/7', label: 'Acceso', icon: 'chart' },
+            { title: 'Especialistas en Almería', desc: 'Conocemos el mercado local, la competencia y el comportamiento de compra de los almerienses.', metric: 'Local', label: 'Expertise', icon: 'map' },
+            { title: 'ROI como obsesión', desc: 'No medimos likes ni impresiones. Medimos leads, llamadas, ventas. Lo que importa a tu cuenta de resultados.', metric: 'x3.5', label: 'ROI medio', icon: 'trending' },
+            { title: 'Equipo multidisciplinar', desc: 'Diseñadores, copywriters, técnicos SEO y expertos en Ads trabajando coordinados para tu marca.', metric: '+5', label: 'Especialistas', icon: 'team' },
+            { title: 'Web + Marketing = Combo', desc: 'Diseñamos tu web con hosting gratuito de por vida y la llenamos de tráfico cualificado. Todo integrado.', metric: '0€', label: 'Hosting web', icon: 'rocket' }
+          ].map((item) => (
+            <div class="group p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:border-orange-200 transition-all duration-500 hover:-translate-y-1">
+              <div class="flex items-start justify-between mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    {item.icon === 'unlock' && <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />}
+                    {item.icon === 'chart' && <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />}
+                    {item.icon === 'map' && <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />}
+                    {item.icon === 'trending' && <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />}
+                    {item.icon === 'team' && <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />}
+                    {item.icon === 'rocket' && <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.58-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />}
+                  </svg>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">{item.metric}</div>
+                  <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">{item.label}</div>
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">{item.title}</h3>
+              <p class="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- Pricing Catalog -->
-    <section id="catalogo" class="py-32 relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-b from-white via-orange-50/30 to-white"></div>
-      <div class="absolute top-40 right-0 w-[600px] h-[600px] bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-[100px]"></div>
-      
-      <div class="container-premium relative z-10">
-        <div class="text-center mb-20">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-6">
+    <!-- ════════════════════════════════════════════ -->
+    <!-- SECTORES — Para quién trabajamos -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium mb-6">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
-            Precios Transparentes
+            Sectores especializados
           </div>
-          <h2 class="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-            Tarifas de <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Marketing Digital</span>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Marketing que entiende<br/>
+            <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">tu sector</span>
           </h2>
-          <p class="text-xl text-slate-500 max-w-2xl mx-auto">
-            Costes de presupuesto publicitario (ad spend) se pagan directamente a las plataformas.
+          <p class="text-lg text-slate-500 max-w-2xl mx-auto">
+            No aplicamos la misma fórmula para todos. Cada sector tiene sus canales, su audiencia y su forma de vender.
           </p>
         </div>
-        
-        <div class="space-y-24">
-          {marketingCategories.map((cat, idx) => (
-            <div class="animate-fade-in-up" style={`animation-delay: ${idx * 0.1}s`}>
-              <div class="flex items-center gap-6 mb-12">
-                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 p-0.5 shadow-lg shadow-orange-500/20">
-                  <div class="w-full h-full rounded-[14px] bg-white flex items-center justify-center">
-                    <div class="w-8 h-8 text-slate-900" set:html={cat.icon} />
-                  </div>
-                </div>
-                <div>
-                  <h3 class="text-3xl font-bold text-slate-900 mb-2">{cat.title}</h3>
-                  <p class="text-slate-500">{cat.description}</p>
-                </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sectors.map((sector) => (
+            <div class="group p-6 rounded-2xl bg-white border border-slate-200 hover:border-orange-200 hover:shadow-lg transition-all duration-300">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  {sector.icon === 'hotel' && <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" />}
+                  {sector.icon === 'building' && <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819" />}
+                  {sector.icon === 'cart' && <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />}
+                  {sector.icon === 'briefcase' && <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />}
+                  {sector.icon === 'hammer' && <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />}
+                  {sector.icon === 'leaf' && <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />}
+                </svg>
               </div>
-              
-              <div class="grid md:grid-cols-2 gap-4">
-                {cat.items.map((item) => (
-                  <div class={`group flex justify-between items-center p-6 rounded-2xl border transition-all duration-300 ${item.popular ? 'bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200 shadow-lg shadow-orange-500/5' : 'bg-white border-slate-200 hover:border-orange-300 hover:shadow-lg'}`}>
-                    <div class="flex items-center gap-4">
-                      {item.popular && (
-                        <span class="px-2 py-1 rounded-full bg-orange-500 text-white text-[10px] font-bold uppercase">Popular</span>
-                      )}
-                      <span class="text-slate-700 font-medium">{item.name}</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                      <span class="text-xs text-slate-400 uppercase tracking-wider hidden sm:block">Desde</span>
-                      <span class="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">{item.price}</span>
-                    </div>
-                  </div>
+              <h3 class="text-lg font-bold text-slate-900 mb-2">{sector.title}</h3>
+              <p class="text-slate-600 text-sm leading-relaxed">{sector.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- TESTIMONIOS — Prueba social -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-white to-orange-50/30 relative overflow-hidden">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-orange-400/8 rounded-full blur-[100px]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            Lo que dicen nuestros clientes
+          </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Resultados reales,<br/>
+            <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">clientes reales</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          {testimonials.map((testimonial) => (
+            <div class="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300">
+              <!-- Stars -->
+              <div class="flex gap-1 mb-4">
+                {Array.from({ length: testimonial.rating }).map(() => (
+                  <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
                 ))}
               </div>
+
+              <blockquote class="text-slate-700 leading-relaxed mb-6 italic">
+                "{testimonial.text}"
+              </blockquote>
+
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
+                  <span class="text-white font-bold text-sm">{testimonial.author.charAt(0)}</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-slate-900 text-sm">{testimonial.author}</div>
+                  <div class="text-slate-500 text-xs">{testimonial.role}</div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- Monthly Packs - ENHANCED EDITION -->
-    <section id="packs" class="py-32 relative overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,165,0,0.08)_0%,transparent_50%)]"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,107,0,0.06)_0%,transparent_50%)]"></div>
-      
-      <div class="container-premium relative z-10">
-        <div class="text-center mb-20">
-          <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-orange-200 shadow-xl shadow-orange-500/10 mb-8">
-            <svg class="w-4 h-4 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-            </svg>
-            <span class="text-sm font-bold text-orange-700 uppercase tracking-wider">Packs Estratégicos</span>
-          </div>
-          <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-8 leading-tight">
-            Packs de <span class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-clip-text text-transparent">Impacto Mensual</span>
+    <!-- ════════════════════════════════════════════ -->
+    <!-- COMPARATIVA — Marketing tradicional vs nosotros -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-orange-50/30 to-white relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+            La diferencia entre tirar dinero y <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">invertir con cabeza</span>
           </h2>
-          <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto">
-            Externaliza tu marketing y ahorra hasta un <strong class="text-orange-600">48% mensual</strong>.
-          </p>
         </div>
-        
-        <div class="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {monthlyPacks.map((pack, index) => (
-            <div class={`group relative rounded-3xl transition-all duration-500 ${pack.popular ? 'lg:scale-110 z-20' : 'hover:-translate-y-2'}`}>
-              {/* Popular Badge */}
-              {pack.popular && (
-                <div class="absolute -top-5 left-1/2 -translate-x-1/2 z-30">
-                  <div class="px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-bold rounded-full shadow-xl shadow-orange-500/50 flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    MÁS POPULAR
-                  </div>
-                </div>
-              )}
-              
-              {/* Savings Badge */}
-              <div class="absolute -top-3 -right-3 z-30">
-                <div class={`px-4 py-2 bg-gradient-to-r ${pack.color === 'orange' ? 'from-orange-600 to-red-600' : pack.color === 'purple' ? 'from-purple-600 to-pink-600' : 'from-blue-600 to-cyan-600'} text-white text-xs font-bold rounded-full shadow-lg rotate-12`}>
-                  {pack.savings}
-                </div>
-              </div>
-              
-              <div class={`h-full rounded-3xl p-8 flex flex-col ${pack.popular ? 'bg-white border-2 border-orange-400 shadow-2xl shadow-orange-500/30' : 'bg-white/80 backdrop-blur-sm border border-slate-200 hover:border-orange-300 hover:shadow-xl'}`}>
-                {/* Header */}
-                <div class="mb-8">
-                  <h4 class={`text-sm font-bold uppercase tracking-wider mb-4 ${pack.popular ? 'text-orange-600' : 'text-slate-400'}`}>
-                    {pack.name}
-                  </h4>
-                  <div class="flex items-baseline gap-2 mb-3">
-                    <span class="text-5xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">{pack.price}</span>
-                    <span class="text-slate-400 text-lg">/mes</span>
-                  </div>
-                  <p class="text-sm text-slate-600 font-medium">{pack.description}</p>
-                </div>
-                
-                {/* Features List with Scroll */}
-                <div class="flex-1 mb-8">
-                  <div class={`space-y-3 ${pack.features.length > 12 ? 'max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-orange-300 scrollbar-track-slate-100' : ''}`}>
-                    {pack.features.map((feature) => (
-                      <div class="flex items-start gap-3 text-sm text-slate-700 group/item">
-                        <svg class={`w-5 h-5 flex-shrink-0 mt-0.5 ${pack.popular ? 'text-orange-500' : 'text-slate-400'} group-hover/item:scale-110 transition-transform`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span class="leading-relaxed">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* CTA Button */}
-                <a 
-                  href="/#contacto"
-                  class={`block w-full py-4 px-6 rounded-full font-bold text-center transition-all duration-300 ${pack.popular ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/40 hover:shadow-xl hover:shadow-orange-500/50 hover:-translate-y-1' : 'bg-slate-900 text-white hover:bg-orange-600 hover:shadow-lg'}`}
-                >
-                  {pack.popular ? '🚀 Activar Scale VIP' : pack.name.includes('Enterprise') ? '💼 Contratar Enterprise' : '✨ Contratar Growth'}
-                </a>
-                
-                {/* Features Count */}
-                <div class="mt-4 text-center">
-                  <span class="text-xs text-slate-400 font-medium">
-                    {pack.features.length} servicios incluidos
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        
-        {/* Comparison Note */}
-        <div class="mt-16 p-8 rounded-2xl bg-gradient-to-r from-slate-50 to-orange-50 border border-orange-100">
-          <div class="flex items-start gap-4">
-            <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-              <svg class="w-6 h-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div class="flex-1">
-              <h4 class="font-bold text-slate-900 mb-2">💡 ¿No estás seguro qué pack elegir?</h4>
-              <p class="text-slate-600 text-sm leading-relaxed">
-                Todos nuestros packs son <strong>sin permanencia</strong> y puedes cambiar o cancelar cuando quieras. 
-                Te recomendamos empezar con <strong class="text-orange-600">Growth Digital</strong> si estás comenzando, 
-                o <strong class="text-orange-600">Scale VIP 360</strong> si quieres resultados acelerados.
-              </p>
-            </div>
+
+        <div class="max-w-4xl mx-auto overflow-hidden rounded-3xl border border-slate-200 shadow-lg">
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-slate-50">
+                  <th class="text-left p-5 font-semibold text-slate-500 w-1/3"></th>
+                  <th class="p-5 text-center font-semibold text-red-600 w-1/3">
+                    <div class="flex flex-col items-center gap-1">
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>
+                      Agencia genérica
+                    </div>
+                  </th>
+                  <th class="p-5 text-center font-bold text-orange-600 w-1/3 bg-orange-50">
+                    <div class="flex flex-col items-center gap-1">
+                      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                      </svg>
+                      Platanito Rico
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { aspect: 'Transparencia', generic: 'Informes PDF mensuales que no entiendes', us: 'Dashboard en tiempo real con métricas claras' },
+                  { aspect: 'Permanencia', generic: '6-12 meses obligatorios', us: 'Sin permanencia. Mes a mes.' },
+                  { aspect: 'Estrategia', generic: 'Plantilla genérica para todos', us: 'Plan personalizado para tu negocio y sector' },
+                  { aspect: 'Comunicación', generic: 'Email con respuesta en 48-72h', us: 'WhatsApp directo. Respuesta en horas.' },
+                  { aspect: 'Web incluida', generic: 'WordPress con hosting de pago mensual', us: 'Web estática ultrarrápida + hosting gratuito' },
+                  { aspect: 'Objetivo', generic: 'Impresiones, clics, alcance...', us: 'Leads, llamadas y ventas reales' }
+                ].map((row, i) => (
+                  <tr class={`border-t border-slate-100 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
+                    <td class="p-5 font-semibold text-slate-900">{row.aspect}</td>
+                    <td class="p-5 text-center text-slate-500">{row.generic}</td>
+                    <td class="p-5 text-center text-slate-900 font-medium bg-orange-50/50">{row.us}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Final CTA -->
-    <section class="py-32 relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5"></div>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-orange-400/20 to-transparent rounded-full blur-[100px]"></div>
-      
-      <div class="container-premium relative z-10">
+    <!-- ════════════════════════════════════════════ -->
+    <!-- FAQ -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-200 text-orange-700 text-sm font-medium mb-6">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Preguntas frecuentes
+          </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+            Resolvemos tus<br/>
+            <span class="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">dudas</span>
+          </h2>
+        </div>
+
+        <div class="max-w-4xl mx-auto space-y-4">
+          {faq.map((item) => (
+            <details class="group rounded-2xl bg-white border border-slate-200 hover:border-orange-200 transition-colors duration-300 overflow-hidden">
+              <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                <h3 class="text-lg font-semibold text-slate-900 pr-4 group-hover:text-orange-600 transition-colors">{item.q}</h3>
+                <svg class="w-5 h-5 text-slate-400 flex-shrink-0 group-open:rotate-180 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="px-6 pb-6">
+                <p class="text-slate-600 leading-relaxed">{item.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- ENLACES INTERNOS -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-16 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl font-bold text-slate-900 mb-3">Servicios relacionados</h2>
+          <p class="text-slate-500">Explora todos nuestros servicios para hacer crecer tu negocio en Almería</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="/diseno-web/almeria/" class="group p-5 rounded-2xl bg-white border border-slate-200 hover:border-orange-200 hover:shadow-md transition-all duration-300">
+            <h3 class="font-semibold text-slate-900 mb-1 group-hover:text-orange-600 transition-colors">Diseño Web en Almería</h3>
+            <p class="text-xs text-slate-500">Webs rápidas con hosting gratuito de por vida</p>
+          </a>
+          <a href="/audiovisual/" class="group p-5 rounded-2xl bg-white border border-slate-200 hover:border-orange-200 hover:shadow-md transition-all duration-300">
+            <h3 class="font-semibold text-slate-900 mb-1 group-hover:text-orange-600 transition-colors">Producción Audiovisual</h3>
+            <p class="text-xs text-slate-500">Video con dron 4K y fotografía profesional</p>
+          </a>
+          <a href="/blog/" class="group p-5 rounded-2xl bg-white border border-slate-200 hover:border-orange-200 hover:shadow-md transition-all duration-300">
+            <h3 class="font-semibold text-slate-900 mb-1 group-hover:text-orange-600 transition-colors">Blog y Recursos</h3>
+            <p class="text-xs text-slate-500">Guías, tendencias y consejos de marketing</p>
+          </a>
+          <a href="/#contacto" class="group p-5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:shadow-lg transition-all duration-300">
+            <h3 class="font-semibold text-white mb-1">Contactar ahora</h3>
+            <p class="text-xs text-white/80">Auditoría gratuita sin compromiso</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- CTA FINAL -->
+    <!-- ════════════════════════════════════════════ -->
+    <section class="py-24 relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,107,0,0.15)_0%,transparent_50%)]"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,165,0,0.1)_0%,transparent_50%)]"></div>
+
+      <div class="max-w-6xl mx-auto px-6 relative z-10">
         <div class="max-w-3xl mx-auto text-center">
-          <div class="p-12 rounded-3xl bg-white border border-orange-200 shadow-2xl shadow-orange-500/10">
-            <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-              ¿Quieres vender más?
-            </h2>
-            <p class="text-xl text-slate-500 mb-10">
-              Analizamos tu tráfico y competencia para crear la <span class="text-orange-600 font-semibold">estrategia perfecta</span>.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/#contacto" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                Solicitar Consultoría Gratis
-                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-              <a href="tel:+34657085019" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-700 font-semibold rounded-full border border-slate-200 hover:border-orange-300 transition-all duration-300">
-                <svg class="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Llamar Ahora
-              </a>
-            </div>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+            Deja de perder dinero.<br/>
+            <span class="bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Empieza a vender.</span>
+          </h2>
+          <p class="text-lg text-white/70 mb-10 max-w-2xl mx-auto">
+            Te hacemos una auditoría gratuita de tu marketing actual. Sin compromiso, sin letra pequeña. Te decimos qué funciona, qué no, y cómo mejorar.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/#contacto" class="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-full shadow-xl shadow-orange-500/30 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <span>Pedir auditoría gratuita</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+            <a href="tel:+34657085019" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/30 hover:bg-white/20 transition-all duration-300">
+              <svg class="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              Llamar al 657 085 019
+            </a>
           </div>
         </div>
       </div>
     </section>
+
   </main>
-  
+
   <Footer />
 </BaseLayout>
 
 <style>
-  @keyframes gradient-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
   @keyframes orb-float {
     0%, 100% { transform: translate(0, 0) scale(1); }
     33% { transform: translate(30px, -30px) scale(1.05); }
@@ -653,14 +832,6 @@ const monthlyPacks = [
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes light-ray {
-    0%, 100% { opacity: 0; transform: translateY(-100%) rotate(var(--tw-rotate)); }
-    50% { opacity: 1; }
-  }
-  .animate-gradient-shift {
-    background-size: 200% 200%;
-    animation: gradient-shift 15s ease infinite;
-  }
   .animate-orb-float {
     animation: orb-float 20s ease-in-out infinite;
   }
@@ -671,98 +842,4 @@ const monthlyPacks = [
     animation: fade-in-up 0.8s ease-out forwards;
     opacity: 0;
   }
-  .animate-light-ray {
-    animation: light-ray 8s ease-in-out infinite;
-  }
-  
-  /* Custom Scrollbar */
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-  }
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 10px;
-  }
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #fb923c, #f59e0b);
-    border-radius: 10px;
-  }
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #f97316, #ea580c);
-  }
 </style>
-
-<script is:inline>
-  const canvas = document.getElementById('particleCanvas');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    /** @type {any[]} */
-    let particles = [];
-    let isActive = true;
-    
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.5 + 0.1;
-        this.color = Math.random() > 0.5 ? '255, 107, 0' : '255, 165, 0';
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
-        ctx.fill();
-      }
-    }
-    
-    function init() {
-      resize();
-      particles = [];
-      const count = window.innerWidth < 768 ? 15 : 25;
-      for (let i = 0; i < count; i++) particles.push(new Particle());
-    }
-    
-    function animate() {
-      if (!isActive) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      particles.forEach((p1, i) => {
-        particles.slice(i + 1).forEach(p2 => {
-          const dx = p1.x - p2.x, dy = p1.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255, 107, 0, ${0.1 * (1 - dist / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-          }
-        });
-      });
-      requestAnimationFrame(animate);
-    }
-    
-    document.addEventListener('visibilitychange', () => {
-      isActive = !document.hidden;
-      if (isActive) animate();
-    });
-    window.addEventListener('resize', init);
-    init();
-    animate();
-  }
-</script>

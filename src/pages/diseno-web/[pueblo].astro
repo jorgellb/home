@@ -5,10 +5,12 @@ import Footer from '../../components/layout/Footer.astro';
 import { pueblos, getPuebloBySlug, type Pueblo } from '../../data/pueblos-almeria';
 
 export async function getStaticPaths() {
-  return pueblos.map((pueblo) => ({
-    params: { pueblo: pueblo.slug },
-    props: { pueblo },
-  }));
+  return pueblos
+    .filter((pueblo) => pueblo.slug !== 'almeria')
+    .map((pueblo) => ({
+      params: { pueblo: pueblo.slug },
+      props: { pueblo },
+    }));
 }
 
 interface Props {
