@@ -5,9 +5,10 @@ interface Props {
   pitch?: number;
   bearing?: number;
   height?: string;
+  label?: string;
 }
 
-const { center, zoom = 13, pitch = 25, bearing = -15, height = "420px" } = Astro.props;
+const { center, zoom = 13, pitch = 25, bearing = -15, height = "420px", label } = Astro.props;
 const mapId = `map-${Math.random().toString(36).substring(7)}`;
 ---
 
@@ -20,6 +21,7 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
     data-zoom={zoom}
     data-pitch={pitch}
     data-bearing={bearing}
+    data-label={label || ''}
   ></div>
 </section>
 
@@ -27,9 +29,10 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
 
 <style>
   .map-section {
-    --map-bg: #0a1628;
-    --map-border: rgba(200, 164, 90, 0.15);
+    --map-bg: #1a1f2e;
+    --map-border: rgba(200, 164, 90, 0.3);
     --map-primary: #c8a45a;
+    --map-primary-glow: rgba(200, 164, 90, 0.4);
   }
 
   .maplibre-map {
@@ -39,57 +42,117 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
   }
 
   :global(.maplibregl-ctrl-group) {
-    background: #0a1628 !important;
-    border: 1px solid rgba(200, 164, 90, 0.15) !important;
+    background: #1a1f2e !important;
+    border: 1px solid rgba(200, 164, 90, 0.2) !important;
+    border-radius: 8px !important;
   }
 
   :global(.maplibregl-ctrl-group button) {
-    background: #0a1628 !important;
+    background: #1a1f2e !important;
+    border-bottom: 1px solid rgba(200, 164, 90, 0.1) !important;
+  }
+
+  :global(.maplibregl-ctrl-group button:hover) {
+    background: rgba(200, 164, 90, 0.15) !important;
   }
 
   :global(.maplibregl-ctrl-icon) {
-    filter: invert(1) brightness(0.7);
+    filter: invert(1) brightness(0.8);
+  }
+
+  :global(.map-marker) {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+  }
+
+  :global(.map-marker svg) {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  }
+
+  :global(.map-label) {
+    background: rgba(26, 31, 46, 0.95);
+    border: 1px solid rgba(200, 164, 90, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #ffffff;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+
+  :global(.map-label::after) {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(200, 164, 90, 0.3);
+  }
+
+  :global(.area-circle) {
+    animation: pulse-ring 2s ease-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.6; }
+    100% { transform: scale(2.5); opacity: 0; }
   }
 </style>
 
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" is:inline></script>
+
 <script is:inline>
   function initMapLibreMaps() {
-    if (typeof maplibregl === 'undefined') return;
+    if (typeof maplibregl === 'undefined') {
+      setTimeout(initMapLibreMaps, 200);
+      return;
+    }
 
     const maps = document.querySelectorAll('.maplibre-map');
     
     maps.forEach((mapContainer) => {
       const element = mapContainer;
-      if (element.querySelector('.maplibregl-map')) return;
+      if (element.querySelector('.maplibregl-canvas')) return;
 
       const center = JSON.parse(element.dataset.center || '[0, 0]');
       const zoom = parseFloat(element.dataset.zoom || '13');
       const pitch = parseFloat(element.dataset.pitch || '25');
       const bearing = parseFloat(element.dataset.bearing || '-15');
+      const label = element.dataset.label || '';
 
       const map = new maplibregl.Map({
         container: element,
         style: {
           version: 8,
+          name: 'Carto Dark',
           sources: {
-            'carto-dark': {
+            'carto-light': {
               type: 'raster',
               tiles: [
-                'https://a.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
-                'https://b.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
-                'https://c.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png',
-                'https://d.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png'
+                'https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                'https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                'https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                'https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
               ],
               tileSize: 256,
               attribution: '&copy; CARTO'
             }
           },
           layers: [{
-            id: 'carto-dark-layer',
+            id: 'carto-light-layer',
             type: 'raster',
-            source: 'carto-dark',
+            source: 'carto-light',
             minzoom: 0,
-            maxzoom: 19
+            maxzoom: 19,
+            paint: {
+              'raster-saturation': -0.2,
+              'raster-brightness-min': 0.3,
+              'raster-brightness-max': 1
+            }
           }]
         },
         center: center,
@@ -101,16 +164,99 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
       });
 
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+
+      map.on('load', () => {
+        map.addSource('area-point', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: [{
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: center
+              },
+              properties: { label: label }
+            }]
+          }
+        });
+
+        map.addLayer({
+          id: 'area-pulse',
+          type: 'circle',
+          source: 'area-point',
+          paint: {
+            'circle-radius': [10, 25, 40],
+            'circle-color': 'rgba(200, 164, 90, 0.3)',
+            'circle-opacity': [0.6, 0.3, 0],
+            'circle-pitch-alignment': 'map'
+          }
+        });
+
+        map.addLayer({
+          id: 'area-fill',
+          type: 'circle',
+          source: 'area-point',
+          paint: {
+            'circle-radius': 12,
+            'circle-color': 'rgba(200, 164, 90, 0.25)',
+            'circle-opacity': 1
+          }
+        });
+
+        map.addLayer({
+          id: 'area-border',
+          type: 'circle',
+          source: 'area-point',
+          paint: {
+            'circle-radius': 16,
+            'circle-color': 'rgba(200, 164, 90, 0.5)',
+            'circle-opacity': 1,
+            'circle-blur': 0.3
+          }
+        });
+
+        map.addLayer({
+          id: 'area-center',
+          type: 'circle',
+          source: 'area-point',
+          paint: {
+            'circle-radius': 8,
+            'circle-color': '#c8a45a',
+            'circle-stroke-width': 3,
+            'circle-stroke-color': '#ffffff'
+          }
+        });
+
+        if (label) {
+          const markerEl = document.createElement('div');
+          markerEl.className = 'map-label';
+          markerEl.textContent = label;
+          markerEl.style.cssText = `
+            position: absolute;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 10;
+          `;
+
+          const markerContainer = document.createElement('div');
+          markerContainer.className = 'custom-marker';
+          markerContainer.style.cssText = 'position: relative;';
+          markerContainer.appendChild(markerEl);
+
+          new maplibregl.Marker({ element: markerContainer })
+            .setLngLat(center)
+            .addTo(map);
+        }
+      });
     });
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(initMapLibreMaps, 100);
-    });
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initMapLibreMaps, 100));
   } else {
     setTimeout(initMapLibreMaps, 100);
   }
 </script>
-
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" is:inline></script>
