@@ -23,6 +23,8 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
   ></div>
 </section>
 
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+
 <style>
   .map-section {
     --map-bg: #0a1628;
@@ -35,14 +37,29 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
     background: var(--map-bg);
     border: 1px solid var(--map-border);
   }
+
+  :global(.maplibregl-ctrl-group) {
+    background: #0a1628 !important;
+    border: 1px solid rgba(200, 164, 90, 0.15) !important;
+  }
+
+  :global(.maplibregl-ctrl-group button) {
+    background: #0a1628 !important;
+  }
+
+  :global(.maplibregl-ctrl-icon) {
+    filter: invert(1) brightness(0.7);
+  }
 </style>
 
-<script>
+<script is:inline>
   function initMapLibreMaps() {
+    if (typeof maplibregl === 'undefined') return;
+
     const maps = document.querySelectorAll('.maplibre-map');
     
-    maps.forEach(async (mapContainer) => {
-      const element = mapContainer as HTMLElement;
+    maps.forEach((mapContainer) => {
+      const element = mapContainer;
       if (element.querySelector('.maplibregl-map')) return;
 
       const center = JSON.parse(element.dataset.center || '[0, 0]');
@@ -50,9 +67,7 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
       const pitch = parseFloat(element.dataset.pitch || '25');
       const bearing = parseFloat(element.dataset.bearing || '-15');
 
-      const L = await import('https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js');
-
-      new L.Map({
+      const map = new maplibregl.Map({
         container: element,
         style: {
           version: 8,
@@ -85,14 +100,17 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
         attributionControl: false
       });
 
-      (L as any).NavigationControl && new (L as any).NavigationControl({ showCompass: false });
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
     });
   }
 
-  initMapLibreMaps();
-  document.addEventListener('astro:page-load', initMapLibreMaps);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(initMapLibreMaps, 100);
+    });
+  } else {
+    setTimeout(initMapLibreMaps, 100);
+  }
 </script>
 
-<style is:global>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
-</style>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" is:inline></script>
