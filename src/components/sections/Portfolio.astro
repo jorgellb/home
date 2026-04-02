@@ -108,65 +108,50 @@ const projects: Project[] = [
           class="group relative rounded-3xl bg-white border border-slate-200 overflow-hidden hover:border-slate-300 transition-all duration-700"
         >
           {/* Image Container with Real Image */}
-          <a 
+          <a
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
             class="relative block aspect-[16/10] overflow-hidden group/image"
             aria-label={`Ver proyecto ${project.name}`}
           >
-            {/* Fallback Gradient Background */}
-            <div class={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}></div>
-            
-            {/* Browser Mockup Overlay */}
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="w-[90%] h-[80%] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shadow-2xl">
-                {/* Browser Header */}
-                <div class="flex items-center gap-2 px-3 py-2 bg-slate-200 border-b border-slate-200">
-                  <div class="flex gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500/80"></span>
-                  </div>
-                  <div class="flex-1 mx-2">
-                    <div class="flex items-center justify-center gap-1 px-2 py-0.5 rounded bg-slate-300/50 text-[10px] text-slate-500">
-                      <svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                      <span class="truncate">{project.url.replace('https://', '').replace('www.', '').slice(0, -1)}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Website Content Preview */}
-                <div class={`relative h-[calc(100%-32px)] bg-gradient-to-br ${project.gradient} opacity-30`}>
-                  <div class="absolute inset-3 space-y-2">
-                    <div class="h-6 w-24 bg-slate-200 rounded"></div>
-                    <div class="h-3 w-40 bg-slate-100 rounded"></div>
-                    <div class="h-3 w-32 bg-slate-100 rounded"></div>
-                    <div class="mt-4 grid grid-cols-3 gap-2">
-                      <div class="h-12 bg-slate-100 rounded"></div>
-                      <div class="h-12 bg-slate-100 rounded"></div>
-                      <div class="h-12 bg-slate-100 rounded"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
+            {/* Real Project Image */}
+            <img
+              src={project.image}
+              alt={`${project.name} — proyecto de ${project.category} por Platanito Rico`}
+              width="600"
+              height="375"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+
+            {/* Gradient Overlay */}
+            <div class={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover/image:opacity-40 transition-opacity duration-300`}></div>
+
             {/* Shine Effect */}
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/image:translate-x-full transition-transform duration-1000"></div>
-            
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover/image:translate-x-full transition-transform duration-1000"></div>
+
             {/* Floating Category Badge */}
             <div class="absolute top-4 right-4 z-10 transition-transform duration-300 group-hover/image:-translate-y-1">
               <span class={`px-3 py-1.5 rounded-full bg-gradient-to-r ${project.gradient} text-white text-xs font-semibold shadow-lg`}>
                 {project.category}
               </span>
             </div>
-            
+
+            {/* URL bar at bottom */}
+            <div class="absolute bottom-3 left-3 z-10">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/25 text-white text-xs font-medium">
+                <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                {project.url.replace('https://', '').replace('www.', '').slice(0, -1)}
+              </span>
+            </div>
+
             {/* View Overlay */}
             <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span class="px-4 py-2 rounded-full bg-white text-slate-900 font-medium text-sm">
+              <span class="px-5 py-2.5 rounded-full bg-white text-slate-900 font-semibold text-sm shadow-lg">
                 Ver proyecto
               </span>
             </div>
@@ -215,21 +200,21 @@ const projects: Project[] = [
     
     <!-- Stats Section -->
     <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg transition-shadow duration-300">
+      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg hover:border-orange-200 transition-all duration-300">
         <div class="text-3xl lg:text-4xl font-bold text-gradient mb-2">50+</div>
-        <div class="text-sm text-slate-400">Proyectos entregados</div>
+        <div class="text-sm text-slate-400">Webs entregadas</div>
       </div>
-      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg transition-shadow duration-300">
+      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg hover:border-orange-200 transition-all duration-300">
         <div class="text-3xl lg:text-4xl font-bold text-gradient mb-2">100%</div>
         <div class="text-sm text-slate-400">Clientes satisfechos</div>
       </div>
-      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg transition-shadow duration-300">
-        <div class="text-3xl lg:text-4xl font-bold text-gradient mb-2">5</div>
-        <div class="text-sm text-slate-400">Años de experiencia</div>
+      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg hover:border-orange-200 transition-all duration-300">
+        <div class="text-3xl lg:text-4xl font-bold text-gradient mb-2">0€</div>
+        <div class="text-sm text-slate-400">Hosting anual</div>
       </div>
-      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg transition-shadow duration-300">
-        <div class="text-3xl lg:text-4xl font-bold text-gradient mb-2">24h</div>
-        <div class="text-sm text-slate-400">Tiempo de respuesta</div>
+      <div class="text-center p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-lg hover:border-orange-200 transition-all duration-300">
+        <div class="text-3xl lg:text-4xl font-bold text-gradient mb-2">&lt;1s</div>
+        <div class="text-sm text-slate-400">Tiempo de carga</div>
       </div>
     </div>
     
