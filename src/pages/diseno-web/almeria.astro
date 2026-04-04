@@ -578,39 +578,70 @@ const jsonLd = [
           </p>
         </div>
 
+        <!-- Desktop: tabla 3 columnas | Mobile: cards apiladas por característica -->
         <div class="rounded-3xl border border-slate-200 overflow-hidden bg-white">
-          <!-- Header -->
-          <div class="grid grid-cols-3 bg-slate-50 border-b border-slate-200">
-            <div class="p-4 text-sm font-semibold text-slate-900"></div>
-            <div class="p-4 text-center">
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 text-purple-600 text-sm font-bold">
-                Platanito Rico
+
+          <!-- Header — solo visible en md+ -->
+          <div class="hidden md:grid grid-cols-3 bg-slate-50 border-b border-slate-200">
+            <div class="p-5 text-sm font-semibold text-slate-400 uppercase tracking-wide">Característica</div>
+            <div class="p-5 text-center">
+              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 text-purple-600 text-sm font-bold">
+                ✦ Platanito Rico
               </span>
             </div>
-            <div class="p-4 text-center">
-              <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-200 text-slate-600 text-sm font-bold">
+            <div class="p-5 text-center">
+              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-slate-500 text-sm font-bold">
                 DIY / WordPress
               </span>
             </div>
           </div>
-          <!-- Rows -->
+
+          <!-- Rows: tabla en desktop, cards en móvil -->
           {comparativa.map((row, i) => (
-            <div class={`grid grid-cols-3 ${i < comparativa.length - 1 ? 'border-b border-slate-100' : ''}`}>
-              <div class="p-4 flex items-center">
-                <span class="text-sm font-medium text-slate-900">{row.caracteristica}</span>
+            <div class={`${i < comparativa.length - 1 ? 'border-b border-slate-100' : ''}`}>
+
+              {/* Desktop row */}
+              <div class="hidden md:grid grid-cols-3">
+                <div class="p-5 flex items-center">
+                  <span class="text-sm font-semibold text-slate-900">{row.caracteristica}</span>
+                </div>
+                <div class="p-5 flex items-start gap-2 bg-purple-500/[0.025]">
+                  <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span class="text-sm text-slate-600 leading-relaxed">{row.profesional}</span>
+                </div>
+                <div class="p-5 flex items-start gap-2">
+                  <svg class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span class="text-sm text-slate-400 leading-relaxed">{row.amateur}</span>
+                </div>
               </div>
-              <div class="p-4 flex items-start gap-2 bg-purple-500/[0.02]">
-                <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm text-slate-600">{row.profesional}</span>
+
+              {/* Mobile card */}
+              <div class="md:hidden p-5 space-y-3">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">{row.caracteristica}</p>
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-100">
+                  <svg class="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <p class="text-xs font-bold text-purple-600 mb-1">Platanito Rico</p>
+                    <p class="text-sm text-slate-700 leading-relaxed">{row.profesional}</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
+                  <svg class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <p class="text-xs font-bold text-slate-400 mb-1">DIY / WordPress</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">{row.amateur}</p>
+                  </div>
+                </div>
               </div>
-              <div class="p-4 flex items-start gap-2">
-                <svg class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm text-slate-500">{row.amateur}</span>
-              </div>
+
             </div>
           ))}
         </div>
