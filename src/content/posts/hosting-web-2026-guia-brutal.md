@@ -14,7 +14,7 @@ featuredImage: "/imagenes/Hosting-para-Web-2026-gratis.jpg"
 featuredImageAlt: "Comparativa de logotipos de hosting web sobre un fondo tecnológico moderno"
 readingTime: 45
 seo:
-  title: "Guía Hosting Web 2026: La Verdad sin Filtros (Cloudflare, Vercel, Netlify)"
+  title: "Guía Hosting Web 2026: La Verdad sin Filtros"
   description: "Análisis brutal de 12 plataformas de hosting en 2026. Datos reales de ancho de banda, costes ocultos y veredicto SEO honesto."
   keywords: ["hosting web 2026", "mejor hosting seo", "cloudflare vs vercel vs netlify", "especificaciones hosting 2026"]
 ---
