@@ -15,7 +15,7 @@ featuredImageAlt: "Comparativa visual de plataformas de hosting web en 2026"
 readingTime: 45
 seo:
   title: "Hosting Web 2026: Guía Brutal sin Filtros"
-  description: "Análisis brutal y honesto de 12 plataformas de hosting en 2026. Especificaciones reales, costes ocultos y veredicto SEO definitivo por alguien que ha gestado +200 sitios."
+  description: "Análisis brutal de 12 plataformas de hosting en 2026. Especificaciones reales, costes ocultos y veredicto SEO sin filtros. +200 sitios gestionados."
   keywords: ["hosting web 2026", "mejor hosting seo", "cloudflare vs vercel vs netlify", "guia hosting profesional 2026", "especificaciones hosting reales"]
 ---
 
