@@ -29,12 +29,13 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         // Excluir páginas que no deben estar en el sitemap
-        const excludedPages = ['/robots.txt', '/404', '/404.html'];
+        const excludedPages = ['/robots.txt', '/404', '/404.html', '/success'];
         return !excludedPages.includes(page);
       },
       customPages: [
         // Asegurar que todas las páginas principales estén incluidas
         'https://platanitorico.com/',
+        'https://platanitorico.com/blog',
         'https://platanitorico.com/desarrollo-web',
         'https://platanitorico.com/audiovisual',
         'https://platanitorico.com/marketing',
@@ -58,7 +59,7 @@ export default defineConfig({
         }
 
         // Servicios principales - alta prioridad
-        if (url.match(/\/(desarrollo-web|audiovisual|marketing|diseno-grafico|soporte|contacto)$/)) {
+        if (url.match(/\/(desarrollo-web|audiovisual|marketing|diseno-grafico|soporte|contacto|blog)$/)) {
           return {
             ...item,
             changefreq: 'weekly',

@@ -199,9 +199,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si tu audiencia es global abarcando múltiples continentes, si tu contenido es predominantemente estático, si tienes conocimiento técnico medio o alto, y si quieres evitar sorpresas de bandwidth costs inesperados.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">Necesitas soporte humano responsive, usas frameworks edge cases con build complejo, o tu modelo de negocio depende de serverless functions intensivas.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">Necesitas soporte humano responsive, usas frameworks edge cases con build complejo, o tu modelo de negocio depende de serverless functions intensivas.</p>
 </div>
 </div>
 </div>
@@ -266,9 +266,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Netlify si eres developer individual o small team valorando DX sobre coste, si tu sitio tiene tráfico bajo-medio (menos de 20,000 visitas mensuales), si necesitas forms sin configurar nada extra, o si trabajas en quick prototypes y MVPs.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">Tráfico supera 50,000 visitas mensuales consistentemente, empiezas a pagar overages regularmente, o necesitas control granular de servidor. En esos casos: migra sin culpa.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">Tráfico supera 50,000 visitas mensuales consistentemente, empiezas a pagar overages regularmente, o necesitas control granular de servidor. En esos casos: migra sin culpa.</p>
 </div>
 </div>
 </div>
@@ -330,9 +330,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Vercel si tu stack es Next.js (no hay debate aquí), necesitas ISR para contenido dinámico-estático, tienes presupuesto para $20-100/mes en hosting, y valoras el cutting edge performance real.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">Usas Astro, Gatsby, Hugo u otros frameworks. Si tienes presupuesto ajustado (menos de $20/mes largo plazo). Si temes vendor lock-in — y deberías temerlo.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">Usas Astro, Gatsby, Hugo u otros frameworks. Si tienes presupuesto ajustado (menos de $20/mes largo plazo). Si temes vendor lock-in — y deberías temerlo.</p>
 </div>
 </div>
 </div>
@@ -385,9 +385,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si eres estudiante o dev aprendiendo, si tu proyecto open source necesita docs, o si el budget es absoluto cero dólares y el proyecto no es profesional.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">El sitio genera dinero o representa una marca profesional. Cuando necesitas cualquier funcionalidad dinámica. Cuando almacenas más de 500 MB de assets.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">El sitio genera dinero o representa una marca profesional. Cuando necesitas cualquier funcionalidad dinámica. Cuando almacenas más de 500 MB de assets.</p>
 </div>
 </div>
 </div>
@@ -440,9 +440,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si ya usas GitLab para repos (por consistencia), si necesitas CI/CD avanzado para builds complejos, si quieres futura opción de self-hosting, o si necesitas repos privados sin pagar cuotas.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">No usas ya GitLab — en ese caso quédate con GitHub por mayor comunidad, o salta directamente a Netlify/Vercel por mejor developer experience.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">No usas ya GitLab — en ese caso quédate con GitHub por mayor comunidad, o salta directamente a Netlify/Vercel por mejor developer experience.</p>
 </div>
 </div>
 </div>
@@ -541,9 +541,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Render si necesitas backend+frontend juntos (API + static), si prototipas app completa con database, o si el free tier es suficiente para MVP validation y no te importa el cold start.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">Para sitios estáticos puros (mejores opciones existen), si tu audiencia está fuera de US West (cada milisegundo de TTFB importa para SEO competitivo).</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">Para sitios estáticos puros (mejores opciones existen), si tu audiencia está fuera de US West (cada milisegundo de TTFB importa para SEO competitivo).</p>
 </div>
 </div>
 </div>
@@ -601,9 +601,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si construyes app full stack con backend complejo, si valoras UX de desarrollo sobre costo predictible, o si eres startup validando concepto con el crédito inicial.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">Si no estás dispuesto a monitorear la factura diariamente. Si el SEO es crítico y necesitas CDN global sin configuración adicional.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">Si no estás dispuesto a monitorear la factura diariamente. Si el SEO es crítico y necesitas CDN global sin configuración adicional.</p>
 </div>
 </div>
 </div>
@@ -794,9 +794,9 @@ Factores Críticos de Hosting para SEO
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Deno Deploy si amas TypeScript y odias la complejidad de Node.js, si construyes APIs edge con alto volumen de peticiones, o si experimentas con el runtime moderno del futuro.</p>
 </div>
-<div class="p-6 rounded-2xl bg-[#262626]">
-<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-white text-sm font-bold leading-relaxed m-0">Para static sites simples (es overkill), si tu equipo depende de librerías NPM específicas, o si el community support es crítico para tu éxito.</p>
+<div class="p-6 rounded-2xl bg-orange-50 border border-orange-100">
+<p class="font-black text-orange-600 text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-slate-800 text-sm font-bold leading-relaxed m-0">Para static sites simples (es overkill), si tu equipo depende de librerías NPM específicas, o si el community support es crítico para tu éxito.</p>
 </div>
 </div>
 </div>
@@ -1006,12 +1006,12 @@ No es perfecto. La UI es confusa, el soporte es malo en free tier, y el lock-in 
 
 ---
 
-<div class="not-prose my-12 p-12 md:p-16 rounded-[3.5rem] bg-[#262626] text-white relative overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.6)] border-4 border-[#FFF055]">
-<div class="absolute -top-32 -right-32 w-96 h-96 bg-[#FFF055]/5 rounded-full blur-[150px]"></div>
+<div class="not-prose my-12 p-12 md:p-16 rounded-[3.5rem] bg-orange-50 border-4 border-orange-200 relative overflow-hidden shadow-xl">
+<div class="absolute -top-32 -right-32 w-96 h-96 bg-orange-500/5 rounded-full blur-[150px]"></div>
 <div class="relative z-10">
-<p class="text-[#FFF055] font-display text-4xl md:text-6xl font-black leading-tight mb-6 uppercase">¿Hablamos de tu próximo proyecto?</p>
-<p class="text-slate-300 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl italic">"En Platanito Rico no solo diseñamos webs. Elegimos la armadura técnica que tu negocio necesita para no desangrarse en facturas absurdas y picos de tráfico inesperados."</p>
-<a href="/contacto" class="inline-flex items-center gap-4 px-10 py-6 bg-[#FFF055] text-[#262626] rounded-2xl font-black uppercase tracking-wider shadow-[0_0_50px_rgba(255,240,85,0.3)] hover:scale-105 transition-all duration-300 no-underline text-lg">
+<p class="text-slate-900 font-display text-4xl md:text-6xl font-black leading-tight mb-6 uppercase">¿Hablamos de tu próximo proyecto?</p>
+<p class="text-slate-600 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl italic">"En Platanito Rico no solo diseñamos webs. Elegimos la armadura técnica que tu negocio necesita para no desangrarse en facturas absurdas y picos de tráfico inesperados."</p>
+<a href="/contacto" class="inline-flex items-center gap-4 px-10 py-6 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-wider shadow-lg hover:scale-105 transition-all duration-300 no-underline text-lg">
 Escribir con honestidad radical
 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
 </a>
