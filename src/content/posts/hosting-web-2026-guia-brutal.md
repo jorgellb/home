@@ -20,7 +20,7 @@ seo:
 ---
 
 <div class="not-prose my-0 -mt-8">
-<div class="relative overflow-hidden rounded-[3rem] bg-[#262626] p-12 md:p-20 shadow-[0_40px_100px_-15px_rgba(0,0,0,0.5)]">
+<div class="relative overflow-hidden rounded-[3rem] bg-[#262626] text-white p-12 md:p-20 shadow-[0_40px_100px_-15px_rgba(0,0,0,0.5)]">
 <div class="absolute -top-32 -right-32 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[150px]"></div>
 <div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-[#FFF055]/5 rounded-full blur-[150px]"></div>
 <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
@@ -189,7 +189,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-10 rounded-[2rem] bg-[#262626] overflow-hidden shadow-2xl border-l-8 border-[#FFF055]">
+<div class="not-prose my-10 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-2xl border-l-8 border-[#FFF055]">
 <div class="p-8">
 <p class="text-[#FFF055] font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 8.5 / 10</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Para contenido estático global es probablemente la mejor opción técnica pura. La combinación de CDN más ancho ilimitado más caché agresivo iguala a Core Web Vitals excelentes consistentemente. Para dinámico o APIs es bueno pero Functions pricing puede ser problema serio.</p>
@@ -255,7 +255,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-10 rounded-[2rem] bg-[#262626] overflow-hidden shadow-2xl border-l-8 border-teal-400">
+<div class="not-prose my-10 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-2xl border-l-8 border-teal-400">
 <div class="p-8">
 <p class="text-teal-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7 / 10</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Fuerte en developer experience, velocidad de iteración y features incluidas (especialmente forms). Débil en bandwidth limits restrictivos, coste proporcional elevado y CDN consistency variable entre regiones.</p>
@@ -318,7 +318,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-10 rounded-[2rem] bg-[#262626] overflow-hidden shadow-2xl border-l-8 border-indigo-400">
+<div class="not-prose my-10 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-2xl border-l-8 border-indigo-400">
 <div class="p-8">
 <p class="text-indigo-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 8/10 (Next.js) · 6/10 (Otros)</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Para proyectos Next.js serios, Vercel ofrece ventajas SEO tangibles — ISR, edge computing e image optimization que justifican el coste hasta cierto punto. Pero debes monitorizar la factura como un halcón porque las sorpresas aparecen.</p>
@@ -372,7 +372,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-slate-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-slate-400">
 <div class="p-8">
 <p class="text-slate-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 5.5 / 10</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Funciona para blogs personales, portfolios estudiantiles, docs de open source y experimentos técnicos. NO funciona para negocios serios, e-commerce o sitios donde la reputación profesional importa.</p>
@@ -426,7 +426,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-orange-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-orange-400">
 <div class="p-8">
 <p class="text-orange-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 5.5 / 10</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Esencialmente igual que GitHub Pages en resultado SEO. La diferencia está en el CI/CD y la opción de self-hosting, no en el rendimiento del hosting en sí.</p>
@@ -472,7 +472,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-slate-500">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-slate-500">
 <div class="p-8">
 <p class="text-slate-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 4 / 10</p>
 <p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">Único caso de uso válido: landing page estática simple que necesitas live YA y no te importa el futuro de la plataforma. Para todo lo demás: usa cualquier otra opción de esta lista. Incluso GitHub Pages es mejor.</p>
@@ -525,7 +525,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-purple-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-purple-400">
 <div class="p-8">
 <p class="text-purple-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6/10 (Full stack) · 4/10 (Static)</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Muy útil para full stack apps con backend. Evitar para sitios estáticos puros donde mejores opciones existen claramente. El cold start en free tier es el mayor problema para SEO.</p>
@@ -584,7 +584,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-violet-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-violet-400">
 <div class="p-8">
 <p class="text-violet-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6.5 / 10</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Potencial enorme pero pricing model y falta de CDN nativo lo hacen arriesgado para sitios donde SEO es crítico y presupuesto predecible importa.</p>
@@ -641,7 +641,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-amber-500">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-amber-500">
 <div class="p-8">
 <p class="text-amber-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6/10 (Ecosistema) · 3/10 (Fuera)</p>
 <p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">La única razón real para usarlo es si ya estás comprometido con Firebase stack y quieres simplidad de tener todo junto. Para todos los demás: evita completamente. Hay opciones mejores, más baratas y más flexibles en todos los aspectos medibles.</p>
@@ -681,7 +681,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-emerald-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-emerald-400">
 <div class="p-8">
 <p class="text-emerald-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7/10 (JS Frameworks) · 5/10 (General)</p>
 <p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">Hidden gem para equipos usando Gatsby, Astro o Next.js que quieren alternativa a Vercel sin lock-in extremo con buena developer experience. Riesgo real de dependencia de empresa pequeña — backup plan necesario.</p>
@@ -720,7 +720,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-blue-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-blue-400">
 <div class="p-8">
 <p class="text-blue-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 4/10 Hoy · 7/10 Potencial Futuro</p>
 <p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">Válido solo para content que necesita resistencia a censura (periodismo investigativo, whistleblowing), dapps web3 donde decentralization es requisito funcional, y experimentación técnica. Para el 99% de webs: evita por ahora. Demasiado inmaduro.</p>
@@ -773,7 +773,7 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] overflow-hidden shadow-xl border-l-8 border-cyan-400">
+<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-cyan-400">
 <div class="p-8">
 <p class="text-cyan-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7.5/10 (Deno) · 3/10 (Static General)</p>
 <p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Perfecto para developers que aman TypeScript y odian la complejidad de Node.js, para APIs edge con alto volumen, o donde el security sandboxing importa. Evita para static sites simples o equipos que dependen del ecosistema Node.js vasto.</p>
@@ -944,7 +944,7 @@ Factores Críticos de Hosting para SEO
 <div class="font-black text-[#262626] text-xl mb-2">→ Cloudflare Pages</div>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0 italic">CDN insuperable + bandwidth ilimitado + caché agresivo = Core Web Vitals excelentes consistentemente. Alternativa: Netlify si valoras DX sobre performance pura.</p>
 </div>
-<div class="p-8 rounded-[2rem] bg-indigo-900 shadow-xl">
+<div class="p-8 rounded-[2rem] bg-indigo-800 text-white shadow-xl">
 <div class="font-display text-lg font-black text-indigo-300 uppercase tracking-wide mb-2">⚡ App Next.js — sacar máximo provecho</div>
 <div class="font-black text-white text-xl mb-2">→ Vercel Pro ($20/mes)</div>
 <p class="text-indigo-200 text-sm font-bold leading-relaxed m-0 italic">ISR + Edge Functions + Image Optimization nativos son ventajas competitivas reales. Pero set alerts de usage y monitoriza la factura diariamente sin excepción.</p>
@@ -994,7 +994,7 @@ No es perfecto. La UI es confusa, el soporte es malo en free tier, y el lock-in 
 
 ---
 
-<div class="not-prose my-12 p-12 md:p-16 rounded-[3.5rem] bg-[#262626] relative overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.6)] border-4 border-[#FFF055]">
+<div class="not-prose my-12 p-12 md:p-16 rounded-[3.5rem] bg-[#262626] text-white relative overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.6)] border-4 border-[#FFF055]">
 <div class="absolute -top-32 -right-32 w-96 h-96 bg-[#FFF055]/5 rounded-full blur-[150px]"></div>
 <div class="relative z-10">
 <p class="text-[#FFF055] font-display text-4xl md:text-6xl font-black leading-tight mb-6 uppercase">¿Hablamos de tu próximo proyecto?</p>
