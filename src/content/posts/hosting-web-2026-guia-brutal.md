@@ -20,18 +20,18 @@ seo:
 ---
 
 <div class="not-prose my-0 -mt-8">
-<div class="relative overflow-hidden rounded-[3rem] bg-[#262626] text-white p-12 md:p-20 shadow-[0_40px_100px_-15px_rgba(0,0,0,0.5)]">
-<div class="absolute -top-32 -right-32 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[150px]"></div>
-<div class="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-[#FFF055]/5 rounded-full blur-[150px]"></div>
+<div class="relative overflow-hidden rounded-[3rem] bg-gradient-to-br from-red-50 via-orange-50 to-amber-50 border-2 border-red-100 p-12 md:p-20 shadow-xl">
+<div class="absolute -top-16 -right-16 w-64 h-64 bg-red-400/10 rounded-full blur-[80px]"></div>
+<div class="absolute -bottom-16 -left-16 w-64 h-64 bg-orange-400/10 rounded-full blur-[80px]"></div>
 <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
-<div class="w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-[2rem] bg-[#FFF055] flex items-center justify-center shadow-[0_0_60px_rgba(255,240,85,0.4)] -rotate-6">
-<svg class="w-14 h-14 text-[#262626]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+<div class="w-24 h-24 md:w-32 md:h-32 shrink-0 rounded-[2rem] bg-[#262626] flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.2)] -rotate-6">
+<svg class="w-14 h-14 text-[#FFF055]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
 </div>
 <div>
-<div class="inline-block px-4 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-black uppercase tracking-[0.2em] mb-4">Advertencia previa</div>
-<h2 class="font-display text-4xl md:text-5xl text-white font-black leading-tight mb-4">Esto va a doler a algunos fanboys</h2>
-<p class="text-slate-300 text-lg md:text-xl leading-relaxed m-0">Voy a decir cosas que no querrás escuchar sobre tu hosting favorito. He gestionado más de 200 sitios web en los últimos 8 años, he migrado clientes entre prácticamente todas las plataformas de esta lista, y he visto suficiente desastres como para tener opiniones formadas que no voy a suavizar por políticamente correcto.</p>
-<p class="text-[#FFF055] font-bold text-lg mt-4 m-0 italic">Si buscas un post que diga "todos son maravillosos", vete a Medium. Aquí vamos con verdad, datos, y algunas verdades incómodas.</p>
+<div class="inline-block px-4 py-1 rounded-full bg-red-200 text-red-700 text-xs font-black uppercase tracking-[0.2em] mb-4">Advertencia previa</div>
+<h2 class="font-display text-4xl md:text-5xl text-slate-900 font-black leading-tight mb-4">Esto va a doler a algunos fanboys</h2>
+<p class="text-slate-600 text-lg md:text-xl leading-relaxed m-0">Voy a decir cosas que no querrás escuchar sobre tu hosting favorito. He gestionado más de 200 sitios web en los últimos 8 años, he migrado clientes entre prácticamente todas las plataformas de esta lista, y he visto suficiente desastres como para tener opiniones formadas que no voy a suavizar por políticamente correcto.</p>
+<p class="text-red-700 font-bold text-lg mt-4 m-0 italic">Si buscas un post que diga "todos son maravillosos", vete a Medium. Aquí vamos con verdad, datos, y algunas verdades incómodas.</p>
 </div>
 </div>
 </div>
@@ -189,18 +189,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-10 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-2xl border-l-8 border-[#FFF055]">
-<div class="p-8">
-<p class="text-[#FFF055] font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 8.5 / 10</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Para contenido estático global es probablemente la mejor opción técnica pura. La combinación de CDN más ancho ilimitado más caché agresivo iguala a Core Web Vitals excelentes consistentemente. Para dinámico o APIs es bueno pero Functions pricing puede ser problema serio.</p>
+<div class="not-prose my-10 rounded-[2rem] bg-gradient-to-br from-yellow-50 to-white border border-yellow-200 overflow-hidden shadow-xl border-l-8 border-l-[#FFF055] relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-yellow-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-yellow-600 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 8.5 / 10</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-yellow-100 pb-6">Para contenido estático global es probablemente la mejor opción técnica pura. La combinación de CDN más ancho ilimitado más caché agresivo iguala a Core Web Vitals excelentes consistentemente. Para dinámico o APIs es bueno pero Functions pricing puede ser problema serio.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si tu audiencia es global abarcando múltiples continentes, si tu contenido es predominantemente estático, si tienes conocimiento técnico medio o alto, y si quieres evitar sorpresas de bandwidth costs inesperados.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Necesitas soporte humano responsive, usas frameworks edge cases con build complejo, o tu modelo de negocio depende de serverless functions intensivas.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">Necesitas soporte humano responsive, usas frameworks edge cases con build complejo, o tu modelo de negocio depende de serverless functions intensivas.</p>
 </div>
 </div>
 </div>
@@ -255,18 +256,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-10 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-2xl border-l-8 border-teal-400">
-<div class="p-8">
-<p class="text-teal-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7 / 10</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Fuerte en developer experience, velocidad de iteración y features incluidas (especialmente forms). Débil en bandwidth limits restrictivos, coste proporcional elevado y CDN consistency variable entre regiones.</p>
+<div class="not-prose my-10 rounded-[2rem] bg-gradient-to-br from-teal-50 to-white border border-teal-200 overflow-hidden shadow-xl border-l-8 border-l-teal-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-teal-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-teal-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7 / 10</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-teal-100 pb-6">Fuerte en developer experience, velocidad de iteración y features incluidas (especialmente forms). Débil en bandwidth limits restrictivos, coste proporcional elevado y CDN consistency variable entre regiones.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Netlify si eres developer individual o small team valorando DX sobre coste, si tu sitio tiene tráfico bajo-medio (menos de 20,000 visitas mensuales), si necesitas forms sin configurar nada extra, o si trabajas en quick prototypes y MVPs.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Tráfico supera 50,000 visitas mensuales consistentemente, empiezas a pagar overages regularmente, o necesitas control granular de servidor. En esos casos: migra sin culpa.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">Tráfico supera 50,000 visitas mensuales consistentemente, empiezas a pagar overages regularmente, o necesitas control granular de servidor. En esos casos: migra sin culpa.</p>
 </div>
 </div>
 </div>
@@ -318,18 +320,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-10 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-2xl border-l-8 border-indigo-400">
-<div class="p-8">
-<p class="text-indigo-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 8/10 (Next.js) · 6/10 (Otros)</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Para proyectos Next.js serios, Vercel ofrece ventajas SEO tangibles — ISR, edge computing e image optimization que justifican el coste hasta cierto punto. Pero debes monitorizar la factura como un halcón porque las sorpresas aparecen.</p>
+<div class="not-prose my-10 rounded-[2rem] bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 overflow-hidden shadow-xl border-l-8 border-l-indigo-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-indigo-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 8/10 (Next.js) · 6/10 (Otros)</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-indigo-100 pb-6">Para proyectos Next.js serios, Vercel ofrece ventajas SEO tangibles — ISR, edge computing e image optimization que justifican el coste hasta cierto punto. Pero debes monitorizar la factura como un halcón porque las sorpresas aparecen.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Vercel si tu stack es Next.js (no hay debate aquí), necesitas ISR para contenido dinámico-estático, tienes presupuesto para $20-100/mes en hosting, y valoras el cutting edge performance real.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usas Astro, Gatsby, Hugo u otros frameworks. Si tienes presupuesto ajustado (menos de $20/mes largo plazo). Si temes vendor lock-in — y deberías temerlo.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">Usas Astro, Gatsby, Hugo u otros frameworks. Si tienes presupuesto ajustado (menos de $20/mes largo plazo). Si temes vendor lock-in — y deberías temerlo.</p>
 </div>
 </div>
 </div>
@@ -372,18 +375,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-slate-400">
-<div class="p-8">
-<p class="text-slate-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 5.5 / 10</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Funciona para blogs personales, portfolios estudiantiles, docs de open source y experimentos técnicos. NO funciona para negocios serios, e-commerce o sitios donde la reputación profesional importa.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-slate-50 to-white border border-slate-200 overflow-hidden shadow-xl border-l-8 border-l-slate-400 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-slate-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-slate-600 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 5.5 / 10</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-slate-200 pb-6">Funciona para blogs personales, portfolios estudiantiles, docs de open source y experimentos técnicos. NO funciona para negocios serios, e-commerce o sitios donde la reputación profesional importa.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si eres estudiante o dev aprendiendo, si tu proyecto open source necesita docs, o si el budget es absoluto cero dólares y el proyecto no es profesional.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">El sitio genera dinero o representa una marca profesional. Cuando necesitas cualquier funcionalidad dinámica. Cuando almacenas más de 500 MB de assets.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">El sitio genera dinero o representa una marca profesional. Cuando necesitas cualquier funcionalidad dinámica. Cuando almacenas más de 500 MB de assets.</p>
 </div>
 </div>
 </div>
@@ -426,18 +430,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-orange-400">
-<div class="p-8">
-<p class="text-orange-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 5.5 / 10</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Esencialmente igual que GitHub Pages en resultado SEO. La diferencia está en el CI/CD y la opción de self-hosting, no en el rendimiento del hosting en sí.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-orange-50 to-white border border-orange-200 overflow-hidden shadow-xl border-l-8 border-l-orange-400 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-orange-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-orange-600 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 5.5 / 10</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-orange-100 pb-6">Esencialmente igual que GitHub Pages en resultado SEO. La diferencia está en el CI/CD y la opción de self-hosting, no en el rendimiento del hosting en sí.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si ya usas GitLab para repos (por consistencia), si necesitas CI/CD avanzado para builds complejos, si quieres futura opción de self-hosting, o si necesitas repos privados sin pagar cuotas.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">No usas ya GitLab — en ese caso quédate con GitHub por mayor comunidad, o salta directamente a Netlify/Vercel por mejor developer experience.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">No usas ya GitLab — en ese caso quédate con GitHub por mayor comunidad, o salta directamente a Netlify/Vercel por mejor developer experience.</p>
 </div>
 </div>
 </div>
@@ -472,10 +477,11 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-slate-500">
-<div class="p-8">
-<p class="text-slate-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 4 / 10</p>
-<p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">Único caso de uso válido: landing page estática simple que necesitas live YA y no te importa el futuro de la plataforma. Para todo lo demás: usa cualquier otra opción de esta lista. Incluso GitHub Pages es mejor.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-slate-50 to-white border border-slate-200 overflow-hidden shadow-xl border-l-8 border-l-slate-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-slate-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-slate-600 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 4 / 10</p>
+<p class="text-slate-700 text-base leading-relaxed mb-4 border-b border-slate-200 pb-4">Único caso de uso válido: landing page estática simple que necesitas live YA y no te importa el futuro de la plataforma. Para todo lo demás: usa cualquier otra opción de esta lista. Incluso GitHub Pages es mejor.</p>
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold m-0">Solo para prototipos rapidísimos y landings provisionales. Nunca para proyectos serios bajo ninguna circunstancia.</p>
@@ -525,18 +531,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-purple-400">
-<div class="p-8">
-<p class="text-purple-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6/10 (Full stack) · 4/10 (Static)</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Muy útil para full stack apps con backend. Evitar para sitios estáticos puros donde mejores opciones existen claramente. El cold start en free tier es el mayor problema para SEO.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-purple-50 to-white border border-purple-200 overflow-hidden shadow-xl border-l-8 border-l-purple-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-purple-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-purple-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6/10 (Full stack) · 4/10 (Static)</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-purple-100 pb-6">Muy útil para full stack apps con backend. Evitar para sitios estáticos puros donde mejores opciones existen claramente. El cold start en free tier es el mayor problema para SEO.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Render si necesitas backend+frontend juntos (API + static), si prototipas app completa con database, o si el free tier es suficiente para MVP validation y no te importa el cold start.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Para sitios estáticos puros (mejores opciones existen), si tu audiencia está fuera de US West (cada milisegundo de TTFB importa para SEO competitivo).</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">Para sitios estáticos puros (mejores opciones existen), si tu audiencia está fuera de US West (cada milisegundo de TTFB importa para SEO competitivo).</p>
 </div>
 </div>
 </div>
@@ -584,18 +591,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-violet-400">
-<div class="p-8">
-<p class="text-violet-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6.5 / 10</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Potencial enorme pero pricing model y falta de CDN nativo lo hacen arriesgado para sitios donde SEO es crítico y presupuesto predecible importa.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-violet-50 to-white border border-violet-200 overflow-hidden shadow-xl border-l-8 border-l-violet-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-violet-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-violet-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6.5 / 10</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-violet-100 pb-6">Potencial enorme pero pricing model y falta de CDN nativo lo hacen arriesgado para sitios donde SEO es crítico y presupuesto predecible importa.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Úsalo si construyes app full stack con backend complejo, si valoras UX de desarrollo sobre costo predictible, o si eres startup validando concepto con el crédito inicial.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Si no estás dispuesto a monitorear la factura diariamente. Si el SEO es crítico y necesitas CDN global sin configuración adicional.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">Si no estás dispuesto a monitorear la factura diariamente. Si el SEO es crítico y necesitas CDN global sin configuración adicional.</p>
 </div>
 </div>
 </div>
@@ -641,10 +649,11 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-amber-500">
-<div class="p-8">
-<p class="text-amber-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6/10 (Ecosistema) · 3/10 (Fuera)</p>
-<p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">La única razón real para usarlo es si ya estás comprometido con Firebase stack y quieres simplidad de tener todo junto. Para todos los demás: evita completamente. Hay opciones mejores, más baratas y más flexibles en todos los aspectos medibles.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-amber-50 to-white border border-amber-200 overflow-hidden shadow-xl border-l-8 border-l-amber-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-amber-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-amber-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 6/10 (Ecosistema) · 3/10 (Fuera)</p>
+<p class="text-slate-700 text-base leading-relaxed mb-4 border-b border-amber-100 pb-4">La única razón real para usarlo es si ya estás comprometido con Firebase stack y quieres simplidad de tener todo junto. Para todos los demás: evita completamente. Hay opciones mejores, más baratas y más flexibles en todos los aspectos medibles.</p>
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold m-0">Solo si ya estás 100% comprometido con el ecosistema Firebase (Firestore + Auth + Functions). Para cualquier otro caso: elige otra plataforma sin mirar atrás.</p>
@@ -681,10 +690,11 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-emerald-400">
-<div class="p-8">
-<p class="text-emerald-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7/10 (JS Frameworks) · 5/10 (General)</p>
-<p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">Hidden gem para equipos usando Gatsby, Astro o Next.js que quieren alternativa a Vercel sin lock-in extremo con buena developer experience. Riesgo real de dependencia de empresa pequeña — backup plan necesario.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-emerald-50 to-white border border-emerald-200 overflow-hidden shadow-xl border-l-8 border-l-emerald-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-emerald-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-emerald-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7/10 (JS Frameworks) · 5/10 (General)</p>
+<p class="text-slate-700 text-base leading-relaxed mb-4 border-b border-emerald-100 pb-4">Hidden gem para equipos usando Gatsby, Astro o Next.js que quieren alternativa a Vercel sin lock-in extremo con buena developer experience. Riesgo real de dependencia de empresa pequeña — backup plan necesario.</p>
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold m-0">Para equipos usando Gatsby, Astro o Next.js que buscan alternativa no-Vercel. Pero ten siempre un plan B por si la plataforma cierra en el futuro.</p>
@@ -720,10 +730,11 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-blue-400">
-<div class="p-8">
-<p class="text-blue-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 4/10 Hoy · 7/10 Potencial Futuro</p>
-<p class="text-white text-base leading-relaxed mb-4 border-b border-white/10 pb-4">Válido solo para content que necesita resistencia a censura (periodismo investigativo, whistleblowing), dapps web3 donde decentralization es requisito funcional, y experimentación técnica. Para el 99% de webs: evita por ahora. Demasiado inmaduro.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-blue-50 to-white border border-blue-200 overflow-hidden shadow-xl border-l-8 border-l-blue-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-blue-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-blue-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 4/10 Hoy · 7/10 Potencial Futuro</p>
+<p class="text-slate-700 text-base leading-relaxed mb-4 border-b border-blue-100 pb-4">Válido solo para content que necesita resistencia a censura (periodismo investigativo, whistleblowing), dapps web3 donde decentralization es requisito funcional, y experimentación técnica. Para el 99% de webs: evita por ahora. Demasiado inmaduro.</p>
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold m-0">Solo si la censorship resistance es un requisito funcional real, no un gimmick de marketing. Para cualquier otra cosa: platform tradicional.</p>
@@ -773,18 +784,19 @@ Factores Críticos de Hosting para SEO
 </div>
 </div>
 
-<div class="not-prose my-6 rounded-[2rem] bg-[#262626] text-white overflow-hidden shadow-xl border-l-8 border-cyan-400">
-<div class="p-8">
-<p class="text-cyan-400 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7.5/10 (Deno) · 3/10 (Static General)</p>
-<p class="text-white text-base leading-relaxed mb-6 border-b border-white/10 pb-6">Perfecto para developers que aman TypeScript y odian la complejidad de Node.js, para APIs edge con alto volumen, o donde el security sandboxing importa. Evita para static sites simples o equipos que dependen del ecosistema Node.js vasto.</p>
+<div class="not-prose my-6 rounded-[2rem] bg-gradient-to-br from-cyan-50 to-white border border-cyan-200 overflow-hidden shadow-xl border-l-8 border-l-cyan-500 relative">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-cyan-300/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="p-8 relative z-10">
+<p class="text-cyan-700 font-display text-3xl font-black uppercase tracking-wide mb-2">Veredicto SEO: 7.5/10 (Deno) · 3/10 (Static General)</p>
+<p class="text-slate-700 text-base leading-relaxed mb-6 border-b border-cyan-100 pb-6">Perfecto para developers que aman TypeScript y odian la complejidad de Node.js, para APIs edge con alto volumen, o donde el security sandboxing importa. Evita para static sites simples o equipos que dependen del ecosistema Node.js vasto.</p>
 <div class="grid md:grid-cols-2 gap-4">
 <div class="p-6 rounded-2xl bg-[#FFF055]">
 <p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">RECOMENDACIÓN:</p>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Usa Deno Deploy si amas TypeScript y odias la complejidad de Node.js, si construyes APIs edge con alto volumen de peticiones, o si experimentas con el runtime moderno del futuro.</p>
 </div>
-<div class="p-6 rounded-2xl bg-white">
-<p class="font-black text-[#262626] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
-<p class="text-[#262626] text-sm font-bold leading-relaxed m-0">Para static sites simples (es overkill), si tu equipo depende de librerías NPM específicas, o si el community support es crítico para tu éxito.</p>
+<div class="p-6 rounded-2xl bg-[#262626]">
+<p class="font-black text-[#FFF055] text-sm uppercase tracking-widest mb-2">EVÍTALO SI:</p>
+<p class="text-white text-sm font-bold leading-relaxed m-0">Para static sites simples (es overkill), si tu equipo depende de librerías NPM específicas, o si el community support es crítico para tu éxito.</p>
 </div>
 </div>
 </div>
@@ -944,10 +956,10 @@ Factores Críticos de Hosting para SEO
 <div class="font-black text-[#262626] text-xl mb-2">→ Cloudflare Pages</div>
 <p class="text-[#262626] text-sm font-bold leading-relaxed m-0 italic">CDN insuperable + bandwidth ilimitado + caché agresivo = Core Web Vitals excelentes consistentemente. Alternativa: Netlify si valoras DX sobre performance pura.</p>
 </div>
-<div class="p-8 rounded-[2rem] bg-indigo-800 text-white shadow-xl">
-<div class="font-display text-lg font-black text-indigo-300 uppercase tracking-wide mb-2">⚡ App Next.js — sacar máximo provecho</div>
-<div class="font-black text-white text-xl mb-2">→ Vercel Pro ($20/mes)</div>
-<p class="text-indigo-200 text-sm font-bold leading-relaxed m-0 italic">ISR + Edge Functions + Image Optimization nativos son ventajas competitivas reales. Pero set alerts de usage y monitoriza la factura diariamente sin excepción.</p>
+<div class="p-8 rounded-[2rem] bg-indigo-50 border-2 border-indigo-200 shadow-xl">
+<div class="font-display text-lg font-black text-indigo-700 uppercase tracking-wide mb-2">⚡ App Next.js — sacar máximo provecho</div>
+<div class="font-black text-slate-900 text-xl mb-2">→ Vercel Pro ($20/mes)</div>
+<p class="text-slate-700 text-sm font-bold leading-relaxed m-0 italic">ISR + Edge Functions + Image Optimization nativos son ventajas competitivas reales. Pero set alerts de usage y monitoriza la factura diariamente sin excepción.</p>
 </div>
 <div class="p-8 rounded-[2rem] bg-white border-2 border-slate-200 shadow-xl">
 <div class="font-display text-lg font-black text-slate-700 uppercase tracking-wide mb-2">💼 Freelancer con 10 sitios/año para clientes</div>
