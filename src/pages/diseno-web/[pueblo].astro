@@ -80,9 +80,9 @@ const proceso = [
 const title = pueblo.sectorPrincipal
   ? `Diseño Web en ${pueblo.nombre} | ${pueblo.sectorPrincipal.slice(0, 50)}`
   : `Diseño Web en ${pueblo.nombre} | Páginas Web y SEO Local en ${pueblo.comarca}`;
-const description = pueblo.descripcion
-  ? `${pueblo.descripcion.slice(0, 120)}. Diseño web profesional, tiendas online y SEO local en ${pueblo.nombre}. Presupuesto sin compromiso.`
-  : `Agencia de diseño web en ${pueblo.nombre}, ${pueblo.comarca}. Páginas web profesionales, tiendas online y estrategias SEO para posicionar tu negocio en Google. Hosting gratuito incluido.`;
+const description = pueblo.sectorPrincipal
+  ? `Diseño web en ${pueblo.nombre} para ${pueblo.sectorPrincipal.slice(0, 45)}. Desde 450€ con hosting gratis de por vida. Presupuesto en 24h.`
+  : `Diseño web en ${pueblo.nombre}, ${pueblo.comarca}. Desde 450€ con hosting gratis. SEO local incluido. Presupuesto gratis en 24h.`;
 
 const veraExtraJsonLd = pueblo.slug === 'vera' ? [
   {
@@ -696,6 +696,32 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
     },
     {
       "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": `Platanito Rico — Diseño Web en ${pueblo.nombre}`,
+      "url": `https://platanitorico.com/diseno-web/${pueblo.slug}/`,
+      "telephone": "+34657085019",
+      "email": "hola@platanitorico.com",
+      "priceRange": "€€",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ctra de Ronda, 82",
+        "addressLocality": "Vera",
+        "addressRegion": "Almería",
+        "postalCode": "04620",
+        "addressCountry": "ES"
+      },
+      "geo": { "@type": "GeoCoordinates", "latitude": "37.2450", "longitude": "-1.8614" },
+      "areaServed": { "@type": "City", "name": pueblo.nombre },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "87",
+        "bestRating": "5",
+        "worstRating": "1"
+      }
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "Service",
       "serviceType": "Diseño Web",
       "name": `Diseño Web en ${pueblo.nombre}`,
@@ -767,6 +793,15 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
         ]
       }
     },
+    ...(pueblo.faqs && pueblo.faqs.length > 0 ? [{
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": pueblo.faqs.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+      }))
+    }] : []),
     ...almeriaExtraJsonLd,
     ...veraExtraJsonLd,
     ...mojacarExtraJsonLd,
