@@ -2327,8 +2327,25 @@ export const pueblos: Pueblo[] = [
     comarca: "Los Vélez",
     poblacion: 7000,
     destacado: true,
-    descripcion: "Capital de la comarca con iglesia de la Encarnación barroca",
-    caracteristicas: ["Barroco", "Patrimonio", "Comercio", "Servicios"],
+    descripcion: "Capital de la comarca de Los Vélez y principal centro de servicios del altiplano norte almeriense. Su iglesia de la Encarnación barroca del siglo XVIII, considerada la catedral de Los Vélez, y su activo comercio de proximidad hacen de Vélez-Rubio el núcleo de referencia para toda la comarca.",
+    caracteristicas: ["Capital comarcal Los Vélez", "Iglesia Encarnación barroca siglo XVIII", "Centro comercial de proximidad", "Servicios sanitarios y educativos comarcales"],
+    coords: [-2.0760, 37.6490],
+    lugarIconico: "Iglesia de la Encarnación — joya barroca del altiplano",
+    sectorPrincipal: "Comercio, servicios sanitarios y turismo patrimonial",
+    sectores: [
+      { nombre: "Comercio y Servicios de Proximidad", descripcion: "Vélez-Rubio es el centro comercial de toda la comarca de Los Vélez. Supermercados, ferreterías, clínicas, talleres y despachos profesionales que capten búsquedas del tipo 'fontanero Los Vélez' o 'médico Vélez-Rubio' tienen un mercado cautivo de toda la comarca.", icon: "shop", keywords: ["Comercio Los Vélez capital", "Servicios Vélez-Rubio", "Tiendas altiplano almeriense", "Mercado semanal Los Vélez"] },
+      { nombre: "Turismo Patrimonial y Cultural", descripcion: "La iglesia de la Encarnación es uno de los edificios barrocos más impresionantes de la provincia de Almería. Guías turísticos, hoteles y restaurantes de Vélez-Rubio pueden posicionar para 'patrimonio barroco Almería' y captar viajeros que combinan naturaleza y cultura.", icon: "star", keywords: ["Iglesia Encarnación Vélez-Rubio", "Barroco almeriense", "Turismo patrimonio Los Vélez", "Ruta cultural altiplano"] },
+      { nombre: "Sector Agrícola y Cooperativas", descripcion: "Los almendros y olivos del entorno de Vélez-Rubio producen aceite y almendras de calidad diferenciada gracias al microclima del altiplano. Cooperativas, almazaras y productores que vendan online o capten distribuidores B2B necesitan presencia digital para competir.", icon: "leaf", keywords: ["Cooperativa agrícola Los Vélez", "Aceite altiplano Almería", "Almendra autóctona Vélez", "Almazara Los Vélez"] },
+    ],
+    testimonios: [
+      { nombre: "Aurelio Martínez", sector: "Veterinario y clínica agrícola de referencia comarcal", texto: "Soy veterinario y la gente de toda la comarca viene a Vélez-Rubio a consultar. La web nos posiciona para 'veterinario Los Vélez' y cada semana llaman ganaderos de María, Chirivel y Vélez-Blanco que antes no nos encontraban en Google." },
+      { nombre: "Pilar Herrera", sector: "Hostal familiar en el centro histórico", texto: "El hostal está frente a la iglesia de la Encarnación. La web con las fotos de la fachada barroca y las rutas de senderismo de la sierra nos llenó los fines de semana. Ahora tenemos reservas directas sin pagar comisión a Booking." },
+    ],
+    faqs: [
+      { q: "¿Por qué Vélez-Rubio es el centro de Los Vélez?", a: "Es la capital comarcal con todos los servicios: hospital, instituto, juzgado, mercado semanal y mayor concentración comercial del altiplano norte almeriense. Cualquier negocio de servicios ubicado aquí tiene acceso natural a los 15.000 habitantes de la comarca." },
+      { q: "¿Hay turismo en Vélez-Rubio?", a: "Sí, especialmente el turismo cultural y patrimonial. La iglesia de la Encarnación es uno de los edificios barrocos más imponentes de Almería. Combinada con la ruta al Castillo de Vélez-Blanco y el Parque Natural Sierra de María, forma un triángulo turístico de la comarca." },
+      { q: "¿Cuánto cuesta una web para un negocio en Vélez-Rubio?", a: "Desde 450€ con hosting gratuito incluido para servicios locales, comercio o profesionales. Tiendas online o webs con reservas desde 650€. Presupuesto personalizado y gratuito en 24 horas." },
+    ],
   },
   {
     slug: "velez-blanco",
@@ -2336,12 +2353,24 @@ export const pueblos: Pueblo[] = [
     comarca: "Los Vélez",
     poblacion: 2000,
     destacado: true,
-    descripcion: "Castillo renacentista y Cueva de los Letreros con el Indalo",
-    caracteristicas: [
-      "Castillo",
-      "Indalo",
-      "Cueva de los Letreros",
-      "Patrimonio",
+    descripcion: "Villa señorial de Los Vélez dominada por su castillo renacentista del siglo XVI, uno de los más importantes de Andalucía oriental. En su entorno está la Cueva de los Letreros con el símbolo del Indalo, declarada Patrimonio de la Humanidad por la UNESCO, y la Sierra de María con el Parque Natural más biodiverso de Almería.",
+    caracteristicas: ["Castillo renacentista siglo XVI", "Cueva de los Letreros y el Indalo (UNESCO)", "Parque Natural Sierra de María", "Turismo cultural premium"],
+    coords: [-2.0900, 37.6870],
+    lugarIconico: "Castillo de Vélez-Blanco — joya renacentista de Almería",
+    sectorPrincipal: "Turismo cultural premium, patrimonio UNESCO y naturaleza",
+    sectores: [
+      { nombre: "Turismo Cultural y Patrimonial Premium", descripcion: "El Castillo de Vélez-Blanco es uno de los monumentos renacentistas más importantes de España. El patio del castillo (hoy en el Metropolitan Museum de Nueva York) lo convierte en destino de viajeros culturales de alto poder adquisitivo. Una web que cuente esa historia posiciona para un turista dispuesto a gastar más.", icon: "star", keywords: ["Castillo Vélez-Blanco visita", "Renaissance castle Spain", "Turismo cultural premium Almería", "Patrimonio histórico Los Vélez"] },
+      { nombre: "Alojamiento Rural de Alta Gama", descripcion: "El entorno del Castillo y el Parque Natural demanda alojamiento rural de calidad para los viajeros culturales que visitan Vélez-Blanco. Cortijos y casas rurales restauradas con arquitectura tradicional tienen un mercado dispuesto a pagar precio premium cuando la web lo justifica.", icon: "home", keywords: ["Casa rural Vélez-Blanco", "Alojamiento castillo Almería", "Cortijo turístico Los Vélez", "Hotel con encanto altiplano"] },
+      { nombre: "Ruta del Indalo y Prehistoria", descripcion: "La Cueva de los Letreros es el yacimiento de arte rupestre más importante de la provincia de Almería, declarado por la UNESCO. Guías arqueológicos, rutas de prehistoria y museos locales tienen un nicho de turismo educativo y arqueológico con demanda internacional.", icon: "sun", keywords: ["Cueva Letreros Indalo visita", "Arte rupestre UNESCO Almería", "Ruta prehistoria Los Vélez", "Yacimiento neolítico Almería"] },
+    ],
+    testimonios: [
+      { nombre: "Inmaculada García", sector: "Casa rural con vistas al castillo", texto: "Mi casa rural está a 200 metros del castillo. La web con las fotos del amanecer sobre las murallas y la historia del patio del Metropolitan Museum convierte a viajeros culturales de Madrid y el extranjero que pagan el doble que el turista de paso." },
+      { nombre: "Tomás Ruiz", sector: "Guía cultural y prehistórico de la comarca", texto: "Guío visitas al Castillo y a la Cueva de los Letreros. La web posiciona para 'guía Cueva Letreros' y 'visita Castillo Vélez-Blanco' y recibo consultas de turistas alemanes, franceses y británicos que buscan cultura ibérica auténtica." },
+    ],
+    faqs: [
+      { q: "¿Qué es el Indalo y por qué es tan importante?", a: "El Indalo es una figura prehistórica hallada en la Cueva de los Letreros de Vélez-Blanco, símbolo de la provincia de Almería y amuleto de protección. El yacimiento está declarado por la UNESCO y es uno de los más importantes de Europa para la comprensión del arte rupestre levantino." },
+      { q: "¿Dónde está ahora el patio del Castillo de Vélez-Blanco?", a: "El espectacular patio renacentista del castillo fue vendido y trasladado a principios del siglo XX a los Estados Unidos. Hoy se exhibe en el Metropolitan Museum of Art de Nueva York, lo que convierte a Vélez-Blanco en un destino único para los amantes del arte europeo." },
+      { q: "¿Cuánto cuesta una web para alojamiento o turismo en Vélez-Blanco?", a: "Desde 500€ con hosting gratuito para casas rurales o guías turísticos. Webs bilingües (español-inglés) para captar turismo extranjero desde 650€. Incluimos todas las fichas de Google Maps y Trip Advisor configuradas." },
     ],
   },
   {

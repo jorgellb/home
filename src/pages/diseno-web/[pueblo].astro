@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
-import { pueblos, getPuebloBySlug, type Pueblo } from '../../data/pueblos-almeria';
+import { pueblos, getPuebloBySlug, getPueblosByComarca, type Pueblo } from '../../data/pueblos-almeria';
 
 export async function getStaticPaths() {
   return pueblos
@@ -77,7 +77,9 @@ const proceso = [
 ];
 
 // SEO Meta - Custom titles and descriptions for specific pueblos
-const title = `Diseño Web en ${pueblo.nombre} | Agencia Web y SEO en ${pueblo.comarca}`;
+const title = pueblo.sectorPrincipal
+  ? `Diseño Web en ${pueblo.nombre} | ${pueblo.sectorPrincipal.slice(0, 50)}`
+  : `Diseño Web en ${pueblo.nombre} | Páginas Web y SEO Local en ${pueblo.comarca}`;
 const description = pueblo.descripcion
   ? `${pueblo.descripcion.slice(0, 120)}. Diseño web profesional, tiendas online y SEO local en ${pueblo.nombre}. Presupuesto sin compromiso.`
   : `Agencia de diseño web en ${pueblo.nombre}, ${pueblo.comarca}. Páginas web profesionales, tiendas online y estrategias SEO para posicionar tu negocio en Google. Hosting gratuito incluido.`;
@@ -4206,7 +4208,40 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
         </div>
       </div>
     </section>
+
+    <!-- =====================================================
+         PUEBLOS CERCANOS — enlace interno entre localidades
+         ===================================================== -->
+    {(() => {
+      const cercanos = getPueblosByComarca(pueblo.comarca)
+        .filter(p => p.slug !== pueblo.slug)
+        .slice(0, 6);
+      return cercanos.length > 0 ? (
+        <section class="relative py-16 overflow-hidden bg-slate-50 border-t border-slate-100">
+          <div class="relative max-w-5xl mx-auto px-6">
+            <p class="text-sm text-slate-500 mb-6 text-center font-medium tracking-wide uppercase">
+              También servimos en {pueblo.comarca}
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+              {cercanos.map(p => (
+                <a
+                  href={`/diseno-web/${p.slug}/`}
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-purple-400/50 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200"
+                >
+                  <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Diseño web {p.nombre}
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null;
+    })()}
+
   </main>
-  
+
   <Footer />
 </BaseLayout>
