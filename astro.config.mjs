@@ -27,88 +27,64 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     sitemap({
+      // NOTA: No usar customPages — con build.format:'directory' Astro ya genera
+      // las URLs con trailing slash. customPages sin slash crea duplicados.
       filter: (page) => {
-        // Excluir páginas que no deben estar en el sitemap
-        const excludedPages = ['/robots.txt', '/404', '/404.html', '/success'];
-        return !excludedPages.includes(page);
+        const path = new URL(page).pathname;
+
+        // Excluir páginas que no deben indexarse
+        const excludedPaths = ['/robots.txt', '/404', '/404.html', '/success/', '/musica/', '/soluciones/agencia'];
+        if (excludedPaths.some(ep => path.startsWith(ep.replace(/\/$/, '')))) return false;
+
+        // Todas las páginas /diseno-web/ se indexan (contenido único por pueblo)
+        return true;
       },
-      customPages: [
-        // Asegurar que todas las páginas principales estén incluidas
-        'https://platanitorico.com/',
-        'https://platanitorico.com/blog',
-        'https://platanitorico.com/desarrollo-web',
-        'https://platanitorico.com/audiovisual',
-        'https://platanitorico.com/marketing',
-        'https://platanitorico.com/diseno-grafico',
-        'https://platanitorico.com/soporte',
-        'https://platanitorico.com/contacto',
-        'https://platanitorico.com/soluciones/emprendedor',
-        'https://platanitorico.com/soluciones/empresa',
-        'https://platanitorico.com/soluciones/ecommerce',
-      ],
       serialize: (item) => {
         const url = item.url;
+        const path = new URL(url).pathname;
 
         // Homepage - máxima prioridad
-        if (url === 'https://platanitorico.com/') {
-          return {
-            ...item,
-            changefreq: 'weekly',
-            priority: 1.0,
-          };
+        if (path === '/') {
+          return { ...item, changefreq: 'weekly', priority: 1.0, lastmod: '2026-04-16' };
         }
 
-        // Servicios principales - alta prioridad
-        if (url.match(/\/(desarrollo-web|audiovisual|marketing|diseno-grafico|soporte|contacto|blog)$/)) {
-          return {
-            ...item,
-            changefreq: 'weekly',
-            priority: 0.9,
-          };
+        // Listado de blog
+        if (path === '/blog/') {
+          return { ...item, changefreq: 'weekly', priority: 0.8, lastmod: '2026-04-16' };
         }
 
-        // Páginas de soluciones - alta prioridad
-        if (url.includes('/soluciones/')) {
-          return {
-            ...item,
-            changefreq: 'monthly',
-            priority: 0.85,
-          };
+        // Artículos de blog individuales
+        if (path.startsWith('/blog/')) {
+          return { ...item, changefreq: 'monthly', priority: 0.7, lastmod: '2025-06-01' };
         }
 
-        // Pueblos destacados - prioridad media-alta
-        const pueblosDestacados = [
-          'almeria', 'roquetas-de-mar', 'el-ejido', 'nijar', 'vera',
-          'mojacar', 'huercal-overa', 'adra', 'tabernas', 'velez-rubio',
-          'velez-blanco', 'albox', 'macael', 'laujar-de-andarax', 'seron'
-        ];
-
-        if (url.includes('/diseno-web/')) {
-          const slug = url.split('/diseno-web/')[1]?.replace('/', '');
-          const isDestacado = pueblosDestacados.includes(slug);
-
-          return {
-            ...item,
-            changefreq: 'monthly',
-            priority: isDestacado ? 0.8 : 0.6,
-          };
+        // Servicios principales
+        if (path.match(/^\/(desarrollo-web|audiovisual|marketing|diseno-grafico|soporte)\/$/)) {
+          return { ...item, changefreq: 'monthly', priority: 0.9, lastmod: '2026-04-16' };
         }
 
-        // Páginas legales - baja prioridad
-        if (url.match(/\/(aviso-legal|privacidad|cookies|terminos-condiciones)$/)) {
-          return {
-            ...item,
-            changefreq: 'yearly',
-            priority: 0.3,
-          };
+        // Contacto
+        if (path === '/contacto/') {
+          return { ...item, changefreq: 'monthly', priority: 0.6, lastmod: '2026-04-16' };
+        }
+
+        // Soluciones
+        if (path.includes('/soluciones/')) {
+          return { ...item, changefreq: 'monthly', priority: 0.8, lastmod: '2026-04-16' };
+        }
+
+        // Páginas de diseño web por localidad — contenido único por pueblo
+        if (path.includes('/diseno-web/')) {
+          return { ...item, changefreq: 'monthly', priority: 0.8, lastmod: '2026-04-16' };
+        }
+
+        // Páginas legales - prioridad mínima
+        if (path.match(/^\/(aviso-legal|privacidad|cookies|terminos-condiciones)\/$/)) {
+          return { ...item, changefreq: 'yearly', priority: 0.3, lastmod: '2023-09-01' };
         }
 
         // Resto de páginas - prioridad media
-        return {
-          ...item,
-          changefreq: 'monthly',
-          priority: 0.7,
-        };
+        return { ...item, changefreq: 'monthly', priority: 0.7, lastmod: '2026-04-16' };
       },
     }),
   ],

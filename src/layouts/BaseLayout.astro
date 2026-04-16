@@ -94,9 +94,7 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={imageAlt} />
     
-    <!-- Google Fonts - Optimized (Non-blocking) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts - Non-blocking -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -116,20 +114,21 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <meta name="geo.position" content="36.8340;-2.4637" />
     <meta name="ICBM" content="36.8340, -2.4637" />
     
-    <!-- GSAP - Load conditionally based on page needs -->
+    <!-- GSAP - Detected after DOM is ready -->
     <script>
-      // Only load GSAP if page has animations
-      if (document.querySelector('[data-gsap]')) {
-        const gsapScript = document.createElement('script');
-        gsapScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
-        gsapScript.defer = true;
-        document.head.appendChild(gsapScript);
-        
-        const stScript = document.createElement('script');
-        stScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
-        stScript.defer = true;
-        document.head.appendChild(stScript);
-      }
+      document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('[data-gsap]')) {
+          const gsapScript = document.createElement('script');
+          gsapScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+          gsapScript.async = true;
+          document.head.appendChild(gsapScript);
+
+          const stScript = document.createElement('script');
+          stScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+          stScript.async = true;
+          document.head.appendChild(stScript);
+        }
+      });
     </script>
     
     <!-- JSON-LD -->
