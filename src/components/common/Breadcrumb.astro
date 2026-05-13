@@ -1,5 +1,6 @@
 ---
-// Breadcrumb Navigation Component - SEO Optimized
+// Breadcrumb Navigation Component - SEO Optimized with Schema.org
+// @see https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
 interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -7,47 +8,139 @@ interface BreadcrumbItem {
 
 interface Props {
   items: BreadcrumbItem[];
+  /** Base URL for constructing absolute URLs in schema */
+  baseUrl?: string;
+  /** Hide visually but keep for SEO */
+  hidden?: boolean;
 }
 
-const { items } = Astro.props;
+const { items, baseUrl = 'https://platanitorico.com', hidden = false } = Astro.props;
 
-// Generate Schema.org breadcrumb data
+// Validate breadcrumb structure (must have at least 2 items)
+const validItems = items.length >= 2 ? items : [{ label: 'Inicio', href: '/' }, ...items];
+
+// Generate Schema.org breadcrumb data with absolute URLs
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": items.map((item, index) => ({
+  "itemListElement": validItems.map((item, index) => ({
     "@type": "ListItem",
     "position": index + 1,
-    "name": item.label,
-    ...(item.href && { "item": `https://platanitorico.com${item.href}` })
+    "name": item.label.replace(/"/g, '&quot;'), // Escape quotes
+    ...(item.href && { 
+      "item": new URL(item.href, baseUrl).href 
+    })
   }))
 };
 ---
 
-<nav aria-label="Breadcrumb" class="py-4 px-6 max-w-7xl mx-auto">
-  <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-    {items.map((item, index) => (
-      <li class="flex items-center">
-        {index > 0 && (
-          <svg class="w-4 h-4 mx-2 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        )}
-        {item.href ? (
-          <a 
-            href={item.href}
-            class="hover:text-orange-600 transition-colors"
-          >
-            {item.label}
-          </a>
-        ) : (
-          <span class="text-slate-900 font-medium" aria-current="page">
-            {item.label}
-          </span>
-        )}
-      </li>
-    ))}
-  </ol>
-</nav>
+<!-- Visible breadcrumb navigation -->
+{!hidden && (
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    <ol class="breadcrumb-list">
+      {validItems.map((item, index) => (
+        <li class="breadcrumb-item" {...(index === validItems.length - 1 && { 'aria-current': 'page' })}>
+          {index > 0 && (
+            <svg class="breadcrumb-separator" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          )}
+          {item.href && index < validItems.length - 1 ? (
+            <a 
+              href={item.href}
+              class="breadcrumb-link"
+            >
+              {item.label}
+            </a>
+          ) : (
+            <span class="breadcrumb-current" aria-current="page">
+              {item.label}
+            </span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
 
+<!-- Structured data for search engines -->
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<style>
+  .breadcrumb-nav {
+    padding: 1rem 1.5rem;
+    max-width: 80rem;
+    margin-inline: auto;
+  }
+  
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #6b7280);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .breadcrumb-separator {
+    width: 1rem;
+    height: 1rem;
+    margin-inline: 0.5rem;
+    color: var(--color-border, #e5e7eb);
+    flex-shrink: 0;
+  }
+  
+  .breadcrumb-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+  }
+  
+  .breadcrumb-link:hover {
+    color: var(--color-primary, #ea580c);
+    text-decoration: underline;
+  }
+  
+  .breadcrumb-current {
+    color: var(--color-text, #1e293b);
+    font-weight: 500;
+  }
+  
+  /* Screen reader only variant */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .breadcrumb-nav {
+      padding: 0.75rem 1rem;
+    }
+    
+    .breadcrumb-list {
+      font-size: 0.75rem;
+    }
+    
+    .breadcrumb-separator {
+      width: 0.875rem;
+      height: 0.875rem;
+      margin-inline: 0.25rem;
+    }
+  }
+</style>
