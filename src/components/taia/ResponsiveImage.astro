@@ -1,7 +1,10 @@
 ---
 /**
- * ResponsiveImage - Optimized image component
- * Handles srcset, lazy loading, width/height for CLS, decoding
+ * ResponsiveImage - Optimized image component for SEO and performance
+ * Handles srcset, lazy loading, width/height for CLS, decoding, priority
+ * 
+ * @see https://web.dev/articles/optimize-lcp#properly_size_images
+ * @see https://web.dev/articles/lcp#elements
  */
 interface Props {
   src: string
@@ -14,6 +17,14 @@ interface Props {
   decoding?: 'async' | 'sync' | 'auto'
   fetchpriority?: 'high' | 'low' | 'auto'
   class?: string
+  /** For LCP images (hero, main content), set to true */
+  priority?: boolean
+  /** Enable WebP format fallback */
+  formats?: ('avif' | 'webp' | 'jpg')[]
+  /** Placeholder for blur-up effect */
+  placeholder?: string
+  /** Caption for accessibility and context */
+  caption?: string
 }
 
 const {
@@ -21,13 +32,21 @@ const {
   alt,
   width,
   height,
-  sizes = '100vw',
+  sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
   srcset,
   loading = 'lazy',
   decoding = 'async',
   fetchpriority = 'auto',
-  class: className
+  class: className,
+  priority = false,
+  formats,
+  placeholder,
+  caption
 } = Astro.props
+
+// Priority images should load eagerly with high fetch priority
+const computedLoading = priority ? 'eager' : loading
+const computedFetchPriority = priority ? 'high' : fetchpriority
 
 // Generate srcset if not provided and src looks like a resizable path
 const generateSrcset = (_baseSrc: string): string | undefined => {
@@ -42,24 +61,88 @@ const generateSrcset = (_baseSrc: string): string | undefined => {
 }
 
 const computedSrcset = generateSrcset(src)
+
+// Determine if we should use picture element for multiple formats
+const usePicture = formats && formats.length > 0
+
+// Generate optimized image URL with format if supported
+const getFormatSrc = (format: string): string => {
+  if (src.startsWith('http') || src.startsWith('data:')) {
+    return src
+  }
+  // For local images, append format query param (works with Astro Image)
+  const url = new URL(src, Astro.site?.origin || 'http://localhost')
+  url.searchParams.set('f', format)
+  return url.pathname + url.search
+}
 ---
 
-<img
-  src={src}
-  alt={alt}
-  width={width}
-  height={height}
-  sizes={computedSrcset ? sizes : undefined}
-  srcset={computedSrcset}
-  loading={loading}
-  decoding={decoding}
-  fetchpriority={fetchpriority}
-  class={className}
-/>
+<!-- Picture element for multiple formats -->
+{usePicture ? (
+  <picture>
+    {formats!.map(format => (
+      <source
+        type={`image/${format === 'jpg' ? 'jpeg' : format}`}
+        srcset={getFormatSrc(format)}
+        sizes={sizes}
+      />
+    ))}
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes={computedSrcset ? sizes : undefined}
+      srcset={computedSrcset}
+      loading={computedLoading}
+      decoding={decoding}
+      fetchpriority={computedFetchPriority}
+      class={className}
+      {...(placeholder && { style: `background-image: url(${placeholder}); background-size: cover;` })}
+    />
+  </picture>
+) : (
+  <figure class={className ? `${className} figure` : 'figure'}>
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes={computedSrcset ? sizes : undefined}
+      srcset={computedSrcset}
+      loading={computedLoading}
+      decoding={decoding}
+      fetchpriority={computedFetchPriority}
+      class={className}
+      {...(placeholder && { style: `background-image: url(${placeholder}); background-size: cover;` })}
+    />
+    {caption && (
+      <figcaption class="image-caption">{caption}</figcaption>
+    )}
+  </figure>
+)}
 
 <style>
+  .figure {
+    margin: 0;
+    max-width: 100%;
+  }
+  
   img {
     max-width: 100%;
     height: auto;
+    display: block;
+  }
+  
+  .image-caption {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-muted, #6b7280);
+    text-align: center;
+  }
+  
+  /* Prevent layout shift - reserve space */
+  img[width][height] {
+    aspect-ratio: attr(width) / attr(height);
   }
 </style>
