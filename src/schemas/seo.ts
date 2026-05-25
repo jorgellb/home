@@ -6,7 +6,7 @@ import { z } from 'zod'
 export const seoSchema = z.object({
   title: z.string().min(1, 'Title is required').max(60, 'Title should be under 60 characters'),
   description: z.string().min(1, 'Description is required').max(160, 'Description should be under 160 characters'),
-  canonical: z.string().url().optional(),
+  canonical: z.url().optional(),
   noindex: z.boolean().optional().default(false),
   nofollow: z.boolean().optional().default(false),
   image: z.string().optional(),

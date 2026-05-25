@@ -1,13 +1,13 @@
 // netlify/functions/submit-form.js
 import { z } from 'zod';
 
-export default async (event, context) => {
+export default async (event, _context) => {
   const { name, email, phone, service, projectType, message } = JSON.parse(event.body);
-  
-  // Validate (Zod)
+
+  // Validate (Zod) — usamos .email() vía .check(z.email()) compatible con Zod 4
   const schema = z.object({
     name: z.string().min(2),
-    email: z.string().email(),
+    email: z.email(),
     phone: z.string().min(9),
     service: z.string(),
     projectType: z.string(),

@@ -7,8 +7,10 @@ interface Testimonial {
   companyUrl?: string;
   text: string;
   rating: number;
-  image: string;
-  imageAlt: string;
+  initial?: string;
+  gradient?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 interface Props {
@@ -17,9 +19,8 @@ interface Props {
   subtitle?: string;
 }
 
-const { 
-  testimonials = [],
-  title = 'Lo que dicen nuestros clientes',
+const {
+  testimonials: propTestimonials,
   subtitle = 'Clientes satisfechos que confían en nuestro trabajo',
 } = Astro.props;
 
@@ -62,6 +63,10 @@ const defaultTestimonials = [
     gradient: 'from-sky-500 to-blue-600'
   },
 ];
+
+const items: Testimonial[] = propTestimonials && propTestimonials.length > 0
+  ? propTestimonials
+  : defaultTestimonials;
 ---
 
 <section class="relative py-28 overflow-hidden" id="testimonios">
@@ -93,7 +98,7 @@ const defaultTestimonials = [
     
     <!-- Testimonials Grid -->
     <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto mb-16">
-      {defaultTestimonials.map((testimonial, index) => (
+      {items.map((testimonial, index) => (
         <article class={`group relative rounded-3xl bg-white border border-slate-200 p-8 hover:bg-white hover:border-orange-500/40 transition-all duration-700 animate-fade-up stagger-${index + 3}`}>
           <!-- Gradient background on hover -->
           <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>

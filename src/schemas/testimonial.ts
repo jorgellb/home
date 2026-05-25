@@ -5,7 +5,7 @@ export const testimonialSchema = z.object({
   name: z.string().min(2).max(100),
   role: z.string().min(2).max(100),
   company: z.string().min(2).max(100),
-  companyUrl: z.string().url().optional(),
+  companyUrl: z.url().optional(),
   text: z.string().min(20).max(500),
   rating: z.number().int().min(1).max(5),
   image: z.string().min(1),

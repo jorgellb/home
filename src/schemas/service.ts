@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { seoSchema, type SeoData } from './seo';
+import { seoSchema } from './seo';
 
 export const serviceSchema = z.object({
   id: z.string().min(1),

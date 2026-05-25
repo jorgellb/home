@@ -217,13 +217,12 @@ function initAnimations() {
   }
   
   // ==========================================
-  // KILL ALL SCROLLTRIGGERS (cleanup)
+  // KILL ALL SCROLLTRIGGERS (cleanup, expuesto en window)
   // ==========================================
-  function cleanup() {
-    // Limpieza si es necesario
+  window.__gsapCleanup = function cleanup() {
     ScrollTrigger.getAll().forEach(st => st.kill());
-  }
-  
+  };
+
   // ==========================================
   // INITIALIZE ALL
   // ==========================================

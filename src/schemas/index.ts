@@ -12,7 +12,7 @@ export { pricingPlanSchema, type PricingPlan } from './pricing'
 
 export type ValidationResult<T> =
   | { success: true; data: T }
-  | { success: false; errors: z.ZodIssue[] }
+  | { success: false; errors: z.core.$ZodIssue[] }
 
 /**
  * Validate data against a schema
@@ -33,7 +33,7 @@ export function validate<T>(
 /**
  * Format validation errors for display
  */
-export function formatErrors(errors: z.ZodIssue[]): string {
+export function formatErrors(errors: z.core.$ZodIssue[]): string {
   return errors
     .map((err) => `  - ${err.path.join('.')}: ${err.message}`)
     .join('\n')

@@ -18,7 +18,7 @@ export const pricingPlanSchema = z.object({
   popular: z.boolean().default(false),
   cta: z.object({
     text: z.string().min(5).max(30),
-    link: z.string().url(),
+    link: z.url(),
   }),
   draft: z.boolean().optional().default(false),
   order: z.number().int().optional(),

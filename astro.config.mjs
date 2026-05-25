@@ -1,9 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
+import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
 
 import netlify from '@astrojs/netlify';
+
+/** @typedef {import('@astrojs/sitemap').SitemapItem} SitemapItem */
 
 export default defineConfig({
   site: 'https://platanitorico.com',
@@ -39,52 +41,55 @@ export default defineConfig({
         // Todas las páginas /diseno-web/ se indexan (contenido único por pueblo)
         return true;
       },
-      serialize: (item) => {
-        const url = item.url;
-        const path = new URL(url).pathname;
+      /**
+       * @param {SitemapItem} item
+       * @returns {SitemapItem}
+       */
+      serialize(item) {
+        const path = new URL(item.url).pathname;
 
         // Homepage - máxima prioridad
         if (path === '/') {
-          return { ...item, changefreq: 'weekly', priority: 1.0, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 1.0, lastmod: '2026-04-16' };
         }
 
         // Listado de blog
         if (path === '/blog/') {
-          return { ...item, changefreq: 'weekly', priority: 0.8, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 0.8, lastmod: '2026-04-16' };
         }
 
         // Artículos de blog individuales
         if (path.startsWith('/blog/')) {
-          return { ...item, changefreq: 'monthly', priority: 0.7, lastmod: '2025-06-01' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: '2025-06-01' };
         }
 
         // Servicios principales
         if (path.match(/^\/(desarrollo-web|audiovisual|marketing|diseno-grafico|soporte)\/$/)) {
-          return { ...item, changefreq: 'monthly', priority: 0.9, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.9, lastmod: '2026-04-16' };
         }
 
         // Contacto
         if (path === '/contacto/') {
-          return { ...item, changefreq: 'monthly', priority: 0.6, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.6, lastmod: '2026-04-16' };
         }
 
         // Soluciones
         if (path.includes('/soluciones/')) {
-          return { ...item, changefreq: 'monthly', priority: 0.8, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: '2026-04-16' };
         }
 
         // Páginas de diseño web por localidad — contenido único por pueblo
         if (path.includes('/diseno-web/')) {
-          return { ...item, changefreq: 'monthly', priority: 0.8, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: '2026-04-16' };
         }
 
         // Páginas legales - prioridad mínima
         if (path.match(/^\/(aviso-legal|privacidad|cookies|terminos-condiciones)\/$/)) {
-          return { ...item, changefreq: 'yearly', priority: 0.3, lastmod: '2023-09-01' };
+          return { ...item, changefreq: ChangeFreqEnum.YEARLY, priority: 0.3, lastmod: '2023-09-01' };
         }
 
         // Resto de páginas - prioridad media
-        return { ...item, changefreq: 'monthly', priority: 0.7, lastmod: '2026-04-16' };
+        return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: '2026-04-16' };
       },
     }),
   ],
@@ -100,12 +105,17 @@ export default defineConfig({
       minify: 'esbuild',
       rollupOptions: {
         output: {
-          manualChunks: {
-            gsap: ['gsap'],
-            lenis: ['lenis'],
+          // Solo se aplica al bundle cliente; en SSR estas libs van externas.
+          manualChunks(id) {
+            if (id.includes('node_modules/gsap')) return 'gsap';
+            if (id.includes('node_modules/lenis')) return 'lenis';
+            return undefined;
           },
         },
       },
+    },
+    ssr: {
+      noExternal: [],
     },
   },
 
