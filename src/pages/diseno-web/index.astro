@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import Breadcrumb from '../../components/common/Breadcrumb.astro';
-import { pueblos, comarcas, comarcaColors, getPueblosByComarca } from '../../data/pueblos-almeria';
+import { pueblos, comarcas, getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const title = 'Diseño Web en toda la Provincia de Almería | Agencia Local';
 const description = 'Páginas web profesionales para cualquier municipio de Almería. Tiendas online, SEO local y hosting gratuito. Presupuesto sin compromiso en 24h.';
@@ -60,95 +60,189 @@ const canonical = 'https://platanitorico.com/diseno-web/';
   ]} />
 
   <main id="main-content">
+    {/* HERO */}
+    <section class="svc-hero">
+      <div class="container-brutal">
+        <header class="svc-hero__head">
+          <span class="text-meta">Atlas · Cobertura provincial</span>
+          <span class="text-meta"><span class="live-dot"></span> {pueblos.length} municipios activos</span>
+        </header>
+        <div class="divider-brutal-thick"></div>
 
-    <!-- Hero -->
-    <section class="section-brutal flex items-center justify-center bg-brutal-bg border-b border-brutal-border">
-      <div class="container-brutal py-24 text-center">
-        <span class="badge-brutal mb-8">
-          <svg class="w-4 h-4 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          {pueblos.length} municipios · 7 comarcas · toda Almería
-        </span>
+        <div class="svc-hero__grid">
+          <div>
+            <span class="text-meta">Cap. 00 / Atlas Almería</span>
+            <h1 class="svc-hero__title">
+              Diseño web en
+              <em>toda</em>
+              <span class="text-stroke-ink">la provincia</span>
+              de Almería.
+            </h1>
+            <p class="svc-hero__lead">
+              Trabajamos con negocios de cualquier municipio de Almería. {pueblos.length} localidades,
+              {' '}{comarcas.length} comarcas, una misma calidad. <strong>Encuentra tu pueblo</strong>
+              {' '}y posiciónate en búsquedas locales.
+            </p>
+            <div class="svc-hero__cta">
+              <a href="/contacto/" class="btn-brutal btn-brutal--lg">Presupuesto gratis →</a>
+              <a href="/desarrollo-web/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver servicios</a>
+            </div>
+          </div>
 
-        <h1 class="heading-display text-display-sm md:text-display-md lg:text-display-lg text-brutal-text mb-6">
-          Diseño Web en<br/>
-          <span class="text-brutal-accent">toda la Provincia</span>
-        </h1>
-        <p class="text-lg text-brutal-text-secondary max-w-2xl mx-auto mb-10 text-body">
-          Trabajamos con negocios de cualquier municipio de Almería. Encuentra tu localidad y descubre cómo podemos posicionar tu negocio en Google.
-        </p>
-        <div class="flex flex-wrap gap-4 justify-center">
-          <a href="/contacto/" class="btn-brutal">
-            Presupuesto gratis
-          </a>
-          <a href="/desarrollo-web/" class="btn-brutal-outline">
-            Ver servicios
-          </a>
+          <aside class="svc-hero__specs">
+            <div class="svc-hero__spec svc-hero__spec--accent">
+              <span class="svc-hero__spec-num text-mono">{pueblos.length}</span>
+              <span class="svc-hero__spec-lbl">Municipios</span>
+            </div>
+            <div class="svc-hero__spec svc-hero__spec--lime">
+              <span class="svc-hero__spec-num text-mono">{comarcas.length}</span>
+              <span class="svc-hero__spec-lbl">Comarcas</span>
+            </div>
+            <div class="svc-hero__spec">
+              <span class="svc-hero__spec-num text-mono">100%</span>
+              <span class="svc-hero__spec-lbl">Provincia cubierta</span>
+            </div>
+            <div class="svc-hero__spec svc-hero__spec--ink">
+              <span class="svc-hero__spec-num text-mono">450€</span>
+              <span class="svc-hero__spec-lbl">Desde · web pro</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="svc-hero__marquee">
+        <div class="svc-hero__marquee-track">
+          {Array.from({length: 4}).map(() => (
+            <span>★ LEVANTE ★ ALMANZORA ★ ALPUJARRA ★ FILABRES ★ NÍJAR ★ PONIENTE ★ CAPITAL ★</span>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- Por comarca -->
-    {comarcas.map(comarca => {
+    {/* Pueblos por comarca */}
+    {comarcas.map((comarca, idx) => {
       const pueblosComarca = getPueblosByComarca(comarca);
-      const colors = comarcaColors[comarca];
       if (!pueblosComarca.length) return null;
       return (
-        <section class="section-brutal py-16 bg-brutal-bg-alt border-b border-brutal-border last:border-0">
+        <section class={`section-brutal ${idx % 2 === 0 ? '' : 'svc-comarca-section--alt'}`}>
           <div class="container-brutal">
-            <div class="flex items-center gap-4 mb-8">
-              <span class={`badge-brutal ${colors.badge}`}>
-                <svg class={`w-4 h-4 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                </svg>
-                {comarca}
-              </span>
-              <span class="text-sm text-brutal-text-muted">{pueblosComarca.length} municipios</span>
-            </div>
+            <header class="brutal-section-head">
+              <div class="brutal-section-head__col">
+                <span class="text-meta">Cap. {String(idx + 1).padStart(2, '0')} / {comarca}</span>
+                <h2 class="brutal-section-head__title">
+                  {comarca}
+                  <em>·</em>
+                  <span class="text-mono comarca-count">{pueblosComarca.length}</span>
+                </h2>
+              </div>
+              <p class="brutal-section-head__lead">
+                Municipios donde trabajamos en {comarca}. Cada pueblo tiene su
+                propia página con SEO local optimizado.
+              </p>
+            </header>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-              {pueblosComarca.map(p => (
-                <a
-                  href={`/diseno-web/${p.slug}/`}
-                  class={`card-brutal group flex flex-col p-4 bg-brutal-card border-brutal-border ${colors.shadow}`}
-                >
-                  {p.destacado && (
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-brutal-accent"></span>
-                  )}
-                  <span class="text-sm font-semibold text-brutal-text group-hover:text-brutal-accent leading-tight mb-1">
-                    {p.nombre}
-                  </span>
-                  {p.sectorPrincipal ? (
-                    <span class="text-xs text-brutal-text-muted line-clamp-2 leading-tight">{p.sectorPrincipal}</span>
-                  ) : p.poblacion ? (
-                    <span class="text-xs text-brutal-text-muted">{p.poblacion.toLocaleString('es-ES')} hab.</span>
-                  ) : null}
-                </a>
+            <ul class="atlas-grid">
+              {pueblosComarca.map((p, i) => (
+                <li>
+                  <a href={`/diseno-web/${p.slug}/`} class={`atlas-tile ${p.destacado ? 'atlas-tile--star' : ''} atlas-tile--${i % 6}`}>
+                    {p.destacado && <span class="atlas-tile__star">★</span>}
+                    <span class="atlas-tile__num text-mono">{String(i + 1).padStart(2, '0')}</span>
+                    <span class="atlas-tile__name heading-display">{p.nombre}</span>
+                    <span class="atlas-tile__sub text-mono">
+                      {p.sectorPrincipal
+                        ? p.sectorPrincipal.split(' ').slice(0, 3).join(' ')
+                        : p.poblacion ? `${p.poblacion.toLocaleString('es-ES')} hab.` : '★'}
+                    </span>
+                    <span class="atlas-tile__arrow" aria-hidden="true">→</span>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         </section>
       );
     })}
 
-    <!-- CTA final -->
-    <section class="section-brutal py-24 bg-brutal-accent">
-      <div class="container-brutal text-center">
-        <h2 class="heading-display text-display-sm md:text-display-md text-brutal-text mb-4">
-          ¿No encuentras tu municipio?
-        </h2>
-        <p class="text-brutal-text/80 mb-8 max-w-2xl mx-auto text-body">
-          Trabajamos con cualquier localidad de la provincia de Almería. Contáctanos y te hacemos un presupuesto personalizado para tu zona.
-        </p>
-        <a href="/contacto/" class="btn-brutal bg-brutal-text text-brutal-bg hover:bg-brutal-text/90">
-          Consulta gratuita sin compromiso
-        </a>
+    {/* CTA final */}
+    <section class="svc-final">
+      <div class="container-brutal">
+        <div class="svc-final__inner">
+          <span class="text-meta">★ ¿No encuentras tu municipio?</span>
+          <h2 class="svc-final__title">
+            Cubrimos
+            <em>toda Almería.</em>
+          </h2>
+          <p class="svc-final__text">
+            Si tu pueblo no está en el atlas, escríbenos. Trabajamos con
+            cualquier localidad de la provincia y te hacemos presupuesto
+            personalizado para tu zona.
+          </p>
+          <div class="svc-final__btns">
+            <a href="/contacto/" class="btn-brutal btn-brutal--lg">Consulta gratuita →</a>
+            <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Llamar al 657 085 019</a>
+          </div>
+        </div>
       </div>
     </section>
-
   </main>
 
   <Footer />
 </BaseLayout>
+
+<style>
+  .svc-comarca-section--alt { background: var(--brutal-bg-alt); border-block: 2px solid var(--brutal-ink); }
+  .comarca-count { font-style: normal; color: var(--brutal-accent); }
+
+  .atlas-grid {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr 1fr;
+    border: 2px solid var(--brutal-ink);
+    background: var(--brutal-ink);
+  }
+  @media (min-width: 640px) { .atlas-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; } }
+  @media (min-width: 900px) { .atlas-grid { grid-template-columns: repeat(4, 1fr); } }
+  @media (min-width: 1200px) { .atlas-grid { grid-template-columns: repeat(6, 1fr); } }
+
+  .atlas-tile {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      'num arrow'
+      'name name'
+      'sub sub';
+    gap: .25rem;
+    padding: 1rem;
+    background: var(--brutal-card);
+    color: var(--brutal-ink);
+    text-decoration: none;
+    min-height: 110px;
+    transition: background .2s, color .2s, padding .15s;
+  }
+  .atlas-tile:hover { background: var(--brutal-accent); padding-block: 1.15rem; }
+  .atlas-tile--1:hover { background: var(--brutal-lime); }
+  .atlas-tile--2:hover { background: var(--brutal-ink); color: var(--brutal-bg); }
+  .atlas-tile--2:hover .atlas-tile__sub { color: var(--brutal-bg-alt); }
+  .atlas-tile--2:hover .atlas-tile__num { color: var(--brutal-lime); }
+  .atlas-tile--2:hover .atlas-tile__arrow { color: var(--brutal-lime); }
+  .atlas-tile--3:hover { background: var(--brutal-accent-soft); }
+  .atlas-tile--4:hover { background: var(--brutal-lime-soft); }
+  .atlas-tile--5:hover { background: var(--brutal-accent); }
+  .atlas-tile:hover .atlas-tile__arrow { transform: translateX(3px); }
+
+  .atlas-tile--star { background: var(--brutal-bg-alt); }
+  .atlas-tile__star {
+    position: absolute;
+    top: .35rem;
+    right: .55rem;
+    font-family: var(--font-mono);
+    color: var(--brutal-accent);
+    font-size: .85rem;
+  }
+  .atlas-tile__num { grid-area: num; font-size: .58rem; color: var(--brutal-text-muted); letter-spacing: .15em; text-transform: uppercase; }
+  .atlas-tile__arrow { grid-area: arrow; font-family: var(--font-mono); color: var(--brutal-text-muted); transition: transform .2s, color .2s; font-size: .9rem; }
+  .atlas-tile__name { grid-area: name; font-size: 1.05rem; line-height: 1.05; letter-spacing: -.02em; }
+  .atlas-tile__sub { grid-area: sub; font-size: .58rem; color: var(--brutal-text-muted); letter-spacing: .1em; text-transform: uppercase; line-height: 1.3; }
+</style>

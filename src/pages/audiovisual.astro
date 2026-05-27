@@ -2,269 +2,77 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
 
 const title = 'Productora Audiovisual en Almería | Video con Dron 4K y Fotografía Aérea';
 const description = 'Productora audiovisual en Almería con dron Mavic 3 Pro 4K. Vídeo corporativo, reels, fotografía aérea y tours virtuales 360°. Presupuesto sin compromiso.';
 const canonical = 'https://platanitorico.com/audiovisual/';
 
-// ── Especificaciones del dron ──
-const droneFeatures = [
-  { title: 'Sensor Hasselblad 4/3', desc: 'Calidad cinematográfica profesional con rango dinámico de 12.8 stops', icon: 'camera' },
-  { title: 'Detección omnidireccional', desc: 'Sensores en todas las direcciones para vuelo seguro en cualquier entorno', icon: 'shield' },
-  { title: '43 minutos de vuelo', desc: 'Máxima autonomía para capturar tomas épicas sin prisas ni limitaciones', icon: 'battery' },
-  { title: 'Apple ProRes & 5.1K', desc: 'Grabación en formatos de cine profesional para post-producción de alto nivel', icon: 'film' }
-];
-
-// ── Servicios principales (SIN PRECIOS) ──
 const services = [
-  {
-    title: 'Video Corporativo con Dron',
-    desc: 'Tomas aéreas cinematográficas combinadas con material terrestre 4K. Tu empresa vista desde una perspectiva que impacta y transmite profesionalidad a otro nivel.',
-    features: ['Dron Mavic 3 Pro 4K', 'Cámaras terrestres profesionales', 'Edición y color grading', 'Música licenciada incluida', 'Entrega en múltiples formatos'],
-    highlight: true,
-    result: 'Ideal para webs corporativas, presentaciones a inversores y redes sociales'
-  },
-  {
-    title: 'Spot Publicitario Aéreo',
-    desc: 'Producción completa desde la idea hasta la entrega final. Storyboard, planificación de vuelo, rodaje con dron y cámara, y post-producción cinematográfica.',
-    features: ['Pre-producción y storyboard', 'Guion creativo', 'Dron 4K + cámara terrestre', 'Color grading profesional', 'Versiones para TV, web y RRSS'],
-    highlight: true,
-    result: 'Para campañas publicitarias, lanzamientos de producto y branding'
-  },
-  {
-    title: 'Tour Virtual 360°',
-    desc: 'Recorridos inmersivos que combinan perspectiva aérea y terrestre. Experiencia interactiva para que tus clientes visiten tu espacio sin moverse de casa.',
-    features: ['Dron + cámara 360°', 'Hotspots interactivos', 'Compatible con VR', 'Hosting incluido', 'Integración en tu web'],
-    highlight: false,
-    result: 'Perfecto para inmobiliarias, hoteles, restaurantes y espacios de eventos'
-  },
-  {
-    title: 'Tomas Aéreas para Proyectos',
-    desc: 'Pack de planos aéreos espectaculares listos para integrar en tus propias producciones. Material en bruto o editado según necesites.',
-    features: ['Múltiples ángulos y alturas', 'Formatos 4K / 5.1K / 1080p', 'Color correction incluida', 'Entrega express en 48h', 'RAW disponible bajo petición'],
-    highlight: false,
-    result: 'Para productoras, agencias y proyectos que necesitan material aéreo de calidad'
-  }
+  { n: '01', title: 'Vídeo corporativo con dron', kicker: 'Cinematográfico · 4K · Hasselblad', desc: 'Tomas aéreas cinematográficas combinadas con material terrestre 4K. Tu empresa vista desde una perspectiva que impacta y transmite profesionalidad a otro nivel.', features: ['Dron Mavic 3 Pro 4K','Cámaras terrestres profesionales','Edición y color grading','Música licenciada incluida','Entrega multi-formato'], figure: '5.1K', figureLabel: 'Resolución máxima', accent: 'accent' },
+  { n: '02', title: 'Spot publicitario aéreo', kicker: 'Storyboard · Rodaje · Post', desc: 'Producción completa desde la idea hasta la entrega final. Storyboard, planificación de vuelo, rodaje con dron y cámara, y post-producción cinematográfica.', features: ['Pre-producción y storyboard','Guion creativo','Dron 4K + cámara terrestre','Color grading profesional','Versiones TV / web / RRSS'], figure: 'TV/Web/IG', figureLabel: 'Formatos entrega', accent: 'ink' },
+  { n: '03', title: 'Tour virtual 360°', kicker: 'Inmersivo · Aéreo · Terrestre',     desc: 'Recorridos inmersivos que combinan perspectiva aérea y terrestre. Experiencia interactiva para que tus clientes visiten tu espacio sin moverse de casa.', features: ['Dron + cámara 360°','Hotspots interactivos','Compatible con VR','Hosting incluido','Integración en tu web'], figure: '360°', figureLabel: 'Vista inmersiva', accent: 'lime' },
+  { n: '04', title: 'Pack tomas aéreas',         kicker: 'B-roll · RAW · Exprés',           desc: 'Pack de planos aéreos espectaculares listos para integrar en tus producciones. Material en bruto o editado según lo necesites.', features: ['Múltiples ángulos y alturas','Formatos 4K · 5.1K · 1080p','Color correction incluida','Entrega express en 48h','RAW bajo petición'], figure: '48h', figureLabel: 'Entrega express', accent: 'paper' },
 ];
 
-// ── Servicios complementarios ──
-const reelServices = [
-  {
-    title: 'Pack Reels con Dron',
-    desc: 'Reels optimizados para Instagram y TikTok con tomas aéreas que detienen el scroll. Contenido vertical impactante que genera engagement.',
-    features: ['Formato 9:16 optimizado', 'Música trending', 'Subtítulos animados', 'Entrega rápida']
-  },
-  {
-    title: 'Video Producto Premium',
-    desc: 'Showcase dinámico con planos cenitales, movimientos envolventes y transiciones profesionales que hacen brillar tu producto.',
-    features: ['Dron + slider motorizado', 'Iluminación profesional', 'Motion graphics', 'Varias revisiones incluidas']
-  }
+const droneSpecs = [
+  { k: 'Sensor',          v: 'Hasselblad 4/3 · 20 MP · 12.8 stops dinámicos' },
+  { k: 'Vídeo',           v: 'Apple ProRes · 5.1K @ 50fps · 4K @ 120fps' },
+  { k: 'Detección',       v: 'Omnidireccional · vuelo seguro entornos complejos' },
+  { k: 'Autonomía',       v: '43 min · transmisión 15 km · viento ≤ 12 m/s' },
+  { k: 'Operador',        v: 'Certificado AESA · seguro RC obligatorio' },
+  { k: 'Espacio aéreo',   v: 'Gestión de permisos AESA / ENAIRE incluida' },
 ];
 
-const motionServices = [
-  {
-    title: 'Logo Animation 3D',
-    desc: 'Tu marca cobra vida con animaciones cinematográficas. Intro profesional para tus vídeos, web y presentaciones que genera impacto instantáneo.',
-    features: ['Animación 3D realista', 'Partículas y efectos VFX', 'Render en 4K', 'Formatos adaptados a cada plataforma']
-  },
-  {
-    title: 'Video Explicativo Animado',
-    desc: 'Combina video real con motion graphics para comunicar mensajes complejos de forma clara y atractiva. Ideal para formación, producto o captación.',
-    features: ['Guion creativo incluido', 'Storyboard detallado', 'Animación 2D/3D', 'Locución profesional opcional']
-  }
+const reels = [
+  { n: '05', title: 'Pack Reels con dron',  kicker: 'Reels · TikTok · Vertical',  desc: 'Reels optimizados para Instagram y TikTok con tomas aéreas que detienen el scroll. Contenido vertical impactante que genera engagement.', features: ['Formato 9:16 optimizado','Música trending','Subtítulos animados','Entrega rápida'], figure: '9:16', figureLabel: 'Formato', accent: 'lime' },
+  { n: '06', title: 'Vídeo producto premium', kicker: 'Studio · Slider · Macro', desc: 'Showcase dinámico con planos cenitales, movimientos envolventes y transiciones profesionales que hacen brillar tu producto.', features: ['Dron + slider motorizado','Iluminación profesional','Motion graphics','Revisiones incluidas'], figure: 'Studio', figureLabel: 'Setup', accent: 'paper' },
 ];
 
-const photoServices = [
-  {
-    title: 'Fotografía Aérea',
-    desc: 'Fotos profesionales desde el cielo con sensor Hasselblad 20MP. Perspectivas únicas que no se consiguen de otra forma.',
-    features: ['Sensor Hasselblad 20MP', 'Entrega RAW + JPG editado', 'Edición profesional incluida', 'Entrega en 48h']
-  },
-  {
-    title: 'Sesión Corporativa Completa',
-    desc: 'Retratos profesionales del equipo + tomas aéreas de las instalaciones. Todo lo que tu empresa necesita para proyectar imagen profesional.',
-    features: ['Equipo de iluminación profesional', 'Dron para exteriores', 'Fotos editadas en alta resolución', 'Galería online privada']
-  }
+const motion = [
+  { n: '07', title: 'Logo Animation 3D', kicker: 'Branding · 3D · VFX',         desc: 'Tu marca cobra vida con animaciones cinematográficas. Intro profesional para tus vídeos, web y presentaciones que genera impacto instantáneo.', features: ['Animación 3D realista','Partículas y VFX','Render 4K','Formatos por plataforma'], figure: '3D', figureLabel: 'Render', accent: 'accent' },
+  { n: '08', title: 'Vídeo explicativo animado', kicker: 'Motion · Locución · 2D/3D', desc: 'Combina vídeo real con motion graphics para comunicar mensajes complejos. Ideal para formación, producto o captación.', features: ['Guion creativo','Storyboard detallado','Animación 2D/3D','Locución profesional'], figure: '60s', figureLabel: 'Duración media', accent: 'ink' },
 ];
 
-// ── Sectores donde aportamos valor ──
 const sectores = [
-  { nombre: 'Inmobiliarias', desc: 'Vende propiedades con perspectivas aéreas que muestran ubicación, entorno y dimensiones reales. Tours 360° que filtran visitas.', icon: 'building' },
-  { nombre: 'Hostelería y Turismo', desc: 'Hoteles, restaurantes y casas rurales que se muestran desde el cielo. Genera reservas con contenido visual que enamora.', icon: 'hotel' },
-  { nombre: 'Construcción e Industria', desc: 'Seguimiento de obra, inspección de infraestructuras y documentación aérea de proyectos con precisión profesional.', icon: 'construction' },
-  { nombre: 'Eventos y Bodas', desc: 'Captura momentos irrepetibles desde perspectivas cinematográficas. Recuerdo premium con tomas que sorprenden.', icon: 'event' },
-  { nombre: 'Agricultura', desc: 'Inspección de cultivos, cartografía de parcelas y documentación visual para explotaciones agrícolas de Almería.', icon: 'agriculture' },
-  { nombre: 'Deporte y Aventura', desc: 'Actividades al aire libre filmadas desde ángulos espectaculares. Surf, senderismo, escalada, ciclismo... contenido que inspira.', icon: 'sport' }
+  { title: 'Inmobiliarias',        desc: 'Vende propiedades con perspectivas aéreas que muestran ubicación, entorno y dimensiones reales. Tours 360° que filtran visitas.' },
+  { title: 'Hostelería y turismo', desc: 'Hoteles, restaurantes y casas rurales mostrados desde el cielo. Genera reservas con contenido visual que enamora.' },
+  { title: 'Construcción e industria', desc: 'Seguimiento de obra, inspección de infraestructuras y documentación aérea con precisión profesional.' },
+  { title: 'Eventos y bodas',      desc: 'Captura momentos irrepetibles desde perspectivas cinematográficas. Recuerdo premium con tomas que sorprenden.' },
+  { title: 'Agricultura',          desc: 'Inspección de cultivos, cartografía de parcelas y documentación visual para explotaciones agrícolas de Almería.' },
+  { title: 'Deporte y aventura',   desc: 'Surf, senderismo, escalada, ciclismo... actividades al aire libre filmadas desde ángulos espectaculares.' },
 ];
 
-// ── Proceso de trabajo ──
-const processSteps = [
-  { num: '01', title: 'Briefing creativo', desc: 'Nos cuentas tu visión, analizamos ubicación, tiempos y necesidades técnicas. Definimos el enfoque creativo juntos.' },
-  { num: '02', title: 'Planificación de vuelo', desc: 'Estudiamos espacio aéreo, gestionamos permisos AESA si son necesarios y elegimos las condiciones óptimas de luz y clima.' },
-  { num: '03', title: 'Producción 4K', desc: 'Día de rodaje con Mavic 3 Pro y equipo terrestre. Múltiples tomas, ángulos y alturas para asegurar el material perfecto.' },
-  { num: '04', title: 'Post-producción', desc: 'Color grading cinematográfico, estabilización avanzada, edición narrativa y entrega en todos los formatos que necesites.' }
+const process = [
+  { num: '01', title: 'Briefing creativo',     eta: '1 día',  body: 'Nos cuentas tu visión. Analizamos ubicación, tiempos y necesidades técnicas. Definimos el enfoque creativo juntos.', deliverable: 'Concepto + estilo visual' },
+  { num: '02', title: 'Planificación de vuelo', eta: '2–4 días', body: 'Estudiamos espacio aéreo, gestionamos permisos AESA si son necesarios y elegimos las condiciones óptimas de luz y clima.', deliverable: 'Plan de vuelo + permisos' },
+  { num: '03', title: 'Producción 4K',         eta: '1–2 días', body: 'Día de rodaje con Mavic 3 Pro y equipo terrestre. Múltiples tomas, ángulos y alturas para asegurar el material perfecto.', deliverable: 'Material en bruto + backup' },
+  { num: '04', title: 'Post-producción',       eta: '5–10 días', body: 'Color grading cinematográfico, estabilización avanzada, edición narrativa y entrega en todos los formatos necesarios.', deliverable: 'Master + versiones · todos los formatos' },
 ];
 
-// ── FAQ ──
+const testimonials = [
+  { text: 'Contratamos el dron para grabar nuestras propiedades en Vera Playa. El resultado fue espectacular: las tomas aéreas venden solas. Hemos duplicado las consultas desde que usamos estos vídeos en los portales.', author: 'Javier Ruiz',   role: 'Director · Inmobiliaria Vera Playa' },
+  { text: 'Necesitábamos un vídeo corporativo para nuestro hotel en Mojácar. El equipo fue muy profesional, las tomas con dron le dieron un toque cinematográfico increíble.', author: 'Laura García',  role: 'Marketing · Hotel · Mojácar' },
+  { text: 'El tour virtual 360° de nuestro restaurante ha sido un cambio total. Los clientes reservan después de ver el espacio. Calidad cine.', author: 'Antonio M.',  role: 'Propietario · Restaurante · Roquetas' },
+  { text: 'Los reels que produjeron para nuestra marca de moda triplicaron el engagement en Instagram. Tomas aéreas + edición de calidad cine.', author: 'Marta P.',     role: 'Founder · Marca de moda · Almería' },
+];
+
 const faqs = [
-  {
-    q: '¿Necesitáis permisos para volar el dron?',
-    a: 'Sí. Somos operadores certificados por AESA (Agencia Estatal de Seguridad Aérea). Gestionamos todos los permisos necesarios según la ubicación y el tipo de vuelo. Contamos con seguro de responsabilidad civil obligatorio. Tú no tienes que preocuparte de nada.'
-  },
-  {
-    q: '¿En cuánto tiempo tengo el material listo?',
-    a: 'Para tomas aéreas sueltas, entrega express en 48 horas. Videos corporativos completos con edición, color grading y música suelen estar listos en 1-2 semanas. Spots publicitarios con pre-producción pueden requerir 2-3 semanas. Siempre acordamos plazos antes de empezar.'
-  },
-  {
-    q: '¿Podéis volar en cualquier ubicación de Almería?',
-    a: 'Volamos en toda la provincia de Almería: costa, interior, zonas urbanas y rurales. Hay restricciones en algunas zonas (aeropuertos, zonas militares, parques naturales protegidos), pero en la mayoría de casos podemos operar con la autorización correspondiente. Lo evaluamos caso por caso.'
-  },
-  {
-    q: '¿Qué calidad de video ofrecéis?',
-    a: 'Grabamos en 5.1K y 4K con el DJI Mavic 3 Pro equipado con sensor Hasselblad. Para proyectos de cine y publicidad, ofrecemos grabación en Apple ProRes con 12.8 stops de rango dinámico. La calidad es equiparable a producciones profesionales de alto presupuesto.'
-  },
-  {
-    q: '¿Puedo usar el material en redes sociales, web y televisión?',
-    a: 'Sí. Entregamos el material en los formatos que necesites: horizontal para web y TV, vertical para Instagram/TikTok, cuadrado para feeds. La música que incluimos está licenciada para uso comercial. Recibes todos los derechos de uso del material.'
-  },
-  {
-    q: '¿Trabajáis fuera de Almería?',
-    a: 'Sí. Aunque nuestra base está en Almería, nos desplazamos a cualquier punto de Andalucía y España. Para proyectos fuera de la provincia, consultanos y te hacemos presupuesto incluyendo desplazamiento.'
-  },
-  {
-    q: '¿Qué pasa si el día de rodaje hace mal tiempo?',
-    a: 'Si las condiciones meteorológicas no son seguras o afectan a la calidad (viento fuerte, lluvia), reprogramamos el rodaje sin coste adicional. Monitorizamos la previsión con antelación y siempre tenemos fechas alternativas preparadas.'
-  },
-  {
-    q: '¿Ofrecéis servicio de fotografía aérea además de vídeo?',
-    a: 'Sí. El sensor Hasselblad de 20MP del Mavic 3 Pro captura fotos aéreas de calidad profesional. Entregamos en RAW y JPG editado. Es un servicio muy demandado por inmobiliarias, constructoras y empresas turísticas de Almería.'
-  }
+  { q: '¿Necesitáis permisos para volar el dron?', a: 'Sí. Somos operadores certificados por AESA (Agencia Estatal de Seguridad Aérea). Gestionamos todos los permisos según ubicación y tipo de vuelo. Contamos con seguro de responsabilidad civil obligatorio. Tú no te preocupas de nada.' },
+  { q: '¿En cuánto tiempo tengo el material listo?', a: 'Tomas aéreas sueltas: entrega express en 48h. Vídeo corporativo completo: 1–2 semanas. Spot publicitario con pre-producción: 2–3 semanas. Plazos acordados antes de empezar.' },
+  { q: '¿Podéis volar en cualquier ubicación de Almería?', a: 'Volamos en toda la provincia: costa, interior, zonas urbanas y rurales. Hay restricciones en aeropuertos, zonas militares y parques naturales protegidos, pero en la mayoría de casos podemos operar con autorización. Lo evaluamos caso por caso.' },
+  { q: '¿Qué calidad de vídeo ofrecéis?', a: 'Grabamos en 5.1K y 4K con el DJI Mavic 3 Pro y sensor Hasselblad. Para proyectos de cine y publicidad, Apple ProRes con 12.8 stops de rango dinámico. Calidad equiparable a producciones profesionales.' },
+  { q: '¿Puedo usar el material en redes sociales, web y televisión?', a: 'Sí. Entregamos en los formatos que necesites: horizontal para web/TV, vertical para Instagram/TikTok, cuadrado para feeds. La música incluida está licenciada para uso comercial. Recibes todos los derechos.' },
+  { q: '¿Trabajáis fuera de Almería?', a: 'Sí. Base en Almería pero nos desplazamos a cualquier punto de Andalucía y España. Para proyectos fuera de provincia, te hacemos presupuesto incluyendo desplazamiento.' },
+  { q: '¿Qué pasa si el día de rodaje hace mal tiempo?', a: 'Si las condiciones meteorológicas no son seguras o afectan a la calidad (viento fuerte, lluvia), reprogramamos sin coste adicional. Monitorizamos la previsión con antelación y siempre tenemos fechas alternativas.' },
+  { q: '¿Ofrecéis fotografía aérea además de vídeo?', a: 'Sí. El sensor Hasselblad de 20MP del Mavic 3 Pro captura fotos aéreas de calidad profesional. Entregamos en RAW y JPG editado. Muy demandado por inmobiliarias, constructoras y empresas turísticas.' },
 ];
 
-// ── Stats ──
-const stats = [
-  { value: '5.1K', label: 'Resolución máxima' },
-  { value: '43min', label: 'Autonomía de vuelo' },
-  { value: '12.8', label: 'Stops rango dinámico' },
-  { value: '48h', label: 'Entrega express' }
-];
-
-// ── JSON-LD Schemas avanzados ──
 const jsonLd = [
-  // WebPage
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": title,
-    "description": description,
-    "url": canonical,
-    "inLanguage": "es",
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Platanito Rico",
-      "url": "https://platanitorico.com"
-    },
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://platanitorico.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Audiovisual", "item": canonical }
-      ]
-    }
-  },
-  // ProfessionalService
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Platanito Rico - Producción Audiovisual Almería",
-    "url": canonical,
-    "telephone": "+34657085019",
-    "email": "hola@platanitorico.com",
-    "image": "https://platanitorico.com/imagenes/audiovisuales-dron-video.jpg",
-    "logo": "https://platanitorico.com/imagenes/logo.png",
-    "description": "Producción audiovisual profesional con dron 4K DJI Mavic 3 Pro en Almería. Video corporativo, spots, fotografía aérea y tours 360°.",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Ctra de Ronda, 82",
-      "addressLocality": "Vera",
-      "addressRegion": "Almería",
-      "postalCode": "04620",
-      "addressCountry": "ES"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "37.2450",
-      "longitude": "-1.8614"
-    },
-    "areaServed": [
-      { "@type": "State", "name": "Almería" },
-      { "@type": "Country", "name": "España" }
-    ],
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "18:00"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Servicios Audiovisuales con Dron",
-      "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Video Corporativo con Dron 4K", "description": "Producción de video corporativo con tomas aéreas cinematográficas" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Spot Publicitario Aéreo", "description": "Producción completa de spots con planificación, storyboard y dron 4K" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tour Virtual 360°", "description": "Recorridos inmersivos con perspectiva aérea y terrestre" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Fotografía Aérea Profesional", "description": "Fotos aéreas con sensor Hasselblad 20MP" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reels y Contenido Social Media", "description": "Videos verticales optimizados para Instagram y TikTok con tomas aéreas" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Motion Graphics y Animación", "description": "Logo animation 3D y videos explicativos animados" } }
-      ]
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "reviewCount": "23",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "author": { "@type": "Person", "name": "Javier Ruiz" },
-        "datePublished": "2025-01-20",
-        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-        "reviewBody": "Contratamos el servicio de dron para grabar nuestras propiedades en Vera Playa. El resultado fue espectacular, las tomas aéreas venden solas. Hemos duplicado las consultas desde que usamos estos vídeos en los portales."
-      },
-      {
-        "@type": "Review",
-        "author": { "@type": "Person", "name": "Laura García" },
-        "datePublished": "2025-02-15",
-        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-        "reviewBody": "Necesitábamos un vídeo corporativo para nuestro hotel en Mojácar. El equipo fue muy profesional, las tomas con dron le dieron un toque cinematográfico increíble. Nuestros clientes internacionales quedan impresionados."
-      }
-    ]
-  },
-  // HowTo
-  {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": "Cómo se produce un video profesional con dron en Almería",
-    "description": "Proceso paso a paso de producción audiovisual con dron 4K: desde el briefing creativo hasta la entrega del material final editado.",
-    "step": processSteps.map((p, i) => ({
-      "@type": "HowToStep",
-      "position": i + 1,
-      "name": p.title,
-      "text": p.desc
-    }))
-  },
-  // FAQPage
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": { "@type": "Answer", "text": f.a }
-    }))
-  }
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","isPartOf":{"@type":"WebSite","name":"Platanito Rico","url":"https://platanitorico.com"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Audiovisual","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico - Producción Audiovisual Almería","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":"https://platanitorico.com/imagenes/audiovisuales-dron-video.jpg","description":"Producción audiovisual con dron 4K DJI Mavic 3 Pro en Almería. Vídeo corporativo, spots, fotografía aérea y tours 360°.","address":{"@type":"PostalAddress","streetAddress":"Ctra de Ronda, 82","addressLocality":"Vera","addressRegion":"Almería","postalCode":"04620","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":"37.2450","longitude":"-1.8614"},"areaServed":[{"@type":"State","name":"Almería"},{"@type":"Country","name":"España"}],"openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"hasOfferCatalog":{"@type":"OfferCatalog","name":"Servicios Audiovisuales con Dron","itemListElement":services.concat(reels).concat(motion).map(s=>({"@type":"Offer","itemOffered":{"@type":"Service","name":s.title,"description":s.desc}}))},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","reviewCount":"23","bestRating":"5","worstRating":"1"} },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo se produce un vídeo profesional con dron en Almería","step":process.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
 ];
 ---
 
@@ -273,545 +81,402 @@ const jsonLd = [
   description={description}
   image="/imagenes/audiovisuales-dron-video.jpg"
   imageAlt="Producción audiovisual con dron 4K en Almería"
-  type="website"
+  type="service"
   lang="es"
   canonical={canonical}
-  keywords="producción audiovisual almería, video dron almería, dron 4k almería, fotografía aérea almería, video corporativo almería, spot publicitario dron, tour virtual 360"
+  keywords="producción audiovisual almería, video dron almería, dron 4k almería, fotografía aérea almería, video corporativo almería"
   jsonLd={jsonLd}
 >
   <Header />
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Audiovisual' }]} />
 
   <main id="main-content">
-
-    <!-- ═══════════════════════════════════════════
-         HERO
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal relative min-h-screen flex items-center justify-center overflow-hidden bg-brutal-bg">
-      <div class="absolute inset-0 z-0">
-        <img
-          src="/imagenes/audiovisuales-dron-video.jpg"
-          alt="Producción audiovisual profesional con dron 4K en Almería"
-          class="w-full h-full object-cover"
-          width="1920"
-          height="1080"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <div class="absolute inset-0 z-[1] bg-brutal-bg/85"></div>
-
-      <div class="container-brutal relative z-10 py-24">
-        <!-- Breadcrumb -->
-        <nav class="mb-8" aria-label="Migas de pan">
-          <ol class="flex items-center gap-2 text-sm text-brutal-text-muted">
-            <li><a href="/" class="hover:text-brutal-text transition-colors">Inicio</a></li>
-            <li aria-hidden="true"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></li>
-            <li><span class="text-brutal-accent font-medium" aria-current="page">Audiovisual</span></li>
-          </ol>
-        </nav>
-
-        <div class="text-center">
-          <div class="badge-brutal mb-8">
-            <span class="relative flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full bg-brutal-accent opacity-75"></span>
-              <span class="relative inline-flex h-2 w-2 bg-brutal-accent"></span>
-            </span>
-            <span class="text-sm font-medium text-brutal-text">DJI Mavic 3 Pro · Operadores certificados AESA</span>
-          </div>
-
-          <h1 class="heading-display text-5xl md:text-6xl lg:text-8xl text-brutal-text mb-8 leading-tight">
-            Perspectivas que<br/>
-            <span class="text-brutal-accent">elevan tu marca</span>
-          </h1>
-
-          <p class="text-xl md:text-2xl text-brutal-text-secondary mb-12 max-w-3xl mx-auto leading-relaxed">
-            Producción audiovisual profesional con <strong class="text-brutal-text">Dron Mavic 3 Pro 4K</strong>.
-            Tomas aéreas cinematográficas, video corporativo, spots publicitarios y fotografía aérea en Almería y toda España.
-          </p>
-
-          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="/#contacto" class="btn-brutal group relative px-8 py-4 bg-brutal-accent text-brutal-text text-lg">
-              <span class="relative z-10">Solicitar presupuesto gratis</span>
-            </a>
-            <a href="#servicios" class="btn-brutal-outline px-8 py-4 border-2 border-brutal-text/30 text-brutal-text text-lg hover:bg-brutal-text/10 transition-colors">
-              Ver servicios
-            </a>
-          </div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {stats.map(stat => (
-              <div class="card-brutal bg-brutal-card border-brutal-border p-5 text-center">
-                <div class="text-3xl md:text-4xl font-bold text-brutal-text mb-1" style="font-family:'Anton',sans-serif">{stat.value}</div>
-                <div class="text-sm text-brutal-text-muted">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         EQUIPO — DJI Mavic 3 Pro
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-24 bg-brutal-bg-alt">
+    {/* HERO */}
+    <section class="svc-hero">
       <div class="container-brutal">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <header class="svc-hero__head">
+          <span class="text-meta">N.º 011 — Servicio · Audiovisual</span>
+          <span class="text-meta"><span class="live-dot"></span> Volando con Mavic 3 Pro</span>
+        </header>
+        <div class="divider-brutal-thick"></div>
+
+        <div class="svc-hero__grid">
           <div>
-            <span class="badge-brutal mb-6">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Equipo profesional
-            </span>
-            <h2 class="heading-display text-4xl md:text-5xl text-brutal-text mb-6">
-              DJI Mavic 3 Pro<br/>
-              <span class="text-brutal-text-muted">La referencia mundial</span>
-            </h2>
-            <p class="text-lg text-brutal-text-secondary mb-8 leading-relaxed">
-              El dron más avanzado de DJI con <strong class="text-brutal-text">triple cámara Hasselblad</strong>.
-              Capturamos tomas aéreas con calidad de cine: 5.1K video, sensor 4/3 CMOS
-              y estabilización gimbal de 3 ejes. Tus proyectos merecen esta calidad.
+            <span class="text-meta">Cap. 01 / Producción audiovisual</span>
+            <h1 class="svc-hero__title">
+              Vídeo con
+              <em>dron 4K,</em>
+              <span class="text-stroke-ink">spots,</span>
+              fotografía aérea.
+            </h1>
+            <p class="svc-hero__lead">
+              Producimos con un <strong>DJI Mavic 3 Pro · sensor Hasselblad 4/3</strong>
+              y equipo terrestre profesional. Vídeo corporativo, spots,
+              tours 360° y reels que detienen el scroll.
             </p>
-
-            <div class="grid sm:grid-cols-2 gap-4">
-              {droneFeatures.map(feature => (
-                <div class="card-brutal bg-brutal-card border-brutal-border flex gap-4 p-4 transition-all group">
-                  <div class="w-12 h-12 bg-brutal-accent flex items-center justify-center flex-shrink-10">
-                    <div class="w-full h-full bg-brutal-card flex items-center justify-center">
-                      {feature.icon === 'camera' && (
-                        <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25z" />
-                        </svg>
-                      )}
-                      {feature.icon === 'shield' && (
-                        <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                        </svg>
-                      )}
-                      {feature.icon === 'battery' && (
-                        <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 10.5h.375c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125H21M3.75 18h15A2.25 2.25 0 0021 15.75v-6a2.25 2.25 0 00-2.25-2.25h-15A2.25 2.25 0 001.5 9.75v6A2.25 2.25 0 003.75 18z" />
-                        </svg>
-                      )}
-                      {feature.icon === 'film' && (
-                        <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v-1.5m1.125 2.625c-.621 0-1.125.504-1.125 1.125v1.5m2.625-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M18 5.625v5.25M7.125 12h9.75m-9.75 0A1.125 1.125 0 016 10.875M7.125 12C6.504 12 6 12.504 6 13.125m0-2.25C6 11.496 5.496 12 4.875 12M18 10.875c0 .621-.504 1.125-1.125 1.125M18 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m-12 5.25v-5.25m0 5.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125m-12 0v-1.5c0-.621-.504-1.125-1.125-1.125M18 18.375v-5.25m0 5.25v-1.5c0-.621.504-1.125 1.125-1.125M18 13.125v1.5c0 .621.504 1.125 1.125 1.125M18 13.125c0-.621.504-1.125 1.125-1.125M6 13.125v1.5c0 .621-.504 1.125-1.125 1.125M6 13.125C6 12.504 5.496 12 4.875 12m-1.5 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M19.125 12h1.5m0 0c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h1.5m14.25 0h1.5" />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-brutal-text">{feature.title}</h4>
-                    <p class="text-sm text-brutal-text-secondary mt-1">{feature.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div class="relative">
-            <div class="bg-brutal-bg border-brutal-border p-8 text-brutal-text">
-              <div class="relative z-10">
-                <h3 class="text-2xl font-bold mb-6">¿Por qué tomas con dron?</h3>
-                <ul class="space-y-4">
-                  {['Perspectivas imposibles de conseguir de otra forma', 'Impacto visual inmediato que engancha al espectador', 'Diferenciación total respecto a tu competencia', 'Versatilidad para cualquier sector y tipo de proyecto', 'Relación calidad-precio imbatible frente a helicóptero'].map(item => (
-                    <li class="flex items-center gap-3">
-                      <svg class="w-5 h-5 text-brutal-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                      <span class="text-brutal-text-secondary">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div class="mt-6 pt-6 border-t border-brutal-border">
-                  <p class="text-sm text-brutal-text-muted">Operadores certificados AESA · Seguro de responsabilidad civil incluido</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         SERVICIOS PRINCIPALES
-    ═══════════════════════════════════════════ -->
-    <section id="servicios" class="section-brutal py-24 bg-brutal-bg">
-      <div class="container-brutal">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-          <span class="badge-brutal mb-8">
-            <svg class="w-4 h-4 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25z" />
-            </svg>
-            Servicios con Dron 4K
-          </span>
-          <h2 class="heading-display text-4xl md:text-5xl text-brutal-text mb-6">
-            Producción audiovisual<br/><span class="text-brutal-accent">profesional</span>
-          </h2>
-          <p class="text-lg text-brutal-text-secondary">
-            Desde videos corporativos hasta spots publicitarios. Todas nuestras producciones
-            incluyen tomas aéreas con el Mavic 3 Pro 4K.
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-8">
-          {services.map((service) => (
-            <div class={`card-brutal bg-brutal-card border-2 ${service.highlight ? 'border-brutal-accent' : 'border-brutal-border'}`}>
-              {service.highlight && (
-                <div class="badge-brutal bg-brutal-accent text-brutal-text text-sm font-bold" style="align-self:flex-start">
-                  Más solicitado
-                </div>
-              )}
-              <h3 class="text-2xl font-bold text-brutal-text mb-3">{service.title}</h3>
-              <p class="text-brutal-text-secondary mb-6">{service.desc}</p>
-              <ul class="space-y-3 mb-6">
-                {service.features.map(feature => (
-                  <li class="flex items-center gap-3 text-brutal-text">
-                    <svg class="w-5 h-5 text-brutal-accent flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <div class="pt-4 border-t border-brutal-border">
-                <p class="text-sm text-brutal-accent font-medium">{service.result}</p>
-              </div>
-              <a
-                href="/#contacto"
-                class={`btn-brutal w-full py-4 text-center mt-6 ${service.highlight ? 'bg-brutal-accent text-brutal-text' : 'bg-brutal-bg text-brutal-text'}`}
-              >
-                Pedir presupuesto
+            <div class="svc-hero__cta">
+              <a href="/contacto" class="btn-brutal btn-brutal--lg">
+                Pedir presupuesto →
+              </a>
+              <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
+                657 085 019
               </a>
             </div>
+          </div>
+
+          <aside class="svc-hero__specs">
+            <div class="svc-hero__spec svc-hero__spec--accent">
+              <span class="svc-hero__spec-num text-mono">5.1K</span>
+              <span class="svc-hero__spec-lbl">Resolución máx.</span>
+            </div>
+            <div class="svc-hero__spec svc-hero__spec--lime">
+              <span class="svc-hero__spec-num text-mono">43min</span>
+              <span class="svc-hero__spec-lbl">Autonomía vuelo</span>
+            </div>
+            <div class="svc-hero__spec">
+              <span class="svc-hero__spec-num text-mono">12.8</span>
+              <span class="svc-hero__spec-lbl">Stops dinámicos</span>
+            </div>
+            <div class="svc-hero__spec svc-hero__spec--ink">
+              <span class="svc-hero__spec-num text-mono">48h</span>
+              <span class="svc-hero__spec-lbl">Entrega exprés</span>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="svc-hero__marquee">
+        <div class="svc-hero__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ DJI MAVIC 3 PRO ★ HASSELBLAD 20MP ★ APPLE PRORES ★ 5.1K · 50FPS ★ DAVINCI ★</span>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         SERVICIOS COMPLEMENTARIOS — Reels, Motion, Foto
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-24 bg-brutal-bg-alt">
+    {/* SERVICIOS principales */}
+    <section class="section-brutal" id="servicios">
       <div class="container-brutal">
-        <div class="grid lg:grid-cols-3 gap-8">
-          <div class="lg:col-span-1">
-            <span class="badge-brutal mb-6">Más servicios</span>
-            <h2 class="heading-display text-3xl md:text-4xl text-brutal-text mb-6">
-              Contenido para redes y motion graphics
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 02 / Servicios</span>
+            <h2 class="brutal-section-head__title">
+              Producción
+              <em>cinematográfica.</em>
             </h2>
-            <p class="text-brutal-text-secondary mb-8">
-              Complementa tu estrategia audiovisual con contenido optimizado para redes sociales y animaciones profesionales.
-            </p>
-            <a href="/#contacto" class="inline-flex items-center gap-2 text-brutal-accent font-semibold hover:gap-4 transition-all">
-              Consultar pack personalizado
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </a>
           </div>
-
-          <div class="lg:col-span-2 space-y-8">
-            <!-- Reels -->
-            <div>
-              <h3 class="text-xl font-bold text-brutal-text mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-                </svg>
-                Reels y Social Media
-              </h3>
-              <div class="grid sm:grid-cols-2 gap-4">
-                {reelServices.map(service => (
-                  <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-                    <h4 class="font-bold text-brutal-text mb-2">{service.title}</h4>
-                    <p class="text-sm text-brutal-text-secondary mb-4">{service.desc}</p>
-                    <ul class="space-y-1">
-                      {service.features.map(f => (
-                        <li class="text-sm text-brutal-text-muted flex items-center gap-2">
-                          <span class="w-1.5 h-1.5 bg-brutal-accent flex-shrink-0"></span>
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <!-- Motion Graphics -->
-            <div>
-              <h3 class="text-xl font-bold text-brutal-text mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-                </svg>
-                Motion Graphics
-              </h3>
-              <div class="grid sm:grid-cols-2 gap-4">
-                {motionServices.map(service => (
-                  <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-                    <h4 class="font-bold text-brutal-text mb-2">{service.title}</h4>
-                    <p class="text-sm text-brutal-text-secondary mb-4">{service.desc}</p>
-                    <ul class="space-y-1">
-                      {service.features.map(f => (
-                        <li class="text-sm text-brutal-text-muted flex items-center gap-2">
-                          <span class="w-1.5 h-1.5 bg-brutal-accent flex-shrink-0"></span>
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <!-- Fotografía -->
-            <div>
-              <h3 class="text-xl font-bold text-brutal-text mb-4 flex items-center gap-2">
-                <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                </svg>
-                Fotografía Profesional
-              </h3>
-              <div class="grid sm:grid-cols-2 gap-4">
-                {photoServices.map(service => (
-                  <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-                    <h4 class="font-bold text-brutal-text mb-2">{service.title}</h4>
-                    <p class="text-sm text-brutal-text-secondary mb-4">{service.desc}</p>
-                    <ul class="space-y-1">
-                      {service.features.map(f => (
-                        <li class="text-sm text-brutal-text-muted flex items-center gap-2">
-                          <span class="w-1.5 h-1.5 bg-brutal-accent flex-shrink-0"></span>
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         SECTORES — Para quién es útil
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-24 bg-brutal-bg">
-      <div class="container-brutal">
-        <div class="text-center mb-16">
-          <span class="badge-brutal mb-8">
-            <svg class="w-4 h-4 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
-            </svg>
-            Sectores
-          </span>
-          <h2 class="heading-display text-3xl md:text-4xl lg:text-5xl text-brutal-text mb-6">
-            Sectores que <span class="text-brutal-accent">transformamos</span> con video aéreo
-          </h2>
-          <p class="text-lg text-brutal-text-secondary max-w-3xl mx-auto">
-            Las tomas con dron aportan valor real a negocios muy diferentes. Estos son los sectores donde más impacto generamos en Almería.
+          <p class="brutal-section-head__lead">
+            Cuatro formatos principales. Cada uno diseñado para un objetivo:
+            transmitir profesionalidad, vender un producto, mostrar un espacio
+            o aportar material a tu propia producción.
           </p>
-        </div>
+        </header>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sectores.map(sector => (
-            <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-              <div class="w-12 h-12 bg-brutal-accent flex items-center justify-center mb-4">
-                <div class="w-full h-full bg-brutal-card flex items-center justify-center">
-                  {sector.icon === 'building' && <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" /></svg>}
-                  {sector.icon === 'hotel' && <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>}
-                  {sector.icon === 'construction' && <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.1 3.03.96-5.57L3.3 8.77l5.6-.82L11.42 3l2.52 4.95 5.6.82-4.08 3.86.96 5.57-5.1-3.03z" /></svg>}
-                  {sector.icon === 'event' && <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>}
-                  {sector.icon === 'agriculture' && <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>}
-                  {sector.icon === 'sport' && <svg class="w-6 h-6 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>}
+        <ol class="svc-bento">
+          {services.map((s) => (
+            <li class={`svc-card svc-card--${s.accent}`}>
+              <header class="svc-card__head">
+                <span class="svc-card__num">{s.n}</span>
+                <span class="svc-card__kicker">{s.kicker}</span>
+              </header>
+              <h3 class="svc-card__title">{s.title}</h3>
+              <p class="svc-card__desc">{s.desc}</p>
+              <ul class="svc-card__features">
+                {s.features.map((f) => (
+                  <li class="svc-card__feat"><span class="svc-card__feat-mark">+</span><span>{f}</span></li>
+                ))}
+              </ul>
+              <footer class="svc-card__foot">
+                <div class="svc-card__figure">
+                  <span class="svc-card__figure-val">{s.figure}</span>
+                  <span class="svc-card__figure-lbl">{s.figureLabel}</span>
                 </div>
-              </div>
-              <h3 class="text-lg font-bold text-brutal-text mb-2">{sector.nombre}</h3>
-              <p class="text-sm text-brutal-text-secondary">{sector.desc}</p>
-            </div>
+                <a href="/contacto" class="svc-card__cta">Pedir presupuesto →</a>
+              </footer>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         TESTIMONIOS
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-24 bg-brutal-bg-alt">
+    {/* DRON · DATA SHEET */}
+    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
       <div class="container-brutal">
-        <div class="text-center mb-16">
-          <div class="badge-brutal mb-8">
-            <div class="flex items-center gap-0.5">
-              {[1,2,3,4,5].map(() => (
-                <svg class="w-5 h-5 text-brutal-accent" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                </svg>
-              ))}
-            </div>
-            <span class="font-bold text-brutal-text text-lg">5.0</span>
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 03 / Equipo · DJI Mavic 3 Pro</span>
+            <h2 class="brutal-section-head__title">
+              Calidad
+              <em>de cine,</em>
+              desde el aire.
+            </h2>
           </div>
-          <h2 class="heading-display text-3xl md:text-4xl lg:text-5xl text-brutal-text mb-6">
-            Clientes que ya <span class="text-brutal-accent">volaron alto</span>
-          </h2>
-        </div>
+          <p class="brutal-section-head__lead">
+            Volamos con un DJI Mavic 3 Pro · sensor Hasselblad 4/3 y vídeo Apple ProRes.
+            Sin equipo profesional no hay calidad profesional. Aquí están las specs.
+          </p>
+        </header>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          {[
-            { nombre: 'Javier Ruiz', negocio: 'Inmobiliaria · Vera Playa', inicial: 'J', texto: 'Contratamos el servicio de dron para grabar nuestras propiedades en Vera Playa. El resultado fue espectacular, las tomas aéreas venden solas. Hemos duplicado las consultas desde que usamos estos vídeos en los portales inmobiliarios.' },
-            { nombre: 'Laura García', negocio: 'Hotel Boutique · Mojácar', inicial: 'L', texto: 'Necesitábamos un vídeo corporativo para nuestro hotel en Mojácar. El equipo fue muy profesional, las tomas con dron le dieron un toque cinematográfico increíble. Nuestros clientes internacionales quedan impresionados antes de llegar.' },
-            { nombre: 'Antonio Pérez', negocio: 'Constructora · Almería', inicial: 'A', texto: 'Usamos el servicio de dron para documentar el avance de obra de una promoción de viviendas. Material impecable que usamos en reuniones con inversores y en la web. Repetiremos seguro.' },
-            { nombre: 'María del Carmen López', negocio: 'Restaurante · Garrucha', inicial: 'M', texto: 'Los reels con tomas aéreas de nuestro restaurante frente al mar se hicieron virales. Pasamos de 800 a 5.000 seguidores en Instagram en dos meses. El contenido con dron marca la diferencia en redes.' }
-          ].map(review => (
-            <article class="card-brutal bg-brutal-card border-brutal-border p-8">
-              <div class="flex items-center gap-1 mb-4">
-                {[1,2,3,4,5].map(() => (
-                  <svg class="w-4 h-4 text-brutal-accent" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
+        <dl class="spec-list" style="max-width:760px;margin:2rem auto 0;">
+          {droneSpecs.map((s) => (
+            <div><dt class="spec-k">{s.k}</dt><dd class="spec-v">{s.v}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </section>
+
+    {/* REELS + PRODUCTO */}
+    <section class="section-brutal">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 04 / Social &amp; producto</span>
+            <h2 class="brutal-section-head__title">
+              Reels y vídeo
+              <em>producto.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Contenido pensado para Instagram, TikTok y e-commerce. Vídeo vertical
+            que detiene el scroll y showcases que hacen brillar lo que vendes.
+          </p>
+        </header>
+
+        <ol class="svc-bento">
+          {reels.map((s) => (
+            <li class={`svc-card svc-card--${s.accent}`}>
+              <header class="svc-card__head">
+                <span class="svc-card__num">{s.n}</span>
+                <span class="svc-card__kicker">{s.kicker}</span>
+              </header>
+              <h3 class="svc-card__title">{s.title}</h3>
+              <p class="svc-card__desc">{s.desc}</p>
+              <ul class="svc-card__features">
+                {s.features.map((f) => (
+                  <li class="svc-card__feat"><span class="svc-card__feat-mark">+</span><span>{f}</span></li>
                 ))}
-              </div>
-              <blockquote class="text-brutal-text-secondary leading-relaxed mb-6 italic">"{review.texto}"</blockquote>
-              <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-brutal-accent flex items-center justify-center text-brutal-text font-bold text-lg">
-                  {review.inicial}
+              </ul>
+              <footer class="svc-card__foot">
+                <div class="svc-card__figure">
+                  <span class="svc-card__figure-val">{s.figure}</span>
+                  <span class="svc-card__figure-lbl">{s.figureLabel}</span>
                 </div>
+                <a href="/contacto" class="svc-card__cta">Solicitar →</a>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* MOTION */}
+    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Motion graphics</span>
+            <h2 class="brutal-section-head__title">
+              Animación &amp;
+              <em>logo motion.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Tu marca animada con criterio: logo en 3D, vídeo explicativo,
+            transiciones cinematográficas. Para presentaciones, web y RRSS.
+          </p>
+        </header>
+
+        <ol class="svc-bento">
+          {motion.map((s) => (
+            <li class={`svc-card svc-card--${s.accent}`}>
+              <header class="svc-card__head">
+                <span class="svc-card__num">{s.n}</span>
+                <span class="svc-card__kicker">{s.kicker}</span>
+              </header>
+              <h3 class="svc-card__title">{s.title}</h3>
+              <p class="svc-card__desc">{s.desc}</p>
+              <ul class="svc-card__features">
+                {s.features.map((f) => (
+                  <li class="svc-card__feat"><span class="svc-card__feat-mark">+</span><span>{f}</span></li>
+                ))}
+              </ul>
+              <footer class="svc-card__foot">
+                <div class="svc-card__figure">
+                  <span class="svc-card__figure-val">{s.figure}</span>
+                  <span class="svc-card__figure-lbl">{s.figureLabel}</span>
+                </div>
+                <a href="/contacto" class="svc-card__cta">Solicitar →</a>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* PROCESO */}
+    <section class="section-brutal">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Método</span>
+            <h2 class="brutal-section-head__title">
+              Cómo se produce
+              <em>un proyecto.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Cuatro fases con entregables claros. Desde el briefing creativo
+            hasta el master final, sin sorpresas.
+          </p>
+        </header>
+
+        <ol class="svc-process">
+          {process.map((s, i) => (
+            <li class={`svc-process__step svc-process__step--${i % 2 === 0 ? 'a' : 'b'}`}>
+              <div class="svc-process__rail">
+                <span class="svc-process__dot"></span>
+                {i < process.length - 1 && <span class="svc-process__line"></span>}
+              </div>
+              <div class="svc-process__num">
+                <span class="text-mono">{s.num}</span>
+                <span class="svc-process__eta">{s.eta}</span>
+              </div>
+              <div class="svc-process__content">
+                <h3 class="svc-process__title">{s.title}</h3>
+                <p class="svc-process__body">{s.body}</p>
+              </div>
+              <aside class="svc-process__deliv">
+                <span class="text-meta">Entregable</span>
+                <p>{s.deliverable}</p>
+              </aside>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* SECTORES */}
+    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 07 / Sectores</span>
+            <h2 class="brutal-section-head__title">
+              Quién contrata
+              <em>nuestro dron.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Inmobiliarias, hoteles, productoras, eventos, agricultura, deporte.
+            Cada sector tiene su uso del aéreo — nos adaptamos.
+          </p>
+        </header>
+
+        <ul class="svc-sectors">
+          {sectores.map((s, i) => (
+            <li class={`svc-sector svc-sector--${i % 3}`}>
+              <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="svc-sector__title">{s.title}</h3>
+              <p class="svc-sector__desc">{s.desc}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* TESTIMONIOS */}
+    <section class="section-brutal">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Clientes</span>
+            <h2 class="brutal-section-head__title">
+              Lo que dicen
+              <em>quienes graban con nosotros.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="svc-pull">
+          <div class="svc-pull__marks" aria-hidden="true">“</div>
+          <blockquote class="svc-pull__quote">{testimonials[0].text}</blockquote>
+          <figcaption class="svc-pull__cap">
+            <span class="svc-pull__avatar">{testimonials[0].author[0]}</span>
+            <div>
+              <span class="svc-pull__name">{testimonials[0].author}</span>
+              <span class="svc-pull__role">{testimonials[0].role}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="svc-quotes">
+          {testimonials.slice(1).map((t, i) => (
+            <li class={`svc-quote svc-quote--${i}`}>
+              <p>"{t.text}"</p>
+              <footer>
+                <span class="svc-quote__avatar">{t.author[0]}</span>
                 <div>
-                  <p class="font-semibold text-brutal-text">{review.nombre}</p>
-                  <p class="text-sm text-brutal-text-muted">{review.negocio}</p>
+                  <span class="svc-quote__name">{t.author}</span>
+                  <span class="svc-quote__role">{t.role}</span>
                 </div>
-              </div>
-            </article>
+              </footer>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         PROCESO — De la idea al cielo
-    ═══════════════════════════════════════════ -->
-    <section id="proceso" class="section-brutal py-24 bg-brutal-bg text-brutal-text">
+    {/* FAQ */}
+    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-top:2px solid var(--brutal-ink);">
       <div class="container-brutal">
-        <div class="text-center max-w-3xl mx-auto mb-20">
-          <span class="badge-brutal mb-6">
-            <span class="w-2 h-2 bg-brutal-accent"></span>
-            <span class="text-sm font-medium text-brutal-accent">Proceso certificado</span>
-          </span>
-          <h2 class="heading-display text-4xl md:text-5xl lg:text-6xl text-brutal-text mb-6">
-            De la <span class="text-brutal-accent">idea</span> al <span class="text-brutal-accent">cielo</span>
-          </h2>
-          <p class="text-lg text-brutal-text-muted">
-            Metodología probada para garantizar resultados espectaculares en cada proyecto.
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Preguntas frecuentes</span>
+            <h2 class="brutal-section-head__title">
+              Lo que más
+              <em>nos preguntan.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Sobre permisos, plazos, formatos y zonas de vuelo. Si no está aquí,
+            escríbenos y respondemos en menos de 24h.
           </p>
-        </div>
+        </header>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {processSteps.map((step) => (
-            <div class="card-brutal bg-brutal-card border-brutal-border p-8 transition-all">
-              <div class="mb-6">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-brutal-accent text-brutal-text">
-                  <span class="text-2xl font-bold" style="font-family:'Anton',sans-serif">{step.num}</span>
-                </div>
-              </div>
-              <h3 class="text-xl font-bold mb-3 text-brutal-text">{step.title}</h3>
-              <p class="text-brutal-text-muted text-sm leading-relaxed">{step.desc}</p>
-            </div>
+        <ol class="svc-faq">
+          {faqs.map((f, i) => (
+            <li class="svc-faq__item">
+              <details class="svc-faq__details" open={i === 0}>
+                <summary class="svc-faq__sum">
+                  <span class="svc-faq__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="svc-faq__q">{f.q}</span>
+                  <span class="svc-faq__toggle" aria-hidden="true">+</span>
+                </summary>
+                <div class="svc-faq__answer"><p>{f.a}</p></div>
+              </details>
+            </li>
           ))}
-        </div>
+        </ol>
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         FAQ
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-24 bg-brutal-bg-alt">
+    {/* CTA final */}
+    <section class="svc-final">
       <div class="container-brutal">
-        <div class="text-center mb-16">
-          <span class="badge-brutal mb-8">
-            <svg class="w-4 h-4 text-brutal-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-            </svg>
-            Preguntas frecuentes
-          </span>
-          <h2 class="heading-display text-3xl md:text-4xl lg:text-5xl text-brutal-text mb-6">
-            Todo lo que necesitas saber<br/>
-            <span class="text-brutal-accent">sobre nuestro servicio</span>
+        <div class="svc-final__inner">
+          <span class="text-meta">★ Próximo paso</span>
+          <h2 class="svc-final__title">
+            Llevemos tu marca
+            <em>al aire.</em>
           </h2>
-        </div>
-
-        <div class="space-y-4 max-w-4xl mx-auto">
-          {faqs.map((item, index) => (
-            <details class="group bg-brutal-card border-brutal-border transition-all open:border-brutal-accent" open={index === 0}>
-              <summary class="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none select-none hover:bg-brutal-bg transition-colors">
-                <span class="font-bold text-brutal-text text-base md:text-lg group-open:text-brutal-accent transition-colors">
-                  {item.q}
-                </span>
-                <span class="flex-shrink-0 w-8 h-8 bg-brutal-bg group-open:bg-brutal-accent/10 flex items-center justify-center transition-colors">
-                  <svg class="w-4 h-4 text-brutal-text-muted group-open:text-brutal-accent transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </span>
-              </summary>
-              <div class="px-6 pb-6 pt-1">
-                <p class="text-brutal-text-secondary leading-relaxed border-t border-brutal-border pt-4">{item.a}</p>
-              </div>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         ENLACES INTERNOS
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-16 bg-brutal-bg border-t border-brutal-border">
-      <div class="container-brutal">
-        <h2 class="heading-display text-2xl text-brutal-text mb-8 text-center">
-          Otros <span class="text-brutal-accent">servicios</span> que pueden interesarte
-        </h2>
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { nombre: 'Desarrollo Web', url: '/desarrollo-web', desc: 'Webs profesionales con hosting gratuito' },
-            { nombre: 'Marketing Digital', url: '/marketing', desc: 'Estrategia y publicidad online' },
-            { nombre: 'Diseño Gráfico', url: '/diseno-grafico', desc: 'Branding e identidad visual' },
-            { nombre: 'Soporte Web', url: '/soporte', desc: 'Mantenimiento y actualizaciones' }
-          ].map(servicio => (
-            <a href={servicio.url} class="card-brutal bg-brutal-card border-brutal-border p-5 transition-all">
-              <h3 class="font-semibold text-brutal-text mb-1">{servicio.nombre}</h3>
-              <p class="text-sm text-brutal-text-muted">{servicio.desc}</p>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════
-         CTA FINAL
-    ═══════════════════════════════════════════ -->
-    <section class="section-brutal py-24 bg-brutal-accent">
-      <div class="container-brutal text-center">
-        <h2 class="heading-display text-3xl md:text-4xl lg:text-5xl text-brutal-text mb-6">
-          ¿Listo para elevar tu proyecto?
-        </h2>
-        <p class="text-brutal-text text-lg mb-10 max-w-2xl mx-auto">
-          Las tomas aéreas con dron 4K marcan la diferencia entre pasar desapercibido y causar impacto. Cuéntanos tu idea y te hacemos una propuesta a medida.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-          <a href="/#contacto" class="btn-brutal bg-brutal-text text-brutal-bg font-bold text-lg px-10 py-5">
-            <span>Solicitar presupuesto gratis</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-          </a>
-          <a href="tel:+34657085019" class="btn-brutal-outline border-2 border-brutal-text/40 text-brutal-text font-bold text-lg px-10 py-5 hover:bg-brutal-text/10 transition-all">
-            657 085 019
-          </a>
-        </div>
-        <div class="flex flex-wrap justify-center gap-6 text-sm text-brutal-text">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Respuesta en 24h
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Sin compromiso
-          </div>
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            Operadores certificados AESA
+          <p class="svc-final__text">
+            Cuéntanos qué quieres rodar y te enviamos un presupuesto detallado
+            en menos de 24h. Sin compromiso, sin reuniones de descubrimiento de
+            tres semanas.
+          </p>
+          <div class="svc-final__btns">
+            <a href="/contacto" class="btn-brutal btn-brutal--lg">Pedir presupuesto →</a>
+            <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Llamar al 657 085 019</a>
           </div>
         </div>
       </div>
