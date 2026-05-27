@@ -1,9 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
-
-import netlify from '@astrojs/netlify';
 
 /** @typedef {import('@astrojs/sitemap').SitemapItem} SitemapItem */
 
@@ -25,9 +23,6 @@ export default defineConfig({
   },
 
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
     sitemap({
       // NOTA: No usar customPages — con build.format:'directory' Astro ya genera
       // las URLs con trailing slash. customPages sin slash crea duplicados.
@@ -100,6 +95,7 @@ export default defineConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     build: {
       cssCodeSplit: true,
       minify: 'esbuild',
@@ -118,6 +114,4 @@ export default defineConfig({
       noExternal: [],
     },
   },
-
-  adapter: netlify(),
 });
