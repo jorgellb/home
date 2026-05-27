@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import CookieBanner from '../components/common/CookieBanner.astro';
 
 interface Props {
   title: string;
@@ -17,11 +16,11 @@ interface Props {
   preload?: Array<{ href: string; as: string; type?: string }>;
 }
 
-const { 
-  title, 
-  description, 
-  image, 
-  imageAlt = 'Platanito Rico - Agencia Creativa Digital en Almería',
+const {
+  title,
+  description,
+  image,
+  imageAlt = 'Platanito Rico — Estudio creativo digital en Almería',
   type = 'website',
   noindex = false,
   canonical,
@@ -43,38 +42,15 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
 <!DOCTYPE html>
 <html lang={lang} class="scroll-smooth">
   <head>
-    <!-- Critical: charset + viewport first -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    
-    <!-- Preconnects -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <!-- DNS Prefetch -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-
-    <!-- Preload critical assets -->
-    {preload.map(resource => (
-      <link rel="preload" href={resource.href} as={resource.as} type={resource.type} crossorigin />
-    ))}
-    
-    <!-- Hreflang alternates -->
-    {alternates && alternates.map((alt) => (
-      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-    ))}
-    
-    <!-- Primary Meta Tags -->
     <title>{title} | {siteName}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Platanito Rico" />
     <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
     <link rel="canonical" href={canonicalUrl} />
-    
-    <!-- Open Graph -->
+
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={`${title} | ${siteName}`} />
@@ -85,54 +61,30 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="es_ES" />
-    
-    <!-- Twitter -->
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:title" content={`${title} | ${siteName}`} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={imageAlt} />
-    
-    <!-- Google Fonts - Non-blocking -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-    </noscript>
-    
-    <!-- Favicon -->
+
     <link rel="icon" type="image/png" href="/imagenes/icon.png" />
-
-    
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#FF6B00" />
+    <meta name="theme-color" content="#F5F1EA" />
     <meta name="generator" content={Astro.generator} />
-    
-    <!-- Geo Tags -->
-    <meta name="geo.region" content="ES-AL" />
-    <meta name="geo.placename" content="Almería" />
-    <meta name="geo.position" content="36.8340;-2.4637" />
-    <meta name="ICBM" content="36.8340, -2.4637" />
-    
-    <!-- GSAP - Detected after DOM is ready -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        if (document.querySelector('[data-gsap]')) {
-          const gsapScript = document.createElement('script');
-          gsapScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
-          gsapScript.async = true;
-          document.head.appendChild(gsapScript);
 
-          const stScript = document.createElement('script');
-          stScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
-          stScript.async = true;
-          document.head.appendChild(stScript);
-        }
-      });
-    </script>
-    
-    <!-- JSON-LD -->
-    {jsonLd && Array.isArray(jsonLd) 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    {preload.map(resource => (
+      <link rel="preload" href={resource.href} as={resource.as} type={resource.type} crossorigin />
+    ))}
+
+    {alternates && alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))}
+
+    {jsonLd && Array.isArray(jsonLd)
       ? jsonLd.map((schema) => (
           <script type="application/ld+json" set:html={JSON.stringify(schema)} />
         ))
@@ -142,61 +94,56 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     }
   </head>
   <body>
-    <!-- Skip to main content -->
-    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    
+    <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+    {/* Marquee superior — banda fija de identidad */}
+    <div class="brand-band" aria-hidden="true">
+      <div class="brand-band__track">
+        <span class="brand-band__item">★ Platanito Rico</span>
+        <span class="brand-band__item">Est. 2018 — Almería</span>
+        <span class="brand-band__item">★ Diseño · Código · Vídeo</span>
+        <span class="brand-band__item">Edición / 2026</span>
+        <span class="brand-band__item">★ Open for projects</span>
+        <span class="brand-band__item">+34 657 085 019</span>
+        <span class="brand-band__item">★ Platanito Rico</span>
+        <span class="brand-band__item">Est. 2018 — Almería</span>
+        <span class="brand-band__item">★ Diseño · Código · Vídeo</span>
+        <span class="brand-band__item">Edición / 2026</span>
+        <span class="brand-band__item">★ Open for projects</span>
+        <span class="brand-band__item">+34 657 085 019</span>
+      </div>
+    </div>
+
     <slot />
-    
-    <!-- Cookie Consent -->
-    <CookieBanner />
-    
-    <!-- GSAP Animations - Only load if needed -->
-    <script is:inline>
-      if (document.querySelector('[data-gsap]') && typeof window.gsap !== 'undefined') {
-        const script = document.createElement('script');
-        script.src = '/scripts/gsap-animations.js';
-        script.async = true;
-        document.body.appendChild(script);
+
+    <style is:global>
+      /* — Marquee superior — */
+      .brand-band {
+        position: relative;
+        width: 100%;
+        background: #0E0D0B;
+        color: #F5F1EA;
+        border-bottom: 2px solid #0E0D0B;
+        overflow: hidden;
+        height: 32px;
       }
-    </script>
-    
-    <!-- Reduced motion support -->
-    <script is:inline>
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.style.setProperty('--transition-duration', '0.01ms');
-        document.documentElement.classList.add('reduce-motion');
+      .brand-band__track {
+        display: flex;
+        width: max-content;
+        align-items: center;
+        height: 100%;
+        gap: 2.5rem;
+        padding-left: 1rem;
+        animation: marquee 42s linear infinite;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .68rem;
+        text-transform: uppercase;
+        letter-spacing: .18em;
       }
-    </script>
+      .brand-band__item { display: inline-flex; align-items: center; white-space: nowrap; }
+      @media (prefers-reduced-motion: reduce) {
+        .brand-band__track { animation: none; }
+      }
+    </style>
   </body>
 </html>
-
-<style>
-  .skip-link {
-    position: absolute;
-    top: -100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    padding: 0.75rem 1.5rem;
-    background: #FF6B00;
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: top 0.3s ease;
-  }
-  .skip-link:focus {
-    top: 1rem;
-    outline: 3px solid #fbbf24;
-    outline-offset: 0.25rem;
-  }
-  
-  /* Reduced motion support */
-  .reduce-motion *,
-  .reduce-motion *::before,
-  .reduce-motion *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-</style>

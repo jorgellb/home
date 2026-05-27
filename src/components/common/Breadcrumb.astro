@@ -1,5 +1,4 @@
 ---
-// Breadcrumb Navigation Component - SEO Optimized
 interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -11,7 +10,6 @@ interface Props {
 
 const { items } = Astro.props;
 
-// Generate Schema.org breadcrumb data
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -24,30 +22,44 @@ const breadcrumbSchema = {
 };
 ---
 
-<nav aria-label="Breadcrumb" class="py-4 px-6 max-w-7xl mx-auto">
-  <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500">
-    {items.map((item, index) => (
-      <li class="flex items-center">
-        {index > 0 && (
-          <svg class="w-4 h-4 mx-2 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        )}
-        {item.href ? (
-          <a 
-            href={item.href}
-            class="hover:text-orange-600 transition-colors"
-          >
-            {item.label}
-          </a>
-        ) : (
-          <span class="text-slate-900 font-medium" aria-current="page">
-            {item.label}
-          </span>
-        )}
-      </li>
-    ))}
-  </ol>
+<nav aria-label="Breadcrumb" class="breadcrumb-brutal">
+  <div class="container-brutal breadcrumb-brutal__inner">
+    <ol class="breadcrumb-brutal__list">
+      {items.map((item, index) => (
+        <li class="breadcrumb-brutal__item">
+          {index > 0 && (
+            <span class="breadcrumb-brutal__sep" aria-hidden="true">[ / ]</span>
+          )}
+          {item.href ? (
+            <a href={item.href} class="breadcrumb-brutal__link">{item.label}</a>
+          ) : (
+            <span class="breadcrumb-brutal__current" aria-current="page">{item.label}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
 </nav>
+
+<style>
+  .breadcrumb-brutal {
+    background: var(--brutal-bg);
+    border-bottom: 1px solid var(--brutal-border-soft);
+  }
+  .breadcrumb-brutal__inner { padding-block: 1rem; }
+  .breadcrumb-brutal__list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-wrap: wrap; gap: .35rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+  }
+  .breadcrumb-brutal__item { display: inline-flex; align-items: center; gap: .35rem; }
+  .breadcrumb-brutal__sep { color: var(--brutal-text-muted); opacity: .55; }
+  .breadcrumb-brutal__link { color: var(--brutal-text-secondary); text-decoration: none; transition: color .15s; }
+  .breadcrumb-brutal__link:hover { color: var(--brutal-accent); }
+  .breadcrumb-brutal__current { color: var(--brutal-ink); font-weight: 700; }
+</style>
 
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

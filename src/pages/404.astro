@@ -3,53 +3,67 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 
-const title = "Página no encontrada - 404";
-const description = "Lo sentimos, la página que buscas no existe en Platanito Rico. Vuelve al inicio para explorar nuestros servicios de diseño web y marketing.";
+const title = "404 — Página no encontrada";
+const description = "La página que buscas no existe. Vuelve al inicio.";
 ---
 
-<BaseLayout
-  title={title}
-  description={description}
-  noindex={true}
->
+<BaseLayout title={title} description={description} noindex={true}>
   <Header />
 
-  <main class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-    <!-- Background Effects -->
-    <div class="absolute inset-0 bg-zinc-950"></div>
-    <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/10 rounded-full blur-[120px]"></div>
+  <main class="not-found">
+    <div class="container-brutal not-found__inner">
+      <header class="not-found__head">
+        <span class="text-meta">N.º 404 / Página no encontrada</span>
+        <span class="text-meta">Vol. {new Date().getFullYear()} · Almería</span>
+      </header>
 
-    <div class="container-premium relative z-10 text-center">
-      <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white/[0.03] border border-white/10 mb-12 animate-float">
-        <span class="text-6xl">🍌</span>
-      </div>
+      <div class="divider-brutal-thick"></div>
 
-      <h1 class="heading-display mb-6 animate-fade-up">
-        Error <span class="text-gradient">404</span>
-      </h1>
-      
-      <p class="text-2xl text-zinc-400 max-w-2xl mx-auto mb-12 animate-fade-up stagger-1 leading-relaxed">
-        Parece que esta página se ha perdido en el <br/>
-        <strong class="text-white">espacio digital</strong>.
-      </p>
-
-      <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-up stagger-2">
-        <a href="/" class="btn-premium px-12 !bg-purple-600 hover:!bg-purple-700">
-          Volver al Inicio
-        </a>
-        <a href="/desarrollo-web/" class="btn-premium px-12 !bg-white/5 !border-white/10">
-          Ver Servicios
-        </a>
-      </div>
-
-      <div class="mt-20 pt-10 border-t border-white/5 animate-fade-up stagger-3">
-        <p class="text-zinc-500 text-sm mb-6 uppercase tracking-[0.2em]">O tal vez buscabas...</p>
-        <div class="flex flex-wrap justify-center gap-8">
-          <a href="/marketing/" class="text-zinc-400 hover:text-purple-400 transition-colors font-medium">Marketing Digital</a>
-          <a href="/audiovisual/" class="text-zinc-400 hover:text-purple-400 transition-colors font-medium">Producción de Vídeo</a>
-          <a href="/soporte/" class="text-zinc-400 hover:text-purple-400 transition-colors font-medium">Soporte Técnico</a>
+      <div class="not-found__hero">
+        <div class="not-found__number heading-display" aria-hidden="true">
+          <span>4</span>
+          <span class="not-found__zero">0</span>
+          <span>4</span>
         </div>
+
+        <h1 class="not-found__title heading-display">
+          Esta página
+          <em class="heading-editorial">se perdió</em>
+          por el camino.
+        </h1>
+
+        <p class="not-found__lead">
+          O la moviste tú, o la movimos nosotros, o nunca existió. En cualquier caso,
+          desde aquí no encontramos nada. Estos enlaces sí funcionan:
+        </p>
+      </div>
+
+      <ul class="not-found__links">
+        <li><a href="/"><span class="text-mono">01</span> Inicio</a></li>
+        <li><a href="/desarrollo-web/"><span class="text-mono">02</span> Diseño Web</a></li>
+        <li><a href="/audiovisual/"><span class="text-mono">03</span> Audiovisual</a></li>
+        <li><a href="/marketing/"><span class="text-mono">04</span> Marketing</a></li>
+        <li><a href="/diseno-grafico/"><span class="text-mono">05</span> Diseño Gráfico</a></li>
+        <li><a href="/blog/"><span class="text-mono">06</span> Blog</a></li>
+        <li><a href="/contacto/"><span class="text-mono">07</span> Contacto</a></li>
+      </ul>
+
+      <div class="not-found__cta">
+        <a href="/" class="btn-brutal btn-brutal--lg">
+          Volver al inicio →
+        </a>
+        <a href="/contacto" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
+          Cuéntame qué buscabas
+        </a>
+      </div>
+    </div>
+
+    {/* Marquee */}
+    <div class="not-found__marquee" aria-hidden="true">
+      <div class="not-found__marquee-track">
+        {Array.from({length: 6}).map(() => (
+          <span>★ ERROR 404 — PAGE NOT FOUND ★ ARCHIVO PERDIDO ★ NULL ★</span>
+        ))}
       </div>
     </div>
   </main>
@@ -57,3 +71,93 @@ const description = "Lo sentimos, la página que buscas no existe en Platanito R
   <Footer />
 </BaseLayout>
 
+<style>
+  .not-found {
+    background: var(--brutal-bg);
+    border-bottom: 3px solid var(--brutal-ink);
+    padding-top: 3rem;
+  }
+  .not-found__inner { padding-bottom: 5rem; }
+  .not-found__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .not-found__hero { padding: 3rem 0; display: flex; flex-direction: column; gap: 1.5rem; }
+  .not-found__number {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: clamp(8rem, 22vw, 18rem);
+    line-height: .85;
+    letter-spacing: -.06em;
+    color: var(--brutal-ink);
+    user-select: none;
+  }
+  .not-found__zero {
+    color: transparent;
+    -webkit-text-stroke: 4px var(--brutal-accent);
+    animation: blink 2.5s steps(2) infinite;
+  }
+  .not-found__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.03em;
+    max-width: 22ch;
+    margin: 0;
+  }
+  .not-found__title em { color: var(--brutal-accent); font-style: italic; }
+  .not-found__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 50ch;
+  }
+
+  .not-found__links {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 3rem;
+    border-top: 2px solid var(--brutal-ink);
+  }
+  .not-found__links li { border-bottom: 1px solid var(--brutal-border-soft); }
+  .not-found__links a {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1rem 0;
+    text-decoration: none;
+    color: var(--brutal-ink);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: -.025em;
+    transition: padding .2s, background .15s, color .15s;
+  }
+  .not-found__links a:hover {
+    padding-left: 1rem;
+    background: var(--brutal-lime-soft);
+    color: var(--brutal-accent);
+  }
+  .not-found__links .text-mono { color: var(--brutal-text-muted); font-size: .85rem; font-weight: 400; min-width: 32px; }
+
+  .not-found__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+  .not-found__marquee {
+    background: var(--brutal-ink);
+    color: var(--brutal-accent);
+    overflow: hidden;
+    padding: 1.5rem 0;
+    border-top: 2px solid var(--brutal-ink);
+  }
+  .not-found__marquee-track {
+    display: flex; gap: 3rem;
+    width: max-content;
+    animation: marquee 35s linear infinite;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: .9rem;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+  }
+</style>

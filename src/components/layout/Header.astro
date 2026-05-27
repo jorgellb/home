@@ -1,181 +1,319 @@
 ---
-// Header Premium - Agencia de Diseño Web
 const navLinks = [
-  { href: "/desarrollo-web", label: "Diseño Web" },
-  { href: "/audiovisual", label: "Audiovisual" },
-  { href: "/marketing", label: "Marketing" },
-  { href: "/diseno-grafico", label: "Diseño Gráfico" },
-  { href: "/soporte", label: "Mantenimiento" },
-  { href: "/blog", label: "Blog" },
+  { num: '01', href: '/desarrollo-web', label: 'Web' },
+  { num: '02', href: '/audiovisual',     label: 'Audiovisual' },
+  { num: '03', href: '/marketing',       label: 'Marketing' },
+  { num: '04', href: '/diseno-grafico',  label: 'Diseño' },
+  { num: '05', href: '/soporte',         label: 'Soporte' },
+  { num: '06', href: '/blog',            label: 'Blog' },
 ];
+const currentPath = Astro.url.pathname;
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100/80">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="flex items-center justify-between h-20">
-      <!-- Logo -->
-      <a href="/" class="flex items-center group">
-        <img 
-          src="/imagenes/logo.png" 
-          alt="Platanito Rico" 
-          class="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-          width="120"
-          height="40"
-        />
+<header class="brutal-header" data-header>
+  <div class="brutal-header__inner container-brutal">
+    <a href="/" class="brutal-logo" aria-label="Platanito Rico — Inicio">
+      <span class="brutal-logo__mark" aria-hidden="true">P★</span>
+      <span class="brutal-logo__word">
+        <span class="brutal-logo__line1">PLATANITO</span>
+        <span class="brutal-logo__line2">/ rico — estudio</span>
+      </span>
+    </a>
+
+    <nav class="brutal-nav" aria-label="Principal">
+      {navLinks.map(link => {
+        const active = currentPath === link.href || currentPath.startsWith(link.href + '/');
+        return (
+          <a href={link.href} class={`brutal-nav__link${active ? ' is-active' : ''}`}>
+            <span class="brutal-nav__num">{link.num}</span>
+            <span class="brutal-nav__label">{link.label}</span>
+          </a>
+        );
+      })}
+    </nav>
+
+    <div class="brutal-header__cta">
+      <a href="/contacto" class="btn-brutal btn-brutal--sm">
+        <span class="live-dot" aria-hidden="true"></span>
+        Hablemos
       </a>
 
-      <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center">
-        {navLinks.map(link => (
-          <a 
-            href={link.href}
-            class="relative px-5 py-2.5 text-sm font-medium text-slate-600 hover:text-orange-600 transition-all duration-300 group rounded-lg"
-          >
-            <!-- Background hover -->
-            <span class="absolute inset-0 bg-orange-50 rounded-lg scale-0 group-hover:scale-100 transition-transform duration-300 ease-out"></span>
-            <!-- Text -->
-            <span class="relative z-10">{link.label}</span>
-            <!-- Underline -->
-            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full group-hover:w-1/2 transition-all duration-300"></span>
-          </a>
-        ))}
-      </nav>
-
-      <!-- CTA Button -->
-      <div class="hidden lg:block">
-        <a 
-          href="/contacto"
-          class="relative inline-flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-full overflow-hidden group hover:bg-orange-600 transition-colors duration-300"
-        >
-          <!-- Shine effect -->
-          <span class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-          <span class="relative">Contactar</span>
-          <svg class="w-4 h-4 relative group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-          </svg>
-        </a>
-      </div>
-
-      <!-- Mobile Menu Button -->
-      <button 
+      <button
         id="menuBtn"
-        class="lg:hidden relative w-11 h-11 flex flex-col items-center justify-center gap-1.5 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50 transition-colors duration-300 group"
-        aria-label="Menu"
+        class="brutal-burger"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="mobileMenu"
       >
-        <span class="w-5 h-0.5 bg-slate-700 rounded-full origin-center group-hover:bg-orange-600 transition-colors duration-300"></span>
-        <span class="w-5 h-0.5 bg-slate-700 rounded-full group-hover:bg-orange-600 transition-colors duration-300"></span>
-        <span class="w-5 h-0.5 bg-slate-700 rounded-full origin-center group-hover:bg-orange-600 transition-colors duration-300"></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </header>
 
-<!-- Mobile Menu Overlay -->
-<div id="mobileMenu" class="fixed inset-0 z-40 lg:hidden opacity-0 pointer-events-none">
-  <!-- Backdrop with blur -->
-  <div class="absolute inset-0 bg-slate-900/30 backdrop-blur-sm" id="menuBackdrop"></div>
-  
-  <!-- Menu Panel -->
-  <div class="absolute top-24 left-4 right-4 bg-white rounded-3xl shadow-2xl shadow-slate-900/20 border border-slate-100 p-2 opacity-0" id="menuPanel">
-    <nav class="flex flex-col p-4">
-      {navLinks.map((link) => (
-        <a 
-          href={link.href}
-          class="flex items-center justify-between px-5 py-4 text-slate-700 font-medium hover:text-orange-600 hover:bg-orange-50 rounded-2xl transition-colors duration-300 mobile-nav-link group"
-        >
-          <span class="text-base">{link.label}</span>
-          <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
-            <svg class="w-4 h-4 text-slate-400 group-hover:text-orange-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </div>
+<aside
+  id="mobileMenu"
+  class="brutal-drawer"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menú principal"
+>
+  <div class="brutal-drawer__backdrop" data-menu-backdrop></div>
+  <div class="brutal-drawer__panel">
+    <div class="brutal-drawer__head">
+      <span class="text-meta">Índice / Menú</span>
+      <span class="text-meta">2026 · ALM</span>
+    </div>
+    <nav class="brutal-drawer__nav">
+      {navLinks.map(link => (
+        <a href={link.href} class="brutal-drawer__link mobile-nav-link">
+          <span class="brutal-drawer__num">{link.num}</span>
+          <span class="brutal-drawer__label">{link.label}</span>
+          <span class="brutal-drawer__arrow">→</span>
         </a>
       ))}
     </nav>
-    
-    <div class="p-4 pt-2">
-      <a 
-        href="/contacto"
-        class="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-2xl hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 group"
-      >
-        <span>Contactar</span>
-        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-        </svg>
+    <div class="brutal-drawer__foot">
+      <a href="/contacto" class="btn-brutal btn-brutal--lg w-full" data-menu-link>
+        Empezar proyecto
       </a>
+      <p class="text-meta mt-6">Llamar · <a href="tel:+34657085019" class="link-brutal" data-menu-link>+34 657 085 019</a></p>
     </div>
   </div>
-</div>
+</aside>
 
 <style>
-  /* Smooth hamburger animation handled by GSAP */
-  #menuBtn span {
-    will-change: transform, opacity;
+  .brutal-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(245, 241, 234, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--brutal-ink);
+  }
+  .brutal-header__inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    height: 78px;
+    gap: 2rem;
+  }
+  .brutal-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: .65rem;
+    text-decoration: none;
+    color: var(--brutal-ink);
+  }
+  .brutal-logo__mark {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--brutal-ink);
+    color: var(--brutal-lime);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: .9rem;
+    border: 2px solid var(--brutal-ink);
+    transition: transform .2s;
+  }
+  .brutal-logo:hover .brutal-logo__mark { transform: rotate(-6deg); background: var(--brutal-accent); color: var(--brutal-ink); }
+  .brutal-logo__word { display: flex; flex-direction: column; line-height: 1; }
+  .brutal-logo__line1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+  }
+  .brutal-logo__line2 {
+    font-family: var(--font-mono);
+    font-size: .58rem;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--brutal-text-muted);
+    margin-top: .15rem;
+  }
+
+  .brutal-nav {
+    display: none;
+    justify-content: center;
+    gap: .25rem;
+  }
+  @media (min-width: 1024px) {
+    .brutal-nav { display: flex; }
+  }
+  .brutal-nav__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: .35rem;
+    padding: .5rem .75rem;
+    text-decoration: none;
+    color: var(--brutal-ink);
+    font-family: var(--font-body);
+    font-size: .9rem;
+    font-weight: 500;
+    border: 1.5px solid transparent;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .brutal-nav__link:hover { border-color: var(--brutal-ink); background: var(--brutal-card); }
+  .brutal-nav__link.is-active { background: var(--brutal-ink); color: var(--brutal-lime); border-color: var(--brutal-ink); }
+  .brutal-nav__num {
+    font-family: var(--font-mono);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    color: var(--brutal-text-muted);
+    text-transform: uppercase;
+  }
+  .brutal-nav__link.is-active .brutal-nav__num { color: var(--brutal-lime); opacity: .7; }
+  .brutal-nav__label { letter-spacing: -.01em; }
+
+  .brutal-header__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .brutal-header__cta .btn-brutal { display: none; }
+  @media (min-width: 768px) {
+    .brutal-header__cta .btn-brutal { display: inline-flex; }
+  }
+
+  .brutal-burger {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: var(--brutal-card);
+    border: 2px solid var(--brutal-ink);
+    cursor: pointer;
+    padding: 0;
+    box-shadow: 3px 3px 0 0 var(--brutal-ink);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .brutal-burger:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 0 var(--brutal-ink); }
+  .brutal-burger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--brutal-ink);
+    transition: transform .25s, opacity .25s;
+  }
+  .brutal-burger.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .brutal-burger.is-open span:nth-child(2) { opacity: 0; }
+  .brutal-burger.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  @media (min-width: 1024px) {
+    .brutal-burger { display: none; }
+  }
+
+  /* ─── Drawer ─── */
+  .brutal-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .brutal-drawer.is-open {
+    pointer-events: auto;
+    visibility: visible;
+  }
+  .brutal-drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(14, 13, 11, 0.72);
+    opacity: 0;
+    transition: opacity .35s;
+  }
+  .brutal-drawer.is-open .brutal-drawer__backdrop { opacity: 1; }
+  .brutal-drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(92vw, 480px);
+    background: var(--brutal-card);
+    border-left: 3px solid var(--brutal-ink);
+    transform: translateX(100%);
+    transition: transform .45s cubic-bezier(.16,1,.3,1);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.75rem 2rem;
+    overflow-y: auto;
+  }
+  .brutal-drawer.is-open .brutal-drawer__panel { transform: translateX(0); }
+  .brutal-drawer__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--brutal-ink);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+  }
+  .brutal-drawer__nav { display: flex; flex-direction: column; }
+  .brutal-drawer__link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    text-decoration: none;
+    color: var(--brutal-ink);
+    border-bottom: 1px solid var(--brutal-border-soft);
+    transition: padding .2s, background .2s;
+  }
+  .brutal-drawer__link:hover { padding-inline: .75rem; background: var(--brutal-bg-alt); }
+  .brutal-drawer__link:hover .brutal-drawer__arrow { transform: translateX(4px); color: var(--brutal-accent); }
+  .brutal-drawer__num {
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    color: var(--brutal-text-muted);
+    letter-spacing: .2em;
+  }
+  .brutal-drawer__label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .brutal-drawer__arrow {
+    font-family: var(--font-mono);
+    color: var(--brutal-ink);
+    transition: transform .25s, color .2s;
+  }
+  .brutal-drawer__foot {
+    margin-top: auto;
+    padding-top: 2rem;
   }
 </style>
 
 <script>
-  import { gsap } from "gsap";
-
   const menuBtn = document.getElementById('menuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const menuBackdrop = document.getElementById('menuBackdrop');
-  const menuPanel = document.getElementById('menuPanel');
-  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-  const hamburgerLines = menuBtn?.querySelectorAll('span');
-  
-  let isOpen = false;
-  let isAnimating = false;
+  const drawer = document.getElementById('mobileMenu');
+  const backdrop = drawer?.querySelector('[data-menu-backdrop]');
+  const links = drawer?.querySelectorAll('[data-menu-link], .mobile-nav-link');
 
-  // Set initial state
-  gsap.set(mobileMenu, { pointerEvents: "none", opacity: 0 });
-  gsap.set(menuBackdrop, { opacity: 0 });
-  gsap.set(menuPanel, { y: -20, opacity: 0, scale: 0.95 });
-  gsap.set(mobileNavLinks, { y: 10, opacity: 0 });
-
-  const timeline = gsap.timeline({ paused: true, onComplete: () => { isAnimating = false; }, onReverseComplete: () => { isAnimating = false; } });
-
-  // Build the timeline
-  timeline
-    .to(mobileMenu, { duration: 0.01, pointerEvents: "auto", opacity: 1 })
-    .to(menuBackdrop, { duration: 0.3, opacity: 1, ease: "power2.out" })
-    .to(menuPanel, { duration: 0.4, y: 0, opacity: 1, scale: 1, ease: "back.out(1.7)" }, "-=0.2")
-    .to(mobileNavLinks, { duration: 0.3, y: 0, opacity: 1, stagger: 0.05, ease: "power2.out" }, "-=0.2");
-
-  function toggleMenu() {
-    if (isAnimating) return;
-    isAnimating = true;
-    isOpen = !isOpen;
-    
-    if (isOpen) {
-      timeline.play();
-      
-      // Animate hamburger to X
-      if (hamburgerLines) {
-        gsap.to(hamburgerLines[0], { rotate: 45, y: 8, duration: 0.3 });
-        gsap.to(hamburgerLines[1], { opacity: 0, scaleX: 0, duration: 0.2 });
-        gsap.to(hamburgerLines[2], { rotate: -45, y: -8, duration: 0.3 });
-      }
-    } else {
-      timeline.reverse();
-      
-      // Reset hamburger
-      if (hamburgerLines) {
-        gsap.to(hamburgerLines[0], { rotate: 0, y: 0, duration: 0.3 });
-        gsap.to(hamburgerLines[1], { opacity: 1, scaleX: 1, duration: 0.3 });
-        gsap.to(hamburgerLines[2], { rotate: 0, y: 0, duration: 0.3 });
-      }
-    }
+  function setOpen(open: boolean) {
+    if (!drawer || !menuBtn) return;
+    drawer.classList.toggle('is-open', open);
+    drawer.setAttribute('aria-hidden', String(!open));
+    menuBtn.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
   }
-  
-  menuBtn?.addEventListener('click', toggleMenu);
-  menuBackdrop?.addEventListener('click', toggleMenu);
-  
-  mobileNavLinks.forEach(link => {
-    link.addEventListener('click', toggleMenu);
+
+  menuBtn?.addEventListener('click', () => {
+    setOpen(!drawer?.classList.contains('is-open'));
   });
-  
+  backdrop?.addEventListener('click', () => setOpen(false));
+  links?.forEach(l => l.addEventListener('click', () => setOpen(false)));
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && isOpen) toggleMenu();
+    if (e.key === 'Escape' && drawer?.classList.contains('is-open')) setOpen(false);
   });
 </script>
