@@ -1,39 +1,48 @@
 ---
 import { pueblos, comarcas, getPueblosByComarca, getPueblosDestacados } from '../../data/pueblos-almeria';
 
+interface Props {
+  hideHero?: boolean;
+}
+const { hideHero = false } = Astro.props;
+
 const currentYear = new Date().getFullYear();
 const pueblosDestacados = getPueblosDestacados();
 ---
 
 <footer class="brutal-footer">
-  {/* Banda final / declaración de marca */}
-  <section class="brutal-footer__hero">
-    <div class="container-brutal">
-      <div class="brutal-footer__hero-grid">
-        <div class="brutal-footer__hero-meta">
-          <span class="text-meta">★ Colofón / Vol. {currentYear}</span>
-          <span class="text-meta">Almería · 37.236° N — 1.866° W</span>
+  {!hideHero && (
+    <>
+      {/* Banda final / declaración de marca */}
+      <section class="brutal-footer__hero">
+        <div class="container-brutal">
+          <div class="brutal-footer__hero-grid">
+            <div class="brutal-footer__hero-meta">
+              <span class="text-meta">★ Colofón / Vol. {currentYear}</span>
+              <span class="text-meta">Almería · 37.236° N — 1.866° W</span>
+            </div>
+            <h2 class="brutal-footer__claim heading-display">
+              ¿Listo para
+              <span class="text-stroke-ink">construir</span>
+              algo
+              <em class="heading-editorial">memorable?</em>
+            </h2>
+            <div class="brutal-footer__hero-cta">
+              <a href="/contacto" class="btn-brutal btn-brutal--lg">
+                Empezar proyecto
+                <span aria-hidden="true">→</span>
+              </a>
+              <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
+                Llamar ahora
+              </a>
+            </div>
+          </div>
         </div>
-        <h2 class="brutal-footer__claim heading-display">
-          ¿Listo para
-          <span class="text-stroke-ink">construir</span>
-          algo
-          <em class="heading-editorial">memorable?</em>
-        </h2>
-        <div class="brutal-footer__hero-cta">
-          <a href="/contacto" class="btn-brutal btn-brutal--lg">
-            Empezar proyecto
-            <span aria-hidden="true">→</span>
-          </a>
-          <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-            Llamar ahora
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <div class="section-divider-thick"></div>
+      <div class="section-divider-thick"></div>
+    </>
+  )}
 
   {/* Grid principal del footer */}
   <section class="brutal-footer__body">
