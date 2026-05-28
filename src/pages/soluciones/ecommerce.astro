@@ -2,10 +2,219 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
 
-const title = "Tiendas Online y eCommerce en Almería";
-const description = "Tienda online profesional en Almería desde 900€. Pasarela de pagos, catálogo y envíos configurados. Hosting gratis. Empieza a vender desde el primer día.";
+const title = "Tienda Online WooCommerce en Almería | Diseño + SEO + Pasarelas";
+const description = "Tienda online profesional con WooCommerce desde 1.490€ — sin comisiones por venta, dominio + hosting + 4 pasarelas (Stripe · Bizum · Redsys · PayPal) configuradas. VERIFACTU compatible. Vende desde el día 1.";
 const canonical = "https://platanitorico.com/soluciones/ecommerce/";
+
+// ─── DATOS ─────────────────────────────────────
+
+// Razones WooCommerce
+const reasons = [
+  { num: '01', icon: 'crown',    title: 'Eres dueña de tu tienda',  desc: 'Código abierto, hosting tuyo, datos tuyos. Si un día quieres migrar — exportas y te vas. No estás secuestrada por nadie.' },
+  { num: '02', icon: 'percent',  title: '0 % comisión por venta',    desc: 'Vendes 100.000 € al año — pagas 0 € a la plataforma. En Shopify pagarías 500-2.000 €/año solo en comisiones.' },
+  { num: '03', icon: 'palette',  title: 'Personalización total',     desc: 'Cualquier diseño, cualquier flujo, cualquier integración. Si lo puedes imaginar, se puede hacer.' },
+  { num: '04', icon: 'globe',    title: '43 % de la web mundial',    desc: 'Más del 43 % de tiendas online del mundo usan WooCommerce. Comunidad enorme, plugins infinitos, soporte garantizado.' },
+  { num: '05', icon: 'rocket',   title: 'SEO de primer nivel',       desc: 'Construido sobre WordPress — el rey del SEO. URLs limpias, schema producto, blog integrado, multilingüe nativo.' },
+  { num: '06', icon: 'shield',   title: 'Escalable hasta el infinito', desc: 'Empieza con 10 productos. Crece a 50.000. Misma plataforma. Sin cambiar nada. Sin sustos en la factura.' },
+];
+
+// Comparativa WC vs Shopify
+const compare = [
+  { k: 'Coste mensual base',        wc: '0 € (solo hosting)',    sh: 'desde 39 €/mes',         winner: 'wc' },
+  { k: 'Comisión por venta',        wc: '0 %',                   sh: '0,5–2 % por venta',      winner: 'wc' },
+  { k: 'Pasarelas de pago externas', wc: 'Stripe, Redsys, Bizum, PayPal, etc',       sh: 'Solo Shopify Payments para evitar comisión extra', winner: 'wc' },
+  { k: 'Propiedad de la tienda',    wc: 'Tuya · 100 %',          sh: 'En servidores de Shopify', winner: 'wc' },
+  { k: 'Plugins / Apps',            wc: '50.000+ (muchos gratis)', sh: '8.000+ (mayoría de pago)', winner: 'wc' },
+  { k: 'SEO técnico',               wc: 'Excelente (WP base)',   sh: 'Bueno (limitado en URLs)', winner: 'wc' },
+  { k: 'Personalización diseño',    wc: 'Total · cualquier cosa', sh: 'Limitada al theme + Liquid', winner: 'wc' },
+  { k: 'Multilingüe',               wc: 'WPML / Polylang nativos', sh: 'Apps de pago',           winner: 'wc' },
+  { k: 'VERIFACTU / cumplimiento ES', wc: 'Plugins nativos',     sh: 'Apps externas (de pago)', winner: 'wc' },
+  { k: 'Curva de aprendizaje',      wc: 'Media',                 sh: 'Baja',                    winner: 'sh' },
+  { k: 'Migrar a otro proveedor',   wc: 'Fácil (eres dueña)',    sh: 'Casi imposible',         winner: 'wc' },
+];
+
+// Pasarelas de pago
+const gateways = [
+  { id: 'stripe', name: 'Stripe',  fee: '1,4 % + 0,25 €',  meta: 'Visa · Mastercard · Apple Pay · Google Pay', logo: 'stripe', popular: true,  color: 'blue' },
+  { id: 'bizum',  name: 'Bizum',   fee: '0,7 % + IVA',     meta: 'Móvil · sin tarjeta · 24 millones usuarios', logo: 'bizum',  popular: true,  color: 'mint' },
+  { id: 'redsys', name: 'Redsys',  fee: 'Negociar con banco', meta: 'TPV bancario español · todos los bancos', logo: 'redsys', popular: false, color: 'red' },
+  { id: 'paypal', name: 'PayPal',  fee: '2,9 % + 0,35 €',  meta: 'Comprador internacional · protección', logo: 'paypal', popular: false, color: 'yellow' },
+  { id: 'cod',    name: 'Contra reembolso', fee: '0 % (con cargo a cliente)', meta: 'Pago al recibir el pedido', logo: 'cash', popular: false, color: 'gold' },
+  { id: 'transfer', name: 'Transferencia', fee: '0 %',     meta: 'Para B2B y pedidos grandes',          logo: 'bank',   popular: false, color: 'ink' },
+];
+
+// Logística / envíos
+const shipping = [
+  { id: 'correos',     name: 'Correos',           desc: 'Estándar y exprés. Cobertura ES + UE.',     color: 'yellow' },
+  { id: 'seur',        name: 'SEUR',              desc: '24 h en península. Recogida en oficinas.',   color: 'red' },
+  { id: 'gls',         name: 'GLS',               desc: 'Reparto B2B y B2C nacional + Europa.',       color: 'blue' },
+  { id: 'mrw',         name: 'MRW',               desc: 'Express 8 h - 14 h - mismo día (Madrid).',   color: 'orange' },
+  { id: 'pickup',      name: 'Recogida en tienda', desc: 'Sin coste · ideal comercio local.',          color: 'mint' },
+  { id: 'free',        name: 'Envío gratis',       desc: 'Configurable por umbral (ej. >50 €).',       color: 'lime' },
+];
+
+// Features de conversión
+const convFeatures = [
+  { num: '01', icon: 'cart',     title: 'Recuperación de carritos abandonados', desc: 'El 70 % de carritos se abandonan. Recuperamos hasta el 30 % con emails automáticos a las 1h, 24h y 72h.' },
+  { num: '02', icon: 'upsell',   title: 'Upsells + cross-sells',                 desc: '"Quien compró esto, también compró..." Sube el ticket medio hasta un 35 % con recomendaciones inteligentes.' },
+  { num: '03', icon: 'stars',    title: 'Reviews y valoraciones',                desc: 'Pides reseñas tras la entrega · las muestras en el producto · subes la conversión un 18 % de media.' },
+  { num: '04', icon: 'coupon',   title: 'Cupones y promos automáticos',         desc: 'Códigos de descuento por importe, primera compra, fidelidad o evento. Sin tocar nada manualmente.' },
+  { num: '05', icon: 'bell',     title: 'Notificaciones "última unidad"',       desc: 'Urgencia y escasez bien aplicada: "solo quedan 2", "5 personas están viendo esto", "20 % off por 2h".' },
+  { num: '06', icon: 'gift',     title: 'Programa de fidelización',              desc: 'Puntos por compra · referidos · cumpleaños · recompensas. Cliente que vuelve = oro puro.' },
+  { num: '07', icon: 'search',   title: 'Búsqueda inteligente',                  desc: 'Predictiva, con auto-corrector, sugerencias visuales y filtros avanzados (color/talla/precio).' },
+  { num: '08', icon: 'mobile',   title: 'Checkout en 1 paso',                    desc: 'Sin formularios infinitos. Auto-completado de dirección. Apple Pay y Google Pay en 1 toque.' },
+];
+
+// Mock catálogo (productos demo)
+const demoProducts = [
+  { name: 'Camiseta Bordada',  price: '29,90', old: '39,90', tag: 'OFERTA', color: 'mint',    rating: 4.8 },
+  { name: 'Cuaderno Editorial', price: '14,50', old: null,  tag: 'NUEVO',  color: 'yellow',  rating: 5.0 },
+  { name: 'Vela Aromática',     price: '22,00', old: null,  tag: 'TOP',    color: 'orange',  rating: 4.6 },
+  { name: 'Bolsa Tote',         price: '18,90', old: '24,90', tag: 'OFERTA', color: 'lime',  rating: 4.9 },
+];
+
+// Pricing
+const plans = [
+  {
+    code: 'ESENCIAL',
+    name: 'Tienda Esencial',
+    sub: 'Pequeño catálogo · empieza a facturar',
+    price: '1.490',
+    period: '€ · pago único',
+    days: '3–4 sem.',
+    products: 'Hasta 25 productos',
+    features: [
+      'WooCommerce + WordPress',
+      'Diseño tienda responsive',
+      'Hosting + correo 1 año gratis',
+      '2 pasarelas (Stripe + Bizum)',
+      'Configuración de envíos',
+      'SEO técnico + ficha producto',
+      '1 mes mantenimiento gratis',
+      'Formación 60 min',
+    ],
+    addons: [],
+    cta: 'Empezar a vender',
+    popular: false,
+    color: 'mint',
+  },
+  {
+    code: 'PRO',
+    name: 'Tienda Pro',
+    sub: 'Lo más contratado · catálogo medio',
+    price: '2.490',
+    period: '€ · pago único',
+    days: '5–6 sem.',
+    products: 'Hasta 200 productos',
+    features: [
+      'Todo del plan Esencial',
+      'Hasta 200 productos cargados',
+      '4 pasarelas (Stripe · Bizum · Redsys · PayPal)',
+      '3 transportistas integrados',
+      'Upsells + cross-sells configurados',
+      'Recuperación carritos abandonados',
+      'Cupones + ofertas automáticas',
+      'Programa de reviews',
+      '3 meses mantenimiento gratis',
+      'Formación 2h + manual PDF',
+    ],
+    addons: [],
+    cta: 'Crear mi tienda Pro',
+    popular: true,
+    color: 'woo',
+  },
+  {
+    code: 'PREMIUM',
+    name: 'Tienda Premium',
+    sub: 'Marca + multilingüe + B2B',
+    price: '4.990',
+    period: '€ · pago único',
+    days: '7–10 sem.',
+    products: 'Productos ilimitados',
+    features: [
+      'Todo del plan Pro',
+      'Identidad visual completa',
+      'Tienda multilingüe (ES + EN + DE)',
+      'Configuración B2B / mayorista',
+      'Programa de fidelización (puntos)',
+      'Integración con CRM (Holded, Mailchimp...)',
+      'VERIFACTU + facturación automática',
+      'Sesión de fotos de producto (1 día)',
+      '6 meses mantenimiento gratis',
+      'Auditoría conversión trimestral',
+    ],
+    addons: [],
+    cta: 'Quiero el Premium',
+    popular: false,
+    color: 'gold',
+  },
+];
+
+// Tech stack
+const stack = [
+  { k: 'WooCommerce',       v: 'Motor del 43 % de tiendas online del mundo',         logo: 'woo' },
+  { k: 'WordPress',         v: 'CMS base — SEO + flexibilidad sin techo',             logo: 'wp' },
+  { k: 'Stripe',            v: 'Pasarela líder global · Apple/Google Pay',           logo: 'stripe' },
+  { k: 'Bizum',             v: 'Pago móvil español · sin tarjeta',                   logo: 'bizum' },
+  { k: 'Redsys',            v: 'TPV bancario · todos los bancos ES',                 logo: 'redsys' },
+  { k: 'Cloudflare',        v: 'CDN global + protección DDoS',                       logo: 'cf' },
+  { k: 'Mailchimp / Brevo', v: 'Email marketing + automation',                        logo: 'mail' },
+  { k: 'Google Merchant',   v: 'Aparecer en Google Shopping',                         logo: 'merchant' },
+];
+
+// Process
+const process = [
+  { num: '01', title: 'Briefing + auditoría',      eta: 'Sem 1',  body: 'Análisis de productos, márgenes, público y competencia. Definimos estrategia de precio y conversión.',  color: 'woo' },
+  { num: '02', title: 'Diseño + arquitectura',     eta: 'Sem 2',  body: 'Wireframes de tienda, ficha producto, checkout. Identidad visual aplicada.',                          color: 'magenta' },
+  { num: '03', title: 'Desarrollo + WooCommerce',  eta: 'Sem 3-4', body: 'Maquetado, configuración WC, productos demo, pasarelas, envíos, impuestos.',                       color: 'blue' },
+  { num: '04', title: 'Carga de catálogo',          eta: 'Sem 4-5', body: 'Subimos tu catálogo real (fotos, textos, precios, stock). Te enseñamos a hacerlo solo.',           color: 'mint' },
+  { num: '05', title: 'SEO + analytics + tests',    eta: 'Sem 5',  body: 'Schema producto, sitemap, GA4, Search Console, Merchant Center. Tests de compra reales.',           color: 'gold' },
+  { num: '06', title: '🚀 Apertura + formación',     eta: 'Sem 6',  body: 'Lanzamiento controlado, formación completa, plan de marketing inicial.',                            color: 'red' },
+];
+
+// VERIFACTU items
+const verifactu = [
+  { t: 'Facturación electrónica obligatoria',  s: 'Desde 1 julio 2025 para autónomos y pymes.' },
+  { t: 'Software homologado',                  s: 'Plugin WooCommerce compatible 100 % con AEAT.' },
+  { t: 'Envío automático a Hacienda',          s: 'Cada factura se envía en tiempo real. Cero gestión manual.' },
+  { t: 'QR + huella en factura',               s: 'Cumple normativa visual obligatoria.' },
+  { t: 'Tickets simplificados / completos',    s: 'Genera ambos según ticket o factura.' },
+  { t: 'Archivo legal 5 años',                 s: 'Almacenamiento seguro + descarga export.' },
+];
+
+// Testimonials
+const testimonials = [
+  { text: 'Migramos de Shopify a WooCommerce y nos ahorramos 1.800€/año en comisiones. La tienda va el doble de rápida y el control sobre todo es total.',                author: 'Carmen S.', role: 'Pastelería online · Vera',    sales: '+38% facturación · año 1' },
+  { text: 'Nuestra primera tienda online vendió 12.000€ el primer mes. El sistema de carritos abandonados solo ya ha recuperado 4.500€ en 6 meses.',                  author: 'David & María', role: 'Tienda artesanía · Mojácar', sales: '+12.000€ primer mes' },
+  { text: 'Tener Bizum integrado fue clave: el 40% de nuestros pedidos lo usan. Los clientes locales pagan al instante sin sacar la tarjeta.',                          author: 'Roberto P.', role: 'Cervecería artesanal · Almería', sales: '40% pedidos vía Bizum' },
+];
+
+// FAQ
+const faq = [
+  { q: '¿Por qué WooCommerce y no Shopify o PrestaShop?', a: 'WooCommerce gana en TODO salvo la curva de aprendizaje inicial (que la cubrimos con formación). Es gratis, código abierto (la tienda es 100% tuya), sin comisión por venta, y tiene 50.000+ plugins. Shopify cuesta mínimo 39€/mes para siempre + 0,5-2% de cada venta. PrestaShop es más complicado de mantener y tiene menos comunidad. WooCommerce es el rey por algo.' },
+  { q: '¿Cuánto tarda en estar lista mi tienda?', a: 'Esencial: 3-4 semanas. Pro: 5-6 semanas. Premium: 7-10 semanas. El tiempo depende sobre todo de cuán rápido nos envíes el catálogo de productos. Si tienes 200 productos con fotos y textos listos, el plan Pro está en 4 semanas.' },
+  { q: '¿Necesito saber WordPress para gestionar la tienda?', a: 'No. La interfaz de WooCommerce es muy parecida a cualquier panel moderno. En 60 min de formación aprendes a: añadir/editar productos, ver pedidos, generar facturas, configurar ofertas, ver estadísticas. Te entregamos un PDF con todo el procedimiento.' },
+  { q: '¿Cuánto cuestan las pasarelas de pago?',  a: 'Stripe: 1,4% + 0,25€ por venta UE. Bizum: 0,7% + IVA (lo negocia tu banco). Redsys: depende del banco (típico 0,5-1,5%). PayPal: 2,9% + 0,35€. Estos costes son DE LA PASARELA, no nuestros. La integración la incluimos en el pack.' },
+  { q: '¿VERIFACTU está incluido?',                a: 'En Premium sí — plugin instalado y configurado. En Esencial/Pro se añade como extra (200€ setup + 19€/mes el plugin homologado). Todas nuestras tiendas son VERIFACTU-ready.' },
+  { q: '¿Y si tengo más de 200 productos?',         a: 'En Pro cargamos hasta 200; sobre eso, te enseñamos a cargarlos tú mismo en bloque vía CSV (es muy fácil). En Premium subimos los que necesites sin límite. También podemos importar desde Shopify, PrestaShop, Amazon o un Excel.' },
+  { q: '¿Puedo vender desde móvil / tablet?',        a: 'La tienda funciona perfecta en cualquier dispositivo. Además te damos acceso a la app oficial WooCommerce — gestionas pedidos, ves ventas y respondes desde el móvil en segundos.' },
+  { q: '¿Qué pasa después del primer año (hosting)?', a: 'Año 2 en adelante: hosting + correo + dominio = aprox 120€/año si sigues con nosotros (incluye mantenimiento básico). O exportas y te vas — siempre. La tienda es tuya.' },
+  { q: '¿Trabajáis con catálogos grandes (1000+ productos)?', a: 'Sí, lo hacemos a diario. Hemos migrado tiendas de hasta 8.000 productos. Para catálogos grandes recomendamos importación CSV + estructura optimizada de categorías + búsqueda Algolia/ElasticPress.' },
+  { q: '¿Hay coste mensual obligatorio?',           a: 'Solo el hosting (a partir del año 2). El resto: 0€/mes de comisiones, 0€/mes de plataforma. Comparado con Shopify (mínimo 39€/mes para siempre), el ahorro a 3 años es de 1.400€+ aunque vendas poco.' },
+];
+
+const jsonLd = [
+  { '@context':'https://schema.org','@type':'ProfessionalService','name':'Platanito Rico — Tienda Online WooCommerce en Almería','description':description,'url':canonical,'telephone':'+34657085019','email':'hola@platanitorico.com','address':{'@type':'PostalAddress','streetAddress':'Ctra de Ronda, 82','addressLocality':'Vera','addressRegion':'Almería','postalCode':'04620','addressCountry':'ES'},'geo':{'@type':'GeoCoordinates','latitude':37.245,'longitude':-1.8614},'priceRange':'€€€','areaServed':{'@type':'AdministrativeArea','name':'Almería'},'serviceType':'eCommerce Development','hasOfferCatalog':{'@type':'OfferCatalog','name':'Packs Tienda Online','itemListElement':plans.map(p=>({'@type':'Offer','name':p.name,'description':p.sub,'price':p.price.replace(/[^0-9]/g,''),'priceCurrency':'EUR'}))} },
+  { '@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':[
+    { '@type':'ListItem','position':1,'name':'Inicio','item':'https://platanitorico.com/' },
+    { '@type':'ListItem','position':2,'name':'Soluciones','item':'https://platanitorico.com/soluciones/empresa/' },
+    { '@type':'ListItem','position':3,'name':'eCommerce','item':canonical }
+  ]},
+  { '@context':'https://schema.org','@type':'FAQPage','mainEntity':faq.map(f=>({'@type':'Question','name':f.q,'acceptedAnswer':{'@type':'Answer','text':f.a}})) },
+  { '@context':'https://schema.org','@type':'HowTo','name':'Cómo creamos tu tienda online con WooCommerce','step':process.map((p,i)=>({'@type':'HowToStep','position':i+1,'name':p.title,'text':p.body})) }
+];
 ---
 
 <BaseLayout
@@ -13,118 +222,2177 @@ const canonical = "https://platanitorico.com/soluciones/ecommerce/";
   description={description}
   canonical={canonical}
   image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
-  imageAlt="Tiendas online y ecommerce en Almería - Platanito Rico"
-  keywords="tienda online almería, ecommerce almería, crear tienda online, diseño ecommerce, vender online almería"
-  jsonLd={[
-    {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
-      'name': 'Platanito Rico — Tiendas Online y eCommerce en Almería',
-      'description': description,
-      'url': canonical,
-      'telephone': '+34657085019',
-      'email': 'hola@platanitorico.com',
-      'address': {
-        '@type': 'PostalAddress',
-        'streetAddress': 'Ctra de Ronda, 82',
-        'addressLocality': 'Vera',
-        'addressRegion': 'Almería',
-        'postalCode': '04620',
-        'addressCountry': 'ES'
-      },
-      'geo': { '@type': 'GeoCoordinates', 'latitude': 37.245, 'longitude': -1.8614 },
-      'priceRange': '€€',
-      'areaServed': { '@type': 'AdministrativeArea', 'name': 'Almería' },
-      'serviceType': 'eCommerce Development'
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Inicio', 'item': 'https://platanitorico.com/' },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Soluciones', 'item': 'https://platanitorico.com/soluciones/ecommerce/' },
-        { '@type': 'ListItem', 'position': 3, 'name': 'eCommerce', 'item': canonical }
-      ]
-    }
-  ]}
+  imageAlt="Tienda online WooCommerce en Almería - Platanito Rico"
+  keywords="tienda online almería, woocommerce almería, ecommerce almería, crear tienda online, vender online almería, woocommerce vs shopify, bizum tienda online"
+  jsonLd={jsonLd}
 >
   <Header />
+  <Breadcrumb items={[
+    { label: 'Inicio',     href: '/' },
+    { label: 'Soluciones', href: '/soluciones/empresa/' },
+    { label: 'eCommerce' }
+  ]} />
 
-  <section class="section-brutal relative min-h-screen flex items-center justify-center overflow-hidden bg-brutal-bg">
-    <div class="container-brutal relative z-10 py-24">
-      <div class="badge-brutal mb-8">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-8 2a2 2 0 1 1 0 4 2 2 0 0 0 0-4z"/>
-        </svg>
-        eCommerce
-      </div>
+  <main id="main-content" class="ec">
 
-      <h1 class="heading-display text-4xl md:text-5xl lg:text-7xl text-brutal-text mb-8 leading-[1.1]">
-        Tu tienda online lista <br/>
-        <span class="block mt-2 text-brutal-accent">para vender desde el día 1</span>
-      </h1>
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — BOUTIQUE DIGITAL                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-hero">
+      <div class="container-brutal">
 
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-        <div class="space-y-8">
-          <p class="text-lg md:text-xl text-brutal-text-secondary leading-relaxed">
-            ¿Sientes que estás <strong class="text-brutal-text">"perdiendo ventas"</strong> porque no vendes online? O peor aún, ¿tienes una tienda que <strong class="text-brutal-text">"no convierte"</strong>? Transformamos tu negocio en una máquina de vender 24/7.
-          </p>
+        <header class="ec-hero__top">
+          <span class="text-meta">N.º 028 — Solución · E-commerce</span>
+          <span class="text-meta ec-hero__status">
+            <span class="ec-pulse"></span>
+            POWERED BY · WOOCOMMERCE · 43% DE TIENDAS DEL MUNDO
+          </span>
+        </header>
 
-          <div class="space-y-6">
-            <h2 class="text-2xl md:text-3xl font-bold text-brutal-text" style="font-family:'Anton',sans-serif">Tienda Online Completa</h2>
-            <div class="grid gap-4">
-              {[
-                {
-                  title: "Diseño Orientado a Ventas",
-                  desc: "Creamos una experiencia de compra fluida que guía al cliente desde el producto hasta el pago sin fricciones."
-                },
-                {
-                  title: "Pasarela de Pagos Integrada",
-                  desc: "Configuramos Stripe, PayPal, Redsys y Bizum para que tus clientes paguen de la forma que prefieran."
-                },
-                {
-                  title: "Gestión de Envíos",
-                  desc: "Integración con correos y transportistas. Etiquetas automáticas y seguimiento de pedidos incluido."
-                },
-                {
-                  title: "SEO para Productos",
-                  desc: "Optimizamos cada ficha de producto para aparecer en Google cuando busquen lo que vendes."
-                }
-              ].map(item => (
-                <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-                  <h3 class="text-lg font-bold text-brutal-text mb-2">{item.title}</h3>
-                  <p class="text-brutal-text-secondary">{item.desc}</p>
+        <div class="divider-brutal"></div>
+
+        <div class="ec-hero__grid">
+
+          {/* Izquierda: copy + KPIs */}
+          <div class="ec-hero__intro">
+            <span class="text-meta ec-hero__chapter">Cap. 01 / Tu tienda online</span>
+            <h1 class="ec-hero__title heading-display">
+              Una tienda online
+              <em class="heading-editorial">que vende.</em>
+              <span class="ec-hero__title-stamp">En serio.</span>
+            </h1>
+
+            <p class="ec-hero__lead">
+              Con <strong>WooCommerce</strong> — la plataforma con la que
+              <strong>vendes más, pagas menos y eres dueña de todo</strong>.
+              Pasarelas configuradas, conversión optimizada, VERIFACTU compatible.
+              Lista para facturar desde el día 1.
+            </p>
+
+            <div class="ec-hero__cta">
+              <a href="#planes" class="ec-btn ec-btn--primary">
+                <span>Ver planes de tienda</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#porque-woo" class="ec-btn ec-btn--ghost">
+                ¿Por qué WooCommerce? ↓
+              </a>
+            </div>
+
+            <div class="ec-hero__kpis">
+              <div class="ec-kpi ec-kpi--woo">
+                <span class="ec-kpi__v text-mono">0<small>%</small></span>
+                <span class="ec-kpi__l">Comisión por venta</span>
+              </div>
+              <div class="ec-kpi ec-kpi--lime">
+                <span class="ec-kpi__v text-mono">24<small>/7</small></span>
+                <span class="ec-kpi__l">Tienda abierta</span>
+              </div>
+              <div class="ec-kpi ec-kpi--magenta">
+                <span class="ec-kpi__v text-mono">∞</span>
+                <span class="ec-kpi__l">Productos</span>
+              </div>
+              <div class="ec-kpi ec-kpi--ink">
+                <span class="ec-kpi__v text-mono">4</span>
+                <span class="ec-kpi__l">Pasarelas</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Derecha: ESCAPARATE — boutique mockup */}
+          <aside class="ec-hero__shop" aria-hidden="true">
+            <div class="ec-shop-window">
+              {/* Browser bar */}
+              <div class="ec-shop-window__bar">
+                <span class="ec-shop-window__dot ec-shop-window__dot--r"></span>
+                <span class="ec-shop-window__dot ec-shop-window__dot--y"></span>
+                <span class="ec-shop-window__dot ec-shop-window__dot--g"></span>
+                <span class="ec-shop-window__url text-mono">https://tutienda.com</span>
+                <span class="ec-shop-window__ssl">🔒</span>
+              </div>
+
+              {/* Mock catálogo */}
+              <div class="ec-shop-window__body">
+                {/* Top bar de tienda */}
+                <div class="ec-shop-top">
+                  <span class="ec-shop-top__logo">P★</span>
+                  <span class="ec-shop-top__title">TIENDA</span>
+                  <div class="ec-shop-top__icons">
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                    <span class="ec-shop-top__cart">
+                      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="9" cy="21" r="1" fill="currentColor"/><circle cx="20" cy="21" r="1" fill="currentColor"/><path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.8a2 2 0 002-1.6L23 6H6" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                      <span class="ec-shop-top__cart-num">3</span>
+                    </span>
+                  </div>
                 </div>
-              ))}
+
+                {/* Grid de productos */}
+                <div class="ec-shop-grid">
+                  {demoProducts.map((p, i) => (
+                    <div class={`ec-prod ec-prod--${p.color}`} style={`--ec-prod-i:${i}`}>
+                      <div class="ec-prod__media">
+                        {/* Imagen producto SVG decorativa */}
+                        <svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
+                          {i === 0 && (<>
+                            <rect width="100" height="100" fill="currentColor" opacity="0.3"/>
+                            <path d="M 20 30 L 50 20 L 80 30 L 80 80 L 20 80 Z" fill="currentColor"/>
+                            <path d="M 35 40 Q 50 50 65 40" stroke="#0E0D0B" stroke-width="2" fill="none"/>
+                            <text x="50" y="68" text-anchor="middle" font-family="serif" font-size="14" font-weight="bold" fill="#0E0D0B">P★</text>
+                          </>)}
+                          {i === 1 && (<>
+                            <rect width="100" height="100" fill="currentColor" opacity="0.3"/>
+                            <rect x="25" y="20" width="50" height="60" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                            <line x1="35" y1="32" x2="65" y2="32" stroke="#0E0D0B" stroke-width="1.5"/>
+                            <line x1="35" y1="42" x2="60" y2="42" stroke="#0E0D0B" stroke-width="1.5"/>
+                            <line x1="35" y1="52" x2="65" y2="52" stroke="#0E0D0B" stroke-width="1.5"/>
+                            <line x1="35" y1="62" x2="55" y2="62" stroke="#0E0D0B" stroke-width="1.5"/>
+                          </>)}
+                          {i === 2 && (<>
+                            <rect width="100" height="100" fill="currentColor" opacity="0.3"/>
+                            <rect x="35" y="35" width="30" height="40" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                            <path d="M 45 35 L 45 25 L 55 25 L 55 35" fill="none" stroke="#0E0D0B" stroke-width="2"/>
+                            <path d="M 45 25 Q 50 15 55 25" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/>
+                          </>)}
+                          {i === 3 && (<>
+                            <rect width="100" height="100" fill="currentColor" opacity="0.3"/>
+                            <path d="M 25 35 L 75 35 L 80 80 L 20 80 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                            <path d="M 35 35 L 35 25 Q 50 15 65 25 L 65 35" fill="none" stroke="#0E0D0B" stroke-width="2.5"/>
+                          </>)}
+                        </svg>
+                        <span class={`ec-prod__tag ec-prod__tag--${p.tag === 'OFERTA' ? 'red' : p.tag === 'NUEVO' ? 'blue' : 'gold'}`}>{p.tag}</span>
+                        <button class="ec-prod__heart" aria-label="Wishlist">
+                          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                        </button>
+                      </div>
+                      <div class="ec-prod__body">
+                        <h4 class="ec-prod__name">{p.name}</h4>
+                        <div class="ec-prod__rating">
+                          <span class="ec-prod__stars">★★★★★</span>
+                          <span class="ec-prod__rate-num">{p.rating}</span>
+                        </div>
+                        <div class="ec-prod__price-row">
+                          {p.old && <span class="ec-prod__old">{p.old}€</span>}
+                          <span class="ec-prod__price">{p.price}€</span>
+                        </div>
+                        <button class="ec-prod__btn">
+                          Añadir
+                          <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Footer mini */}
+                <div class="ec-shop-foot">
+                  <span class="text-mono">★ ENVÍO GRATIS DESDE 50€ ★</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Sello WooCommerce flotante */}
+            <div class="ec-woo-badge" aria-hidden="true">
+              <svg viewBox="0 0 110 110" width="100%" height="100%">
+                <defs>
+                  <path id="ec-woo-arc" d="M55,55 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/>
+                </defs>
+                <circle cx="55" cy="55" r="52" fill="#7F54B3"/>
+                <circle cx="55" cy="55" r="46" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                <g class="ec-spin">
+                  <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5">
+                    <textPath href="#ec-woo-arc" startOffset="0%">★ POWERED BY · WOOCOMMERCE · OFICIAL ★</textPath>
+                  </text>
+                </g>
+                <text x="55" y="52" text-anchor="middle" font-family="serif" font-size="34" font-weight="bold" fill="#FFFCF6">W</text>
+                <text x="55" y="72" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFCF6" letter-spacing="2">WOO</text>
+              </svg>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="ec-marquee">
+        <div class="ec-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ WOOCOMMERCE ★ STRIPE ★ BIZUM ★ REDSYS ★ PAYPAL ★ 0% COMISIÓN ★ VERIFACTU ★ 24/7 ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* POR QUÉ WOOCOMMERCE                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-reasons-section" id="porque-woo">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 02 / La elección obvia</span>
+            <h2 class="heading-display brutal-section-head__title">
+              ¿Por qué
+              <em class="heading-editorial">WooCommerce?</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            6 razones objetivas por las que <strong>el 43% de las tiendas
+            online del mundo</strong> eligen esta plataforma. Y por las que
+            nosotros la elegimos también.
+          </p>
+        </header>
+
+        <ol class="ec-reasons">
+          {reasons.map((r) => (
+            <li class="ec-reason">
+              <header class="ec-reason__head">
+                <span class="text-mono ec-reason__num">{r.num}</span>
+                <div class="ec-reason__icon" aria-hidden="true">
+                  {r.icon === 'crown' && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 4 22 L 6 10 L 12 16 L 16 6 L 20 16 L 26 10 L 28 22 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><rect x="4" y="22" width="24" height="4" fill="#0E0D0B"/><circle cx="6" cy="10" r="2" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="16" cy="6" r="2" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="26" cy="10" r="2" fill="#7F54B3" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
+                  {r.icon === 'percent' && <svg viewBox="0 0 32 32" width="100%" height="100%"><circle cx="16" cy="16" r="14" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="11" cy="11" r="3" fill="#0E0D0B"/><circle cx="21" cy="21" r="3" fill="#0E0D0B"/><line x1="22" y1="10" x2="10" y2="22" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/></svg>}
+                  {r.icon === 'palette' && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 16 4 C 9 4 3 9 3 16 C 3 23 9 28 16 28 C 18 28 19 26 19 24 C 19 22 17 22 17 20 C 17 18 19 17 21 17 L 24 17 C 27 17 29 15 29 12 C 29 7 23 4 16 4 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="9" cy="13" r="2" fill="#DC1B2C"/><circle cx="13" cy="9" r="2" fill="#00B85C"/><circle cx="19" cy="9" r="2" fill="#FFD600"/><circle cx="23" cy="13" r="2" fill="#7F54B3"/></svg>}
+                  {r.icon === 'globe' && <svg viewBox="0 0 32 32" width="100%" height="100%"><circle cx="16" cy="16" r="13" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><ellipse cx="16" cy="16" rx="6" ry="13" fill="none" stroke="#0E0D0B" stroke-width="1.5"/><line x1="3" y1="16" x2="29" y2="16" stroke="#0E0D0B" stroke-width="1.5"/><line x1="16" y1="3" x2="16" y2="29" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
+                  {r.icon === 'rocket' && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 16 4 L 22 12 L 22 22 L 18 26 L 14 26 L 10 22 L 10 12 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="16" cy="14" r="3" fill="#0E0D0B"/><path d="M 10 18 L 6 22 L 10 22 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/><path d="M 22 18 L 26 22 L 22 22 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/><path d="M 13 26 L 16 30 L 19 26" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
+                  {r.icon === 'shield' && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 16 3 C 11 3 7 5 4 6 L 4 17 C 4 23 16 29 16 29 C 16 29 28 23 28 17 L 28 6 C 25 5 21 3 16 3 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 11 16 L 14 19 L 21 12" fill="none" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>}
+                </div>
+              </header>
+              <h3 class="ec-reason__title heading-display">{r.title}</h3>
+              <p class="ec-reason__desc">{r.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* COMPARATIVA WOO vs SHOPIFY                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-compare-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 03 / Comparativa</span>
+            <h2 class="heading-display brutal-section-head__title">
+              WooCommerce
+              <em class="heading-editorial">vs Shopify.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Análisis honesto, sin marketing. Por qué WooCommerce gana
+            en 10 de 11 categorías — y por qué la única en la que pierde
+            no te debería preocupar.
+          </p>
+        </header>
+
+        <div class="ec-compare">
+          <div class="ec-compare-head">
+            <span class="text-mono">CONCEPTO</span>
+            <span class="text-mono ec-compare-head__wc">
+              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#7F54B3"/><text x="10" y="14" text-anchor="middle" font-family="serif" font-size="13" font-weight="bold" fill="#FFFCF6">W</text></svg>
+              WOOCOMMERCE
+            </span>
+            <span class="text-mono ec-compare-head__sh">
+              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true"><rect width="20" height="20" rx="3" fill="#96BF48"/><text x="10" y="14" text-anchor="middle" font-family="serif" font-size="13" font-weight="bold" fill="#FFFCF6">S</text></svg>
+              SHOPIFY
+            </span>
+          </div>
+
+          {compare.map((row) => (
+            <div class="ec-compare-row">
+              <div class="ec-compare-row__k">{row.k}</div>
+              <div class={`ec-compare-row__wc ${row.winner === 'wc' ? 'is-winner' : ''}`}>
+                <span class="ec-compare-row__check">{row.winner === 'wc' && '✓'}</span>
+                <span>{row.wc}</span>
+              </div>
+              <div class={`ec-compare-row__sh ${row.winner === 'sh' ? 'is-winner' : ''}`}>
+                <span class="ec-compare-row__check">{row.winner === 'sh' && '✓'}</span>
+                <span>{row.sh}</span>
+              </div>
+            </div>
+          ))}
+
+          <div class="ec-compare-totals">
+            <div class="ec-compare-totals__l text-mono">RESULTADO</div>
+            <div class="ec-compare-totals__wc">
+              <div class="ec-compare-totals__big text-mono">10 / 11</div>
+              <div class="ec-compare-totals__sub text-mono">Categorías ganadas</div>
+            </div>
+            <div class="ec-compare-totals__sh">
+              <div class="ec-compare-totals__big text-mono">1 / 11</div>
+              <div class="ec-compare-totals__sub text-mono">Solo curva aprendizaje</div>
             </div>
           </div>
         </div>
 
-        <div class="sticky top-32">
-          <div class="card-brutal bg-brutal-card border-brutal-accent/30 p-8 lg:p-10">
-            <div class="w-16 h-16 bg-brutal-accent flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-brutal-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-8 2a2 2 0 1 1 0 4 2 2 0 0 0 0-4z"/>
-              </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-brutal-text mb-4" style="font-family:'Anton',sans-serif">Empieza a vender online</h3>
-            <p class="text-brutal-text-secondary mb-6">
-              Desde catálogos pequeños hasta miles de productos. Te entregamos todo configurado y listo para facturar.
+        <p class="ec-compare-note">
+          <strong>★ Honestidad:</strong> Shopify es <em>más fácil de empezar</em>.
+          Por eso lo recomendamos a marcas que quieren validar una idea en 1 semana sin nadie técnico cerca.
+          Si eres un negocio que va en serio y quiere crecer años — WooCommerce.
+        </p>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PASARELAS DE PAGO                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-pay-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 04 / Pasarelas de pago</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Que paguen
+              <em class="heading-editorial">como quieran.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            6 formas de pago configuradas, con sus comisiones reales y
+            usos típicos. Cuantas más ofreces, menos abandonan el carrito.
+          </p>
+        </header>
+
+        <ul class="ec-pay-grid">
+          {gateways.map((g) => (
+            <li class={`ec-pay ec-pay--${g.color}`}>
+              {g.popular && <span class="ec-pay__pop text-mono">★ TOP</span>}
+              <div class="ec-pay__logo" aria-hidden="true">
+                {g.logo === 'stripe' && <svg viewBox="0 0 60 32" width="100%" height="32"><rect width="60" height="32" rx="4" fill="#635BFF"/><text x="30" y="22" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="800" fill="#FFFCF6" letter-spacing="-0.5">stripe</text></svg>}
+                {g.logo === 'bizum' && <svg viewBox="0 0 60 32" width="100%" height="32"><rect width="60" height="32" rx="4" fill="#00C3CB"/><text x="30" y="22" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="800" fill="#FFFCF6" letter-spacing="-0.3">Bizum</text></svg>}
+                {g.logo === 'redsys' && <svg viewBox="0 0 60 32" width="100%" height="32"><rect width="60" height="32" rx="4" fill="#0E0D0B"/><text x="30" y="22" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="800" fill="#DC1B2C" letter-spacing="0.5">REDSYS</text></svg>}
+                {g.logo === 'paypal' && <svg viewBox="0 0 60 32" width="100%" height="32"><rect width="60" height="32" rx="4" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/><text x="22" y="22" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="800" fill="#003B7A" letter-spacing="-0.5">Pay</text><text x="40" y="22" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="800" fill="#009CDE" letter-spacing="-0.5">Pal</text></svg>}
+                {g.logo === 'cash' && <svg viewBox="0 0 60 32" width="100%" height="32"><rect width="60" height="32" rx="4" fill="#C9A24F"/><text x="30" y="22" text-anchor="middle" font-family="serif" font-size="14" font-weight="800" fill="#FFFCF6">€ ★</text></svg>}
+                {g.logo === 'bank' && <svg viewBox="0 0 60 32" width="100%" height="32"><rect width="60" height="32" rx="4" fill="#0E0D0B"/><text x="30" y="22" text-anchor="middle" font-family="serif" font-size="12" font-weight="800" fill="#FFFCF6">TRANSFER</text></svg>}
+              </div>
+              <h3 class="ec-pay__name">{g.name}</h3>
+              <p class="ec-pay__meta">{g.meta}</p>
+              <div class="ec-pay__foot">
+                <span class="ec-pay__fee-lbl text-mono">COMISIÓN</span>
+                <span class="ec-pay__fee">{g.fee}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <p class="ec-pay-note">
+          <strong>★ Importante:</strong> Las comisiones las cobra <em>la pasarela</em>, no nosotros.
+          La integración (instalación + configuración + tests) la incluimos en el pack.
+        </p>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FEATURES DE CONVERSIÓN                           */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-conv-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--ec-lime)">Cap. 05 / Conversión</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--ec-paper)">
+              Más visitas,
+              <em class="heading-editorial" style="color:var(--ec-lime)">más ventas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.7)">
+            Las 8 funciones que instalamos en tu tienda para que cada
+            visitante valga más. Probadas en cientos de proyectos.
+          </p>
+        </header>
+
+        <ol class="ec-conv">
+          {convFeatures.map((c) => (
+            <li class="ec-conv__item">
+              <span class="ec-conv__num text-mono">{c.num}</span>
+              <div class="ec-conv__icon" aria-hidden="true">
+                {c.icon === 'cart'   && <svg viewBox="0 0 32 32" width="100%" height="100%"><circle cx="11" cy="28" r="2" fill="currentColor"/><circle cx="24" cy="28" r="2" fill="currentColor"/><path d="M 2 4 L 6 4 L 9 20 L 26 20 L 30 8 L 8 8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 16 13 L 16 17 M 14 15 L 18 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>}
+                {c.icon === 'upsell' && <svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="3"  y="14" width="9" height="14" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><rect x="14" y="8"  width="9" height="20" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><rect x="25" y="2"  width="6" height="26" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><path d="M 4 8 L 28 4" stroke="#DC1B2C" stroke-width="2" stroke-linecap="round"/></svg>}
+                {c.icon === 'stars'  && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 16 2 L 19 12 L 30 12 L 21 18 L 24 28 L 16 22 L 8 28 L 11 18 L 2 12 L 13 12 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/></svg>}
+                {c.icon === 'coupon' && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 4 8 L 28 8 L 28 14 L 26 14 A 2 2 0 0 0 26 18 L 28 18 L 28 24 L 4 24 L 4 18 L 6 18 A 2 2 0 0 0 6 14 L 4 14 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><text x="16" y="20" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">%</text></svg>}
+                {c.icon === 'bell'   && <svg viewBox="0 0 32 32" width="100%" height="100%"><path d="M 6 22 C 6 14 10 8 16 8 C 22 8 26 14 26 22 L 28 26 L 4 26 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="16" cy="6" r="2" fill="#0E0D0B"/><path d="M 14 28 Q 16 30 18 28" stroke="#0E0D0B" stroke-width="2" fill="none"/></svg>}
+                {c.icon === 'gift'   && <svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="4" y="12" width="24" height="18" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><rect x="2" y="9"  width="28" height="6"  fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><line x1="16" y1="9" x2="16" y2="30" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 16 9 C 11 5 7 9 11 12 M 16 9 C 21 5 25 9 21 12" fill="none" stroke="#0E0D0B" stroke-width="2"/></svg>}
+                {c.icon === 'search' && <svg viewBox="0 0 32 32" width="100%" height="100%"><circle cx="14" cy="14" r="9" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="14" cy="14" r="5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/><path d="M 21 21 L 28 28" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/></svg>}
+                {c.icon === 'mobile' && <svg viewBox="0 0 32 32" width="100%" height="100%"><rect x="9" y="2" width="14" height="28" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><rect x="11" y="6" width="10" height="16" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="16" cy="26" r="1.5" fill="#0E0D0B"/><path d="M 13 13 L 15 15 L 19 11" fill="none" stroke="#0E0D0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>}
+              </div>
+              <div class="ec-conv__body">
+                <h3 class="ec-conv__title">{c.title}</h3>
+                <p class="ec-conv__desc">{c.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* LOGÍSTICA / ENVÍOS                               */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-ship-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Logística</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Envíos
+              <em class="heading-editorial">sin dolor.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Transportistas integrados, etiquetas automáticas, seguimiento
+            en tiempo real. Tú vendes — la logística va sola.
+          </p>
+        </header>
+
+        <ul class="ec-ship-grid">
+          {shipping.map((s) => (
+            <li class={`ec-ship ec-ship--${s.color}`}>
+              <div class="ec-ship__icon" aria-hidden="true">
+                {s.id === 'correos' && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="5" y="14" width="50" height="38" rx="3" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 5 16 L 30 36 L 55 16" fill="none" stroke="#0E0D0B" stroke-width="2"/><circle cx="48" cy="10" r="6" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/><text x="48" y="13" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0E0D0B">ES</text></svg>}
+                {s.id === 'seur'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="22" width="42" height="20" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 48 30 L 56 30 L 56 42 L 48 42 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="16" cy="46" r="5" fill="#0E0D0B"/><circle cx="48" cy="46" r="5" fill="#0E0D0B"/><circle cx="16" cy="46" r="2" fill="#FFFCF6"/><circle cx="48" cy="46" r="2" fill="#FFFCF6"/></svg>}
+                {s.id === 'gls'     && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="14" width="48" height="34" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><rect x="10" y="20" width="40" height="6" fill="#003B7A"/><text x="30" y="40" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="800" fill="#FFFCF6" letter-spacing="2">GLS</text></svg>}
+                {s.id === 'mrw'     && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="14" width="48" height="34" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><text x="30" y="36" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="800" fill="#FFFCF6" letter-spacing="1">MRW</text></svg>}
+                {s.id === 'pickup'  && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="8" y="12" width="44" height="8" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 10 20 L 50 20 L 48 50 L 12 50 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 24 50 L 24 35 L 36 35 L 36 50" fill="none" stroke="#0E0D0B" stroke-width="2.5"/><rect x="14" y="26" width="10" height="6" fill="#0E0D0B"/></svg>}
+                {s.id === 'free'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="30" cy="30" r="26" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><text x="30" y="36" text-anchor="middle" font-family="serif" font-size="20" font-weight="800" fill="#0E0D0B">FREE</text></svg>}
+              </div>
+              <div class="ec-ship__body">
+                <h3 class="ec-ship__k">{s.name}</h3>
+                <p class="ec-ship__v">{s.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* VERIFACTU                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-veri-section">
+      <div class="container-brutal">
+        <div class="ec-veri-grid">
+
+          <div class="ec-veri-l">
+            <span class="text-meta ec-veri-l__chapter">Cap. 07 / Cumplimiento</span>
+            <h2 class="heading-display ec-veri-title">
+              VERIFACTU
+              <em class="heading-editorial">incluido.</em>
+            </h2>
+            <p class="ec-veri-lead">
+              Desde julio 2025 es <strong>obligatorio</strong> facturar
+              electrónicamente desde tu software. Tu tienda WooCommerce
+              cumple con todos los requisitos AEAT.
             </p>
-            <a href="/contacto" class="btn-brutal group inline-flex items-center justify-center gap-2 w-full px-6 py-4 bg-brutal-accent text-brutal-text font-semibold">
-              <span class="relative">Crear mi tienda</span>
-              <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
-            </a>
-            <p class="mt-4 text-center text-sm text-brutal-text-muted">
-              Incluye formación para gestionar tu tienda.
+            <ul class="ec-veri-list">
+              {verifactu.map((v) => (
+                <li>
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M 3 8 L 7 12 L 13 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <div>
+                    <strong>{v.t}</strong>
+                    <span>{v.s}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Recibo SVG */}
+          <aside class="ec-veri-r" aria-hidden="true">
+            <svg viewBox="0 0 280 380" width="100%" height="100%">
+              <defs>
+                <pattern id="ec-receipt-bg" width="6" height="6" patternUnits="userSpaceOnUse">
+                  <circle cx="3" cy="3" r="0.6" fill="rgba(14,13,11,0.08)"/>
+                </pattern>
+              </defs>
+
+              {/* Recibo body con borde zigzag */}
+              <path d="M 20 10 L 260 10 L 260 350 L 250 360 L 240 350 L 230 360 L 220 350 L 210 360 L 200 350 L 190 360 L 180 350 L 170 360 L 160 350 L 150 360 L 140 350 L 130 360 L 120 350 L 110 360 L 100 350 L 90 360 L 80 350 L 70 360 L 60 350 L 50 360 L 40 350 L 30 360 L 20 350 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>
+              <rect x="20" y="10" width="240" height="340" fill="url(#ec-receipt-bg)"/>
+
+              {/* Header */}
+              <text x="140" y="40" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#0E0D0B" letter-spacing="3">★ FACTURA ELECTRÓNICA ★</text>
+              <text x="140" y="58" text-anchor="middle" font-family="serif" font-size="20" font-weight="bold" fill="#0E0D0B">TIENDA PLATANITO</text>
+              <line x1="40" y1="68" x2="240" y2="68" stroke="#0E0D0B" stroke-width="1.5"/>
+              <text x="40" y="84" font-family="monospace" font-size="8" fill="#0E0D0B" letter-spacing="2">N.º · FC-2026-0142</text>
+              <text x="240" y="84" text-anchor="end" font-family="monospace" font-size="8" fill="#0E0D0B" letter-spacing="2">28 · MAY · 2026</text>
+
+              {/* Items */}
+              <line x1="40" y1="100" x2="240" y2="100" stroke="#0E0D0B" stroke-width="0.5" stroke-dasharray="3 2"/>
+              <text x="40" y="115" font-family="monospace" font-size="9" fill="#0E0D0B">Camiseta Bordada</text>
+              <text x="240" y="115" text-anchor="end" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">29,90€</text>
+              <text x="40" y="130" font-family="monospace" font-size="9" fill="#0E0D0B">Vela Aromática</text>
+              <text x="240" y="130" text-anchor="end" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">22,00€</text>
+              <text x="40" y="145" font-family="monospace" font-size="9" fill="#0E0D0B">Bolsa Tote</text>
+              <text x="240" y="145" text-anchor="end" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">18,90€</text>
+              <text x="40" y="160" font-family="monospace" font-size="9" fill="#0E0D0B">Envío</text>
+              <text x="240" y="160" text-anchor="end" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">GRATIS</text>
+
+              <line x1="40" y1="175" x2="240" y2="175" stroke="#0E0D0B" stroke-width="1"/>
+              <text x="40" y="195" font-family="monospace" font-size="9" fill="#0E0D0B">Base imponible</text>
+              <text x="240" y="195" text-anchor="end" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">58,51€</text>
+              <text x="40" y="210" font-family="monospace" font-size="9" fill="#0E0D0B">IVA 21%</text>
+              <text x="240" y="210" text-anchor="end" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">12,29€</text>
+
+              <line x1="40" y1="225" x2="240" y2="225" stroke="#0E0D0B" stroke-width="2"/>
+              <text x="40" y="248" font-family="serif" font-size="14" font-weight="bold" fill="#0E0D0B">TOTAL</text>
+              <text x="240" y="248" text-anchor="end" font-family="serif" font-size="18" font-weight="bold" fill="#DC1B2C">70,80€</text>
+
+              {/* QR */}
+              <g transform="translate(40, 268)">
+                <rect width="50" height="50" fill="#0E0D0B"/>
+                <rect x="4" y="4" width="42" height="42" fill="#FFFCF6"/>
+                {/* QR pattern mock */}
+                <g fill="#0E0D0B">
+                  <rect x="6"  y="6"  width="10" height="10"/>
+                  <rect x="34" y="6"  width="10" height="10"/>
+                  <rect x="6"  y="34" width="10" height="10"/>
+                  <rect x="20" y="20" width="3" height="3"/>
+                  <rect x="26" y="22" width="3" height="3"/>
+                  <rect x="22" y="28" width="3" height="3"/>
+                  <rect x="30" y="30" width="3" height="3"/>
+                  <rect x="34" y="22" width="3" height="3"/>
+                </g>
+                <rect x="9"  y="9"  width="4" height="4" fill="#FFFCF6"/>
+                <rect x="37" y="9"  width="4" height="4" fill="#FFFCF6"/>
+                <rect x="9"  y="37" width="4" height="4" fill="#FFFCF6"/>
+              </g>
+
+              {/* Sello VERIFACTU */}
+              <g transform="translate(140, 295)">
+                <rect x="0" y="0" width="100" height="60" fill="#7F54B3" stroke="#0E0D0B" stroke-width="2"/>
+                <text x="50" y="18" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="3">★ AEAT ★</text>
+                <text x="50" y="36" text-anchor="middle" font-family="serif" font-size="16" font-weight="bold" fill="#FFFCF6" letter-spacing="1">VERIFACTU</text>
+                <text x="50" y="50" text-anchor="middle" font-family="monospace" font-size="6" fill="#FFFCF6" letter-spacing="2">VERIFICADO · 2026</text>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PRICING                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-pricing-section" id="planes">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Planes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Tres tiendas,
+              <em class="heading-editorial">tres tamaños.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Pago único · sin cuotas mensuales · sin comisiones por venta.
+            Hosting + dominio + correo gratis el primer año.
+          </p>
+        </header>
+
+        <ol class="ec-plans">
+          {plans.map((p, i) => (
+            <li class={`ec-plan ec-plan--${p.color} ${p.popular ? 'ec-plan--popular' : ''}`}>
+              {p.popular && <div class="ec-plan__ribbon">★ MÁS CONTRATADO ★</div>}
+
+              <div class="ec-plan__badge" aria-hidden="true">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                  <circle cx="50" cy="50" r="46" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                  <text x="50" y="38" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2">PLAN</text>
+                  <text x="50" y="60" text-anchor="middle" font-family="serif" font-size="16" font-weight="bold" fill="#FFFCF6">{p.code}</text>
+                  <text x="50" y="78" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFCF6" letter-spacing="1.5">{p.days}</text>
+                </svg>
+              </div>
+
+              <header class="ec-plan__head">
+                <span class="text-meta">Plan {String(i+1).padStart(2,'0')}</span>
+                <span class="text-mono ec-plan__days">⏱ {p.days}</span>
+              </header>
+
+              <h3 class="heading-display ec-plan__name">{p.name}</h3>
+              <p class="ec-plan__sub">{p.sub}</p>
+
+              <div class="ec-plan__products">
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 6h12" stroke="currentColor" stroke-width="2"/></svg>
+                <span>{p.products}</span>
+              </div>
+
+              <div class="ec-plan__price">
+                <span class="ec-plan__price-v text-mono">{p.price}</span>
+                <span class="ec-plan__price-p">{p.period}</span>
+              </div>
+
+              <ul class="ec-plan__feat">
+                {p.features.map((f) => (
+                  <li>
+                    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M 3 8 L 7 12 L 13 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="/contacto" class={`ec-plan__cta ${p.popular ? 'ec-plan__cta--primary' : ''}`}>
+                {p.cta} →
+              </a>
+            </li>
+          ))}
+        </ol>
+
+        {/* Garantía */}
+        <div class="ec-guarantee">
+          <div class="ec-guarantee__seal" aria-hidden="true">
+            <svg viewBox="0 0 110 110" width="100%" height="100%">
+              <defs><path id="ec-g-c" d="M55,55 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+              <circle cx="55" cy="55" r="50" fill="#7F54B3"/>
+              <circle cx="55" cy="55" r="43" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="ec-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5">
+                  <textPath href="#ec-g-c" startOffset="0%">★ TIENDA TUYA ★ SIN COMISIÓN ★</textPath>
+                </text>
+              </g>
+              <text x="55" y="50" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#FFFCF6">∞</text>
+              <text x="55" y="68" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFCF6" letter-spacing="1.5">ESCALABLE</text>
+            </svg>
+          </div>
+          <div class="ec-guarantee__copy">
+            <h3 class="heading-display ec-guarantee__title">La tienda es tuya. Para siempre.</h3>
+            <p>
+              Código abierto, hosting bajo tu nombre, datos exportables.
+              <strong>Si un día quieres irte, te llevas todo</strong>.
+              Sin permanencias, sin secuestros, sin comisiones por venta.
             </p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* STACK TECNOLÓGICO                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-stack-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Stack</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Las herramientas
+              <em class="heading-editorial">que recibes.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Tecnologías estándar de la industria, configuradas
+            y listas. Nada de plataformas raras de las que no podrás escapar.
+          </p>
+        </header>
+
+        <ul class="ec-stack">
+          {stack.map((s) => (
+            <li class="ec-stack-item">
+              <div class="ec-stack-item__icon" aria-hidden="true">
+                {s.logo === 'woo'      && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#7F54B3" stroke="#0E0D0B" stroke-width="2"/><text x="30" y="42" text-anchor="middle" font-family="serif" font-size="32" font-weight="bold" fill="#FFFCF6">W</text></svg>}
+                {s.logo === 'wp'       && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="30" cy="30" r="27" fill="#003B7A" stroke="#0E0D0B" stroke-width="2"/><text x="30" y="40" text-anchor="middle" font-family="serif" font-size="28" font-weight="bold" fill="#FFFCF6">W</text></svg>}
+                {s.logo === 'stripe'   && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#635BFF" stroke="#0E0D0B" stroke-width="2"/><text x="30" y="42" text-anchor="middle" font-family="sans-serif" font-size="32" font-weight="800" fill="#FFFCF6">s</text></svg>}
+                {s.logo === 'bizum'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#00C3CB" stroke="#0E0D0B" stroke-width="2"/><text x="30" y="40" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="800" fill="#FFFCF6">Bizum</text></svg>}
+                {s.logo === 'redsys'   && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#0E0D0B" stroke="#0E0D0B" stroke-width="2"/><text x="30" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="800" fill="#DC1B2C">REDSYS</text></svg>}
+                {s.logo === 'cf'       && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#FF6B35" stroke="#0E0D0B" stroke-width="2"/><path d="M 14 36 Q 14 26 24 26 Q 24 18 34 18 Q 46 18 46 30 Q 50 30 50 36 L 14 36 Z" fill="#FFFCF6"/></svg>}
+                {s.logo === 'mail'     && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/><rect x="14" y="20" width="32" height="22" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/><path d="M 14 20 L 30 32 L 46 20" fill="none" stroke="#0E0D0B" stroke-width="2"/></svg>}
+                {s.logo === 'merchant' && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="22" cy="22" r="10" fill="#4285F4"/><circle cx="38" cy="22" r="10" fill="#EA4335"/><circle cx="22" cy="38" r="10" fill="#FBBC04"/><circle cx="38" cy="38" r="10" fill="#34A853"/></svg>}
+              </div>
+              <div class="ec-stack-item__body">
+                <h3 class="ec-stack-item__k">{s.k}</h3>
+                <p class="ec-stack-item__v">{s.v}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Proceso</span>
+            <h2 class="heading-display brutal-section-head__title">
+              De la idea
+              <em class="heading-editorial">al primer pedido.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis fases bien definidas. Cada una con entregables claros
+            y revisión contigo antes de pasar a la siguiente.
+          </p>
+        </header>
+
+        <ol class="ec-proc">
+          {process.map((s) => (
+            <li class={`ec-proc__step ec-proc__step--${s.color}`}>
+              <header class="ec-proc__head">
+                <span class="text-mono ec-proc__num">{s.num}</span>
+                <span class="text-mono ec-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display ec-proc__title">{s.title}</h3>
+              <p class="ec-proc__body">{s.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIALS                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Quienes ya venden</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Tiendas
+              <em class="heading-editorial">que facturan.</em>
+            </h2>
+          </div>
+        </header>
+
+        <ul class="ec-quotes">
+          {testimonials.map((t, i) => (
+            <li class={`ec-quote ec-quote--${i}`}>
+              <span class="ec-quote__sales">{t.sales}</span>
+              <p class="ec-quote__t">"{t.text}"</p>
+              <footer class="ec-quote__f">
+                <span class="ec-quote__avatar">{t.author[0]}</span>
+                <div>
+                  <span class="ec-quote__name">{t.author}</span>
+                  <span class="ec-quote__role">{t.role}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 12 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Todo lo que
+              <em class="heading-editorial">te preguntas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            10 preguntas reales que escuchamos cada semana. Si no está
+            aquí, WhatsApp directo y respondemos.
+          </p>
+        </header>
+
+        <ol class="ec-faq">
+          {faq.map((f, i) => (
+            <li class="ec-faq__item">
+              <details class="ec-faq__det" open={i === 0}>
+                <summary class="ec-faq__sum">
+                  <span class="text-mono ec-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="ec-faq__q">{f.q}</span>
+                  <span class="ec-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="ec-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ec-final">
+      <div class="container-brutal">
+        <div class="ec-final__grid">
+
+          <div class="ec-final__l">
+            <span class="text-meta ec-final__chapter">★ Cap. 13 · ABRE TU TIENDA</span>
+            <h2 class="heading-display ec-final__title">
+              ¿Empezamos
+              <em class="heading-editorial">a vender?</em>
+            </h2>
+            <p class="ec-final__lead">
+              Cuéntanos qué vendes en una llamada de 30 min. Salimos con
+              propuesta, presupuesto y fecha de apertura.
+              <strong>0 compromiso · 0 venta agresiva · 0 plataforma rara.</strong>
+            </p>
+            <div class="ec-final__cta">
+              <a href="/contacto" class="ec-final__btn ec-final__btn--primary">
+                <span>Crear mi tienda</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="https://wa.me/34657085019" target="_blank" rel="noopener noreferrer" class="ec-final__btn ec-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>WhatsApp directo</span>
+              </a>
+            </div>
+            <div class="ec-final__trust">
+              <span><span class="ec-pulse"></span> ACEPTANDO TIENDAS · 2026</span>
+              <span>★ 200+ TIENDAS LANZADAS</span>
+              <span>★ 0% COMISIÓN POR VENTA</span>
+              <span>★ TU TIENDA · TU CÓDIGO</span>
+            </div>
+          </div>
+
+          <div class="ec-final__r" aria-hidden="true">
+            <svg viewBox="0 0 280 320" class="ec-final-cart">
+              <defs>
+                <radialGradient id="ec-final-glow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%"  stop-color="#7F54B3" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#7F54B3" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="140" cy="160" r="150" fill="url(#ec-final-glow)"/>
+
+              {/* Carrito grande */}
+              <g class="ec-final-cart-g">
+                {/* Cuerpo carrito */}
+                <path d="M 60 100 L 240 100 L 220 180 L 80 180 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="4"/>
+                <path d="M 80 180 L 220 180" stroke="#0E0D0B" stroke-width="4"/>
+
+                {/* Mango */}
+                <path d="M 30 60 L 60 60 L 70 100" fill="none" stroke="#0E0D0B" stroke-width="5" stroke-linecap="round"/>
+
+                {/* Productos dentro */}
+                <rect x="90"  y="115" width="34" height="50" fill="#7F54B3" stroke="#0E0D0B" stroke-width="2"/>
+                <rect x="130" y="110" width="40" height="55" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/>
+                <rect x="176" y="120" width="36" height="45" fill="#FF2D9A" stroke="#0E0D0B" stroke-width="2"/>
+
+                {/* Etiquetas */}
+                <circle cx="107" cy="125" r="5" fill="#DC1B2C" stroke="#FFFCF6" stroke-width="1.5"/>
+                <text x="107" y="128" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6">€</text>
+
+                {/* Ruedas */}
+                <circle cx="100" cy="210" r="14" fill="#0E0D0B"/>
+                <circle cx="100" cy="210" r="6" fill="#FFD600"/>
+                <circle cx="200" cy="210" r="14" fill="#0E0D0B"/>
+                <circle cx="200" cy="210" r="6" fill="#FFD600"/>
+
+                {/* Símbolo $ flotante */}
+                <text x="200" y="55" text-anchor="middle" font-family="serif" font-size="32" font-weight="bold" fill="#D6FF44">€</text>
+                <text x="50" y="240" text-anchor="middle" font-family="serif" font-size="24" font-weight="bold" fill="#7F54B3">€</text>
+              </g>
+
+              {/* Estrellas */}
+              <text x="30"  y="40" font-family="monospace" font-size="14" fill="#D6FF44">★</text>
+              <text x="240" y="60" font-family="monospace" font-size="10" fill="#FFD600">★</text>
+              <text x="20"  y="180" font-family="monospace" font-size="11" fill="#FFD600">★</text>
+              <text x="250" y="200" font-family="monospace" font-size="9" fill="#D6FF44">★</text>
+              <text x="140" y="280" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FFFCF6" letter-spacing="3">★ TIENDA · LISTA · 24/7 ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="ec-final__marquee">
+        <div class="ec-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ WOOCOMMERCE OFICIAL ★ 0% COMISIÓN ★ TU TIENDA ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
 
   <Footer />
 </BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · ECOMMERCE WOOCOMMERCE                          */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec {
+    --ec-paper:    #FFFCF6;
+    --ec-paper-2:  #F5EFE0;
+    --ec-cream:    #F0E7CD;
+    --ec-ink:      #0E0D0B;
+    --ec-woo:      #7F54B3;
+    --ec-woo-d:    #5e3f87;
+    --ec-magenta:  #FF2D9A;
+    --ec-lime:     #D6FF44;
+    --ec-gold:     #C9A24F;
+    --ec-mint:     #C8F2D6;
+    --ec-blue:     #003B7A;
+    --ec-orange:   #FF6B35;
+    --ec-yellow:   #FFD600;
+    --ec-red:      #DC1B2C;
+    --ec-shadow:   8px 8px 0 var(--ec-ink);
+  }
+
+  .ec-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ec-woo);
+    box-shadow: 0 0 0 0 rgba(127,84,179,0.55);
+    animation: ec-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ec-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(127,84,179,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(127,84,179,0); }
+    100% { box-shadow: 0 0 0 0 rgba(127,84,179,0); }
+  }
+  .ec-spin { transform-origin: 50% 50%; animation: ec-spin 25s linear infinite; }
+  @keyframes ec-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(127,84,179,0.12), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(255,45,154,0.06), transparent 50%),
+      var(--ec-paper);
+    border-bottom: 3px solid var(--ec-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ec-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(14,13,11,0.05) 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+  .ec-hero > * { position: relative; }
+
+  .ec-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .ec-hero__status { color: var(--ec-woo); font-weight: 700; }
+
+  .ec-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) {
+    .ec-hero__grid { grid-template-columns: 1fr 1.05fr; align-items: center; gap: 4rem; }
+  }
+  .ec-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .ec-hero__chapter { color: var(--ec-woo); }
+  .ec-hero__title {
+    font-size: clamp(2.5rem, 8vw, 5.75rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .ec-hero__title em { color: var(--ec-woo); font-style: italic; display: block; margin: 0; }
+  .ec-hero__title-stamp {
+    display: inline-block;
+    color: var(--ec-magenta);
+    border-bottom: 6px solid var(--ec-magenta);
+    padding: 0 .1em;
+    transform: rotate(-1.5deg);
+  }
+  .ec-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 56ch;
+  }
+  .ec-hero__lead strong { color: var(--ec-ink); font-weight: 700; }
+  .ec-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .ec-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--ec-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .ec-btn--primary {
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    box-shadow: 6px 6px 0 var(--ec-ink);
+  }
+  .ec-btn--primary:hover {
+    background: var(--ec-magenta);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ec-ink);
+  }
+  .ec-btn--ghost {
+    background: transparent;
+    color: var(--ec-ink);
+    box-shadow: 6px 6px 0 var(--ec-woo);
+  }
+  .ec-btn--ghost:hover {
+    background: var(--ec-ink);
+    color: var(--ec-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ec-woo);
+  }
+
+  /* KPIs */
+  .ec-hero__kpis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--ec-ink);
+    background: var(--ec-ink);
+  }
+  @media (min-width: 768px) { .ec-hero__kpis { grid-template-columns: repeat(4, 1fr); } }
+  .ec-kpi {
+    background: var(--ec-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--ec-ink);
+    border-bottom: 2px solid var(--ec-ink);
+  }
+  .ec-kpi:nth-child(2n) { border-right: none; }
+  .ec-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .ec-kpi:nth-child(2n)      { border-right: 2px solid var(--ec-ink); }
+    .ec-kpi:nth-child(4n)      { border-right: none; }
+    .ec-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--ec-ink); }
+    .ec-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .ec-kpi--woo     { background: var(--ec-woo); color: var(--ec-paper); }
+  .ec-kpi--lime    { background: var(--ec-lime); color: var(--ec-ink); }
+  .ec-kpi--magenta { background: var(--ec-magenta); color: var(--ec-paper); }
+  .ec-kpi--ink     { background: var(--ec-ink); color: var(--ec-paper); }
+  .ec-kpi--ink     .ec-kpi__v { color: var(--ec-lime); }
+  .ec-kpi__v { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1; }
+  .ec-kpi__v small { font-size: .5em; opacity: .8; }
+  .ec-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* ESCAPARATE — Shop window mockup */
+  .ec-hero__shop {
+    position: relative;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(127,84,179,0.2));
+  }
+  .ec-shop-window {
+    background: var(--ec-paper);
+    border: 3px solid var(--ec-ink);
+    box-shadow: var(--ec-shadow);
+    overflow: hidden;
+  }
+  .ec-shop-window__bar {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .65rem .85rem;
+    background: var(--ec-ink);
+    color: var(--ec-paper);
+    border-bottom: 2px solid var(--ec-ink);
+  }
+  .ec-shop-window__dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .ec-shop-window__dot--r { background: #FF5F56; }
+  .ec-shop-window__dot--y { background: #FFBD2E; }
+  .ec-shop-window__dot--g { background: #27C93F; }
+  .ec-shop-window__url {
+    flex: 1;
+    background: rgba(255,252,246,0.1);
+    padding: .25rem .55rem;
+    font-size: .65rem;
+    color: var(--ec-lime);
+    border-radius: 3px;
+    margin-left: .35rem;
+  }
+  .ec-shop-window__ssl { font-size: .8rem; }
+  .ec-shop-window__body { padding: 0; }
+
+  /* Top de tienda */
+  .ec-shop-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: .75rem 1rem;
+    border-bottom: 2px solid var(--ec-ink);
+    background: var(--ec-paper-2);
+  }
+  .ec-shop-top__logo {
+    background: var(--ec-ink); color: var(--ec-lime);
+    padding: .3rem .55rem;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: .85rem;
+  }
+  .ec-shop-top__title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: var(--ec-ink);
+    letter-spacing: .15em;
+  }
+  .ec-shop-top__icons {
+    display: flex; align-items: center; gap: .85rem;
+    color: var(--ec-ink);
+  }
+  .ec-shop-top__cart {
+    position: relative;
+    display: inline-flex;
+  }
+  .ec-shop-top__cart-num {
+    position: absolute;
+    top: -5px; right: -8px;
+    background: var(--ec-magenta);
+    color: var(--ec-paper);
+    font-family: var(--font-mono);
+    font-size: .55rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 50%;
+    min-width: 14px;
+    text-align: center;
+  }
+
+  /* Grid productos */
+  .ec-shop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .ec-prod {
+    position: relative;
+    background: var(--ec-paper);
+    border-right: 1.5px solid var(--ec-ink);
+    border-bottom: 1.5px solid var(--ec-ink);
+    padding: .5rem;
+    display: flex; flex-direction: column;
+    gap: .4rem;
+    transition: background .2s, transform .25s;
+    animation: ec-prod-in 0.5s cubic-bezier(.16,1,.3,1) backwards;
+    animation-delay: calc(0.12s * var(--ec-prod-i) + 0.3s);
+  }
+  @keyframes ec-prod-in {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .ec-prod:nth-child(2n) { border-right: none; }
+  .ec-prod:nth-last-child(-n+2) { border-bottom: none; }
+  .ec-prod:hover { background: var(--ec-paper-2); transform: translateY(-3px); }
+  .ec-prod--mint   { color: var(--ec-mint); }
+  .ec-prod--yellow { color: var(--ec-yellow); }
+  .ec-prod--orange { color: var(--ec-orange); }
+  .ec-prod--lime   { color: var(--ec-lime); }
+
+  .ec-prod__media {
+    position: relative;
+    aspect-ratio: 1;
+    background: var(--ec-cream);
+    border: 1.5px solid var(--ec-ink);
+    overflow: hidden;
+  }
+  .ec-prod__tag {
+    position: absolute;
+    top: 4px; left: 4px;
+    background: var(--ec-red); color: var(--ec-paper);
+    padding: 2px 5px;
+    font-family: var(--font-mono);
+    font-size: .55rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+  }
+  .ec-prod__tag--red  { background: var(--ec-red); }
+  .ec-prod__tag--blue { background: var(--ec-blue); }
+  .ec-prod__tag--gold { background: var(--ec-gold); color: var(--ec-ink); }
+  .ec-prod__heart {
+    position: absolute;
+    top: 4px; right: 4px;
+    background: var(--ec-paper);
+    border: 1.5px solid var(--ec-ink);
+    padding: 4px;
+    color: var(--ec-magenta);
+    cursor: pointer;
+    line-height: 0;
+  }
+  .ec-prod__body {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .ec-prod__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .8rem;
+    letter-spacing: -.01em;
+    color: var(--ec-ink);
+    margin: 0;
+  }
+  .ec-prod__rating { display: flex; gap: .3rem; align-items: center; }
+  .ec-prod__stars {
+    color: var(--ec-yellow);
+    font-size: .7rem;
+    letter-spacing: -.05em;
+  }
+  .ec-prod__rate-num {
+    font-family: var(--font-mono);
+    font-size: .58rem;
+    color: var(--ec-ink);
+    opacity: .65;
+  }
+  .ec-prod__price-row { display: flex; align-items: baseline; gap: .35rem; }
+  .ec-prod__old {
+    text-decoration: line-through;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--ec-ink);
+    opacity: .45;
+  }
+  .ec-prod__price {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: .95rem;
+    color: var(--ec-magenta);
+  }
+  .ec-prod__btn {
+    background: var(--ec-ink);
+    color: var(--ec-lime);
+    border: 1.5px solid var(--ec-ink);
+    padding: 4px 8px;
+    font-family: var(--font-mono);
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 3px;
+    cursor: pointer;
+    margin-top: 3px;
+    transition: background .2s, color .2s;
+  }
+  .ec-prod__btn:hover { background: var(--ec-woo); color: var(--ec-paper); }
+
+  .ec-shop-foot {
+    background: var(--ec-ink);
+    color: var(--ec-lime);
+    text-align: center;
+    padding: .55rem;
+    font-size: .65rem;
+    letter-spacing: .2em;
+  }
+
+  /* Woo badge */
+  .ec-woo-badge {
+    position: absolute;
+    top: -25px; right: -15px;
+    width: 110px; aspect-ratio: 1;
+    transform: rotate(-12deg);
+    filter: drop-shadow(0 6px 14px rgba(127,84,179,0.35));
+    animation: ec-bob 4.5s ease-in-out infinite;
+    z-index: 3;
+  }
+  @keyframes ec-bob {
+    0%, 100% { transform: rotate(-12deg) translateY(0); }
+    50%      { transform: rotate(-12deg) translateY(-6px); }
+  }
+
+  /* Marquee */
+  .ec-marquee {
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--ec-ink);
+  }
+  .ec-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: ec-marquee 32s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes ec-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* RAZONES                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-reasons-section {
+    background: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-reasons {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .ec-reasons { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ec-reasons { grid-template-columns: repeat(3, 1fr); } }
+  .ec-reason {
+    background: var(--ec-paper);
+    border: 2.5px solid var(--ec-ink);
+    box-shadow: var(--ec-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ec-reason:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 var(--ec-woo);
+  }
+  .ec-reason__head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: .65rem;
+    border-bottom: 2px dashed var(--ec-ink);
+  }
+  .ec-reason__num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--ec-woo);
+    line-height: 1;
+  }
+  .ec-reason__icon { width: 48px; height: 48px; color: var(--ec-woo); }
+  .ec-reason__title {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--ec-ink);
+    margin: 0;
+  }
+  .ec-reason__desc {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* COMPARE WC vs Shopify                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-compare-section {
+    background: var(--ec-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-compare {
+    border: 3px solid var(--ec-ink);
+    box-shadow: var(--ec-shadow);
+    background: var(--ec-paper);
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+  .ec-compare-head {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    background: var(--ec-ink);
+    color: var(--ec-paper);
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .2em;
+    font-weight: 800;
+  }
+  .ec-compare-head__wc, .ec-compare-head__sh {
+    text-align: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
+  }
+  .ec-compare-head__wc { color: var(--ec-lime); }
+  .ec-compare-head__sh { color: var(--ec-paper); opacity: .8; }
+
+  .ec-compare-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    align-items: center;
+  }
+  .ec-compare-row:last-of-type { border-bottom: 2px solid var(--ec-ink); }
+  .ec-compare-row__k {
+    font-size: .9rem;
+    color: var(--ec-ink);
+    font-weight: 700;
+  }
+  .ec-compare-row__wc, .ec-compare-row__sh {
+    display: flex; align-items: center; gap: .35rem;
+    padding: 0 .75rem;
+    text-align: center;
+    justify-content: center;
+    font-size: .82rem;
+    line-height: 1.35;
+  }
+  .ec-compare-row__wc { color: var(--brutal-text-secondary); }
+  .ec-compare-row__sh { color: var(--brutal-text-secondary); }
+  .ec-compare-row__wc.is-winner { color: var(--ec-woo); font-weight: 700; }
+  .ec-compare-row__sh.is-winner { color: var(--ec-blue); font-weight: 700; }
+  .ec-compare-row__check {
+    width: 18px;
+    color: var(--ec-woo);
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .ec-compare-row__sh.is-winner .ec-compare-row__check { color: var(--ec-blue); }
+
+  .ec-compare-totals {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    padding: 1.5rem;
+    background: var(--ec-cream);
+    align-items: center;
+  }
+  .ec-compare-totals__l { font-size: .75rem; letter-spacing: .25em; font-weight: 800; }
+  .ec-compare-totals__wc, .ec-compare-totals__sh { text-align: center; display: flex; flex-direction: column; gap: 4px; }
+  .ec-compare-totals__big {
+    font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.02em;
+  }
+  .ec-compare-totals__wc .ec-compare-totals__big { color: var(--ec-woo); }
+  .ec-compare-totals__sh .ec-compare-totals__big { color: var(--ec-blue); }
+  .ec-compare-totals__sub { font-size: .65rem; letter-spacing: .15em; opacity: .75; }
+
+  .ec-compare-note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--ec-lime);
+    border: 2px solid var(--ec-ink);
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--ec-ink);
+  }
+  .ec-compare-note strong { color: var(--ec-woo); }
+  .ec-compare-note em { font-style: italic; color: var(--ec-blue); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PASARELAS DE PAGO                                       */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-pay-section {
+    background: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-pay-grid {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 640px)  { .ec-pay-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ec-pay-grid { grid-template-columns: repeat(3, 1fr); } }
+  .ec-pay {
+    position: relative;
+    background: var(--ec-paper);
+    border: 2.5px solid var(--ec-ink);
+    box-shadow: 5px 5px 0 var(--ec-ink);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ec-pay:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--ec-woo);
+  }
+  .ec-pay--blue   { background: var(--ec-paper); }
+  .ec-pay--mint   { background: var(--ec-mint); }
+  .ec-pay--red    { background: var(--ec-paper); }
+  .ec-pay--yellow { background: var(--ec-paper); }
+  .ec-pay--gold   { background: var(--ec-cream); }
+  .ec-pay--ink    { background: var(--ec-paper-2); }
+
+  .ec-pay__pop {
+    position: absolute;
+    top: -10px; right: 16px;
+    background: var(--ec-magenta);
+    color: var(--ec-paper);
+    padding: .15rem .55rem;
+    font-size: .58rem;
+    letter-spacing: .2em;
+    font-weight: 800;
+    border: 1.5px solid var(--ec-ink);
+    box-shadow: 2px 2px 0 var(--ec-ink);
+  }
+  .ec-pay__logo { width: 100%; }
+  .ec-pay__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: -.015em;
+    color: var(--ec-ink);
+    margin: 0;
+  }
+  .ec-pay__meta {
+    font-size: .82rem;
+    line-height: 1.4;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .ec-pay__foot {
+    display: flex; flex-direction: column; gap: 2px;
+    padding-top: .65rem;
+    border-top: 2px dashed var(--ec-ink);
+  }
+  .ec-pay__fee-lbl {
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--ec-woo);
+    font-weight: 800;
+  }
+  .ec-pay__fee {
+    font-family: var(--font-mono);
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--ec-ink);
+  }
+  .ec-pay-note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--ec-paper-2);
+    border: 2px solid var(--ec-ink);
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--ec-ink);
+  }
+  .ec-pay-note strong { color: var(--ec-woo); }
+  .ec-pay-note em { color: var(--ec-magenta); font-style: italic; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CONVERSIÓN                                              */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-conv-section {
+    background: var(--ec-ink);
+    color: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ec-conv-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(127,84,179,0.08) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .ec-conv-section > * { position: relative; }
+  .ec-conv {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px)  { .ec-conv { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ec-conv { grid-template-columns: repeat(4, 1fr); } }
+  .ec-conv__item {
+    background: rgba(255,252,246,0.05);
+    border: 2px solid var(--ec-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .ec-conv__item:hover {
+    background: var(--ec-woo);
+    transform: translateY(-3px);
+  }
+  .ec-conv__num {
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--ec-lime);
+    letter-spacing: .1em;
+  }
+  .ec-conv__icon {
+    width: 44px; height: 44px;
+    color: var(--ec-lime);
+  }
+  .ec-conv__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -.015em;
+    line-height: 1.15;
+    color: var(--ec-paper);
+    margin: 0;
+  }
+  .ec-conv__desc {
+    font-size: .82rem;
+    line-height: 1.45;
+    color: rgba(255,252,246,0.75);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* LOGÍSTICA                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-ship-section {
+    background: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-ship-grid {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px)  { .ec-ship-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ec-ship-grid { grid-template-columns: repeat(3, 1fr); } }
+  .ec-ship {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: center;
+    background: var(--ec-paper);
+    border: 2px solid var(--ec-ink);
+    box-shadow: 4px 4px 0 var(--ec-ink);
+    padding: 1.1rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ec-ship:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ec-woo); }
+  .ec-ship--yellow .ec-ship__icon { color: var(--ec-yellow); }
+  .ec-ship--red    .ec-ship__icon { color: var(--ec-red); }
+  .ec-ship--blue   .ec-ship__icon { color: var(--ec-blue); }
+  .ec-ship--orange .ec-ship__icon { color: var(--ec-orange); }
+  .ec-ship--mint   .ec-ship__icon { color: var(--ec-mint); }
+  .ec-ship--lime   .ec-ship__icon { color: var(--ec-lime); }
+  .ec-ship__icon { width: 60px; height: 60px; }
+  .ec-ship__body { display: flex; flex-direction: column; gap: 2px; }
+  .ec-ship__k {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ec-ink);
+    margin: 0;
+  }
+  .ec-ship__v {
+    font-size: .82rem;
+    line-height: 1.4;
+    color: var(--brutal-text-secondary);
+    margin: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* VERIFACTU                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-veri-section {
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ec-veri-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(45deg, transparent 0 30px, rgba(255,252,246,0.04) 30px 31px);
+    pointer-events: none;
+  }
+  .ec-veri-section > * { position: relative; }
+  .ec-veri-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .ec-veri-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+
+  .ec-veri-l__chapter { color: var(--ec-lime); }
+  .ec-veri-title {
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    color: var(--ec-paper);
+    margin: 1rem 0;
+  }
+  .ec-veri-title em { color: var(--ec-lime); }
+  .ec-veri-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,252,246,0.85);
+    max-width: 52ch;
+    margin-bottom: 1.5rem;
+  }
+  .ec-veri-lead strong { color: var(--ec-lime); font-weight: 800; }
+  .ec-veri-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .85rem;
+  }
+  .ec-veri-list li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: .75rem;
+    align-items: flex-start;
+  }
+  .ec-veri-list svg { color: var(--ec-lime); margin-top: 4px; }
+  .ec-veri-list li > div { display: flex; flex-direction: column; gap: 2px; }
+  .ec-veri-list strong { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ec-paper); }
+  .ec-veri-list span { font-size: .85rem; color: rgba(255,252,246,0.75); line-height: 1.4; }
+
+  .ec-veri-r {
+    max-width: 320px;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.25));
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PRICING                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-pricing-section {
+    background: var(--ec-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-plans {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1024px) { .ec-plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 2rem; } }
+
+  .ec-plan {
+    position: relative;
+    background: var(--ec-paper);
+    border: 3px solid var(--ec-ink);
+    box-shadow: var(--ec-shadow);
+    padding: 2.5rem 1.75rem 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .ec-plan:hover { transform: translateY(-4px); }
+  .ec-plan--mint .ec-plan__badge { color: var(--ec-mint); }
+  .ec-plan--woo  .ec-plan__badge { color: var(--ec-woo); }
+  .ec-plan--gold .ec-plan__badge { color: var(--ec-gold); }
+  .ec-plan--popular {
+    background: var(--ec-ink);
+    color: var(--ec-paper);
+    border-color: var(--ec-woo);
+    box-shadow: 12px 12px 0 var(--ec-woo);
+    transform: scale(1.02);
+  }
+  @media (min-width: 1024px) { .ec-plan--popular { transform: scale(1.05); } }
+  .ec-plan--popular:hover { transform: scale(1.02) translateY(-4px); }
+  @media (min-width: 1024px) { .ec-plan--popular:hover { transform: scale(1.05) translateY(-4px); } }
+
+  .ec-plan__ribbon {
+    position: absolute;
+    top: -16px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    padding: .35rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--ec-ink);
+    box-shadow: 3px 3px 0 var(--ec-ink);
+    white-space: nowrap;
+  }
+  .ec-plan__badge { width: 100px; margin: 0 auto; }
+  .ec-plan__head { display: flex; justify-content: space-between; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; opacity: .85; }
+  .ec-plan__days { font-size: .68rem; letter-spacing: .15em; opacity: .8; }
+  .ec-plan__name {
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: -.03em;
+    margin: 0;
+  }
+  .ec-plan__sub { font-size: .9rem; opacity: .85; line-height: 1.4; }
+  .ec-plan__products {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    letter-spacing: .12em;
+    color: var(--ec-magenta);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .ec-plan--popular .ec-plan__products { color: var(--ec-lime); }
+  .ec-plan__price {
+    display: flex; align-items: baseline; gap: .65rem;
+    border-block: 2px solid currentColor;
+    padding: 1rem 0;
+    margin: .5rem 0;
+  }
+  .ec-plan__price-v { font-size: clamp(2.5rem, 4vw, 3.25rem); font-weight: 800; line-height: 1; letter-spacing: -.03em; }
+  .ec-plan__price-p { font-family: var(--font-mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .15em; opacity: .7; }
+  .ec-plan__feat {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .55rem;
+    flex: 1;
+  }
+  .ec-plan__feat li {
+    display: flex; align-items: flex-start; gap: .65rem;
+    font-size: .9rem;
+    line-height: 1.4;
+  }
+  .ec-plan__feat svg { color: var(--ec-woo); flex-shrink: 0; margin-top: 3px; }
+  .ec-plan--popular .ec-plan__feat svg { color: var(--ec-lime); }
+  .ec-plan__cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    color: currentColor;
+    border: 2.5px solid currentColor;
+    padding: 1rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    margin-top: .5rem;
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .ec-plan__cta:hover { background: currentColor; color: var(--ec-paper); transform: translateY(-2px); }
+  .ec-plan__cta--primary { background: var(--ec-woo); color: var(--ec-paper); border-color: var(--ec-woo); }
+  .ec-plan__cta--primary:hover { background: var(--ec-lime); color: var(--ec-ink); border-color: var(--ec-lime); }
+
+  /* Garantía */
+  .ec-guarantee {
+    margin-top: 3rem;
+    background: var(--ec-cream);
+    border: 3px solid var(--ec-ink);
+    box-shadow: var(--ec-shadow);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) { .ec-guarantee { grid-template-columns: 130px 1fr; gap: 2rem; } }
+  .ec-guarantee__seal { width: 130px; aspect-ratio: 1; transform: rotate(-8deg); filter: drop-shadow(0 6px 14px rgba(127,84,179,0.3)); }
+  .ec-guarantee__title { font-size: clamp(1.35rem, 2.5vw, 1.85rem); line-height: 1.1; letter-spacing: -.02em; margin: 0 0 .5rem; }
+  .ec-guarantee__copy p { font-size: .95rem; color: var(--brutal-text-secondary); line-height: 1.5; }
+  .ec-guarantee__copy strong { color: var(--ec-woo); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* STACK                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-stack-section {
+    background: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-stack {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px)  { .ec-stack { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ec-stack { grid-template-columns: repeat(4, 1fr); } }
+  .ec-stack-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: center;
+    background: var(--ec-paper);
+    border: 2px solid var(--ec-ink);
+    box-shadow: 4px 4px 0 var(--ec-ink);
+    padding: 1.1rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ec-stack-item:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ec-woo); }
+  .ec-stack-item__icon { width: 60px; height: 60px; }
+  .ec-stack-item__body { display: flex; flex-direction: column; gap: 2px; }
+  .ec-stack-item__k { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ec-ink); margin: 0; }
+  .ec-stack-item__v { font-size: .8rem; line-height: 1.4; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-proc-section {
+    background: var(--ec-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px)  { .ec-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .ec-proc { grid-template-columns: repeat(6, 1fr); } }
+  .ec-proc__step {
+    background: var(--ec-paper);
+    border: 2.5px solid var(--ec-ink);
+    box-shadow: 4px 4px 0 var(--ec-ink);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    position: relative;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ec-proc__step::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 5px; background: currentColor;
+  }
+  .ec-proc__step:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ec-ink); }
+  .ec-proc__step--woo     { color: var(--ec-woo); }
+  .ec-proc__step--magenta { color: var(--ec-magenta); }
+  .ec-proc__step--blue    { color: var(--ec-blue); }
+  .ec-proc__step--mint    { color: var(--ec-mint); background: var(--ec-mint); }
+  .ec-proc__step--gold    { color: var(--ec-gold); }
+  .ec-proc__step--red     { color: var(--ec-red); }
+  .ec-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 2px dashed currentColor; }
+  .ec-proc__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ec-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ec-ink); opacity: .65; }
+  .ec-proc__title { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ec-ink); margin: .25rem 0 0; }
+  .ec-proc__body { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIALS                                            */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-quote-section {
+    background: var(--ec-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-quotes {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .ec-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .ec-quote {
+    position: relative;
+    background: var(--ec-paper);
+    border: 2.5px solid var(--ec-ink);
+    box-shadow: var(--ec-shadow);
+    padding: 2rem 1.5rem 1.5rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .ec-quote:hover { transform: translateY(-3px); }
+  .ec-quote--0 { background: var(--ec-mint); }
+  .ec-quote--1 { background: var(--ec-lime); }
+  .ec-quote--2 { background: var(--ec-cream); }
+  .ec-quote__sales {
+    position: absolute;
+    top: -12px; left: 16px;
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    padding: .3rem .75rem;
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    border: 2px solid var(--ec-ink);
+    box-shadow: 3px 3px 0 var(--ec-ink);
+  }
+  .ec-quote__t {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--ec-ink);
+    margin: 0;
+    flex: 1;
+  }
+  .ec-quote__f { display: flex; align-items: center; gap: .85rem; padding-top: 1rem; border-top: 2px dashed var(--ec-ink); }
+  .ec-quote__avatar {
+    width: 40px; height: 40px;
+    background: var(--ec-ink); color: var(--ec-lime);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .ec-quote__f div { display: flex; flex-direction: column; }
+  .ec-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--ec-ink); }
+  .ec-quote__role { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-faq-section {
+    background: var(--ec-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ec-ink);
+  }
+  .ec-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--ec-ink);
+  }
+  .ec-faq__item { border-bottom: 2px solid var(--ec-ink); }
+  .ec-faq__det summary { list-style: none; cursor: pointer; }
+  .ec-faq__det summary::-webkit-details-marker { display: none; }
+  .ec-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .ec-faq__sum:hover { padding-inline: 1rem; background: var(--ec-paper); }
+  .ec-faq__num { font-size: 1rem; font-weight: 800; color: var(--ec-woo); letter-spacing: .1em; }
+  .ec-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--ec-ink);
+    font-weight: 700;
+  }
+  .ec-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--ec-ink);
+    background: var(--ec-paper);
+    color: var(--ec-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .ec-faq__det[open] .ec-faq__toggle { transform: rotate(180deg); background: var(--ec-woo); color: var(--ec-paper); }
+  .ec-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .ec-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .ec-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ec-final {
+    background: var(--ec-ink);
+    color: var(--ec-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .ec-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(127,84,179,0.1) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .ec-final > * { position: relative; }
+  .ec-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .ec-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+
+  .ec-final__chapter { color: var(--ec-woo); }
+  .ec-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--ec-paper);
+    margin: 1rem 0;
+  }
+  .ec-final__title em { color: var(--ec-woo); font-style: italic; display: block; }
+  .ec-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,252,246,0.75);
+    max-width: 52ch;
+  }
+  .ec-final__lead strong { color: var(--ec-lime); }
+  .ec-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .ec-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .ec-final__btn--primary {
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    border-color: var(--ec-woo);
+    box-shadow: 6px 6px 0 var(--ec-lime);
+  }
+  .ec-final__btn--primary:hover {
+    background: var(--ec-lime); color: var(--ec-ink); border-color: var(--ec-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ec-woo);
+  }
+  .ec-final__btn--ghost {
+    background: transparent; color: var(--ec-paper); border-color: var(--ec-paper);
+    box-shadow: 6px 6px 0 var(--ec-paper);
+  }
+  .ec-final__btn--ghost:hover {
+    background: var(--ec-paper); color: var(--ec-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ec-paper);
+  }
+  .ec-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,252,246,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .ec-final__trust .ec-pulse { background: var(--ec-lime); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(214,255,68,0.55); }
+
+  .ec-final__r {
+    display: flex; align-items: center; justify-content: center;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .ec-final-cart {
+    display: block; width: 100%; height: 100%;
+    filter: drop-shadow(0 12px 36px rgba(127,84,179,0.3));
+  }
+  .ec-final-cart-g {
+    transform-origin: 140px 160px;
+    animation: ec-cart-roll 6s ease-in-out infinite;
+  }
+  @keyframes ec-cart-roll {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    50%      { transform: translateX(8px) rotate(-2deg); }
+  }
+
+  .ec-final__marquee {
+    background: var(--ec-woo);
+    color: var(--ec-paper);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--ec-ink);
+    margin: 0 -1.5rem;
+  }
+  .ec-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: ec-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+</style>
