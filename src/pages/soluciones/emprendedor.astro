@@ -2,10 +2,228 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
 
 const title = "Web para Emprendedores en Almería | Lanza tu Negocio Digital";
-const description = "Lanza tu web en Almería desde 450€ sin complicaciones. Hosting gratis de por vida, SEO incluido y entrega en 2 semanas. Sin permanencia. Presupuesto gratis.";
+const description = "Lanza tu web en Almería en 14 días desde 450€ — hosting gratis de por vida, SEO incluido, sin permanencia. Pack todo-en-uno con dominio, correo, analytics y formación. Presupuesto gratis.";
 const canonical = "https://platanitorico.com/soluciones/emprendedor/";
+
+// ─── DATOS ─────────────────────────────────────
+
+// Pain points emprendedor
+const pains = [
+  { num: '01', pain: '«No tengo tiempo»',          sol: 'Hacemos absolutamente todo — tú solo apruebas. Briefing de 1h y luego ya no nos necesitas hasta el primer informe.',   color: 'orange', icon: 'clock'  },
+  { num: '02', pain: '«No sé por dónde empezar»',  sol: 'Te damos una hoja de ruta de 14 días con todo lo que vas a tener. Sin tecnicismos. Plan claro y previsible.',           color: 'lime',   icon: 'map'    },
+  { num: '03', pain: '«Me da miedo el coste»',     sol: 'Precio cerrado desde 450€ — sin extras escondidos. Hosting y correo profesional gratuitos el primer año.',               color: 'yellow', icon: 'wallet' },
+  { num: '04', pain: '«Quiero validar primero»',   sol: 'Opción «MVP exprés» en 7 días con landing + formulario. Si funciona, evolucionamos. Si no, has perdido poco.',           color: 'mint',   icon: 'beaker' },
+];
+
+// Timeline 14 días
+const timeline = [
+  { d: 'D1',  phase: 'BRIEFING',    title: 'Llamada de 60 min',         desc: 'Nos cuentas tu idea y resolvemos dudas. Análisis básico de competencia y oportunidad.',     ph: 'kickoff', color: 'orange' },
+  { d: 'D2',  phase: 'BRIEFING',    title: 'Auditoría de marca',        desc: 'Revisamos lo que tienes (logo, contenido). Detectamos huecos.',                            ph: 'kickoff', color: 'orange' },
+  { d: 'D3',  phase: 'DISEÑO',      title: 'Wireframes + arquitectura', desc: 'Estructura de páginas y flujo de conversión.',                                              ph: 'design',  color: 'yellow' },
+  { d: 'D4',  phase: 'DISEÑO',      title: 'Maquetación visual',        desc: 'Identidad visual aplicada — colores, tipografía, jerarquía.',                              ph: 'design',  color: 'yellow' },
+  { d: 'D5',  phase: 'COPY',        title: 'Textos persuasivos',        desc: 'Copywriting orientado a venta. Te enviamos para revisión.',                                ph: 'copy',    color: 'lime'   },
+  { d: 'D6',  phase: 'COPY',        title: 'Imágenes / banco',          desc: 'Selección de fotos pro y/o uso de tus assets.',                                            ph: 'copy',    color: 'lime'   },
+  { d: 'D7',  phase: 'DESARROLLO',  title: 'Construcción web',          desc: 'Maquetado responsive + animaciones cuidadas.',                                              ph: 'dev',     color: 'blue'   },
+  { d: 'D8',  phase: 'DESARROLLO',  title: 'Integraciones',             desc: 'Formularios, mapas, redes, WhatsApp, analytics.',                                          ph: 'dev',     color: 'blue'   },
+  { d: 'D9',  phase: 'DESARROLLO',  title: 'Optimización velocidad',    desc: 'Imágenes optimizadas, Core Web Vitals verde, Lighthouse 90+.',                              ph: 'dev',     color: 'blue'   },
+  { d: 'D10', phase: 'SEO',         title: 'Setup SEO técnico',         desc: 'Sitemap, robots, schema, meta tags, Open Graph, canonical.',                               ph: 'seo',     color: 'mint'   },
+  { d: 'D11', phase: 'SEO',         title: 'Google + Analytics',        desc: 'Search Console + Analytics + Maps + perfil de empresa.',                                   ph: 'seo',     color: 'mint'   },
+  { d: 'D12', phase: 'REVIEW',      title: 'Revisión + ajustes',        desc: 'Pase final juntos. Cambios menores en directo.',                                            ph: 'review',  color: 'gold'   },
+  { d: 'D13', phase: 'REVIEW',      title: 'Formación 30 min',          desc: 'Te enseñamos a editar textos, imágenes y publicar.',                                        ph: 'review',  color: 'gold'   },
+  { d: 'D14', phase: 'LANZAMIENTO', title: '🚀 LIVE',                    desc: 'Despliegue, DNS, SSL, monitorización activa. Web pública.',                                  ph: 'launch',  color: 'red'    },
+];
+
+// Mission kit — todo lo que entra
+const kit = [
+  { ic: 'web',       k: 'Diseño web a medida',         v: '5 secciones esenciales + responsive móvil',           tag: 'INCLUIDO' },
+  { ic: 'domain',    k: 'Dominio .com / .es',          v: 'Compra y configuración (primer año)',                  tag: 'INCLUIDO' },
+  { ic: 'host',      k: 'Hosting profesional',         v: 'SSD · CDN · 99.9% uptime · sin tráfico límite',        tag: 'GRATIS 1 AÑO' },
+  { ic: 'ssl',       k: 'SSL Enterprise',              v: 'Certificado válido · candado verde · de por vida',     tag: 'GRATIS' },
+  { ic: 'mail',      k: 'Correo profesional',          v: '3 cuentas tu@tudominio.com · 10 GB cada una',          tag: 'GRATIS 1 AÑO' },
+  { ic: 'seo',       k: 'SEO técnico completo',        v: 'Sitemap, schema, OG, canonical, robots.txt',           tag: 'INCLUIDO' },
+  { ic: 'ga',        k: 'Google Analytics 4',          v: 'Setup + eventos clave + propiedad creada',             tag: 'INCLUIDO' },
+  { ic: 'gsc',       k: 'Google Search Console',       v: 'Verificación + envío sitemap + monitor de indexación', tag: 'INCLUIDO' },
+  { ic: 'maps',      k: 'Google Maps / Negocio',       v: 'Ficha completa optimizada para búsquedas locales',     tag: 'INCLUIDO' },
+  { ic: 'forms',     k: 'Formularios anti-spam',       v: 'Hasta 3 formularios con honeypot + email notify',      tag: 'INCLUIDO' },
+  { ic: 'social',    k: 'Open Graph + Twitter Card',   v: 'Tu web se ve preciosa cuando se comparte',             tag: 'INCLUIDO' },
+  { ic: 'training',  k: 'Formación 30 minutos',        v: 'Cómo editar tu web sin tocar código',                  tag: 'INCLUIDO' },
+  { ic: 'backup',    k: 'Backups + soporte',           v: '1 mes de mantenimiento + copias diarias',              tag: 'GRATIS 1 MES' },
+  { ic: 'doc',       k: 'Manual personalizado',        v: 'PDF con todos tus accesos y procedimientos',           tag: 'INCLUIDO' },
+];
+
+// Comparativa DIY vs Pro
+const diy = [
+  { item: 'Plataforma web (Wix/Squarespace)',   diyCost: '180€/año', diyTime: '20–40h',  proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Dominio + correo profesional',        diyCost: '60€/año',  diyTime: '3h',      proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Plantilla premium o diseñador',       diyCost: '150–800€', diyTime: '15–30h',  proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Banco de imágenes / fotos pro',       diyCost: '120€/año', diyTime: '5h',      proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Copywriting / contenido',             diyCost: '300–800€', diyTime: '20h',     proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'SEO técnico básico',                  diyCost: '200€',     diyTime: '15h',     proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Setup Analytics + Search Console',    diyCost: '—',        diyTime: '4h',      proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Formularios + emails',                diyCost: '60€/año',  diyTime: '3h',      proCost: '✓ Incluido', proTime: '0h' },
+  { item: 'Mantenimiento + seguridad',           diyCost: '300€/año', diyTime: '10h/año', proCost: '1 mes gratis', proTime: '0h' },
+];
+
+// Pricing
+const plans = [
+  {
+    code: 'MVP',
+    name: 'Lanzamiento Express',
+    sub: 'Para validar una idea rápido',
+    price: '450',
+    period: '€ · pago único',
+    days: '7 días',
+    features: [
+      'Landing de 1 página · responsive',
+      'Formulario de captación',
+      'Dominio + hosting 1 año gratis',
+      'Setup SEO básico',
+      'Google Analytics',
+      'Sin permanencia',
+    ],
+    cta: 'Validar mi idea',
+    popular: false,
+    color: 'yellow',
+  },
+  {
+    code: 'PRO',
+    name: 'Lanzamiento Pro',
+    sub: 'La web de tu negocio completa',
+    price: '890',
+    period: '€ · pago único',
+    days: '14 días',
+    features: [
+      'Hasta 5 páginas (Home, Sobre, Servicios, Blog, Contacto)',
+      'Diseño 100% a medida',
+      'Copywriting incluido',
+      '3 correos profesionales · hosting 1 año',
+      'SEO técnico completo',
+      'Analytics + Search Console + Maps',
+      'Formación 30 min + manual PDF',
+      '1 mes de mantenimiento gratis',
+    ],
+    cta: 'Empezar mi web',
+    popular: true,
+    color: 'lime',
+  },
+  {
+    code: 'PREMIUM',
+    name: 'Lanzamiento Premium',
+    sub: 'Todo + branding + 3 meses soporte',
+    price: '1.490',
+    period: '€ · pago único',
+    days: '21 días',
+    features: [
+      'Todo del plan Pro',
+      'Identidad visual (logo + paleta + tipografías)',
+      'Hasta 8 páginas + blog activo',
+      'Sesión de fotos de marca (1 día)',
+      'Estrategia SEO local (10 keywords)',
+      '3 meses de mantenimiento gratis',
+      'Auditoría mensual de tráfico',
+    ],
+    cta: 'Quiero el Premium',
+    popular: false,
+    color: 'gold',
+  },
+];
+
+// Tech stack
+const stack = [
+  { k: 'Astro',         v: 'Sitios estáticos ultrarrápidos (Lighthouse 95+)', logo: 'astro' },
+  { k: 'WordPress',     v: 'Si necesitas blog dinámico o tienda',              logo: 'wp'    },
+  { k: 'Netlify',       v: 'Hosting + CDN global + SSL gratuito',              logo: 'host'  },
+  { k: 'Google Analytics 4', v: 'Conoce qué hacen tus visitantes',             logo: 'ga'    },
+  { k: 'Cloudflare',    v: 'Protección + caché + DNS rápido',                  logo: 'cf'    },
+  { k: 'Resend / SMTP', v: 'Envío de emails desde formularios',                logo: 'mail'  },
+];
+
+// Proceso (5 fases)
+const proceso = [
+  { num: '01', title: 'Briefing',     body: 'Nos cuentas tu visión, objetivo y público. Sin tecnicismos — nosotros traducimos.', eta: 'Día 1',  color: 'orange' },
+  { num: '02', title: 'Diseño',       body: 'Wireframes + estilos. Te enviamos para validar antes de programar nada.',          eta: 'Día 3–5', color: 'yellow' },
+  { num: '03', title: 'Desarrollo',   body: 'Construcción real con optimización de velocidad y accesibilidad.',                 eta: 'Día 6–10', color: 'blue'  },
+  { num: '04', title: 'SEO + setup',  body: 'Indexación, analytics, mapas, social. Tu web lista para Google.',                  eta: 'Día 11–13', color: 'mint' },
+  { num: '05', title: '🚀 Lanzamiento', body: 'Despliegue + formación + monitorización. Tú al mando.',                            eta: 'Día 14',  color: 'red' },
+];
+
+// Checklist pre-launch (25 items)
+const checklist = [
+  { c: 'NEGOCIO', items: [
+    { t: 'Definir propuesta de valor en 1 frase', done: true },
+    { t: 'Identificar a tu cliente ideal (1 persona)', done: true },
+    { t: 'Listar 3 competidores directos', done: true },
+    { t: 'Definir 1 llamada a la acción principal', done: true },
+  ]},
+  { c: 'MARCA', items: [
+    { t: 'Logo en SVG y PNG (fondo transparente)', done: true },
+    { t: 'Paleta de 3 colores principales', done: true },
+    { t: '2 tipografías (titular + body)', done: true },
+    { t: 'Tono de voz definido', done: true },
+  ]},
+  { c: 'CONTENIDO', items: [
+    { t: 'Texto «Sobre nosotros» (200–300 palabras)', done: true },
+    { t: 'Descripción de servicios/productos', done: true },
+    { t: 'FAQs (mínimo 5 preguntas)', done: true },
+    { t: '5–10 imágenes de calidad', done: true },
+    { t: 'Datos legales: NIF, dirección, política privacidad', done: true },
+  ]},
+  { c: 'TÉCNICO', items: [
+    { t: 'Dominio comprado o decidido', done: true },
+    { t: 'Cuenta Google preparada (Analytics + Search)', done: true },
+    { t: 'Perfil de Google Maps / Negocio', done: true },
+    { t: 'Acceso a redes sociales (mínimo IG + LinkedIn)', done: true },
+    { t: 'Foto de perfil pro + foto de portada', done: true },
+  ]},
+  { c: 'LANZAMIENTO', items: [
+    { t: 'Plan de difusión en redes (3 posts)', done: true },
+    { t: 'Email a tu red de contactos', done: true },
+    { t: 'Lista inicial de 10 personas para feedback', done: true },
+    { t: 'Métrica de éxito definida (visitas, leads, ventas)', done: true },
+    { t: 'Calendario de revisión a 30 / 60 / 90 días', done: true },
+    { t: 'Plan B si algo va mal (mantenimiento)', done: true },
+    { t: 'Champán o reserva en restaurante 🎉', done: true },
+  ]},
+];
+
+// Testimonials
+const testimonials = [
+  { text: 'Pasé de tener una idea en una libreta a tener web profesional en 2 semanas. Lo más importante: explicaron cada paso sin que yo entendiera de tecnología.', author: 'Marta L.',   role: 'Fundadora · Estudio de yoga · Mojácar',  rocket: '🌱' },
+  { text: 'Necesitaba validar una idea sin gastarme miles. Por 450€ tuve landing + formulario en una semana. En 2 meses tenía suficiente feedback para ir a por la web grande.', author: 'David R.', role: 'CEO · Startup turismo · Cabo de Gata', rocket: '⚡' },
+  { text: 'No paro de recomendarles. Mi mayor miedo era contratar a alguien que desapareciera tras cobrar. Aquí siguen ayudándome 3 años después.',                  author: 'Sara P.',     role: 'Propietaria · Pastelería online · Vera', rocket: '🍰' },
+];
+
+// FAQ
+const faq = [
+  { q: '¿Cuánto cuesta lanzar mi web?', a: 'Desde 450€ (Express, 1 página · 7 días) hasta 1.490€ (Premium, branding + 3 meses soporte · 21 días). El plan más contratado es el Pro: 890€ con web completa de 5 páginas, hosting + correo gratis 1 año, SEO técnico y formación.' },
+  { q: '¿Por qué no usar Wix o Shopify yo solo?',  a: 'Puedes — y para validar una idea funciona. Pero a partir del tercer mes pagas suscripción para siempre, no eres dueño de la web, el SEO es peor y queda con apariencia de plantilla. Calcula: en 3 años en Wix gastas más que en una web profesional propia.' },
+  { q: '¿Qué pasa después del primer año (hosting/correo)?', a: 'El segundo año el hosting + correo cuesta unos 90€/año si quieres seguir con nosotros. O te exportamos todo y te vas — la web es tuya. Sin sorpresas, sin extorsión.' },
+  { q: '¿Y si no tengo logo ni marca todavía?',     a: 'En el plan Premium incluimos identidad visual completa (logo, colores, tipografías). En Pro hacemos un look profesional con tu logo actual aunque sea básico. Si no tienes nada, te recomendamos Premium o partir de un diseño tipográfico limpio.' },
+  { q: '¿Cuánto tarda realmente?',                   a: 'Express: 7 días reales. Pro: 14 días reales. Premium: 21 días. Lo cumplimos siempre que recibamos tus textos/imágenes a tiempo (te ayudamos con un calendario y recordatorios).' },
+  { q: '¿Puedo añadir tienda online más adelante?',  a: 'Sí, sin tirar nada. Las webs que entregamos están preparadas para crecer. Migración a WooCommerce o PrestaShop la presupuestamos cuando lo necesites — sin obligación.' },
+  { q: '¿Trabajáis con autónomos sin facturación previa?', a: 'Sí, lo hacemos a diario. Fraccionamos pagos (50% al iniciar, 50% al lanzar). Te asesoramos en lo administrativo sin coste.' },
+  { q: '¿Hay garantía si no me convence?',           a: 'Sí. Tienes 15 días desde la entrega para pedir cambios o devolución parcial si algo no encaja. Hasta hoy: 0 devoluciones, 200+ proyectos. Pero la garantía está.' },
+];
+
+const jsonLd = [
+  { '@context':'https://schema.org','@type':'ProfessionalService','name':'Platanito Rico — Web para Emprendedores en Almería','description':description,'url':canonical,'telephone':'+34657085019','email':'hola@platanitorico.com','address':{'@type':'PostalAddress','streetAddress':'Ctra de Ronda, 82','addressLocality':'Vera','addressRegion':'Almería','postalCode':'04620','addressCountry':'ES'},'geo':{'@type':'GeoCoordinates','latitude':37.245,'longitude':-1.8614},'priceRange':'€€','areaServed':{'@type':'AdministrativeArea','name':'Almería'},'serviceType':'Web Design for Startups','hasOfferCatalog':{'@type':'OfferCatalog','name':'Packs Lanzamiento','itemListElement':plans.map(p=>({'@type':'Offer','name':p.name,'description':p.sub,'price':p.price.replace(/[^0-9]/g,''),'priceCurrency':'EUR'}))} },
+  { '@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':[
+    { '@type':'ListItem','position':1,'name':'Inicio','item':'https://platanitorico.com/' },
+    { '@type':'ListItem','position':2,'name':'Soluciones','item':'https://platanitorico.com/soluciones/empresa/' },
+    { '@type':'ListItem','position':3,'name':'Emprendedores','item':canonical }
+  ]},
+  { '@context':'https://schema.org','@type':'FAQPage','mainEntity':faq.map(f=>({'@type':'Question','name':f.q,'acceptedAnswer':{'@type':'Answer','text':f.a}})) },
+  { '@context':'https://schema.org','@type':'HowTo','name':'Cómo lanzamos tu negocio digital en 14 días','step':proceso.map((p,i)=>({'@type':'HowToStep','position':i+1,'name':p.title,'text':p.body})) }
+];
+
+// Conteos resumen DIY
+const diyTotalLow  = 1290; // suma aproximada baja
+const diyTotalHigh = 2740;
+const diyHoursLow  = 95;
+const diyHoursHigh = 130;
 ---
 
 <BaseLayout
@@ -14,117 +232,2158 @@ const canonical = "https://platanitorico.com/soluciones/emprendedor/";
   canonical={canonical}
   image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
   imageAlt="Web para emprendedores en Almería - Platanito Rico"
-  keywords="web emprendedores almería, lanzar web almería, primera web negocio, diseño web barato almería, startup web almería"
-  jsonLd={[
-    {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
-      'name': 'Platanito Rico — Web para Emprendedores en Almería',
-      'description': description,
-      'url': canonical,
-      'telephone': '+34657085019',
-      'email': 'hola@platanitorico.com',
-      'address': {
-        '@type': 'PostalAddress',
-        'streetAddress': 'Ctra de Ronda, 82',
-        'addressLocality': 'Vera',
-        'addressRegion': 'Almería',
-        'postalCode': '04620',
-        'addressCountry': 'ES'
-      },
-      'geo': { '@type': 'GeoCoordinates', 'latitude': 37.245, 'longitude': -1.8614 },
-      'priceRange': '€€',
-      'areaServed': { '@type': 'AdministrativeArea', 'name': 'Almería' },
-      'serviceType': 'Web Design for Startups'
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Inicio', 'item': 'https://platanitorico.com/' },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Soluciones', 'item': 'https://platanitorico.com/soluciones/ecommerce/' },
-        { '@type': 'ListItem', 'position': 3, 'name': 'Emprendedores', 'item': canonical }
-      ]
-    }
-  ]}
+  keywords="web emprendedores almería, lanzar web almería, primera web negocio, diseño web barato almería, startup web almería, mvp web almería"
+  jsonLd={jsonLd}
 >
   <Header />
+  <Breadcrumb items={[
+    { label: 'Inicio',      href: '/' },
+    { label: 'Soluciones',  href: '/soluciones/empresa/' },
+    { label: 'Emprendedores' }
+  ]} />
 
-  <section class="section-brutal relative min-h-screen flex items-center justify-center overflow-hidden bg-brutal-bg">
-    <div class="container-brutal relative z-10 py-24">
-      <div class="badge-brutal mb-8">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
-        </svg>
-        Emprendedores
+  <main id="main-content" class="em">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — LAUNCH PAD                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-hero">
+      <div class="container-brutal">
+
+        <header class="em-hero__top">
+          <span class="text-meta">N.º 027 — Solución · Emprendedores</span>
+          <span class="text-meta em-hero__status">
+            <span class="em-pulse"></span>
+            MISIÓN 027 · LISTOS PARA DESPEGAR · T-MINUS 14 DÍAS
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="em-hero__grid">
+
+          {/* Izquierda: copy + KPIs */}
+          <div class="em-hero__intro">
+            <span class="text-meta em-hero__chapter">Cap. 01 / Despega tu negocio</span>
+            <h1 class="em-hero__title heading-display">
+              De la
+              <em class="heading-editorial">idea</em>
+              al
+              <span class="em-hero__title-stamp">despegue</span>
+              en 14 días.
+            </h1>
+
+            <p class="em-hero__lead">
+              Web profesional, dominio, correo, SEO y formación — <strong>todo incluido</strong>
+              desde <strong>450€</strong>. Sin permanencia, sin sorpresas, sin gastar tu
+              tiempo en algo que no es tu negocio.
+            </p>
+
+            <div class="em-hero__cta">
+              <a href="#planes" class="em-btn em-btn--primary">
+                <span>Iniciar secuencia</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#timeline" class="em-btn em-btn--ghost">
+                Ver hoja de ruta ↓
+              </a>
+            </div>
+
+            <div class="em-hero__kpis">
+              <div class="em-kpi em-kpi--orange">
+                <span class="em-kpi__v text-mono">14<small>d</small></span>
+                <span class="em-kpi__l">Hasta el lanzamiento</span>
+              </div>
+              <div class="em-kpi em-kpi--lime">
+                <span class="em-kpi__v text-mono">450<small>€</small></span>
+                <span class="em-kpi__l">Desde · pago único</span>
+              </div>
+              <div class="em-kpi em-kpi--yellow">
+                <span class="em-kpi__v text-mono">∞</span>
+                <span class="em-kpi__l">Hosting 1 año gratis</span>
+              </div>
+              <div class="em-kpi em-kpi--ink">
+                <span class="em-kpi__v text-mono">0</span>
+                <span class="em-kpi__l">Permanencia</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Derecha: COHETE en plataforma */}
+          <aside class="em-hero__pad" aria-hidden="true">
+            <svg viewBox="0 0 380 520" class="em-rocket-svg">
+              <defs>
+                <radialGradient id="em-glow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%"  stop-color="#FF6B35" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#FF6B35" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="em-rocket-body" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%"  stop-color="#FFFCF6"/>
+                  <stop offset="50%" stop-color="#F8F2E4"/>
+                  <stop offset="100%" stop-color="#E8DFC5"/>
+                </linearGradient>
+                <linearGradient id="em-rocket-fire" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"  stop-color="#FFD600"/>
+                  <stop offset="50%" stop-color="#FF6B35"/>
+                  <stop offset="100%" stop-color="#DC1B2C"/>
+                </linearGradient>
+              </defs>
+
+              {/* Glow detrás */}
+              <circle cx="190" cy="260" r="200" fill="url(#em-glow)"/>
+
+              {/* Estrellas decorativas */}
+              <g fill="#FFD600" class="em-stars">
+                <text x="40"  y="60"  font-family="monospace" font-size="14">★</text>
+                <text x="330" y="100" font-family="monospace" font-size="10">★</text>
+                <text x="50"  y="200" font-family="monospace" font-size="8">★</text>
+                <text x="340" y="240" font-family="monospace" font-size="12">★</text>
+                <text x="30"  y="380" font-family="monospace" font-size="9">★</text>
+                <text x="350" y="400" font-family="monospace" font-size="11">★</text>
+              </g>
+
+              {/* COHETE */}
+              <g class="em-rocket">
+                {/* Llama animada */}
+                <g class="em-flame">
+                  <path d="M 170 380 C 170 380 160 410 175 440 C 180 460 195 460 205 440 C 220 410 210 380 210 380 Z" fill="url(#em-rocket-fire)" stroke="#0E0D0B" stroke-width="2"/>
+                  <path d="M 178 388 C 178 388 174 408 183 425 C 188 438 197 438 202 425 C 211 408 207 388 207 388 Z" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/>
+                  <path d="M 185 395 C 185 395 184 408 190 418 C 194 425 196 425 200 418 C 206 408 205 395 205 395 Z" fill="#FFFCF6"/>
+                </g>
+
+                {/* Aletas */}
+                <path d="M 150 320 L 130 380 L 165 360 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2.5"/>
+                <path d="M 230 320 L 250 380 L 215 360 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2.5"/>
+
+                {/* Cuerpo principal */}
+                <rect x="155" y="200" width="70" height="180" rx="4" fill="url(#em-rocket-body)" stroke="#0E0D0B" stroke-width="3"/>
+
+                {/* Línea decorativa */}
+                <line x1="155" y1="250" x2="225" y2="250" stroke="#0E0D0B" stroke-width="2"/>
+                <line x1="155" y1="330" x2="225" y2="330" stroke="#0E0D0B" stroke-width="2"/>
+
+                {/* Punta */}
+                <path d="M 155 200 C 155 160 175 130 190 110 C 205 130 225 160 225 200 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="3"/>
+
+                {/* Ventana / cabina */}
+                <circle cx="190" cy="230" r="20" fill="#0A1A3A" stroke="#0E0D0B" stroke-width="3"/>
+                <circle cx="190" cy="230" r="14" fill="#005FB8" stroke="#0E0D0B" stroke-width="1.5"/>
+                <circle cx="184" cy="224" r="4" fill="#FFFCF6" opacity="0.8"/>
+
+                {/* Logo P★ en el cohete */}
+                <text x="190" y="295" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#0E0D0B">P★R</text>
+
+                {/* Tornillos */}
+                <circle cx="165" cy="270" r="2" fill="#0E0D0B"/>
+                <circle cx="215" cy="270" r="2" fill="#0E0D0B"/>
+                <circle cx="165" cy="350" r="2" fill="#0E0D0B"/>
+                <circle cx="215" cy="350" r="2" fill="#0E0D0B"/>
+              </g>
+
+              {/* Plataforma de lanzamiento */}
+              <g>
+                <rect x="80" y="465" width="220" height="20" fill="#0E0D0B"/>
+                <rect x="100" y="455" width="180" height="10" fill="#1a1817" stroke="#0E0D0B" stroke-width="2"/>
+                {/* Tornillos plataforma */}
+                <circle cx="90" cy="475" r="2.5" fill="#FFD600"/>
+                <circle cx="290" cy="475" r="2.5" fill="#FFD600"/>
+                <text x="190" y="479" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#D6FF44" letter-spacing="2">LP-027 · VERA · ALMERÍA</text>
+              </g>
+
+              {/* Humo en la base */}
+              <g class="em-smoke" opacity="0.55">
+                <circle cx="140" cy="455" r="14" fill="#FFFCF6"/>
+                <circle cx="160" cy="450" r="10" fill="#F8F2E4"/>
+                <circle cx="240" cy="455" r="14" fill="#FFFCF6"/>
+                <circle cx="220" cy="450" r="10" fill="#F8F2E4"/>
+                <circle cx="190" cy="460" r="8"  fill="#FFFCF6"/>
+              </g>
+
+              {/* Texto T-MINUS arriba */}
+              <text x="190" y="40" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#0E0D0B" letter-spacing="4">T-MINUS · 00:14:00:00</text>
+              <text x="190" y="55" text-anchor="middle" font-family="monospace" font-size="8" fill="#003B7A" letter-spacing="3">SECUENCIA DE LANZAMIENTO LISTA</text>
+            </svg>
+
+            {/* Mission patch flotante */}
+            <div class="em-mission-patch" aria-hidden="true">
+              <svg viewBox="0 0 110 110" width="100%" height="100%">
+                <defs>
+                  <path id="em-patch-arc" d="M55,55 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/>
+                </defs>
+                <circle cx="55" cy="55" r="52" fill="#0A1A3A" stroke="#0E0D0B" stroke-width="2.5"/>
+                <circle cx="55" cy="55" r="46" fill="none" stroke="#D6FF44" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                <g class="em-patch-spin">
+                  <text font-family="monospace" font-size="8" font-weight="bold" fill="#D6FF44" letter-spacing="2.5">
+                    <textPath href="#em-patch-arc" startOffset="0%">★ MISIÓN 027 ★ LANZAMIENTO ★</textPath>
+                  </text>
+                </g>
+                {/* Rocket interior */}
+                <g transform="translate(55, 55) scale(0.55) translate(-22, -28)">
+                  <path d="M 22 4 L 30 16 L 30 38 L 26 44 L 18 44 L 14 38 L 14 16 Z" fill="#FF6B35" stroke="#FFFCF6" stroke-width="1.5"/>
+                  <circle cx="22" cy="20" r="4" fill="#005FB8" stroke="#FFFCF6" stroke-width="1"/>
+                  <path d="M 14 30 L 8 38 L 14 38 Z M 30 30 L 36 38 L 30 38 Z" fill="#DC1B2C" stroke="#FFFCF6" stroke-width="1"/>
+                  <path d="M 18 44 L 22 52 L 26 44 Z" fill="#FFD600"/>
+                </g>
+              </svg>
+            </div>
+          </aside>
+        </div>
       </div>
 
-      <h1 class="heading-display text-4xl md:text-5xl lg:text-7xl text-brutal-text mb-8 leading-[1.1]">
-        De la idea a la <br/>
-        <span class="block mt-2 text-brutal-accent">realidad digital</span>
-      </h1>
+      {/* Marquee T-minus */}
+      <div class="em-marquee">
+        <div class="em-marquee__track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ TODO INCLUIDO ★ 14 DÍAS ★ HOSTING GRATIS ★ SIN PERMANENCIA ★ DESDE 450€ ★ 200+ PROYECTOS LANZADOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
 
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-        <div class="space-y-8">
-          <p class="text-lg md:text-xl text-brutal-text-secondary leading-relaxed">
-            Sabemos que como emprendedor, tu tiempo es el activo más valioso. <strong class="text-brutal-text">"No tengo tiempo"</strong> o <strong class="text-brutal-text">"No sé por dónde empezar"</strong> son frases que escuchamos a diario.
+    {/* ════════════════════════════════════════════════ */}
+    {/* MISSION BRIEFING — PAIN POINTS                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-pains-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 02 / Briefing de misión</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Sabemos
+              <em class="heading-editorial">cómo te sientes.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Las 4 frases que más escuchamos de emprendedores. Y cómo las
+            convertimos en un plan de lanzamiento concreto.
           </p>
+        </header>
 
-          <div class="space-y-6">
-            <h2 class="text-2xl md:text-3xl font-bold text-brutal-text" style="font-family:'Anton',sans-serif">Nuestra solución "Todo Incluido"</h2>
-            <div class="grid gap-4">
-              {[
-                {
-                  title: "Diseño y Estrategia",
-                  desc: "No solo hacemos una web bonita, creamos una herramienta de venta que comunica tu propuesta de valor."
-                },
-                {
-                  title: "Copywriting Persuasivo",
-                  desc: "Redactamos los textos de tu web para que conecten con tu cliente ideal y lo guíen a la acción."
-                },
-                {
-                  title: "Lanzamiento y SEO",
-                  desc: "Configuramos todo para que tu sitio sea visible en Google desde el día uno."
-                },
-                {
-                  title: "Formación Básica",
-                  desc: "Te enseñamos a gestionar lo básico para que seas dueño de tu propio negocio online."
-                }
-              ].map(item => (
-                <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-                  <h3 class="text-lg font-bold text-brutal-text mb-2">{item.title}</h3>
-                  <p class="text-brutal-text-secondary">{item.desc}</p>
+        <ol class="em-pains">
+          {pains.map((p) => (
+            <li class={`em-pain em-pain--${p.color}`}>
+              <div class="em-pain__icon" aria-hidden="true">
+                {p.icon === 'clock' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <circle cx="32" cy="32" r="26" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                    <circle cx="32" cy="32" r="20" fill="none" stroke="#0E0D0B" stroke-width="2"/>
+                    {Array.from({length: 12}).map((_, i) => (
+                      <line x1="32" y1="10" x2="32" y2="14" stroke="#0E0D0B" stroke-width="2" transform={`rotate(${i*30} 32 32)`}/>
+                    ))}
+                    <line x1="32" y1="32" x2="32" y2="18" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="32" y1="32" x2="44" y2="32" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="32" cy="32" r="3" fill="#0E0D0B"/>
+                  </svg>
+                )}
+                {p.icon === 'map' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <path d="M 8 14 L 24 8 L 40 14 L 56 8 L 56 50 L 40 56 L 24 50 L 8 56 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                    <line x1="24" y1="8"  x2="24" y2="50" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="40" y1="14" x2="40" y2="56" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="32" cy="32" r="6" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 32 26 L 32 38 M 26 32 L 38 32" stroke="#FFFCF6" stroke-width="2"/>
+                  </svg>
+                )}
+                {p.icon === 'wallet' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <rect x="8" y="16" width="48" height="36" rx="4" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                    <path d="M 8 24 L 56 24" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="44" cy="38" r="6" fill="#0E0D0B"/>
+                    <text x="44" y="42" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#FFD600">€</text>
+                    <path d="M 14 12 L 14 16 L 42 16 L 42 12" fill="none" stroke="#0E0D0B" stroke-width="2.5"/>
+                  </svg>
+                )}
+                {p.icon === 'beaker' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <path d="M 24 8 L 24 28 L 14 52 C 12 56 14 60 18 60 L 46 60 C 50 60 52 56 50 52 L 40 28 L 40 8 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                    <line x1="18" y1="8" x2="46" y2="8" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M 17 44 Q 32 38 47 44 L 50 52 C 52 56 50 60 46 60 L 18 60 C 14 60 12 56 14 52 Z" fill="#00B85C" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="26" cy="50" r="2" fill="#FFFCF6"/>
+                    <circle cx="36" cy="54" r="1.5" fill="#FFFCF6"/>
+                  </svg>
+                )}
+              </div>
+              <header class="em-pain__head">
+                <span class="text-mono em-pain__num">{p.num}</span>
+                <span class="text-mono em-pain__lbl">PAIN POINT</span>
+              </header>
+              <h3 class="em-pain__pain heading-display">{p.pain}</h3>
+              <div class="em-pain__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <p class="em-pain__sol"><strong>Nuestra respuesta:</strong> {p.sol}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TIMELINE 14 DÍAS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-timeline-section" id="timeline">
+      <div class="container-brutal">
+        <header class="em-timeline-head">
+          <div>
+            <span class="text-meta" style="color:var(--em-lime)">Cap. 03 / Hoja de ruta</span>
+            <h2 class="heading-display em-timeline-title">
+              14 días al
+              <em class="heading-editorial" style="color:var(--em-orange)">despegue.</em>
+            </h2>
+            <p class="em-timeline-lead">
+              Día a día, qué pasa y qué entregamos. Cero misterios. Cero retrasos —
+              si recibimos tus textos/fotos a tiempo, lanzamos el día 14.
+            </p>
+          </div>
+          <div class="em-timeline-aside">
+            <span class="text-mono em-timeline-aside__lbl">FASES TOTALES</span>
+            <span class="em-timeline-aside__count">06</span>
+            <ul class="em-timeline-aside__legend">
+              <li><span style="background:var(--em-orange)"></span>Briefing</li>
+              <li><span style="background:var(--em-yellow)"></span>Diseño</li>
+              <li><span style="background:var(--em-lime)"></span>Copy</li>
+              <li><span style="background:var(--em-blue)"></span>Desarrollo</li>
+              <li><span style="background:var(--em-mint)"></span>SEO</li>
+              <li><span style="background:var(--em-gold)"></span>Review</li>
+              <li><span style="background:var(--em-red)"></span>🚀 Launch</li>
+            </ul>
+          </div>
+        </header>
+
+        <ol class="em-timeline">
+          {timeline.map((t, i) => (
+            <li class={`em-tl em-tl--${t.color}`} style={`--em-tl-i:${i}`}>
+              <div class="em-tl__day text-mono">{t.d}</div>
+              <div class="em-tl__bar" aria-hidden="true"></div>
+              <div class="em-tl__body">
+                <header class="em-tl__head">
+                  <span class="text-mono em-tl__phase">{t.phase}</span>
+                  <span class="text-mono em-tl__num">{String(i+1).padStart(2,'0')}/14</span>
+                </header>
+                <h3 class="em-tl__title">{t.title}</h3>
+                <p class="em-tl__desc">{t.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MISSION KIT — UNBOXING                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-kit-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 04 / Mission Kit</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que viene
+              <em class="heading-editorial">en la caja.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            14 elementos esenciales para que tu negocio nazca preparado.
+            No vendemos «hacemos webs» — vendemos un negocio digital listo.
+          </p>
+        </header>
+
+        <div class="em-kit-wrap">
+          {/* Caja ilustrada izquierda */}
+          <aside class="em-kit-box" aria-hidden="true">
+            <svg viewBox="0 0 320 380" width="100%" height="100%">
+              <defs>
+                <pattern id="em-cardboard" width="8" height="8" patternUnits="userSpaceOnUse">
+                  <circle cx="4" cy="4" r="0.8" fill="#0E0D0B" opacity="0.18"/>
+                </pattern>
+              </defs>
+
+              {/* Tapas abiertas (perspectiva) */}
+              <path d="M 30 80 L 160 30 L 160 80 L 30 130 Z" fill="#F8F2E4" stroke="#0E0D0B" stroke-width="3"/>
+              <path d="M 290 80 L 160 30 L 160 80 L 290 130 Z" fill="#F0E7CD" stroke="#0E0D0B" stroke-width="3"/>
+
+              {/* Caja principal */}
+              <rect x="30" y="80" width="260" height="240" fill="#F8F2E4" stroke="#0E0D0B" stroke-width="3.5"/>
+              <rect x="30" y="80" width="260" height="240" fill="url(#em-cardboard)"/>
+
+              {/* Cinta de embalaje */}
+              <rect x="140" y="80" width="40" height="240" fill="#FF6B35" stroke="#0E0D0B" stroke-width="2.5"/>
+              <text x="160" y="180" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#FFFCF6" letter-spacing="3" transform="rotate(-90 160 180)">PLATANITO RICO · MISSION KIT</text>
+
+              {/* Etiqueta FRAGILE */}
+              <g transform="translate(50, 100) rotate(-8)">
+                <rect width="80" height="40" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/>
+                <text x="40" y="18" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#DC1B2C" letter-spacing="2">FRAGILE</text>
+                <text x="40" y="32" text-anchor="middle" font-family="monospace" font-size="6" fill="#0E0D0B" letter-spacing="1.5">★ SUEÑOS · MANEJAR CON CUIDADO</text>
+              </g>
+
+              {/* Etiqueta destinatario */}
+              <g transform="translate(195, 105)">
+                <rect width="80" height="60" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/>
+                <text x="40" y="13" text-anchor="middle" font-family="monospace" font-size="6" fill="#0E0D0B" letter-spacing="2">PARA:</text>
+                <text x="40" y="28" text-anchor="middle" font-family="serif" font-size="11" font-weight="bold" fill="#0E0D0B">EL EMPRENDEDOR</text>
+                <line x1="6" y1="34" x2="74" y2="34" stroke="#0E0D0B" stroke-width="0.5"/>
+                <text x="40" y="46" text-anchor="middle" font-family="monospace" font-size="6" fill="#0E0D0B" letter-spacing="1.5">CON UNA</text>
+                <text x="40" y="56" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#DC1B2C" letter-spacing="1.5">BUENA IDEA</text>
+              </g>
+
+              {/* Sello redondo entrega */}
+              <g transform="translate(85, 240)">
+                <circle r="32" fill="none" stroke="#DC1B2C" stroke-width="2.5"/>
+                <circle r="26" fill="none" stroke="#DC1B2C" stroke-width="1" stroke-dasharray="2 1.5"/>
+                <text y="-6" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#DC1B2C" letter-spacing="2">★ ENTREGADO ★</text>
+                <text y="6"  text-anchor="middle" font-family="serif" font-size="11" font-weight="bold" fill="#DC1B2C">14d</text>
+                <text y="17" text-anchor="middle" font-family="monospace" font-size="5" fill="#DC1B2C" letter-spacing="1.5">ALMERÍA · 04620</text>
+              </g>
+
+              {/* Código de barras */}
+              <g transform="translate(195, 220)">
+                <rect width="80" height="60" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                <g fill="#0E0D0B" transform="translate(8, 8)">
+                  <rect x="0"  y="0" width="2" height="30"/>
+                  <rect x="4"  y="0" width="1" height="30"/>
+                  <rect x="7"  y="0" width="3" height="30"/>
+                  <rect x="12" y="0" width="1" height="30"/>
+                  <rect x="15" y="0" width="2" height="30"/>
+                  <rect x="20" y="0" width="3" height="30"/>
+                  <rect x="25" y="0" width="1" height="30"/>
+                  <rect x="28" y="0" width="2" height="30"/>
+                  <rect x="32" y="0" width="3" height="30"/>
+                  <rect x="37" y="0" width="1" height="30"/>
+                  <rect x="40" y="0" width="2" height="30"/>
+                  <rect x="44" y="0" width="3" height="30"/>
+                  <rect x="49" y="0" width="1" height="30"/>
+                  <rect x="52" y="0" width="2" height="30"/>
+                  <rect x="56" y="0" width="3" height="30"/>
+                  <rect x="61" y="0" width="1" height="30"/>
+                </g>
+                <text x="40" y="52" text-anchor="middle" font-family="monospace" font-size="7" fill="#0E0D0B" letter-spacing="2">PR-027-2026</text>
+              </g>
+
+              {/* Estrellas en esquinas */}
+              <text x="48"  y="350" font-family="monospace" font-size="14" fill="#FFD600">★</text>
+              <text x="272" y="350" font-family="monospace" font-size="14" fill="#FFD600">★</text>
+              <text x="160" y="370" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#0E0D0B" letter-spacing="3">★ PESO: 0KG · 100% DIGITAL ★</text>
+            </svg>
+          </aside>
+
+          {/* Lista de items derecha */}
+          <ol class="em-kit-list">
+            {kit.map((k, i) => (
+              <li class="em-kit-item">
+                <span class="em-kit-item__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                <div class="em-kit-item__icon" aria-hidden="true">
+                  {k.ic === 'web'      && <svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="4" width="18" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="6.5" r="0.7" fill="currentColor"/><circle cx="8" cy="6.5" r="0.7" fill="currentColor"/></svg>}
+                  {k.ic === 'domain'   && <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18" fill="none" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'host'     && <svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="5"  width="18" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="18" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="7" cy="8" r="1" fill="currentColor"/><circle cx="7" cy="16" r="1" fill="currentColor"/></svg>}
+                  {k.ic === 'ssl'      && <svg viewBox="0 0 24 24" width="22" height="22"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 018 0v3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="15" r="1.5" fill="currentColor"/></svg>}
+                  {k.ic === 'mail'     && <svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="5" width="18" height="14" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 7l9 6 9-6" fill="none" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'seo'      && <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>}
+                  {k.ic === 'ga'       && <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 20V10M12 20V4M19 20v-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>}
+                  {k.ic === 'gsc'      && <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v10M7 12h10" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'maps'     && <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 22s8-7 8-13a8 8 0 10-16 0c0 6 8 13 8 13z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9" r="3" fill="currentColor"/></svg>}
+                  {k.ic === 'forms'    && <svg viewBox="0 0 24 24" width="22" height="22"><rect x="4" y="3" width="16" height="18" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><line x1="7" y1="8"  x2="17" y2="8"  stroke="currentColor" stroke-width="2"/><line x1="7" y1="12" x2="17" y2="12" stroke="currentColor" stroke-width="2"/><line x1="7" y1="16" x2="13" y2="16" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'social'   && <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="6"  cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6"  r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="8.7" y1="10.7" x2="15.3" y2="7.3" stroke="currentColor" stroke-width="2"/><line x1="8.7" y1="13.3" x2="15.3" y2="16.7" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'training' && <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 7l9-4 9 4-9 4-9-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M7 9v5a5 5 0 0010 0V9" fill="none" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'backup'   && <svg viewBox="0 0 24 24" width="22" height="22"><ellipse cx="12" cy="6" rx="8" ry="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" fill="none" stroke="currentColor" stroke-width="2"/></svg>}
+                  {k.ic === 'doc'      && <svg viewBox="0 0 24 24" width="22" height="22"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 2v6h6" fill="none" stroke="currentColor" stroke-width="2"/><line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="2"/><line x1="8" y1="17" x2="13" y2="17" stroke="currentColor" stroke-width="2"/></svg>}
                 </div>
-              ))}
+                <div class="em-kit-item__body">
+                  <h3 class="em-kit-item__k">{k.k}</h3>
+                  <p class="em-kit-item__v">{k.v}</p>
+                </div>
+                <span class={`em-kit-item__tag em-kit-item__tag--${k.tag.includes('GRATIS') ? 'free' : 'inc'}`}>
+                  {k.tag}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIY vs PRO — Comparativa real                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-compare-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Lo que cuesta hacerlo solo</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Hazlo tú,
+              <em class="heading-editorial">o hazlo bien.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Comparativa honesta: lo que pagarías y el tiempo que invertirías
+            haciéndolo solo, vs nuestro pack todo-en-uno.
+          </p>
+        </header>
+
+        <div class="em-compare">
+          <div class="em-compare-head">
+            <span class="text-mono em-compare-head__l">CONCEPTO</span>
+            <span class="text-mono em-compare-head__c">DIY · TÚ SOLO</span>
+            <span class="text-mono em-compare-head__r">PLATANITO · PRO</span>
+          </div>
+
+          {diy.map((row) => (
+            <div class="em-compare-row">
+              <div class="em-compare-row__item">{row.item}</div>
+              <div class="em-compare-row__diy">
+                <span class="em-compare-row__cost">{row.diyCost}</span>
+                <span class="em-compare-row__time text-mono">⏱ {row.diyTime}</span>
+              </div>
+              <div class="em-compare-row__pro">
+                <span class="em-compare-row__cost em-compare-row__cost--ok">{row.proCost}</span>
+                <span class="em-compare-row__time text-mono">⏱ {row.proTime}</span>
+              </div>
+            </div>
+          ))}
+
+          {/* Totales */}
+          <div class="em-compare-totals">
+            <div class="em-compare-totals__l">
+              <span class="text-mono">TOTAL · ESTIMADO</span>
+            </div>
+            <div class="em-compare-totals__diy">
+              <div class="em-compare-totals__big text-mono">{diyTotalLow}–{diyTotalHigh}€</div>
+              <div class="em-compare-totals__sub text-mono">+ {diyHoursLow}–{diyHoursHigh}h de tu tiempo</div>
+              <div class="em-compare-totals__bad text-mono">⚠ Sin garantía de resultado</div>
+            </div>
+            <div class="em-compare-totals__pro">
+              <div class="em-compare-totals__big em-compare-totals__big--ok text-mono">890€</div>
+              <div class="em-compare-totals__sub text-mono">0 horas tu tiempo</div>
+              <div class="em-compare-totals__good text-mono">✓ Resultado garantizado</div>
             </div>
           </div>
         </div>
 
-        <div class="sticky top-32">
-          <div class="card-brutal bg-brutal-card border-brutal-accent/30 p-8 lg:p-10">
-            <div class="w-16 h-16 bg-brutal-accent flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-brutal-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
-              </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-brutal-text mb-4" style="font-family:'Anton',sans-serif">¿Hablamos de tu proyecto?</h3>
-            <p class="text-brutal-text-secondary mb-6">
-              Cuéntanos tu idea y te propondremos la ruta más rápida y eficiente para lanzarla al mercado.
-            </p>
-            <a href="/contacto" class="btn-brutal group inline-flex items-center justify-center gap-2 w-full px-6 py-4 bg-brutal-accent text-brutal-text font-semibold">
-              <span class="relative">Empezar ahora</span>
-              <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
-            </a>
-            <p class="mt-4 text-center text-sm text-brutal-text-muted">
-              Presupuesto personalizado en menos de 48h.
+        <p class="em-compare-note">
+          <strong>★ Honestidad:</strong> hay quien puede hacerlo solo con éxito.
+          Si tienes tiempo, ganas y disfrutas aprendiendo cosas técnicas — adelante.
+          Si tu tiempo vale más en tu negocio que en montar webs, contrátanos.
+        </p>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PRICING — 3 PACKAGES                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-pricing-section" id="planes">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Planes de lanzamiento</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Elige tu
+              <em class="heading-editorial">despegue.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Tres velocidades, mismo destino: tu negocio online y funcionando.
+            Pago único · sin cuotas mensuales · sin permanencia.
+          </p>
+        </header>
+
+        <ol class="em-plans">
+          {plans.map((p, i) => (
+            <li class={`em-plan em-plan--${p.color} ${p.popular ? 'em-plan--popular' : ''}`}>
+              {p.popular && <div class="em-plan__ribbon">★ MÁS CONTRATADO ★</div>}
+
+              <div class="em-plan__badge" aria-hidden="true">
+                <svg viewBox="0 0 80 90" width="100%" height="100%">
+                  <path d="M 40 5 C 28 5 18 9 8 14 L 8 50 C 8 70 40 86 40 86 C 40 86 72 70 72 50 L 72 14 C 62 9 52 5 40 5 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                  <text x="40" y="36" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2">PACK</text>
+                  <text x="40" y="58" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#FFFCF6">{p.code}</text>
+                  <text x="40" y="76" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFCF6" letter-spacing="1.5">{p.days}</text>
+                </svg>
+              </div>
+
+              <header class="em-plan__head">
+                <span class="text-meta">Plan {String(i+1).padStart(2,'0')}</span>
+                <span class="text-mono em-plan__days">⏱ {p.days}</span>
+              </header>
+
+              <h3 class="heading-display em-plan__name">{p.name}</h3>
+              <p class="em-plan__sub">{p.sub}</p>
+
+              <div class="em-plan__price">
+                <span class="em-plan__price-v text-mono">{p.price}</span>
+                <span class="em-plan__price-p">{p.period}</span>
+              </div>
+
+              <ul class="em-plan__feat">
+                {p.features.map((f) => (
+                  <li>
+                    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M 3 8 L 7 12 L 13 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="/contacto" class={`em-plan__cta ${p.popular ? 'em-plan__cta--primary' : ''}`}>
+                {p.cta} →
+              </a>
+            </li>
+          ))}
+        </ol>
+
+        {/* Garantía */}
+        <div class="em-guarantee">
+          <div class="em-guarantee__seal" aria-hidden="true">
+            <svg viewBox="0 0 110 110" width="100%" height="100%">
+              <defs><path id="em-g-c" d="M55,55 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs>
+              <circle cx="55" cy="55" r="50" fill="#DC1B2C"/>
+              <circle cx="55" cy="55" r="43" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="em-patch-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5">
+                  <textPath href="#em-g-c" startOffset="0%">★ GARANTÍA 15 DÍAS ★ DEVOLUCIÓN ★</textPath>
+                </text>
+              </g>
+              <text x="55" y="51" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#FFFCF6">15d</text>
+              <text x="55" y="66" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFCF6" letter-spacing="1.5">GARANTÍA</text>
+            </svg>
+          </div>
+          <div class="em-guarantee__copy">
+            <h3 class="heading-display em-guarantee__title">15 días de garantía total.</h3>
+            <p>
+              Si en los primeros 15 días desde la entrega algo no encaja, pides
+              cambios o devolución parcial. <strong>Hasta hoy: 0 devoluciones · 200+ proyectos.</strong>
+              Sin permanencia, sin condiciones raras.
             </p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TECH STACK                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-stack-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--em-lime)">Cap. 07 / Tu equipo</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--em-paper)">
+              Las herramientas
+              <em class="heading-editorial" style="color:var(--em-orange)">que recibes.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.7)">
+            Tecnologías de nivel enterprise, configuradas y listas para
+            funcionar — sin que tengas que entender qué son.
+          </p>
+        </header>
+
+        <ul class="em-stack">
+          {stack.map((s) => (
+            <li class="em-stack-item">
+              <div class="em-stack-item__icon" aria-hidden="true">
+                {s.logo === 'astro' && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#0E0D0B" stroke="#FFFCF6" stroke-width="2"/><path d="M 30 8 L 12 52 L 30 46 L 48 52 Z" fill="#FF6B35"/><path d="M 22 40 Q 30 32 38 40" fill="none" stroke="#FFFCF6" stroke-width="2"/></svg>}
+                {s.logo === 'wp'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="30" cy="30" r="27" fill="#003B7A" stroke="#FFFCF6" stroke-width="2"/><text x="30" y="40" text-anchor="middle" font-family="serif" font-size="28" font-weight="bold" fill="#FFFCF6">W</text></svg>}
+                {s.logo === 'host'  && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="30" cy="30" r="27" fill="#00B85C" stroke="#FFFCF6" stroke-width="2"/><circle cx="30" cy="30" r="14" fill="none" stroke="#FFFCF6" stroke-width="2"/><path d="M 30 16 v 28 M 16 30 h 28" stroke="#FFFCF6" stroke-width="1.5"/></svg>}
+                {s.logo === 'ga'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#FFD600" stroke="#FFFCF6" stroke-width="2"/><path d="M 18 46 V 26 M 30 46 V 14 M 42 46 V 32" stroke="#0E0D0B" stroke-width="4" stroke-linecap="round"/></svg>}
+                {s.logo === 'cf'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#FF6B35" stroke="#FFFCF6" stroke-width="2"/><path d="M 14 36 Q 14 26 24 26 Q 24 18 34 18 Q 46 18 46 30 Q 50 30 50 36 L 14 36 Z" fill="#FFFCF6"/></svg>}
+                {s.logo === 'mail'  && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="3" y="3" width="54" height="54" rx="4" fill="#005FB8" stroke="#FFFCF6" stroke-width="2"/><rect x="14" y="20" width="32" height="22" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/><path d="M 14 20 L 30 32 L 46 20" fill="none" stroke="#0E0D0B" stroke-width="2"/></svg>}
+              </div>
+              <div class="em-stack-item__body">
+                <h3 class="em-stack-item__k">{s.k}</h3>
+                <p class="em-stack-item__v">{s.v}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Método</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cinco fases,
+              <em class="heading-editorial">cero misterios.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Resumen del proceso completo. Cada fase tiene entregables claros
+            y plazos cumplidos.
+          </p>
+        </header>
+
+        <ol class="em-proc">
+          {proceso.map((p) => (
+            <li class={`em-proc__step em-proc__step--${p.color}`}>
+              <header class="em-proc__head">
+                <span class="text-mono em-proc__num">{p.num}</span>
+                <span class="text-mono em-proc__eta">{p.eta}</span>
+              </header>
+              <h3 class="heading-display em-proc__title">{p.title}</h3>
+              <p class="em-proc__body">{p.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CHECKLIST PRE-LAUNCH                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-checklist-section">
+      <div class="container-brutal">
+        <header class="em-check-head">
+          <div>
+            <span class="text-meta" style="color:var(--em-orange)">Cap. 09 / Checklist de lanzamiento</span>
+            <h2 class="heading-display em-check-title">
+              Tu checklist
+              <em class="heading-editorial">pre-despegue.</em>
+            </h2>
+            <p class="em-check-lead">
+              Las 25 cosas que necesitas tener listas — y las que preparamos
+              nosotros por ti. Útil aunque no nos contrates.
+            </p>
+          </div>
+          <a href="/contacto" class="em-check-cta">
+            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Pedir PDF gratis</span>
+          </a>
+        </header>
+
+        <div class="em-checklist">
+          {checklist.map((group, gi) => (
+            <article class="em-check-group">
+              <header class="em-check-group__head">
+                <span class="text-mono em-check-group__num">0{gi+1}</span>
+                <h3 class="em-check-group__title">{group.c}</h3>
+                <span class="text-mono em-check-group__count">{group.items.length} ITEMS</span>
+              </header>
+              <ul class="em-check-list">
+                {group.items.map((it) => (
+                  <li class="em-check-item">
+                    <span class="em-check-item__box" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" width="14" height="14"><path d="M 3 8 L 7 12 L 13 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <span class="em-check-item__t">{it.t}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIALS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Quienes ya despegaron</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Los que están
+              <em class="heading-editorial">en órbita.</em>
+            </h2>
+          </div>
+        </header>
+
+        <ul class="em-quotes">
+          {testimonials.map((t, i) => (
+            <li class={`em-quote em-quote--${i}`}>
+              <span class="em-quote__rocket" aria-hidden="true">{t.rocket}</span>
+              <p class="em-quote__t">"{t.text}"</p>
+              <footer class="em-quote__f">
+                <span class="em-quote__avatar">{t.author[0]}</span>
+                <div>
+                  <span class="em-quote__name">{t.author}</span>
+                  <span class="em-quote__role">{t.role}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">nos preguntan.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Si no está aquí, escríbenos por WhatsApp y respondemos en menos de 4h.
+          </p>
+        </header>
+
+        <ol class="em-faq">
+          {faq.map((f, i) => (
+            <li class="em-faq__item">
+              <details class="em-faq__det" open={i === 0}>
+                <summary class="em-faq__sum">
+                  <span class="text-mono em-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="em-faq__q">{f.q}</span>
+                  <span class="em-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="em-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL — IGNITION                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="em-final">
+      <div class="container-brutal">
+        <div class="em-final__grid">
+
+          <div class="em-final__l">
+            <span class="text-meta em-final__chapter">★ Última fase · IGNITION</span>
+            <h2 class="heading-display em-final__title">
+              ¿Listo para
+              <em class="heading-editorial">despegar?</em>
+            </h2>
+            <p class="em-final__lead">
+              Cuéntanos tu idea en una llamada de 30 min. Salimos con un plan
+              concreto, presupuesto cerrado y fecha de lanzamiento.
+              <strong>0 compromiso. 0 venta agresiva. 0 jerga.</strong>
+            </p>
+            <div class="em-final__cta">
+              <a href="/contacto" class="em-final__btn em-final__btn--primary">
+                <span>Iniciar secuencia de despegue</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="https://wa.me/34657085019" target="_blank" rel="noopener noreferrer" class="em-final__btn em-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>WhatsApp directo</span>
+              </a>
+            </div>
+            <div class="em-final__trust">
+              <span><span class="em-pulse"></span> ACEPTANDO MISIONES · 2026</span>
+              <span>★ 200+ NEGOCIOS LANZADOS</span>
+              <span>★ GARANTÍA 15 DÍAS</span>
+              <span>★ SIN PERMANENCIA</span>
+            </div>
+          </div>
+
+          <div class="em-final__r" aria-hidden="true">
+            <svg viewBox="0 0 280 320" class="em-final-rocket">
+              <defs>
+                <radialGradient id="em-final-glow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%"  stop-color="#FF6B35" stop-opacity="0.55"/>
+                  <stop offset="100%" stop-color="#FF6B35" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="140" cy="160" r="150" fill="url(#em-final-glow)"/>
+
+              {/* Llama larga */}
+              <g class="em-final-flame">
+                <path d="M 120 230 C 120 230 105 280 130 320 C 135 335 145 335 150 320 C 175 280 160 230 160 230 Z" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/>
+                <path d="M 128 240 C 128 240 122 275 135 305 C 138 315 142 315 145 305 C 158 275 152 240 152 240 Z" fill="#FF6B35" stroke="#0E0D0B" stroke-width="1.5"/>
+                <path d="M 134 250 C 134 250 132 275 138 290 C 140 295 142 295 142 290 C 148 275 146 250 146 250 Z" fill="#FFFCF6"/>
+              </g>
+
+              {/* Aletas */}
+              <path d="M 105 180 L 85 230 L 120 215 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2.5"/>
+              <path d="M 175 180 L 195 230 L 160 215 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2.5"/>
+
+              {/* Cuerpo */}
+              <rect x="110" y="80" width="60" height="150" rx="4" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="3"/>
+              <line x1="110" y1="120" x2="170" y2="120" stroke="#0E0D0B" stroke-width="2"/>
+              <line x1="110" y1="190" x2="170" y2="190" stroke="#0E0D0B" stroke-width="2"/>
+
+              {/* Punta roja */}
+              <path d="M 110 80 C 110 50 125 30 140 10 C 155 30 170 50 170 80 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="3"/>
+
+              {/* Ventana */}
+              <circle cx="140" cy="105" r="14" fill="#0A1A3A" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="140" cy="105" r="9" fill="#D6FF44" stroke="#0E0D0B" stroke-width="1"/>
+              <text x="140" y="109" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B">P★R</text>
+
+              <text x="140" y="155" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B" letter-spacing="2">MISIÓN 027</text>
+              <text x="140" y="170" text-anchor="middle" font-family="serif" font-size="14" font-weight="bold" fill="#0E0D0B">DESPEGUE</text>
+
+              {/* Estrellas */}
+              <text x="30"  y="40" font-family="monospace" font-size="14" fill="#D6FF44">★</text>
+              <text x="240" y="60" font-family="monospace" font-size="10" fill="#FFD600">★</text>
+              <text x="20"  y="180" font-family="monospace" font-size="11" fill="#FFD600">★</text>
+              <text x="250" y="200" font-family="monospace" font-size="9" fill="#D6FF44">★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="em-final__marquee">
+        <div class="em-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ T-MINUS 14 DÍAS ★ HOSTING GRATIS ★ DESDE 450€ ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
 
   <Footer />
 </BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · LAUNCH PAD                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .em {
+    --em-paper:    #FFFCF6;
+    --em-paper-2:  #F8F2E4;
+    --em-cream:    #F0E7CD;
+    --em-ink:      #0E0D0B;
+    --em-space:    #0A1A3A;
+    --em-orange:   #FF6B35;
+    --em-yellow:   #FFD600;
+    --em-lime:     #D6FF44;
+    --em-red:      #DC1B2C;
+    --em-blue:     #005FB8;
+    --em-mint:     #C8F2D6;
+    --em-gold:     #C9A24F;
+    --em-shadow:   8px 8px 0 var(--em-ink);
+  }
+
+  .em-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--em-orange);
+    box-shadow: 0 0 0 0 rgba(255,107,53,0.55);
+    animation: em-pulse-anim 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes em-pulse-anim {
+    0%   { box-shadow: 0 0 0 0 rgba(255,107,53,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(255,107,53,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(255,107,53,0.10), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(255,214,0,0.07), transparent 50%),
+      var(--em-paper);
+    border-bottom: 3px solid var(--em-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .em-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(14,13,11,0.05) 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+  .em-hero > * { position: relative; }
+
+  .em-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .em-hero__status {
+    color: var(--em-orange);
+    font-weight: 700;
+  }
+
+  .em-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) {
+    .em-hero__grid { grid-template-columns: 1.15fr 1fr; align-items: center; gap: 4rem; }
+  }
+  .em-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .em-hero__chapter { color: var(--em-orange); }
+  .em-hero__title {
+    font-size: clamp(2.75rem, 8.5vw, 6.5rem);
+    line-height: .88;
+    letter-spacing: -.045em;
+    margin: .25rem 0;
+  }
+  .em-hero__title em { color: var(--em-orange); font-style: italic; display: inline-block; margin: 0 .15em; }
+  .em-hero__title-stamp {
+    display: inline-block;
+    color: var(--em-red);
+    border-bottom: 6px solid var(--em-red);
+    padding: 0 .1em;
+    transform: rotate(-1.5deg);
+  }
+
+  .em-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 56ch;
+  }
+  .em-hero__lead strong { color: var(--em-ink); font-weight: 700; }
+
+  .em-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .em-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--em-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .em-btn--primary {
+    background: var(--em-orange);
+    color: var(--em-paper);
+    box-shadow: 6px 6px 0 var(--em-ink);
+  }
+  .em-btn--primary:hover {
+    background: var(--em-red);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--em-ink);
+  }
+  .em-btn--ghost {
+    background: transparent;
+    color: var(--em-ink);
+    box-shadow: 6px 6px 0 var(--em-orange);
+  }
+  .em-btn--ghost:hover {
+    background: var(--em-ink);
+    color: var(--em-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--em-orange);
+  }
+
+  /* KPIs */
+  .em-hero__kpis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--em-ink);
+    background: var(--em-ink);
+  }
+  @media (min-width: 768px) { .em-hero__kpis { grid-template-columns: repeat(4, 1fr); } }
+  .em-kpi {
+    background: var(--em-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--em-ink);
+    border-bottom: 2px solid var(--em-ink);
+  }
+  .em-kpi:nth-child(2n) { border-right: none; }
+  .em-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .em-kpi:nth-child(2n)      { border-right: 2px solid var(--em-ink); }
+    .em-kpi:nth-child(4n)      { border-right: none; }
+    .em-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--em-ink); }
+    .em-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .em-kpi--orange { background: var(--em-orange); color: var(--em-paper); }
+  .em-kpi--lime   { background: var(--em-lime); color: var(--em-ink); }
+  .em-kpi--yellow { background: var(--em-yellow); color: var(--em-ink); }
+  .em-kpi--ink    { background: var(--em-ink); color: var(--em-paper); }
+  .em-kpi--ink    .em-kpi__v { color: var(--em-lime); }
+  .em-kpi__v {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1;
+  }
+  .em-kpi__v small { font-size: .5em; opacity: .8; }
+  .em-kpi__l {
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    opacity: .85;
+  }
+
+  /* Cohete */
+  .em-hero__pad {
+    position: relative;
+    aspect-ratio: 380 / 520;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(255,107,53,0.2));
+  }
+  .em-rocket-svg { display: block; width: 100%; height: 100%; }
+  .em-rocket { transform-origin: 190px 260px; animation: em-rocket-bob 3s ease-in-out infinite; }
+  @keyframes em-rocket-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  .em-flame {
+    transform-box: fill-box;
+    transform-origin: center top;
+    animation: em-flame-flicker 0.4s ease-in-out infinite alternate;
+  }
+  @keyframes em-flame-flicker {
+    0%   { transform: scaleY(1)   scaleX(1); }
+    100% { transform: scaleY(1.12) scaleX(0.94); }
+  }
+  .em-smoke {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: em-smoke-puff 4s ease-in-out infinite;
+  }
+  @keyframes em-smoke-puff {
+    0%, 100% { transform: scale(1)   translateY(0); opacity: 0.55; }
+    50%      { transform: scale(1.1) translateY(2px); opacity: 0.7; }
+  }
+  .em-stars text { animation: em-twinkle 2.5s ease-in-out infinite; }
+  .em-stars text:nth-child(2n) { animation-delay: 0.8s; }
+  .em-stars text:nth-child(3n) { animation-delay: 1.4s; }
+  @keyframes em-twinkle {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+  }
+
+  .em-mission-patch {
+    position: absolute;
+    top: -2%; right: -2%;
+    width: 110px; aspect-ratio: 1;
+    transform: rotate(-12deg);
+    filter: drop-shadow(0 6px 14px rgba(10,26,58,0.35));
+    animation: em-patch-bob 4.5s ease-in-out infinite;
+  }
+  @keyframes em-patch-bob {
+    0%, 100% { transform: rotate(-12deg) translateY(0); }
+    50%      { transform: rotate(-12deg) translateY(-6px); }
+  }
+  .em-patch-spin { transform-origin: 50% 50%; animation: em-spin 25s linear infinite; }
+  @keyframes em-spin { to { transform: rotate(360deg); } }
+
+  /* Marquee hero */
+  .em-marquee {
+    background: var(--em-ink);
+    color: var(--em-orange);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--em-ink);
+  }
+  .em-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: em-marquee 30s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes em-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PAINS                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-pains-section {
+    background: var(--em-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-pains {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px)  { .em-pains { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .em-pains { grid-template-columns: repeat(4, 1fr); } }
+
+  .em-pain {
+    position: relative;
+    background: var(--em-paper);
+    border: 2.5px solid var(--em-ink);
+    box-shadow: var(--em-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .em-pain:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--em-ink); }
+  .em-pain--orange { background: var(--em-paper); color: var(--em-orange); }
+  .em-pain--lime   { background: var(--em-lime); color: var(--em-ink); }
+  .em-pain--yellow { background: var(--em-yellow); color: var(--em-ink); }
+  .em-pain--mint   { background: var(--em-mint); color: var(--em-ink); }
+
+  .em-pain__icon {
+    width: 64px; height: 64px;
+  }
+  .em-pain__head { display: flex; justify-content: space-between; }
+  .em-pain__num  { font-size: 1.25rem; font-weight: 800; color: currentColor; }
+  .em-pain__lbl  { font-size: .58rem; letter-spacing: .25em; opacity: .65; }
+  .em-pain__pain {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.1;
+    letter-spacing: -.015em;
+    color: var(--em-ink);
+    margin: .25rem 0 .5rem;
+    font-style: italic;
+  }
+  .em-pain__arrow { color: var(--em-ink); opacity: .55; }
+  .em-pain__sol {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--em-ink);
+  }
+  .em-pain__sol strong {
+    font-weight: 800;
+    color: var(--em-ink);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TIMELINE 14 DÍAS                                        */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-timeline-section {
+    background: var(--em-space);
+    color: var(--em-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .em-timeline-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(214,255,68,0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .em-timeline-section > * { position: relative; }
+
+  .em-timeline-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  @media (min-width: 1024px) { .em-timeline-head { grid-template-columns: 1.6fr 1fr; align-items: end; } }
+  .em-timeline-title {
+    font-size: clamp(2.25rem, 6vw, 4.25rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    color: var(--em-paper);
+    margin: 1rem 0 .75rem;
+  }
+  .em-timeline-lead { color: rgba(255,252,246,0.75); max-width: 56ch; }
+  .em-timeline-aside {
+    background: var(--em-paper);
+    color: var(--em-ink);
+    padding: 1.25rem 1.5rem;
+    border: 2.5px solid var(--em-lime);
+    box-shadow: 6px 6px 0 var(--em-lime);
+    display: flex; flex-direction: column; gap: .65rem;
+  }
+  .em-timeline-aside__lbl { font-size: .65rem; letter-spacing: .2em; opacity: .65; }
+  .em-timeline-aside__count {
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--em-orange);
+    line-height: 1;
+  }
+  .em-timeline-aside__legend {
+    list-style: none; padding: 0; margin: .35rem 0 0;
+    display: flex; flex-wrap: wrap; gap: .35rem .65rem;
+  }
+  .em-timeline-aside__legend li {
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .em-timeline-aside__legend span {
+    width: 12px; height: 12px;
+    border: 1.5px solid var(--em-ink);
+  }
+
+  .em-timeline {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .75rem;
+  }
+  @media (min-width: 768px)  { .em-timeline { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .em-timeline { grid-template-columns: repeat(7, 1fr); gap: 0; } }
+
+  .em-tl {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: .75rem;
+    background: rgba(255,252,246,0.05);
+    border: 2px solid currentColor;
+    padding: 1rem 1.25rem;
+    transition: background .25s, transform .25s;
+  }
+  @media (min-width: 1280px) {
+    .em-tl {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 6px 1fr;
+      gap: 0;
+      padding: 1rem;
+      border-right: 0;
+    }
+    .em-tl:last-child { border-right: 2px solid currentColor; }
+    .em-tl:nth-child(odd)  { background: rgba(255,252,246,0.04); }
+    .em-tl:nth-child(even) { background: rgba(255,252,246,0.07); }
+  }
+  .em-tl:hover { background: rgba(214,255,68,0.08); transform: translateY(-3px); }
+
+  .em-tl--orange { color: var(--em-orange); }
+  .em-tl--yellow { color: var(--em-yellow); }
+  .em-tl--lime   { color: var(--em-lime); }
+  .em-tl--blue   { color: var(--em-blue); }
+  .em-tl--mint   { color: var(--em-mint); }
+  .em-tl--gold   { color: var(--em-gold); }
+  .em-tl--red    { color: var(--em-red); }
+  .em-tl--red    { background: rgba(220,27,44,0.12) !important; }
+
+  .em-tl__day {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: currentColor;
+    line-height: 1;
+    align-self: center;
+  }
+  .em-tl__bar {
+    background: currentColor;
+    height: 4px;
+    margin: .35rem 0;
+    display: none;
+  }
+  @media (min-width: 1280px) { .em-tl__bar { display: block; } }
+
+  .em-tl__body { display: flex; flex-direction: column; gap: .35rem; }
+  .em-tl__head { display: flex; justify-content: space-between; align-items: baseline; }
+  .em-tl__phase {
+    font-size: .55rem;
+    letter-spacing: .2em;
+    color: currentColor;
+    font-weight: 800;
+  }
+  .em-tl__num {
+    font-size: .55rem;
+    letter-spacing: .15em;
+    opacity: .55;
+    color: var(--em-paper);
+  }
+  .em-tl__title {
+    font-family: var(--font-display);
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--em-paper);
+    line-height: 1.1;
+    margin: .15rem 0 0;
+  }
+  .em-tl__desc {
+    font-size: .8rem;
+    line-height: 1.4;
+    color: rgba(255,252,246,0.7);
+    margin: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MISSION KIT                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-kit-section {
+    background: var(--em-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-kit-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  @media (min-width: 1024px) { .em-kit-wrap { grid-template-columns: 320px 1fr; gap: 3rem; align-items: start; } }
+
+  .em-kit-box {
+    position: sticky; top: 2rem;
+    max-width: 360px;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 22px rgba(14,13,11,0.18));
+  }
+  @media (max-width: 1023px) { .em-kit-box { position: static; } }
+
+  .em-kit-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column;
+    gap: 1px;
+    background: var(--em-ink);
+    border: 2.5px solid var(--em-ink);
+  }
+  .em-kit-item {
+    display: grid;
+    grid-template-columns: 36px 30px 1fr auto;
+    gap: .85rem;
+    align-items: center;
+    background: var(--em-paper);
+    padding: 1rem 1.25rem;
+    transition: background .2s;
+  }
+  .em-kit-item:hover { background: var(--em-paper-2); }
+  .em-kit-item__num { font-size: .85rem; font-weight: 800; color: var(--em-orange); }
+  .em-kit-item__icon { color: var(--em-blue); display: flex; align-items: center; justify-content: center; }
+  .em-kit-item__body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .em-kit-item__k {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -.015em;
+    color: var(--em-ink);
+    margin: 0;
+  }
+  .em-kit-item__v {
+    font-size: .8rem;
+    line-height: 1.4;
+    color: var(--brutal-text-secondary);
+    margin: 0;
+  }
+  .em-kit-item__tag {
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    padding: .35rem .6rem;
+    border: 1.5px solid var(--em-ink);
+    white-space: nowrap;
+  }
+  .em-kit-item__tag--inc  { background: var(--em-paper); color: var(--em-blue); }
+  .em-kit-item__tag--free { background: var(--em-orange); color: var(--em-paper); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* COMPARE DIY vs PRO                                      */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-compare-section {
+    background: var(--em-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-compare {
+    border: 3px solid var(--em-ink);
+    box-shadow: var(--em-shadow);
+    background: var(--em-paper);
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+  .em-compare-head {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    background: var(--em-ink);
+    color: var(--em-paper);
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .2em;
+    font-weight: 800;
+  }
+  .em-compare-head__l { }
+  .em-compare-head__c { color: var(--em-red); text-align: center; }
+  .em-compare-head__r { color: var(--em-lime); text-align: center; }
+
+  .em-compare-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    align-items: center;
+  }
+  .em-compare-row:last-of-type { border-bottom: 2px solid var(--em-ink); }
+  .em-compare-row__item {
+    font-size: .92rem;
+    color: var(--em-ink);
+    font-weight: 600;
+  }
+  .em-compare-row__diy, .em-compare-row__pro {
+    text-align: center;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .em-compare-row__cost {
+    font-family: var(--font-mono);
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--em-red);
+  }
+  .em-compare-row__cost--ok { color: var(--em-blue); }
+  .em-compare-row__time {
+    font-size: .65rem;
+    letter-spacing: .12em;
+    opacity: .65;
+  }
+
+  .em-compare-totals {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0;
+    padding: 1.5rem;
+    background: var(--em-cream);
+    align-items: center;
+  }
+  .em-compare-totals__l {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    letter-spacing: .25em;
+    color: var(--em-ink);
+    font-weight: 800;
+  }
+  .em-compare-totals__diy, .em-compare-totals__pro {
+    text-align: center;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .em-compare-totals__big {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--em-red);
+    letter-spacing: -.02em;
+  }
+  .em-compare-totals__big--ok { color: var(--em-blue); }
+  .em-compare-totals__sub {
+    font-size: .68rem;
+    letter-spacing: .12em;
+    color: var(--em-ink);
+    opacity: .75;
+  }
+  .em-compare-totals__bad  { font-size: .62rem; letter-spacing: .15em; color: var(--em-red); }
+  .em-compare-totals__good { font-size: .62rem; letter-spacing: .15em; color: var(--em-blue); }
+  @media (max-width: 768px) {
+    .em-compare-head, .em-compare-row, .em-compare-totals {
+      grid-template-columns: 1fr;
+      gap: .5rem;
+      text-align: left !important;
+    }
+    .em-compare-row__diy, .em-compare-row__pro, .em-compare-totals__diy, .em-compare-totals__pro {
+      flex-direction: row; gap: .75rem; align-items: baseline; text-align: left;
+    }
+    .em-compare-head__c::before { content: 'DIY → '; }
+    .em-compare-head__r::before { content: 'PRO → '; }
+  }
+
+  .em-compare-note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--em-lime);
+    border: 2px solid var(--em-ink);
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--em-ink);
+  }
+  .em-compare-note strong { color: var(--em-red); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PRICING                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-pricing-section {
+    background: var(--em-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-plans {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1024px) { .em-plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 2rem; } }
+
+  .em-plan {
+    position: relative;
+    background: var(--em-paper);
+    border: 3px solid var(--em-ink);
+    box-shadow: var(--em-shadow);
+    padding: 2.5rem 1.75rem 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .em-plan:hover { transform: translateY(-4px); }
+  .em-plan--yellow .em-plan__badge { color: var(--em-yellow); }
+  .em-plan--lime   .em-plan__badge { color: var(--em-lime); }
+  .em-plan--gold   .em-plan__badge { color: var(--em-gold); }
+  .em-plan--popular {
+    background: var(--em-ink);
+    color: var(--em-paper);
+    border-color: var(--em-orange);
+    box-shadow: 12px 12px 0 var(--em-orange);
+    transform: scale(1.02);
+  }
+  @media (min-width: 1024px) { .em-plan--popular { transform: scale(1.05); } }
+  .em-plan--popular:hover { transform: scale(1.02) translateY(-4px); }
+  @media (min-width: 1024px) { .em-plan--popular:hover { transform: scale(1.05) translateY(-4px); } }
+
+  .em-plan__ribbon {
+    position: absolute;
+    top: -16px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--em-orange);
+    color: var(--em-paper);
+    padding: .35rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--em-ink);
+    box-shadow: 3px 3px 0 var(--em-ink);
+    white-space: nowrap;
+  }
+  .em-plan__badge { width: 80px; margin: 0 auto; }
+  .em-plan__head { display: flex; justify-content: space-between; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; opacity: .85; }
+  .em-plan__days { font-size: .68rem; letter-spacing: .15em; opacity: .8; }
+  .em-plan__name {
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: -.03em;
+    margin: 0;
+  }
+  .em-plan__sub { font-size: .9rem; opacity: .85; line-height: 1.4; }
+  .em-plan__price {
+    display: flex; align-items: baseline; gap: .65rem;
+    border-block: 2px solid currentColor;
+    padding: 1rem 0;
+    margin: .5rem 0;
+  }
+  .em-plan__price-v {
+    font-size: clamp(2.5rem, 4vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.03em;
+  }
+  .em-plan__price-p {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    opacity: .7;
+  }
+  .em-plan__feat {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .55rem;
+    flex: 1;
+  }
+  .em-plan__feat li {
+    display: flex; align-items: flex-start; gap: .65rem;
+    font-size: .92rem;
+    line-height: 1.4;
+  }
+  .em-plan__feat svg { color: var(--em-orange); flex-shrink: 0; margin-top: 3px; }
+  .em-plan--popular .em-plan__feat svg { color: var(--em-lime); }
+
+  .em-plan__cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    color: currentColor;
+    border: 2.5px solid currentColor;
+    padding: 1rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    margin-top: .5rem;
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .em-plan__cta:hover { background: currentColor; color: var(--em-paper); transform: translateY(-2px); }
+  .em-plan__cta--primary { background: var(--em-orange); color: var(--em-paper); border-color: var(--em-orange); }
+  .em-plan__cta--primary:hover { background: var(--em-lime); color: var(--em-ink); border-color: var(--em-lime); }
+
+  /* Garantía */
+  .em-guarantee {
+    margin-top: 3rem;
+    background: var(--em-cream);
+    border: 3px solid var(--em-ink);
+    box-shadow: var(--em-shadow);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) { .em-guarantee { grid-template-columns: 130px 1fr; gap: 2rem; } }
+  .em-guarantee__seal { width: 130px; aspect-ratio: 1; transform: rotate(-8deg); filter: drop-shadow(0 6px 14px rgba(220,27,44,0.3)); }
+  .em-guarantee__title {
+    font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin: 0 0 .5rem;
+  }
+  .em-guarantee__copy p {
+    font-size: .95rem;
+    color: var(--brutal-text-secondary);
+    line-height: 1.5;
+  }
+  .em-guarantee__copy strong { color: var(--em-ink); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* STACK                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-stack-section {
+    background: var(--em-ink);
+    color: var(--em-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .em-stack-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,107,53,0.06) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .em-stack-section > * { position: relative; }
+  .em-stack {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px)  { .em-stack { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .em-stack { grid-template-columns: repeat(3, 1fr); } }
+  .em-stack-item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.25rem;
+    background: rgba(255,252,246,0.05);
+    border: 2px solid var(--em-paper);
+    transition: background .2s;
+  }
+  .em-stack-item:hover { background: rgba(255,107,53,0.15); }
+  .em-stack-item__icon { width: 60px; height: 60px; }
+  .em-stack-item__body { display: flex; flex-direction: column; gap: 2px; }
+  .em-stack-item__k {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--em-paper);
+    margin: 0;
+  }
+  .em-stack-item__v {
+    font-size: .82rem;
+    line-height: 1.4;
+    color: rgba(255,252,246,0.7);
+    margin: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-proc-section {
+    background: var(--em-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px)  { .em-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .em-proc { grid-template-columns: repeat(5, 1fr); } }
+  .em-proc__step {
+    background: var(--em-paper);
+    border: 2.5px solid var(--em-ink);
+    box-shadow: 4px 4px 0 var(--em-ink);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    position: relative;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .em-proc__step::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 5px; background: currentColor;
+  }
+  .em-proc__step:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--em-ink); }
+  .em-proc__step--orange { color: var(--em-orange); }
+  .em-proc__step--yellow { color: var(--em-yellow); }
+  .em-proc__step--blue   { color: var(--em-blue); }
+  .em-proc__step--mint   { color: var(--em-mint); background: var(--em-mint); }
+  .em-proc__step--red    { color: var(--em-red); }
+  .em-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 2px dashed currentColor; }
+  .em-proc__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .em-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--em-ink); opacity: .65; }
+  .em-proc__title {
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    line-height: 1;
+    letter-spacing: -.02em;
+    color: var(--em-ink);
+    margin: .25rem 0 0;
+  }
+  .em-proc__body { font-size: .85rem; line-height: 1.45; color: var(--brutal-text-secondary); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CHECKLIST                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-checklist-section {
+    background: var(--em-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-check-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    align-items: end;
+  }
+  @media (min-width: 768px) { .em-check-head { grid-template-columns: 1.5fr auto; } }
+  .em-check-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0 .75rem;
+  }
+  .em-check-lead { color: var(--brutal-text-secondary); max-width: 56ch; }
+  .em-check-cta {
+    display: inline-flex; align-items: center; gap: .65rem;
+    background: var(--em-orange);
+    color: var(--em-paper);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    border: 2.5px solid var(--em-ink);
+    box-shadow: 5px 5px 0 var(--em-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    align-self: end;
+    white-space: nowrap;
+  }
+  .em-check-cta:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--em-ink); }
+
+  .em-checklist {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .em-checklist { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .em-checklist { grid-template-columns: repeat(3, 1fr); } }
+  .em-check-group {
+    background: var(--em-paper);
+    border: 2.5px solid var(--em-ink);
+    box-shadow: 5px 5px 0 var(--em-ink);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .75rem;
+  }
+  .em-check-group__head {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: .65rem;
+    align-items: center;
+    padding-bottom: .65rem;
+    border-bottom: 2px dashed var(--em-ink);
+  }
+  .em-check-group__num { font-size: .85rem; font-weight: 800; color: var(--em-orange); }
+  .em-check-group__title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--em-ink);
+    margin: 0;
+  }
+  .em-check-group__count {
+    font-size: .55rem;
+    letter-spacing: .2em;
+    color: var(--em-blue);
+    opacity: .85;
+  }
+  .em-check-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .5rem; }
+  .em-check-item {
+    display: flex; align-items: flex-start; gap: .65rem;
+    font-size: .88rem;
+    line-height: 1.4;
+    color: var(--em-ink);
+  }
+  .em-check-item__box {
+    width: 20px; height: 20px;
+    border: 2px solid var(--em-ink);
+    background: var(--em-paper);
+    color: var(--em-orange);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .em-check-item__t { padding-top: 1px; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIALS                                            */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-quote-section {
+    background: var(--em-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-quotes {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .em-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .em-quote {
+    position: relative;
+    background: var(--em-paper);
+    border: 2.5px solid var(--em-ink);
+    box-shadow: var(--em-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .em-quote:hover { transform: translateY(-3px); }
+  .em-quote--0 { background: var(--em-mint); }
+  .em-quote--1 { background: var(--em-yellow); }
+  .em-quote--2 { background: var(--em-lime); }
+  .em-quote__rocket {
+    position: absolute;
+    top: -16px; right: 16px;
+    font-size: 1.85rem;
+    width: 44px; height: 44px;
+    background: var(--em-ink);
+    color: var(--em-paper);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--em-paper);
+    box-shadow: 3px 3px 0 var(--em-ink);
+  }
+  .em-quote__t {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    color: var(--em-ink);
+    margin: 0;
+    flex: 1;
+  }
+  .em-quote__f {
+    display: flex; align-items: center; gap: .85rem;
+    padding-top: 1rem;
+    border-top: 2px dashed var(--em-ink);
+  }
+  .em-quote__avatar {
+    width: 40px; height: 40px;
+    background: var(--em-ink);
+    color: var(--em-lime);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .em-quote__f div { display: flex; flex-direction: column; }
+  .em-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--em-ink); }
+  .em-quote__role { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-faq-section {
+    background: var(--em-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--em-ink);
+  }
+  .em-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--em-ink);
+  }
+  .em-faq__item { border-bottom: 2px solid var(--em-ink); }
+  .em-faq__det summary { list-style: none; cursor: pointer; }
+  .em-faq__det summary::-webkit-details-marker { display: none; }
+  .em-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .em-faq__sum:hover { padding-inline: 1rem; background: var(--em-paper); }
+  .em-faq__num { font-size: 1rem; font-weight: 800; color: var(--em-orange); letter-spacing: .1em; }
+  .em-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--em-ink);
+    font-weight: 700;
+  }
+  .em-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--em-ink);
+    background: var(--em-paper);
+    color: var(--em-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s;
+  }
+  .em-faq__det[open] .em-faq__toggle { transform: rotate(180deg); background: var(--em-orange); color: var(--em-paper); }
+  .em-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .em-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .em-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .em-final {
+    background: var(--em-space);
+    color: var(--em-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .em-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(214,255,68,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .em-final > * { position: relative; }
+  .em-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .em-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+
+  .em-final__chapter { color: var(--em-orange); }
+  .em-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--em-paper);
+    margin: 1rem 0;
+  }
+  .em-final__title em { color: var(--em-orange); font-style: italic; display: block; }
+  .em-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,252,246,0.75);
+    max-width: 52ch;
+  }
+  .em-final__lead strong { color: var(--em-lime); }
+  .em-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .em-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .em-final__btn--primary {
+    background: var(--em-orange);
+    color: var(--em-paper);
+    border-color: var(--em-orange);
+    box-shadow: 6px 6px 0 var(--em-lime);
+  }
+  .em-final__btn--primary:hover {
+    background: var(--em-lime);
+    color: var(--em-ink);
+    border-color: var(--em-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--em-orange);
+  }
+  .em-final__btn--ghost {
+    background: transparent;
+    color: var(--em-paper);
+    border-color: var(--em-paper);
+    box-shadow: 6px 6px 0 var(--em-paper);
+  }
+  .em-final__btn--ghost:hover {
+    background: var(--em-paper);
+    color: var(--em-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--em-paper);
+  }
+  .em-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,252,246,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .em-final__trust .em-pulse { background: var(--em-lime); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(214,255,68,0.55); }
+
+  .em-final__r {
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 280 / 320;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .em-final-rocket { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(255,107,53,0.25)); }
+  .em-final-flame { transform-box: fill-box; transform-origin: center top; animation: em-flame-flicker 0.4s ease-in-out infinite alternate; }
+  .em-final-rocket g[fill="url(#em-final-glow)"] { animation: em-flame-flicker 4s ease-in-out infinite alternate; }
+
+  .em-final__marquee {
+    background: var(--em-orange);
+    color: var(--em-ink);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--em-ink);
+    margin: 0 -1.5rem;
+  }
+  .em-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: em-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+</style>
