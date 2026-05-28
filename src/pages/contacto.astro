@@ -2,36 +2,58 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import Contact from '../components/sections/Contact.astro';
 import FAQ from '../components/sections/FAQ.astro';
 
 const phoneNumber = '+34657085019';
+const phoneDisplay = '657 085 019';
 const whatsappLink = `https://wa.me/${phoneNumber.replace('+', '')}?text=Hola%2C%20me%20interesa%20contratar%20vuestros%20servicios`;
 const telLink = `tel:${phoneNumber}`;
+const today = new Date();
+const dispatch = `${String(today.getDate()).padStart(2,'0')}.${String(today.getMonth()+1).padStart(2,'0')}.${today.getFullYear()}`;
+
+const channels = [
+  { id: 'whatsapp', label: 'WhatsApp',      value: phoneDisplay,           meta: 'Respuesta inmediata', href: whatsappLink,                  ext: true,  color: 'mint',   icon: 'wa',   hint: '24/7 · Lo más rápido' },
+  { id: 'tel',      label: 'Llamada',       value: phoneDisplay,           meta: 'L–V · 09–19h',         href: telLink,                       ext: false, color: 'lime',   icon: 'tel',  hint: 'Habla con el equipo' },
+  { id: 'email',    label: 'Email',         value: 'hola@platanitorico.com', meta: 'Respuesta < 24h',     href: 'mailto:hola@platanitorico.com', ext: false, color: 'cyan',   icon: 'mail', hint: 'Brief detallado' },
+];
 
 const trust = [
-  { num: '01', title: 'Respuesta en <4h',          body: 'No te dejamos esperando. Tu mensaje llega directamente al equipo técnico. Sin tickets, sin filtros, sin "te derivamos a un compañero".' },
-  { num: '02', title: 'Equipo local en Almería',   body: 'Personas reales, aquí al lado. Podemos vernos en persona, tomar un café y hablar de tu proyecto cara a cara cuando haga falta.' },
-  { num: '03', title: 'Sin compromiso',            body: 'Consultar es gratis. Te damos un presupuesto claro con todo detallado. Sin sorpresas, sin permanencias, sin trampas.' },
-  { num: '04', title: '15+ años de experiencia',   body: 'Hemos trabajado con más de 200 negocios en la provincia. Sabemos qué funciona, qué no — y cuándo decirte que no es buen momento.' },
+  { num: '01', stamp: 'EXPRESS',    title: 'Respuesta < 4h',         body: 'Sin tickets, sin filtros, sin "te derivamos a un compañero". Tu mensaje llega directo al equipo técnico.', color: 'red'    },
+  { num: '02', stamp: 'LOCAL',      title: 'Equipo en Almería',      body: 'Personas reales, aquí al lado. Podemos vernos en persona y hablar cara a cara cuando haga falta.',          color: 'blue'   },
+  { num: '03', stamp: 'GRATIS',     title: 'Sin compromiso',         body: 'Consultar es gratis. Te damos presupuesto claro con todo detallado. Sin sorpresas, sin permanencias.',        color: 'lime'   },
+  { num: '04', stamp: '15+ AÑOS',   title: '200+ proyectos',         body: 'Hemos trabajado con más de 200 negocios en la provincia. Sabemos qué funciona — y cuándo decirte que no.',     color: 'orange' },
 ];
 
 const steps = [
-  { num: '01', title: 'Nos cuentas tu idea',                eta: 'Hoy',     body: 'WhatsApp, teléfono o formulario. Como prefieras. Cuéntanos qué necesitas sin tecnicismos — nosotros lo traducimos.' },
-  { num: '02', title: 'Te enviamos presupuesto claro',      eta: '<24h',    body: 'Plazos, precios y todo lo que incluye. Sin sorpresas ni letra pequeña.' },
-  { num: '03', title: 'Arrancamos',                         eta: '2 sem.',  body: 'Comunicación constante, entregas parciales y tú al mando de las decisiones importantes.' },
+  { num: '01', tag: 'HOY',     title: 'Nos cuentas tu idea',           body: 'WhatsApp, teléfono o el formulario. Cuéntanos qué necesitas sin tecnicismos — nosotros lo traducimos.', sello: 'RX' },
+  { num: '02', tag: '<24H',    title: 'Te enviamos presupuesto',       body: 'Plazos, precios y todo lo que incluye. Sin sorpresas ni letra pequeña. Mini-roadmap incluido.',             sello: 'OK' },
+  { num: '03', tag: '2 SEM.',  title: 'Arrancamos producción',         body: 'Comunicación constante, entregas parciales y tú al mando de las decisiones importantes.',                  sello: 'GO' },
+];
+
+const dispatchBoard = [
+  { k: 'Estado',           v: 'ACEPTANDO PROYECTOS',          tone: 'on' },
+  { k: 'Plazas Q3·2026',   v: '03 / 08 disponibles',          tone: 'warn' },
+  { k: 'Próxima ventana',  v: '+2 semanas',                   tone: 'off' },
+  { k: 'Tiempo respuesta', v: '< 4 horas (jornada laboral)',  tone: 'off' },
+  { k: 'Idiomas estudio',  v: 'ES · EN · DE',                 tone: 'off' },
+  { k: 'Cobertura',        v: 'Almería · España · UE',        tone: 'off' },
+];
+
+const sectores = [
+  'Hostelería', 'Inmobiliarias', 'Comercio local', 'Restauración',
+  'Construcción', 'Servicios profesionales', 'Educación', 'Salud y bienestar',
 ];
 ---
 
 <BaseLayout
   title="Contacto | Platanito Rico — Diseño Web y Marketing en Almería"
-  description="Contacta con Platanito Rico en Almería. Respuesta en menos de 4h por WhatsApp o formulario. Presupuesto gratis."
+  description="Contacta con Platanito Rico en Almería. Respuesta en menos de 4h por WhatsApp o formulario. Presupuesto gratis y sin compromiso."
   canonical="https://platanitorico.com/contacto/"
   image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
   imageAlt="Contacta con el equipo de Platanito Rico"
   type="website"
   lang="es"
-  keywords="contacto diseño web almería, presupuesto web, agencia digital almería"
+  keywords="contacto diseño web almería, presupuesto web, agencia digital almería, whatsapp platanito rico, contactar agencia almería"
   jsonLd={[
     { '@context': 'https://schema.org', '@type': 'ContactPage', 'name': 'Contacto — Platanito Rico', 'url': 'https://platanitorico.com/contacto/' },
     { '@context': 'https://schema.org', '@type': 'LocalBusiness', 'name': 'Platanito Rico', 'url': 'https://platanitorico.com', 'telephone': phoneNumber, 'email': 'hola@platanitorico.com', 'address': { '@type': 'PostalAddress', 'streetAddress': 'Ctra de Ronda, 82', 'addressLocality': 'Vera', 'addressRegion': 'Almería', 'postalCode': '04620', 'addressCountry': 'ES' } }
@@ -39,86 +61,598 @@ const steps = [
 >
   <Header />
 
-  <main id="main-content">
-    {/* Hero editorial */}
-    <section class="contacto-hero">
+  <main id="main-content" class="ct">
+
+    {/* ════════════════════════════════════════════════════ */}
+    {/* HERO — SOBRE AIRMAIL                                  */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="ct-hero">
       <div class="container-brutal">
-        <header class="contacto-hero__head">
-          <div class="text-meta">N.º 027 — Contacto</div>
+
+        <header class="ct-hero__top">
+          <div class="text-meta">N.º 027 — Correspondencia</div>
           <div class="text-meta"><span class="live-dot"></span> Aceptando proyectos · 2026</div>
         </header>
 
         <div class="divider-brutal"></div>
 
-        <div class="contacto-hero__grid">
-          <div>
-            <span class="text-meta">Cap. 01 / Hablemos</span>
-            <h1 class="heading-display contacto-hero__title">
-              ¿Empezamos
-              <em class="heading-editorial">tu próximo</em>
-              <span class="text-stroke-ink">proyecto?</span>
-            </h1>
+        <div class="ct-hero__grid">
 
-            <p class="contacto-hero__lead">
+          {/* Columna izquierda: titular + lead */}
+          <div class="ct-hero__intro">
+            <span class="text-meta">Cap. 01 / Hablemos</span>
+            <h1 class="ct-hero__title heading-display">
+              Escríbenos
+              <em class="heading-editorial">como si fuera</em>
+              <span class="ct-hero__title-stamp">una carta.</span>
+            </h1>
+            <p class="ct-hero__lead">
               Cuéntanos qué necesitas y te ayudamos a hacerlo realidad. Llevamos
               <strong>15+ años</strong> ayudando a negocios en Almería a crecer
               en internet. Tu consulta no molesta — nos encanta lo que hacemos.
             </p>
-
-            <div class="contacto-hero__cta">
-              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="btn-brutal btn-brutal--lg">
-                Escribir por WhatsApp →
-              </a>
-              <a href={telLink} class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-                Llamar {phoneNumber}
-              </a>
+            <div class="ct-hero__cta">
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="btn-brutal btn-brutal--lg">Escribir por WhatsApp →</a>
+              <a href="#formulario" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Bajar al formulario ↓</a>
             </div>
           </div>
 
-          {/* Spec sheet */}
-          <aside class="contacto-hero__specs">
-            <div class="contacto-hero__spec contacto-hero__spec--accent">
-              <span class="contacto-hero__spec-num text-mono">200<sup>+</sup></span>
-              <span class="contacto-hero__spec-lbl">Proyectos</span>
-            </div>
-            <div class="contacto-hero__spec contacto-hero__spec--lime">
-              <span class="contacto-hero__spec-num text-mono">&lt;4h</span>
-              <span class="contacto-hero__spec-lbl">Respuesta</span>
-            </div>
-            <div class="contacto-hero__spec">
-              <span class="contacto-hero__spec-num text-mono">15<sup>+</sup></span>
-              <span class="contacto-hero__spec-lbl">Años</span>
-            </div>
-            <div class="contacto-hero__spec contacto-hero__spec--ink">
-              <span class="contacto-hero__spec-num text-mono">24/7</span>
-              <span class="contacto-hero__spec-lbl">WhatsApp</span>
+          {/* Columna derecha: SOBRE AIRMAIL */}
+          <aside class="ct-envelope" aria-hidden="true">
+            <div class="ct-envelope__paper">
+
+              {/* Stripes airmail */}
+              <div class="ct-envelope__stripes"></div>
+
+              {/* PAR AVION badge */}
+              <div class="ct-envelope__avion">
+                <svg viewBox="0 0 60 24" width="60" height="24" aria-hidden="true">
+                  <path d="M2 12 L48 6 L52 4 L58 8 L52 10 L40 14 L48 22 L40 22 L30 16 L14 18 L2 12 Z" fill="#DC1B2C"/>
+                </svg>
+                <span>PAR AVION</span>
+                <span class="ct-envelope__avion-sub">POR AVIÓN · BY AIR MAIL</span>
+              </div>
+
+              {/* Sellos / stamps */}
+              <div class="ct-envelope__stamps">
+                <div class="ct-stamp ct-stamp--orange">
+                  <svg viewBox="0 0 60 70" width="60" height="70" aria-hidden="true">
+                    <path d="M30 8 Q24 22 30 38 Q36 22 30 8 Z" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M30 8 Q26 26 30 38" fill="none" stroke="#0E0D0B" stroke-width="1"/>
+                    <circle cx="30" cy="46" r="2" fill="#0E0D0B"/>
+                  </svg>
+                  <span class="ct-stamp__val">0,75 €</span>
+                  <span class="ct-stamp__txt">ESPAÑA · 2026</span>
+                </div>
+                <div class="ct-stamp ct-stamp--mint">
+                  <svg viewBox="0 0 60 70" width="60" height="70" aria-hidden="true">
+                    <rect x="14" y="14" width="32" height="32" fill="none" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="14" y1="14" x2="46" y2="46" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="46" y1="14" x2="14" y2="46" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="30" cy="30" r="8" fill="#D6FF44" stroke="#0E0D0B" stroke-width="2"/>
+                  </svg>
+                  <span class="ct-stamp__val">1,50 €</span>
+                  <span class="ct-stamp__txt">CORREO URGENTE</span>
+                </div>
+                <div class="ct-stamp ct-stamp--cyan">
+                  <svg viewBox="0 0 60 70" width="60" height="70" aria-hidden="true">
+                    <circle cx="30" cy="28" r="14" fill="none" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="30" cy="28" r="8" fill="#FF6B35" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <circle cx="30" cy="28" r="3" fill="#0E0D0B"/>
+                  </svg>
+                  <span class="ct-stamp__val">2,00 €</span>
+                  <span class="ct-stamp__txt">★ PLATANITO ★</span>
+                </div>
+              </div>
+
+              {/* Postmark / matasellos */}
+              <div class="ct-envelope__postmark">
+                <svg viewBox="0 0 120 120" width="100%" height="100%" aria-hidden="true">
+                  <defs>
+                    <path id="ct-circle" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/>
+                  </defs>
+                  <circle cx="60" cy="60" r="52" fill="none" stroke="#003B7A" stroke-width="2"/>
+                  <circle cx="60" cy="60" r="44" fill="none" stroke="#003B7A" stroke-width="1.5" stroke-dasharray="3 2"/>
+                  <text font-family="monospace" font-size="9" font-weight="bold" fill="#003B7A" letter-spacing="2">
+                    <textPath href="#ct-circle" startOffset="0%">★ ALMERÍA · VERA · ESPAÑA · 04620 ★ ALMERÍA · VERA</textPath>
+                  </text>
+                  <line x1="20" y1="60" x2="100" y2="60" stroke="#003B7A" stroke-width="1.5"/>
+                  <text x="60" y="50" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#003B7A">{dispatch}</text>
+                  <text x="60" y="74" text-anchor="middle" font-family="monospace" font-size="9" fill="#003B7A">RECIBIDO</text>
+                </svg>
+              </div>
+
+              {/* Address block */}
+              <div class="ct-envelope__address">
+                <div class="ct-envelope__address-to">PARA / FOR:</div>
+                <div class="ct-envelope__address-name">PLATANITO RICO</div>
+                <div class="ct-envelope__address-line">Ctra. de Ronda, 82</div>
+                <div class="ct-envelope__address-line">04620 — Vera</div>
+                <div class="ct-envelope__address-line">Almería · ESPAÑA</div>
+                <div class="ct-envelope__address-tracking">
+                  <span class="text-mono">TRACKING:</span>
+                  <span class="text-mono">PR-2026-{String(Math.floor(Math.random()*900000+100000))}-ES</span>
+                </div>
+              </div>
+
+              {/* Watermark big number */}
+              <div class="ct-envelope__watermark text-mono">027</div>
+
+              {/* Corner triangles airmail */}
+              <span class="ct-envelope__corner ct-envelope__corner--tl"></span>
+              <span class="ct-envelope__corner ct-envelope__corner--tr"></span>
+              <span class="ct-envelope__corner ct-envelope__corner--bl"></span>
+              <span class="ct-envelope__corner ct-envelope__corner--br"></span>
             </div>
           </aside>
+
         </div>
       </div>
 
-      {/* Marquee declaration */}
-      <div class="contacto-hero__marquee">
-        <div class="contacto-hero__marquee-track">
-          {Array.from({length: 8}).map(() => (
-            <span>RESPUESTA EN MENOS DE 4 HORAS ★</span>
+      {/* Telegrama marquee */}
+      <div class="ct-telegram">
+        <div class="ct-telegram__track">
+          {Array.from({length: 4}).map(() => (
+            <span class="ct-telegram__item">★ TELEGRAMA ★ PARA: USTED &middot; STOP &middot; RESPUESTA EN MENOS DE 4 HORAS &middot; STOP &middot; PRESUPUESTO GRATIS &middot; STOP &middot; SIN COMPROMISO &middot; STOP &middot; EQUIPO LOCAL ALMERÍA &middot; STOP &middot; ENVÍE BRIEFING &middot;</span>
           ))}
         </div>
       </div>
     </section>
 
-    {/* Formulario + canales — usamos componente Contact */}
-    <Contact />
-
-    {/* Trust */}
-    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
+    {/* ════════════════════════════════════════════════════ */}
+    {/* CANALES — 3 CARDS GRANDES                             */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="section-brutal ct-channels-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 03 / Por qué nosotros</span>
+            <span class="text-meta">Cap. 02 / Canales directos</span>
             <h2 class="heading-display brutal-section-head__title">
-              No somos una agencia
-              <em class="heading-editorial">más.</em>
+              Tres formas
+              <em class="heading-editorial">de empezar.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            La más rápida es WhatsApp, te leemos al instante. La más detallada es
+            el formulario. Tú decides.
+          </p>
+        </header>
+
+        <div class="ct-channels">
+          {channels.map((c) => (
+            <a href={c.href} target={c.ext ? '_blank' : undefined} rel={c.ext ? 'noopener noreferrer' : undefined} class={`ct-channel ct-channel--${c.color}`}>
+              <div class="ct-channel__head">
+                <span class="ct-channel__num text-mono">0{channels.indexOf(c)+1}</span>
+                <span class="ct-channel__label text-mono">{c.label}</span>
+                <span class="ct-channel__live"><span class="live-dot"></span></span>
+              </div>
+
+              <div class="ct-channel__icon" aria-hidden="true">
+                {c.icon === 'wa' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <path d="M32 6C17.6 6 6 17.6 6 32c0 5.1 1.4 9.9 4 14L6 58l12.4-3.9c4 2.1 8.5 3.2 13.6 3.2 14.4 0 26-11.6 26-26S46.4 6 32 6z" fill="#0E0D0B"/>
+                    <path d="M44.2 38.4c-.7-.4-3.9-1.9-4.5-2.1-.6-.2-1.1-.4-1.5.4-.5.7-1.7 2.1-2.1 2.6-.4.4-.8.5-1.4.2-3.7-1.8-6-3.3-8.4-7.6-.6-1.1.6-1 1.8-3.4.2-.4 0-.8-.1-1.1-.1-.4-1.5-3.6-2-4.9-.5-1.3-1-1.1-1.5-1.1H23c-.5 0-1.3.2-1.9.9-.6.7-2.5 2.4-2.5 5.8 0 3.4 2.5 6.8 2.9 7.2.4.4 5 7.6 12.1 10.7 4.5 1.9 6.2 2.1 8.4 1.8 1.4-.2 4.1-1.7 4.7-3.3.6-1.6.6-3 .4-3.3-.2-.3-.6-.5-1.3-.9z" fill="#D6FF44"/>
+                  </svg>
+                )}
+                {c.icon === 'tel' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <rect x="6" y="14" width="52" height="36" rx="6" fill="#0E0D0B"/>
+                    <path d="M22 26c0-3 2-5 5-5h2l3 8-4 3c2 4 6 8 10 10l3-4 8 3v2c0 3-2 5-5 5h-3c-11 0-19-8-19-19v-3z" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <circle cx="14" cy="32" r="2" fill="#FF0040"/>
+                  </svg>
+                )}
+                {c.icon === 'mail' && (
+                  <svg viewBox="0 0 64 64" width="100%" height="100%">
+                    <rect x="6" y="14" width="52" height="36" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M6 14 L32 36 L58 14" fill="none" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M6 50 L24 30 M58 50 L40 30" fill="none" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="50" cy="20" r="6" fill="#00E5FF" stroke="#0E0D0B" stroke-width="2"/>
+                  </svg>
+                )}
+              </div>
+
+              <div class="ct-channel__body">
+                <div class="ct-channel__value">{c.value}</div>
+                <div class="ct-channel__meta text-mono">{c.meta}</div>
+                <div class="ct-channel__hint">{c.hint}</div>
+              </div>
+
+              <div class="ct-channel__foot">
+                <span class="ct-channel__cta">Abrir →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════════ */}
+    {/* FORMULARIO BRIEFING                                   */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section id="formulario" class="ct-form-section">
+      <div class="container-brutal">
+
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 03 / Briefing</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Formulario
+              <em class="heading-editorial">de envío.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Cuanta más información mejor — pero con 3 líneas también vale. Lo
+            importante es empezar a hablar.
+          </p>
+        </header>
+
+        <div class="ct-form-wrap">
+
+          {/* Cabecera del documento */}
+          <header class="ct-form-doc-head">
+            <div class="ct-form-doc-head__l">
+              <div class="text-mono ct-form-doc-head__id">EXP. № 027 / 2026</div>
+              <div class="text-mono ct-form-doc-head__title">BRIEFING — CLIENTE NUEVO</div>
+            </div>
+            <div class="ct-form-doc-head__r">
+              <div class="ct-form-doc-head__stamp">CONFIDENCIAL</div>
+              <div class="text-mono ct-form-doc-head__date">{dispatch}</div>
+            </div>
+          </header>
+
+          {/* Banda fechado lateral */}
+          <div class="ct-form-side">
+            <span>FECHA · {dispatch}</span>
+            <span>·</span>
+            <span>EXP · 027</span>
+            <span>·</span>
+            <span>VERA · ALMERÍA</span>
+            <span>·</span>
+            <span>ESPAÑA</span>
+            <span>·</span>
+            <span>FORMULARIO · 2026</span>
+          </div>
+
+          <form
+            name="contact"
+            method="POST"
+            action="/success"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            class="ct-form"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+              <label>No rellenar: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
+
+            {/* Sección 1: Tu identidad */}
+            <fieldset class="ct-fieldset">
+              <legend class="ct-legend">
+                <span class="ct-legend__num text-mono">§ 01</span>
+                <span class="ct-legend__title">Tu identidad</span>
+                <span class="ct-legend__line"></span>
+              </legend>
+
+              <div class="ct-row ct-row--2">
+                <label class="ct-field">
+                  <span class="ct-field__label">Nombre <span class="ct-field__req">★</span></span>
+                  <span class="ct-field__hint text-mono">obligatorio · libre</span>
+                  <input type="text" name="name" required placeholder="Cómo te llamas" class="ct-input" />
+                </label>
+                <label class="ct-field">
+                  <span class="ct-field__label">Email <span class="ct-field__req">★</span></span>
+                  <span class="ct-field__hint text-mono">obligatorio · para responder</span>
+                  <input type="email" name="email" required placeholder="tu@email.com" class="ct-input" />
+                </label>
+              </div>
+
+              <div class="ct-row ct-row--2">
+                <label class="ct-field">
+                  <span class="ct-field__label">Teléfono</span>
+                  <span class="ct-field__hint text-mono">opcional · más rápido</span>
+                  <input type="tel" name="phone" placeholder="+34 600 000 000" class="ct-input" />
+                </label>
+                <label class="ct-field">
+                  <span class="ct-field__label">Empresa / proyecto</span>
+                  <span class="ct-field__hint text-mono">opcional</span>
+                  <input type="text" name="company" placeholder="Nombre o sector" class="ct-input" />
+                </label>
+              </div>
+            </fieldset>
+
+            {/* Sección 2: Servicio */}
+            <fieldset class="ct-fieldset">
+              <legend class="ct-legend">
+                <span class="ct-legend__num text-mono">§ 02</span>
+                <span class="ct-legend__title">¿Qué necesitas?</span>
+                <span class="ct-legend__line"></span>
+              </legend>
+
+              <div class="ct-chips ct-chips--service">
+                <input type="radio" id="s1" name="service" value="web" />
+                <label for="s1"><span class="ct-chip-dot ct-chip-dot--green"></span>Diseño Web</label>
+                <input type="radio" id="s2" name="service" value="audiovisual" />
+                <label for="s2"><span class="ct-chip-dot ct-chip-dot--red"></span>Audiovisual / Dron</label>
+                <input type="radio" id="s3" name="service" value="marketing" />
+                <label for="s3"><span class="ct-chip-dot ct-chip-dot--blue"></span>Marketing / SEO</label>
+                <input type="radio" id="s4" name="service" value="branding" />
+                <label for="s4"><span class="ct-chip-dot ct-chip-dot--magenta"></span>Diseño gráfico</label>
+                <input type="radio" id="s5" name="service" value="soporte" />
+                <label for="s5"><span class="ct-chip-dot ct-chip-dot--cyan"></span>Soporte / Mant.</label>
+                <input type="radio" id="s6" name="service" value="otro" checked />
+                <label for="s6"><span class="ct-chip-dot ct-chip-dot--ink"></span>Otro / Mixto</label>
+              </div>
+            </fieldset>
+
+            {/* Sección 3: Presupuesto + plazo */}
+            <fieldset class="ct-fieldset">
+              <legend class="ct-legend">
+                <span class="ct-legend__num text-mono">§ 03</span>
+                <span class="ct-legend__title">Presupuesto · plazo</span>
+                <span class="ct-legend__line"></span>
+              </legend>
+
+              <div class="ct-row ct-row--2">
+                <div class="ct-field">
+                  <span class="ct-field__label">Presupuesto orientativo</span>
+                  <span class="ct-field__hint text-mono">no pasa nada si no lo sabes</span>
+                  <div class="ct-chips">
+                    <input type="radio" id="b1" name="budget" value="0-1000" />
+                    <label for="b1">&lt;1.000€</label>
+                    <input type="radio" id="b2" name="budget" value="1000-3000" />
+                    <label for="b2">1k–3k</label>
+                    <input type="radio" id="b3" name="budget" value="3000-7000" />
+                    <label for="b3">3k–7k</label>
+                    <input type="radio" id="b4" name="budget" value="7000+" />
+                    <label for="b4">7k+</label>
+                    <input type="radio" id="b5" name="budget" value="no-idea" checked />
+                    <label for="b5">No lo sé</label>
+                  </div>
+                </div>
+                <div class="ct-field">
+                  <span class="ct-field__label">¿Para cuándo?</span>
+                  <span class="ct-field__hint text-mono">aproximado</span>
+                  <div class="ct-chips">
+                    <input type="radio" id="t1" name="timing" value="urgente" />
+                    <label for="t1">URGENTE</label>
+                    <input type="radio" id="t2" name="timing" value="1-mes" />
+                    <label for="t2">&lt; 1 mes</label>
+                    <input type="radio" id="t3" name="timing" value="1-3-meses" checked />
+                    <label for="t3">1–3 meses</label>
+                    <input type="radio" id="t4" name="timing" value="3-6-meses" />
+                    <label for="t4">3–6 meses</label>
+                    <input type="radio" id="t5" name="timing" value="flexible" />
+                    <label for="t5">Flexible</label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            {/* Sección 4: Mensaje */}
+            <fieldset class="ct-fieldset">
+              <legend class="ct-legend">
+                <span class="ct-legend__num text-mono">§ 04</span>
+                <span class="ct-legend__title">Cuéntanos qué necesitas</span>
+                <span class="ct-legend__line"></span>
+              </legend>
+
+              <label class="ct-field">
+                <span class="ct-field__label">Mensaje <span class="ct-field__req">★</span></span>
+                <span class="ct-field__hint text-mono">qué quieres conseguir, plazos, referencias que te gusten...</span>
+                <textarea name="message" rows="7" required placeholder="Hola Platanito Rico, tengo un proyecto que..." class="ct-input ct-input--area"></textarea>
+              </label>
+
+              <label class="ct-check">
+                <input type="checkbox" name="newsletter" value="si" />
+                <span class="ct-check__box"></span>
+                <span class="ct-check__txt">Quiero recibir consejos y novedades. <span class="text-mono">(0 spam · darte de baja en 1 clic)</span></span>
+              </label>
+            </fieldset>
+
+            {/* Footer del formulario */}
+            <footer class="ct-form-foot">
+              <div class="ct-form-foot__legal">
+                <span class="text-mono ct-form-foot__sello">RGPD</span>
+                <p class="ct-form-foot__txt">
+                  Al enviar aceptas la <a href="/privacidad/" class="link-brutal">política de privacidad</a>.
+                  No compartiremos tus datos con terceros.
+                </p>
+              </div>
+              <button type="submit" class="ct-submit">
+                <span class="ct-submit__main">Enviar briefing</span>
+                <span class="ct-submit__arrow">→</span>
+                <span class="ct-submit__stamp" aria-hidden="true">
+                  <svg viewBox="0 0 60 60" width="60" height="60">
+                    <defs><path id="ct-submit-c" d="M30,30 m-22,0 a22,22 0 1,1 44,0 a22,22 0 1,1 -44,0"/></defs>
+                    <circle cx="30" cy="30" r="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/>
+                    <text font-family="monospace" font-size="6" font-weight="bold" fill="currentColor" letter-spacing="1.5"><textPath href="#ct-submit-c" startOffset="0%">★ ENVIAR ★ APROBAR ★ ENVIAR ★ OK ★</textPath></text>
+                  </svg>
+                </span>
+              </button>
+            </footer>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════════ */}
+    {/* DISPATCH BOARD — PANEL ESTADO                         */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="ct-dispatch-section">
+      <div class="container-brutal">
+        <header class="ct-dispatch-head">
+          <div>
+            <span class="text-meta" style="color:var(--ct-mint)">Cap. 04 / Estado en vivo</span>
+            <h2 class="heading-display ct-dispatch-h2">
+              Panel de
+              <em class="heading-editorial" style="color:var(--ct-orange)">salidas.</em>
+            </h2>
+          </div>
+          <div class="ct-dispatch-clock">
+            <span class="text-mono ct-dispatch-clock__lbl">HORA · ALMERÍA</span>
+            <span class="text-mono ct-dispatch-clock__val" id="ct-clock">--:--:--</span>
+            <span class="text-mono ct-dispatch-clock__zone">CET · UTC+1</span>
+          </div>
+        </header>
+
+        <div class="ct-board">
+          <header class="ct-board__head">
+            <span class="text-mono">EXP.</span>
+            <span class="text-mono">CONCEPTO</span>
+            <span class="text-mono">ESTADO / VALOR</span>
+            <span class="text-mono">SIG.</span>
+          </header>
+          {dispatchBoard.map((r, i) => (
+            <div class={`ct-board__row ct-board__row--${r.tone}`}>
+              <span class="ct-board__num text-mono">{String(i+1).padStart(3,'0')}</span>
+              <span class="ct-board__k">{r.k}</span>
+              <span class="ct-board__v text-mono">{r.v}</span>
+              <span class="ct-board__sig" aria-hidden="true"></span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════════ */}
+    {/* MAPA / ESTUDIO                                        */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="section-brutal ct-map-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Localización</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Estudio en
+              <em class="heading-editorial">Vera.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Equipo local en la costa de Almería. Si estás cerca, pásate a tomar
+            un café — el estudio huele a tinta y a proyecto.
+          </p>
+        </header>
+
+        <div class="ct-map-grid">
+
+          {/* Mapa SVG */}
+          <div class="ct-map">
+            <svg viewBox="0 0 480 360" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              {/* Grid */}
+              <defs>
+                <pattern id="ct-map-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(14,13,11,0.06)" stroke-width="1"/>
+                </pattern>
+                <pattern id="ct-map-dots" width="6" height="6" patternUnits="userSpaceOnUse">
+                  <circle cx="1" cy="1" r="0.6" fill="rgba(14,13,11,0.18)"/>
+                </pattern>
+              </defs>
+
+              <rect width="480" height="360" fill="url(#ct-map-grid)"/>
+
+              {/* Costa / mar (azul) */}
+              <path d="M 320 0 L 340 40 L 360 80 L 380 130 L 400 180 L 420 220 L 440 270 L 460 310 L 480 360 L 480 0 Z" fill="#003B7A" opacity="0.85"/>
+              <path d="M 320 0 L 340 40 L 360 80 L 380 130 L 400 180 L 420 220 L 440 270 L 460 310 L 480 360" fill="none" stroke="#0E0D0B" stroke-width="2.5"/>
+
+              {/* Tierra patrón puntos */}
+              <path d="M 0 0 L 320 0 L 340 40 L 360 80 L 380 130 L 400 180 L 420 220 L 440 270 L 460 310 L 480 360 L 0 360 Z" fill="url(#ct-map-dots)"/>
+
+              {/* Sierras */}
+              <path d="M 30 220 Q 60 180 90 200 T 150 195 T 220 210" fill="none" stroke="#0E0D0B" stroke-width="1" opacity="0.4"/>
+              <path d="M 60 260 Q 100 230 140 245 T 220 250" fill="none" stroke="#0E0D0B" stroke-width="1" opacity="0.4"/>
+
+              {/* Pueblos pequeños */}
+              <g font-family="monospace" font-size="9" fill="#0E0D0B">
+                <circle cx="100" cy="180" r="2" fill="#0E0D0B"/><text x="106" y="183">ALMERÍA</text>
+                <circle cx="220" cy="120" r="2" fill="#0E0D0B"/><text x="226" y="123">HUÉRCAL-OVERA</text>
+                <circle cx="180" cy="280" r="2" fill="#0E0D0B"/><text x="186" y="283">NÍJAR</text>
+                <circle cx="260" cy="200" r="2" fill="#0E0D0B"/><text x="266" y="203">MOJÁCAR</text>
+                <circle cx="80" cy="120" r="2" fill="#0E0D0B"/><text x="86" y="123">FIÑANA</text>
+              </g>
+
+              {/* PIN VERA — destacado */}
+              <g>
+                <circle cx="280" cy="160" r="38" fill="#FF6B35" opacity="0.15">
+                  <animate attributeName="r" values="20;42;20" dur="3s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="0.35;0;0.35" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="280" cy="160" r="20" fill="#FF6B35" opacity="0.35"/>
+                <path d="M 280 132 C 268 132 260 142 260 154 C 260 168 280 188 280 188 C 280 188 300 168 300 154 C 300 142 292 132 280 132 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/>
+                <circle cx="280" cy="154" r="7" fill="#FFF8EC" stroke="#0E0D0B" stroke-width="1.5"/>
+                <circle cx="280" cy="154" r="3" fill="#0E0D0B"/>
+                <text x="280" y="208" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#0E0D0B">★ VERA · 04620 ★</text>
+                <text x="280" y="222" text-anchor="middle" font-family="monospace" font-size="8" fill="#0E0D0B" opacity="0.7">37.2450°N · 1.8614°W</text>
+              </g>
+
+              {/* Rosa de los vientos */}
+              <g transform="translate(420,60)">
+                <circle r="20" fill="none" stroke="#0E0D0B" stroke-width="1"/>
+                <path d="M 0 -16 L 4 0 L 0 16 L -4 0 Z" fill="#0E0D0B"/>
+                <path d="M -16 0 L 0 4 L 16 0 L 0 -4 Z" fill="none" stroke="#0E0D0B" stroke-width="1"/>
+                <text y="-22" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#0E0D0B">N</text>
+              </g>
+
+              {/* Escala */}
+              <g transform="translate(20,340)">
+                <line x1="0" y1="0" x2="60" y2="0" stroke="#0E0D0B" stroke-width="2"/>
+                <line x1="0" y1="-3" x2="0" y2="3" stroke="#0E0D0B" stroke-width="2"/>
+                <line x1="30" y1="-3" x2="30" y2="3" stroke="#0E0D0B" stroke-width="2"/>
+                <line x1="60" y1="-3" x2="60" y2="3" stroke="#0E0D0B" stroke-width="2"/>
+                <text x="30" y="-8" text-anchor="middle" font-family="monospace" font-size="8" fill="#0E0D0B">10 KM</text>
+              </g>
+
+              {/* Marca registro */}
+              <text x="460" y="350" text-anchor="end" font-family="monospace" font-size="7" fill="#0E0D0B" opacity="0.5">PLATANITO RICO · CARTOGRAFÍA · 2026</text>
+            </svg>
+          </div>
+
+          {/* Datos del estudio */}
+          <aside class="ct-studio">
+            <div class="ct-studio__head">
+              <span class="text-mono">FICHA · ESTUDIO</span>
+              <span class="text-mono">№ 027</span>
+            </div>
+
+            <h3 class="ct-studio__name heading-display">Platanito Rico<br/><em class="heading-editorial">Studio.</em></h3>
+
+            <dl class="ct-studio__data">
+              <div><dt class="text-mono">Dirección</dt><dd>Ctra. de Ronda, 82<br/>04620 — Vera, Almería</dd></div>
+              <div><dt class="text-mono">Coords</dt><dd class="text-mono">37.2450°N · 1.8614°W</dd></div>
+              <div><dt class="text-mono">Tel.</dt><dd><a href={telLink} class="link-brutal">{phoneDisplay}</a></dd></div>
+              <div><dt class="text-mono">Email</dt><dd><a href="mailto:hola@platanitorico.com" class="link-brutal">hola@platanitorico.com</a></dd></div>
+              <div><dt class="text-mono">Horario</dt><dd>L–V · 09:00 – 19:00<br/>S · 10:00 – 14:00</dd></div>
+              <div><dt class="text-mono">Domingo</dt><dd>Cerrado · WhatsApp 24/7</dd></div>
+            </dl>
+
+            <a href="https://maps.google.com/?q=Ctra+de+Ronda+82+Vera+Almeria" target="_blank" rel="noopener noreferrer" class="ct-studio__cta">
+              Cómo llegar →
+            </a>
+
+            {/* Sectores que atendemos */}
+            <div class="ct-studio__sectors">
+              <span class="text-mono">SECTORES HABITUALES</span>
+              <ul>
+                {sectores.map((s) => <li>{s}</li>)}
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════════ */}
+    {/* TRUST — POR QUÉ NOSOTROS                              */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="section-brutal ct-trust-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Por qué nosotros</span>
+            <h2 class="heading-display brutal-section-head__title">
+              No somos
+              <em class="heading-editorial">una agencia más.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
@@ -127,27 +661,37 @@ const steps = [
           </p>
         </header>
 
-        <ol class="contacto-trust-grid">
+        <ol class="ct-trust-grid">
           {trust.map((r) => (
-            <li class="contacto-trust">
-              <span class="contacto-trust__num text-mono">{r.num}</span>
-              <h3 class="contacto-trust__title heading-display">{r.title}</h3>
-              <p class="contacto-trust__body">{r.body}</p>
+            <li class={`ct-trust ct-trust--${r.color}`}>
+              <div class="ct-trust__stamp" aria-hidden="true">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                  <defs><path id={`ct-trust-c-${r.num}`} d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+                  <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/>
+                  <text font-family="monospace" font-size="7" font-weight="bold" fill="currentColor" letter-spacing="2"><textPath href={`#ct-trust-c-${r.num}`} startOffset="0%">★ {r.stamp} ★ {r.stamp} ★</textPath></text>
+                  <text x="50" y="54" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="currentColor">{r.num}</text>
+                </svg>
+              </div>
+              <h3 class="ct-trust__title heading-display">{r.title}</h3>
+              <p class="ct-trust__body">{r.body}</p>
             </li>
           ))}
         </ol>
       </div>
     </section>
 
-    {/* Cómo funciona */}
-    <section class="section-brutal">
+    {/* ════════════════════════════════════════════════════ */}
+    {/* PROCESO — 3 POSTALES                                  */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="section-brutal ct-process-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 04 / Cómo funciona</span>
+            <span class="text-meta">Cap. 07 / Cómo funciona</span>
             <h2 class="heading-display brutal-section-head__title">
               Tres pasos,
-              <em class="heading-editorial">ningún misterio.</em>
+              <em class="heading-editorial">tres postales.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
@@ -156,162 +700,1332 @@ const steps = [
           </p>
         </header>
 
-        <ol class="contacto-steps">
-          {steps.map((s) => (
-            <li class="contacto-step">
-              <div class="contacto-step__num text-mono">
-                <span>{s.num}</span>
-                <small>{s.eta}</small>
-              </div>
-              <div>
-                <h3 class="heading-display contacto-step__title">{s.title}</h3>
-                <p class="contacto-step__body">{s.body}</p>
-              </div>
+        <ol class="ct-postcards">
+          {steps.map((s, i) => (
+            <li class={`ct-postcard ct-postcard--${i}`}>
+              <header class="ct-postcard__head">
+                <span class="text-mono ct-postcard__num">{s.num} / 03</span>
+                <span class="text-mono ct-postcard__tag">ETA · {s.tag}</span>
+              </header>
+              <h3 class="heading-display ct-postcard__title">{s.title}</h3>
+              <p class="ct-postcard__body">{s.body}</p>
+              <footer class="ct-postcard__foot">
+                <div class="ct-postcard__sello" aria-hidden="true">
+                  <span>{s.sello}</span>
+                </div>
+                <div class="ct-postcard__lines">
+                  <span></span><span></span><span></span>
+                </div>
+              </footer>
             </li>
           ))}
         </ol>
-
-        {/* Horario / data sheet */}
-        <div class="contacto-schedule">
-          <header class="contacto-schedule__head">
-            <span class="text-meta">Horario</span>
-            <span class="text-meta">★ ALM</span>
-          </header>
-          <dl class="spec-list">
-            <div><dt class="spec-k">Lunes–Viernes</dt><dd class="spec-v">09:00 – 19:00</dd></div>
-            <div><dt class="spec-k">Sábados</dt><dd class="spec-v">10:00 – 14:00</dd></div>
-            <div><dt class="spec-k">Domingos</dt><dd class="spec-v">Cerrado · WhatsApp 24/7</dd></div>
-            <div><dt class="spec-k">Estudio</dt><dd class="spec-v">Ctra. de Ronda, 82 — Vera</dd></div>
-          </dl>
-        </div>
       </div>
     </section>
 
+    {/* ════════════════════════════════════════════════════ */}
+    {/* FAQ                                                   */}
+    {/* ════════════════════════════════════════════════════ */}
     <FAQ />
+
+    {/* ════════════════════════════════════════════════════ */}
+    {/* CTA FINAL — SELLO GIRATORIO                           */}
+    {/* ════════════════════════════════════════════════════ */}
+    <section class="ct-final">
+      <div class="container-brutal">
+        <div class="ct-final__grid">
+
+          <div class="ct-final__l">
+            <span class="text-meta" style="color:var(--ct-lime)">Cap. 08 / Última llamada</span>
+            <h2 class="ct-final__title heading-display">
+              ¿Empezamos
+              <em class="heading-editorial">esta semana?</em>
+            </h2>
+            <p class="ct-final__lead">
+              Te respondemos hoy mismo. Sin compromiso. Sin tonterías. Solo
+              gente que disfruta de su trabajo, hablando contigo.
+            </p>
+            <div class="ct-final__cta">
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="ct-final__btn">
+                Escribir por WhatsApp
+                <span aria-hidden="true">→</span>
+              </a>
+              <a href={telLink} class="ct-final__btn ct-final__btn--ghost">
+                Llamar al {phoneDisplay}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <div class="ct-final__meta">
+              <span class="text-mono"><span class="live-dot"></span> ACEPTANDO PROYECTOS</span>
+              <span class="text-mono">★ ALMERÍA · 04620 ★</span>
+              <span class="text-mono">RESPUESTA &lt; 4H</span>
+            </div>
+          </div>
+
+          <div class="ct-final__r">
+            <div class="ct-final__seal" aria-hidden="true">
+              <svg viewBox="0 0 220 220" width="100%" height="100%">
+                <defs>
+                  <path id="ct-final-c-1" d="M110,110 m-92,0 a92,92 0 1,1 184,0 a92,92 0 1,1 -184,0"/>
+                  <path id="ct-final-c-2" d="M110,110 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/>
+                </defs>
+                <circle cx="110" cy="110" r="108" fill="none" stroke="#D6FF44" stroke-width="2"/>
+                <circle cx="110" cy="110" r="100" fill="none" stroke="#D6FF44" stroke-width="1.5" stroke-dasharray="3 2"/>
+                <g class="ct-seal-spin">
+                  <text font-family="monospace" font-size="11" font-weight="bold" fill="#D6FF44" letter-spacing="3">
+                    <textPath href="#ct-final-c-1" startOffset="0%">★ RECIBIDO ★ APROBADO ★ HOLA ★ PLATANITO RICO ★ ALMERÍA ★ 2026 ★ </textPath>
+                  </text>
+                </g>
+                <circle cx="110" cy="110" r="76" fill="none" stroke="#D6FF44" stroke-width="1"/>
+                <g class="ct-seal-spin-rev">
+                  <text font-family="monospace" font-size="9" font-weight="bold" fill="#FF6B35" letter-spacing="2">
+                    <textPath href="#ct-final-c-2" startOffset="0%">RESPUESTA · MENOS DE 4H · RESPUESTA · MENOS DE 4H · </textPath>
+                  </text>
+                </g>
+                <text x="110" y="100" text-anchor="middle" font-family="var(--font-display)" font-size="36" font-weight="700" fill="#FFF8EC" letter-spacing="-2">★</text>
+                <text x="110" y="125" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#FFF8EC" letter-spacing="3">HABLEMOS</text>
+                <text x="110" y="142" text-anchor="middle" font-family="monospace" font-size="8" fill="#D6FF44" letter-spacing="2">·  EXP. 027  ·</text>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Marquee inferior */}
+      <div class="ct-final__marquee">
+        <div class="ct-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ HOLA@PLATANITORICO.COM ★ {phoneDisplay} ★ VERA · ALMERÍA ★ 2026 ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
   </main>
 
   <Footer />
+
+  {/* Reloj en vivo del dispatch */}
+  <script is:inline>
+    (function(){
+      var el = document.getElementById('ct-clock');
+      if(!el) return;
+      function tick(){
+        var d = new Date();
+        var h = String(d.getHours()).padStart(2,'0');
+        var m = String(d.getMinutes()).padStart(2,'0');
+        var s = String(d.getSeconds()).padStart(2,'0');
+        el.textContent = h+':'+m+':'+s;
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+  </script>
 </BaseLayout>
 
 <style>
-  /* Hero */
-  .contacto-hero {
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · CORRESPONDENCIA AIRMAIL                        */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct {
+    --ct-paper:    #FFF8EC;
+    --ct-paper-2:  #FBF1DC;
+    --ct-cream:    #F5E9C8;
+    --ct-ink:      #0E0D0B;
+    --ct-red:      #DC1B2C;
+    --ct-blue:     #003B7A;
+    --ct-orange:   #FF6B35;
+    --ct-lime:     #D6FF44;
+    --ct-mint:     #C8F2D6;
+    --ct-cyan:     #00E5FF;
+    --ct-yellow:   #FFD600;
+    --ct-magenta:  #FF2D9A;
+    --ct-sello:    #C9A24F;
+    --ct-shadow:   8px 8px 0 0 var(--ct-ink);
+    --ct-shadow-s: 4px 4px 0 0 var(--ct-ink);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO · SOBRE AIRMAIL                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-hero {
     padding-top: 3rem;
     padding-bottom: 0;
-    background: var(--brutal-bg);
-    border-bottom: 3px solid var(--brutal-ink);
+    background:
+      radial-gradient(circle at 20% 0%, rgba(255,107,53,0.08), transparent 40%),
+      radial-gradient(circle at 80% 100%, rgba(0,59,122,0.06), transparent 50%),
+      var(--ct-paper);
+    border-bottom: 3px solid var(--ct-ink);
+    position: relative;
+    overflow: hidden;
   }
-  .contacto-hero__head {
-    display: flex; justify-content: space-between; padding-bottom: 1rem;
-    flex-wrap: wrap; gap: 1rem;
+  .ct-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(14,13,11,0.05) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
   }
-  .contacto-hero__grid {
+  .ct-hero > * { position: relative; }
+  .ct-hero__top {
+    display: flex; justify-content: space-between;
+    padding-bottom: 1rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .ct-hero__grid {
     display: grid; gap: 3rem;
     grid-template-columns: 1fr;
-    padding-block: 3rem;
+    padding-block: 3rem 4rem;
   }
-  @media (min-width: 1024px) { .contacto-hero__grid { grid-template-columns: 1.7fr 1fr; align-items: end; gap: 4rem; } }
-  .contacto-hero__title {
-    font-size: clamp(3rem, 9vw, 7rem);
-    line-height: .85;
+  @media (min-width: 1024px) {
+    .ct-hero__grid { grid-template-columns: 1.05fr 1fr; align-items: center; gap: 4rem; }
+  }
+  .ct-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .ct-hero__title {
+    font-size: clamp(2.75rem, 8.5vw, 6.5rem);
+    line-height: .88;
     letter-spacing: -.045em;
-    margin: 1rem 0 1.5rem;
+    margin: .25rem 0;
   }
-  .contacto-hero__title em { color: var(--brutal-accent); font-style: italic; }
-  .contacto-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 52ch; }
-  .contacto-hero__lead strong { color: var(--brutal-ink); font-weight: 700; }
-  .contacto-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+  .ct-hero__title em { color: var(--ct-orange); font-style: italic; display: block; }
+  .ct-hero__title-stamp {
+    display: inline-block;
+    color: var(--ct-red);
+    transform: rotate(-2deg);
+    border-bottom: 6px solid var(--ct-red);
+    padding: 0 .1em;
+  }
+  .ct-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 52ch;
+  }
+  .ct-hero__lead strong { color: var(--ct-ink); font-weight: 700; }
+  .ct-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
 
-  .contacto-hero__specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border: 2px solid var(--brutal-ink);
-    background: var(--brutal-ink);
+  /* ── SOBRE ── */
+  .ct-envelope {
+    position: relative;
+    aspect-ratio: 14 / 9;
+    transform: rotate(-1.5deg);
+    transition: transform .4s cubic-bezier(.2,.8,.2,1);
   }
-  .contacto-hero__spec {
-    background: var(--brutal-card);
-    padding: 1.5rem;
+  .ct-envelope:hover { transform: rotate(0deg) translateY(-4px); }
+  .ct-envelope__paper {
+    position: relative;
+    width: 100%; height: 100%;
+    background:
+      repeating-linear-gradient(45deg, transparent 0 8px, rgba(220,27,44,0.04) 8px 9px),
+      var(--ct-paper);
+    border: 3px solid var(--ct-ink);
+    box-shadow: 12px 12px 0 0 var(--ct-ink), 0 30px 60px -20px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  /* Stripes airmail diagonales en el borde */
+  .ct-envelope__stripes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      /* arriba */
+      linear-gradient(90deg, transparent, transparent) top/100% 12px no-repeat,
+      /* abajo */
+      repeating-linear-gradient(135deg, var(--ct-red) 0 12px, var(--ct-paper) 12px 18px, var(--ct-blue) 18px 30px, var(--ct-paper) 30px 36px) bottom/100% 14px no-repeat,
+      repeating-linear-gradient(45deg,  var(--ct-red) 0 12px, var(--ct-paper) 12px 18px, var(--ct-blue) 18px 30px, var(--ct-paper) 30px 36px) top/100% 14px no-repeat,
+      repeating-linear-gradient(45deg,  var(--ct-red) 0 12px, var(--ct-paper) 12px 18px, var(--ct-blue) 18px 30px, var(--ct-paper) 30px 36px) left/14px 100% no-repeat,
+      repeating-linear-gradient(135deg, var(--ct-red) 0 12px, var(--ct-paper) 12px 18px, var(--ct-blue) 18px 30px, var(--ct-paper) 30px 36px) right/14px 100% no-repeat;
+  }
+  .ct-envelope__avion {
+    position: absolute;
+    top: 22px; left: 22px;
+    display: flex; align-items: center; gap: .5rem;
+    background: var(--ct-paper);
+    padding: .35rem .6rem;
+    border: 2px solid var(--ct-ink);
+    box-shadow: 3px 3px 0 0 var(--ct-ink);
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    color: var(--ct-red);
+    z-index: 3;
+  }
+  .ct-envelope__avion-sub {
+    font-size: .55rem;
+    color: var(--ct-blue);
+    letter-spacing: .12em;
+    margin-left: .5rem;
+    border-left: 1.5px solid var(--ct-ink);
+    padding-left: .5rem;
+  }
+  .ct-envelope__stamps {
+    position: absolute;
+    top: 20px; right: 24px;
     display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    border-right: 2px solid var(--brutal-ink);
-    border-bottom: 2px solid var(--brutal-ink);
+    gap: 6px;
+    z-index: 3;
+    transform: rotate(2deg);
   }
-  .contacto-hero__spec:nth-child(2n) { border-right: none; }
-  .contacto-hero__spec:nth-last-child(-n+2) { border-bottom: none; }
-  .contacto-hero__spec--accent { background: var(--brutal-accent); color: var(--brutal-ink); }
-  .contacto-hero__spec--lime { background: var(--brutal-lime); color: var(--brutal-ink); }
-  .contacto-hero__spec--ink { background: var(--brutal-ink); color: var(--brutal-bg); }
-  .contacto-hero__spec--ink .contacto-hero__spec-num { color: var(--brutal-lime); }
-  .contacto-hero__spec-num { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; line-height: 1; }
-  .contacto-hero__spec-num sup { font-size: .5em; vertical-align: super; color: var(--brutal-accent); }
-  .contacto-hero__spec-lbl { font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+  .ct-stamp {
+    width: 56px;
+    background: var(--ct-paper);
+    border: 1.5px dashed var(--ct-ink);
+    padding: 4px 4px 6px;
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: 2px 2px 0 rgba(14,13,11,0.15);
+    font-family: var(--font-mono);
+    text-align: center;
+  }
+  .ct-stamp svg { display: block; }
+  .ct-stamp__val { font-size: .7rem; font-weight: 700; line-height: 1; margin-top: 2px; color: var(--ct-ink); }
+  .ct-stamp__txt { font-size: .42rem; letter-spacing: .08em; color: var(--ct-ink); margin-top: 2px; }
+  .ct-stamp--orange { background: var(--ct-orange); }
+  .ct-stamp--mint   { background: var(--ct-mint); }
+  .ct-stamp--cyan   { background: var(--ct-cyan); }
+  .ct-stamp:nth-child(1) { transform: rotate(-4deg); }
+  .ct-stamp:nth-child(2) { transform: rotate(1deg); }
+  .ct-stamp:nth-child(3) { transform: rotate(-2deg); }
 
-  .contacto-hero__marquee {
-    background: var(--brutal-ink);
-    color: var(--brutal-lime);
+  .ct-envelope__postmark {
+    position: absolute;
+    top: 36%;
+    right: 22%;
+    width: 110px;
+    aspect-ratio: 1;
+    transform: rotate(-12deg);
+    opacity: 0.85;
+    z-index: 2;
+    animation: ct-postmark-in .8s ease-out .3s both;
+  }
+  @keyframes ct-postmark-in {
+    0%   { opacity: 0; transform: rotate(-30deg) scale(2); }
+    60%  { opacity: 0.95; transform: rotate(-10deg) scale(1.05); }
+    100% { opacity: 0.85; transform: rotate(-12deg) scale(1); }
+  }
+
+  .ct-envelope__address {
+    position: absolute;
+    bottom: 50px; left: 26px;
+    font-family: var(--font-mono);
+    z-index: 2;
+    text-align: left;
+  }
+  .ct-envelope__address-to {
+    font-size: .55rem;
+    letter-spacing: .15em;
+    color: var(--ct-blue);
+    margin-bottom: 4px;
+  }
+  .ct-envelope__address-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.02em;
+    color: var(--ct-ink);
+    border-bottom: 2px solid var(--ct-ink);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+  }
+  .ct-envelope__address-line {
+    font-size: .72rem;
+    line-height: 1.35;
+    color: var(--ct-ink);
+  }
+  .ct-envelope__address-tracking {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1.5px dashed var(--ct-ink);
+    font-size: .55rem;
+    letter-spacing: .1em;
+    display: flex; gap: .5rem;
+    color: var(--ct-blue);
+  }
+  .ct-envelope__watermark {
+    position: absolute;
+    bottom: -30px;
+    right: -10px;
+    font-size: 16rem;
+    line-height: 1;
+    font-weight: 800;
+    color: rgba(14,13,11,0.04);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .ct-envelope__corner {
+    position: absolute;
+    width: 0; height: 0;
+    border-style: solid;
+    z-index: 1;
+  }
+  .ct-envelope__corner--tl {
+    top: 0; left: 0;
+    border-width: 30px 30px 0 0;
+    border-color: var(--ct-red) transparent transparent transparent;
+  }
+  .ct-envelope__corner--tr {
+    top: 0; right: 0;
+    border-width: 0 30px 30px 0;
+    border-color: transparent var(--ct-blue) transparent transparent;
+  }
+  .ct-envelope__corner--bl {
+    bottom: 0; left: 0;
+    border-width: 30px 0 0 30px;
+    border-color: transparent transparent transparent var(--ct-blue);
+  }
+  .ct-envelope__corner--br {
+    bottom: 0; right: 0;
+    border-width: 0 0 30px 30px;
+    border-color: transparent transparent var(--ct-red) transparent;
+  }
+
+  /* TELEGRAMA marquee */
+  .ct-telegram {
+    background: var(--ct-ink);
+    color: var(--ct-paper);
     overflow: hidden;
     padding: 1rem 0;
-    border-top: 2px solid var(--brutal-ink);
+    border-top: 3px solid var(--ct-ink);
+    position: relative;
   }
-  .contacto-hero__marquee-track {
-    display: flex; gap: 3rem; width: max-content;
-    animation: marquee 30s linear infinite;
+  .ct-telegram::before, .ct-telegram::after {
+    content: '★';
+    position: absolute; top: 50%; transform: translateY(-50%);
+    color: var(--ct-yellow);
+    font-size: 1.5rem;
+    z-index: 2;
+  }
+  .ct-telegram::before { left: 1rem; }
+  .ct-telegram::after  { right: 1rem; }
+  .ct-telegram__track {
+    display: flex; gap: 4rem; width: max-content;
+    animation: marquee 40s linear infinite;
     font-family: var(--font-mono);
-    font-size: .8rem;
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-weight: 700;
+  }
+  .ct-telegram__item {
+    flex-shrink: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CANALES                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-channels-section { background: var(--brutal-bg); }
+  .ct-channels {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  @media (min-width: 768px) { .ct-channels { grid-template-columns: repeat(3, 1fr); } }
+  .ct-channel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--ct-paper);
+    border: 2.5px solid var(--ct-ink);
+    box-shadow: var(--ct-shadow);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--ct-ink);
+    transition: transform .25s, box-shadow .25s;
+    overflow: hidden;
+  }
+  .ct-channel:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 14px 14px 0 0 var(--ct-ink);
+  }
+  .ct-channel--mint { background: var(--ct-mint); }
+  .ct-channel--lime { background: var(--ct-lime); }
+  .ct-channel--cyan { background: var(--ct-cyan); }
+  .ct-channel__head {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: .5rem;
+    padding-bottom: .75rem;
+    border-bottom: 2px solid var(--ct-ink);
+    margin-bottom: 1rem;
+  }
+  .ct-channel__num {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .ct-channel__label {
+    font-size: .7rem;
     text-transform: uppercase;
     letter-spacing: .15em;
     font-weight: 700;
   }
-
-  /* Trust */
-  .contacto-trust-grid {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid; gap: 0;
-    grid-template-columns: 1fr;
-    border: 2px solid var(--brutal-ink);
-    background: var(--brutal-ink);
+  .ct-channel__live { display: flex; align-items: center; }
+  .ct-channel__live .live-dot { background: var(--ct-ink); }
+  .ct-channel__icon {
+    width: 64px; height: 64px;
+    margin: 0 0 1rem;
   }
-  @media (min-width: 640px) { .contacto-trust-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
-  .contacto-trust {
-    background: var(--brutal-card);
+  .ct-channel__body { flex: 1; }
+  .ct-channel__value {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    margin-bottom: .35rem;
+  }
+  .ct-channel__meta {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ct-ink);
+    opacity: .75;
+    margin-bottom: 1rem;
+  }
+  .ct-channel__hint {
+    font-size: .92rem;
+    line-height: 1.4;
+    color: var(--ct-ink);
+    opacity: .85;
+  }
+  .ct-channel__foot {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px dashed var(--ct-ink);
+  }
+  .ct-channel__cta {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FORMULARIO                                              */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-form-section {
+    padding: 6rem 1.5rem;
+    background: var(--ct-paper-2);
+    border-block: 3px solid var(--ct-ink);
+    position: relative;
+  }
+  .ct-form-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(14,13,11,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,13,11,0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .ct-form-section > * { position: relative; }
+
+  .ct-form-wrap {
+    background: var(--ct-paper);
+    border: 3px solid var(--ct-ink);
+    box-shadow: 16px 16px 0 0 var(--ct-ink);
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .ct-form-doc-head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+    background: var(--ct-ink);
+    color: var(--ct-paper);
+    border-bottom: 3px solid var(--ct-ink);
+  }
+  .ct-form-doc-head__l, .ct-form-doc-head__r { display: flex; flex-direction: column; gap: .25rem; }
+  .ct-form-doc-head__r { text-align: right; align-items: flex-end; }
+  .ct-form-doc-head__id {
+    font-size: .7rem; letter-spacing: .2em;
+    color: var(--ct-lime);
+  }
+  .ct-form-doc-head__title {
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    line-height: 1;
+  }
+  .ct-form-doc-head__stamp {
+    display: inline-block;
+    background: var(--ct-red);
+    color: var(--ct-paper);
+    padding: .25rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 1.5px solid var(--ct-paper);
+    transform: rotate(2deg);
+  }
+  .ct-form-doc-head__date {
+    font-size: .75rem;
+    letter-spacing: .15em;
+    color: var(--ct-paper);
+    opacity: .85;
+  }
+  .ct-form-side {
+    position: absolute;
+    top: 90px; right: -20px;
+    transform: rotate(90deg);
+    transform-origin: right top;
+    display: flex; gap: .65rem;
+    font-family: var(--font-mono);
+    font-size: .55rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--ct-ink);
+    opacity: .5;
+    pointer-events: none;
+    z-index: 1;
+  }
+  @media (max-width: 768px) { .ct-form-side { display: none; } }
+
+  .ct-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem 2rem 2.5rem;
+  }
+  @media (min-width: 768px) { .ct-form { padding: 2.5rem 3rem 3rem; } }
+
+  .ct-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .ct-legend {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0;
+    margin-bottom: .5rem;
+  }
+  .ct-legend__num {
+    font-size: .85rem;
+    font-weight: 800;
+    color: var(--ct-red);
+    letter-spacing: .15em;
+  }
+  .ct-legend__title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--ct-ink);
+  }
+  .ct-legend__line {
+    flex: 1; height: 0;
+    border-bottom: 2px dashed var(--ct-ink);
+  }
+
+  .ct-row {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) { .ct-row--2 { grid-template-columns: 1fr 1fr; } }
+
+  .ct-field {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+  }
+  .ct-field__label {
+    font-family: var(--font-display);
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--ct-ink);
+    line-height: 1;
+  }
+  .ct-field__req { color: var(--ct-red); margin-left: .15rem; }
+  .ct-field__hint {
+    font-size: .62rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ct-blue);
+    opacity: .7;
+    margin-bottom: .35rem;
+  }
+
+  .ct-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--ct-ink);
+    padding: .65rem .25rem .5rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ct-ink);
+    transition: border-color .2s, padding .2s, background .2s;
+  }
+  .ct-input::placeholder {
+    color: var(--ct-ink);
+    opacity: .35;
+  }
+  .ct-input:focus {
+    outline: none;
+    background: var(--ct-cream);
+    padding-left: .65rem;
+    padding-right: .65rem;
+    border-bottom-color: var(--ct-red);
+  }
+  .ct-input--area {
+    border: 2px solid var(--ct-ink);
+    padding: .85rem 1rem;
+    background:
+      linear-gradient(transparent calc(1.6rem - 1px), rgba(14,13,11,0.12) calc(1.6rem - 1px), rgba(14,13,11,0.12) 1.6rem, transparent 1.6rem) 0 0/100% 1.6rem;
+    line-height: 1.6rem;
+    resize: vertical;
+    min-height: 8rem;
+  }
+  .ct-input--area:focus {
+    background:
+      linear-gradient(transparent calc(1.6rem - 1px), rgba(220,27,44,0.25) calc(1.6rem - 1px), rgba(220,27,44,0.25) 1.6rem, transparent 1.6rem) 0 0/100% 1.6rem,
+      var(--ct-paper);
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Chips */
+  .ct-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: .35rem;
+  }
+  .ct-chips input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .ct-chips label {
+    cursor: pointer;
+    padding: .55rem .85rem;
+    background: var(--ct-paper);
+    border: 2px solid var(--ct-ink);
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ct-ink);
+    display: inline-flex; align-items: center; gap: .5rem;
+    transition: background .2s, color .2s, transform .15s, box-shadow .15s;
+  }
+  .ct-chips label:hover {
+    background: var(--ct-cream);
+    transform: translate(-1px, -1px);
+    box-shadow: 2px 2px 0 var(--ct-ink);
+  }
+  .ct-chips input[type="radio"]:checked + label {
+    background: var(--ct-ink);
+    color: var(--ct-lime);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ct-red);
+  }
+  .ct-chips--service label { padding: .65rem 1rem; font-size: .78rem; }
+  .ct-chip-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ct-ink);
+    display: inline-block;
+  }
+  .ct-chip-dot--green   { background: #00FF94; }
+  .ct-chip-dot--red     { background: var(--ct-red); }
+  .ct-chip-dot--blue    { background: var(--ct-blue); }
+  .ct-chip-dot--magenta { background: var(--ct-magenta); }
+  .ct-chip-dot--cyan    { background: var(--ct-cyan); }
+  .ct-chip-dot--ink     { background: var(--ct-ink); }
+  .ct-chips input[type="radio"]:checked + label .ct-chip-dot { border-color: var(--ct-lime); }
+
+  /* Checkbox */
+  .ct-check {
+    display: flex; align-items: flex-start; gap: .85rem;
+    cursor: pointer;
+    padding: .85rem 1rem;
+    background: var(--ct-cream);
+    border: 2px solid var(--ct-ink);
+    margin-top: 1rem;
+  }
+  .ct-check input[type="checkbox"] {
+    position: absolute; opacity: 0; pointer-events: none;
+  }
+  .ct-check__box {
+    width: 22px; height: 22px;
+    border: 2px solid var(--ct-ink);
+    background: var(--ct-paper);
+    flex-shrink: 0;
+    position: relative;
+    margin-top: 2px;
+  }
+  .ct-check input[type="checkbox"]:checked + .ct-check__box::after {
+    content: '✓';
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    color: var(--ct-red);
+    font-size: 1.1rem;
+  }
+  .ct-check__txt { font-size: .9rem; line-height: 1.4; color: var(--ct-ink); }
+
+  /* Footer del form */
+  .ct-form-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    border-top: 3px solid var(--ct-ink);
+    padding-top: 1.5rem;
+    margin-top: .5rem;
+  }
+  .ct-form-foot__legal {
+    display: flex; align-items: center; gap: .85rem;
+    max-width: 36ch;
+  }
+  .ct-form-foot__sello {
+    background: var(--ct-blue);
+    color: var(--ct-paper);
+    padding: .25rem .5rem;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    border: 1.5px solid var(--ct-ink);
+    box-shadow: 2px 2px 0 var(--ct-ink);
+  }
+  .ct-form-foot__txt {
+    font-size: .8rem;
+    line-height: 1.45;
+    color: var(--ct-ink);
+    opacity: .8;
+  }
+
+  .ct-submit {
+    position: relative;
+    background: var(--ct-ink);
+    color: var(--ct-paper);
+    border: 3px solid var(--ct-ink);
+    padding: 1.25rem 2rem 1.25rem 2.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -.01em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--ct-shadow);
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .ct-submit:hover {
+    background: var(--ct-red);
+    color: var(--ct-paper);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 0 var(--ct-ink);
+  }
+  .ct-submit__arrow { font-family: var(--font-mono); font-size: 1.5rem; }
+  .ct-submit__stamp {
+    position: absolute;
+    top: -28px; right: -28px;
+    width: 70px; height: 70px;
+    color: var(--ct-lime);
+    transform: rotate(-15deg);
+    transition: transform .4s;
+    animation: ct-stamp-spin 20s linear infinite;
+  }
+  .ct-submit:hover .ct-submit__stamp {
+    transform: rotate(360deg);
+    color: var(--ct-yellow);
+    animation: none;
+  }
+  @keyframes ct-stamp-spin { to { transform: rotate(345deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* DISPATCH BOARD                                          */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-dispatch-section {
+    background: var(--ct-ink);
+    color: var(--ct-paper);
+    padding: 6rem 1.5rem;
+    border-block: 3px solid var(--ct-ink);
+  }
+  .ct-dispatch-head {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 2rem;
+  }
+  .ct-dispatch-h2 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    color: var(--ct-paper);
+    margin: 1rem 0 0;
+  }
+  .ct-dispatch-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background: var(--ct-paper);
+    color: var(--ct-ink);
+    padding: 1rem 1.5rem;
+    border: 2px solid var(--ct-lime);
+    box-shadow: 6px 6px 0 var(--ct-red);
+  }
+  .ct-dispatch-clock__lbl { font-size: .6rem; letter-spacing: .2em; opacity: .7; }
+  .ct-dispatch-clock__val {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1;
+    margin: .25rem 0;
+    color: var(--ct-red);
+    letter-spacing: -.02em;
+  }
+  .ct-dispatch-clock__zone { font-size: .55rem; letter-spacing: .2em; opacity: .6; }
+
+  .ct-board {
+    background: var(--ct-paper);
+    color: var(--ct-ink);
+    border: 3px solid var(--ct-lime);
+    box-shadow: 12px 12px 0 var(--ct-red);
+  }
+  .ct-board__head {
+    display: grid;
+    grid-template-columns: 60px 1fr 1.4fr 40px;
+    gap: 1rem;
+    padding: .75rem 1.5rem;
+    background: var(--ct-ink);
+    color: var(--ct-lime);
+    font-size: .65rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+  }
+  .ct-board__row {
+    display: grid;
+    grid-template-columns: 60px 1fr 1.4fr 40px;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1.5px dashed rgba(14,13,11,0.18);
+    align-items: center;
+  }
+  .ct-board__row:last-child { border-bottom: none; }
+  .ct-board__num { font-size: .85rem; opacity: .55; }
+  .ct-board__k {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -.005em;
+  }
+  .ct-board__v {
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .ct-board__sig {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--ct-ink);
+    opacity: .3;
+    justify-self: end;
+  }
+  .ct-board__row--on .ct-board__v   { color: var(--ct-blue); }
+  .ct-board__row--on .ct-board__sig { background: #00B85C; opacity: 1; animation: ct-blink 1.5s ease-in-out infinite; }
+  .ct-board__row--warn .ct-board__v { color: var(--ct-red); }
+  .ct-board__row--warn .ct-board__sig { background: var(--ct-red); opacity: 1; }
+  @media (max-width: 640px) {
+    .ct-board__head, .ct-board__row {
+      grid-template-columns: 40px 1fr;
+      gap: .5rem;
+    }
+    .ct-board__head span:nth-child(3), .ct-board__head span:nth-child(4) { display: none; }
+    .ct-board__row .ct-board__v { grid-column: 2; font-size: .85rem; }
+    .ct-board__row .ct-board__sig { display: none; }
+  }
+  @keyframes ct-blink { 50% { opacity: .35; } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MAPA                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-map-section { background: var(--ct-paper); }
+  .ct-map-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  @media (min-width: 1024px) { .ct-map-grid { grid-template-columns: 1.5fr 1fr; gap: 3rem; } }
+  .ct-map {
+    background: var(--ct-cream);
+    border: 3px solid var(--ct-ink);
+    box-shadow: var(--ct-shadow);
+    padding: 1.5rem;
+    aspect-ratio: 4 / 3;
+  }
+  .ct-studio {
+    background: var(--ct-paper);
+    border: 3px solid var(--ct-ink);
+    box-shadow: var(--ct-shadow);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    gap: .75rem;
-    transition: background .25s;
+    gap: 1.25rem;
   }
-  .contacto-trust:hover { background: var(--brutal-bg-alt); }
-  .contacto-trust__num { font-size: 1.75rem; font-weight: 700; color: var(--brutal-accent); line-height: 1; }
-  .contacto-trust__title { font-size: clamp(1.4rem, 2.5vw, 1.85rem); line-height: 1; letter-spacing: -.025em; margin: .25rem 0 .5rem; }
-  .contacto-trust__body { font-size: .95rem; color: var(--brutal-text-secondary); line-height: 1.55; }
-
-  /* Steps */
-  .contacto-steps {
-    list-style: none; padding: 0; margin: 2rem 0 3rem;
-    border-top: 2px solid var(--brutal-ink);
+  .ct-studio__head {
+    display: flex; justify-content: space-between;
+    font-size: .7rem;
+    letter-spacing: .2em;
+    color: var(--ct-blue);
+    padding-bottom: .75rem;
+    border-bottom: 2px dashed var(--ct-ink);
   }
-  .contacto-step {
+  .ct-studio__name {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    line-height: .9;
+    letter-spacing: -.03em;
+    margin: 0;
+  }
+  .ct-studio__name em { color: var(--ct-orange); font-style: italic; }
+  .ct-studio__data {
     display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 2rem;
-    padding: 2rem 0;
-    border-bottom: 1px solid var(--brutal-border-soft);
+    gap: .85rem;
+    margin: 0;
   }
-  .contacto-step__num { display: flex; flex-direction: column; }
-  .contacto-step__num span { font-size: 2rem; font-weight: 700; color: var(--brutal-ink); line-height: 1; }
-  .contacto-step__num small { font-family: var(--font-mono); font-size: .65rem; color: var(--brutal-accent); text-transform: uppercase; letter-spacing: .18em; font-weight: 600; margin-top: .25rem; }
-  .contacto-step__title { font-size: clamp(1.4rem, 3vw, 2.25rem); line-height: 1; letter-spacing: -.03em; margin: 0 0 .5rem; }
-  .contacto-step__body { font-size: .95rem; color: var(--brutal-text-secondary); line-height: 1.55; max-width: 54ch; }
+  .ct-studio__data > div {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 1rem;
+    padding-bottom: .65rem;
+    border-bottom: 1px dotted var(--ct-ink);
+  }
+  .ct-studio__data dt {
+    font-size: .62rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ct-blue);
+    opacity: .75;
+  }
+  .ct-studio__data dd {
+    font-size: .92rem;
+    line-height: 1.4;
+    color: var(--ct-ink);
+    margin: 0;
+  }
+  .ct-studio__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ct-ink);
+    color: var(--ct-lime);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    border: 2px solid var(--ct-ink);
+    box-shadow: 5px 5px 0 var(--ct-red);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ct-studio__cta:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 var(--ct-red);
+  }
+  .ct-studio__sectors {
+    border-top: 2px dashed var(--ct-ink);
+    padding-top: 1rem;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .ct-studio__sectors > span {
+    font-size: .6rem; letter-spacing: .2em; color: var(--ct-blue); opacity: .75;
+  }
+  .ct-studio__sectors ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-wrap: wrap; gap: .35rem;
+  }
+  .ct-studio__sectors li {
+    background: var(--ct-mint);
+    border: 1.5px solid var(--ct-ink);
+    padding: .25rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
 
-  /* Schedule */
-  .contacto-schedule {
-    background: var(--brutal-card);
-    border: 2px solid var(--brutal-ink);
-    box-shadow: 6px 6px 0 0 var(--brutal-ink);
-    padding: 1.5rem 2rem;
-    max-width: 520px;
+  /* ═══════════════════════════════════════════════════════ */
+  /* TRUST                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-trust-section { background: var(--ct-paper-2); border-block: 3px solid var(--ct-ink); }
+  .ct-trust-grid {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: 1fr;
   }
-  .contacto-schedule__head { display: flex; justify-content: space-between; padding-bottom: 1rem; border-bottom: 2px solid var(--brutal-ink); margin-bottom: .5rem; }
+  @media (min-width: 640px)  { .ct-trust-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ct-trust-grid { grid-template-columns: repeat(4, 1fr); } }
+  .ct-trust {
+    position: relative;
+    background: var(--ct-paper);
+    border: 2.5px solid var(--ct-ink);
+    box-shadow: var(--ct-shadow);
+    padding: 2rem 1.5rem 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s;
+    overflow: hidden;
+  }
+  .ct-trust:hover { transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ct-ink); }
+  .ct-trust__stamp {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 70px; height: 70px;
+    transform: rotate(-8deg);
+    opacity: .85;
+  }
+  .ct-trust__title {
+    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    margin: 3rem 0 .5rem;
+    max-width: 12ch;
+  }
+  .ct-trust__body {
+    font-size: .9rem;
+    color: var(--brutal-text-secondary);
+    line-height: 1.5;
+  }
+  .ct-trust--red    { color: var(--ct-red); }
+  .ct-trust--blue   { color: var(--ct-blue); }
+  .ct-trust--lime   .ct-trust__stamp { color: var(--ct-ink); }
+  .ct-trust--lime   { background: var(--ct-lime); color: var(--ct-ink); }
+  .ct-trust--orange .ct-trust__stamp { color: var(--ct-ink); }
+  .ct-trust--orange { background: var(--ct-orange); color: var(--ct-ink); }
+  .ct-trust--red .ct-trust__title, .ct-trust--blue .ct-trust__title { color: var(--ct-ink); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* POSTALES (proceso)                                      */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-process-section { background: var(--ct-paper); }
+  .ct-postcards {
+    list-style: none; padding: 2rem 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .ct-postcards { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .ct-postcard {
+    position: relative;
+    background: var(--ct-paper);
+    border: 3px solid var(--ct-ink);
+    box-shadow: var(--ct-shadow);
+    padding: 1.75rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    min-height: 280px;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1);
+  }
+  .ct-postcard--0 { transform: rotate(-2deg); background: var(--ct-mint); }
+  .ct-postcard--1 { transform: rotate(1deg);  background: var(--ct-yellow); }
+  .ct-postcard--2 { transform: rotate(-1deg); background: var(--ct-cyan); }
+  .ct-postcard:hover { transform: rotate(0) translateY(-6px); }
+  .ct-postcard__head {
+    display: flex; justify-content: space-between;
+    font-size: .68rem;
+    letter-spacing: .15em;
+    padding-bottom: .65rem;
+    border-bottom: 2px dashed var(--ct-ink);
+  }
+  .ct-postcard__num { font-weight: 800; }
+  .ct-postcard__tag { color: var(--ct-red); font-weight: 800; }
+  .ct-postcard__title {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    line-height: .95;
+    letter-spacing: -.03em;
+    margin: .5rem 0 .25rem;
+  }
+  .ct-postcard__body {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--ct-ink);
+    flex: 1;
+  }
+  .ct-postcard__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 2px dashed var(--ct-ink);
+    padding-top: .85rem;
+  }
+  .ct-postcard__sello {
+    width: 58px; height: 58px;
+    border: 2.5px solid var(--ct-ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: .08em;
+    background: var(--ct-paper);
+    box-shadow: 3px 3px 0 var(--ct-ink);
+    transform: rotate(-8deg);
+  }
+  .ct-postcard__lines {
+    display: flex; flex-direction: column; gap: 4px;
+    flex: 1; margin-left: 1rem;
+  }
+  .ct-postcard__lines span {
+    display: block;
+    height: 1.5px;
+    background: var(--ct-ink);
+    opacity: .35;
+  }
+  .ct-postcard__lines span:nth-child(1) { width: 70%; }
+  .ct-postcard__lines span:nth-child(2) { width: 95%; }
+  .ct-postcard__lines span:nth-child(3) { width: 60%; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ct-final {
+    background: var(--ct-ink);
+    color: var(--ct-paper);
+    padding: 6rem 1.5rem 0;
+    border-top: 3px solid var(--ct-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ct-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(214,255,68,0.05) 1.5px, transparent 1.5px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+  .ct-final > * { position: relative; }
+
+  .ct-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .ct-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+
+  .ct-final__title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: .88;
+    letter-spacing: -.045em;
+    margin: 1rem 0;
+    color: var(--ct-paper);
+  }
+  .ct-final__title em { color: var(--ct-lime); font-style: italic; display: block; }
+  .ct-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,248,236,0.75);
+    max-width: 48ch;
+  }
+  .ct-final__cta {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.75rem 0 1.5rem;
+  }
+  .ct-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    background: var(--ct-lime);
+    color: var(--ct-ink);
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    border: 2px solid var(--ct-lime);
+    box-shadow: 6px 6px 0 var(--ct-orange);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .ct-final__btn:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ct-orange);
+  }
+  .ct-final__btn--ghost {
+    background: transparent;
+    color: var(--ct-paper);
+    border-color: var(--ct-paper);
+    box-shadow: 6px 6px 0 var(--ct-paper);
+  }
+  .ct-final__btn--ghost:hover {
+    background: var(--ct-paper);
+    color: var(--ct-ink);
+    box-shadow: 11px 11px 0 var(--ct-paper);
+  }
+  .ct-final__meta {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 2rem;
+    font-size: .7rem;
+    letter-spacing: .15em;
+    color: rgba(255,248,236,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .ct-final__meta .live-dot { background: var(--ct-lime); }
+
+  .ct-final__r {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ct-final__seal {
+    width: 100%;
+    max-width: 380px;
+    aspect-ratio: 1;
+    filter: drop-shadow(0 8px 24px rgba(214,255,68,0.18));
+  }
+  .ct-seal-spin     { transform-origin: 110px 110px; animation: ct-spin 40s linear infinite; }
+  .ct-seal-spin-rev { transform-origin: 110px 110px; animation: ct-spin 30s linear infinite reverse; }
+  @keyframes ct-spin { to { transform: rotate(360deg); } }
+
+  .ct-final__marquee {
+    background: var(--ct-lime);
+    color: var(--ct-ink);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--ct-ink);
+    margin: 0 -1.5rem;
+  }
+  .ct-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: marquee 25s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* RESPONSIVE                                              */
+  /* ═══════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .ct-form-doc-head { padding: 1rem 1.25rem; }
+    .ct-form-doc-head__title { font-size: .85rem; }
+    .ct-envelope { transform: rotate(-1deg); }
+    .ct-envelope__postmark { width: 88px; right: 16%; top: 40%; }
+    .ct-envelope__stamps { gap: 4px; }
+    .ct-stamp { width: 44px; }
+    .ct-stamp svg { width: 44px; height: 54px; }
+  }
+
+  /* Marquee shared */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
 </style>
