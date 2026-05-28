@@ -1,31 +1,67 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumb from '../components/common/Breadcrumb.astro';
 
-const allPosts = await getCollection('posts', ({ data }) => !data.draft);
-const posts = allPosts.sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+type Post = CollectionEntry<'posts'>;
+
+const allPosts = await getCollection('posts', ({ data }: Post) => !data.draft);
+const posts = allPosts.sort((a: Post, b: Post) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: '2-digit' }).toUpperCase();
+  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: '2-digit' }).toUpperCase();
+}
+function formatDateShort(date: Date): string {
+  return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
 }
 function calculateReadingTime(content: string): number {
   return Math.max(1, Math.ceil((content || '').split(/\s+/).length / 200));
 }
 
 const [featured, ...rest] = posts;
+
+// Datos del periódico
+const today = new Date();
+const issueNumber = String(100 + posts.length).padStart(3, '0');
+const volume = today.getFullYear() - 2017;
+const dateLong = today.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const weatherTemp = 22 + Math.floor((today.getMonth() < 5 || today.getMonth() > 9) ? -4 : 6);
+const seaTemp = 18 + Math.floor((today.getMonth() < 5 || today.getMonth() > 9) ? -2 : 5);
+
+// Secciones del índice (mock)
+const indexSections = [
+  { id: 'portada',  name: 'Portada',     page: '01' },
+  { id: 'tech',     name: 'Tecnología',  page: '02' },
+  { id: 'opinion',  name: 'Opinión',     page: '05' },
+  { id: 'mercado',  name: 'Mercado',     page: '08' },
+  { id: 'almeria',  name: 'Almería',     page: '11' },
+  { id: 'colofon',  name: 'Colofón',     page: 'XX' },
+];
+
+// Stock ticker mock
+const tickers = [
+  { sym: 'WEB',  val: '127.45', d: '+2.3%',  up: true  },
+  { sym: 'SEO',  val: '89.12',  d: '+1.1%',  up: true  },
+  { sym: 'CMS',  val: '54.80',  d: '-0.4%',  up: false },
+  { sym: 'CWV',  val: '99.97',  d: '+0.05%', up: true  },
+  { sym: 'JS',   val: '21.7K',  d: '+5.2%',  up: true  },
+  { sym: 'WP',   val: '6.8.1',  d: 'STABLE', up: true  },
+];
+
+// Categorías observed
+const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categories || []))).slice(0, 8);
 ---
 
 <BaseLayout
-  title="Blog · Tecnología, SEO y Marketing"
-  description="Artículos sobre tecnología, VERIFACTU, marketing digital y consejos para empresas y autónomos en Almería."
+  title="Blog · El Diario de Platanito — Tecnología, SEO y Marketing"
+  description="Periódico digital con artículos sobre tecnología, VERIFACTU, marketing digital y consejos para empresas y autónomos en Almería."
   canonical="https://platanitorico.com/blog/"
   image="/imagenes/equipo-marketing-web.jpg"
   imageAlt="Blog de tecnología y marketing digital"
   type="website"
-  keywords="blog tecnología, VERIFACTU, marketing digital, blog almería"
+  keywords="blog tecnología, VERIFACTU, marketing digital, blog almería, diario digital"
   jsonLd={[
     { "@context": "https://schema.org", "@type": "Blog", "name": "Blog Platanito Rico", "url": "https://platanitorico.com/blog/", "inLanguage": "es" },
     { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -38,108 +74,399 @@ const [featured, ...rest] = posts;
 
   <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Blog' }]} />
 
-  <main id="main-content">
-    {/* HERO editorial */}
-    <section class="blog-hero">
+  <main id="main-content" class="np">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* NAMEPLATE — Cabecera principal del periódico     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="np-nameplate">
       <div class="container-brutal">
-        <header class="blog-hero__head">
-          <span class="text-meta">N.º 100 — Diario · Vol. {new Date().getFullYear()}</span>
-          <span class="text-meta">{posts.length} entradas publicadas</span>
-        </header>
-        <div class="divider-brutal-thick"></div>
-        <div class="blog-hero__grid">
-          <div>
-            <span class="text-meta">★ Diario</span>
-            <h1 class="blog-hero__title heading-display">
-              Notas sobre
-              <em class="heading-editorial">tecnología</em>
-              y crecimiento.
-            </h1>
+
+        {/* Top bar antes del nombre */}
+        <header class="np-top">
+          <div class="np-top__l">
+            <span class="np-top__est">Est. MMXVIII</span>
+            <span class="np-top__sep">·</span>
+            <span>Vol. {volume}</span>
+            <span class="np-top__sep">·</span>
+            <span>N.º {issueNumber}</span>
           </div>
-          <p class="blog-hero__lead">
-            Pensamientos, prácticas y manuales de campo. Sobre
-            <strong>facturación electrónica, performance, SEO, web3</strong> —
-            y todo lo que un negocio necesita saber para no quedarse atrás.
-          </p>
+          <div class="np-top__c">
+            <span class="np-top__free">★ EDICIÓN GRATUITA ★</span>
+          </div>
+          <div class="np-top__r">
+            <span>{posts.length} crónicas publicadas</span>
+            <span class="np-top__sep">·</span>
+            <span>Precio: 0,00 €</span>
+          </div>
+        </header>
+
+        {/* NOMBRE GIGANTE */}
+        <div class="np-masthead">
+          {/* Adorno izquierda */}
+          <div class="np-masthead__ornament np-masthead__ornament--l" aria-hidden="true">
+            <svg viewBox="0 0 80 100" width="100%" height="100%">
+              <circle cx="40" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="40" cy="50" r="22" fill="none" stroke="currentColor" stroke-width="1"/>
+              <path d="M40 22 L44 42 L64 50 L44 58 L40 78 L36 58 L16 50 L36 42 Z" fill="currentColor"/>
+              <text x="40" y="54" text-anchor="middle" font-family="serif" font-size="10" font-weight="bold" fill="#FAF5E6">P★R</text>
+            </svg>
+          </div>
+
+          {/* Nombre */}
+          <div class="np-masthead__title">
+            <span class="np-masthead__pre">★  EL  ★</span>
+            <h1 class="np-masthead__name">
+              <span class="np-masthead__line1">PLATANITO</span>
+              <span class="np-masthead__line2">POST</span>
+            </h1>
+            <span class="np-masthead__sub">— EDICIÓN DIGITAL · ALMERÍA · ESPAÑA —</span>
+          </div>
+
+          {/* Adorno derecha */}
+          <div class="np-masthead__ornament np-masthead__ornament--r" aria-hidden="true">
+            <svg viewBox="0 0 80 100" width="100%" height="100%">
+              <rect x="14" y="14" width="52" height="72" fill="none" stroke="currentColor" stroke-width="2"/>
+              <rect x="22" y="22" width="36" height="56" fill="none" stroke="currentColor" stroke-width="1"/>
+              <line x1="14" y1="34" x2="66" y2="34" stroke="currentColor" stroke-width="1"/>
+              <line x1="14" y1="66" x2="66" y2="66" stroke="currentColor" stroke-width="1"/>
+              <text x="40" y="56" text-anchor="middle" font-family="serif" font-size="11" font-weight="bold" fill="currentColor">PR</text>
+              <text x="40" y="78" text-anchor="middle" font-family="monospace" font-size="6" fill="currentColor">2026</text>
+            </svg>
+          </div>
         </div>
+
+        {/* Banda de información: fecha + clima + lema */}
+        <div class="np-strip">
+          <div class="np-strip__item">
+            <span class="np-strip__lbl">FECHA</span>
+            <span class="np-strip__val">{dateLong}</span>
+          </div>
+
+          <div class="np-strip__divider"></div>
+
+          <div class="np-strip__item np-strip__item--motto">
+            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+              <circle cx="12" cy="12" r="5" fill="currentColor"/>
+              {Array.from({length: 8}).map((_, i) => (
+                <line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" transform={`rotate(${i*45} 12 12)`}/>
+              ))}
+            </svg>
+            <span>«Toda la verdad sobre la web — sin filtros, sin spam»</span>
+          </div>
+
+          <div class="np-strip__divider"></div>
+
+          <div class="np-strip__item np-strip__item--weather">
+            <span class="np-strip__lbl">ALMERÍA</span>
+            <svg viewBox="0 0 32 32" width="20" height="20" aria-hidden="true">
+              <circle cx="16" cy="16" r="6" fill="#FFD600" stroke="currentColor" stroke-width="1.5"/>
+              {Array.from({length: 12}).map((_, i) => (
+                <line x1="16" y1="3" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" transform={`rotate(${i*30} 16 16)`}/>
+              ))}
+            </svg>
+            <span class="np-strip__val">{weatherTemp}°C · Sol</span>
+            <span class="np-strip__sub">Mar {seaTemp}°C</span>
+          </div>
+        </div>
+
+        {/* ÍNDICE / SUMARIO */}
+        <nav class="np-index" aria-label="Índice del periódico">
+          <span class="np-index__lbl">★ ÍNDICE ★</span>
+          {indexSections.map((s) => (
+            <a href={`#${s.id}`} class="np-index__item">
+              <span class="np-index__name">{s.name}</span>
+              <span class="np-index__dots" aria-hidden="true"></span>
+              <span class="np-index__page">{s.page}</span>
+            </a>
+          ))}
+        </nav>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* STOCK TICKER MARQUEE                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="np-ticker">
+      <div class="np-ticker__lbl">
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path d="M3 17l6-6 4 4 8-8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 7h6v6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>MERCADO · TECH</span>
+      </div>
+      <div class="np-ticker__track">
+        {Array.from({length: 3}).map(() => (
+          tickers.map((t) => (
+            <span class={`np-ticker__item ${t.up ? 'np-ticker__item--up' : 'np-ticker__item--down'}`}>
+              <span class="np-ticker__sym">{t.sym}</span>
+              <span class="np-ticker__val">{t.val}</span>
+              <span class="np-ticker__d">{t.up ? '▲' : '▼'} {t.d}</span>
+            </span>
+          ))
+        ))}
       </div>
     </section>
 
     {posts.length === 0 ? (
-      <section class="section-brutal">
-        <div class="container-brutal blog-empty">
-          <span class="text-meta">∅ Sin entradas todavía</span>
-          <h2 class="heading-display blog-empty__title">Próximamente.</h2>
-          <p class="blog-empty__text">Estamos preparando contenido. Mientras tanto, escríbenos.</p>
-          <a href="/contacto" class="btn-brutal btn-brutal--lg">Hablemos →</a>
+      <section class="np-empty-section">
+        <div class="container-brutal np-empty">
+          <span class="text-meta">∅ Sin crónicas todavía</span>
+          <h2 class="np-empty__title heading-display">La rotativa <em>está caliente.</em></h2>
+          <p class="np-empty__text">Próxima edición a punto de salir. Mientras tanto, escríbenos.</p>
+          <a href="/contacto" class="np-btn">Hablemos →</a>
         </div>
       </section>
     ) : (
       <>
-        {/* FEATURED POST — XL */}
+        {/* ═══════════════════════════════════════════ */}
+        {/* PORTADA — ABOVE THE FOLD                    */}
+        {/* ═══════════════════════════════════════════ */}
         {featured && (
-          <section class="blog-feature">
+          <section class="np-portada" id="portada">
             <div class="container-brutal">
-              <a href={`/blog/${featured.data.slug}`} class="blog-feature__link">
-                <div class="blog-feature__media">
-                  {featured.data.featuredImage ? (
-                    <img src={featured.data.featuredImage} alt={featured.data.featuredImageAlt || featured.data.title} loading="eager" />
-                  ) : (
-                    <div class="blog-feature__placeholder dotgrid"></div>
-                  )}
-                  <span class="blog-feature__badge badge-brutal badge-brutal--lime">★ Destacado</span>
+
+              {/* Cabecera de sección */}
+              <header class="np-section-head">
+                <div class="np-section-head__l">
+                  <span class="np-section-head__num">— 01 —</span>
+                  <h2 class="np-section-head__name">EN PORTADA</h2>
                 </div>
-                <div class="blog-feature__body">
-                  <div class="blog-feature__meta">
-                    <span class="text-meta">{formatDate(featured.data.publishedAt)}</span>
-                    <span class="text-meta">{featured.data.readingTime || calculateReadingTime(featured.body || '')} min lectura</span>
-                    {featured.data.categories && featured.data.categories[0] && (
-                      <span class="text-meta">/ {featured.data.categories[0]}</span>
+                <div class="np-section-head__line"></div>
+                <span class="np-section-head__date">{formatDateShort(featured.data.publishedAt)} · ALMERÍA</span>
+              </header>
+
+              <a href={`/blog/${featured.data.slug}`} class="np-portada__link">
+
+                {/* Kicker arriba */}
+                <div class="np-portada__kicker">
+                  <span class="np-portada__kicker-tag">★ CRÓNICA DESTACADA ★</span>
+                  <span class="np-portada__kicker-bar"></span>
+                  <span class="np-portada__kicker-date">{formatDate(featured.data.publishedAt)}</span>
+                  <span class="np-portada__kicker-bar"></span>
+                  <span class="np-portada__kicker-rt">{featured.data.readingTime || calculateReadingTime(featured.body || '')} MIN DE LECTURA</span>
+                </div>
+
+                {/* Headline gigante */}
+                <h2 class="np-portada__title">{featured.data.title}</h2>
+
+                {/* Byline */}
+                <div class="np-portada__byline">
+                  <span class="np-portada__byline-by">POR</span>
+                  <strong>EL EQUIPO</strong>
+                  <span class="np-portada__byline-loc">— DESDE EL ESTUDIO · VERA, ALMERÍA</span>
+                </div>
+
+                {/* Grid imagen + standfirst */}
+                <div class="np-portada__grid">
+                  {/* Imagen / placeholder con halftone */}
+                  <figure class="np-portada__figure">
+                    {featured.data.featuredImage ? (
+                      <img src={featured.data.featuredImage} alt={featured.data.featuredImageAlt || featured.data.title} loading="eager" class="np-portada__img"/>
+                    ) : (
+                      <div class="np-portada__placeholder" aria-hidden="true">
+                        <svg viewBox="0 0 400 280" width="100%" height="100%">
+                          <defs>
+                            <pattern id="np-halftone-big" width="6" height="6" patternUnits="userSpaceOnUse">
+                              <circle cx="3" cy="3" r="1.5" fill="#1a1614"/>
+                            </pattern>
+                            <radialGradient id="np-halftone-fade" cx="50%" cy="50%" r="70%">
+                              <stop offset="0%"  stop-color="#1a1614" stop-opacity="0"/>
+                              <stop offset="60%" stop-color="#1a1614" stop-opacity="0.6"/>
+                              <stop offset="100%" stop-color="#1a1614" stop-opacity="1"/>
+                            </radialGradient>
+                          </defs>
+                          <rect width="400" height="280" fill="#FAF5E6"/>
+                          <rect width="400" height="280" fill="url(#np-halftone-big)"/>
+                          <rect width="400" height="280" fill="url(#np-halftone-fade)" opacity="0.7"/>
+                          {/* Old print press illustration */}
+                          <g transform="translate(100, 60)" stroke="#FAF5E6" stroke-width="3" fill="none">
+                            <rect x="0" y="40" width="200" height="100" fill="#1a1614"/>
+                            <rect x="20" y="60" width="160" height="60" fill="#FAF5E6" stroke="#1a1614"/>
+                            <line x1="40" y1="75" x2="160" y2="75" stroke="#1a1614" stroke-width="2"/>
+                            <line x1="40" y1="85" x2="140" y2="85" stroke="#1a1614" stroke-width="1.5"/>
+                            <line x1="40" y1="95" x2="150" y2="95" stroke="#1a1614" stroke-width="1.5"/>
+                            <line x1="40" y1="105" x2="120" y2="105" stroke="#1a1614" stroke-width="1.5"/>
+                            <circle cx="100" cy="20" r="14" fill="#B81B1B"/>
+                            <circle cx="100" cy="20" r="8" fill="#FAF5E6"/>
+                            <line x1="100" y1="34" x2="100" y2="40" stroke="#1a1614" stroke-width="3"/>
+                            <rect x="-10" y="140" width="220" height="14" fill="#1a1614"/>
+                            <circle cx="20" cy="160" r="6" fill="#1a1614"/>
+                            <circle cx="180" cy="160" r="6" fill="#1a1614"/>
+                          </g>
+                          <text x="200" y="240" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#FAF5E6" letter-spacing="3">FOTOGRAFÍA: ARCHIVO</text>
+                        </svg>
+                      </div>
                     )}
+                    {featured.data.categories && featured.data.categories[0] && (
+                      <figcaption class="np-portada__caption">
+                        FIG. 01 — Sección {featured.data.categories[0]}
+                      </figcaption>
+                    )}
+                  </figure>
+
+                  {/* Standfirst con drop cap */}
+                  <div class="np-portada__copy">
+                    {featured.data.excerpt && (
+                      <p class="np-portada__lead">
+                        <span class="np-portada__dropcap">{featured.data.excerpt[0]}</span>{featured.data.excerpt.slice(1)}
+                      </p>
+                    )}
+
+                    <ul class="np-portada__points">
+                      <li><span>★</span>Análisis completo</li>
+                      <li><span>★</span>Casos reales</li>
+                      <li><span>★</span>Cómo aplicarlo a tu negocio</li>
+                    </ul>
+
+                    <span class="np-portada__cta">
+                      Continuar leyendo en interior
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                        <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
                   </div>
-                  <h2 class="blog-feature__title heading-display">{featured.data.title}</h2>
-                  {featured.data.excerpt && <p class="blog-feature__excerpt">{featured.data.excerpt}</p>}
-                  <span class="blog-feature__cta">
-                    Leer el artículo →
-                  </span>
                 </div>
               </a>
             </div>
           </section>
         )}
 
-        {/* GRID resto */}
-        <section class="section-brutal" style="padding-top:2rem;">
+        {/* ═══════════════════════════════════════════ */}
+        {/* FLEURON DIVIDER                              */}
+        {/* ═══════════════════════════════════════════ */}
+        <div class="np-fleuron" aria-hidden="true">
+          <span class="np-fleuron__line"></span>
+          <svg viewBox="0 0 120 40" width="120" height="40">
+            <g fill="currentColor">
+              <circle cx="20" cy="20" r="3"/>
+              <circle cx="100" cy="20" r="3"/>
+              <path d="M40 20 Q50 10 60 20 Q70 30 80 20 Q70 10 60 20 Q50 30 40 20 Z"/>
+              <line x1="30" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="1"/>
+              <line x1="80" y1="20" x2="90" y2="20" stroke="currentColor" stroke-width="1"/>
+            </g>
+          </svg>
+          <span class="np-fleuron__line"></span>
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* MÁS CRÓNICAS — Grid multicolumna             */}
+        {/* ═══════════════════════════════════════════ */}
+        <section class="np-articles" id="tech">
           <div class="container-brutal">
-            <header class="blog-grid__head">
-              <span class="text-meta">★ Más entradas</span>
-              <div class="divider-brutal"></div>
+            <header class="np-section-head">
+              <div class="np-section-head__l">
+                <span class="np-section-head__num">— 02 —</span>
+                <h2 class="np-section-head__name">ÚLTIMAS CRÓNICAS</h2>
+              </div>
+              <div class="np-section-head__line"></div>
+              <span class="np-section-head__date">{rest.length} ARTÍCULOS · ACTUALIZADO HOY</span>
             </header>
-            <ol class="blog-grid">
-              {rest.map((post, i) => {
+
+            {/* Filtros categoría como newspaper section tabs */}
+            {allCategories.length > 0 && (
+              <div class="np-cats">
+                <span class="np-cats__lbl">SECCIONES:</span>
+                {allCategories.map((c) => <span class="np-cats__tag">{c}</span>)}
+              </div>
+            )}
+
+            <ol class="np-grid">
+              {rest.map((post: Post, i: number) => {
                 const rt = post.data.readingTime || calculateReadingTime(post.body || '');
+                const sizeClass = i === 0 ? 'np-art--big' : (i % 5 === 4 ? 'np-art--wide' : 'np-art--normal');
                 return (
-                  <li class="blog-card" style={`--i:${i}`}>
-                    <a href={`/blog/${post.data.slug}`} class="blog-card__link">
-                      <div class="blog-card__media">
+                  <li class={`np-art ${sizeClass}`}>
+                    <a href={`/blog/${post.data.slug}`} class="np-art__link">
+
+                      {/* Cabecera tipo periódico */}
+                      <header class="np-art__head">
+                        <span class="np-art__num">N.º {String(i + 2).padStart(3, '0')}</span>
+                        <span class="np-art__dot">·</span>
+                        <span class="np-art__date">{formatDateShort(post.data.publishedAt)}</span>
+                        <span class="np-art__dot">·</span>
+                        <span class="np-art__rt">{rt} MIN</span>
+                      </header>
+
+                      {/* Imagen / placeholder */}
+                      <figure class="np-art__figure">
                         {post.data.featuredImage ? (
-                          <img src={post.data.featuredImage} alt={post.data.featuredImageAlt || post.data.title} loading="lazy" />
+                          <img src={post.data.featuredImage} alt={post.data.featuredImageAlt || post.data.title} loading="lazy"/>
                         ) : (
-                          <div class="blog-card__placeholder crosshatch-soft"></div>
+                          <div class="np-art__placeholder" aria-hidden="true">
+                            <svg viewBox="0 0 200 130" width="100%" height="100%">
+                              <defs>
+                                <pattern id={`np-ht-${i}`} width="5" height="5" patternUnits="userSpaceOnUse">
+                                  <circle cx="2.5" cy="2.5" r={1 + (i % 3) * 0.3} fill="#1a1614"/>
+                                </pattern>
+                              </defs>
+                              <rect width="200" height="130" fill="#F5EEDE"/>
+                              <rect width="200" height="130" fill={`url(#np-ht-${i})`} opacity="0.55"/>
+                              {/* Decoration variations per index */}
+                              {i % 4 === 0 && (
+                                <g stroke="#1a1614" stroke-width="2" fill="none">
+                                  <rect x="60" y="40" width="80" height="50" fill="#FAF5E6"/>
+                                  <line x1="70" y1="55" x2="130" y2="55"/>
+                                  <line x1="70" y1="65" x2="120" y2="65"/>
+                                  <line x1="70" y1="75" x2="125" y2="75"/>
+                                  <circle cx="100" cy="25" r="8" fill="#B81B1B"/>
+                                </g>
+                              )}
+                              {i % 4 === 1 && (
+                                <g stroke="#1a1614" stroke-width="2" fill="none">
+                                  <circle cx="100" cy="65" r="30" fill="#FAF5E6"/>
+                                  <circle cx="100" cy="65" r="20" fill="none"/>
+                                  <circle cx="100" cy="65" r="10" fill="#1a1614"/>
+                                  {Array.from({length: 8}).map((_, j) => (
+                                    <line x1="100" y1="20" x2="100" y2="35" stroke-width="2" transform={`rotate(${j*45} 100 65)`}/>
+                                  ))}
+                                </g>
+                              )}
+                              {i % 4 === 2 && (
+                                <g stroke="#1a1614" stroke-width="2" fill="none">
+                                  <path d="M 40 90 L 70 50 L 100 75 L 130 35 L 160 60" stroke-linecap="round"/>
+                                  <circle cx="40" cy="90" r="3" fill="#1a1614"/>
+                                  <circle cx="70" cy="50" r="3" fill="#1a1614"/>
+                                  <circle cx="100" cy="75" r="3" fill="#1a1614"/>
+                                  <circle cx="130" cy="35" r="3" fill="#B81B1B"/>
+                                  <circle cx="160" cy="60" r="3" fill="#1a1614"/>
+                                  <line x1="20" y1="105" x2="180" y2="105"/>
+                                </g>
+                              )}
+                              {i % 4 === 3 && (
+                                <g stroke="#1a1614" stroke-width="2" fill="none">
+                                  <rect x="50" y="30" width="100" height="70" fill="#FAF5E6"/>
+                                  <text x="100" y="55" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#1a1614">★</text>
+                                  <line x1="60" y1="68" x2="140" y2="68" stroke-width="1"/>
+                                  <line x1="60" y1="78" x2="140" y2="78" stroke-width="1"/>
+                                  <line x1="60" y1="88" x2="120" y2="88" stroke-width="1"/>
+                                </g>
+                              )}
+                            </svg>
+                          </div>
                         )}
-                        <span class="blog-card__num text-mono">N.º {String(i + 2).padStart(2, '0')}</span>
-                      </div>
-                      <div class="blog-card__body">
-                        <div class="blog-card__meta">
-                          <span class="text-meta">{formatDate(post.data.publishedAt)}</span>
-                          <span class="text-meta">{rt} min</span>
+                      </figure>
+
+                      {/* Tag sección */}
+                      {post.data.categories && post.data.categories[0] && (
+                        <span class="np-art__section">★ {post.data.categories[0]}</span>
+                      )}
+
+                      {/* Headline */}
+                      <h3 class="np-art__title">{post.data.title}</h3>
+
+                      {/* Standfirst */}
+                      {post.data.excerpt && (
+                        <p class="np-art__lead">{post.data.excerpt}</p>
+                      )}
+
+                      {/* Pie con etiquetas */}
+                      <footer class="np-art__foot">
+                        <div class="np-art__tags">
+                          {(post.data.categories || []).slice(0, 2).map((c: string) => <span class="np-tag">{c}</span>)}
                         </div>
-                        <h3 class="blog-card__title heading-display">{post.data.title}</h3>
-                        {post.data.excerpt && <p class="blog-card__excerpt">{post.data.excerpt}</p>}
-                        <div class="blog-card__tags">
-                          {(post.data.categories || []).slice(0, 2).map((c: string) => <span class="tag-brutal">{c}</span>)}
-                        </div>
-                      </div>
+                        <span class="np-art__cta">Sigue leyendo →</span>
+                      </footer>
                     </a>
                   </li>
                 );
@@ -147,209 +474,1107 @@ const [featured, ...rest] = posts;
             </ol>
           </div>
         </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* PULL QUOTE / OPINIÓN                         */}
+        {/* ═══════════════════════════════════════════ */}
+        <section class="np-opinion" id="opinion">
+          <div class="container-brutal">
+            <header class="np-section-head np-section-head--inv">
+              <div class="np-section-head__l">
+                <span class="np-section-head__num">— 05 —</span>
+                <h2 class="np-section-head__name">OPINIÓN</h2>
+              </div>
+              <div class="np-section-head__line np-section-head__line--inv"></div>
+              <span class="np-section-head__date">EDITORIAL · 2026</span>
+            </header>
+
+            <figure class="np-pullquote">
+              <div class="np-pullquote__marks" aria-hidden="true">
+                <svg viewBox="0 0 60 60" width="80" height="80">
+                  <text x="0" y="50" font-family="serif" font-size="80" font-weight="bold" fill="currentColor">"</text>
+                </svg>
+              </div>
+              <blockquote class="np-pullquote__q">
+                Si tu web no carga en menos de 2 segundos, no existe. Si no es accesible, no existe. Y si no convierte… <em>tampoco.</em>
+              </blockquote>
+              <figcaption class="np-pullquote__cap">
+                <span class="np-pullquote__sep"></span>
+                <span class="np-pullquote__author">— EDITORIAL · PLATANITO POST</span>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
       </>
     )}
 
-    {/* Newsletter CTA editorial */}
-    <section class="blog-cta">
+    {/* ════════════════════════════════════════════════ */}
+    {/* NEWSLETTER CARD — ESTILO SUSCRIPCIÓN PRENSA      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="np-subscribe" id="almeria">
       <div class="container-brutal">
-        <div class="blog-cta__inner">
-          <div>
-            <span class="text-meta">★ Manténte cerca</span>
-            <h2 class="heading-display blog-cta__title">
-              ¿Quieres leer lo
-              <em class="heading-editorial">próximo?</em>
-            </h2>
-            <p class="blog-cta__text">
-              Publicamos cuando tenemos algo que decir, sin spam. Suscríbete por email
-              o sígueme en LinkedIn — donde sueles estar.
+        <div class="np-sub-card">
+
+          {/* Cabecera del card */}
+          <header class="np-sub-card__head">
+            <span class="np-sub-card__lbl">CUPÓN DE SUSCRIPCIÓN</span>
+            <span class="np-sub-card__price">12 EDICIONES / AÑO</span>
+            <span class="np-sub-card__free">GRATIS</span>
+          </header>
+
+          <div class="np-sub-card__body">
+
+            {/* Izquierda: copy */}
+            <div class="np-sub-card__l">
+              <h2 class="np-sub-card__title">
+                Recibe el<br/>
+                <em>PLATANITO POST</em><br/>
+                <span>en tu buzón.</span>
+              </h2>
+              <p class="np-sub-card__text">
+                Publicamos cuando tenemos algo que decir, <strong>sin spam</strong>.
+                Suscríbete por email o síguenos en LinkedIn — donde sueles estar.
+              </p>
+
+              {/* Beneficios estilo lista de ventajas */}
+              <ul class="np-sub-card__perks">
+                <li><span aria-hidden="true">✓</span>Análisis técnicos en exclusiva</li>
+                <li><span aria-hidden="true">✓</span>Tips de SEO + marketing aplicado</li>
+                <li><span aria-hidden="true">✓</span>Casos reales de clientes</li>
+                <li><span aria-hidden="true">✓</span>Cero spam · darse de baja en 1 clic</li>
+              </ul>
+
+              <div class="np-sub-card__cta">
+                <a href="https://www.linkedin.com/company/platanitorico/" target="_blank" rel="noopener noreferrer" class="np-btn np-btn--primary">
+                  Seguir en LinkedIn →
+                </a>
+                <a href="/contacto" class="np-btn np-btn--ghost">
+                  Suscribirse por email
+                </a>
+              </div>
+            </div>
+
+            {/* Derecha: cupón ilustrado */}
+            <aside class="np-sub-card__r" aria-hidden="true">
+              <svg viewBox="0 0 280 360" width="100%" height="100%">
+                <defs>
+                  <pattern id="np-sub-dots" width="8" height="8" patternUnits="userSpaceOnUse">
+                    <circle cx="4" cy="4" r="0.8" fill="#1a1614" opacity="0.3"/>
+                  </pattern>
+                </defs>
+
+                {/* Cupón body */}
+                <rect x="10" y="10" width="260" height="340" fill="#FAF5E6" stroke="#1a1614" stroke-width="3" stroke-dasharray="6 4"/>
+
+                {/* Línea de tijera */}
+                <text x="20" y="30" font-family="monospace" font-size="9" fill="#1a1614" letter-spacing="2">✂ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─</text>
+
+                {/* Cabecera */}
+                <text x="140" y="65" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#B81B1B" letter-spacing="3">★ ★ ★</text>
+                <text x="140" y="90" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#1a1614" letter-spacing="1">PLATANITO</text>
+                <text x="140" y="115" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#1a1614" letter-spacing="1">POST</text>
+
+                {/* Línea decorativa */}
+                <line x1="40" y1="130" x2="240" y2="130" stroke="#1a1614" stroke-width="1.5"/>
+                <line x1="40" y1="135" x2="240" y2="135" stroke="#1a1614" stroke-width="0.5"/>
+
+                {/* "VALE POR" */}
+                <text x="140" y="160" text-anchor="middle" font-family="monospace" font-size="10" fill="#1a1614" letter-spacing="3">★ VALE POR ★</text>
+
+                {/* Big "1 SUSCRIPCIÓN" */}
+                <text x="140" y="200" text-anchor="middle" font-family="serif" font-size="40" font-weight="bold" fill="#B81B1B">01</text>
+                <text x="140" y="225" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#1a1614" letter-spacing="2">SUSCRIPCIÓN</text>
+                <text x="140" y="240" text-anchor="middle" font-family="monospace" font-size="8" fill="#1a1614" letter-spacing="2">ANUAL · GRATUITA</text>
+
+                {/* Sello redondo */}
+                <g transform="translate(140, 290)">
+                  <circle r="34" fill="none" stroke="#B81B1B" stroke-width="2"/>
+                  <circle r="28" fill="none" stroke="#B81B1B" stroke-width="1" stroke-dasharray="2 1.5"/>
+                  <text y="-5" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#B81B1B" letter-spacing="2">★ VÁLIDO ★</text>
+                  <text y="7"  text-anchor="middle" font-family="serif" font-size="14" font-weight="bold" fill="#B81B1B">2026</text>
+                  <text y="20" text-anchor="middle" font-family="monospace" font-size="6" fill="#B81B1B" letter-spacing="2">ALMERÍA</text>
+                </g>
+
+                {/* Bottom */}
+                <text x="140" y="343" text-anchor="middle" font-family="monospace" font-size="7" fill="#1a1614" letter-spacing="2">N.º {issueNumber} · EDICIÓN GRATUITA</text>
+              </svg>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* COLOFÓN — Pie de periódico                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="np-colofon" id="colofon">
+      <div class="container-brutal">
+        <div class="np-colofon__inner">
+          <div class="np-colofon__col">
+            <span class="np-colofon__lbl">★ REDACCIÓN</span>
+            <p>Platanito Rico · Estudio digital<br/>Ctra. de Ronda, 82<br/>04620 — Vera, Almería · ES</p>
+          </div>
+          <div class="np-colofon__col">
+            <span class="np-colofon__lbl">★ EDICIÓN</span>
+            <p>Vol. {volume} · N.º {issueNumber}<br/>Periodicidad: cuando hay algo que decir<br/>Idioma: español</p>
+          </div>
+          <div class="np-colofon__col">
+            <span class="np-colofon__lbl">★ IMPRENTA</span>
+            <p>Impreso en bytes y café<br/>0 papel · 0 tinta · 0 árboles<br/>Cifrado SSL · Servido por Netlify</p>
+          </div>
+          <div class="np-colofon__col">
+            <span class="np-colofon__lbl">★ CONTACTO</span>
+            <p>
+              <a href="mailto:hola@platanitorico.com" class="np-link">hola@platanitorico.com</a><br/>
+              <a href="tel:+34657085019" class="np-link">+34 657 085 019</a><br/>
+              <a href="/contacto" class="np-link">/contacto</a>
             </p>
           </div>
-          <div class="blog-cta__btns">
-            <a href="https://www.linkedin.com/company/platanitorico/" target="_blank" rel="noopener noreferrer" class="btn-brutal btn-brutal--lg">
-              LinkedIn →
-            </a>
-            <a href="/contacto" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-              Suscríbete por email
-            </a>
-          </div>
+        </div>
+
+        <div class="np-colofon__bottom">
+          <span>★ PLATANITO POST · {today.getFullYear()} ★ TODOS LOS DERECHOS RESERVADOS ★ CORREO ADMITIDO ★</span>
         </div>
       </div>
     </section>
   </main>
 
-  <Footer />
+  <Footer hideHero={true} />
 </BaseLayout>
 
 <style>
-  /* Hero */
-  .blog-hero {
-    padding: 3rem 0;
-    background: var(--brutal-bg);
-    border-bottom: 2px solid var(--brutal-ink);
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · PERIÓDICO EN PAPEL                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .np {
+    --np-paper:    #FAF5E6;       /* aged paper */
+    --np-paper-2:  #F5EEDE;       /* slightly darker */
+    --np-cream:    #EDE2C9;
+    --np-ink:      #1a1614;       /* warm black ink */
+    --np-red:      #B81B1B;       /* newspaper red */
+    --np-gold:     #B8956B;       /* aged gold */
+    --np-lime:     #D6FF44;       /* brand */
+    --np-blue:     #003B7A;
+    --np-rule:     rgba(26,22,20,0.18);
+    --np-rule-2:   rgba(26,22,20,0.4);
+    --np-mono:     var(--font-mono);
+    --np-serif:    var(--font-serif, 'Instrument Serif', Georgia, serif);
+    background: var(--np-paper);
   }
-  .blog-hero__head {
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-    padding-bottom: 1rem;
-  }
-  .blog-hero__grid {
-    display: grid; gap: 2rem; margin-top: 2.5rem;
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 1024px) {
-    .blog-hero__grid { grid-template-columns: 1.6fr 1fr; align-items: end; gap: 4rem; }
-  }
-  .blog-hero__title {
-    font-size: clamp(3rem, 9vw, 7rem);
-    line-height: .9;
-    letter-spacing: -.045em;
-    margin: .75rem 0 0;
-    max-width: 18ch;
-  }
-  .blog-hero__title em { color: var(--brutal-accent); font-style: italic; }
-  .blog-hero__lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 44ch; }
-  .blog-hero__lead strong { color: var(--brutal-ink); }
 
-  /* Featured */
-  .blog-feature {
-    padding: 4rem 0;
-    background: var(--brutal-bg-alt);
-    border-bottom: 2px solid var(--brutal-ink);
-  }
-  .blog-feature__link {
-    display: grid;
-    gap: 0;
-    grid-template-columns: 1fr;
-    background: var(--brutal-card);
-    border: 2px solid var(--brutal-ink);
-    box-shadow: 10px 10px 0 0 var(--brutal-ink);
-    text-decoration: none;
-    color: var(--brutal-ink);
-    transition: transform .35s, box-shadow .35s, background .3s;
-  }
-  .blog-feature__link:hover { transform: translate(-4px,-4px); box-shadow: 14px 14px 0 0 var(--brutal-accent); background: var(--brutal-bg); }
-  @media (min-width: 1024px) {
-    .blog-feature__link { grid-template-columns: 1.2fr 1fr; }
-  }
-  .blog-feature__media {
+  /* ═══════════════════════════════════════════════════════ */
+  /* NAMEPLATE                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-nameplate {
+    background:
+      radial-gradient(circle at 20% 0%, rgba(184,27,27,0.04), transparent 60%),
+      radial-gradient(circle at 80% 100%, rgba(184,149,107,0.05), transparent 60%),
+      var(--np-paper);
+    padding: 2.5rem 1.5rem 0;
+    border-bottom: 4px double var(--np-ink);
     position: relative;
-    aspect-ratio: 16 / 11;
     overflow: hidden;
-    background: var(--brutal-surface);
-    border-right: 2px solid var(--brutal-ink);
   }
-  .blog-feature__media img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform .5s, filter .3s;
-    filter: contrast(1.02) grayscale(.15);
+  .np-nameplate::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(26,22,20,0.04) 1px, transparent 1px);
+    background-size: 6px 6px;
+    pointer-events: none;
+    opacity: 0.5;
   }
-  .blog-feature__link:hover .blog-feature__media img { transform: scale(1.04); filter: none; }
-  .blog-feature__placeholder { width: 100%; height: 100%; }
-  .blog-feature__badge { position: absolute; top: 1rem; left: 1rem; box-shadow: 3px 3px 0 0 var(--brutal-ink); }
+  .np-nameplate > * { position: relative; }
 
-  .blog-feature__body { padding: clamp(1.5rem, 4vw, 3rem); display: flex; flex-direction: column; gap: 1rem; }
-  .blog-feature__meta { display: flex; flex-wrap: wrap; gap: 1rem; }
-  .blog-feature__title {
-    font-size: clamp(1.75rem, 4.5vw, 3.25rem);
-    line-height: .95;
-    letter-spacing: -.035em;
+  .np-top {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 1rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid var(--np-ink);
+    font-family: var(--np-mono);
+    font-size: .65rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--np-ink);
+  }
+  .np-top__l { justify-self: start; display: flex; gap: .35rem; flex-wrap: wrap; }
+  .np-top__c { justify-self: center; color: var(--np-red); font-weight: 800; }
+  .np-top__r { justify-self: end;   display: flex; gap: .35rem; flex-wrap: wrap; }
+  .np-top__sep { opacity: .45; }
+  .np-top__est { font-style: italic; opacity: .8; }
+  @media (max-width: 768px) {
+    .np-top { grid-template-columns: 1fr; text-align: center; gap: .35rem; }
+    .np-top__l, .np-top__r { justify-self: center; justify-content: center; }
+  }
+
+  /* MASTHEAD */
+  .np-masthead {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0 1rem;
+    border-bottom: 1px solid var(--np-ink);
+  }
+  .np-masthead__ornament {
+    width: 80px; height: 100px;
+    color: var(--np-ink);
+  }
+  @media (max-width: 768px) { .np-masthead__ornament { width: 50px; height: 65px; } }
+
+  .np-masthead__title {
+    display: flex; flex-direction: column; align-items: center; gap: .25rem;
+    text-align: center;
+  }
+  .np-masthead__pre {
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    letter-spacing: .8em;
+    color: var(--np-red);
+    margin-left: .8em;
+    font-weight: 700;
+  }
+  .np-masthead__name {
+    margin: 0;
+    font-family: var(--np-serif);
+    font-weight: 700;
+    line-height: .85;
+    letter-spacing: -.025em;
+    color: var(--np-ink);
+    text-align: center;
+  }
+  .np-masthead__line1 {
+    display: block;
+    font-size: clamp(3.5rem, 11vw, 8.5rem);
+    font-style: italic;
+  }
+  .np-masthead__line2 {
+    display: block;
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: -.04em;
+    text-transform: uppercase;
+    margin-top: -.05em;
+  }
+  .np-masthead__sub {
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    letter-spacing: .35em;
+    margin-top: .35rem;
+    color: var(--np-ink);
+    opacity: .75;
+  }
+
+  /* Strip */
+  .np-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--np-ink);
+    font-family: var(--np-mono);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--np-ink);
+  }
+  .np-strip__item {
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .np-strip__item--motto {
+    flex: 1; justify-content: center;
+    font-style: italic;
+    color: var(--np-red);
+    letter-spacing: .05em;
+    text-transform: none;
+    font-family: var(--np-serif);
+    font-size: 1rem;
+  }
+  .np-strip__item--motto span { display: inline; }
+  .np-strip__item--motto svg { color: var(--np-red); }
+  .np-strip__item--weather { color: var(--np-blue); }
+  .np-strip__lbl { font-weight: 800; opacity: .65; }
+  .np-strip__val { font-weight: 700; }
+  .np-strip__sub { opacity: .65; font-size: .65rem; }
+  .np-strip__divider {
+    width: 1px; align-self: stretch;
+    background: var(--np-ink);
+    opacity: .3;
+  }
+  @media (max-width: 768px) {
+    .np-strip__divider { display: none; }
+    .np-strip { font-size: .65rem; gap: .5rem; flex-direction: column; align-items: flex-start; }
+    .np-strip__item--motto { font-size: .85rem; text-align: center; justify-content: center; width: 100%; }
+  }
+
+  /* Índice / sumario */
+  .np-index {
+    display: grid;
+    grid-template-columns: auto repeat(6, 1fr);
+    gap: 1rem 1.5rem;
+    padding: .85rem 0 1rem;
+    align-items: center;
+    font-family: var(--np-mono);
+  }
+  .np-index__lbl {
+    font-size: .68rem;
+    letter-spacing: .25em;
+    font-weight: 800;
+    color: var(--np-red);
+  }
+  .np-index__item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: .35rem;
+    align-items: baseline;
+    text-decoration: none;
+    color: var(--np-ink);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    transition: color .2s;
+  }
+  .np-index__item:hover { color: var(--np-red); }
+  .np-index__name { font-weight: 700; }
+  .np-index__dots {
+    border-bottom: 1.5px dotted var(--np-rule-2);
+    align-self: end;
+    margin-bottom: 4px;
+  }
+  .np-index__page { font-weight: 800; color: var(--np-red); }
+  @media (max-width: 768px) {
+    .np-index { grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .np-index__lbl { grid-column: 1 / -1; text-align: center; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* STOCK TICKER                                            */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-ticker {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    background: var(--np-ink);
+    color: var(--np-paper);
+    overflow: hidden;
+    border-bottom: 3px solid var(--np-ink);
+  }
+  .np-ticker__lbl {
+    display: flex; align-items: center; gap: .5rem;
+    padding: .75rem 1.25rem;
+    background: var(--np-red);
+    color: var(--np-paper);
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    white-space: nowrap;
+    border-right: 2px solid var(--np-paper);
+  }
+  .np-ticker__track {
+    display: flex; gap: 2.5rem;
+    width: max-content;
+    animation: np-ticker-scroll 50s linear infinite;
+    padding: .75rem 1.25rem;
+    font-family: var(--np-mono);
+    font-size: .8rem;
+    align-items: center;
+  }
+  @keyframes np-ticker-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-33.33%); }
+  }
+  .np-ticker__item {
+    display: inline-flex; align-items: baseline; gap: .5rem;
+    white-space: nowrap;
+  }
+  .np-ticker__sym { font-weight: 800; color: var(--np-gold); letter-spacing: .1em; }
+  .np-ticker__val { color: var(--np-paper); font-weight: 700; }
+  .np-ticker__d { font-size: .7rem; letter-spacing: .1em; }
+  .np-ticker__item--up   .np-ticker__d { color: #00B85C; }
+  .np-ticker__item--down .np-ticker__d { color: #ff5a5a; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SECTION HEAD genérico                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-section-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 3px double var(--np-ink);
+    margin-bottom: 2rem;
+  }
+  .np-section-head__l { display: flex; align-items: baseline; gap: .85rem; }
+  .np-section-head__num {
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: var(--np-red);
+    font-weight: 800;
+  }
+  .np-section-head__name {
+    font-family: var(--np-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    letter-spacing: -.015em;
+    color: var(--np-ink);
     margin: 0;
   }
-  .blog-feature__excerpt { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); }
-  .blog-feature__cta {
-    margin-top: auto;
-    padding-top: 1rem;
-    border-top: 1px solid var(--brutal-border-soft);
-    font-family: var(--font-mono);
-    font-size: .78rem;
+  .np-section-head__line {
+    height: 0;
+    border-bottom: 1.5px solid var(--np-ink);
+  }
+  .np-section-head__date {
+    font-family: var(--np-mono);
+    font-size: .65rem;
+    letter-spacing: .15em;
+    color: var(--np-ink);
+    opacity: .65;
+    text-transform: uppercase;
+  }
+  @media (max-width: 768px) {
+    .np-section-head { grid-template-columns: 1fr; gap: .5rem; }
+    .np-section-head__line { display: none; }
+  }
+
+  .np-section-head--inv .np-section-head__num { color: var(--np-paper); }
+  .np-section-head--inv .np-section-head__name { color: var(--np-paper); }
+  .np-section-head--inv .np-section-head__date { color: var(--np-paper); opacity: .7; }
+  .np-section-head__line--inv { border-color: var(--np-paper); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PORTADA                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-portada {
+    padding: 0 1.5rem 4rem;
+    background: var(--np-paper);
+  }
+  .np-portada__link {
+    display: block;
+    text-decoration: none;
+    color: var(--np-ink);
+    border: 3px double var(--np-ink);
+    padding: 2.5rem clamp(1.5rem, 4vw, 3rem);
+    background: var(--np-paper-2);
+    box-shadow: 12px 12px 0 var(--np-ink);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .np-portada__link:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 18px 18px 0 var(--np-red);
+  }
+
+  /* Kicker */
+  .np-portada__kicker {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--np-ink);
+  }
+  .np-portada__kicker-tag {
+    background: var(--np-red); color: var(--np-paper);
+    padding: .25rem .65rem;
+    font-weight: 800;
+  }
+  .np-portada__kicker-bar {
+    width: 24px; height: 1.5px;
+    background: var(--np-ink);
+  }
+  .np-portada__kicker-date { font-weight: 700; }
+  .np-portada__kicker-rt { font-weight: 700; opacity: .75; }
+
+  /* Headline gigante */
+  .np-portada__title {
+    font-family: var(--np-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .95;
+    letter-spacing: -.025em;
+    text-align: center;
+    color: var(--np-ink);
+    margin: 0 0 1.25rem;
+    max-width: 22ch;
+    margin-inline: auto;
+  }
+  .np-portada__link:hover .np-portada__title { color: var(--np-red); }
+
+  /* Byline */
+  .np-portada__byline {
+    display: flex; justify-content: center; align-items: center;
+    flex-wrap: wrap;
+    gap: .35rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1.5px solid var(--np-ink);
+    margin-bottom: 2rem;
+    font-family: var(--np-mono);
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--np-ink);
+  }
+  .np-portada__byline-by { opacity: .55; }
+  .np-portada__byline strong { font-weight: 800; letter-spacing: .2em; }
+  .np-portada__byline-loc { opacity: .55; }
+
+  /* Grid imagen + copy */
+  .np-portada__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 1024px) {
+    .np-portada__grid { grid-template-columns: 1.2fr 1fr; gap: 3rem; }
+  }
+  .np-portada__figure {
+    margin: 0;
+    border: 2px solid var(--np-ink);
+    background: var(--np-paper);
+    position: relative;
+  }
+  .np-portada__img, .np-portada__placeholder {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    object-fit: cover;
+    filter: contrast(1.05) grayscale(0.25) sepia(0.1);
+  }
+  .np-portada__placeholder { padding: 0; background: var(--np-paper); filter: none; }
+  .np-portada__placeholder svg { display: block; width: 100%; height: 100%; }
+  .np-portada__caption {
+    font-family: var(--np-mono);
+    font-size: .62rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    padding: .5rem .75rem;
+    border-top: 1.5px solid var(--np-ink);
+    color: var(--np-ink);
+    opacity: .75;
+  }
+
+  .np-portada__copy { display: flex; flex-direction: column; gap: 1.25rem; }
+  .np-portada__lead {
+    font-family: var(--np-serif);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--np-ink);
+    margin: 0;
+    text-align: justify;
+    hyphens: auto;
+  }
+  .np-portada__dropcap {
+    float: left;
+    font-family: var(--np-serif);
+    font-style: italic;
+    font-size: 5rem;
+    font-weight: 700;
+    line-height: .85;
+    padding: .15rem .65rem .15rem 0;
+    color: var(--np-red);
+  }
+  .np-portada__points {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-block: 2px solid var(--np-ink);
+    padding: .85rem 0;
+  }
+  .np-portada__points li {
+    display: flex; align-items: center; gap: .5rem;
+    font-family: var(--np-mono);
+    font-size: .8rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--np-ink);
+  }
+  .np-portada__points li span { color: var(--np-red); font-weight: 800; }
+  .np-portada__cta {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--np-mono);
+    font-size: .85rem;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: .15em;
-    font-weight: 700;
-    color: var(--brutal-ink);
+    color: var(--np-red);
+    padding-top: .5rem;
   }
-  .blog-feature__link:hover .blog-feature__cta { color: var(--brutal-accent); }
+  .np-portada__link:hover .np-portada__cta { gap: .85rem; }
 
-  /* Grid */
-  .blog-grid__head { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
-  .blog-grid {
+  /* ═══════════════════════════════════════════════════════ */
+  /* FLEURON DIVIDER                                         */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-fleuron {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0 1.5rem;
+    color: var(--np-ink);
+    margin: 1rem 0;
+  }
+  .np-fleuron__line {
+    flex: 1; height: 0;
+    border-bottom: 1.5px solid var(--np-ink);
+    position: relative;
+  }
+  .np-fleuron__line::before,
+  .np-fleuron__line::after {
+    content: '';
+    position: absolute; top: -1.5px;
+    width: 0; height: 0;
+    border-top: 1.5px solid var(--np-ink);
+  }
+  .np-fleuron__line::before { left: 0; }
+  .np-fleuron__line::after  { right: 0; }
+  .np-fleuron svg { color: var(--np-red); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* GRID ARTÍCULOS                                          */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-articles {
+    padding: 3rem 1.5rem;
+    background: var(--np-paper);
+    border-top: 1px solid var(--np-ink);
+  }
+
+  /* Tabs de categorías */
+  .np-cats {
+    display: flex; flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--np-ink);
+    margin-bottom: 2.5rem;
+    font-family: var(--np-mono);
+  }
+  .np-cats__lbl {
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: var(--np-red);
+    font-weight: 800;
+    margin-right: .5rem;
+  }
+  .np-cats__tag {
+    padding: .35rem .75rem;
+    border: 1.5px solid var(--np-ink);
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--np-ink);
+    font-weight: 700;
+    background: var(--np-paper);
+    transition: background .2s, color .2s;
+  }
+  .np-cats__tag:hover { background: var(--np-ink); color: var(--np-lime); cursor: pointer; }
+
+  .np-grid {
     list-style: none; padding: 0; margin: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2px;
-    background: var(--brutal-ink);
-    border: 2px solid var(--brutal-ink);
+    gap: 0;
   }
-  @media (min-width: 768px) { .blog-grid { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1024px) { .blog-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 768px)  { .np-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .np-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1280px) { .np-grid { grid-template-columns: repeat(4, 1fr); } }
 
-  .blog-card { background: var(--brutal-card); }
-  .blog-card__link {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    text-decoration: none;
-    color: var(--brutal-ink);
+  .np-art {
+    border-right: 1.5px solid var(--np-rule-2);
+    border-bottom: 1.5px solid var(--np-rule-2);
+    background: var(--np-paper);
     transition: background .25s;
   }
-  .blog-card__link:hover { background: var(--brutal-bg-alt); }
-  .blog-card__media {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: var(--brutal-surface);
-    border-bottom: 2px solid var(--brutal-ink);
-  }
-  .blog-card__media img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform .5s, filter .3s;
-    filter: contrast(1.02) grayscale(.15);
-  }
-  .blog-card__link:hover .blog-card__media img { transform: scale(1.04); filter: none; }
-  .blog-card__placeholder { width: 100%; height: 100%; }
-  .blog-card__num {
-    position: absolute; top: 1rem; left: 1rem;
-    background: var(--brutal-ink); color: var(--brutal-lime);
-    padding: .25rem .55rem; font-size: .62rem;
-    text-transform: uppercase; letter-spacing: .15em; font-weight: 700;
+  .np-art:hover { background: var(--np-paper-2); }
+  .np-art--wide  { grid-column: span 1; }
+  .np-art--big   { grid-column: span 1; }
+  @media (min-width: 768px) {
+    .np-art--wide { grid-column: span 2; }
   }
 
-  .blog-card__body { padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; flex: 1; }
-  .blog-card__meta { display: flex; gap: 1rem; }
-  .blog-card__title {
-    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+  .np-art__link {
+    display: flex; flex-direction: column; gap: .75rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--np-ink);
+    height: 100%;
+  }
+  .np-art__head {
+    display: flex; align-items: center; gap: .5rem;
+    flex-wrap: wrap;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid var(--np-rule-2);
+    font-family: var(--np-mono);
+    font-size: .6rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--np-ink);
+    opacity: .8;
+  }
+  .np-art__num { color: var(--np-red); font-weight: 800; }
+  .np-art__dot { opacity: .35; }
+  .np-art__date { font-weight: 700; }
+  .np-art__rt { font-weight: 700; opacity: .65; }
+
+  .np-art__figure {
+    margin: 0;
+    border: 1.5px solid var(--np-ink);
+    background: var(--np-paper);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+  .np-art__figure img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    filter: contrast(1.05) grayscale(0.4) sepia(0.05);
+    transition: filter .3s, transform .3s;
+  }
+  .np-art__link:hover .np-art__figure img { filter: contrast(1) grayscale(0) sepia(0); transform: scale(1.03); }
+  .np-art__placeholder { width: 100%; height: 100%; background: var(--np-paper-2); }
+  .np-art__placeholder svg { display: block; width: 100%; height: 100%; }
+
+  .np-art__section {
+    align-self: flex-start;
+    background: var(--np-ink); color: var(--np-paper);
+    padding: .2rem .55rem;
+    font-family: var(--np-mono);
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-top: .35rem;
+  }
+
+  .np-art__title {
+    font-family: var(--np-serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1.8vw, 1.5rem);
     line-height: 1.05;
-    letter-spacing: -.025em;
+    letter-spacing: -.015em;
+    color: var(--np-ink);
     margin: 0;
     transition: color .2s;
   }
-  .blog-card__link:hover .blog-card__title { color: var(--brutal-accent); }
-  .blog-card__excerpt { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
-  .blog-card__tags { display: flex; flex-wrap: wrap; gap: .35rem; padding-top: .75rem; border-top: 1px solid var(--brutal-border-soft); }
+  .np-art__link:hover .np-art__title { color: var(--np-red); }
 
-  /* Empty state */
-  .blog-empty { text-align: center; padding: 4rem 0; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-  .blog-empty__title { font-size: clamp(2rem, 5vw, 3.5rem); margin: 0; }
-  .blog-empty__text { color: var(--brutal-text-secondary); max-width: 40ch; }
+  /* Variantes por tamaño */
+  .np-art--wide .np-art__title { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+  .np-art--big  .np-art__title { font-size: clamp(1.4rem, 2.2vw, 1.8rem); }
 
-  /* CTA */
-  .blog-cta { padding: 4rem 0; background: var(--brutal-ink); color: var(--brutal-bg); }
-  .blog-cta__inner {
-    display: grid; gap: 2rem; grid-template-columns: 1fr;
-    background: var(--brutal-ink);
+  .np-art__lead {
+    font-family: var(--np-body, var(--font-body));
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--np-ink);
+    opacity: .82;
+    margin: 0;
+    flex: 1;
   }
-  @media (min-width: 1024px) {
-    .blog-cta__inner { grid-template-columns: 1.5fr 1fr; align-items: end; gap: 4rem; }
+  .np-art__foot {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: .5rem;
+    padding-top: .75rem;
+    border-top: 1px dashed var(--np-rule-2);
+    margin-top: auto;
   }
-  .blog-cta__inner .text-meta { color: var(--brutal-accent); }
-  .blog-cta__title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: .9;
-    letter-spacing: -.04em;
-    margin: .5rem 0 0;
-    color: var(--brutal-bg);
+  .np-art__tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .np-tag {
+    font-family: var(--np-mono);
+    font-size: .55rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    padding: .15rem .4rem;
+    border: 1px solid var(--np-ink);
+    color: var(--np-ink);
+    background: var(--np-paper);
   }
-  .blog-cta__title em { color: var(--brutal-lime); font-style: italic; }
-  .blog-cta__text { margin: 1rem 0 0; font-size: 1rem; line-height: 1.55; color: var(--brutal-bg-alt); max-width: 44ch; }
-  .blog-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
-  .blog-cta .btn-brutal--ghost { background: transparent; color: var(--brutal-bg); border-color: var(--brutal-bg); --shadow-color: var(--brutal-accent); }
+  .np-art__cta {
+    font-family: var(--np-mono);
+    font-size: .65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--np-red);
+    white-space: nowrap;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* OPINIÓN — PULL QUOTE                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-opinion {
+    background: var(--np-ink);
+    color: var(--np-paper);
+    padding: 4rem 1.5rem;
+    border-top: 3px solid var(--np-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .np-opinion::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(184,149,107,0.07) 1.5px, transparent 1.5px);
+    background-size: 30px 30px;
+    pointer-events: none;
+  }
+  .np-opinion > * { position: relative; }
+
+  .np-pullquote {
+    margin: 2rem 0 0;
+    text-align: center;
+    max-width: 56ch;
+    margin-inline: auto;
+  }
+  .np-pullquote__marks {
+    color: var(--np-gold);
+    line-height: 0;
+    margin-bottom: -1.5rem;
+  }
+  .np-pullquote__q {
+    font-family: var(--np-serif);
+    font-style: italic;
+    font-weight: 600;
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+    line-height: 1.15;
+    color: var(--np-paper);
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+  .np-pullquote__q em {
+    color: var(--np-lime);
+    font-style: italic;
+  }
+  .np-pullquote__cap {
+    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    margin-top: 2rem;
+  }
+  .np-pullquote__sep {
+    width: 60px; height: 1.5px;
+    background: var(--np-gold);
+  }
+  .np-pullquote__author {
+    font-family: var(--np-mono);
+    font-size: .75rem;
+    letter-spacing: .25em;
+    color: var(--np-gold);
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* NEWSLETTER SUBSCRIBE                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-subscribe {
+    padding: 4rem 1.5rem;
+    background: var(--np-paper);
+    border-top: 3px double var(--np-ink);
+  }
+  .np-sub-card {
+    background: var(--np-paper);
+    border: 3px solid var(--np-ink);
+    box-shadow: 14px 14px 0 var(--np-red);
+    overflow: hidden;
+  }
+  .np-sub-card__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--np-ink);
+    color: var(--np-paper);
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    letter-spacing: .2em;
+  }
+  .np-sub-card__lbl { color: var(--np-gold); font-weight: 800; }
+  .np-sub-card__price { color: var(--np-paper); font-weight: 700; }
+  .np-sub-card__free {
+    background: var(--np-red); color: var(--np-paper);
+    padding: .25rem .6rem;
+    font-weight: 800;
+    border: 1.5px solid var(--np-paper);
+  }
+
+  .np-sub-card__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  @media (min-width: 1024px) { .np-sub-card__body { grid-template-columns: 1.4fr 1fr; } }
+
+  .np-sub-card__l {
+    padding: 2.5rem clamp(1.5rem, 3vw, 2.5rem);
+    display: flex; flex-direction: column; gap: 1rem;
+    border-right: 2px dashed var(--np-ink);
+  }
+  @media (max-width: 1023px) {
+    .np-sub-card__l { border-right: none; border-bottom: 2px dashed var(--np-ink); }
+  }
+  .np-sub-card__title {
+    font-family: var(--np-serif);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.025em;
+    color: var(--np-ink);
+    margin: 0;
+  }
+  .np-sub-card__title em { color: var(--np-red); font-style: italic; }
+  .np-sub-card__title span { font-style: italic; font-weight: 400; }
+  .np-sub-card__text {
+    font-size: 1rem;
+    line-height: 1.55;
+    color: var(--np-ink);
+    opacity: .85;
+    margin: 0;
+  }
+  .np-sub-card__text strong { font-weight: 700; color: var(--np-red); }
+  .np-sub-card__perks {
+    list-style: none; padding: 0; margin: .5rem 0;
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .np-sub-card__perks li {
+    display: flex; align-items: flex-start; gap: .65rem;
+    font-size: .92rem;
+    line-height: 1.45;
+    color: var(--np-ink);
+  }
+  .np-sub-card__perks li span {
+    width: 20px; height: 20px;
+    background: var(--np-red); color: var(--np-paper);
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-family: var(--np-mono);
+    font-weight: 800;
+    font-size: .65rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .np-sub-card__cta {
+    display: flex; flex-wrap: wrap; gap: .75rem;
+    margin-top: 1rem;
+  }
+
+  .np-sub-card__r {
+    padding: 1.5rem;
+    background: var(--np-cream);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .np-sub-card__r svg { max-width: 280px; width: 100%; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* BUTTONS                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--np-ink);
+    color: var(--np-paper);
+    padding: 1rem 1.5rem;
+    font-family: var(--np-mono);
+    font-weight: 800;
+    font-size: .85rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    border: 2.5px solid var(--np-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .np-btn:hover {
+    background: var(--np-red); color: var(--np-paper);
+    border-color: var(--np-red);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--np-ink);
+  }
+  .np-btn--primary {
+    background: var(--np-red);
+    border-color: var(--np-red);
+    box-shadow: 5px 5px 0 var(--np-ink);
+  }
+  .np-btn--primary:hover {
+    background: var(--np-ink); color: var(--np-lime);
+    border-color: var(--np-ink);
+    box-shadow: 8px 8px 0 var(--np-red);
+  }
+  .np-btn--ghost {
+    background: transparent;
+    color: var(--np-ink);
+    box-shadow: 5px 5px 0 var(--np-ink);
+  }
+  .np-btn--ghost:hover {
+    background: var(--np-ink); color: var(--np-paper);
+    box-shadow: 8px 8px 0 var(--np-red);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* EMPTY STATE                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-empty-section { padding: 6rem 1.5rem; background: var(--np-paper); border-top: 3px solid var(--np-ink); }
+  .np-empty {
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    max-width: 600px; margin: 0 auto;
+  }
+  .np-empty__title {
+    font-family: var(--np-serif); font-style: italic; font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin: 0;
+    color: var(--np-ink);
+  }
+  .np-empty__title em { color: var(--np-red); }
+  .np-empty__text { color: var(--np-ink); opacity: .85; max-width: 44ch; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* COLOFÓN — pie de periódico                              */
+  /* ═══════════════════════════════════════════════════════ */
+  .np-colofon {
+    background: var(--np-ink);
+    color: var(--np-paper);
+    padding: 3rem 1.5rem 2rem;
+    border-top: 4px double var(--np-paper);
+  }
+  .np-colofon__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px dashed rgba(250,245,230,0.3);
+  }
+  @media (min-width: 768px)  { .np-colofon__inner { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .np-colofon__inner { grid-template-columns: repeat(4, 1fr); } }
+  .np-colofon__col { display: flex; flex-direction: column; gap: .75rem; }
+  .np-colofon__lbl {
+    font-family: var(--np-mono);
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: var(--np-gold);
+    font-weight: 800;
+  }
+  .np-colofon__col p {
+    font-family: var(--np-mono);
+    font-size: .78rem;
+    line-height: 1.55;
+    color: var(--np-paper);
+    opacity: .85;
+    margin: 0;
+  }
+  .np-link {
+    color: var(--np-paper);
+    text-decoration: underline;
+    text-decoration-color: var(--np-gold);
+    text-underline-offset: 3px;
+    transition: color .2s;
+  }
+  .np-link:hover { color: var(--np-lime); }
+
+  .np-colofon__bottom {
+    padding-top: 1.5rem;
+    text-align: center;
+    font-family: var(--np-mono);
+    font-size: .65rem;
+    letter-spacing: .25em;
+    color: var(--np-gold);
+    text-transform: uppercase;
+    opacity: .8;
+  }
 </style>
