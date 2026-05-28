@@ -1704,3 +1704,163 @@ details[open] .svc-faq__toggle { background: var(--brutal-accent); color: var(--
 .legal-final__text { font-size: 1rem; line-height: 1.55; color: var(--brutal-bg-alt); margin: 0 0 2rem; max-width: 52ch; }
 .legal-final__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
 .legal-final .btn-brutal--ghost { background: transparent; color: var(--brutal-bg); border-color: var(--brutal-bg); --shadow-color: var(--brutal-accent); }
+
+/* ════════════════════════════════════════════════════════════════════
+   RESPONSIVE FIXES — MOBILE PHONES (≤ 640px)
+   Bloque global de ajustes para que todas las páginas rediseñadas
+   se vean correctamente en móviles. Se aplica al final para sobrescribir
+   reglas hardcoded de cada página.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Prevent horizontal overflow globally */
+html, body { overflow-x: hidden; }
+.heading-display, h1, h2, h3, h4 { overflow-wrap: break-word; word-break: break-word; }
+
+@media (max-width: 640px) {
+  /* Variable global más comprimida en móvil */
+  :root { --section-padding-y: clamp(3rem, 8vw, 5rem); }
+
+  /* Hero sections (top padding más sutil) */
+  .em-hero, .sp-hero, .ct-hero, .av-hero, .dw-hero, .mk-hero, .dg-hero,
+  .blog-hero, .np-nameplate, .svc-hero {
+    padding-top: 1.5rem;
+  }
+
+  /* Section content padding reducido */
+  .em-pains-section, .em-timeline-section, .em-kit-section, .em-compare-section,
+  .em-pricing-section, .em-stack-section, .em-proc-section, .em-checklist-section,
+  .em-quote-section, .em-faq-section,
+  .sp-noc-section, .sp-svc-section, .sp-backup-section, .sp-plat-section,
+  .sp-plans-section, .sp-cert-section, .sp-proc-section, .sp-quote-section, .sp-faq-section,
+  .ct-form-section, .ct-dispatch-section, .ct-channels-section, .ct-map-section, .ct-trust-section, .ct-process-section,
+  .np-articles, .np-opinion, .np-subscribe, .np-empty-section, .np-colofon,
+  .em-final, .sp-final, .ct-final {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  /* Section heads stack */
+  .brutal-section-head { grid-template-columns: 1fr !important; gap: 1.25rem !important; }
+  .brutal-section-head__title { font-size: clamp(1.85rem, 7vw, 3rem); max-width: 100%; }
+
+  /* Hero titles - clamp min reducido */
+  .em-hero__title, .sp-hero__title, .ct-hero__title, .av-hero__title,
+  .dw-hero__title, .mk-hero__title, .dg-hero__title {
+    font-size: clamp(2rem, 9vw, 4rem);
+    line-height: .95;
+  }
+
+  /* Heading display max-width sin overflow */
+  .em-hero__title em, .sp-hero__title em, .ct-hero__title em {
+    margin: 0 .1em !important;
+  }
+
+  /* KPI grids 2-col en móvil */
+  .em-hero__kpis, .sp-hero__kpis, .ct-hero__specs {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Container-brutal padding más ajustado */
+  .container-brutal { padding-inline: 1.25rem; }
+}
+
+/* Targeted: tablet+móvil grid stacks */
+@media (max-width: 768px) {
+  /* Comparativa DIY vs Pro */
+  .em-compare-head, .em-compare-row, .em-compare-totals {
+    grid-template-columns: 1fr !important;
+    gap: .35rem !important;
+    text-align: left !important;
+  }
+  .em-compare-row__diy::before { content: "DIY: "; font-family: var(--font-mono); font-size: .65rem; opacity: .55; letter-spacing: .15em; }
+  .em-compare-row__pro::before { content: "PRO: "; font-family: var(--font-mono); font-size: .65rem; opacity: .55; letter-spacing: .15em; }
+  .em-compare-row__diy, .em-compare-row__pro {
+    display: flex; gap: .5rem; align-items: baseline;
+    text-align: left;
+  }
+
+  /* Mission kit wrap */
+  .em-kit-wrap { grid-template-columns: 1fr !important; }
+  .em-kit-box { position: static !important; max-width: 280px; }
+
+  /* Contacto: mapa + estudio */
+  .ct-map-grid { grid-template-columns: 1fr !important; }
+
+  /* Soporte: NOC head */
+  .sp-noc-head { grid-template-columns: 1fr !important; }
+  .sp-backup-head { grid-template-columns: 1fr !important; }
+  .em-check-head { grid-template-columns: 1fr !important; }
+  .em-timeline-head { grid-template-columns: 1fr !important; }
+
+  /* Marketing funnel */
+  .mk-funnel { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+
+  /* Soporte planes */
+  .sp-plans { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .sp-plan--popular { transform: none !important; }
+
+  /* Marquees: fuente más pequeña */
+  .em-marquee__track, .sp-final__marquee-track, .ct-final__marquee-track,
+  .em-final__marquee-track, .np-ticker__track {
+    font-size: .7rem !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Plan ribbons cleaner */
+  .em-plan, .sp-plan { padding-top: 2.25rem; }
+}
+
+/* Mini phones (≤ 380px) */
+@media (max-width: 380px) {
+  /* Aún más compresión */
+  .em-hero__title, .sp-hero__title, .ct-hero__title, .av-hero__title,
+  .dw-hero__title, .mk-hero__title, .dg-hero__title {
+    font-size: clamp(1.75rem, 11vw, 3rem);
+  }
+  .brutal-section-head__title { font-size: 1.65rem; }
+
+  .container-brutal { padding-inline: 1rem; }
+
+  /* KPIs 2-col más compactos */
+  .em-kpi, .sp-kpi, .contacto-hero__spec { padding: .85rem .75rem !important; }
+  .em-kpi__v, .sp-kpi__val, .contacto-hero__spec-num { font-size: 1.4rem !important; }
+  .em-kpi__l, .sp-kpi__lbl { font-size: .55rem !important; }
+
+  /* Section padding aún menor */
+  .em-pains-section, .em-timeline-section, .em-kit-section, .em-compare-section,
+  .em-pricing-section, .em-stack-section, .em-proc-section, .em-checklist-section,
+  .em-quote-section, .em-faq-section,
+  .sp-noc-section, .sp-svc-section, .sp-backup-section, .sp-plat-section,
+  .sp-plans-section, .sp-cert-section, .sp-proc-section, .sp-quote-section, .sp-faq-section,
+  .ct-form-section, .ct-dispatch-section, .ct-channels-section, .ct-map-section, .ct-trust-section, .ct-process-section,
+  .np-articles, .np-opinion, .np-subscribe, .np-empty-section, .np-colofon {
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Cohete y elementos decorativos contenidos */
+  .em-hero__pad, .sp-hero__shield { max-width: 320px; }
+
+  /* Pulses oculto ASEGURADO badge en móvil */
+  .sp-shield__seal { width: 80px !important; }
+
+  /* Logos */
+  .brutal-logo__line1 { font-size: .95rem; }
+}
+
+/* Tablet portrait (640-1024) */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .em-plans, .sp-plans { grid-template-columns: 1fr; }
+  .em-plan--popular, .sp-plan--popular { transform: none; }
+}
+
+/* Touch-targets mínimos AA */
+@media (hover: none) {
+  a, button, .btn-brutal, .em-btn, .sp-btn, .ct-channel, .md-link {
+    min-height: 44px;
+  }
+}
