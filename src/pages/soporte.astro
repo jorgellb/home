@@ -178,93 +178,216 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
 
           {/* Derecha: ESCUDO GUARDIÁN */}
           <aside class="sp-hero__shield" aria-hidden="true">
-            <svg viewBox="0 0 360 420" width="100%" height="100%">
+
+            {/* Anillos pulsantes exteriores (CSS) */}
+            <span class="sp-shield-pulse sp-shield-pulse--1"></span>
+            <span class="sp-shield-pulse sp-shield-pulse--2"></span>
+            <span class="sp-shield-pulse sp-shield-pulse--3"></span>
+
+            <svg viewBox="0 0 460 520" class="sp-shield-svg">
               <defs>
-                {/* Path para texto circular */}
-                <path id="sp-shield-arc" d="M180 80 m-110 0 a110 110 0 1 1 220 0"/>
-                {/* Pattern interior */}
+                {/* Paths de texto circular */}
+                <path id="sp-shield-arc-outer" d="M230 35 a195 195 0 1 1 0 430 a195 195 0 1 1 0 -430"/>
+                <path id="sp-shield-arc-inner" d="M230 95 a135 135 0 1 0 0 310 a135 135 0 1 0 0 -310"/>
+
+                {/* Pattern dots interior escudo */}
                 <pattern id="sp-shield-pattern" width="14" height="14" patternUnits="userSpaceOnUse">
-                  <circle cx="2" cy="2" r="1" fill="rgba(0,184,92,0.18)"/>
+                  <circle cx="2" cy="2" r="1" fill="rgba(0,184,92,0.22)"/>
                 </pattern>
-                {/* Gradient escudo */}
+
+                {/* Glow verde */}
                 <radialGradient id="sp-shield-glow" cx="50%" cy="40%" r="60%">
-                  <stop offset="0%"  stop-color="#00B85C" stop-opacity="0.35"/>
+                  <stop offset="0%"  stop-color="#00B85C" stop-opacity="0.45"/>
+                  <stop offset="60%" stop-color="#00B85C" stop-opacity="0.1"/>
                   <stop offset="100%" stop-color="#00B85C" stop-opacity="0"/>
+                </radialGradient>
+
+                {/* Glow dorado sunburst */}
+                <radialGradient id="sp-shield-gold" cx="50%" cy="42%" r="55%">
+                  <stop offset="0%"  stop-color="#D6FF44" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#D6FF44" stop-opacity="0"/>
+                </radialGradient>
+
+                {/* Gradiente cuerpo candado (metálico) */}
+                <linearGradient id="sp-lock-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%"  stop-color="#1a1817"/>
+                  <stop offset="50%" stop-color="#0E0D0B"/>
+                  <stop offset="100%" stop-color="#080706"/>
+                </linearGradient>
+
+                {/* Gradiente keyhole glow */}
+                <radialGradient id="sp-key-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%"  stop-color="#D6FF44" stop-opacity="1"/>
+                  <stop offset="60%" stop-color="#D6FF44" stop-opacity="0.6"/>
+                  <stop offset="100%" stop-color="#D6FF44" stop-opacity="0"/>
                 </radialGradient>
               </defs>
 
-              {/* Glow */}
-              <circle cx="180" cy="180" r="170" fill="url(#sp-shield-glow)"/>
+              {/* Glow background grande */}
+              <circle cx="230" cy="250" r="240" fill="url(#sp-shield-glow)"/>
+              <circle cx="230" cy="250" r="200" fill="url(#sp-shield-gold)"/>
 
-              {/* Anillo dashed externo (rotación) */}
-              <g class="sp-shield-spin" style="transform-origin: 180px 200px;">
-                <circle cx="180" cy="200" r="158" fill="none" stroke="#00B85C" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.55"/>
-              </g>
-
-              {/* Tics dial */}
-              <g opacity="0.55">
-                {Array.from({length: 36}).map((_, i) => (
+              {/* Sunburst rays detrás del escudo (24 rayos) */}
+              <g opacity="0.18" class="sp-shield-rays">
+                {Array.from({length: 24}).map((_, i) => (
                   <line
-                    x1="180" y1={i % 3 === 0 ? "32" : "38"}
-                    x2="180" y2={i % 3 === 0 ? "44" : "42"}
-                    stroke="#0E0D0B" stroke-width={i % 3 === 0 ? "2" : "1"}
-                    transform={`rotate(${i*10} 180 200)`}
+                    x1="230" y1="40" x2="230" y2="120"
+                    stroke="#00B85C" stroke-width="2.5"
+                    stroke-linecap="round"
+                    transform={`rotate(${i*15} 230 250)`}
                   />
                 ))}
               </g>
 
-              {/* Texto circular GUARDIAN */}
-              <text font-family="monospace" font-size="11" font-weight="bold" fill="#003B7A" letter-spacing="4">
-                <textPath href="#sp-shield-arc" startOffset="0%">★ PLATANITO RICO · GUARDIAN · 24/7 · ALMERÍA · UPTIME · BACKUP ★</textPath>
-              </text>
-
-              {/* ESCUDO BODY */}
-              <g transform="translate(80, 90)">
-                {/* Shadow */}
-                <path d="M 100 5 C 60 5 30 15 10 25 L 10 130 C 10 195 100 250 100 250 C 100 250 190 195 190 130 L 190 25 C 170 15 140 5 100 5 Z" fill="#0E0D0B" transform="translate(8, 8)"/>
-                {/* Escudo principal */}
-                <path d="M 100 5 C 60 5 30 15 10 25 L 10 130 C 10 195 100 250 100 250 C 100 250 190 195 190 130 L 190 25 C 170 15 140 5 100 5 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="4"/>
-                {/* Pattern interior */}
-                <path d="M 100 5 C 60 5 30 15 10 25 L 10 130 C 10 195 100 250 100 250 C 100 250 190 195 190 130 L 190 25 C 170 15 140 5 100 5 Z" fill="url(#sp-shield-pattern)"/>
-                {/* Banda verde central */}
-                <path d="M 10 100 L 190 100 L 190 130 L 10 130 Z" fill="#00B85C"/>
-                <path d="M 10 100 L 190 100" stroke="#0E0D0B" stroke-width="2"/>
-                <path d="M 10 130 L 190 130" stroke="#0E0D0B" stroke-width="2"/>
-
-                {/* CANDADO en el centro */}
-                <g transform="translate(75, 80)">
-                  {/* Aro */}
-                  <path d="M 8 28 L 8 18 C 8 6 18 -2 25 -2 C 32 -2 42 6 42 18 L 42 28" fill="none" stroke="#0E0D0B" stroke-width="4" stroke-linecap="round"/>
-                  {/* Cuerpo */}
-                  <rect x="0" y="28" width="50" height="40" rx="3" fill="#0E0D0B"/>
-                  {/* Cerradura */}
-                  <circle cx="25" cy="46" r="5" fill="#D6FF44"/>
-                  <rect x="23" y="48" width="4" height="10" fill="#D6FF44"/>
-                </g>
-
-                {/* Texto STATUS */}
-                <text x="100" y="160" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#FFFCF6" letter-spacing="3">PROTECTED</text>
-
-                {/* Bottom 24/7 */}
-                <text x="100" y="200" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#0E0D0B" letter-spacing="2">24 / 7</text>
-                <text x="100" y="218" text-anchor="middle" font-family="monospace" font-size="8" fill="#003B7A" letter-spacing="2">MONITORIZACIÓN</text>
-                <text x="100" y="232" text-anchor="middle" font-family="monospace" font-size="8" fill="#003B7A" letter-spacing="2">CONTINUA</text>
+              {/* Texto circular EXTERIOR */}
+              <g class="sp-shield-text-outer">
+                <text font-family="monospace" font-size="12" font-weight="bold" fill="#003B7A" letter-spacing="5">
+                  <textPath href="#sp-shield-arc-outer" startOffset="0%">★ PLATANITO RICO · GUARDIAN · 24/7 · ALMERÍA · UPTIME · BACKUP · MONITOR ★</textPath>
+                </text>
               </g>
 
-              {/* Estrellas decorativas */}
-              <text x="60"  y="320" font-family="monospace" font-size="20" fill="#C9A24F">★</text>
-              <text x="290" y="320" font-family="monospace" font-size="20" fill="#C9A24F">★</text>
-              <text x="180" y="380" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#003B7A" letter-spacing="3">EST. 2018 · ALMERÍA · ES</text>
+              {/* Anillo dashed externo (rotando CW lento) */}
+              <g class="sp-shield-spin-slow" style="transform-origin: 230px 250px;">
+                <circle cx="230" cy="250" r="207" fill="none" stroke="#00B85C" stroke-width="2" stroke-dasharray="10 7" opacity="0.6"/>
+              </g>
+
+              {/* Tics dial 60 marcas alrededor */}
+              <g opacity="0.65">
+                {Array.from({length: 60}).map((_, i) => (
+                  <line
+                    x1="230" y1={i % 5 === 0 ? "52" : "58"}
+                    x2="230" y2={i % 5 === 0 ? "66" : "62"}
+                    stroke={i % 5 === 0 ? "#003B7A" : "#0E0D0B"}
+                    stroke-width={i % 5 === 0 ? "2.5" : "1"}
+                    transform={`rotate(${i*6} 230 250)`}
+                  />
+                ))}
+              </g>
+
+              {/* Anillo dashed medio (rotando CCW medio) */}
+              <g class="sp-shield-spin-rev" style="transform-origin: 230px 250px;">
+                <circle cx="230" cy="250" r="168" fill="none" stroke="#C9A24F" stroke-width="1.5" stroke-dasharray="3 5" opacity="0.55"/>
+              </g>
+
+              {/* Texto circular INTERIOR (secundario) */}
+              <g class="sp-shield-text-inner">
+                <text font-family="monospace" font-size="9" font-weight="bold" fill="#00B85C" letter-spacing="2.5">
+                  <textPath href="#sp-shield-arc-inner" startOffset="0%">SECURE · BACKUP · MONITOR · UPTIME 99.97% · SECURE · BACKUP · MONITOR · UPTIME 99.97% · </textPath>
+                </text>
+              </g>
+
+              {/* MINI BADGES orbitales (4 compass points) */}
+              {/* Top — SSL */}
+              <g class="sp-mini-badge sp-mini-badge--1" transform="translate(230, 60)">
+                <circle r="26" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>
+                <circle r="21" fill="#00B85C"/>
+                <text y="-2" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#FFFCF6" letter-spacing="1">SSL</text>
+                <text y="9" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#FFFCF6" letter-spacing="1">★</text>
+              </g>
+              {/* Right — RGPD */}
+              <g class="sp-mini-badge sp-mini-badge--2" transform="translate(415, 250)">
+                <circle r="26" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>
+                <circle r="21" fill="#003B7A"/>
+                <text y="-1" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="0.5">RGPD</text>
+                <text y="9" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#FFFCF6" letter-spacing="1">✓ UE</text>
+              </g>
+              {/* Bottom — BACKUP */}
+              <g class="sp-mini-badge sp-mini-badge--3" transform="translate(230, 440)">
+                <circle r="26" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>
+                <circle r="21" fill="#C9A24F"/>
+                <text y="-1" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="0.5">BAK</text>
+                <text y="9" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#FFFCF6" letter-spacing="1">·DIARIO·</text>
+              </g>
+              {/* Left — WAF */}
+              <g class="sp-mini-badge sp-mini-badge--4" transform="translate(45, 250)">
+                <circle r="26" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>
+                <circle r="21" fill="#FF6B35"/>
+                <text y="-1" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="0.5">WAF</text>
+                <text y="9" text-anchor="middle" font-family="monospace" font-size="5.5" fill="#FFFCF6" letter-spacing="1">·LIVE·</text>
+              </g>
+
+              {/* ════ ESCUDO BODY ════ */}
+              <g transform="translate(110, 115)">
+                {/* Shadow */}
+                <path d="M 120 5 C 75 5 40 17 10 30 L 10 145 C 10 220 120 285 120 285 C 120 285 230 220 230 145 L 230 30 C 200 17 165 5 120 5 Z" fill="#0E0D0B" transform="translate(10, 10)" opacity="0.85"/>
+
+                {/* Escudo principal */}
+                <path d="M 120 5 C 75 5 40 17 10 30 L 10 145 C 10 220 120 285 120 285 C 120 285 230 220 230 145 L 230 30 C 200 17 165 5 120 5 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="5"/>
+
+                {/* Pattern dots interior */}
+                <path d="M 120 5 C 75 5 40 17 10 30 L 10 145 C 10 220 120 285 120 285 C 120 285 230 220 230 145 L 230 30 C 200 17 165 5 120 5 Z" fill="url(#sp-shield-pattern)"/>
+
+                {/* Banda superior negra: PROTECTED */}
+                <path d="M 10 30 L 230 30 L 230 60 L 10 60 Z" fill="#0E0D0B"/>
+                <text x="120" y="51" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#D6FF44" letter-spacing="5">PROTECTED</text>
+
+                {/* Banda verde central */}
+                <path d="M 10 110 L 230 110 L 230 150 L 10 150 Z" fill="#00B85C"/>
+                <path d="M 10 110 L 230 110" stroke="#0E0D0B" stroke-width="2.5"/>
+                <path d="M 10 150 L 230 150" stroke="#0E0D0B" stroke-width="2.5"/>
+                {/* Repeating ★ en la banda verde */}
+                <text x="20"  y="135" font-family="monospace" font-size="11" fill="#0E0D0B" opacity="0.45">★</text>
+                <text x="210" y="135" font-family="monospace" font-size="11" fill="#0E0D0B" opacity="0.45">★</text>
+
+                {/* CANDADO GIGANTE en el centro */}
+                <g transform="translate(75, 70)">
+                  {/* Aura keyhole detrás */}
+                  <circle cx="45" cy="68" r="42" fill="url(#sp-key-glow)" class="sp-lock-aura"/>
+                  {/* Aro */}
+                  <path d="M 12 36 L 12 24 C 12 8 26 -4 45 -4 C 64 -4 78 8 78 24 L 78 36" fill="none" stroke="#0E0D0B" stroke-width="7" stroke-linecap="round"/>
+                  {/* Cuerpo candado */}
+                  <rect x="0" y="36" width="90" height="68" rx="5" fill="url(#sp-lock-grad)" stroke="#0E0D0B" stroke-width="2.5"/>
+                  {/* Highlight reflejo */}
+                  <rect x="5" y="40" width="20" height="58" rx="2" fill="#FFFCF6" opacity="0.08"/>
+                  {/* Keyhole grande con glow */}
+                  <circle cx="45" cy="68" r="11" fill="#D6FF44" class="sp-lock-pulse"/>
+                  <rect x="40.5" y="72" width="9" height="20" rx="2" fill="#D6FF44"/>
+                  <circle cx="45" cy="68" r="5.5" fill="#0E0D0B"/>
+                </g>
+
+                {/* Banda verde subtítulo */}
+                <text x="120" y="138" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#FFFCF6" letter-spacing="3.5">24 / 7 · GUARDIA</text>
+
+                {/* Bottom inferior: stat principal */}
+                <text x="120" y="200" text-anchor="middle" font-family="monospace" font-size="22" font-weight="bold" fill="#0E0D0B" letter-spacing="-0.5">99.97%</text>
+                <text x="120" y="218" text-anchor="middle" font-family="monospace" font-size="8" fill="#003B7A" letter-spacing="2.5">UPTIME · ÚLTIMOS 30 DÍAS</text>
+
+                {/* Live indicator inferior */}
+                <g transform="translate(120, 248)">
+                  <circle cx="-44" cy="0" r="4" fill="#00B85C" class="sp-shield-live"/>
+                  <text x="-34" y="3" font-family="monospace" font-size="8" font-weight="bold" fill="#003B7A" letter-spacing="2">EN VIVO · AHORA</text>
+                </g>
+              </g>
+
+              {/* Estrellas y firma */}
+              <text x="65"  y="500" font-family="monospace" font-size="26" fill="#C9A24F">★</text>
+              <text x="380" y="500" font-family="monospace" font-size="26" fill="#C9A24F">★</text>
+              <text x="230" y="498" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#003B7A" letter-spacing="4">EST. 2018 · ALMERÍA · ES</text>
+              <text x="230" y="512" text-anchor="middle" font-family="monospace" font-size="7" fill="#0E0D0B" letter-spacing="2" opacity="0.55">─── PLATANITO RICO STUDIO ───</text>
             </svg>
 
-            {/* Sello "ASEGURADO" giratorio sobre el escudo */}
+            {/* Sello "ASEGURADO" gigante */}
             <div class="sp-shield__seal" aria-hidden="true">
-              <svg viewBox="0 0 80 80" width="100%" height="100%">
-                <defs><path id="sp-seal-c" d="M40,40 m-32,0 a32,32 0 1,1 64,0 a32,32 0 1,1 -64,0"/></defs>
-                <circle cx="40" cy="40" r="38" fill="#DC1B2C"/>
-                <circle cx="40" cy="40" r="33" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
-                <g class="sp-seal-spin"><text font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6" letter-spacing="2"><textPath href="#sp-seal-c" startOffset="0%">★ ASEGURADO ★ ASEGURADO ★</textPath></text></g>
-                <text x="40" y="44" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#FFFCF6">✓</text>
+              <svg viewBox="0 0 120 120" width="100%" height="100%">
+                <defs>
+                  <path id="sp-seal-c1" d="M60,60 m-49,0 a49,49 0 1,1 98,0 a49,49 0 1,1 -98,0"/>
+                  <path id="sp-seal-c2" d="M60,60 m-32,0 a32,32 0 1,1 64,0 a32,32 0 1,1 -64,0"/>
+                </defs>
+                {/* Anillo exterior */}
+                <circle cx="60" cy="60" r="58" fill="#DC1B2C"/>
+                <circle cx="60" cy="60" r="54" fill="none" stroke="#FFFCF6" stroke-width="2" stroke-dasharray="3 2"/>
+                <circle cx="60" cy="60" r="38" fill="none" stroke="#FFFCF6" stroke-width="1.5"/>
+                {/* Texto exterior giratorio */}
+                <g class="sp-seal-spin">
+                  <text font-family="monospace" font-size="9" font-weight="bold" fill="#FFFCF6" letter-spacing="3">
+                    <textPath href="#sp-seal-c1" startOffset="0%">★ ASEGURADO ★ APROBADO ★ </textPath>
+                  </text>
+                </g>
+                {/* Estrellas interiores */}
+                <text x="60" y="34" text-anchor="middle" font-family="monospace" font-size="10" fill="#FFFCF6">★</text>
+                <text x="60" y="94" text-anchor="middle" font-family="monospace" font-size="10" fill="#FFFCF6">★</text>
+                {/* Check gigante centrado */}
+                <text x="60" y="69" text-anchor="middle" font-family="monospace" font-size="32" font-weight="bold" fill="#FFFCF6">✓</text>
               </svg>
             </div>
           </aside>
@@ -1174,29 +1297,109 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     opacity: .85;
   }
 
-  /* ESCUDO */
+  /* ════════ ESCUDO GUARDIÁN ════════ */
   .sp-hero__shield {
     position: relative;
-    aspect-ratio: 1;
-    max-width: 460px;
+    aspect-ratio: 460 / 520;
+    width: 100%;
+    max-width: 620px;
     margin: 0 auto;
-    filter: drop-shadow(0 12px 24px rgba(0,184,92,0.15));
+    filter: drop-shadow(0 18px 50px rgba(0,184,92,0.22));
   }
-  .sp-shield-spin { animation: sp-spin 60s linear infinite; }
+  .sp-shield-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Anillos pulsantes exteriores */
+  .sp-shield-pulse {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 88%;
+    aspect-ratio: 1;
+    border: 2px solid var(--sp-green);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0.85);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    animation: sp-shield-pulse-anim 4s ease-out infinite;
+  }
+  .sp-shield-pulse--2 { animation-delay: 1.3s; border-color: var(--sp-lime); }
+  .sp-shield-pulse--3 { animation-delay: 2.6s; border-color: var(--sp-gold); }
+  @keyframes sp-shield-pulse-anim {
+    0%   { transform: translate(-50%, -50%) scale(0.78); opacity: .55; }
+    100% { transform: translate(-50%, -50%) scale(1.12); opacity: 0; }
+  }
+
+  /* Rotaciones SVG */
+  .sp-shield-spin-slow { animation: sp-spin 80s linear infinite; }
+  .sp-shield-spin-rev  { animation: sp-spin 55s linear infinite reverse; }
+  .sp-shield-text-outer { animation: sp-spin 120s linear infinite; transform-origin: 230px 250px; }
+  .sp-shield-text-inner { animation: sp-spin 70s linear infinite reverse; transform-origin: 230px 250px; }
   @keyframes sp-spin { to { transform: rotate(360deg); } }
+
+  /* Sunburst rays subtle pulse */
+  .sp-shield-rays { animation: sp-rays-pulse 6s ease-in-out infinite; transform-origin: 230px 250px; }
+  @keyframes sp-rays-pulse {
+    0%, 100% { opacity: 0.18; }
+    50%      { opacity: 0.32; }
+  }
+
+  /* Keyhole glow + pulse */
+  .sp-lock-pulse { animation: sp-lock-glow 2.2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes sp-lock-glow {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.75; transform: scale(1.15); }
+  }
+  .sp-lock-aura { animation: sp-aura-breath 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes sp-aura-breath {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 0.95; }
+  }
+
+  /* Mini badges con bob individual (cada uno con delay) */
+  .sp-mini-badge {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sp-mini-bob 3.5s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(14,13,11,0.18));
+  }
+  .sp-mini-badge--1 { animation-delay: 0s;   }
+  .sp-mini-badge--2 { animation-delay: 0.9s; }
+  .sp-mini-badge--3 { animation-delay: 1.7s; }
+  .sp-mini-badge--4 { animation-delay: 2.5s; }
+  @keyframes sp-mini-bob {
+    0%, 100% { transform: translateY(0)    scale(1); }
+    50%      { transform: translateY(-6px) scale(1.05); }
+  }
+
+  /* Live dot dentro del escudo */
+  .sp-shield-live { animation: sp-live-blink 1.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes sp-live-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.85); }
+  }
+
+  /* SELLO ASEGURADO gigante */
   .sp-shield__seal {
     position: absolute;
-    top: 10%; right: 5%;
-    width: 90px; aspect-ratio: 1;
-    transform: rotate(12deg);
-    filter: drop-shadow(0 4px 8px rgba(220,27,44,0.35));
-    animation: sp-bob 4s ease-in-out infinite;
+    top: -2%; right: -4%;
+    width: 130px; aspect-ratio: 1;
+    transform: rotate(15deg);
+    filter: drop-shadow(0 8px 18px rgba(220,27,44,0.4));
+    animation: sp-seal-bob 4.5s ease-in-out infinite;
+    z-index: 3;
   }
-  @keyframes sp-bob {
-    0%, 100% { transform: rotate(12deg) translateY(0); }
-    50%      { transform: rotate(12deg) translateY(-6px); }
+  @media (min-width: 768px) { .sp-shield__seal { width: 160px; } }
+  @keyframes sp-seal-bob {
+    0%, 100% { transform: rotate(15deg)  translateY(0); }
+    50%      { transform: rotate(-3deg)  translateY(-8px); }
   }
-  .sp-seal-spin { transform-origin: 50% 50%; animation: sp-spin 30s linear infinite; }
+  .sp-seal-spin { transform-origin: 50% 50%; animation: sp-spin 25s linear infinite; }
 
   /* ECG HEARTBEAT */
   .sp-ecg {
