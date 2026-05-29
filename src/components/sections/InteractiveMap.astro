@@ -6,6 +6,9 @@ interface Props {
   bearing?: number;
   height?: string;
   label?: string;
+  themeColor?: string;
+  themeColorDark?: string;
+  townInitial?: string;
   puntosInteres?: Array<{
     nombre: string;
     coords: [number, number];
@@ -13,353 +16,463 @@ interface Props {
   }>;
 }
 
-const { center, zoom = 13, pitch = 25, bearing = -15, height = "460px", label, puntosInteres = [] } = Astro.props;
+const {
+  center,
+  zoom = 13,
+  pitch = 25,
+  bearing = -15,
+  height = "520px",
+  label,
+  themeColor = '#0E0D0B',
+  themeColorDark = '#0E0D0B',
+  townInitial,
+  puntosInteres = [],
+} = Astro.props;
+
 const mapId = `map-${Math.random().toString(36).substring(7)}`;
+const initial = (townInitial || label || 'A').charAt(0).toUpperCase();
+
+// Format coordinates for display
+const lat = center[1].toFixed(4);
+const lng = center[0].toFixed(4);
+const latStr = `${Math.abs(parseFloat(lat))}° ${center[1] >= 0 ? 'N' : 'S'}`;
+const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
 ---
 
-<div class="map-premium-wrapper">
-  <!-- Halo exterior decorativo -->
-  <div class="map-halo"></div>
+<div
+  class="iMap"
+  style={`--iMap-theme: ${themeColor}; --iMap-theme-d: ${themeColorDark};`}
+>
+  {/* ── Cabecera con coordenadas tipo carta cartográfica ── */}
+  <header class="iMap__head">
+    <span class="iMap__head-stamp">★ CARTA · {label ? label.toUpperCase() : 'MAPA'} ★</span>
+    <span class="iMap__head-coords">
+      <span class="iMap__coord-pill">LAT {latStr}</span>
+      <span class="iMap__coord-pill">LNG {lngStr}</span>
+    </span>
+  </header>
 
-  <!-- Marco con ornamentos dorados -->
-  <div class="map-frame">
-    <!-- Esquinas decorativas SVG -->
-    <div class="corner tl" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M4 76 L4 18 Q4 4 18 4 L76 4" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M0 60 L0 12 Q0 0 12 0 L60 0" stroke="rgba(212,175,55,0.25)" stroke-width="0.8"/>
-        <circle cx="4" cy="4" r="3.5" fill="#d4af37" class="gem"/>
-        <circle cx="4" cy="4" r="6" fill="rgba(212,175,55,0.15)" class="gem-halo"/>
+  {/* ── Contenedor con el mapa + overlays ── */}
+  <div class="iMap__body">
+
+    {/* Mapa */}
+    <div
+      id={mapId}
+      class="iMap__canvas"
+      style={`height: ${height};`}
+      data-center={JSON.stringify(center)}
+      data-zoom={zoom}
+      data-pitch={pitch}
+      data-bearing={bearing}
+      data-label={label || ''}
+      data-initial={initial}
+      data-theme={themeColor}
+      data-theme-d={themeColorDark}
+      data-puntos={JSON.stringify(puntosInteres)}
+    ></div>
+
+    {/* Esquinas con marcas de registro (estilo plano técnico) */}
+    <div class="iMap__corner iMap__corner--tl" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="100%" height="100%">
+        <path d="M 4 12 L 4 4 L 12 4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="4" cy="4" r="2" fill="currentColor"/>
       </svg>
     </div>
-    <div class="corner tr" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M4 76 L4 18 Q4 4 18 4 L76 4" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M0 60 L0 12 Q0 0 12 0 L60 0" stroke="rgba(212,175,55,0.25)" stroke-width="0.8"/>
-        <circle cx="4" cy="4" r="3.5" fill="#d4af37" class="gem"/>
-        <circle cx="4" cy="4" r="6" fill="rgba(212,175,55,0.15)" class="gem-halo"/>
+    <div class="iMap__corner iMap__corner--tr" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="100%" height="100%">
+        <path d="M 28 4 L 36 4 L 36 12" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="36" cy="4" r="2" fill="currentColor"/>
       </svg>
     </div>
-    <div class="corner bl" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M4 76 L4 18 Q4 4 18 4 L76 4" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M0 60 L0 12 Q0 0 12 0 L60 0" stroke="rgba(212,175,55,0.25)" stroke-width="0.8"/>
-        <circle cx="4" cy="4" r="3.5" fill="#d4af37" class="gem"/>
-        <circle cx="4" cy="4" r="6" fill="rgba(212,175,55,0.15)" class="gem-halo"/>
+    <div class="iMap__corner iMap__corner--bl" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="100%" height="100%">
+        <path d="M 4 28 L 4 36 L 12 36" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="4" cy="36" r="2" fill="currentColor"/>
       </svg>
     </div>
-    <div class="corner br" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M4 76 L4 18 Q4 4 18 4 L76 4" stroke="#d4af37" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M0 60 L0 12 Q0 0 12 0 L60 0" stroke="rgba(212,175,55,0.25)" stroke-width="0.8"/>
-        <circle cx="4" cy="4" r="3.5" fill="#d4af37" class="gem"/>
-        <circle cx="4" cy="4" r="6" fill="rgba(212,175,55,0.15)" class="gem-halo"/>
+    <div class="iMap__corner iMap__corner--br" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="100%" height="100%">
+        <path d="M 28 36 L 36 36 L 36 28" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="36" cy="36" r="2" fill="currentColor"/>
       </svg>
     </div>
 
-    <!-- Mapa -->
-    <div class="map-container">
-      <div
-        id={mapId}
-        class="maplibre-map"
-        style={`height: ${height};`}
-        data-center={JSON.stringify(center)}
-        data-zoom={zoom}
-        data-pitch={pitch}
-        data-bearing={bearing}
-        data-label={label || ''}
-        data-puntos={JSON.stringify(puntosInteres)}
-      ></div>
+    {/* Compass rose flotante top-right */}
+    <div class="iMap__compass" aria-hidden="true">
+      <svg viewBox="0 0 100 100" width="100%" height="100%">
+        {/* Ring exterior */}
+        <circle cx="50" cy="50" r="46" fill="rgba(255,252,246,0.92)" stroke="#0E0D0B" stroke-width="2.5"/>
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#0E0D0B" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
 
-      <!-- Viñeta interior sutil -->
-      <div class="map-vignette" aria-hidden="true"></div>
+        {/* Marcas cardinales largas + secundarias */}
+        <g class="iMap-compass-ticks" stroke="#0E0D0B">
+          {Array.from({length: 36}).map((_, i) => (
+            <line
+              x1="50"
+              y1={i % 9 === 0 ? "8" : (i % 3 === 0 ? "12" : "14")}
+              x2="50"
+              y2={i % 9 === 0 ? "16" : (i % 3 === 0 ? "16" : "16")}
+              stroke-width={i % 9 === 0 ? "2.5" : (i % 3 === 0 ? "1.5" : "0.8")}
+              transform={`rotate(${i*10} 50 50)`}
+            />
+          ))}
+        </g>
 
-      <!-- Líneas de escaneo decorativas (overlay) -->
-      <div class="scan-lines" aria-hidden="true"></div>
+        {/* Letras cardinales */}
+        <text x="50" y="26" text-anchor="middle" font-family="monospace" font-size="11" font-weight="800" fill="currentColor">N</text>
+        <text x="74" y="54" text-anchor="middle" font-family="monospace" font-size="8" font-weight="700" fill="#0E0D0B" opacity="0.65">E</text>
+        <text x="50" y="82" text-anchor="middle" font-family="monospace" font-size="8" font-weight="700" fill="#0E0D0B" opacity="0.65">S</text>
+        <text x="26" y="54" text-anchor="middle" font-family="monospace" font-size="8" font-weight="700" fill="#0E0D0B" opacity="0.65">O</text>
+
+        {/* Aguja brújula */}
+        <g class="iMap-compass-needle">
+          {/* Punta N (theme color) */}
+          <path d="M 50 50 L 46 50 L 50 18 L 54 50 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="1"/>
+          {/* Punta S (ink) */}
+          <path d="M 50 50 L 46 50 L 50 82 L 54 50 Z" fill="#0E0D0B"/>
+          {/* Punto central */}
+          <circle cx="50" cy="50" r="3.5" fill="#0E0D0B"/>
+          <circle cx="50" cy="50" r="1.5" fill="#FFFCF6"/>
+        </g>
+      </svg>
     </div>
+
+    {/* Scale bar bottom-left */}
+    <div class="iMap__scale" aria-hidden="true">
+      <span class="iMap__scale-bar">
+        <span class="iMap__scale-fill"></span>
+        <span class="iMap__scale-tick iMap__scale-tick--0">0</span>
+        <span class="iMap__scale-tick iMap__scale-tick--mid">·</span>
+        <span class="iMap__scale-tick iMap__scale-tick--end">1km</span>
+      </span>
+      <span class="iMap__scale-meta">ESCALA · APROX</span>
+    </div>
+
+    {/* Grid sutil overlay */}
+    <div class="iMap__grid" aria-hidden="true"></div>
+
+    {/* Vignette */}
+    <div class="iMap__vignette" aria-hidden="true"></div>
   </div>
 
-  <!-- Partículas flotantes -->
-  <div class="particles" aria-hidden="true">
-    {Array.from({ length: 18 }).map(() => (
-      <div
-        class="particle"
-        style={`--px:${Math.round(Math.random()*100)}%;--py:${Math.round(Math.random()*100)}%;--ps:${(1.5 + Math.random()*2.5).toFixed(1)}px;--pd:${(6 + Math.random()*8).toFixed(1)}s;--pdelay:-${(Math.random()*12).toFixed(1)}s`}
-      ></div>
-    ))}
-  </div>
+  {/* ── Pie con metadata cartográfica ── */}
+  <footer class="iMap__foot">
+    <span class="iMap__foot-meta">★ PROYECCIÓN WEB MERCATOR · OSM · CARTO</span>
+    <span class="iMap__foot-meta">PLATANITO RICO · CARTOGRAFÍA · 2026</span>
+  </footer>
 </div>
 
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
 
 <style>
-  /* ── Variables ─────────────────────────────────────────── */
-  .map-premium-wrapper {
-    --gold: #d4af37;
-    --gold-dim: rgba(212,175,55,0.35);
-    --gold-glow: rgba(212,175,55,0.12);
-    --radius: 36px;
-
-    position: relative;
-    padding: 32px;
-    margin: 3rem 0;
-  }
-
-  /* ── Halo exterior ─────────────────────────────────────── */
-  .map-halo {
-    position: absolute;
-    inset: 0;
-    border-radius: calc(var(--radius) + 20px);
-    background: radial-gradient(ellipse at 50% 50%, var(--gold-glow) 0%, transparent 70%);
-    pointer-events: none;
-    animation: halo-pulse 6s ease-in-out infinite;
-  }
-
-  @keyframes halo-pulse {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50%       { opacity: 1;   transform: scale(1.015); }
-  }
-
-  /* ── Marco principal ───────────────────────────────────── */
-  .map-frame {
-    position: relative;
-    border-radius: var(--radius);
-    padding: 3px;
-    background: linear-gradient(135deg,
-      rgba(212,175,55,0.6) 0%,
-      rgba(255,243,190,0.9) 25%,
-      rgba(212,175,55,0.3) 50%,
-      rgba(255,243,190,0.9) 75%,
-      rgba(212,175,55,0.6) 100%
-    );
-    box-shadow:
-      0 0 0 1px rgba(212,175,55,0.1),
-      0 30px 80px -10px rgba(0,0,0,0.18),
-      0 0 60px var(--gold-glow),
-      inset 0 1px 0 rgba(255,255,255,0.5);
-    animation: border-shimmer 8s linear infinite;
-    background-size: 200% 200%;
-  }
-
-  @keyframes border-shimmer {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* ── Mapa inner ────────────────────────────────────────── */
-  .map-container {
-    position: relative;
-    border-radius: calc(var(--radius) - 3px);
+  /* ══════════════════════════════════════════════════════════
+     INTERACTIVE MAP — Brutalist cartographic system
+     ══════════════════════════════════════════════════════════ */
+  .iMap {
+    --iMap-paper: #FFFCF6;
+    --iMap-ink: #0E0D0B;
+    color: var(--iMap-theme);
+    background: var(--iMap-ink);
+    border: 3px solid var(--iMap-ink);
+    box-shadow: 10px 10px 0 var(--iMap-theme);
+    margin: 0;
     overflow: hidden;
-    background: #f0ece4;
+    font-family: var(--font-mono, monospace);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .iMap:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 14px 14px 0 var(--iMap-theme);
   }
 
-  .maplibre-map {
+  /* ── CABECERA ── */
+  .iMap__head {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap;
+    gap: .75rem;
+    padding: .8rem 1.25rem;
+    background: var(--iMap-ink);
+    color: var(--iMap-paper);
+    border-bottom: 2px solid var(--iMap-theme);
+  }
+  .iMap__head-stamp {
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .25em;
+    color: var(--iMap-theme);
+  }
+  .iMap__head-coords {
+    display: inline-flex; gap: .5rem;
+  }
+  .iMap__coord-pill {
+    background: var(--iMap-theme);
+    color: var(--iMap-paper);
+    padding: .25rem .55rem;
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    border: 1.5px solid var(--iMap-paper);
+  }
+
+  /* ── BODY (mapa + overlays) ── */
+  .iMap__body {
+    position: relative;
+    background: #f0ece4;
+    overflow: hidden;
+  }
+  .iMap__canvas {
     width: 100%;
     display: block;
-    filter: contrast(1.04) saturate(1.08) brightness(1.02);
+    filter: contrast(1.05) saturate(1.05);
   }
 
-  .map-vignette {
+  /* Esquinas cartográficas */
+  .iMap__corner {
     position: absolute;
-    inset: 0;
+    width: 40px; height: 40px;
+    color: var(--iMap-theme);
+    z-index: 8;
     pointer-events: none;
-    z-index: 2;
-    background:
-      radial-gradient(ellipse at center, transparent 45%, rgba(10,10,20,0.07) 100%);
-    box-shadow: inset 0 0 100px rgba(0,0,0,0.06);
+    filter: drop-shadow(0 2px 6px rgba(14,13,11,0.45));
+  }
+  .iMap__corner--tl { top: 10px; left: 10px; }
+  .iMap__corner--tr { top: 10px; right: 10px; }
+  .iMap__corner--bl { bottom: 10px; left: 10px; }
+  .iMap__corner--br { bottom: 10px; right: 10px; }
+
+  /* Compass rose */
+  .iMap__compass {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 80px; height: 80px;
+    z-index: 9;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+  }
+  .iMap__compass svg { display: block; width: 100%; height: 100%; color: var(--iMap-theme); }
+  .iMap-compass-needle {
+    transform-origin: 50px 50px;
+    animation: iMap-needle-wobble 6s ease-in-out infinite;
+  }
+  @keyframes iMap-needle-wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg); }
+    50% { transform: rotate(2deg); }
+    75% { transform: rotate(-1deg); }
+  }
+  .iMap-compass-ticks {
+    transform-origin: 50px 50px;
+    animation: iMap-ticks-pulse 5s ease-in-out infinite;
+  }
+  @keyframes iMap-ticks-pulse {
+    0%, 100% { opacity: 0.8; }
+    50%       { opacity: 1; }
+  }
+  @media (max-width: 640px) {
+    .iMap__compass { width: 60px; height: 60px; top: 10px; right: 10px; }
   }
 
-  /* Líneas de escaneo sutiles — efecto tech premium */
-  .scan-lines {
+  /* Scale bar */
+  .iMap__scale {
     position: absolute;
-    inset: 0;
+    bottom: 14px; left: 14px;
+    z-index: 9;
+    pointer-events: none;
+    background: rgba(255,252,246,0.92);
+    border: 2px solid var(--iMap-ink);
+    padding: .4rem .55rem .35rem;
+    box-shadow: 3px 3px 0 var(--iMap-theme);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .iMap__scale-bar {
+    position: relative;
+    width: 90px; height: 12px;
+    background: var(--iMap-ink);
+    border: 1.5px solid var(--iMap-ink);
+    display: block;
+  }
+  .iMap__scale-fill {
+    position: absolute; top: 0; left: 0; bottom: 0;
+    width: 50%;
+    background: var(--iMap-theme);
+  }
+  .iMap__scale-tick {
+    position: absolute;
+    top: 100%;
+    margin-top: 2px;
+    font-size: .55rem;
+    font-weight: 800;
+    color: var(--iMap-ink);
+    letter-spacing: .1em;
+  }
+  .iMap__scale-tick--0 { left: 0; }
+  .iMap__scale-tick--mid { left: 50%; transform: translateX(-50%); }
+  .iMap__scale-tick--end { right: 0; }
+  .iMap__scale-meta {
+    margin-top: 14px;
+    font-size: .5rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    color: var(--iMap-theme-d);
+  }
+
+  /* Grid sutil */
+  .iMap__grid {
+    position: absolute; inset: 0;
     pointer-events: none;
     z-index: 3;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(0,0,0,0.008) 3px,
-      rgba(0,0,0,0.008) 4px
-    );
-    border-radius: inherit;
+    background-image:
+      linear-gradient(rgba(14,13,11,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14,13,11,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mix-blend-mode: multiply;
   }
 
-  /* ── Esquinas ──────────────────────────────────────────── */
-  .corner {
-    position: absolute;
-    width: 72px;
-    height: 72px;
-    z-index: 20;
+  /* Vignette */
+  .iMap__vignette {
+    position: absolute; inset: 0;
     pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(14,13,11,0.18) 100%);
   }
 
-  .corner svg { width: 100%; height: 100%; overflow: visible; }
-
-  .corner.tl { top: -4px;    left: -4px; }
-  .corner.tr { top: -4px;    right: -4px;  transform: scaleX(-1); }
-  .corner.bl { bottom: -4px; left: -4px;   transform: scaleY(-1); }
-  .corner.br { bottom: -4px; right: -4px;  transform: scale(-1); }
-
-  .gem {
-    filter: drop-shadow(0 0 5px var(--gold));
-    animation: gem-pulse 3s ease-in-out infinite;
+  /* ── PIE ── */
+  .iMap__foot {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .55rem 1.25rem;
+    background: var(--iMap-theme);
+    color: var(--iMap-paper);
+    border-top: 2px solid var(--iMap-ink);
+  }
+  .iMap__foot-meta {
+    font-size: .55rem;
+    font-weight: 800;
+    letter-spacing: .2em;
   }
 
-  .gem-halo {
-    animation: gem-pulse 3s ease-in-out infinite reverse;
-  }
-
-  @keyframes gem-pulse {
-    0%, 100% { opacity: 0.5; }
-    50%       { opacity: 1;   }
-  }
-
-  /* ── Partículas ────────────────────────────────────────── */
-  .particles {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 5;
-  }
-
-  .particle {
-    position: absolute;
-    left: var(--px);
-    top: var(--py);
-    width: var(--ps);
-    height: var(--ps);
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 0 8px 2px rgba(255,243,190,0.6);
-    opacity: 0;
-    animation: float-particle var(--pd) var(--pdelay) linear infinite;
-  }
-
-  @keyframes float-particle {
-    0%   { opacity: 0;   transform: translateY(0)    scale(0.2); }
-    15%  { opacity: 0.7; }
-    60%  { opacity: 0.3; transform: translateY(-90px) translateX(20px) scale(1.2); }
-    100% { opacity: 0;   transform: translateY(-180px) translateX(40px) scale(0); }
-  }
-
-  /* ── MapLibre controles ────────────────────────────────── */
+  /* ══════════════════════════════════════════════════════════
+     MAPLIBRE CONTROLS
+     ══════════════════════════════════════════════════════════ */
   :global(.maplibregl-ctrl-group) {
-    background: rgba(255,255,255,0.88) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(212,175,55,0.3) !important;
-    border-radius: 14px !important;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.6) inset !important;
-    margin: 16px !important;
+    background: rgba(255,252,246,0.95) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 2px solid var(--iMap-ink, #0E0D0B) !important;
+    border-radius: 0 !important;
+    box-shadow: 3px 3px 0 var(--iMap-theme, #0E0D0B) !important;
+    margin: 14px !important;
     overflow: hidden;
   }
-
   :global(.maplibregl-ctrl-group button) {
-    width: 36px !important;
-    height: 36px !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 0 !important;
   }
-
+  :global(.maplibregl-ctrl-group button + button) {
+    border-top: 1.5px solid var(--iMap-ink, #0E0D0B) !important;
+  }
   :global(.maplibregl-ctrl-group button:hover) {
-    background: rgba(212,175,55,0.08) !important;
+    background: var(--iMap-theme, #0E0D0B) !important;
+  }
+  :global(.maplibregl-ctrl-group button:hover .maplibregl-ctrl-icon) {
+    filter: invert(1);
   }
 
-  /* ── Marcador personalizado ────────────────────────────── */
-  :global(.map-marker-wrap) {
+  /* ══════════════════════════════════════════════════════════
+     CUSTOM MARKER — Brutalist
+     ══════════════════════════════════════════════════════════ */
+  :global(.iMap-marker) {
     position: relative;
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    width: 64px; height: 80px;
+    display: flex; align-items: flex-end; justify-content: center;
+    cursor: pointer;
   }
 
-  :global(.map-marker-pin) {
-    width: 48px;
-    height: 60px;
-    filter: drop-shadow(0 6px 18px rgba(212,175,55,0.55)) drop-shadow(0 2px 6px rgba(0,0,0,0.2));
-    animation: marker-float 3.5s ease-in-out infinite;
+  :global(.iMap-marker__pin) {
+    position: relative;
+    width: 54px; height: 70px;
+    filter: drop-shadow(0 6px 14px rgba(14,13,11,0.45));
+    animation: iMap-marker-float 3s ease-in-out infinite;
   }
-
-  @keyframes marker-float {
+  @keyframes iMap-marker-float {
     0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-6px); }
+    50%       { transform: translateY(-8px); }
   }
 
-  :global(.map-marker-pulse) {
+  :global(.iMap-marker__rings) {
     position: absolute;
-    bottom: -6px;
+    bottom: -2px;
     left: 50%;
     transform: translateX(-50%);
-    width: 28px;
-    height: 10px;
-    background: radial-gradient(ellipse, rgba(212,175,55,0.5) 0%, transparent 70%);
-    animation: pulse-shadow 3.5s ease-in-out infinite;
+    width: 90px; height: 90px;
+    pointer-events: none;
   }
 
-  @keyframes pulse-shadow {
-    0%, 100% { transform: translateX(-50%) scale(1);    opacity: 0.5; }
-    50%       { transform: translateX(-50%) scale(0.65); opacity: 0.2; }
-  }
-
-  :global(.map-label-badge) {
+  :global(.iMap-marker__ring) {
     position: absolute;
-    top: -62px;
+    top: 50%; left: 50%;
+    width: 60px; height: 60px;
+    border: 2px solid;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0;
+    animation: iMap-marker-ring 3s ease-out infinite;
+  }
+  :global(.iMap-marker__ring--2) { animation-delay: 1s; }
+  :global(.iMap-marker__ring--3) { animation-delay: 2s; }
+
+  @keyframes iMap-marker-ring {
+    0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0.85; }
+    100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+  }
+
+  :global(.iMap-marker__label) {
+    position: absolute;
+    top: -38px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1.5px solid var(--gold, #d4af37);
-    border-radius: 20px;
-    padding: 8px 20px;
-    white-space: nowrap;
-    color: #111;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    background: #0E0D0B;
+    color: #FFFCF6;
+    padding: .5rem 1rem;
+    border: 2px solid;
+    box-shadow: 3px 3px 0 currentColor;
+    font-family: monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .2em;
     text-transform: uppercase;
-    box-shadow:
-      0 12px 40px rgba(0,0,0,0.12),
-      0 0 20px rgba(212,175,55,0.18);
-    animation: badge-enter 0.8s cubic-bezier(0.2,1,0.3,1) both;
-    z-index: 200;
+    white-space: nowrap;
+    z-index: 100;
+    animation: iMap-marker-label-in .6s cubic-bezier(.16,1,.3,1) both;
   }
-
-  :global(.map-label-badge::after) {
+  :global(.iMap-marker__label::after) {
     content: '';
     position: absolute;
-    bottom: -7px;
-    left: 50%;
+    bottom: -8px; left: 50%;
     transform: translateX(-50%);
-    width: 12px;
-    height: 7px;
-    background: rgba(255,255,255,0.92);
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    border-left: 1.5px solid var(--gold, #d4af37);
-    border-right: 1.5px solid var(--gold, #d4af37);
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid currentColor;
   }
-
-  @keyframes badge-enter {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.88); }
-    to   { opacity: 1; transform: translateX(-50%) translateY(0)    scale(1); }
+  @keyframes iMap-marker-label-in {
+    from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 </style>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" is:inline></script>
 
 <script is:inline>
-  function initMaps() {
+  function initIMaps() {
     if (typeof maplibregl === 'undefined') {
-      setTimeout(initMaps, 150);
+      setTimeout(initIMaps, 150);
       return;
     }
 
-    document.querySelectorAll('.maplibre-map:not(.initialized)').forEach(function(container) {
+    document.querySelectorAll('.iMap__canvas:not(.initialized)').forEach(function(container) {
       container.classList.add('initialized');
 
       var center  = JSON.parse(container.dataset.center  || '[0,0]');
@@ -367,6 +480,9 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
       var pitch   = parseFloat(container.dataset.pitch   || '25');
       var bearing = parseFloat(container.dataset.bearing || '-15');
       var label   = container.dataset.label || '';
+      var initial = container.dataset.initial || 'A';
+      var theme   = container.dataset.theme || '#0E0D0B';
+      var themeD  = container.dataset.themeD || theme;
 
       var map = new maplibregl.Map({
         container: container,
@@ -397,56 +513,58 @@ const mapId = `map-${Math.random().toString(36).substring(7)}`;
         pitch: pitch,
         bearing: bearing,
         attributionControl: false,
-        logoPosition: 'bottom-left'
+        logoPosition: 'bottom-right'
       });
 
-      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
 
       map.on('load', function() {
-        /* ── Marcador premium ── */
+        /* ── Marcador brutal ── */
         var el = document.createElement('div');
-        el.className = 'map-marker-wrap';
-        el.innerHTML = [
-          label ? '<div class="map-label-badge">' + label.toUpperCase() + '</div>' : '',
-          '<svg class="map-marker-pin" viewBox="0 0 48 60" fill="none" xmlns="http://www.w3.org/2000/svg">',
-            '<defs>',
-              '<linearGradient id="pg-' + container.id + '" x1="0" y1="0" x2="0" y2="60" gradientUnits="userSpaceOnUse">',
-                '<stop offset="0%" stop-color="#fff3b0"/>',
-                '<stop offset="55%" stop-color="#d4af37"/>',
-                '<stop offset="100%" stop-color="#a07d15"/>',
-              '</linearGradient>',
-              '<radialGradient id="rg-' + container.id + '" cx="40%" cy="35%">',
-                '<stop offset="0%" stop-color="rgba(255,255,255,0.6)"/>',
-                '<stop offset="100%" stop-color="rgba(255,255,255,0)"/>',
-              '</radialGradient>',
-              '<filter id="glow-' + container.id + '">',
-                '<feGaussianBlur stdDeviation="2" result="blur"/>',
-                '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>',
-              '</filter>',
-            '</defs>',
-            '<path d="M24 0C10.75 0 0 10.75 0 24c0 16 24 36 24 36s24-20 24-36C48 10.75 37.25 0 24 0z" fill="url(#pg-' + container.id + ')" filter="url(#glow-' + container.id + ')"/>',
-            '<path d="M24 0C10.75 0 0 10.75 0 24c0 16 24 36 24 36s24-20 24-36C48 10.75 37.25 0 24 0z" fill="url(#rg-' + container.id + ')"/>',
-            '<circle cx="24" cy="24" r="10" fill="white" opacity="0.95"/>',
-            '<circle cx="24" cy="24" r="6"  fill="#d4af37"/>',
-            '<circle cx="21" cy="21" r="2"  fill="white" opacity="0.7"/>',
-          '</svg>',
-          '<div class="map-marker-pulse"></div>'
-        ].join('');
+        el.className = 'iMap-marker';
+
+        var pinHTML = ''
+          + '<div class="iMap-marker__rings">'
+          +   '<div class="iMap-marker__ring iMap-marker__ring--1" style="border-color:' + theme + '"></div>'
+          +   '<div class="iMap-marker__ring iMap-marker__ring--2" style="border-color:' + theme + '"></div>'
+          +   '<div class="iMap-marker__ring iMap-marker__ring--3" style="border-color:' + theme + '"></div>'
+          + '</div>'
+          + (label ? '<div class="iMap-marker__label" style="color:' + theme + '">★ ' + label.toUpperCase() + ' ★</div>' : '')
+          + '<svg class="iMap-marker__pin" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">'
+          +   '<defs>'
+          +     '<linearGradient id="iMap-grad-' + container.id + '" x1="0" y1="0" x2="0" y2="70" gradientUnits="userSpaceOnUse">'
+          +       '<stop offset="0%" stop-color="' + theme + '"/>'
+          +       '<stop offset="100%" stop-color="' + themeD + '"/>'
+          +     '</linearGradient>'
+          +   '</defs>'
+          // Sombra brutal (offset)
+          +   '<path d="M27 4 C13 4 4 14 4 26 C 4 44 27 64 27 64 C 27 64 50 44 50 26 C 50 14 41 4 27 4 Z" fill="#0E0D0B" transform="translate(3 3)"/>'
+          // Pin principal
+          +   '<path d="M27 4 C13 4 4 14 4 26 C 4 44 27 64 27 64 C 27 64 50 44 50 26 C 50 14 41 4 27 4 Z" fill="url(#iMap-grad-' + container.id + ')" stroke="#0E0D0B" stroke-width="3"/>'
+          // Círculo inner blanco
+          +   '<circle cx="27" cy="26" r="13" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>'
+          // Inicial
+          +   '<text x="27" y="32" text-anchor="middle" font-family="\'Bricolage Grotesque\', serif" font-size="16" font-weight="800" fill="#0E0D0B">' + initial + '</text>'
+          // Star debajo de la inicial
+          +   '<text x="27" y="48" text-anchor="middle" font-family="monospace" font-size="6" fill="#FFFCF6" letter-spacing="1.5">★ ★ ★</text>'
+          + '</svg>';
+
+        el.innerHTML = pinHTML;
 
         new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat(center)
           .addTo(map);
 
-        /* Redimensionar tras render */
+        /* Resize tras render */
         setTimeout(function() { map.resize(); }, 400);
       });
     });
   }
 
-  document.addEventListener('astro:page-load', initMaps);
+  document.addEventListener('astro:page-load', initIMaps);
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMaps);
+    document.addEventListener('DOMContentLoaded', initIMaps);
   } else {
-    initMaps();
+    initIMaps();
   }
 </script>
