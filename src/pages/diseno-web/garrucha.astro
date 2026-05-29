@@ -1,0 +1,2164 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'garrucha');
+
+const title = 'Diseño Web en Garrucha | Puerto Pesquero, Gamba Roja y Hostelería · Almería';
+const description = 'Agencia de diseño web en Garrucha, el puerto pesquero más famoso de Almería. Webs para restaurantes de gamba roja, hoteles del paseo marítimo, comercio local y servicios náuticos. SEO local, reservas directas y multiidioma para turismo gastronómico.';
+const canonical = 'https://platanitorico.com/diseno-web/garrucha/';
+
+// Sectores específicos de Garrucha
+const sectores = [
+  { nombre: 'Restaurantes y Marisquerías', stat: '#1',  statLabel: 'búsquedas "gamba roja"',  desc: 'La gamba roja de Garrucha atrae comensales de toda España. Restaurantes y marisquerías del Puerto necesitan web con carta visual, sistema de reservas y SEO local para captar las miles de búsquedas mensuales de "gamba roja Garrucha".', tags: ['Carta visual','Reservas online','SEO "gamba roja"','Google Maps #1'] },
+  { nombre: 'Hoteles y apartamentos',       stat: '+40%',statLabel: 'reservas directas',       desc: 'Hoteles y apartamentos del paseo marítimo: motor de reservas propio para eliminar comisiones del 15-20% de Booking y Airbnb. Multiidioma para captar turismo nacional e internacional.', tags: ['Motor reservas propio','Sin comisiones','Multiidioma','Galería pro'] },
+  { nombre: 'Comercio y náutica',           stat: '24/7',statLabel: 'tu tienda online',        desc: 'Comercio tradicional, tiendas de pesca, talleres náuticos y servicios portuarios. Webs profesionales con e-commerce, catálogo y SEO local para Garrucha.', tags: ['E-commerce','Catálogo náutico','SEO local','Google Business'] },
+  { nombre: 'Servicios profesionales',      stat: '+60%',statLabel: 'leads cualificados',      desc: 'Gestorías, clínicas, despachos y profesionales liberales que sirven a Garrucha, Vera y todo el Levante. Webs que transmiten autoridad y convierten.', tags: ['Landing captación','Formularios','Google Business','Trust building'] },
+  { nombre: 'Actividades náuticas',         stat: 'x3',  statLabel: 'reservas online',         desc: 'Empresas de pesca deportiva, charters, paseos en barco, snorkel y excursiones. Webs con reservas online, calendario de actividades y galería 4K que vende sola.', tags: ['Reservas calendario','Galería 4K','Multiidioma','Pasarela pago'] },
+  { nombre: 'Productores y cooperativas',   stat: 'B2B', statLabel: 'venta a HORECA',          desc: 'Cofradías de pescadores, cooperativas y distribuidores. Plataformas B2B para hostelería con catálogo, fichas de producto, pedidos online y traceability.', tags: ['B2B HORECA','Catálogo trazable','Pedidos online','Lonja digital'] },
+];
+
+// Cocina marina típica
+const platos = [
+  { plato: 'Gamba Roja',           desc: 'A la plancha · con un poco de sal · cero adornos',     temp: '★★★★★', color: 'gamba'  },
+  { plato: 'Arroz a Banda',        desc: 'Caldo de pescado, sofrito, arroz seco',                temp: '★★★★',  color: 'navy'   },
+  { plato: 'Pulpo a la brasa',     desc: 'Tradición pescador · brasas y pimentón',                temp: '★★★★',  color: 'copper' },
+  { plato: 'Boquerones en vinagre', desc: 'Aperitivo clásico · marinados en casa',                temp: '★★★★',  color: 'plata'  },
+];
+
+// 4 razones diferenciales de Garrucha
+const diferenciales = [
+  { title: 'Producto estrella',       desc: 'La gamba roja de Garrucha es la más cotizada de España. Más de 5.000 búsquedas mensuales en Google. Bien posicionado, captas turistas gastronómicos de toda la península.' },
+  { title: 'Puerto pesquero activo',  desc: 'No es turismo de plástico — es un puerto pesquero real con flota, lonja diaria y oficios tradicionales. Esa autenticidad vende — y bien comunicada en la web, multiplica reservas.' },
+  { title: 'Paseo marítimo vivo',     desc: 'Restauración, terrazas, comercio y hoteles concentrados en 1,5 km de paseo. Densidad de negocios alta — la competencia online aún es baja. Quien se mueve primero, gana.' },
+  { title: 'Levante consolidado',     desc: 'A 5 min de Vera, 15 de Mojácar. Comarca con economía diversificada y demanda alta de servicios digitales todo el año, no solo en agosto.' },
+];
+
+// Datos de la Lonja
+const lonja = [
+  { k: 'INAUGURADA',     v: '1985 · ampliada 2008' },
+  { k: 'SUBASTA',        v: 'L–V · 17:00–19:00 · al lonjero electrónico' },
+  { k: 'ESPECIE TOP',    v: 'Gamba roja (Aristeus antennatus)' },
+  { k: 'PRECIO MÁXIMO',  v: 'Hasta 200 €/kg en lonja' },
+  { k: 'FLOTA',          v: '40+ embarcaciones · arrastre y artes menores' },
+  { k: 'DENOMINACIÓN',   v: 'IGP en trámite · Marca de Garantía' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión en el puerto',    eta: '1–2 días',  body: 'Visitamos tu negocio en Garrucha. Si es restaurante, vemos la cocina. Si es hotel, vemos la ubicación. Entendemos el negocio en su contexto real.', deliverable: 'Briefing + análisis competencia' },
+  { num: '02', title: 'Diseño marinero',           eta: '3–5 días',  body: 'Diseño que respira mar, paseo y autenticidad pesquera. Sin plantillas. Tipografía editorial, fotos de calidad, identidad propia.',           deliverable: 'Prototipo Figma · aprobado' },
+  { num: '03', title: 'Desarrollo + reservas',      eta: '5–10 días', body: 'Astro ultrarrápido, sistema de reservas integrado, multiidioma si aplica, Core Web Vitals verde, accesibilidad AA.',                       deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + SEO local',    eta: '1–2 días',  body: 'Publicamos, configuramos Google Business Profile optimizado para Garrucha y palabras clave gastronómicas, e indexamos en Search Console.', deliverable: 'Sitio LIVE + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Paco Rueda',    negocio: 'Restaurante junto a la lonja',    texto: 'Somos el restaurante de gamba roja más buscado en Google en Garrucha. Antes no aparecíamos. La web nueva con las fotos de nuestra cocina y el sistema de reservas lo cambió todo. Los fines de semana hay cola.' },
+  { nombre: 'Marina Torres', negocio: 'Apartamentos · primera línea',     texto: 'Dependíamos de Airbnb para todo. Ahora con motor de reservas propio en la web, el 40% de los clientes reservan directo. Sin comisiones. Y los clientes directos repiten mucho más.' },
+  { nombre: 'Andrés Pérez',  negocio: 'Marisquería del Puerto',           texto: 'En agosto vendemos solo. El problema es de octubre a mayo. Con SEO de gamba roja y reservas online captamos turistas gastronómicos todo el año. Hemos triplicado los meses bajos.' },
+];
+
+const faq = [
+  { q: '¿Podéis hacer una web para mi restaurante en Garrucha que aparezca en búsquedas de "gamba roja"?', a: 'Sí, es una de nuestras especialidades. Trabajamos SEO específico para que tu restaurante aparezca primero en "gamba roja Garrucha", "marisquería Garrucha", "restaurante pescado puerto Garrucha" y búsquedas similares con miles de búsquedas/mes.' },
+  { q: '¿Cuánto cuesta una web con reservas para hostelería en Garrucha?',                                 a: 'Web de restaurante con carta digital y formulario de reservas: desde 550€. Con pasarela de pago para grupos o reservas con señal: desde 800€. Hosting gratuito siempre. Presupuesto cerrado sin sorpresas.' },
+  { q: '¿Hacéis reuniones presenciales en Garrucha?',                                                     a: 'Por supuesto. Nuestra sede está en Vera, a 5 min de Garrucha. Podemos citarnos en tu local, en el paseo marítimo o en nuestro estudio. Sin compromiso.' },
+  { q: '¿Tenéis experiencia con marketing gastronómico y SEO local?',                                     a: 'Sí. Llevamos años posicionando restaurantes, marisquerías y hoteles en Garrucha, Vera y Mojácar. SEO local + Google Business Profile + reseñas + multiidioma para captar turistas nacionales e internacionales.' },
+  { q: '¿Podéis hacer la web multiidioma para turistas?',                                                  a: 'Sí. Para hoteles y restaurantes del puerto recomendamos al menos ES + EN. Si captas mucho turismo francés o alemán, añadimos esos idiomas. SEO optimizado en cada idioma — no traducción automática.' },
+  { q: '¿En cuánto tiempo tengo lista mi web en Garrucha?',                                               a: 'Web corporativa o restaurante: 1–2 semanas. Hotel con reservas o e-commerce: 2–4 semanas. Cumplimos plazos siempre que la información llegue a tiempo (te damos calendario).' },
+  { q: '¿Ofrecéis sistema de reservas directas para eliminar comisiones de Booking?',                     a: 'Sí. Integramos motores de reservas directas en tu web para que tus clientes reserven sin pasar por Booking ni TripAdvisor. Eliminas comisiones del 15–20% y tienes el control total de los datos de tus clientes.' },
+  { q: '¿Trabajáis con cofradías y cooperativas de pescadores?',                                          a: 'Sí. Desarrollamos plataformas B2B para venta a HORECA, catálogos trazables, pedidos online y "lonja digital" para distribuir la captura a restaurantes con pedido y entrega organizada.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Garrucha","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Garrucha","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-garrucha.jpg","address":{"@type":"PostalAddress","addressLocality":"Garrucha","addressRegion":"Almería","postalCode":"04630","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.1825,"longitude":-1.8228},"areaServed":["Garrucha","Vera","Mojácar","Levante Almeriense"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"54","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Garrucha","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-garrucha.jpg"
+  imageAlt="Diseño web en Garrucha - Puerto pesquero y gamba roja"
+  type="service"
+  keywords="diseño web garrucha, gamba roja garrucha, web restaurante garrucha, hotel garrucha, puerto pesquero almería, seo gastronómico"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="gr">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — PUERTO PESQUERO                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-hero">
+      <div class="container-brutal">
+
+        <header class="gr-hero__top">
+          <span class="text-meta">N.º 023 — Levante Almeriense · Puerto</span>
+          <span class="text-meta gr-hero__status">
+            <span class="gr-pulse"></span>
+            ★ PUERTO PESQUERO · LONJA ACTIVA L–V ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="gr-hero__grid">
+
+          <div class="gr-hero__intro">
+            <span class="text-meta gr-hero__chapter">Cap. 01 / Garrucha · Almería</span>
+            <h1 class="gr-hero__title heading-display">
+              Diseño web para el
+              <em class="heading-editorial">puerto pesquero</em>
+              <span class="gr-hero__title-stamp">de la Gamba Roja.</span>
+            </h1>
+
+            <p class="gr-hero__lead">
+              <strong>Garrucha</strong> es la capital española de la
+              <em>gamba roja</em>. Su puerto, su lonja y su paseo marítimo
+              concentran restaurantes, marisquerías y hoteles que viven del
+              turismo gastronómico. <strong>Tu web tiene que estar a la altura.</strong>
+            </p>
+
+            <div class="gr-hero__cta">
+              <a href="/contacto" class="gr-btn gr-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#gamba" class="gr-btn gr-btn--ghost">
+                La Gamba Roja ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="gr-kpis">
+              <li class="gr-kpi gr-kpi--gamba">
+                <span class="gr-kpi__v text-mono">#1</span>
+                <span class="gr-kpi__l">Gamba roja España</span>
+              </li>
+              <li class="gr-kpi gr-kpi--navy">
+                <span class="gr-kpi__v text-mono">40<small>+</small></span>
+                <span class="gr-kpi__l">Embarcaciones flota</span>
+              </li>
+              <li class="gr-kpi gr-kpi--copper">
+                <span class="gr-kpi__v text-mono">1,5<small>km</small></span>
+                <span class="gr-kpi__l">Paseo marítimo</span>
+              </li>
+              <li class="gr-kpi gr-kpi--ink">
+                <span class="gr-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="gr-kpi__l">54 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — perfil portuario + imagen + ancla */}
+          <aside class="gr-hero__postcard" aria-hidden="true">
+            <div class="gr-postcard">
+
+              <header class="gr-postcard__head">
+                <span class="text-mono">GARRUCHA · 04630 · ALMERÍA</span>
+                <span class="text-mono">37.183° N · 1.823° W</span>
+              </header>
+
+              {/* Perfil del puerto SVG */}
+              <div class="gr-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="gr-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#0A3D62"/>
+                      <stop offset="100%" stop-color="#4A7BA8"/>
+                    </linearGradient>
+                  </defs>
+                  {/* Cielo navy */}
+                  <rect width="540" height="220" fill="url(#gr-sky)"/>
+
+                  {/* Estrellas */}
+                  <circle cx="60" cy="30" r="1.5" fill="#FFFBF0"/>
+                  <circle cx="120" cy="50" r="1" fill="#FFFBF0"/>
+                  <circle cx="450" cy="25" r="1.5" fill="#FFFBF0"/>
+                  <circle cx="500" cy="40" r="1" fill="#FFFBF0"/>
+
+                  {/* Luna */}
+                  <circle cx="430" cy="55" r="16" fill="#FFFBF0"/>
+                  <circle cx="436" cy="50" r="14" fill="#0A3D62"/>
+
+                  {/* Faro a la derecha */}
+                  <g transform="translate(480, 70)">
+                    <rect x="-4" y="0" width="8" height="80" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="-6" y="80" width="12" height="6" fill="#0E0D0B"/>
+                    <path d="M -6 0 L 0 -10 L 6 0 Z" fill="#D9342C" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="-3" y="-6" width="6" height="3" fill="#FFD600"/>
+                    {/* Halo */}
+                    <path d="M 0 -4 L -50 -20 L 0 -10 Z" fill="#FFD600" opacity="0.35"/>
+                  </g>
+
+                  {/* Mar / olas */}
+                  <path d="M 0 140 Q 30 130 60 140 T 120 140 T 180 140 T 240 140 T 300 140 T 360 140 T 420 140 T 480 140 T 540 140 L 540 220 L 0 220 Z" fill="#0A3D62" stroke="#0E0D0B" stroke-width="2.5"/>
+                  <path d="M 0 154 Q 30 144 60 154 T 120 154 T 180 154 T 240 154 T 300 154 T 360 154 T 420 154 T 480 154 T 540 154" fill="none" stroke="#9FB4C1" stroke-width="1.5" opacity="0.7"/>
+                  <path d="M 0 168 Q 30 160 60 168 T 120 168 T 180 168 T 240 168 T 300 168 T 360 168 T 420 168 T 480 168 T 540 168" fill="none" stroke="#9FB4C1" stroke-width="1" opacity="0.5"/>
+
+                  {/* MUELLE del puerto */}
+                  <rect x="60" y="138" width="160" height="14" fill="#B87333" stroke="#0E0D0B" stroke-width="2"/>
+                  {/* Bolardos */}
+                  <rect x="78" y="132" width="6" height="8" fill="#0E0D0B"/>
+                  <rect x="118" y="132" width="6" height="8" fill="#0E0D0B"/>
+                  <rect x="158" y="132" width="6" height="8" fill="#0E0D0B"/>
+                  <rect x="198" y="132" width="6" height="8" fill="#0E0D0B"/>
+
+                  {/* BARCO PESQUERO grande */}
+                  <g transform="translate(140, 80)">
+                    {/* Casco */}
+                    <path d="M -50 50 L 60 50 L 50 70 L -40 70 Z" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <line x1="-40" y1="58" x2="50" y2="58" stroke="#D9342C" stroke-width="3"/>
+                    {/* Cabina */}
+                    <rect x="-20" y="30" width="40" height="20" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="-15" y="34" width="12" height="8" fill="#0A3D62"/>
+                    <rect x="3" y="34" width="12" height="8" fill="#0A3D62"/>
+                    {/* Mástil */}
+                    <line x1="0" y1="30" x2="0" y2="0" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Cabecera */}
+                    <circle cx="0" cy="0" r="3" fill="#D9342C"/>
+                    {/* Antena pesca */}
+                    <line x1="20" y1="30" x2="38" y2="6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <line x1="-20" y1="30" x2="-38" y2="6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Red colgando */}
+                    <g stroke="#C8A87C" stroke-width="0.8" fill="none">
+                      <path d="M 28 14 L 28 28 M 32 14 L 32 28 M 36 14 L 36 28 M 24 14 L 24 28"/>
+                      <path d="M 24 18 L 36 18 M 24 22 L 36 22 M 24 26 L 36 26"/>
+                    </g>
+                  </g>
+
+                  {/* Pequeña barca a la izquierda */}
+                  <g transform="translate(40, 145)">
+                    <path d="M -20 0 L 20 0 L 16 12 L -16 12 Z" fill="#D9342C" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="0" y1="0" x2="0" y2="-18" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 0 -16 L 12 -8 L 0 -4 Z" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Otra barca derecha */}
+                  <g transform="translate(290, 142)">
+                    <path d="M -18 0 L 18 0 L 14 12 L -14 12 Z" fill="#0A3D62" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="0" y1="0" x2="0" y2="-14" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 0 -12 L 10 -6 L 0 -2 Z" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Gaviotas en cielo */}
+                  <g fill="none" stroke="#FFFBF0" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M 200 40 Q 205 36 210 40 Q 215 36 220 40"/>
+                    <path d="M 260 28 Q 264 24 268 28 Q 272 24 276 28"/>
+                    <path d="M 340 50 Q 344 46 348 50 Q 352 46 356 50"/>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="gr-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-garrucha.jpg"
+                  alt="Garrucha, puerto pesquero y paseo marítimo"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="gr-postcard__img"
+                />
+                {/* Ancla flotante */}
+                <div class="gr-postcard__anchor" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#0A3D62"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#FFFBF0" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    {/* Ancla */}
+                    <g fill="none" stroke="#FFFBF0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="40" cy="22" r="4" fill="none"/>
+                      <line x1="40" y1="26" x2="40" y2="58"/>
+                      <line x1="32" y1="34" x2="48" y2="34"/>
+                      <path d="M 22 50 Q 22 60 40 60 Q 58 60 58 50"/>
+                      <line x1="22" y1="50" x2="18" y2="46"/>
+                      <line x1="58" y1="50" x2="62" y2="46"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="gr-postcard__tag">
+                  <span class="text-mono">★ PUERTO PESQUERO ★</span>
+                </div>
+              </div>
+
+              {/* Datos puerto */}
+              <div class="gr-postcard__data">
+                <div class="gr-postcard__data-row">
+                  <span class="text-mono">CALADO</span>
+                  <span class="text-mono gr-postcard__data-v">4,5 m</span>
+                </div>
+                <div class="gr-postcard__data-row">
+                  <span class="text-mono">FLOTA</span>
+                  <span class="text-mono gr-postcard__data-v">40+ barcos</span>
+                </div>
+                <div class="gr-postcard__data-row">
+                  <span class="text-mono">LONJA</span>
+                  <span class="text-mono gr-postcard__data-v">Lunes a viernes · 17h</span>
+                </div>
+                <div class="gr-postcard__data-row">
+                  <span class="text-mono">PASEO</span>
+                  <span class="text-mono gr-postcard__data-v">1,5 km · Mediterráneo</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="gr-marquee">
+        <div class="gr-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ GAMBA ROJA ★ LONJA DIARIA ★ PUERTO PESQUERO ★ PASEO MARÍTIMO ★ COCINA MARINA ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* GAMBA ROJA — sección flagship                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-gamba-section" id="gamba">
+      <div class="container-brutal">
+        <div class="gr-gamba-grid">
+
+          <div class="gr-gamba-l">
+            <span class="text-meta gr-gamba-chapter">Cap. 02 / La estrella</span>
+            <h2 class="gr-gamba-title heading-display">
+              La
+              <em class="heading-editorial">Gamba Roja,</em>
+              joya de Garrucha.
+            </h2>
+            <p class="gr-gamba-lead">
+              <em>Aristeus antennatus</em>. <strong>Hasta 200 €/kg</strong>
+              en lonja en sus mejores días. La pescan a más de 800 m de
+              profundidad en el Mediterráneo y se subasta cada tarde en la
+              Lonja del Puerto. <strong>Restaurantes de toda España vienen a
+              comprarla aquí.</strong>
+            </p>
+            <ul class="gr-gamba-facts">
+              <li>
+                <span class="text-mono gr-gamba-facts__k">ESPECIE</span>
+                <span class="gr-gamba-facts__v"><em>Aristeus antennatus</em></span>
+              </li>
+              <li>
+                <span class="text-mono gr-gamba-facts__k">CAPTURA</span>
+                <span class="gr-gamba-facts__v">Arrastre · 800 m profundidad</span>
+              </li>
+              <li>
+                <span class="text-mono gr-gamba-facts__k">PRECIO</span>
+                <span class="gr-gamba-facts__v">Hasta 200 €/kg en lonja</span>
+              </li>
+              <li>
+                <span class="text-mono gr-gamba-facts__k">TEMPORADA</span>
+                <span class="gr-gamba-facts__v">Veda en mayo · resto del año</span>
+              </li>
+              <li>
+                <span class="text-mono gr-gamba-facts__k">RECETA</span>
+                <span class="gr-gamba-facts__v">Plancha · sal gorda · 30 segundos</span>
+              </li>
+              <li>
+                <span class="text-mono gr-gamba-facts__k">SEO</span>
+                <span class="gr-gamba-facts__v">5.000+ búsquedas/mes en Google</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Gamba roja GIGANTE */}
+          <aside class="gr-gamba-r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" width="100%" height="100%">
+              <defs>
+                <radialGradient id="gr-gamba-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stop-color="#D9342C" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#D9342C" stop-opacity="0"/>
+                </radialGradient>
+                <pattern id="gr-net" width="16" height="16" patternUnits="userSpaceOnUse">
+                  <path d="M 0 0 L 16 16 M 16 0 L 0 16" stroke="rgba(200,168,124,0.25)" stroke-width="1"/>
+                </pattern>
+              </defs>
+
+              {/* Halo rojo */}
+              <circle cx="160" cy="160" r="150" fill="url(#gr-gamba-glow)"/>
+
+              {/* Plato circular */}
+              <circle cx="160" cy="180" r="120" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="3"/>
+              <circle cx="160" cy="180" r="110" fill="none" stroke="#0E0D0B" stroke-width="1" stroke-dasharray="2 2" opacity="0.4"/>
+              <circle cx="160" cy="180" r="120" fill="url(#gr-net)"/>
+
+              {/* GAMBA ROJA grande */}
+              <g class="gr-gamba-anim" transform="translate(160, 180)">
+                {/* Antenas largas */}
+                <g fill="none" stroke="#8E1F1A" stroke-width="2.5" stroke-linecap="round">
+                  <path d="M 60 -10 Q 100 -40 130 -50"/>
+                  <path d="M 60 0 Q 110 -20 140 -20"/>
+                  <path d="M 60 -5 Q 105 -32 138 -38"/>
+                </g>
+
+                {/* Cuerpo gamba — segmentos */}
+                <g stroke="#0E0D0B" stroke-width="2" stroke-linejoin="round">
+                  {/* Cabeza */}
+                  <path d="M 60 0 Q 70 -20 50 -25 Q 30 -22 20 -10 Q 35 0 60 0 Z" fill="#D9342C"/>
+                  {/* Ojo */}
+                  <circle cx="55" cy="-12" r="3" fill="#0E0D0B"/>
+                  <circle cx="56" cy="-13" r="1" fill="#FFFBF0"/>
+
+                  {/* Cuerpo segmentado */}
+                  <path d="M 20 -10 Q 0 -16 -20 -10 Q -10 0 20 -2 Z" fill="#E14B43"/>
+                  <path d="M -20 -10 Q -38 -8 -52 -2 Q -38 6 -20 0 Z" fill="#D9342C"/>
+                  <path d="M -52 -2 Q -68 0 -80 8 Q -66 14 -52 8 Z" fill="#E14B43"/>
+                  <path d="M -80 8 Q -94 12 -104 22 Q -90 26 -80 18 Z" fill="#D9342C"/>
+
+                  {/* Cola en abanico */}
+                  <path d="M -104 22 L -130 18 L -125 28 L -135 32 L -125 36 L -130 46 L -110 36 Z" fill="#D9342C"/>
+
+                  {/* Patas / pleópodos */}
+                  <g fill="#8E1F1A" stroke="#0E0D0B" stroke-width="1.5">
+                    <path d="M 10 4 L 6 16 L 14 16 Z"/>
+                    <path d="M -10 6 L -14 18 L -6 18 Z"/>
+                    <path d="M -30 6 L -34 20 L -26 20 Z"/>
+                    <path d="M -50 8 L -54 20 L -46 20 Z"/>
+                    <path d="M -70 12 L -74 22 L -66 22 Z"/>
+                  </g>
+
+                  {/* Detalles segmentos */}
+                  <g fill="none" stroke="#0E0D0B" stroke-width="1.2">
+                    <path d="M 20 -8 Q 20 0 20 0"/>
+                    <path d="M -20 -8 Q -20 0 -20 0"/>
+                    <path d="M -52 -2 Q -52 6 -52 6"/>
+                    <path d="M -80 6 Q -80 14 -80 14"/>
+                  </g>
+
+                  {/* Pinzas pequeñas frontales */}
+                  <path d="M 30 4 L 42 16 M 30 4 L 44 8" stroke="#0E0D0B" stroke-width="2" fill="none"/>
+                  <path d="M 42 16 Q 44 18 46 16 L 44 14 Z" fill="#D9342C"/>
+                </g>
+              </g>
+
+              {/* Sal granos */}
+              <g fill="#FFFBF0" stroke="#0E0D0B" stroke-width="0.5">
+                <circle cx="60"  cy="110" r="2"/>
+                <circle cx="240" cy="120" r="2"/>
+                <circle cx="80"  cy="240" r="2"/>
+                <circle cx="220" cy="250" r="2"/>
+                <circle cx="50"  cy="170" r="1.5"/>
+                <circle cx="265" cy="200" r="1.5"/>
+              </g>
+
+              {/* Limón en esquina */}
+              <g transform="translate(260, 90)">
+                <circle r="22" fill="#FFD600" stroke="#0E0D0B" stroke-width="2.5"/>
+                <circle r="22" fill="none" stroke="#0E0D0B" stroke-width="1" stroke-dasharray="2 2" opacity="0.45"/>
+                <line x1="-22" y1="0" x2="22" y2="0" stroke="#0E0D0B" stroke-width="1.5" opacity="0.5"/>
+                <line x1="0" y1="-22" x2="0" y2="22" stroke="#0E0D0B" stroke-width="1.5" opacity="0.5"/>
+              </g>
+
+              {/* Etiqueta firma */}
+              <text x="160" y="305" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B" letter-spacing="3">★ GAMBA ROJA · GARRUCHA · IGP ★</text>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* LA LONJA — datos                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-lonja-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--gr-copper)">Cap. 03 / La Lonja</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--gr-paper)">
+              La subasta
+              <em class="heading-editorial" style="color:var(--gr-gamba)">de cada tarde.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,251,240,0.75)">
+            La Lonja de Garrucha funciona <strong>al lonjero electrónico</strong>:
+            el precio baja, no sube. El primero que pulsa, se lleva la caja.
+            Restaurantes y distribuidores compiten en tiempo real cada tarde.
+          </p>
+        </header>
+
+        <div class="gr-lonja">
+          {/* Card subasta mock */}
+          <div class="gr-lonja-card">
+            <header class="gr-lonja-card__head">
+              <span class="text-mono">★ LONJA · 17:32 ★</span>
+              <span class="text-mono gr-lonja-card__live">EN VIVO</span>
+            </header>
+
+            <div class="gr-lonja-card__rows">
+              <div class="gr-lonja-card__row gr-lonja-card__row--top">
+                <span class="text-mono gr-lonja-card__lbl">SUBASTANDO AHORA</span>
+                <span class="gr-lonja-card__species">GAMBA ROJA · 1ª</span>
+                <span class="text-mono gr-lonja-card__price">158,00 €/kg</span>
+              </div>
+              <div class="gr-lonja-card__row">
+                <span class="text-mono gr-lonja-card__n">02</span>
+                <span class="gr-lonja-card__species">Pulpo</span>
+                <span class="text-mono gr-lonja-card__price gr-lonja-card__price--small">18,50 €/kg</span>
+              </div>
+              <div class="gr-lonja-card__row">
+                <span class="text-mono gr-lonja-card__n">03</span>
+                <span class="gr-lonja-card__species">Boquerón</span>
+                <span class="text-mono gr-lonja-card__price gr-lonja-card__price--small">6,20 €/kg</span>
+              </div>
+              <div class="gr-lonja-card__row">
+                <span class="text-mono gr-lonja-card__n">04</span>
+                <span class="gr-lonja-card__species">Calamar</span>
+                <span class="text-mono gr-lonja-card__price gr-lonja-card__price--small">22,00 €/kg</span>
+              </div>
+              <div class="gr-lonja-card__row">
+                <span class="text-mono gr-lonja-card__n">05</span>
+                <span class="gr-lonja-card__species">Cigalas</span>
+                <span class="text-mono gr-lonja-card__price gr-lonja-card__price--small">85,00 €/kg</span>
+              </div>
+            </div>
+
+            <footer class="gr-lonja-card__foot">
+              <span class="text-mono">★ COFRADÍA DE PESCADORES · GARRUCHA</span>
+            </footer>
+          </div>
+
+          {/* Data de la lonja */}
+          <ul class="gr-lonja-data">
+            {lonja.map((row) => (
+              <li>
+                <span class="text-mono gr-lonja-data__k">{row.k}</span>
+                <span class="gr-lonja-data__v">{row.v}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* COCINA MARINA                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-cocina-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 04 / Cocina marina</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Platos que
+              <em class="heading-editorial">se venden solos.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            La carta que los turistas vienen buscando. Tu web debe
+            <strong>fotografiarlos bien</strong>, posicionar la palabra
+            clave y permitir reservar. Tres cosas, bien hechas.
+          </p>
+        </header>
+
+        <ol class="gr-cocina">
+          {platos.map((p) => (
+            <li class={`gr-cocina__card gr-cocina__card--${p.color}`}>
+              <div class="gr-cocina__icon" aria-hidden="true">
+                {p.color === 'gamba' && (
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="36" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Mini gamba */}
+                    <g transform="translate(40, 40)">
+                      <path d="M 20 -4 Q 28 -14 12 -16 Q -4 -10 -10 -2 Q -22 4 -28 8 L -32 14 Q -28 18 -10 12 Q 0 8 20 -4 Z" fill="#D9342C" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <circle cx="14" cy="-8" r="1.5" fill="#0E0D0B"/>
+                      <path d="M 20 -6 Q 30 -16 36 -22" fill="none" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <path d="M 18 -2 Q 28 -10 34 -14" fill="none" stroke="#0E0D0B" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                )}
+                {p.color === 'navy' && (
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="36" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Plato de arroz */}
+                    <ellipse cx="40" cy="44" rx="26" ry="10" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/>
+                    <ellipse cx="40" cy="42" rx="26" ry="10" fill="none" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Granos arroz */}
+                    {Array.from({length: 12}).map((_, i) => (
+                      <ellipse cx={28 + (i%4)*8} cy={38 + Math.floor(i/4)*4} rx="1.5" ry="1" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="0.5"/>
+                    ))}
+                    {/* Gamba encima */}
+                    <path d="M 30 36 Q 42 32 50 36" fill="none" stroke="#D9342C" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="50" cy="36" r="2" fill="#D9342C"/>
+                  </svg>
+                )}
+                {p.color === 'copper' && (
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="36" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Pulpo */}
+                    <g transform="translate(40, 38)">
+                      <circle cx="0" cy="-4" r="14" fill="#B87333" stroke="#0E0D0B" stroke-width="2"/>
+                      <circle cx="-4" cy="-8" r="1.5" fill="#0E0D0B"/>
+                      <circle cx="4" cy="-8" r="1.5" fill="#0E0D0B"/>
+                      {/* Tentáculos */}
+                      <path d="M -12 6 Q -18 12 -14 18 Q -10 12 -8 6" fill="#B87333" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <path d="M -6 8 Q -10 16 -4 20 Q 0 14 -2 8" fill="#B87333" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <path d="M 4 8 Q 8 16 14 20 Q 8 14 8 8" fill="#B87333" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <path d="M 10 6 Q 16 12 14 18 Q 8 12 8 6" fill="#B87333" stroke="#0E0D0B" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                )}
+                {p.color === 'plata' && (
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="36" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Pez (boquerón) */}
+                    <g transform="translate(40, 40)">
+                      <path d="M -22 0 Q -10 -14 14 -8 L 20 0 L 14 8 Q -10 14 -22 0 Z" fill="#9FB4C1" stroke="#0E0D0B" stroke-width="2"/>
+                      <path d="M 20 0 L 30 -8 L 28 0 L 30 8 Z" fill="#9FB4C1" stroke="#0E0D0B" stroke-width="2"/>
+                      <circle cx="6" cy="-2" r="2" fill="#0E0D0B"/>
+                      <circle cx="6.5" cy="-2.5" r="0.8" fill="#FFFBF0"/>
+                      <path d="M -8 0 Q -2 -4 4 0" fill="none" stroke="#0E0D0B" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                )}
+              </div>
+              <h3 class="gr-cocina__plato heading-display">{p.plato}</h3>
+              <p class="gr-cocina__desc">{p.desc}</p>
+              <span class="gr-cocina__rating">{p.temp}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Sectores Garrucha</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">viven del mar.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con su propia estrategia digital. Cada uno con
+            SEO local, fotografía pro y sistemas de reserva o venta
+            que eliminan comisiones.
+          </p>
+        </header>
+
+        <ol class="gr-sec">
+          {sectores.map((s, i) => {
+            const colors = ['gamba', 'navy', 'copper', 'plata', 'cuerda', 'navy-d'];
+            return (
+              <li class={`gr-sec__card gr-sec__card--${colors[i]}`}>
+                <header class="gr-sec__head">
+                  <span class="text-mono gr-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="gr-sec__stat-box">
+                    <span class="gr-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="gr-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="gr-sec__title heading-display">{s.nombre}</h3>
+                <p class="gr-sec__desc">{s.desc}</p>
+                <ul class="gr-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="gr-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="gr-sec__foot">
+                  <a href="/contacto" class="gr-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA NÁUTICO                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-map-section">
+      <header class="gr-map-head">
+        <div class="container-brutal gr-map-head__inner">
+          <div>
+            <span class="text-meta gr-map-chapter">Cap. 06 / Cartografía</span>
+            <h2 class="heading-display gr-map-title">
+              Carta
+              <em class="heading-editorial">náutica.</em>
+            </h2>
+          </div>
+          <div class="gr-map-coords">
+            <span class="text-mono">37.183° N · 1.823° W</span>
+            <span class="text-mono">CALADO 4,5m · MEDITERRÁNEO · LEVANTE</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="gr-map-frame">
+        {/* Ancla esquina */}
+        <div class="gr-map-anchor gr-map-anchor--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <g fill="none" stroke="#FFFBF0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="30" cy="14" r="4"/>
+              <line x1="30" y1="18" x2="30" y2="46"/>
+              <line x1="22" y1="26" x2="38" y2="26"/>
+              <path d="M 14 42 Q 14 50 30 50 Q 46 50 46 42"/>
+              <line x1="14" y1="42" x2="10" y2="38"/>
+              <line x1="46" y1="42" x2="50" y2="38"/>
+            </g>
+          </svg>
+        </div>
+        <div class="gr-map-anchor gr-map-anchor--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            {/* Timón */}
+            <circle cx="30" cy="30" r="22" fill="none" stroke="#FFFBF0" stroke-width="3"/>
+            <circle cx="30" cy="30" r="8" fill="none" stroke="#FFFBF0" stroke-width="2.5"/>
+            {Array.from({length: 8}).map((_, i) => (
+              <line x1="30" y1="8" x2="30" y2="2" stroke="#FFFBF0" stroke-width="3" stroke-linecap="round" transform={`rotate(${i*45} 30 30)`}/>
+            ))}
+            {Array.from({length: 8}).map((_, i) => (
+              <line x1="30" y1="22" x2="30" y2="14" stroke="#FFFBF0" stroke-width="2.5" stroke-linecap="round" transform={`rotate(${i*45 + 22.5} 30 30)`}/>
+            ))}
+          </svg>
+        </div>
+
+        <div class="gr-map-wrap">
+          <InteractiveMap center={[-1.8228, 37.1825]} zoom={14} pitch={55} bearing={10} label="Garrucha" />
+        </div>
+
+        {/* Pin barco */}
+        <div class="gr-map-pin">
+          <svg viewBox="0 0 70 90" width="70" height="90" aria-hidden="true">
+            <path d="M 35 4 C 19 4 6 16 6 32 C 6 58 35 86 35 86 C 35 86 64 58 64 32 C 64 16 51 4 35 4 Z" fill="#D9342C" stroke="#0E0D0B" stroke-width="3"/>
+            <circle cx="35" cy="32" r="16" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+            {/* Mini barca */}
+            <g transform="translate(35, 32)">
+              <path d="M -10 4 L 10 4 L 8 10 L -8 10 Z" fill="#0A3D62" stroke="#0E0D0B" stroke-width="1.5"/>
+              <line x1="0" y1="4" x2="0" y2="-6" stroke="#0E0D0B" stroke-width="2"/>
+              <path d="M 0 -5 L 6 -1 L 0 1 Z" fill="#D9342C" stroke="#0E0D0B" stroke-width="1.2"/>
+            </g>
+          </svg>
+          <span class="gr-map-pin__label">GARRUCHA</span>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 07 / Por qué Garrucha</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que hace
+              <em class="heading-editorial">único este puerto.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Cuatro razones por las que tu web en Garrucha tiene un
+            potencial enorme si se trabaja bien el SEO gastronómico
+            y portuario.
+          </p>
+        </header>
+
+        <ol class="gr-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`gr-dif__item gr-dif__item--${i}`}>
+              <span class="text-mono gr-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display gr-dif__t">{d.title}</h3>
+              <p class="gr-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--gr-gamba)">Cap. 08 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--gr-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--gr-cuerda)">a tu web en Garrucha.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,251,240,0.75)">
+            Visitamos el negocio. Diseñamos pensando en Garrucha. Programamos
+            con reservas integradas. Lanzamos con SEO local desde el día 1.
+          </p>
+        </header>
+
+        <ol class="gr-proc">
+          {proceso.map((s) => (
+            <li class="gr-proc__step">
+              <header class="gr-proc__head">
+                <span class="text-mono gr-proc__num">{s.num}</span>
+                <span class="text-mono gr-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display gr-proc__t">{s.title}</h3>
+              <p class="gr-proc__body">{s.body}</p>
+              <footer class="gr-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Voces del puerto</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Garrucha
+              <em class="heading-editorial">que ya venden online.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="gr-pull">
+          <div class="gr-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="gr-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#D9342C" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#FFFBF0" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="gr-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFBF0" letter-spacing="2.5"><textPath href="#gr-pull-c" startOffset="0%">★ GAMBA ROJA ★ GARRUCHA · 2026 ★</textPath></text>
+              </g>
+              {/* Mini gamba */}
+              <g transform="translate(45, 45)">
+                <path d="M 12 -4 Q 18 -10 8 -10 Q -4 -6 -10 0 L -14 6 Q -8 8 4 4 Q 8 0 12 -4 Z" fill="#FFFBF0" stroke="none"/>
+                <circle cx="8" cy="-6" r="1" fill="#D9342C"/>
+              </g>
+            </svg>
+          </div>
+          <blockquote class="gr-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="gr-pull__cap">
+            <span class="gr-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="gr-pull__name">{testimonios[0].nombre}</span>
+              <span class="gr-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="gr-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`gr-quote gr-quote--${i}`}>
+              <span class="gr-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="gr-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="gr-quote__name">{t.nombre}</span>
+                  <span class="gr-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Preguntas Garrucha</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">preguntan en Garrucha.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Plazos, precios, SEO gastronómico, reservas directas y trabajo
+            con cofradías. Si no está aquí, escríbenos.
+          </p>
+        </header>
+
+        <ol class="gr-faq">
+          {faq.map((f, i) => (
+            <li class="gr-faq__item">
+              <details class="gr-faq__det" open={i === 0}>
+                <summary class="gr-faq__sum">
+                  <span class="text-mono gr-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="gr-faq__q">{f.q}</span>
+                  <span class="gr-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="gr-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosLevante.length > 0 && (
+      <section class="gr-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 11 / Levante Almeriense</span>
+              <h2 class="heading-display brutal-section-head__title">
+                También en
+                <em class="heading-editorial">el Levante.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del Levante donde trabajamos. Si tu pueblo
+              no aparece, escríbenos.
+            </p>
+          </header>
+
+          <ul class="gr-vecinos">
+            {pueblosLevante.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`gr-vecino gr-vecino--${i % 4}`}>
+                  <span class="text-mono gr-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="gr-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono gr-vecino__sub">{p.comarca}</span>
+                  <span class="gr-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="gr-final">
+      <div class="container-brutal">
+        <div class="gr-final__grid">
+
+          <div class="gr-final__l">
+            <span class="text-meta gr-final__chapter">★ Cap. 12 · Próximo paso</span>
+            <h2 class="heading-display gr-final__title">
+              ¿Empezamos tu web
+              <em class="heading-editorial">en el puerto?</em>
+            </h2>
+            <p class="gr-final__lead">
+              Tu restaurante, hotel o negocio en el puerto pesquero más
+              famoso de Almería — con <strong>SEO gastronómico</strong>,
+              reservas directas y multiidioma para captar turismo nacional
+              e internacional.
+            </p>
+            <div class="gr-final__cta">
+              <a href="/contacto" class="gr-final__btn gr-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="gr-final__btn gr-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="gr-final__trust">
+              <span><span class="gr-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ SEO GAMBA ROJA</span>
+              <span>★ RESERVAS DIRECTAS</span>
+              <span>4.9★ · 54 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* Faro animado */}
+          <div class="gr-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="gr-final-svg">
+              <defs>
+                <radialGradient id="gr-final-glow" cx="50%" cy="35%" r="55%">
+                  <stop offset="0%" stop-color="#FFD600" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#FFD600" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              {/* Glow del faro */}
+              <circle cx="160" cy="120" r="140" fill="url(#gr-final-glow)"/>
+
+              {/* Olas mar */}
+              <path d="M 0 240 Q 35 224 70 240 T 140 240 T 210 240 T 280 240 T 320 240 L 320 320 L 0 320 Z" fill="#0A3D62" stroke="#FFFBF0" stroke-width="3"/>
+              <path d="M 0 260 Q 35 248 70 260 T 140 260 T 210 260 T 280 260 T 320 260" fill="none" stroke="#9FB4C1" stroke-width="2" opacity="0.6"/>
+
+              {/* Roca base del faro */}
+              <path d="M 100 240 Q 110 220 130 218 L 190 218 Q 210 220 220 240 Z" fill="#B87333" stroke="#FFFBF0" stroke-width="2.5"/>
+
+              {/* FARO */}
+              <g class="gr-final-lighthouse">
+                {/* Cuerpo cilíndrico con franjas */}
+                <rect x="142" y="100" width="36" height="120" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="3"/>
+                <rect x="142" y="120" width="36" height="14" fill="#D9342C"/>
+                <rect x="142" y="148" width="36" height="14" fill="#D9342C"/>
+                <rect x="142" y="176" width="36" height="14" fill="#D9342C"/>
+                <rect x="142" y="204" width="36" height="14" fill="#D9342C"/>
+
+                {/* Plataforma */}
+                <rect x="138" y="94" width="44" height="6" fill="#0E0D0B"/>
+
+                {/* Linterna */}
+                <rect x="146" y="74" width="28" height="20" fill="#FFD600" stroke="#0E0D0B" stroke-width="2.5"/>
+                {/* Lámpara */}
+                <circle cx="160" cy="84" r="6" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5"/>
+
+                {/* Tejado faro */}
+                <path d="M 144 74 L 160 56 L 176 74 Z" fill="#D9342C" stroke="#0E0D0B" stroke-width="2.5"/>
+                <rect x="158" y="48" width="4" height="10" fill="#0E0D0B"/>
+                <path d="M 156 48 L 164 48 L 160 42 Z" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5"/>
+              </g>
+
+              {/* Haz de luz */}
+              <path d="M 160 84 L 40 60 L 60 100 Z" fill="#FFD600" opacity="0.5">
+                <animateTransform attributeName="transform" type="rotate" from="0 160 84" to="360 160 84" dur="8s" repeatCount="indefinite"/>
+              </path>
+              <path d="M 160 84 L 280 60 L 260 100 Z" fill="#FFD600" opacity="0.5">
+                <animateTransform attributeName="transform" type="rotate" from="180 160 84" to="540 160 84" dur="8s" repeatCount="indefinite"/>
+              </path>
+
+              {/* Estrellas */}
+              <circle cx="40" cy="30" r="1.5" fill="#FFFBF0"/>
+              <circle cx="80" cy="50" r="1" fill="#FFFBF0"/>
+              <circle cx="270" cy="30" r="1.5" fill="#FFFBF0"/>
+              <circle cx="290" cy="60" r="1" fill="#FFFBF0"/>
+
+              {/* Texto firma */}
+              <text x="160" y="305" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FFFBF0" letter-spacing="3">★ GARRUCHA · 04630 ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="gr-final__marquee">
+        <div class="gr-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ GAMBA ROJA ★ LONJA ★ PUERTO PESQUERO ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · GARRUCHA · PUERTO PESQUERO                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr {
+    --gr-paper:    #FFFBF0;
+    --gr-paper-2:  #F4EBD8;
+    --gr-sand:     #E8DCC0;
+    --gr-ink:      #0E0D0B;
+    --gr-gamba:    #D9342C;      /* rojo gamba */
+    --gr-gamba-d:  #8E1F1A;
+    --gr-navy:     #0A3D62;      /* mar profundo */
+    --gr-navy-d:   #062841;
+    --gr-copper:   #B87333;      /* cobre · cuerdas */
+    --gr-cuerda:   #C8A87C;      /* yute */
+    --gr-plata:    #9FB4C1;      /* pescado plata */
+    --gr-lima:     #D6FF44;      /* brand */
+    --gr-sun:      #FFD600;      /* faro */
+    --gr-shadow:   8px 8px 0 var(--gr-ink);
+  }
+  .gr-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--gr-gamba);
+    box-shadow: 0 0 0 0 rgba(217,52,44,0.55);
+    animation: gr-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes gr-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(217,52,44,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(217,52,44,0); }
+    100% { box-shadow: 0 0 0 0 rgba(217,52,44,0); }
+  }
+  .gr-spin { transform-origin: 50% 50%; animation: gr-spin 26s linear infinite; }
+  @keyframes gr-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(10,61,98,0.10), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(217,52,44,0.10), transparent 50%),
+      var(--gr-paper);
+    border-bottom: 3px solid var(--gr-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .gr-hero::before {
+    /* Red de pescador sutil */
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 0 22px, rgba(184,115,51,0.06) 22px 23px, transparent 23px 44px),
+      linear-gradient(-45deg, transparent 0 22px, rgba(184,115,51,0.06) 22px 23px, transparent 23px 44px);
+    pointer-events: none;
+  }
+  .gr-hero > * { position: relative; }
+  .gr-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .gr-hero__status { color: var(--gr-gamba); font-weight: 700; }
+
+  .gr-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) { .gr-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .gr-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .gr-hero__chapter { color: var(--gr-navy); }
+  .gr-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .gr-hero__title em { color: var(--gr-navy); font-style: italic; }
+  .gr-hero__title-stamp {
+    display: inline-block;
+    color: var(--gr-paper);
+    background: var(--gr-gamba);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+
+  .gr-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 54ch;
+  }
+  .gr-hero__lead strong { color: var(--gr-ink); font-weight: 700; }
+  .gr-hero__lead em { color: var(--gr-gamba); font-style: italic; font-weight: 600; }
+
+  .gr-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+  .gr-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--gr-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .gr-btn--primary {
+    background: var(--gr-gamba);
+    color: var(--gr-paper);
+    box-shadow: 6px 6px 0 var(--gr-ink);
+  }
+  .gr-btn--primary:hover {
+    background: var(--gr-navy);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--gr-ink);
+  }
+  .gr-btn--ghost {
+    background: transparent;
+    color: var(--gr-ink);
+    box-shadow: 6px 6px 0 var(--gr-navy);
+  }
+  .gr-btn--ghost:hover {
+    background: var(--gr-ink);
+    color: var(--gr-sun);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--gr-navy);
+  }
+
+  /* KPIs */
+  .gr-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--gr-ink);
+    background: var(--gr-ink);
+  }
+  @media (min-width: 768px) { .gr-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .gr-kpi {
+    background: var(--gr-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--gr-ink);
+    border-bottom: 2px solid var(--gr-ink);
+  }
+  .gr-kpi:nth-child(2n) { border-right: none; }
+  .gr-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .gr-kpi:nth-child(2n)      { border-right: 2px solid var(--gr-ink); }
+    .gr-kpi:nth-child(4n)      { border-right: none; }
+    .gr-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--gr-ink); }
+    .gr-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .gr-kpi--gamba  { background: var(--gr-gamba); color: var(--gr-paper); }
+  .gr-kpi--navy   { background: var(--gr-navy); color: var(--gr-paper); }
+  .gr-kpi--copper { background: var(--gr-copper); color: var(--gr-paper); }
+  .gr-kpi--ink    { background: var(--gr-ink); color: var(--gr-paper); }
+  .gr-kpi--ink .gr-kpi__v { color: var(--gr-sun); }
+  .gr-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .gr-kpi__v small { font-size: .55em; opacity: .8; }
+  .gr-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .gr-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
+  }
+  .gr-postcard {
+    background: var(--gr-paper);
+    border: 3px solid var(--gr-ink);
+    box-shadow: var(--gr-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .gr-postcard:hover { transform: rotate(0); }
+  .gr-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--gr-navy);
+    color: var(--gr-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--gr-ink);
+  }
+  .gr-postcard__profile {
+    width: 100%;
+    aspect-ratio: 540 / 220;
+    border-bottom: 2px solid var(--gr-ink);
+    overflow: hidden;
+  }
+  .gr-postcard__img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 2px solid var(--gr-ink);
+  }
+  .gr-postcard__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.1);
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .gr-postcard:hover .gr-postcard__img { transform: scale(1.05); }
+  .gr-postcard__anchor {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 80px; height: 80px;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 10px rgba(10,61,98,0.4));
+  }
+  .gr-postcard__tag {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    background: var(--gr-paper);
+    color: var(--gr-ink);
+    padding: .4rem .75rem;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--gr-ink);
+    box-shadow: 3px 3px 0 var(--gr-gamba);
+    transform: rotate(-2deg);
+  }
+  .gr-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--gr-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .gr-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    font-size: .68rem;
+  }
+  .gr-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .gr-postcard__data-row > span:first-child { color: var(--gr-navy); letter-spacing: .2em; font-weight: 800; }
+  .gr-postcard__data-v { color: var(--gr-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .gr-marquee {
+    background: var(--gr-navy);
+    color: var(--gr-sun);
+    overflow: hidden;
+    padding: .9rem 0;
+    border-top: 3px solid var(--gr-ink);
+  }
+  .gr-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: gr-marquee 36s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes gr-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* GAMBA ROJA SECTION                                      */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-gamba-section {
+    background: var(--gr-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .gr-gamba-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,52,44,0.05) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .gr-gamba-section > * { position: relative; }
+  .gr-gamba-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .gr-gamba-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+
+  .gr-gamba-chapter { color: var(--gr-gamba); }
+  .gr-gamba-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .gr-gamba-title em { color: var(--gr-gamba); }
+  .gr-gamba-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 54ch;
+  }
+  .gr-gamba-lead strong { color: var(--gr-gamba-d); font-weight: 700; }
+  .gr-gamba-lead em { color: var(--gr-navy); font-style: italic; }
+
+  .gr-gamba-facts {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--gr-ink);
+    background: var(--gr-paper);
+  }
+  @media (min-width: 640px) { .gr-gamba-facts { grid-template-columns: 1fr 1fr; } }
+  .gr-gamba-facts li {
+    padding: .85rem 1rem;
+    border-bottom: 1px solid var(--gr-ink);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  @media (min-width: 640px) {
+    .gr-gamba-facts li:nth-child(odd) { border-right: 1px solid var(--gr-ink); }
+    .gr-gamba-facts li:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) {
+    .gr-gamba-facts li:last-child { border-bottom: none; }
+  }
+  .gr-gamba-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--gr-navy); font-weight: 800; }
+  .gr-gamba-facts__v { font-size: .9rem; color: var(--gr-ink); font-weight: 600; line-height: 1.35; }
+  .gr-gamba-facts__v em { color: var(--gr-gamba); font-style: italic; }
+
+  .gr-gamba-r {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .gr-gamba-anim {
+    transform-origin: center;
+    animation: gr-gamba-float 4s ease-in-out infinite;
+  }
+  @keyframes gr-gamba-float {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50%      { transform: translateY(-6px) rotate(1deg); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* LONJA                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-lonja-section {
+    background: var(--gr-navy);
+    color: var(--gr-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .gr-lonja-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,214,0,0.06) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .gr-lonja-section > * { position: relative; }
+  .gr-lonja {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  @media (min-width: 1024px) { .gr-lonja { grid-template-columns: 1.2fr 1fr; gap: 3rem; } }
+
+  /* Lonja card mock */
+  .gr-lonja-card {
+    background: var(--gr-paper);
+    color: var(--gr-ink);
+    border: 3px solid var(--gr-sun);
+    box-shadow: 12px 12px 0 var(--gr-sun);
+  }
+  .gr-lonja-card__head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: .85rem 1.25rem;
+    background: var(--gr-ink);
+    color: var(--gr-paper);
+    border-bottom: 2px solid var(--gr-ink);
+    font-size: .7rem;
+    letter-spacing: .2em;
+  }
+  .gr-lonja-card__live {
+    background: var(--gr-gamba);
+    color: var(--gr-paper);
+    padding: .2rem .5rem;
+    font-weight: 800;
+    border: 1px solid var(--gr-paper);
+    animation: gr-blink 1.5s ease-in-out infinite;
+  }
+  @keyframes gr-blink { 50% { opacity: .55; } }
+  .gr-lonja-card__rows { display: flex; flex-direction: column; }
+  .gr-lonja-card__row {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px dashed var(--gr-ink);
+  }
+  .gr-lonja-card__row:last-child { border-bottom: none; }
+  .gr-lonja-card__row--top {
+    background: var(--gr-sun);
+    border-bottom: 2px solid var(--gr-ink);
+  }
+  .gr-lonja-card__row--top .gr-lonja-card__lbl {
+    grid-column: 1 / -1;
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--gr-gamba-d);
+    font-weight: 800;
+    margin-bottom: .25rem;
+  }
+  .gr-lonja-card__row--top .gr-lonja-card__species {
+    grid-column: 1;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--gr-gamba);
+    letter-spacing: -.02em;
+  }
+  .gr-lonja-card__row--top .gr-lonja-card__price {
+    grid-column: 2 / -1;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--gr-gamba);
+    text-align: right;
+  }
+  .gr-lonja-card__row--top {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .gr-lonja-card__n { font-size: .7rem; color: var(--gr-navy); font-weight: 800; }
+  .gr-lonja-card__species { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--gr-ink); }
+  .gr-lonja-card__price { font-size: 1rem; font-weight: 800; color: var(--gr-navy); }
+  .gr-lonja-card__price--small { font-size: .9rem; }
+  .gr-lonja-card__foot {
+    padding: .75rem 1.25rem;
+    background: var(--gr-paper-2);
+    border-top: 2px solid var(--gr-ink);
+    font-size: .6rem;
+    letter-spacing: .2em;
+    color: var(--gr-navy);
+    font-weight: 800;
+    text-align: center;
+  }
+
+  /* Lonja data */
+  .gr-lonja-data {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2.5px solid var(--gr-paper);
+  }
+  .gr-lonja-data li {
+    padding: .85rem 1.1rem;
+    border-bottom: 1px dashed rgba(255,251,240,0.25);
+    display: flex; flex-direction: column; gap: 2px;
+    background: rgba(255,251,240,0.04);
+  }
+  .gr-lonja-data li:last-child { border-bottom: none; }
+  .gr-lonja-data__k { font-size: .58rem; letter-spacing: .2em; color: var(--gr-sun); font-weight: 800; }
+  .gr-lonja-data__v { font-size: .9rem; color: var(--gr-paper); font-weight: 600; line-height: 1.35; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* COCINA                                                  */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-cocina-section {
+    background: var(--gr-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-cocina {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px)  { .gr-cocina { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .gr-cocina { grid-template-columns: repeat(4, 1fr); } }
+  .gr-cocina__card {
+    background: var(--gr-paper);
+    border: 2.5px solid var(--gr-ink);
+    box-shadow: 5px 5px 0 var(--gr-ink);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .5rem; align-items: center;
+    text-align: center;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .gr-cocina__card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 currentColor; }
+  .gr-cocina__card--gamba  { color: var(--gr-gamba); }
+  .gr-cocina__card--navy   { color: var(--gr-navy); }
+  .gr-cocina__card--copper { color: var(--gr-copper); }
+  .gr-cocina__card--plata  { color: var(--gr-plata); }
+  .gr-cocina__icon { width: 80px; height: 80px; }
+  .gr-cocina__plato {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1;
+    letter-spacing: -.02em;
+    color: var(--gr-ink);
+    margin: .5rem 0 0;
+  }
+  .gr-cocina__desc {
+    font-size: .82rem;
+    line-height: 1.4;
+    color: var(--brutal-text-secondary);
+    margin: 0;
+  }
+  .gr-cocina__rating {
+    font-family: var(--font-mono);
+    color: var(--gr-sun);
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SECTORES                                                */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-sec-section {
+    background: var(--gr-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-sec {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .gr-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .gr-sec { grid-template-columns: repeat(3, 1fr); } }
+  .gr-sec__card {
+    background: var(--gr-paper);
+    border: 2.5px solid var(--gr-ink);
+    box-shadow: var(--gr-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .gr-sec__card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .gr-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .gr-sec__card--gamba  { color: var(--gr-gamba); }
+  .gr-sec__card--navy   { color: var(--gr-navy); }
+  .gr-sec__card--copper { color: var(--gr-copper); }
+  .gr-sec__card--plata  { color: var(--gr-plata); }
+  .gr-sec__card--cuerda { color: var(--gr-cuerda); }
+  .gr-sec__card--navy-d { color: var(--gr-navy-d); }
+
+  .gr-sec__head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+    gap: .5rem;
+  }
+  .gr-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .gr-sec__stat-box {
+    background: var(--gr-ink); color: var(--gr-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .gr-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .gr-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .gr-sec__title {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--gr-ink);
+    margin: 0;
+  }
+  .gr-sec__desc {
+    font-size: .88rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .gr-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .gr-sec__tag {
+    display: flex; align-items: flex-start; gap: .35rem;
+    font-size: .78rem;
+    line-height: 1.35;
+    color: var(--gr-ink);
+  }
+  .gr-sec__tag span { color: currentColor; font-weight: 800; }
+  .gr-sec__foot {
+    padding-top: .65rem;
+    border-top: 2px solid var(--gr-ink);
+  }
+  .gr-sec__cta {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MAPA                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-map-section {
+    background: var(--gr-sand);
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-map-head { padding: 4rem 0 2rem; }
+  .gr-map-head__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+  @media (min-width: 768px) { .gr-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .gr-map-chapter { color: var(--gr-navy); }
+  .gr-map-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0 0;
+  }
+  .gr-map-title em { color: var(--gr-navy); }
+  .gr-map-coords {
+    background: var(--gr-gamba);
+    color: var(--gr-paper);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--gr-ink);
+    box-shadow: 5px 5px 0 var(--gr-navy);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem;
+    letter-spacing: .15em;
+  }
+
+  .gr-map-frame {
+    position: relative;
+    border-top: 3px solid var(--gr-ink);
+    border-bottom: 3px solid var(--gr-ink);
+    background: var(--gr-ink);
+  }
+  .gr-map-anchor {
+    position: absolute;
+    width: 60px; height: 60px;
+    z-index: 5;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45));
+    opacity: 0.85;
+  }
+  .gr-map-anchor--tl { top: 16px; left: 16px; }
+  .gr-map-anchor--br { bottom: 16px; right: 16px; }
+
+  .gr-map-wrap {
+    width: 100%;
+    height: clamp(420px, 60vh, 600px);
+    overflow: hidden;
+  }
+  .gr-map-wrap > * { width: 100%; height: 100%; }
+
+  .gr-map-pin {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -100%);
+    z-index: 4;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 14px rgba(217,52,44,0.55));
+    animation: gr-pin-bounce 2.6s ease-in-out infinite;
+  }
+  @keyframes gr-pin-bounce {
+    0%, 100% { transform: translate(-50%, -100%); }
+    50%      { transform: translate(-50%, -112%); }
+  }
+  .gr-map-pin__label {
+    position: absolute;
+    bottom: -22px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--gr-ink);
+    color: var(--gr-sun);
+    padding: .2rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 1.5px solid var(--gr-sun);
+    white-space: nowrap;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* DIFERENCIALES                                           */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-dif-section {
+    background: var(--gr-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-dif {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--gr-ink);
+  }
+  @media (min-width: 768px) { .gr-dif { grid-template-columns: 1fr 1fr; } }
+  .gr-dif__item {
+    padding: 1.75rem 1.5rem;
+    border-bottom: 1px solid var(--gr-ink);
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .2s;
+  }
+  @media (min-width: 768px) {
+    .gr-dif__item:nth-child(odd) { border-right: 1px solid var(--gr-ink); }
+    .gr-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) {
+    .gr-dif__item:last-child { border-bottom: none; }
+  }
+  .gr-dif__item--0 { background: var(--gr-paper-2); }
+  .gr-dif__item--1 { background: var(--gr-paper); }
+  .gr-dif__item--2 { background: var(--gr-sand); }
+  .gr-dif__item--3 { background: var(--gr-paper); }
+  .gr-dif__item:hover { background: var(--gr-sun); }
+  .gr-dif__num { font-size: .85rem; color: var(--gr-gamba); font-weight: 800; letter-spacing: .15em; }
+  .gr-dif__t {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+    color: var(--gr-ink);
+    margin: 0;
+  }
+  .gr-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-proc-section {
+    background: var(--gr-ink);
+    color: var(--gr-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .gr-proc-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,52,44,0.06) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .gr-proc-section > * { position: relative; }
+  .gr-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px)  { .gr-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .gr-proc { grid-template-columns: repeat(4, 1fr); } }
+  .gr-proc__step {
+    background: rgba(255,251,240,0.05);
+    border: 2px solid var(--gr-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .gr-proc__step:hover { background: rgba(217,52,44,0.12); transform: translateY(-3px); }
+  .gr-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(255,251,240,0.25); }
+  .gr-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--gr-sun); line-height: 1; }
+  .gr-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--gr-gamba); }
+  .gr-proc__t {
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--gr-paper);
+    margin: .25rem 0 0;
+  }
+  .gr-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,251,240,0.75); flex: 1; }
+  .gr-proc__foot {
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--gr-sun);
+    font-weight: 800;
+    padding-top: .5rem;
+    border-top: 1.5px solid rgba(255,251,240,0.25);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIOS                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-quote-section {
+    background: var(--gr-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-pull {
+    position: relative;
+    background: var(--gr-sand);
+    border: 3px solid var(--gr-ink);
+    box-shadow: var(--gr-shadow);
+    padding: 3rem 2rem 2rem;
+    margin: 2rem 0;
+  }
+  .gr-pull__seal {
+    position: absolute;
+    top: -30px; right: 30px;
+    width: 90px; aspect-ratio: 1;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 8px rgba(217,52,44,0.4));
+  }
+  .gr-pull__q {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    line-height: 1.3;
+    margin: 0 0 1.5rem;
+    color: var(--gr-ink);
+    max-width: 56ch;
+  }
+  .gr-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--gr-ink); }
+  .gr-pull__avatar {
+    width: 48px; height: 48px;
+    background: var(--gr-gamba); color: var(--gr-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 800;
+    border-radius: 50%;
+  }
+  .gr-pull__cap div { display: flex; flex-direction: column; }
+  .gr-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--gr-ink); }
+  .gr-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+
+  .gr-quotes {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .gr-quotes { grid-template-columns: repeat(2, 1fr); } }
+  .gr-quote {
+    position: relative;
+    background: var(--gr-paper);
+    border: 2px solid var(--gr-ink);
+    box-shadow: 5px 5px 0 var(--gr-ink);
+    padding: 1.75rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .gr-quote:hover { transform: translateY(-3px); }
+  .gr-quote--0 { background: var(--gr-paper); }
+  .gr-quote--1 { background: var(--gr-sand); }
+  .gr-quote__mark {
+    position: absolute;
+    top: -8px; left: 14px;
+    font-family: serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--gr-gamba);
+    opacity: .45;
+  }
+  .gr-quote p { font-size: .92rem; line-height: 1.5; color: var(--gr-ink); flex: 1; margin: 0; }
+  .gr-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--gr-ink); }
+  .gr-quote__avatar {
+    width: 36px; height: 36px;
+    background: var(--gr-navy); color: var(--gr-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .gr-quote footer div { display: flex; flex-direction: column; }
+  .gr-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .gr-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-faq-section {
+    background: var(--gr-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--gr-ink);
+  }
+  .gr-faq__item { border-bottom: 2px solid var(--gr-ink); }
+  .gr-faq__det summary { list-style: none; cursor: pointer; }
+  .gr-faq__det summary::-webkit-details-marker { display: none; }
+  .gr-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .gr-faq__sum:hover { padding-inline: 1rem; background: var(--gr-paper-2); }
+  .gr-faq__num { font-size: 1rem; font-weight: 800; color: var(--gr-navy); letter-spacing: .1em; }
+  .gr-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--gr-ink);
+    font-weight: 700;
+  }
+  .gr-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--gr-ink);
+    background: var(--gr-paper);
+    color: var(--gr-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .gr-faq__det[open] .gr-faq__toggle { transform: rotate(180deg); background: var(--gr-gamba); color: var(--gr-paper); }
+  .gr-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .gr-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .gr-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PUEBLOS VECINOS                                         */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-vecinos-section {
+    background: var(--gr-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--gr-ink);
+  }
+  .gr-vecinos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr;
+    border: 2px solid var(--gr-ink);
+    background: var(--gr-ink);
+  }
+  @media (min-width: 640px)  { .gr-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .gr-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .gr-vecino {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    gap: .35rem;
+    padding: 1.5rem;
+    background: var(--gr-paper);
+    color: var(--gr-ink);
+    text-decoration: none;
+    min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .gr-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .gr-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .gr-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .gr-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--gr-gamba); font-size: 1.3rem; transition: transform .25s; }
+  .gr-vecino:hover { background: var(--gr-gamba); color: var(--gr-paper); }
+  .gr-vecino:hover .gr-vecino__sub, .gr-vecino:hover .gr-vecino__n { opacity: .85; }
+  .gr-vecino:hover .gr-vecino__arrow { color: var(--gr-paper); transform: translateX(4px); }
+  .gr-vecino--1:hover { background: var(--gr-navy); color: var(--gr-paper); }
+  .gr-vecino--2:hover { background: var(--gr-copper); color: var(--gr-paper); }
+  .gr-vecino--3:hover { background: var(--gr-ink); color: var(--gr-sun); }
+  .gr-vecino--3:hover .gr-vecino__arrow { color: var(--gr-sun); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .gr-final {
+    background: var(--gr-navy-d);
+    color: var(--gr-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .gr-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,214,0,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .gr-final > * { position: relative; }
+  .gr-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .gr-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .gr-final__chapter { color: var(--gr-sun); }
+  .gr-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--gr-paper);
+    margin: 1rem 0;
+  }
+  .gr-final__title em { color: var(--gr-gamba); font-style: italic; display: block; }
+  .gr-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,251,240,0.75);
+    max-width: 52ch;
+  }
+  .gr-final__lead strong { color: var(--gr-sun); }
+  .gr-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .gr-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .gr-final__btn--primary {
+    background: var(--gr-gamba); color: var(--gr-paper); border-color: var(--gr-gamba);
+    box-shadow: 6px 6px 0 var(--gr-sun);
+  }
+  .gr-final__btn--primary:hover {
+    background: var(--gr-sun); color: var(--gr-ink); border-color: var(--gr-sun);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--gr-gamba);
+  }
+  .gr-final__btn--ghost {
+    background: transparent; color: var(--gr-paper); border-color: var(--gr-paper);
+    box-shadow: 6px 6px 0 var(--gr-paper);
+  }
+  .gr-final__btn--ghost:hover {
+    background: var(--gr-paper); color: var(--gr-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--gr-paper);
+  }
+  .gr-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,251,240,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .gr-final__trust .gr-pulse { background: var(--gr-sun); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(255,214,0,0.55); }
+
+  .gr-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .gr-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(255,214,0,0.25)); }
+
+  .gr-final__marquee {
+    background: var(--gr-gamba);
+    color: var(--gr-paper);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--gr-ink);
+    margin: 0 -1.5rem;
+  }
+  .gr-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: gr-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+</style>
