@@ -7,31 +7,61 @@ import { getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const pueblosValle = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'albox');
 
-const title = 'Diseño Web en Albox | Creación de Páginas Web, Tiendas Online y SEO Local';
-const description = 'Diseñador web en Albox, Valle del Almanzora. Páginas web profesionales para comercios, industria del mármol, servicios profesionales y hostelería. Hosting gratuito, tiendas online y posicionamiento SEO. Presupuesto sin compromiso.';
+const title = 'Diseño Web en Albox | El Mercado del Valle · Mármol · SEO Local Bilingüe';
+const description = 'Agencia de diseño web en Albox, capital comercial del Valle del Almanzora. Webs para comercio del mercado, industria del mármol, hostelería y servicios. Bilingüe ES/EN para captar comunidad británica. Hosting gratuito + SEO local.';
 const canonical = 'https://platanitorico.com/diseno-web/albox/';
 
+// El mercado de los martes — datos
+const mercado = [
+  { hora: '07:00', actividad: 'Montaje', desc: 'Llegan los puestos · más de 200 paradas en su día grande' },
+  { hora: '09:00', actividad: 'Apertura', desc: 'Apertura oficial al público · comienza el ajetreo' },
+  { hora: '11:00', actividad: 'Punto fuerte', desc: 'Visitantes de toda la comarca + Lorca + británicos' },
+  { hora: '13:30', actividad: 'Compra final', desc: 'Última hora · ofertas y mejores precios' },
+  { hora: '14:30', actividad: 'Desmontaje', desc: 'Cierre · los puestos vuelven a sus pueblos' },
+];
+
+// Productos típicos del mercado
+const puestos = [
+  { id: 'frutas',   name: 'Frutas y verduras',  ic: '🥝', color: 'verde'   },
+  { id: 'embut',    name: 'Embutidos y queso',  ic: '🧀', color: 'mostaza' },
+  { id: 'ropa',     name: 'Ropa y mantelería',  ic: '👗', color: 'naranja' },
+  { id: 'ferreteria', name: 'Ferretería',        ic: '🔨', color: 'azul'    },
+  { id: 'plantas',  name: 'Plantas y semillas', ic: '🌿', color: 'verde'   },
+  { id: 'bazar',    name: 'Bazar y curiosidades', ic: '🪴', color: 'rojo'   },
+];
+
+// Sectores
 const sectores = [
-  { nombre: 'Comercio local y mercado',   stat: '12k',   statLabel: 'habitantes', desc: 'Albox es el centro comercial del Valle, con su famoso mercado semanal. Creamos tiendas online para que tus productos lleguen a toda España, catálogos digitales y webs con reserva de pedidos.', tags: ['Tienda online','Catálogo digital','Pasarela de pago','Pedidos online'] },
-  { nombre: 'Industria del mármol y piedra', stat: 'B2B', statLabel: 'exportación mundial', desc: 'El Valle del Almanzora es referencia mundial en mármol. Webs corporativas para canteras, fábricas y distribuidores con catálogo técnico multiidioma y captación de leads internacionales.', tags: ['Catálogo técnico','Fichas de producto','Multiidioma','Leads internacionales'] },
-  { nombre: 'Servicios profesionales',    stat: '#1',    statLabel: 'Google local', desc: 'Abogados, gestorías, aseguradoras, arquitectos e ingenieros de Albox. Webs que transmiten confianza con formularios cualificados, blog de autoridad y posicionamiento local.', tags: ['Web corporativa','Formularios inteligentes','SEO local','Blog profesional'] },
-  { nombre: 'Salud y bienestar',          stat: '24/7',  statLabel: 'citas online', desc: 'Clínicas dentales, fisioterapeutas, psicólogos, farmacias, veterinarios y centros de estética en Albox. Citas online, RGPD sanitario y posicionamiento para captar pacientes de toda la comarca.', tags: ['Citas online','RGPD sanitario','Ficha de servicios','SEO salud'] },
-  { nombre: 'Hostelería y restauración',  stat: 'x2',    statLabel: 'reservas online', desc: 'Restaurantes, bares, cafeterías y alojamientos rurales. Carta digital QR, reservas online, integración Google Maps y fotografía profesional de platos.', tags: ['Carta digital QR','Reservas online','Google Maps','Fotos profesionales'] },
-  { nombre: 'Construcción e inmobiliarias', stat: '+35%', statLabel: 'presupuestos', desc: 'Constructoras, reformas, electricistas, fontaneros e inmobiliarias de Albox. Portales con buscador de propiedades, portfolios de obras y SEO local.', tags: ['Portfolio de obras','Presupuestos online','Portal propiedades','SEO construcción'] },
+  { nombre: 'Comercio local y mercado',     stat: '12k',  statLabel: 'habitantes',           desc: 'Albox es el centro comercial del Valle, con su famoso mercado semanal. Creamos tiendas online para que tus productos lleguen a toda España, catálogos digitales y webs con reserva de pedidos.', tags: ['Tienda online','Catálogo digital','Pasarela de pago','Pedidos online'] },
+  { nombre: 'Industria del mármol y piedra',  stat: 'B2B',  statLabel: 'exportación mundial',  desc: 'El Valle del Almanzora es referencia mundial en mármol. Webs corporativas para canteras, fábricas y distribuidores con catálogo técnico multiidioma y captación de leads internacionales.', tags: ['Catálogo técnico','Fichas de producto','Multiidioma','Leads internacionales'] },
+  { nombre: 'Servicios profesionales',        stat: '#1',   statLabel: 'Google local',          desc: 'Abogados, gestorías, aseguradoras, arquitectos e ingenieros de Albox. Webs que transmiten confianza con formularios cualificados, blog de autoridad y posicionamiento local.',           tags: ['Web corporativa','Formularios inteligentes','SEO local','Blog profesional'] },
+  { nombre: 'Salud y bienestar',              stat: '24/7', statLabel: 'citas online',          desc: 'Clínicas dentales, fisioterapeutas, psicólogos, farmacias, veterinarios y centros de estética en Albox. Citas online, RGPD sanitario y posicionamiento para captar pacientes de toda la comarca.', tags: ['Citas online','RGPD sanitario','Ficha de servicios','SEO salud'] },
+  { nombre: 'Hostelería y restauración',      stat: 'x2',   statLabel: 'reservas online',       desc: 'Restaurantes, bares, cafeterías y alojamientos rurales. Carta digital QR, reservas online, integración Google Maps y fotografía profesional de platos.',                                       tags: ['Carta digital QR','Reservas online','Google Maps','Fotos profesionales'] },
+  { nombre: 'Construcción e inmobiliarias',   stat: '+35%', statLabel: 'presupuestos',          desc: 'Constructoras, reformas, electricistas, fontaneros e inmobiliarias de Albox. Portales con buscador de propiedades, portfolios de obras y SEO local + bilingüe para la comunidad británica.',  tags: ['Portfolio de obras','Presupuestos online','Portal propiedades','SEO bilingüe'] },
+];
+
+// Hitos del municipio
+const hitos = [
+  { k: 'POBLACIÓN',     v: '12.000 hab · capital del Valle' },
+  { k: 'MERCADO',       v: 'Cada martes desde 1850 · +200 puestos' },
+  { k: 'COMARCA',       v: 'Valle del Almanzora · 35 municipios' },
+  { k: 'INDUSTRIA',     v: 'Mármol Macael a 15 km · exportación' },
+  { k: 'COMUNIDAD',     v: '~2.000 británicos residentes en el área' },
+  { k: 'PATRIMONIO',    v: 'Santuario del Saliente · barroco' },
 ];
 
 const diferenciales = [
   { title: 'Capital del Valle del Almanzora',     desc: 'Con 12.000 habitantes, Albox es el centro de servicios, comercio y administración de toda la comarca. Tu web sirve a Olula, Macael, Cantoria, Fines, Arboleas y decenas de localidades.' },
-  { title: 'Mercado tradicional con proyección digital', desc: 'El famoso mercado de Albox atrae visitantes cada semana. El mercado digital está abierto 24/7. Una web profesional extiende tu negocio más allá del martes de mercado.' },
-  { title: 'Industria del mármol: escaparate mundial', desc: 'Macael y el Valle del Almanzora exportan mármol a todo el mundo. Las empresas del sector necesitan webs multiidioma con catálogos técnicos a la altura del producto.' },
-  { title: 'Comunidad expatriada británica',      desc: 'Albox y alrededores tienen una importante comunidad británica. Muchos negocios locales se benefician de una web bilingüe español-inglés para captar este mercado.' },
+  { title: 'Mercado tradicional + digital',       desc: 'El famoso mercado de los martes atrae visitantes cada semana. El mercado digital está abierto 24/7. Una web profesional extiende tu negocio más allá del día grande.' },
+  { title: 'Mármol Macael: escaparate mundial',   desc: 'A 15 km, Macael exporta a 60+ países. Las empresas del sector necesitan webs multiidioma con catálogos técnicos a la altura del producto. Aquí lo hacemos a diario.' },
+  { title: 'Comunidad británica activa',          desc: 'Albox y alrededores tienen ~2.000 británicos residentes. Negocios bilingües (estate agents, restaurantes, servicios) captan este mercado con una simple web ES/EN.' },
 ];
 
 const proceso = [
-  { num: '01', title: 'Reunión en Albox',           eta: '1–2 días', body: 'Reunión en tu negocio (presencial o videollamada). Análisis de sector, competencia y mercado. Definimos objetivos, keywords y arquitectura web.', deliverable: 'Briefing + roadmap' },
-  { num: '02', title: 'Diseño personalizado',        eta: '3–5 días', body: 'Diseño visual adaptado a tu negocio: estructura, colores, tipografías y UX. Nada de plantillas — tú apruebas cada decisión.', deliverable: 'Prototipo Figma · approved' },
-  { num: '03', title: 'Desarrollo + SEO',            eta: '5–10 días', body: 'Astro ultrarrápido, SEO técnico desde el código, Schema.org, Core Web Vitals y contenido orientado a posicionar en Albox.', deliverable: 'Web en staging + auditoría' },
-  { num: '04', title: 'Lanzamiento + formación',     eta: '1–2 días', body: 'Publicamos con hosting gratuito, configuramos Google Business Profile, Search Console y te formamos para que gestiones tu web con autonomía.', deliverable: 'Sitio en producción + manual' },
+  { num: '01', title: 'Reunión en Albox',         eta: '1–2 días',  body: 'Reunión en tu negocio (presencial o videollamada). Análisis de sector, competencia y mercado comarcal. Definimos objetivos y keywords reales.', deliverable: 'Briefing + roadmap' },
+  { num: '02', title: 'Diseño personalizado',      eta: '3–5 días',  body: 'Diseño visual adaptado a tu negocio: estructura, colores, tipografías y UX. Nada de plantillas — tú apruebas cada decisión.',                deliverable: 'Prototipo Figma · approved' },
+  { num: '03', title: 'Desarrollo + SEO',          eta: '5–10 días', body: 'Astro ultrarrápido, SEO técnico desde el código, Schema.org, Core Web Vitals y contenido orientado a posicionar en Albox y comarca.',         deliverable: 'Web en staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + formación',   eta: '1–2 días',  body: 'Publicamos con hosting gratuito, configuramos Google Business Profile, Search Console y te formamos para que gestiones tu web con autonomía.', deliverable: 'Sitio en producción + manual' },
 ];
 
 const testimonios = [
@@ -42,19 +72,19 @@ const testimonios = [
 ];
 
 const faq = [
-  { q: '¿Cuánto cuesta el diseño web en Albox?', a: 'Web profesional desde 450€. Incluye diseño personalizado, SEO técnico, hosting gratuito de por vida (para webs estáticas) y formación. Tiendas online: 900€–2.500€ según funcionalidades. Presupuesto cerrado sin sorpresas.' },
-  { q: '¿Por qué el hosting es gratuito en Albox?', a: 'Generación estática con Astro: webs ultrarrápidas servidas desde CDN global sin servidor ni base de datos. Vercel o Cloudflare Pages ofrecen hosting gratuito ilimitado. Tu negocio se ahorra 60–200€/año.' },
-  { q: '¿Sois diseñadores web en Albox? ¿Hacéis reuniones presenciales?', a: 'Sí. Agencia local que trabaja habitualmente en Albox, Olula del Río, Macael, Cantoria y todo el Valle del Almanzora. Reuniones en tu negocio o videollamada. Primera consulta gratuita.' },
-  { q: '¿Cuánto tarda la creación de una página web en Albox?', a: 'Web corporativa: 1–2 semanas. Tienda online: 2–4 semanas según complejidad. Metodología ágil: ves avances desde la primera semana. Si tienes urgencia, priorizamos.' },
-  { q: '¿Mi web aparecerá en Google para búsquedas en Albox?', a: 'Sí. SEO técnico desde el código: velocidad óptima, datos estructurados, meta etiquetas, sitemap y contenido optimizado para keywords como "diseño web Albox", "abogado Albox" o "restaurante Albox". Configuramos también Google Business Profile.' },
-  { q: '¿Hacéis tiendas online para comercios de Albox?', a: 'Sí. Tiendas online completas con catálogo, pasarela de pago segura (Stripe, Redsys), gestión de stock, envíos automatizados y diseño responsive. Ideal para vender a toda España sin depender solo del mercado local.' },
-  { q: '¿Qué ventaja tiene una web estática frente a WordPress?', a: 'Carga <1s (vs 3–8s en WP), sin base de datos hackeable, sin actualizaciones de plugins, hosting gratuito y mejor rendimiento en Google. Para webs corporativas, portfolios y landings es la mejor opción.' },
-  { q: '¿Puedo gestionar mi página web yo mismo?', a: 'Sí. Formación personalizada para actualizar textos, imágenes y contenidos sin programar. Para blog o catálogo, CMS headless intuitivo. Soporte técnico siempre disponible.' },
+  { q: '¿Cuánto cuesta el diseño web en Albox?',                                a: 'Web profesional desde 450€. Incluye diseño personalizado, SEO técnico, hosting gratuito de por vida (para webs estáticas) y formación. Tiendas online: 900€–2.500€ según funcionalidades. Presupuesto cerrado sin sorpresas.' },
+  { q: '¿Por qué el hosting es gratuito en Albox?',                              a: 'Generación estática con Astro: webs ultrarrápidas servidas desde CDN global sin servidor ni base de datos. Vercel o Cloudflare Pages ofrecen hosting gratuito ilimitado. Tu negocio se ahorra 60–200€/año.' },
+  { q: '¿Sois diseñadores web en Albox? ¿Hacéis reuniones presenciales?',       a: 'Sí. Agencia local que trabaja habitualmente en Albox, Olula del Río, Macael, Cantoria y todo el Valle del Almanzora. Reuniones en tu negocio o videollamada. Primera consulta gratuita.' },
+  { q: '¿Cuánto tarda la creación de una página web en Albox?',                  a: 'Web corporativa: 1–2 semanas. Tienda online: 2–4 semanas según complejidad. Metodología ágil: ves avances desde la primera semana. Si tienes urgencia, priorizamos.' },
+  { q: '¿Mi web aparecerá en Google para búsquedas en Albox?',                  a: 'Sí. SEO técnico desde el código: velocidad óptima, datos estructurados, meta etiquetas, sitemap y contenido optimizado para keywords como "diseño web Albox", "abogado Albox" o "restaurante Albox". Configuramos también Google Business Profile.' },
+  { q: '¿Hacéis webs bilingües para captar la comunidad británica?',             a: 'Sí, especialidad. ES/EN con SEO en ambos idiomas (no traducción automática). Es un mercado que paga bien, busca todo online y que la competencia local muchas veces ignora. Ventaja inmediata para inmobiliarias, restaurantes, servicios y comercios.' },
+  { q: '¿Hacéis tiendas online para comercios del mercado?',                     a: 'Sí. Tiendas online completas con catálogo, pasarela de pago segura (Stripe, Redsys, Bizum), gestión de stock, envíos automatizados y diseño responsive. Ideal para vender a toda España sin depender solo del día de mercado.' },
+  { q: '¿Trabajáis con empresas del mármol de Macael?',                          a: 'Sí, frecuentemente. Webs corporativas multiidioma (ES/EN/IT) con catálogo técnico de materiales, fichas descargables PDF y formularios B2B para captar distribuidores internacionales.' },
 ];
 
 const jsonLdSchemas = [
   { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Albox","item":canonical}]} },
-  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico - Diseño Web Albox","url":canonical,"telephone":"+34657085019","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Albox","addressRegion":"Almería","postalCode":"04800","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.387,"longitude":-2.149},"areaServed":["Albox","Olula del Río","Macael","Cantoria","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"41","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web Albox","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-albox.jpg","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Albox","addressRegion":"Almería","postalCode":"04800","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3871,"longitude":-1.6187},"areaServed":["Albox","Olula del Río","Macael","Cantoria","Fines","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"41","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
   { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Albox","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
   { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
 ];
@@ -65,120 +95,584 @@ const jsonLdSchemas = [
   description={description}
   canonical={canonical}
   image="/imagenes/diseno-web-albox.jpg"
-  imageAlt="Diseño web en Albox - Platanito Rico"
+  imageAlt="Diseño web en Albox - Valle del Almanzora"
   type="service"
-  keywords="diseño web albox, agencia web albox, tienda online albox, seo albox, valle almanzora, mármol macael"
+  keywords="diseño web albox, agencia web albox, mercado albox, tienda online albox, seo albox bilingüe, valle almanzora, mármol macael"
   jsonLd={jsonLdSchemas}
 >
   <Header />
 
-  <main id="main-content">
-    {/* HERO */}
-    <section class="svc-hero">
-      <div class="container-brutal">
-        <header class="svc-hero__head">
-          <span class="text-meta">N.º 048 — Valle del Almanzora · Mercado &amp; mármol</span>
-          <span class="text-meta"><span class="live-dot"></span> 12.000 habitantes · centro comarcal</span>
-        </header>
-        <div class="divider-brutal-thick"></div>
+  <main id="main-content" class="ab">
 
-        <div class="svc-hero__grid">
-          <div>
-            <span class="text-meta">Diseño Web · Albox · Valle del Almanzora</span>
-            <h1 class="svc-hero__title">
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — MERCADO DEL VALLE                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-hero">
+      <div class="container-brutal">
+
+        <header class="ab-hero__top">
+          <span class="text-meta">N.º 028 — Valle del Almanzora · Interior</span>
+          <span class="text-meta ab-hero__status">
+            <span class="ab-pulse"></span>
+            ★ CAPITAL DEL VALLE · MARTES DE MERCADO ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="ab-hero__grid">
+
+          <div class="ab-hero__intro">
+            <span class="text-meta ab-hero__chapter">Cap. 01 / Albox · Almería</span>
+            <h1 class="ab-hero__title heading-display">
               Diseño web en
-              <em>Albox,</em>
-              <span class="text-stroke-ink">capital</span>
-              del Valle.
+              <em class="heading-editorial">Albox,</em>
+              <span class="ab-hero__title-stamp">el mercado del Valle.</span>
             </h1>
-            <p class="svc-hero__lead">
-              <strong>Centro comercial</strong> del Valle del Almanzora, mercado tradicional
-              y puerta a la industria del mármol mundial. Webs para comercio, industria,
-              servicios profesionales y hostelería con SEO local y bilingüe ES/EN.
+
+            <p class="ab-hero__lead">
+              <strong>12.000 habitantes</strong>, mercado tradicional cada martes
+              desde <em>1850</em>, capital comercial del Valle del Almanzora y
+              puerta a la industria del <strong>mármol de Macael</strong>. SEO local
+              + bilingüe ES/EN para captar la <strong>comunidad británica</strong>.
             </p>
-            <div class="svc-hero__cta">
-              <a href="/contacto" class="btn-brutal btn-brutal--lg">Presupuesto en 24h →</a>
-              <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">657 085 019</a>
+
+            <div class="ab-hero__cta">
+              <a href="/contacto" class="ab-btn ab-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#mercado" class="ab-btn ab-btn--ghost">
+                Día de mercado ↓
+              </a>
             </div>
+
+            {/* KPIs */}
+            <ul class="ab-kpis">
+              <li class="ab-kpi ab-kpi--naranja">
+                <span class="ab-kpi__v text-mono">200<small>+</small></span>
+                <span class="ab-kpi__l">Puestos martes</span>
+              </li>
+              <li class="ab-kpi ab-kpi--verde">
+                <span class="ab-kpi__v text-mono">1850</span>
+                <span class="ab-kpi__l">Desde el año</span>
+              </li>
+              <li class="ab-kpi ab-kpi--azul">
+                <span class="ab-kpi__v text-mono">2<small>k</small></span>
+                <span class="ab-kpi__l">UK residentes</span>
+              </li>
+              <li class="ab-kpi ab-kpi--ink">
+                <span class="ab-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="ab-kpi__l">41 reseñas</span>
+              </li>
+            </ul>
           </div>
 
-          <aside class="svc-hero__specs">
-            <div class="svc-hero__spec svc-hero__spec--accent">
-              <span class="svc-hero__spec-num text-mono">12k</span>
-              <span class="svc-hero__spec-lbl">Habitantes</span>
-            </div>
-            <div class="svc-hero__spec svc-hero__spec--lime">
-              <span class="svc-hero__spec-num text-mono">ES/EN</span>
-              <span class="svc-hero__spec-lbl">Comunidad UK</span>
-            </div>
-            <div class="svc-hero__spec">
-              <span class="svc-hero__spec-num text-mono">450€</span>
-              <span class="svc-hero__spec-lbl">Desde · web pro</span>
-            </div>
-            <div class="svc-hero__spec svc-hero__spec--ink">
-              <span class="svc-hero__spec-num text-mono">4.9★</span>
-              <span class="svc-hero__spec-lbl">41 reseñas</span>
+          {/* POSTAL — escena de mercado SVG */}
+          <aside class="ab-hero__postcard" aria-hidden="true">
+            <div class="ab-postcard">
+
+              <header class="ab-postcard__head">
+                <span class="text-mono">ALBOX · 04800 · VALLE DEL ALMANZORA</span>
+                <span class="text-mono">37.387° N · 1.619° W</span>
+              </header>
+
+              {/* Escena de mercado SVG */}
+              <div class="ab-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="ab-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#A8C8E8"/>
+                      <stop offset="100%" stop-color="#F4E4B8"/>
+                    </linearGradient>
+                    <pattern id="ab-marble" width="8" height="8" patternUnits="userSpaceOnUse">
+                      <path d="M 0 4 Q 4 2 8 4" stroke="#D5C9B6" stroke-width="0.5" fill="none"/>
+                    </pattern>
+                  </defs>
+
+                  {/* Cielo */}
+                  <rect width="540" height="100" fill="url(#ab-sky)"/>
+
+                  {/* Sierra de los Filabres al fondo */}
+                  <path d="M 0 100 L 60 75 L 120 90 L 200 65 L 280 85 L 360 60 L 440 80 L 540 70 L 540 110 L 0 110 Z" fill="#5F8B4C" opacity="0.6"/>
+                  <path d="M 0 110 L 80 95 L 160 105 L 240 90 L 320 100 L 400 88 L 480 100 L 540 95 L 540 130 L 0 130 Z" fill="#5F8B4C"/>
+
+                  {/* Suelo plaza */}
+                  <rect x="0" y="130" width="540" height="90" fill="#E8D9B0" stroke="#0E0D0B" stroke-width="2"/>
+                  {/* Pavimento */}
+                  <g stroke="#0E0D0B" stroke-width="0.6" opacity="0.3">
+                    <line x1="0" y1="155" x2="540" y2="155"/>
+                    <line x1="0" y1="180" x2="540" y2="180"/>
+                    {Array.from({length: 9}).map((_, i) => (
+                      <line x1={60*i} y1="130" x2={60*i} y2="220"/>
+                    ))}
+                  </g>
+
+                  {/* PUESTO 1 — Frutas (toldo naranja) */}
+                  <g transform="translate(50, 110)">
+                    {/* Toldo a rayas */}
+                    <path d="M -30 0 L 50 0 L 50 6 L -30 6 Z" fill="#E96B2A" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="-22" y1="0" x2="-22" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-6" y1="0" x2="-6" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="10" y1="0" x2="10" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="26" y1="0" x2="26" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="42" y1="0" x2="42" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    {/* Postes */}
+                    <line x1="-28" y1="6" x2="-28" y2="40" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="48" y1="6" x2="48" y2="40" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Mesa */}
+                    <rect x="-30" y="20" width="80" height="12" fill="#8B5A2B" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Cajas de fruta */}
+                    <rect x="-26" y="14" width="22" height="8" fill="#5F8B4C" stroke="#0E0D0B" stroke-width="1"/>
+                    <circle cx="-21" cy="12" r="2" fill="#D9AF3A"/>
+                    <circle cx="-17" cy="12" r="2" fill="#D9AF3A"/>
+                    <circle cx="-13" cy="12" r="2" fill="#D9AF3A"/>
+                    <rect x="0" y="14" width="22" height="8" fill="#B0241F" stroke="#0E0D0B" stroke-width="1"/>
+                    <circle cx="5" cy="12" r="2" fill="#E96B2A"/>
+                    <circle cx="11" cy="12" r="2" fill="#E96B2A"/>
+                    <circle cx="17" cy="12" r="2" fill="#E96B2A"/>
+                    <rect x="26" y="14" width="22" height="8" fill="#D9AF3A" stroke="#0E0D0B" stroke-width="1"/>
+                    <circle cx="32" cy="12" r="2" fill="#5F8B4C"/>
+                    <circle cx="38" cy="12" r="2" fill="#5F8B4C"/>
+                    <circle cx="44" cy="12" r="2" fill="#5F8B4C"/>
+                  </g>
+
+                  {/* PUESTO 2 — Embutidos (toldo amarillo) */}
+                  <g transform="translate(160, 105)">
+                    <path d="M -30 0 L 50 0 L 50 6 L -30 6 Z" fill="#D9AF3A" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="-22" y1="0" x2="-22" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-6" y1="0" x2="-6" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="10" y1="0" x2="10" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="26" y1="0" x2="26" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="42" y1="0" x2="42" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-28" y1="6" x2="-28" y2="45" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="48" y1="6" x2="48" y2="45" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Mesa */}
+                    <rect x="-30" y="25" width="80" height="12" fill="#8B5A2B" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Chorizos colgando */}
+                    <line x1="-22" y1="6" x2="-22" y2="25" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <ellipse cx="-22" cy="18" rx="4" ry="9" fill="#B0241F" stroke="#0E0D0B" stroke-width="1"/>
+                    <line x1="-6" y1="6" x2="-6" y2="25" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <ellipse cx="-6" cy="18" rx="4" ry="9" fill="#B0241F" stroke="#0E0D0B" stroke-width="1"/>
+                    <line x1="10" y1="6" x2="10" y2="25" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <ellipse cx="10" cy="18" rx="4" ry="9" fill="#8B5A2B" stroke="#0E0D0B" stroke-width="1"/>
+                    <line x1="26" y1="6" x2="26" y2="25" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <ellipse cx="26" cy="18" rx="4" ry="9" fill="#B0241F" stroke="#0E0D0B" stroke-width="1"/>
+                  </g>
+
+                  {/* PUESTO 3 — Ropa (toldo rojo) */}
+                  <g transform="translate(270, 108)">
+                    <path d="M -30 0 L 50 0 L 50 6 L -30 6 Z" fill="#B0241F" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="-22" y1="0" x2="-22" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-6" y1="0" x2="-6" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="10" y1="0" x2="10" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="26" y1="0" x2="26" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="42" y1="0" x2="42" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-28" y1="6" x2="-28" y2="42" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="48" y1="6" x2="48" y2="42" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Perchas con ropa */}
+                    <line x1="-30" y1="14" x2="50" y2="14" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <g fill="#1F3A6E" stroke="#0E0D0B" stroke-width="1">
+                      <path d="M -22 16 L -22 32 L -14 32 L -14 16 L -16 14 L -20 14 Z"/>
+                    </g>
+                    <g fill="#5F8B4C" stroke="#0E0D0B" stroke-width="1">
+                      <path d="M -8 16 L -8 32 L 0 32 L 0 16 L -2 14 L -6 14 Z"/>
+                    </g>
+                    <g fill="#D9AF3A" stroke="#0E0D0B" stroke-width="1">
+                      <path d="M 6 16 L 6 32 L 14 32 L 14 16 L 12 14 L 8 14 Z"/>
+                    </g>
+                    <g fill="#E96B2A" stroke="#0E0D0B" stroke-width="1">
+                      <path d="M 20 16 L 20 32 L 28 32 L 28 16 L 26 14 L 22 14 Z"/>
+                    </g>
+                    <g fill="#B0241F" stroke="#0E0D0B" stroke-width="1">
+                      <path d="M 34 16 L 34 32 L 42 32 L 42 16 L 40 14 L 36 14 Z"/>
+                    </g>
+                  </g>
+
+                  {/* PUESTO 4 — Bazar (toldo azul) */}
+                  <g transform="translate(380, 112)">
+                    <path d="M -30 0 L 50 0 L 50 6 L -30 6 Z" fill="#1F3A6E" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="-22" y1="0" x2="-22" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-6" y1="0" x2="-6" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="10" y1="0" x2="10" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="26" y1="0" x2="26" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="42" y1="0" x2="42" y2="6" stroke="#FFFCF6" stroke-width="3"/>
+                    <line x1="-28" y1="6" x2="-28" y2="38" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="48" y1="6" x2="48" y2="38" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Mesa con cestas */}
+                    <rect x="-30" y="22" width="80" height="10" fill="#8B5A2B" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Cestas */}
+                    <path d="M -24 22 L -8 22 L -10 14 L -22 14 Z" fill="#C49A6C" stroke="#0E0D0B" stroke-width="1.2"/>
+                    <path d="M -2 22 L 14 22 L 12 14 L 0 14 Z" fill="#C49A6C" stroke="#0E0D0B" stroke-width="1.2"/>
+                    <path d="M 20 22 L 36 22 L 34 14 L 22 14 Z" fill="#C49A6C" stroke="#0E0D0B" stroke-width="1.2"/>
+                  </g>
+
+                  {/* PUESTO 5 — Plantas (toldo verde) */}
+                  <g transform="translate(485, 108)">
+                    <path d="M -25 0 L 40 0 L 40 6 L -25 6 Z" fill="#5F8B4C" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="-18" y1="0" x2="-18" y2="6" stroke="#FFFCF6" stroke-width="2.5"/>
+                    <line x1="-4" y1="0" x2="-4" y2="6" stroke="#FFFCF6" stroke-width="2.5"/>
+                    <line x1="10" y1="0" x2="10" y2="6" stroke="#FFFCF6" stroke-width="2.5"/>
+                    <line x1="24" y1="0" x2="24" y2="6" stroke="#FFFCF6" stroke-width="2.5"/>
+                    <line x1="-23" y1="6" x2="-23" y2="42" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="38" y1="6" x2="38" y2="42" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Macetas */}
+                    <rect x="-25" y="24" width="65" height="12" fill="#8B5A2B" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <g stroke="#0E0D0B" stroke-width="1">
+                      <path d="M -20 24 L -22 18 L -10 18 L -12 24" fill="#C49A6C"/>
+                      <path d="M -16 16 L -18 8 L -14 6 L -10 8 L -14 16" fill="#5F8B4C" stroke-width="1.2"/>
+                      <path d="M -4 24 L -6 18 L 6 18 L 4 24" fill="#C49A6C"/>
+                      <path d="M 0 16 L -2 8 L 2 6 L 6 8 L 2 16" fill="#5F8B4C" stroke-width="1.2"/>
+                      <path d="M 12 24 L 10 18 L 22 18 L 20 24" fill="#C49A6C"/>
+                      <path d="M 16 16 L 14 8 L 18 6 L 22 8 L 18 16" fill="#5F8B4C" stroke-width="1.2"/>
+                    </g>
+                  </g>
+
+                  {/* Gente caminando (siluetas pequeñas) */}
+                  <g fill="#0E0D0B">
+                    <g transform="translate(110, 175)">
+                      <circle cx="0" cy="-6" r="2.5"/>
+                      <line x1="0" y1="-3.5" x2="0" y2="8" stroke="#0E0D0B" stroke-width="1.8"/>
+                      <line x1="-2.5" y1="8" x2="-2.5" y2="14" stroke="#0E0D0B" stroke-width="1.8"/>
+                      <line x1="2.5" y1="8" x2="2.5" y2="14" stroke="#0E0D0B" stroke-width="1.8"/>
+                    </g>
+                    <g transform="translate(220, 178)">
+                      <circle cx="0" cy="-5" r="2.2"/>
+                      <line x1="0" y1="-3" x2="0" y2="7" stroke="#0E0D0B" stroke-width="1.6"/>
+                      <line x1="-2" y1="7" x2="-2" y2="13" stroke="#0E0D0B" stroke-width="1.6"/>
+                      <line x1="2" y1="7" x2="2" y2="13" stroke="#0E0D0B" stroke-width="1.6"/>
+                    </g>
+                    <g transform="translate(335, 180)">
+                      <circle cx="0" cy="-5" r="2.5"/>
+                      <line x1="0" y1="-2.5" x2="0" y2="8" stroke="#0E0D0B" stroke-width="1.6"/>
+                      <line x1="-2.5" y1="8" x2="-2.5" y2="13" stroke="#0E0D0B" stroke-width="1.6"/>
+                      <line x1="2.5" y1="8" x2="2.5" y2="13" stroke="#0E0D0B" stroke-width="1.6"/>
+                    </g>
+                    <g transform="translate(440, 182)">
+                      <circle cx="0" cy="-5" r="2.5"/>
+                      <line x1="0" y1="-2.5" x2="0" y2="8" stroke="#0E0D0B" stroke-width="1.6"/>
+                      <line x1="-2.5" y1="8" x2="-2.5" y2="13" stroke="#0E0D0B" stroke-width="1.6"/>
+                      <line x1="2.5" y1="8" x2="2.5" y2="13" stroke="#0E0D0B" stroke-width="1.6"/>
+                    </g>
+                  </g>
+
+                  {/* Pájaros */}
+                  <g fill="none" stroke="#0E0D0B" stroke-width="1.2" stroke-linecap="round">
+                    <path d="M 80 35 Q 84 31 88 35 Q 92 31 96 35"/>
+                    <path d="M 320 45 Q 324 41 328 45 Q 332 41 336 45"/>
+                    <path d="M 450 28 Q 454 24 458 28 Q 462 24 466 28"/>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="ab-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-albox.jpg"
+                  alt="Albox, capital del Valle del Almanzora"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="ab-postcard__img"
+                />
+                {/* Sello mercado */}
+                <div class="ab-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="ab-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#E96B2A"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="ab-spin">
+                      <text font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5">
+                        <textPath href="#ab-seal-arc" startOffset="0%">★ MERCADO · MARTES · ALBOX ★</textPath>
+                      </text>
+                    </g>
+                    {/* Cesta dentro */}
+                    <g stroke="#FFFCF6" stroke-width="2" fill="none">
+                      <path d="M 28 38 L 52 38 L 48 56 L 32 56 Z"/>
+                      <line x1="28" y1="38" x2="52" y2="38" stroke-width="3"/>
+                      <path d="M 32 38 Q 40 30 48 38" stroke-width="2"/>
+                      <circle cx="36" cy="48" r="2" fill="#FFFCF6"/>
+                      <circle cx="40" cy="50" r="2" fill="#FFFCF6"/>
+                      <circle cx="44" cy="46" r="2" fill="#FFFCF6"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="ab-postcard__tag">
+                  <span class="text-mono">★ EL MARTES, A LO GRANDE ★</span>
+                </div>
+              </div>
+
+              {/* Datos del municipio */}
+              <div class="ab-postcard__data">
+                <div class="ab-postcard__data-row">
+                  <span class="text-mono">ALTITUD</span>
+                  <span class="text-mono ab-postcard__data-v">444 m</span>
+                </div>
+                <div class="ab-postcard__data-row">
+                  <span class="text-mono">SUPERFICIE</span>
+                  <span class="text-mono ab-postcard__data-v">168 km²</span>
+                </div>
+                <div class="ab-postcard__data-row">
+                  <span class="text-mono">PATRÓN</span>
+                  <span class="text-mono ab-postcard__data-v">Stmo. Cristo del Mar · sep.</span>
+                </div>
+                <div class="ab-postcard__data-row">
+                  <span class="text-mono">DIST. SEDE</span>
+                  <span class="text-mono ab-postcard__data-v">35 min · Vera</span>
+                </div>
+              </div>
             </div>
           </aside>
         </div>
       </div>
 
-      <div class="svc-hero__marquee">
-        <div class="svc-hero__marquee-track">
-          {Array.from({length: 6}).map(() => (
-            <span>★ ALBOX ★ VALLE DEL ALMANZORA ★ MÁRMOL ★ MACAEL ★ MERCADO ★ COMERCIO ★ BILINGÜE ★</span>
+      {/* Marquee */}
+      <div class="ab-marquee">
+        <div class="ab-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ EL MERCADO DE LOS MARTES ★ MÁRMOL DE MACAEL ★ VALLE DEL ALMANZORA ★ BILINGÜE ES/EN ★ </span>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="section-brutal" style="padding:0;background:var(--brutal-bg-alt);border-bottom:2px solid var(--brutal-ink);">
-      <div class="pueblo-map-wrap">
-        <InteractiveMap center={[-2.149, 37.387]} zoom={13} pitch={25} bearing={-15} label="Albox" />
-      </div>
-    </section>
-
-    {/* SECTORES */}
-    <section class="section-brutal" id="sectores">
+    {/* ════════════════════════════════════════════════ */}
+    {/* EL MERCADO DE LOS MARTES — flagship              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-mercado-section" id="mercado">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 01 / Sectores Albox</span>
-            <h2 class="brutal-section-head__title">
-              Para quién
-              <em>diseñamos</em>
-              en Albox.
+            <span class="text-meta" style="color:var(--ab-naranja)">Cap. 02 / Día grande</span>
+            <h2 class="heading-display brutal-section-head__title">
+              El mercado
+              <em class="heading-editorial">de los martes.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Seis sectores fuertes en Albox y Valle del Almanzora: mercado,
-            mármol, servicios, salud, hostelería y construcción. Cada uno con
-            estrategia propia.
+            Desde <strong>1850</strong>, cada martes Albox se llena de puestos
+            que vienen de toda la comarca. <strong>+200 paradas</strong> y
+            visitantes desde Lorca, Vera y la comunidad británica.
+            Tu negocio digital puede vivir <em>todos los días así</em>.
           </p>
         </header>
 
-        <ol class="svc-bento">
+        <div class="ab-mercado">
+
+          {/* Timeline del día */}
+          <ol class="ab-mercado__timeline">
+            {mercado.map((m, i) => (
+              <li class={`ab-mercado__step ab-mercado__step--${i}`}>
+                <span class="ab-mercado__hora text-mono">{m.hora}</span>
+                <div class="ab-mercado__body">
+                  <h3 class="ab-mercado__act heading-display">{m.actividad}</h3>
+                  <p class="ab-mercado__desc">{m.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          {/* Puestos típicos */}
+          <aside class="ab-mercado__puestos">
+            <h3 class="text-mono ab-mercado__puestos-h">★ QUÉ ENCUENTRAS</h3>
+            <ul class="ab-mercado__puestos-list">
+              {puestos.map((p) => (
+                <li class={`ab-puesto ab-puesto--${p.color}`}>
+                  <span class="ab-puesto__ic" aria-hidden="true">{p.ic}</span>
+                  <span class="ab-puesto__name">{p.name}</span>
+                </li>
+              ))}
+            </ul>
+            <p class="ab-mercado__note">
+              <strong>★ Idea:</strong> tu web te permite vender lo mismo que en
+              el mercado <em>los otros 6 días de la semana</em> a clientes
+              que no pueden venir el martes.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MÁRMOL DE MACAEL — sección                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-marmol-section">
+      <div class="container-brutal">
+        <div class="ab-marmol">
+
+          <div class="ab-marmol__l">
+            <span class="text-meta ab-marmol-chapter">Cap. 03 / A 15 km</span>
+            <h2 class="ab-marmol-title heading-display">
+              El mármol
+              <em class="heading-editorial">de Macael.</em>
+            </h2>
+            <p class="ab-marmol-lead">
+              A 15 km de Albox, <strong>Macael exporta a 60+ países</strong>:
+              mármol blanco usado en la Alhambra, en proyectos de Arabia
+              Saudí, Emiratos, Italia y EEUU. Las empresas del sector
+              necesitan webs <strong>técnicas, multiidioma y rápidas</strong>
+              para captar distribuidores B2B internacionales.
+            </p>
+
+            <div class="ab-marmol__features">
+              <div class="ab-marmol__feat">
+                <span class="text-mono ab-marmol__feat-n">01</span>
+                <span class="ab-marmol__feat-t">Catálogo técnico ES/EN/IT/AR</span>
+                <span class="ab-marmol__feat-d">Fichas PDF descargables · trazabilidad</span>
+              </div>
+              <div class="ab-marmol__feat">
+                <span class="text-mono ab-marmol__feat-n">02</span>
+                <span class="ab-marmol__feat-t">Formularios B2B cualificados</span>
+                <span class="ab-marmol__feat-d">RFQ · solicitud cotización · contacto distribuidor</span>
+              </div>
+              <div class="ab-marmol__feat">
+                <span class="text-mono ab-marmol__feat-n">03</span>
+                <span class="ab-marmol__feat-t">SEO internacional</span>
+                <span class="ab-marmol__feat-d">"white marble Macael" · hreflang · Google internacional</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Vetas de mármol SVG */}
+          <aside class="ab-marmol__r" aria-hidden="true">
+            <svg viewBox="0 0 300 300" width="100%" height="100%">
+              <defs>
+                <radialGradient id="ab-marble-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stop-color="#FFFCF6" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#E8DCC0" stop-opacity="1"/>
+                </radialGradient>
+              </defs>
+              {/* Bloque mármol */}
+              <rect x="20" y="20" width="260" height="260" fill="#0E0D0B" transform="translate(8 8)"/>
+              <rect x="20" y="20" width="260" height="260" fill="url(#ab-marble-glow)" stroke="#0E0D0B" stroke-width="3"/>
+
+              {/* Vetas */}
+              <g fill="none" stroke="#D5C9B6" stroke-width="1.5" opacity="0.7">
+                <path d="M 30 60 Q 100 70 150 50 T 270 80"/>
+                <path d="M 30 100 Q 80 120 140 90 T 270 110"/>
+                <path d="M 30 140 Q 90 130 160 150 T 270 140"/>
+                <path d="M 30 180 Q 100 200 170 180 T 270 200"/>
+                <path d="M 30 220 Q 120 210 190 230 T 270 220"/>
+                <path d="M 30 260 Q 110 250 170 270 T 270 260"/>
+              </g>
+              <g fill="none" stroke="#B0A48F" stroke-width="0.8" opacity="0.5">
+                <path d="M 30 70 Q 60 80 90 70"/>
+                <path d="M 130 130 Q 160 140 190 125"/>
+                <path d="M 200 200 Q 230 210 260 200"/>
+              </g>
+
+              {/* Etiqueta esquina */}
+              <rect x="36" y="36" width="80" height="28" fill="#0E0D0B"/>
+              <text x="76" y="50" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2">MÁRMOL</text>
+              <text x="76" y="60" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#E96B2A" letter-spacing="2">★ MACAEL ★</text>
+
+              {/* Texto inferior */}
+              <text x="150" y="278" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0E0D0B" letter-spacing="3">EXPORT 60+ PAÍSES</text>
+
+              {/* Banderitas idiomas */}
+              <g transform="translate(192, 36)">
+                <rect width="24" height="14" fill="#AA151B"/>
+                <rect y="4.6" width="24" height="4.6" fill="#F1BF00"/>
+                <text x="12" y="11" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#0E0D0B">ES</text>
+              </g>
+              <g transform="translate(220, 36)">
+                <rect width="24" height="14" fill="#012169"/>
+                <path d="M0 0L24 14M24 0L0 14" stroke="#FFFFFF" stroke-width="1.5"/>
+                <path d="M12 0V14M0 7H24" stroke="#FFFFFF" stroke-width="2.5"/>
+                <path d="M12 0V14M0 7H24" stroke="#C8102E" stroke-width="1.2"/>
+                <text x="12" y="11" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFFFF">EN</text>
+              </g>
+              <g transform="translate(192, 56)">
+                <rect width="24" height="14" fill="#FFFFFF" stroke="#0E0D0B" stroke-width="0.5"/>
+                <rect width="8" height="14" fill="#008C45"/>
+                <rect x="16" width="8" height="14" fill="#CD212A"/>
+                <text x="12" y="11" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#0E0D0B">IT</text>
+              </g>
+              <g transform="translate(220, 56)">
+                <rect width="24" height="14" fill="#006C35"/>
+                <text x="12" y="11" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFFFF">AR</text>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--ab-naranja)">Cap. 04 / Cifras y hitos</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--ab-paper)">
+              Por qué Albox
+              <em class="heading-editorial" style="color:var(--ab-naranja)">pesa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(248,244,236,0.75)">
+            Datos reales del municipio. Cabeza comarcal, mercado histórico,
+            cercanía a la industria del mármol y comunidad internacional activa.
+          </p>
+        </header>
+
+        <ul class="ab-hitos">
+          {hitos.map((h, i) => (
+            <li class={`ab-hito ab-hito--${i}`}>
+              <span class="text-mono ab-hito__k">{h.k}</span>
+              <span class="ab-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Sectores Albox</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios del
+              <em class="heading-editorial">Valle.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con su estrategia digital propia. Cada uno con
+            SEO local, integración con su ecosistema y captación cualificada
+            de toda la comarca + comunidad británica.
+          </p>
+        </header>
+
+        <ol class="ab-sec">
           {sectores.map((s, i) => {
-            const accents = ['accent', 'paper', 'lime', 'paper', 'ink', 'paper'];
+            const colors = ['naranja', 'marble', 'azul', 'verde', 'mostaza', 'rojo'];
             return (
-              <li class={`svc-card svc-card--${accents[i]}`}>
-                <header class="svc-card__head">
-                  <span class="svc-card__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="svc-card__kicker">{s.stat} · {s.statLabel}</span>
+              <li class={`ab-sec__card ab-sec__card--${colors[i]}`}>
+                <header class="ab-sec__head">
+                  <span class="text-mono ab-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="ab-sec__stat-box">
+                    <span class="ab-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="ab-sec__stat-l">{s.statLabel}</span>
+                  </div>
                 </header>
-                <h3 class="svc-card__title">{s.nombre}</h3>
-                <p class="svc-card__desc">{s.desc}</p>
-                <ul class="svc-card__features">
+                <h3 class="ab-sec__title heading-display">{s.nombre}</h3>
+                <p class="ab-sec__desc">{s.desc}</p>
+                <ul class="ab-sec__tags">
                   {s.tags.map((t) => (
-                    <li class="svc-card__feat"><span class="svc-card__feat-mark">+</span><span>{t}</span></li>
+                    <li class="ab-sec__tag"><span>+</span>{t}</li>
                   ))}
                 </ul>
-                <footer class="svc-card__foot">
-                  <div class="svc-card__figure">
-                    <span class="svc-card__figure-val">{s.stat}</span>
-                    <span class="svc-card__figure-lbl">{s.statLabel}</span>
-                  </div>
-                  <a href="/contacto" class="svc-card__cta">Pedir →</a>
+                <footer class="ab-sec__foot">
+                  <a href="/contacto" class="ab-sec__cta">Hablemos →</a>
                 </footer>
               </li>
             );
@@ -187,112 +681,155 @@ const jsonLdSchemas = [
       </div>
     </section>
 
-    {/* DIFERENCIALES */}
-    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 02 / Por qué Albox</span>
-            <h2 class="brutal-section-head__title">
-              Centro del Valle,
-              <em>puerta del mármol.</em>
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-map-section">
+      <header class="ab-map-head">
+        <div class="container-brutal ab-map-head__inner">
+          <div>
+            <span class="text-meta ab-map-chapter">Cap. 06 / Cartografía</span>
+            <h2 class="heading-display ab-map-title">
+              El Valle
+              <em class="heading-editorial">desde el aire.</em>
             </h2>
           </div>
-          <p class="brutal-section-head__lead">
-            Tres mercados se cruzan en Albox: comercio comarcal, industria del
-            mármol exportadora y comunidad británica residente. Tres oportunidades
-            digitales bien diferenciadas.
-          </p>
-        </header>
+          <div class="ab-map-coords">
+            <span class="text-mono">37.387° N · 1.619° W</span>
+            <span class="text-mono">ALT. 444m · 168 km² · CAPITAL DEL VALLE</span>
+          </div>
+        </div>
+      </header>
 
-        <ul class="svc-sectors">
-          {diferenciales.map((d, i) => (
-            <li class={`svc-sector svc-sector--${i % 3}`}>
-              <span class="text-meta">★ {String(i + 1).padStart(2, '0')}</span>
-              <h3 class="svc-sector__title">{d.title}</h3>
-              <p class="svc-sector__desc">{d.desc}</p>
-            </li>
-          ))}
-        </ul>
+      <div class="ab-map-frame">
+        <div class="ab-map-wrap">
+          <InteractiveMap
+            center={[-1.6187, 37.3871]}
+            zoom={13}
+            pitch={45}
+            bearing={5}
+            label="Albox"
+            themeColor="#E96B2A"
+            themeColorDark="#A04317"
+            townInitial="A"
+          />
+        </div>
       </div>
     </section>
 
-    {/* PROCESO */}
-    <section class="section-brutal">
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-dif-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 03 / Método</span>
-            <h2 class="brutal-section-head__title">
-              De cero a producción
-              <em>en 2 semanas.</em>
+            <span class="text-meta">Cap. 07 / Por qué Albox</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para apostar por el Valle.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Cuatro fases con entregables claros. Reunión en Albox, diseño,
-            desarrollo con SEO técnico y lanzamiento con formación incluida.
+            La combinación única de Albox: tamaño, mercado tradicional,
+            cercanía al mármol y comunidad británica residente.
           </p>
         </header>
 
-        <ol class="svc-process">
-          {proceso.map((s, i) => (
-            <li class={`svc-process__step svc-process__step--${i % 2 === 0 ? 'a' : 'b'}`}>
-              <div class="svc-process__rail">
-                <span class="svc-process__dot"></span>
-                {i < proceso.length - 1 && <span class="svc-process__line"></span>}
-              </div>
-              <div class="svc-process__num">
-                <span class="text-mono">{s.num}</span>
-                <span class="svc-process__eta">{s.eta}</span>
-              </div>
-              <div class="svc-process__content">
-                <h3 class="svc-process__title">{s.title}</h3>
-                <p class="svc-process__body">{s.body}</p>
-              </div>
-              <aside class="svc-process__deliv">
-                <span class="text-meta">Entregable</span>
-                <p>{s.deliverable}</p>
-              </aside>
+        <ol class="ab-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`ab-dif__item ab-dif__item--${i}`}>
+              <span class="text-mono ab-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display ab-dif__t">{d.title}</h3>
+              <p class="ab-dif__desc">{d.desc}</p>
             </li>
           ))}
         </ol>
       </div>
     </section>
 
-    {/* TESTIMONIOS */}
-    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-proc-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 04 / Voces de Albox</span>
-            <h2 class="brutal-section-head__title">
-              Negocios locales que
-              <em>ya facturan más.</em>
+            <span class="text-meta" style="color:var(--ab-mostaza)">Cap. 08 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--ab-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--ab-naranja)">a tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(248,244,236,0.75)">
+            Reunión en Albox. Diseñamos. Programamos con SEO técnico
+            integrado. Lanzamos y formamos. Sin sorpresas, plazos claros.
+          </p>
+        </header>
+
+        <ol class="ab-proc">
+          {proceso.map((s) => (
+            <li class="ab-proc__step">
+              <header class="ab-proc__head">
+                <span class="text-mono ab-proc__num">{s.num}</span>
+                <span class="text-mono ab-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display ab-proc__t">{s.title}</h3>
+              <p class="ab-proc__body">{s.body}</p>
+              <footer class="ab-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Voces del Valle</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Albox
+              <em class="heading-editorial">que ya venden online.</em>
             </h2>
           </div>
         </header>
 
-        <figure class="svc-pull">
-          <div class="svc-pull__marks" aria-hidden="true">“</div>
-          <blockquote class="svc-pull__quote">{testimonios[0].texto}</blockquote>
-          <figcaption class="svc-pull__cap">
-            <span class="svc-pull__avatar">{testimonios[0].nombre[0]}</span>
+        <figure class="ab-pull">
+          <div class="ab-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="ab-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#E96B2A" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="ab-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5"><textPath href="#ab-pull-c" startOffset="0%">★ TESTIMONIO · ALBOX · 2026 ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#FFFCF6">"</text>
+            </svg>
+          </div>
+          <blockquote class="ab-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="ab-pull__cap">
+            <span class="ab-pull__avatar">{testimonios[0].nombre[0]}</span>
             <div>
-              <span class="svc-pull__name">{testimonios[0].nombre}</span>
-              <span class="svc-pull__role">{testimonios[0].negocio}</span>
+              <span class="ab-pull__name">{testimonios[0].nombre}</span>
+              <span class="ab-pull__role">{testimonios[0].negocio}</span>
             </div>
           </figcaption>
         </figure>
 
-        <ul class="svc-quotes">
+        <ul class="ab-quotes">
           {testimonios.slice(1).map((t, i) => (
-            <li class={`svc-quote svc-quote--${i}`}>
-              <p>"{t.texto}"</p>
+            <li class={`ab-quote ab-quote--${i}`}>
+              <span class="ab-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
               <footer>
-                <span class="svc-quote__avatar">{t.nombre[0]}</span>
+                <span class="ab-quote__avatar">{t.nombre[0]}</span>
                 <div>
-                  <span class="svc-quote__name">{t.nombre}</span>
-                  <span class="svc-quote__role">{t.negocio}</span>
+                  <span class="ab-quote__name">{t.nombre}</span>
+                  <span class="ab-quote__role">{t.negocio}</span>
                 </div>
               </footer>
             </li>
@@ -301,34 +838,37 @@ const jsonLdSchemas = [
       </div>
     </section>
 
-    {/* FAQ */}
-    <section class="section-brutal">
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-faq-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 05 / Preguntas Albox</span>
-            <h2 class="brutal-section-head__title">
+            <span class="text-meta">Cap. 10 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
               Lo que más
-              <em>preguntan</em>
-              en Albox.
+              <em class="heading-editorial">preguntan en Albox.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Plazos, precios, hosting, mármol y bilingüe. Si no está aquí,
-            escríbenos y respondemos en menos de 24h.
+            Plazos, precios, hosting gratuito, SEO local, web bilingüe y
+            mármol. Si no está aquí, escríbenos.
           </p>
         </header>
 
-        <ol class="svc-faq">
+        <ol class="ab-faq">
           {faq.map((f, i) => (
-            <li class="svc-faq__item">
-              <details class="svc-faq__details" open={i === 0}>
-                <summary class="svc-faq__sum">
-                  <span class="svc-faq__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="svc-faq__q">{f.q}</span>
-                  <span class="svc-faq__toggle" aria-hidden="true">+</span>
+            <li class="ab-faq__item">
+              <details class="ab-faq__det" open={i === 0}>
+                <summary class="ab-faq__sum">
+                  <span class="text-mono ab-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="ab-faq__q">{f.q}</span>
+                  <span class="ab-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
                 </summary>
-                <div class="svc-faq__answer"><p>{f.a}</p></div>
+                <div class="ab-faq__ans"><p>{f.a}</p></div>
               </details>
             </li>
           ))}
@@ -336,32 +876,34 @@ const jsonLdSchemas = [
       </div>
     </section>
 
-    {/* OTROS PUEBLOS DEL VALLE */}
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
     {pueblosValle.length > 0 && (
-      <section class="section-brutal" style="background:var(--brutal-bg-alt);border-top:2px solid var(--brutal-ink);">
+      <section class="ab-vecinos-section">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 06 / Valle del Almanzora</span>
-              <h2 class="brutal-section-head__title">
-                También en el
-                <em>Valle del Almanzora.</em>
+              <span class="text-meta">Cap. 11 / Valle del Almanzora</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en todo
+                <em class="heading-editorial">el Valle.</em>
               </h2>
             </div>
             <p class="brutal-section-head__lead">
-              Otros municipios del Valle del Almanzora donde ya trabajamos.
-              Si tu pueblo no está, escríbenos.
+              Otros municipios del Valle del Almanzora donde trabajamos.
+              Si tu pueblo no aparece, escríbenos — cubrimos toda Almería.
             </p>
           </header>
 
-          <ul class="cobertura-grid" style="margin-top:2rem;">
+          <ul class="ab-vecinos">
             {pueblosValle.slice(0, 8).map((p, i) => (
               <li>
-                <a href={`/diseno-web/${p.slug}/`} class={`cobertura-tile cobertura-tile--${i % 6}`}>
-                  <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
-                  <span class="cobertura-tile__name heading-display">{p.nombre}</span>
-                  <span class="cobertura-tile__sub text-mono">{p.comarca}</span>
-                  <span class="cobertura-tile__arrow" aria-hidden="true">→</span>
+                <a href={`/diseno-web/${p.slug}/`} class={`ab-vecino ab-vecino--${i % 4}`}>
+                  <span class="text-mono ab-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="ab-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono ab-vecino__sub">{p.comarca}</span>
+                  <span class="ab-vecino__arrow" aria-hidden="true">→</span>
                 </a>
               </li>
             ))}
@@ -370,24 +912,133 @@ const jsonLdSchemas = [
       </section>
     )}
 
-    {/* CTA final */}
-    <section class="svc-final">
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ab-final">
       <div class="container-brutal">
-        <div class="svc-final__inner">
-          <span class="text-meta">★ Próximo paso</span>
-          <h2 class="svc-final__title">
-            ¿Empezamos tu web
-            <em>en Albox?</em>
-          </h2>
-          <p class="svc-final__text">
-            Cuéntanos qué necesitas — comercio, mármol, gestoría, hostelería,
-            inmobiliaria — y te enviamos un presupuesto detallado en 24h.
-            Reuniones presenciales en Albox y todo el Valle.
-          </p>
-          <div class="svc-final__btns">
-            <a href="/contacto" class="btn-brutal btn-brutal--lg">Pedir presupuesto →</a>
-            <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Llamar al 657 085 019</a>
+        <div class="ab-final__grid">
+
+          <div class="ab-final__l">
+            <span class="text-meta ab-final__chapter">★ Cap. 12 · Próximo paso</span>
+            <h2 class="heading-display ab-final__title">
+              ¿Empezamos tu web
+              <em class="heading-editorial">en el Valle?</em>
+            </h2>
+            <p class="ab-final__lead">
+              Tu negocio en Albox con <strong>SEO local + bilingüe ES/EN</strong>,
+              diseño que conecta y soporte humano. Comercio, mármol, servicios,
+              hostelería — captamos clientes en una comarca que
+              <strong>busca y compra todo el año</strong>.
+            </p>
+            <div class="ab-final__cta">
+              <a href="/contacto" class="ab-final__btn ab-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="ab-final__btn ab-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="ab-final__trust">
+              <span><span class="ab-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ BILINGÜE ES/EN</span>
+              <span>★ MÁRMOL B2B</span>
+              <span>4.9★ · 41 RESEÑAS</span>
+            </div>
           </div>
+
+          {/* Carrito de mercado + cesta */}
+          <div class="ab-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="ab-final-svg">
+              <defs>
+                <radialGradient id="ab-final-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stop-color="#E96B2A" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#E96B2A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="160" cy="160" r="150" fill="url(#ab-final-glow)"/>
+
+              {/* Sol */}
+              <circle cx="240" cy="80" r="22" fill="#D9AF3A" stroke="#FFFCF6" stroke-width="3"/>
+              {Array.from({length: 12}).map((_, i) => (
+                <line x1="240" y1="48" x2="240" y2="54" stroke="#D9AF3A" stroke-width="3" stroke-linecap="round" transform={`rotate(${i*30} 240 80)`}/>
+              ))}
+
+              {/* Suelo */}
+              <path d="M 0 240 Q 160 220 320 240 L 320 320 L 0 320 Z" fill="#E8D9B0" stroke="#FFFCF6" stroke-width="3"/>
+
+              {/* PUESTO DE MERCADO grande */}
+              <g class="ab-final-stand">
+                {/* Toldo a rayas naranja-blanco */}
+                <path d="M 70 100 L 250 100 L 250 116 L 70 116 Z" fill="#E96B2A" stroke="#FFFCF6" stroke-width="3"/>
+                <rect x="84" y="100" width="14" height="16" fill="#FFFCF6"/>
+                <rect x="112" y="100" width="14" height="16" fill="#FFFCF6"/>
+                <rect x="140" y="100" width="14" height="16" fill="#FFFCF6"/>
+                <rect x="168" y="100" width="14" height="16" fill="#FFFCF6"/>
+                <rect x="196" y="100" width="14" height="16" fill="#FFFCF6"/>
+                <rect x="224" y="100" width="14" height="16" fill="#FFFCF6"/>
+
+                {/* Bordillo dentado */}
+                <path d="M 70 116 L 80 124 L 90 116 L 100 124 L 110 116 L 120 124 L 130 116 L 140 124 L 150 116 L 160 124 L 170 116 L 180 124 L 190 116 L 200 124 L 210 116 L 220 124 L 230 116 L 240 124 L 250 116" fill="none" stroke="#FFFCF6" stroke-width="3"/>
+
+                {/* Postes */}
+                <line x1="76" y1="116" x2="76" y2="200" stroke="#FFFCF6" stroke-width="4"/>
+                <line x1="244" y1="116" x2="244" y2="200" stroke="#FFFCF6" stroke-width="4"/>
+
+                {/* Mesa */}
+                <rect x="70" y="180" width="180" height="22" fill="#8B5A2B" stroke="#FFFCF6" stroke-width="3"/>
+
+                {/* Cajas con productos */}
+                <rect x="80" y="158" width="50" height="22" fill="#5F8B4C" stroke="#FFFCF6" stroke-width="2.5"/>
+                <circle cx="90"  cy="166" r="4" fill="#D9AF3A"/>
+                <circle cx="100" cy="166" r="4" fill="#D9AF3A"/>
+                <circle cx="110" cy="166" r="4" fill="#D9AF3A"/>
+                <circle cx="120" cy="166" r="4" fill="#D9AF3A"/>
+                <circle cx="95"  cy="174" r="4" fill="#D9AF3A"/>
+                <circle cx="105" cy="174" r="4" fill="#D9AF3A"/>
+                <circle cx="115" cy="174" r="4" fill="#D9AF3A"/>
+
+                <rect x="135" y="156" width="50" height="24" fill="#B0241F" stroke="#FFFCF6" stroke-width="2.5"/>
+                <circle cx="145" cy="166" r="4" fill="#E96B2A"/>
+                <circle cx="155" cy="166" r="4" fill="#E96B2A"/>
+                <circle cx="165" cy="166" r="4" fill="#E96B2A"/>
+                <circle cx="175" cy="166" r="4" fill="#E96B2A"/>
+                <circle cx="150" cy="174" r="4" fill="#E96B2A"/>
+                <circle cx="160" cy="174" r="4" fill="#E96B2A"/>
+                <circle cx="170" cy="174" r="4" fill="#E96B2A"/>
+
+                <rect x="190" y="160" width="50" height="20" fill="#1F3A6E" stroke="#FFFCF6" stroke-width="2.5"/>
+                <circle cx="200" cy="170" r="4" fill="#FFFCF6"/>
+                <circle cx="210" cy="170" r="4" fill="#FFFCF6"/>
+                <circle cx="220" cy="170" r="4" fill="#FFFCF6"/>
+                <circle cx="230" cy="170" r="4" fill="#FFFCF6"/>
+              </g>
+
+              {/* Cesta de mimbre delante del puesto */}
+              <g transform="translate(160, 230)">
+                <path d="M -22 0 L 22 0 L 18 18 L -18 18 Z" fill="#C49A6C" stroke="#0E0D0B" stroke-width="2"/>
+                <line x1="-22" y1="0" x2="22" y2="0" stroke="#0E0D0B" stroke-width="3"/>
+                <path d="M -16 0 Q 0 -16 16 0" fill="none" stroke="#8B5A2B" stroke-width="2"/>
+                {/* Productos en cesta */}
+                <circle cx="-8" cy="8" r="3" fill="#5F8B4C" stroke="#0E0D0B" stroke-width="1"/>
+                <circle cx="0" cy="6" r="3" fill="#B0241F" stroke="#0E0D0B" stroke-width="1"/>
+                <circle cx="8" cy="8" r="3" fill="#D9AF3A" stroke="#0E0D0B" stroke-width="1"/>
+              </g>
+
+              {/* Texto */}
+              <text x="160" y="305" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#0E0D0B" letter-spacing="3">★ ALBOX · 04800 · MARTES ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="ab-final__marquee">
+        <div class="ab-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ MERCADO DE LOS MARTES ★ BILINGÜE ES/EN ★ MÁRMOL B2B ★ HABLEMOS ★ </span>
+          ))}
         </div>
       </div>
     </section>
@@ -397,6 +1048,1036 @@ const jsonLdSchemas = [
 </BaseLayout>
 
 <style>
-  .pueblo-map-wrap { width: 100%; height: clamp(360px, 50vh, 520px); overflow: hidden; }
-  .pueblo-map-wrap > * { width: 100%; height: 100%; }
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · ALBOX · MERCADO DEL VALLE                      */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab {
+    --ab-paper:    #F8F4EC;          /* mármol blanco */
+    --ab-paper-2:  #F0E8D3;
+    --ab-marble:   #EAE0CA;          /* veta */
+    --ab-marble-d: #D5C9B6;
+    --ab-ink:      #0E0D0B;
+    --ab-naranja:  #E96B2A;          /* toldos naranja */
+    --ab-naranja-d:#A04317;
+    --ab-verde:    #5F8B4C;          /* vega + toldos verdes */
+    --ab-verde-d:  #43631F;
+    --ab-rojo:     #B0241F;          /* toldos rojos */
+    --ab-azul:     #1F3A6E;          /* UK + toldos azules */
+    --ab-mostaza:  #D9AF3A;          /* toldos amarillos */
+    --ab-tierra:   #8B5A2B;          /* mesa madera */
+    --ab-lima:     #D6FF44;
+    --ab-shadow:   8px 8px 0 var(--ab-ink);
+  }
+  .ab-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ab-naranja);
+    box-shadow: 0 0 0 0 rgba(233,107,42,0.55);
+    animation: ab-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ab-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(233,107,42,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(233,107,42,0); }
+    100% { box-shadow: 0 0 0 0 rgba(233,107,42,0); }
+  }
+  .ab-spin { transform-origin: 50% 50%; animation: ab-spin 26s linear infinite; }
+  @keyframes ab-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(233,107,42,0.10), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(95,139,76,0.08), transparent 50%),
+      var(--ab-paper);
+    border-bottom: 3px solid var(--ab-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 40px, rgba(213,201,182,0.15) 40px 41px);
+    pointer-events: none;
+  }
+  .ab-hero > * { position: relative; }
+  .ab-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .ab-hero__status { color: var(--ab-naranja); font-weight: 700; }
+
+  .ab-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) { .ab-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .ab-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .ab-hero__chapter { color: var(--ab-naranja); }
+  .ab-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .ab-hero__title em { color: var(--ab-naranja); font-style: italic; }
+  .ab-hero__title-stamp {
+    display: inline-block;
+    color: var(--ab-paper);
+    background: var(--ab-verde);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .ab-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 54ch;
+  }
+  .ab-hero__lead strong { color: var(--ab-ink); font-weight: 700; }
+  .ab-hero__lead em { color: var(--ab-naranja); font-style: italic; font-weight: 600; }
+
+  .ab-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+  .ab-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--ab-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .ab-btn--primary {
+    background: var(--ab-naranja); color: var(--ab-paper);
+    box-shadow: 6px 6px 0 var(--ab-ink);
+  }
+  .ab-btn--primary:hover {
+    background: var(--ab-verde);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ab-ink);
+  }
+  .ab-btn--ghost {
+    background: transparent; color: var(--ab-ink);
+    box-shadow: 6px 6px 0 var(--ab-naranja);
+  }
+  .ab-btn--ghost:hover {
+    background: var(--ab-ink); color: var(--ab-mostaza);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ab-naranja);
+  }
+
+  /* KPIs */
+  .ab-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--ab-ink);
+    background: var(--ab-ink);
+  }
+  @media (min-width: 768px) { .ab-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .ab-kpi {
+    background: var(--ab-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--ab-ink);
+    border-bottom: 2px solid var(--ab-ink);
+  }
+  .ab-kpi:nth-child(2n) { border-right: none; }
+  .ab-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .ab-kpi:nth-child(2n)      { border-right: 2px solid var(--ab-ink); }
+    .ab-kpi:nth-child(4n)      { border-right: none; }
+    .ab-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--ab-ink); }
+    .ab-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .ab-kpi--naranja { background: var(--ab-naranja); color: var(--ab-paper); }
+  .ab-kpi--verde   { background: var(--ab-verde); color: var(--ab-paper); }
+  .ab-kpi--azul    { background: var(--ab-azul); color: var(--ab-paper); }
+  .ab-kpi--ink     { background: var(--ab-ink); color: var(--ab-paper); }
+  .ab-kpi--ink .ab-kpi__v { color: var(--ab-mostaza); }
+  .ab-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .ab-kpi__v small { font-size: .55em; opacity: .8; }
+  .ab-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .ab-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
+  }
+  .ab-postcard {
+    background: var(--ab-paper);
+    border: 3px solid var(--ab-ink);
+    box-shadow: var(--ab-shadow);
+    overflow: hidden;
+    transform: rotate(-1.5deg);
+    transition: transform .35s;
+  }
+  .ab-postcard:hover { transform: rotate(0); }
+  .ab-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--ab-naranja);
+    color: var(--ab-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--ab-ink);
+  }
+  .ab-postcard__profile {
+    width: 100%;
+    aspect-ratio: 540 / 220;
+    border-bottom: 2px solid var(--ab-ink);
+    overflow: hidden;
+  }
+  .ab-postcard__img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 2px solid var(--ab-ink);
+  }
+  .ab-postcard__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.05);
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .ab-postcard:hover .ab-postcard__img { transform: scale(1.05); }
+  .ab-postcard__seal {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 80px; height: 80px;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 10px rgba(233,107,42,0.5));
+  }
+  .ab-postcard__tag {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    background: var(--ab-mostaza);
+    color: var(--ab-ink);
+    padding: .4rem .75rem;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--ab-ink);
+    box-shadow: 3px 3px 0 var(--ab-naranja);
+    transform: rotate(-2deg);
+  }
+  .ab-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--ab-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .ab-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    font-size: .68rem;
+  }
+  .ab-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .ab-postcard__data-row > span:first-child { color: var(--ab-naranja-d); letter-spacing: .2em; font-weight: 800; }
+  .ab-postcard__data-v { color: var(--ab-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .ab-marquee {
+    background: var(--ab-verde);
+    color: var(--ab-paper);
+    overflow: hidden;
+    padding: .9rem 0;
+    border-top: 3px solid var(--ab-ink);
+  }
+  .ab-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: ab-marquee 36s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes ab-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MERCADO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-mercado-section {
+    background: var(--ab-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-mercado {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  @media (min-width: 1024px) { .ab-mercado { grid-template-columns: 1.4fr 1fr; gap: 3rem; } }
+
+  /* Timeline */
+  .ab-mercado__timeline {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column;
+    border: 3px solid var(--ab-ink);
+    background: var(--ab-paper);
+    box-shadow: var(--ab-shadow);
+  }
+  .ab-mercado__step {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1.5px dashed rgba(14,13,11,0.18);
+    gap: 1rem;
+    transition: background .25s;
+  }
+  .ab-mercado__step:last-child { border-bottom: none; }
+  .ab-mercado__step:hover { background: var(--ab-paper-2); }
+  .ab-mercado__step--0 { background: rgba(233,107,42,0.06); }
+  .ab-mercado__step--2 { background: rgba(217,175,58,0.08); }
+  .ab-mercado__step--4 { background: rgba(95,139,76,0.08); }
+  .ab-mercado__hora {
+    background: var(--ab-ink); color: var(--ab-mostaza);
+    padding: .4rem .55rem;
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    border: 2px solid var(--ab-ink);
+    text-align: center;
+  }
+  .ab-mercado__body { display: flex; flex-direction: column; gap: 2px; }
+  .ab-mercado__act {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--ab-ink);
+    margin: 0;
+  }
+  .ab-mercado__desc { font-size: .85rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* Puestos */
+  .ab-mercado__puestos {
+    background: var(--ab-ink);
+    color: var(--ab-paper);
+    padding: 1.75rem 1.5rem;
+    border: 3px solid var(--ab-ink);
+    box-shadow: 8px 8px 0 var(--ab-naranja);
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .ab-mercado__puestos-h {
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: var(--ab-mostaza);
+    font-weight: 800;
+  }
+  .ab-mercado__puestos-list {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .55rem;
+  }
+  .ab-puesto {
+    display: flex; align-items: center; gap: .55rem;
+    padding: .55rem .7rem;
+    background: rgba(248,244,236,0.06);
+    border: 1.5px solid currentColor;
+    transition: background .2s;
+  }
+  .ab-puesto:hover { background: rgba(248,244,236,0.14); }
+  .ab-puesto--naranja { color: var(--ab-naranja); }
+  .ab-puesto--verde   { color: var(--ab-verde); }
+  .ab-puesto--azul    { color: var(--ab-azul); }
+  .ab-puesto--rojo    { color: var(--ab-rojo); }
+  .ab-puesto--mostaza { color: var(--ab-mostaza); }
+  .ab-puesto__ic { font-size: 1.05rem; line-height: 1; }
+  .ab-puesto__name { font-size: .82rem; color: var(--ab-paper); font-weight: 700; }
+
+  .ab-mercado__note {
+    padding: .85rem 1rem;
+    background: var(--ab-mostaza);
+    color: var(--ab-ink);
+    font-size: .85rem;
+    line-height: 1.45;
+    border-left: 4px solid var(--ab-naranja);
+  }
+  .ab-mercado__note strong { color: var(--ab-naranja-d); }
+  .ab-mercado__note em { color: var(--ab-rojo); font-style: italic; font-weight: 600; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MÁRMOL                                                  */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-marmol-section {
+    background: var(--ab-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-marmol-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, transparent 0 30px, rgba(213,201,182,0.18) 30px 31px);
+    pointer-events: none;
+  }
+  .ab-marmol-section > * { position: relative; }
+  .ab-marmol {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .ab-marmol { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+
+  .ab-marmol-chapter { color: var(--ab-tierra); }
+  .ab-marmol-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .ab-marmol-title em { color: var(--ab-tierra); }
+  .ab-marmol-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 54ch;
+  }
+  .ab-marmol-lead strong { color: var(--ab-tierra); font-weight: 700; }
+
+  .ab-marmol__features {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .85rem;
+  }
+  .ab-marmol__feat {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 .85rem;
+    padding: 1rem 1.25rem;
+    background: var(--ab-marble);
+    border: 2px solid var(--ab-ink);
+    box-shadow: 4px 4px 0 var(--ab-tierra);
+  }
+  .ab-marmol__feat-n {
+    grid-row: 1 / span 2;
+    align-self: center;
+    background: var(--ab-tierra);
+    color: var(--ab-paper);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem;
+    font-weight: 800;
+    border: 1.5px solid var(--ab-ink);
+  }
+  .ab-marmol__feat-t {
+    grid-column: 2; grid-row: 1;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -.015em;
+    color: var(--ab-ink);
+  }
+  .ab-marmol__feat-d {
+    grid-column: 2; grid-row: 2;
+    font-size: .8rem;
+    color: var(--brutal-text-secondary);
+    margin-top: 2px;
+  }
+
+  .ab-marmol__r { max-width: 360px; margin: 0 auto; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HITOS                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-hitos-section {
+    background: var(--ab-ink);
+    color: var(--ab-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(233,107,42,0.08) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .ab-hitos-section > * { position: relative; }
+  .ab-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2.5px solid var(--ab-paper);
+  }
+  @media (min-width: 640px)  { .ab-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ab-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .ab-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(248,244,236,0.25);
+    border-right: 1px solid rgba(248,244,236,0.25);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(248,244,236,0.04);
+    transition: background .25s;
+  }
+  .ab-hito:hover { background: rgba(233,107,42,0.15); }
+  @media (min-width: 1024px) {
+    .ab-hito:nth-child(3n) { border-right: none; }
+    .ab-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .ab-hito:nth-child(2n) { border-right: none; }
+    .ab-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) {
+    .ab-hito { border-right: none; }
+    .ab-hito:last-child { border-bottom: none; }
+  }
+  .ab-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--ab-mostaza); font-weight: 800; }
+  .ab-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ab-paper); line-height: 1.35; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SECTORES                                                */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-sec-section {
+    background: var(--ab-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-sec {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .ab-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ab-sec { grid-template-columns: repeat(3, 1fr); } }
+  .ab-sec__card {
+    background: var(--ab-paper);
+    border: 2.5px solid var(--ab-ink);
+    box-shadow: var(--ab-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-sec__card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .ab-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .ab-sec__card--naranja { color: var(--ab-naranja); }
+  .ab-sec__card--marble  { color: var(--ab-tierra); }
+  .ab-sec__card--azul    { color: var(--ab-azul); }
+  .ab-sec__card--verde   { color: var(--ab-verde); }
+  .ab-sec__card--mostaza { color: var(--ab-mostaza); }
+  .ab-sec__card--rojo    { color: var(--ab-rojo); }
+
+  .ab-sec__head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+    gap: .5rem;
+  }
+  .ab-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ab-sec__stat-box {
+    background: var(--ab-ink); color: var(--ab-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .ab-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ab-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .ab-sec__title {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--ab-ink);
+    margin: 0;
+  }
+  .ab-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .ab-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .ab-sec__tag {
+    display: flex; align-items: flex-start; gap: .35rem;
+    font-size: .78rem;
+    line-height: 1.35;
+    color: var(--ab-ink);
+  }
+  .ab-sec__tag span { color: currentColor; font-weight: 800; }
+  .ab-sec__foot {
+    padding-top: .65rem;
+    border-top: 2px solid var(--ab-ink);
+  }
+  .ab-sec__cta {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MAPA                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-map-section {
+    background: var(--ab-marble);
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-map-head { padding: 4rem 0 2rem; }
+  .ab-map-head__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+  @media (min-width: 768px) { .ab-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .ab-map-chapter { color: var(--ab-naranja); }
+  .ab-map-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0 0;
+  }
+  .ab-map-title em { color: var(--ab-naranja); }
+  .ab-map-coords {
+    background: var(--ab-ink);
+    color: var(--ab-mostaza);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--ab-naranja);
+    box-shadow: 5px 5px 0 var(--ab-naranja);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem;
+    letter-spacing: .15em;
+  }
+  .ab-map-frame {
+    border-top: 3px solid var(--ab-ink);
+    border-bottom: 3px solid var(--ab-ink);
+    background: var(--ab-ink);
+  }
+  .ab-map-wrap > * { width: 100%; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* DIFERENCIALES                                           */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-dif-section {
+    background: var(--ab-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-dif {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--ab-ink);
+  }
+  @media (min-width: 768px) { .ab-dif { grid-template-columns: 1fr 1fr; } }
+  .ab-dif__item {
+    padding: 1.75rem 1.5rem;
+    border-bottom: 1px solid var(--ab-ink);
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .2s;
+  }
+  @media (min-width: 768px) {
+    .ab-dif__item:nth-child(odd) { border-right: 1px solid var(--ab-ink); }
+    .ab-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) {
+    .ab-dif__item:last-child { border-bottom: none; }
+  }
+  .ab-dif__item--0 { background: var(--ab-paper-2); }
+  .ab-dif__item--1 { background: var(--ab-paper); }
+  .ab-dif__item--2 { background: var(--ab-marble); }
+  .ab-dif__item--3 { background: var(--ab-paper); }
+  .ab-dif__item:hover { background: var(--ab-mostaza); }
+  .ab-dif__num { font-size: .85rem; color: var(--ab-naranja); font-weight: 800; letter-spacing: .15em; }
+  .ab-dif__t {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+    color: var(--ab-ink);
+    margin: 0;
+  }
+  .ab-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-proc-section {
+    background: var(--ab-ink);
+    color: var(--ab-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-proc-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,175,58,0.07) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .ab-proc-section > * { position: relative; }
+  .ab-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px)  { .ab-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ab-proc { grid-template-columns: repeat(4, 1fr); } }
+  .ab-proc__step {
+    background: rgba(248,244,236,0.05);
+    border: 2px solid var(--ab-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .ab-proc__step:hover { background: rgba(233,107,42,0.12); transform: translateY(-3px); }
+  .ab-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(248,244,236,0.25); }
+  .ab-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ab-mostaza); line-height: 1; }
+  .ab-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ab-naranja); }
+  .ab-proc__t {
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--ab-paper);
+    margin: .25rem 0 0;
+  }
+  .ab-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(248,244,236,0.75); flex: 1; }
+  .ab-proc__foot {
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--ab-mostaza);
+    font-weight: 800;
+    padding-top: .5rem;
+    border-top: 1.5px solid rgba(248,244,236,0.25);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIOS                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-quote-section {
+    background: var(--ab-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-pull {
+    position: relative;
+    background: var(--ab-marble);
+    border: 3px solid var(--ab-ink);
+    box-shadow: var(--ab-shadow);
+    padding: 3rem 2rem 2rem;
+    margin: 2rem 0;
+  }
+  .ab-pull__seal {
+    position: absolute;
+    top: -30px; right: 30px;
+    width: 90px; aspect-ratio: 1;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 8px rgba(233,107,42,0.4));
+  }
+  .ab-pull__q {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    line-height: 1.3;
+    margin: 0 0 1.5rem;
+    color: var(--ab-ink);
+    max-width: 56ch;
+  }
+  .ab-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--ab-ink); }
+  .ab-pull__avatar {
+    width: 48px; height: 48px;
+    background: var(--ab-naranja); color: var(--ab-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 800;
+    border-radius: 50%;
+  }
+  .ab-pull__cap div { display: flex; flex-direction: column; }
+  .ab-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ab-ink); }
+  .ab-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+
+  .ab-quotes {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .ab-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .ab-quote {
+    position: relative;
+    background: var(--ab-paper);
+    border: 2px solid var(--ab-ink);
+    box-shadow: 5px 5px 0 var(--ab-ink);
+    padding: 1.75rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .ab-quote:hover { transform: translateY(-3px); }
+  .ab-quote--0 { background: var(--ab-paper); }
+  .ab-quote--1 { background: var(--ab-marble); }
+  .ab-quote--2 { background: var(--ab-paper-2); }
+  .ab-quote__mark {
+    position: absolute;
+    top: -8px; left: 14px;
+    font-family: serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--ab-naranja);
+    opacity: .45;
+  }
+  .ab-quote p { font-size: .92rem; line-height: 1.5; color: var(--ab-ink); flex: 1; margin: 0; }
+  .ab-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--ab-ink); }
+  .ab-quote__avatar {
+    width: 36px; height: 36px;
+    background: var(--ab-verde); color: var(--ab-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ab-quote footer div { display: flex; flex-direction: column; }
+  .ab-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .ab-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-faq-section {
+    background: var(--ab-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--ab-ink);
+  }
+  .ab-faq__item { border-bottom: 2px solid var(--ab-ink); }
+  .ab-faq__det summary { list-style: none; cursor: pointer; }
+  .ab-faq__det summary::-webkit-details-marker { display: none; }
+  .ab-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .ab-faq__sum:hover { padding-inline: 1rem; background: var(--ab-paper-2); }
+  .ab-faq__num { font-size: 1rem; font-weight: 800; color: var(--ab-naranja); letter-spacing: .1em; }
+  .ab-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--ab-ink);
+    font-weight: 700;
+  }
+  .ab-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--ab-ink);
+    background: var(--ab-paper);
+    color: var(--ab-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .ab-faq__det[open] .ab-faq__toggle { transform: rotate(180deg); background: var(--ab-naranja); color: var(--ab-paper); }
+  .ab-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .ab-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .ab-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PUEBLOS VECINOS                                         */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-vecinos-section {
+    background: var(--ab-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ab-ink);
+  }
+  .ab-vecinos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr;
+    border: 2px solid var(--ab-ink);
+    background: var(--ab-ink);
+  }
+  @media (min-width: 640px)  { .ab-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .ab-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .ab-vecino {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    gap: .35rem;
+    padding: 1.5rem;
+    background: var(--ab-paper);
+    color: var(--ab-ink);
+    text-decoration: none;
+    min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .ab-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .ab-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .ab-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .ab-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ab-naranja); font-size: 1.3rem; transition: transform .25s; }
+  .ab-vecino:hover { background: var(--ab-naranja); color: var(--ab-paper); }
+  .ab-vecino:hover .ab-vecino__sub, .ab-vecino:hover .ab-vecino__n { opacity: .85; }
+  .ab-vecino:hover .ab-vecino__arrow { color: var(--ab-paper); transform: translateX(4px); }
+  .ab-vecino--1:hover { background: var(--ab-verde); color: var(--ab-paper); }
+  .ab-vecino--2:hover { background: var(--ab-tierra); color: var(--ab-paper); }
+  .ab-vecino--3:hover { background: var(--ab-ink); color: var(--ab-mostaza); }
+  .ab-vecino--3:hover .ab-vecino__arrow { color: var(--ab-mostaza); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ab-final {
+    background: var(--ab-ink);
+    color: var(--ab-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .ab-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(217,175,58,0.07) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .ab-final > * { position: relative; }
+  .ab-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .ab-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ab-final__chapter { color: var(--ab-mostaza); }
+  .ab-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--ab-paper);
+    margin: 1rem 0;
+  }
+  .ab-final__title em { color: var(--ab-naranja); font-style: italic; display: block; }
+  .ab-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(248,244,236,0.75);
+    max-width: 52ch;
+  }
+  .ab-final__lead strong { color: var(--ab-mostaza); }
+  .ab-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .ab-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .ab-final__btn--primary {
+    background: var(--ab-naranja); color: var(--ab-paper); border-color: var(--ab-naranja);
+    box-shadow: 6px 6px 0 var(--ab-mostaza);
+  }
+  .ab-final__btn--primary:hover {
+    background: var(--ab-mostaza); color: var(--ab-ink); border-color: var(--ab-mostaza);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ab-naranja);
+  }
+  .ab-final__btn--ghost {
+    background: transparent; color: var(--ab-paper); border-color: var(--ab-paper);
+    box-shadow: 6px 6px 0 var(--ab-paper);
+  }
+  .ab-final__btn--ghost:hover {
+    background: var(--ab-paper); color: var(--ab-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ab-paper);
+  }
+  .ab-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(248,244,236,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .ab-final__trust .ab-pulse { background: var(--ab-mostaza); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(217,175,58,0.55); }
+
+  .ab-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .ab-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(233,107,42,0.3)); }
+  .ab-final-stand {
+    transform-origin: center bottom;
+    animation: ab-stand-breathe 4s ease-in-out infinite;
+  }
+  @keyframes ab-stand-breathe {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+
+  .ab-final__marquee {
+    background: var(--ab-naranja);
+    color: var(--ab-paper);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--ab-ink);
+    margin: 0 -1.5rem;
+  }
+  .ab-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: ab-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
 </style>
