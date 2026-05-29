@@ -2,10 +2,232 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
 
-const title = "Diseño Web para Empresas en Almería";
-const description = "Web corporativa moderna para empresas en Almería. Diseño profesional, SEO incluido y hosting gratuito de por vida. Genera confianza y ventas desde el primer día.";
+const title = "Diseño Web para Empresas en Almería | Web Corporativa Profesional";
+const description = "Web corporativa profesional para empresas en Almería desde 3.490€. Auditoría técnica gratuita, RGPD + WCAG AA, integraciones CRM/ERP, SLA 99.9% uptime, multilingüe. Cuando tu marca lo es todo.";
 const canonical = "https://platanitorico.com/soluciones/empresa/";
+
+// ─── DATOS ─────────────────────────────────────
+
+// Auditoría gratuita (15 puntos reales)
+const auditPoints = [
+  { c: 'RENDIMIENTO', items: [
+    'Velocidad de carga (Core Web Vitals)',
+    'Lighthouse score (Performance/SEO/A11y)',
+    'Optimización de imágenes y assets',
+  ]},
+  { c: 'SEO TÉCNICO', items: [
+    'Schema markup y datos estructurados',
+    'Meta tags · Open Graph · canonical',
+    'Indexación en Search Console',
+  ]},
+  { c: 'ACCESIBILIDAD', items: [
+    'Cumplimiento WCAG 2.2 AA',
+    'Contraste de color y navegación teclado',
+    'ARIA labels y semántica HTML',
+  ]},
+  { c: 'CUMPLIMIENTO', items: [
+    'RGPD · cookies · políticas',
+    'SSL · HTTPS · seguridad headers',
+    'Aviso legal y condiciones',
+  ]},
+  { c: 'CONVERSIÓN', items: [
+    'Análisis de embudos y formularios',
+    'Llamadas a la acción y jerarquía',
+    'Compatibilidad CRM / Analytics',
+  ]},
+];
+
+// 6 pilares
+const pillars = [
+  { num: '01', code: 'A',  icon: 'foundation', title: 'Cimientos',     sub: 'PERFORMANCE · SEO', desc: 'Web ligera, indexada y bien estructurada desde el primer ladrillo. CWV verde, schema completo, sitemap óptimo.',  color: 'navy' },
+  { num: '02', code: 'B',  icon: 'facade',     title: 'Fachada',       sub: 'DISEÑO · IDENTIDAD', desc: 'Look profesional alineado con tu marca. Tipografía editorial, paleta corporativa, fotografía pro.',           color: 'gold' },
+  { num: '03', code: 'C',  icon: 'structure',  title: 'Estructura',    sub: 'ARQUITECTURA · UX', desc: 'Información jerarquizada · flujo de usuario claro · conversión optimizada. Cada clic tiene un propósito.',       color: 'blue' },
+  { num: '04', code: 'D',  icon: 'wiring',     title: 'Instalaciones', sub: 'INTEGRACIONES · API', desc: 'Conexión con tu CRM, ERP, email, booking, contabilidad. Tu web habla con todo tu stack — sin parches.',          color: 'cyan' },
+  { num: '05', code: 'E',  icon: 'shield',     title: 'Seguridad',     sub: 'RGPD · WAF · SSL', desc: 'Protección integral · cumplimiento legal · auditorías regulares. Tu reputación nunca está en juego.',                color: 'red' },
+  { num: '06', code: 'F',  icon: 'service',    title: 'Mantenimiento', sub: 'SOPORTE · SLA',     desc: 'Updates semanales · backups diarios · soporte humano. Tu web nunca queda obsoleta o desatendida.',                  color: 'mint' },
+];
+
+// Antes vs Después (transformación visual con métricas reales)
+const transformation = [
+  { metric: 'Velocidad de carga',       before: '5,2 s',  after: '1,1 s',   improvement: '-79%',  better: 'after',  unit: '', color: 'red' },
+  { metric: 'Lighthouse Performance',   before: '42/100', after: '98/100',  improvement: '+133%', better: 'after',  unit: '', color: 'lime' },
+  { metric: 'Tasa de rebote',           before: '68%',    after: '24%',     improvement: '-65%',  better: 'after',  unit: '', color: 'red' },
+  { metric: 'Leads / mes',              before: '12',     after: '37',      improvement: '+208%', better: 'after',  unit: '', color: 'lime' },
+  { metric: 'Posicionamiento Google',   before: 'Pág. 4', after: 'Pág. 1',  improvement: '4 posic', better: 'after', unit: '', color: 'lime' },
+  { metric: 'Mobile-friendly',          before: 'NO',     after: 'SÍ',      improvement: '✓',     better: 'after',  unit: '', color: 'lime' },
+  { metric: 'Cumplimiento RGPD',        before: 'Parcial',after: 'Total',   improvement: '✓',     better: 'after',  unit: '', color: 'lime' },
+  { metric: 'Accesibilidad WCAG',       before: 'NO',     after: 'AA',      improvement: '✓',     better: 'after',  unit: '', color: 'lime' },
+];
+
+// Integraciones empresariales
+const integrations = [
+  { cat: 'CRM',          items: [
+    { name: 'HubSpot',    color: 'orange' },
+    { name: 'Salesforce', color: 'cyan' },
+    { name: 'Zoho',       color: 'red' },
+    { name: 'Pipedrive',  color: 'lime' },
+  ]},
+  { cat: 'ERP · Facturación', items: [
+    { name: 'Holded',     color: 'navy' },
+    { name: 'SAP B1',     color: 'blue' },
+    { name: 'A3',         color: 'gold' },
+    { name: 'Quipu',      color: 'mint' },
+  ]},
+  { cat: 'Email · Marketing', items: [
+    { name: 'Mailchimp',  color: 'yellow' },
+    { name: 'Brevo',      color: 'navy' },
+    { name: 'ActiveCampaign', color: 'cyan' },
+    { name: 'Klaviyo',    color: 'lime' },
+  ]},
+  { cat: 'Reservas · Booking', items: [
+    { name: 'Calendly',   color: 'cyan' },
+    { name: 'Bookeo',     color: 'gold' },
+    { name: 'SimplyBook', color: 'navy' },
+    { name: 'TimeKit',    color: 'lime' },
+  ]},
+];
+
+// Sectores que servimos
+const sectors = [
+  { id: 'legal',     icon: 'scale',    name: 'Servicios legales',   desc: 'Despachos · abogados · notarías · gestorías' },
+  { id: 'consult',   icon: 'briefcase', name: 'Consultorías',         desc: 'Auditoría · estrategia · transformación' },
+  { id: 'realestate', icon: 'building', name: 'Inmobiliarias',       desc: 'Agencias · promotoras · gestión propiedades' },
+  { id: 'hotel',     icon: 'bed',      name: 'Hotelería · turismo', desc: 'Hoteles · apartamentos · agencias viajes' },
+  { id: 'industry',  icon: 'gear',     name: 'Industria',            desc: 'Fabricantes · distribuidores · instaladoras' },
+  { id: 'health',    icon: 'cross',    name: 'Sanidad',              desc: 'Clínicas · centros médicos · dentistas' },
+  { id: 'build',     icon: 'tower',    name: 'Construcción',         desc: 'Constructoras · arquitectos · reformas' },
+  { id: 'edu',       icon: 'cap',      name: 'Educación',            desc: 'Academias · centros formación · cursos' },
+];
+
+// SLA por tier
+const sla = [
+  { metric: 'Uptime garantizado',       essential: '99.5 %',   pro: '99.9 %',   plus: '99.95 %' },
+  { metric: 'Respuesta soporte L–V',    essential: '< 24 h',   pro: '< 4 h',    plus: '< 1 h' },
+  { metric: 'Resolución incidencia crítica', essential: '< 24 h', pro: '< 8 h',   plus: '< 2 h' },
+  { metric: 'Soporte fin de semana',    essential: '—',         pro: 'WhatsApp', plus: '24/7' },
+  { metric: 'Backups diarios off-site', essential: '✓',         pro: '✓',         plus: '✓' },
+  { metric: 'Informe mensual',          essential: 'Básico',    pro: 'Avanzado', plus: 'Ejecutivo' },
+  { metric: 'Auditoría seguridad',      essential: 'Anual',     pro: 'Semestral',plus: 'Trimestral' },
+  { metric: 'Reunión periódica',        essential: '—',         pro: 'Mensual',  plus: 'Quincenal' },
+];
+
+// Pricing
+const plans = [
+  {
+    code: 'ESENCIAL',
+    name: 'Corporativa Esencial',
+    sub: 'Web profesional · marca consolidada',
+    price: '3.490',
+    period: '€ · pago único',
+    days: '4–5 sem.',
+    pages: 'Hasta 8 páginas',
+    features: [
+      'Diseño 100% a medida',
+      'Wireframes + maquetación',
+      'Copywriting institucional',
+      'Identidad visual aplicada',
+      'CMS WordPress + formación',
+      'SEO técnico completo',
+      'Hosting + dominio + correo 1 año',
+      'SLA Esencial · 99.5% uptime',
+      '3 meses mantenimiento incluido',
+    ],
+    color: 'navy',
+    popular: false,
+  },
+  {
+    code: 'PRO',
+    name: 'Corporativa Pro',
+    sub: 'Lo más contratado · con integraciones',
+    price: '5.990',
+    period: '€ · pago único',
+    days: '6–8 sem.',
+    pages: 'Hasta 15 páginas',
+    features: [
+      'Todo del plan Esencial',
+      'Hasta 15 páginas + blog corporativo',
+      'WCAG 2.2 AA · accesibilidad total',
+      '2 integraciones (CRM/ERP/Email)',
+      'Formularios avanzados + automation',
+      'Auditoría SEO + estrategia keywords',
+      'Google Analytics 4 + Tag Manager',
+      'SLA Pro · 99.9% uptime · respuesta <4h',
+      '6 meses mantenimiento incluido',
+      'Sesión formación equipo (2h)',
+    ],
+    color: 'gold',
+    popular: true,
+  },
+  {
+    code: 'PLUS',
+    name: 'Corporativa Plus',
+    sub: 'Premium · multilingüe + soporte 24/7',
+    price: '10.990',
+    period: '€ · desde · pago único',
+    days: '10–14 sem.',
+    pages: 'Páginas ilimitadas',
+    features: [
+      'Todo del plan Pro',
+      'Multilingüe (hasta 3 idiomas · WPML)',
+      'Hasta 5 integraciones (CRM/ERP/Booking…)',
+      'Diseño sistema (design system)',
+      'Áreas privadas / portal cliente',
+      'A/B testing + analytics avanzado',
+      'SLA Plus · 99.95% uptime · soporte 24/7',
+      '12 meses mantenimiento + auditorías trimestrales',
+      'Equipo dedicado (project manager)',
+      'Reuniones quincenales seguimiento',
+    ],
+    color: 'lime',
+    popular: false,
+  },
+];
+
+// Proceso corporativo (8 pasos con puertas de aprobación)
+const proceso = [
+  { num: '01', title: 'Briefing ejecutivo',     gate: 'KO/APROBADO',    eta: 'Sem 1', body: 'Sesión inicial con stakeholders. Definimos objetivos, audiencia, KPIs y restricciones.' },
+  { num: '02', title: 'Auditoría técnica',      gate: 'INFORME',         eta: 'Sem 1', body: 'Análisis exhaustivo de tu web actual: rendimiento, SEO, accesibilidad, conversión.' },
+  { num: '03', title: 'Arquitectura + wireframes', gate: 'APROBACIÓN',    eta: 'Sem 2', body: 'Sitemap + flujos · wireframes de todas las páginas clave. Revisión y aprobación.' },
+  { num: '04', title: 'Diseño visual',          gate: 'APROBACIÓN',     eta: 'Sem 3-4', body: 'Mockups en alta fidelidad. 2 rondas de revisión incluidas. Validación stakeholders.' },
+  { num: '05', title: 'Desarrollo',             gate: 'STAGING',         eta: 'Sem 4-7', body: 'Construcción real con CWV verde, accesibilidad AA, integraciones. Entorno staging.' },
+  { num: '06', title: 'Contenidos + multilingüe', gate: 'REVISIÓN',     eta: 'Sem 6-7', body: 'Copywriting, traducciones, carga de imágenes/PDFs/documentación.' },
+  { num: '07', title: 'QA + tests',             gate: 'CHECKLIST',       eta: 'Sem 7-8', body: 'Tests cross-browser, accesibilidad, performance, RGPD. Checklist de 50+ puntos.' },
+  { num: '08', title: 'Lanzamiento + handover', gate: '✓ LIVE',          eta: 'Sem 8',  body: 'Migración DNS, monitorización, formación equipo, documentación, soporte activo.' },
+];
+
+// Testimonials
+const testimonials = [
+  { text: 'Renovamos la web del despacho con cero interrupción del servicio. En 3 meses subimos al top 3 de Google para "abogados Almería". Las consultas se han duplicado.',     author: 'Sara M.',     role: 'Socia directora · Despacho legal · Almería', metric: 'Top 3 Google · 6 meses' },
+  { text: 'Necesitábamos integrar la web con nuestro ERP SAP y el CRM HubSpot. Plataforma anterior no podía. Ahora todo fluye automático y ganamos 2 horas/día por persona.', author: 'Andrés P.',    role: 'Director comercial · Distribuidora · Roquetas', metric: '+10h equipo / semana' },
+  { text: 'La auditoría gratuita ya valió la pena: detectaron 8 fallos críticos de la web anterior que ni sabíamos. Decidimos rehacerla con ellos. La calidad final es premium.', author: 'Beatriz L.', role: 'CEO · Consultora ingeniería · El Ejido',       metric: 'Auditoría 100% gratis' },
+];
+
+// FAQ
+const faq = [
+  { q: '¿Qué incluye la auditoría gratuita?', a: 'Un informe PDF de 15+ páginas revisando 15 puntos en 5 áreas (rendimiento, SEO técnico, accesibilidad, cumplimiento legal, conversión). Te lo explicamos en una llamada de 30 min. Sin compromiso de contratación. Lo entregamos en menos de 5 días laborables.' },
+  { q: '¿Por qué WordPress y no otra plataforma?',  a: 'Para webs corporativas WordPress sigue siendo la mejor opción: SEO de primer nivel, miles de profesionales que pueden mantenerla, infraestructura probada y multilingüe nativo (WPML/Polylang). Para casos específicos también usamos Astro (estático ultrarrápido) o Drupal (corporativo grande). Te recomendamos lo que mejor encaje, no lo que más cobramos.' },
+  { q: '¿Cumplís con RGPD y accesibilidad?',  a: 'Sí. Plan Esencial: RGPD básico (banner cookies, política, formularios). Plan Pro: además WCAG 2.2 AA completo. Plan Plus: además auditorías de accesibilidad trimestrales. La accesibilidad es obligatoria por ley para empresas con >100 empleados o >2 M€ facturación.' },
+  { q: '¿Cuánto tarda en estar lista?',       a: 'Esencial: 4-5 semanas. Pro: 6-8 semanas. Plus: 10-14 semanas. El tiempo depende sobre todo de la velocidad de aprobación interna en tu empresa. Cumplimos plazos siempre que las aprobaciones llegan a tiempo (te damos calendario para que sepas cuándo necesitas qué).' },
+  { q: '¿Trabajáis con grandes empresas con procesos corporativos?', a: 'Sí. Estamos acostumbrados a ciclos de aprobación con varios stakeholders (dirección + marketing + legal + IT). Cada fase tiene gate de aprobación documentado. Firmamos NDA si lo necesitas. Facturamos contra hitos.' },
+  { q: '¿Qué pasarelas de pago y CRMs integráis?', a: 'CRMs: HubSpot, Salesforce, Zoho, Pipedrive, ActiveCampaign. ERPs: Holded, A3, Quipu, SAP B1 (vía API). Email: Mailchimp, Brevo, Klaviyo. Booking: Calendly, Bookeo, SimplyBook. Si usas algo distinto, casi siempre se puede integrar — pregúntanos.' },
+  { q: '¿Y si necesito web multilingüe?',       a: 'En Pro: integración WPML para 2 idiomas (típicamente ES + EN). En Plus: hasta 3 idiomas (ES + EN + alemán/francés/italiano según mercado). Más idiomas se cotizan aparte. Las traducciones las haces tú o te recomendamos partners profesionales.' },
+  { q: '¿El precio es cerrado o variable?',     a: 'Cerrado al 100 %. Te damos presupuesto fijo por escrito antes de empezar. Si en mitad del proyecto pides algo fuera del scope, se cotiza aparte con tu aprobación previa. Sin sorpresas en la factura final.' },
+  { q: '¿Qué pasa el segundo año (mantenimiento)?', a: 'Esencial: 79€/mes (mantenimiento Pro). Pro: 149€/mes (mantenimiento Pro + 5h cambios). Plus: 349€/mes (mantenimiento Plus + 15h cambios + auditorías). Sin permanencia. Cancelas cuando quieras. Te exportamos todo y te vas.' },
+  { q: '¿Firmáis SLA con penalizaciones?',      a: 'En Plus sí, con penalizaciones económicas si incumplimos uptime garantizado o tiempos de respuesta. En Pro firmamos compromiso de SLA sin penalización económica (cumplido en el 100% de proyectos en los últimos 3 años).' },
+];
+
+const jsonLd = [
+  { '@context':'https://schema.org','@type':'ProfessionalService','name':'Platanito Rico — Diseño Web para Empresas en Almería','description':description,'url':canonical,'telephone':'+34657085019','email':'hola@platanitorico.com','address':{'@type':'PostalAddress','streetAddress':'Ctra de Ronda, 82','addressLocality':'Vera','addressRegion':'Almería','postalCode':'04620','addressCountry':'ES'},'geo':{'@type':'GeoCoordinates','latitude':37.245,'longitude':-1.8614},'priceRange':'€€€','areaServed':{'@type':'AdministrativeArea','name':'Almería'},'serviceType':'Corporate Web Design','hasOfferCatalog':{'@type':'OfferCatalog','name':'Webs Corporativas','itemListElement':plans.map(p=>({'@type':'Offer','name':p.name,'description':p.sub,'price':p.price.replace(/[^0-9]/g,''),'priceCurrency':'EUR'}))} },
+  { '@context':'https://schema.org','@type':'BreadcrumbList','itemListElement':[
+    { '@type':'ListItem','position':1,'name':'Inicio','item':'https://platanitorico.com/' },
+    { '@type':'ListItem','position':2,'name':'Soluciones','item':'https://platanitorico.com/soluciones/empresa/' },
+    { '@type':'ListItem','position':3,'name':'Empresas','item':canonical }
+  ]},
+  { '@context':'https://schema.org','@type':'FAQPage','mainEntity':faq.map(f=>({'@type':'Question','name':f.q,'acceptedAnswer':{'@type':'Answer','text':f.a}})) },
+  { '@context':'https://schema.org','@type':'HowTo','name':'Cómo construimos tu web corporativa','step':proceso.map((p,i)=>({'@type':'HowToStep','position':i+1,'name':p.title,'text':p.body})) }
+];
 ---
 
 <BaseLayout
@@ -14,117 +236,1944 @@ const canonical = "https://platanitorico.com/soluciones/empresa/";
   canonical={canonical}
   image="/imagenes/equipo-desarrollo-web-calidad.jpg"
   imageAlt="Diseño web para empresas en Almería - Platanito Rico"
-  keywords="diseño web empresas almería, web corporativa almería, presencia digital empresas, seo empresas almería"
-  jsonLd={[
-    {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
-      'name': 'Platanito Rico — Diseño Web para Empresas en Almería',
-      'description': description,
-      'url': canonical,
-      'telephone': '+34657085019',
-      'email': 'hola@platanitorico.com',
-      'address': {
-        '@type': 'PostalAddress',
-        'streetAddress': 'Ctra de Ronda, 82',
-        'addressLocality': 'Vera',
-        'addressRegion': 'Almería',
-        'postalCode': '04620',
-        'addressCountry': 'ES'
-      },
-      'geo': { '@type': 'GeoCoordinates', 'latitude': 37.245, 'longitude': -1.8614 },
-      'priceRange': '€€',
-      'areaServed': { '@type': 'AdministrativeArea', 'name': 'Almería' },
-      'serviceType': 'Corporate Web Design'
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Inicio', 'item': 'https://platanitorico.com/' },
-        { '@type': 'ListItem', 'position': 2, 'name': 'Soluciones', 'item': 'https://platanitorico.com/soluciones/ecommerce/' },
-        { '@type': 'ListItem', 'position': 3, 'name': 'Empresas', 'item': canonical }
-      ]
-    }
-  ]}
+  keywords="diseño web empresas almería, web corporativa almería, presencia digital empresas, seo empresas almería, rgpd web empresa, web multilingüe empresa, sla web corporativa"
+  jsonLd={jsonLd}
 >
   <Header />
+  <Breadcrumb items={[
+    { label: 'Inicio',     href: '/' },
+    { label: 'Soluciones', href: '/soluciones/empresa/' },
+    { label: 'Empresas' }
+  ]} />
 
-  <section class="section-brutal relative min-h-screen flex items-center justify-center overflow-hidden bg-brutal-bg">
-    <div class="container-brutal relative z-10 py-24">
-      <div class="badge-brutal mb-8">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path d="M6 22V10l6-4 6 4v12H6z"/><path d="M6 12h12"/><path d="M10 22V16h4v6"/>
-        </svg>
-        Empresas
-      </div>
+  <main id="main-content" class="co">
 
-      <h1 class="heading-display text-4xl md:text-5xl lg:text-7xl text-brutal-text mb-8 leading-[1.1]">
-        Evolución digital de tu <br/>
-        <span class="block mt-2 text-brutal-accent">identidad corporativa</span>
-      </h1>
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — PLANO ARQUITECTÓNICO                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-hero">
+      <div class="container-brutal">
 
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-        <div class="space-y-8">
-          <p class="text-lg md:text-xl text-brutal-text-secondary leading-relaxed">
-            Una web <strong class="text-brutal-text">"que no se ve bien"</strong> o que <strong class="text-brutal-text">"parece del siglo pasado"</strong> ahuyenta a potenciales clientes. Tu empresa merece una presencia que transmita profesionalidad y vanguardia.
-          </p>
+        <header class="co-hero__top">
+          <span class="text-meta">N.º 029 — Solución · Empresas</span>
+          <span class="text-meta co-hero__status">
+            <span class="co-pulse"></span>
+            PROYECTO · LICITACIÓN · ACEPTANDO CONTRATOS · 2026
+          </span>
+        </header>
 
-          <div class="space-y-6">
-            <h2 class="text-2xl md:text-3xl font-bold text-brutal-text" style="font-family:'Anton',sans-serif">Renovación Integral</h2>
-            <div class="grid gap-4">
-              {[
-                {
-                  title: "Rediseño UI/UX Moderno",
-                  desc: "Actualizamos visualmente tu marca con las últimas tendencias de diseño, priorizando la facilidad de uso."
-                },
-                {
-                  title: "Optimización de Rendimiento",
-                  desc: "Mejoramos la velocidad de carga para reducir la tasa de rebote y escalar posiciones en buscadores."
-                },
-                {
-                  title: "SEO Local e Internacional",
-                  desc: "Estrategias específicas para ser encontrado por los clientes que realmente necesitan tus servicios."
-                },
-                {
-                  title: "Integración de Sistemas",
-                  desc: "Conectamos tu web con tu CRM, sistema de reservas o cualquier herramienta que ya utilices."
-                }
-              ].map(item => (
-                <div class="card-brutal bg-brutal-card border-brutal-border p-6">
-                  <h3 class="text-lg font-bold text-brutal-text mb-2">{item.title}</h3>
-                  <p class="text-brutal-text-secondary">{item.desc}</p>
-                </div>
-              ))}
+        <div class="divider-brutal"></div>
+
+        <div class="co-hero__grid">
+
+          {/* Izquierda: copy + KPIs */}
+          <div class="co-hero__intro">
+            <span class="text-meta co-hero__chapter">Cap. 01 / Tu edificio digital</span>
+            <h1 class="co-hero__title heading-display">
+              Tu web corporativa,
+              <em class="heading-editorial">construida</em>
+              <span class="co-hero__title-stamp">como un edificio.</span>
+            </h1>
+
+            <p class="co-hero__lead">
+              Cimientos sólidos. Fachada profesional. Instalaciones integradas.
+              Cumplimiento legal y seguridad blindada.
+              <strong>Cuando tu marca lo es todo, tu web tiene que estar a la altura.</strong>
+              Auditoría técnica gratuita incluida.
+            </p>
+
+            <div class="co-hero__cta">
+              <a href="#audit" class="co-btn co-btn--primary">
+                <span>Auditoría técnica gratis</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#planes" class="co-btn co-btn--ghost">
+                Ver planes y SLA ↓
+              </a>
+            </div>
+
+            <div class="co-hero__kpis">
+              <div class="co-kpi co-kpi--navy">
+                <span class="co-kpi__v text-mono">200<small>+</small></span>
+                <span class="co-kpi__l">Empresas</span>
+              </div>
+              <div class="co-kpi co-kpi--gold">
+                <span class="co-kpi__v text-mono">99.9<small>%</small></span>
+                <span class="co-kpi__l">Uptime SLA</span>
+              </div>
+              <div class="co-kpi">
+                <span class="co-kpi__v text-mono">&lt;2<small>s</small></span>
+                <span class="co-kpi__l">Velocidad media</span>
+              </div>
+              <div class="co-kpi co-kpi--ink">
+                <span class="co-kpi__v text-mono">AA</span>
+                <span class="co-kpi__l">WCAG 2.2</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="sticky top-32">
-          <div class="card-brutal bg-brutal-card border-brutal-accent/30 p-8 lg:p-10">
-            <div class="w-16 h-16 bg-brutal-accent flex items-center justify-center mb-6">
-              <svg class="w-8 h-8 text-brutal-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M6 22V10l6-4 6 4v12H6z"/><path d="M6 12h12"/><path d="M10 22V16h4v6"/>
+          {/* Derecha: PLANO ARQUITECTÓNICO SVG */}
+          <aside class="co-hero__plan" aria-hidden="true">
+            <div class="co-blueprint">
+              {/* Cabecera del plano */}
+              <div class="co-blueprint__head">
+                <span class="text-mono">PROY. PR-027/2026 · ESCALA 1:50 · VERA · ALMERÍA</span>
+                <span class="text-mono">PLANO Nº 01/12 · ALZADO · PLANTA TIPO</span>
+              </div>
+
+              {/* SVG plano del edificio */}
+              <div class="co-blueprint__body">
+                <svg viewBox="0 0 500 420" class="co-plan-svg">
+                  <defs>
+                    <pattern id="co-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0,102,204,0.15)" stroke-width="0.5"/>
+                    </pattern>
+                    <pattern id="co-grid-big" width="100" height="100" patternUnits="userSpaceOnUse">
+                      <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(0,102,204,0.3)" stroke-width="1"/>
+                    </pattern>
+                  </defs>
+
+                  {/* Grid background */}
+                  <rect width="500" height="420" fill="url(#co-grid)"/>
+                  <rect width="500" height="420" fill="url(#co-grid-big)"/>
+
+                  {/* Edificio: ALZADO */}
+                  {/* Cimientos */}
+                  <rect x="60"  y="380" width="380" height="14" fill="#0066CC" stroke="#0A2540" stroke-width="2"/>
+                  <text x="250" y="389" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="3">CIMIENTOS · PERFORMANCE · SEO</text>
+
+                  {/* Planta baja */}
+                  <rect x="80" y="300" width="340" height="80" fill="none" stroke="#0A2540" stroke-width="2.5"/>
+                  <line x1="80" y1="320" x2="420" y2="320" stroke="#0A2540" stroke-width="1"/>
+                  <text x="90" y="316" font-family="monospace" font-size="9" font-weight="bold" fill="#0A2540">PB</text>
+                  {/* Puerta + ventanas planta baja */}
+                  <rect x="230" y="340" width="40" height="40" fill="#C9A24F" stroke="#0A2540" stroke-width="2"/>
+                  <line x1="250" y1="340" x2="250" y2="380" stroke="#0A2540" stroke-width="1.5"/>
+                  <rect x="110" y="335" width="30" height="25" fill="#FFFCF6" stroke="#0A2540" stroke-width="1.5"/>
+                  <line x1="125" y1="335" x2="125" y2="360" stroke="#0A2540" stroke-width="1"/>
+                  <line x1="110" y1="347" x2="140" y2="347" stroke="#0A2540" stroke-width="1"/>
+                  <rect x="160" y="335" width="30" height="25" fill="#FFFCF6" stroke="#0A2540" stroke-width="1.5"/>
+                  <line x1="175" y1="335" x2="175" y2="360" stroke="#0A2540" stroke-width="1"/>
+                  <line x1="160" y1="347" x2="190" y2="347" stroke="#0A2540" stroke-width="1"/>
+                  <rect x="310" y="335" width="30" height="25" fill="#FFFCF6" stroke="#0A2540" stroke-width="1.5"/>
+                  <line x1="325" y1="335" x2="325" y2="360" stroke="#0A2540" stroke-width="1"/>
+                  <line x1="310" y1="347" x2="340" y2="347" stroke="#0A2540" stroke-width="1"/>
+                  <rect x="360" y="335" width="30" height="25" fill="#FFFCF6" stroke="#0A2540" stroke-width="1.5"/>
+                  <line x1="375" y1="335" x2="375" y2="360" stroke="#0A2540" stroke-width="1"/>
+                  <line x1="360" y1="347" x2="390" y2="347" stroke="#0A2540" stroke-width="1"/>
+
+                  {/* Planta 1 */}
+                  <rect x="80" y="220" width="340" height="80" fill="none" stroke="#0A2540" stroke-width="2.5"/>
+                  <text x="90" y="236" font-family="monospace" font-size="9" font-weight="bold" fill="#0A2540">P1</text>
+                  {/* Departamentos / oficinas (4 ventanas) */}
+                  <g>
+                    <rect x="100" y="245" width="60" height="45" fill="#00B8D9" stroke="#0A2540" stroke-width="1.5"/>
+                    <text x="130" y="270" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0A2540">HOME</text>
+                    <rect x="180" y="245" width="60" height="45" fill="#0066CC" stroke="#0A2540" stroke-width="1.5"/>
+                    <text x="210" y="270" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6">SERVICIOS</text>
+                    <rect x="260" y="245" width="60" height="45" fill="#C9A24F" stroke="#0A2540" stroke-width="1.5"/>
+                    <text x="290" y="270" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0A2540">EQUIPO</text>
+                    <rect x="340" y="245" width="60" height="45" fill="#D6FF44" stroke="#0A2540" stroke-width="1.5"/>
+                    <text x="370" y="270" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0A2540">CASOS</text>
+                  </g>
+
+                  {/* Planta 2 */}
+                  <rect x="80" y="140" width="340" height="80" fill="none" stroke="#0A2540" stroke-width="2.5"/>
+                  <text x="90" y="156" font-family="monospace" font-size="9" font-weight="bold" fill="#0A2540">P2</text>
+                  {/* Departamentos avanzados */}
+                  <rect x="100" y="165" width="80" height="45" fill="#0A2540"/>
+                  <text x="140" y="190" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#D6FF44">BLOG · NEWS</text>
+                  <rect x="200" y="165" width="80" height="45" fill="#FFFCF6" stroke="#0A2540" stroke-width="1.5"/>
+                  <text x="240" y="187" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0A2540">PORTAL</text>
+                  <text x="240" y="198" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0A2540">CLIENTE</text>
+                  <rect x="300" y="165" width="100" height="45" fill="#DC1B2C"/>
+                  <text x="350" y="190" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6">CONTACTO + CRM</text>
+
+                  {/* Ático / coronación */}
+                  <path d="M 60 140 L 250 60 L 440 140 Z" fill="none" stroke="#0A2540" stroke-width="2.5"/>
+                  <text x="250" y="105" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#0A2540" letter-spacing="2">PLATANITO RICO</text>
+                  <text x="250" y="122" text-anchor="middle" font-family="monospace" font-size="9" fill="#0A2540" letter-spacing="3">ARQUITECTURA WEB</text>
+                  <text x="250" y="84" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#C9A24F">★</text>
+
+                  {/* Cotas / dimensiones */}
+                  <g stroke="#DC1B2C" stroke-width="1" fill="#DC1B2C">
+                    {/* Cota lateral izq altura total */}
+                    <line x1="40" y1="60" x2="40" y2="394"/>
+                    <line x1="35" y1="60" x2="45" y2="60"/>
+                    <line x1="35" y1="394" x2="45" y2="394"/>
+                    <text x="20" y="232" font-family="monospace" font-size="9" font-weight="bold" letter-spacing="2" transform="rotate(-90 20 232)">334 cm</text>
+                    {/* Cota inferior */}
+                    <line x1="60" y1="408" x2="440" y2="408"/>
+                    <line x1="60" y1="403" x2="60" y2="413"/>
+                    <line x1="440" y1="403" x2="440" y2="413"/>
+                    <text x="250" y="418" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold">380 cm · ANCHO TOTAL</text>
+                  </g>
+
+                  {/* Etiquetas plantas (A-F) */}
+                  <g font-family="monospace" font-size="14" font-weight="bold" fill="#0A2540">
+                    <circle cx="455" cy="92"  r="11" fill="#0A2540"/>
+                    <text x="455" y="96" text-anchor="middle" fill="#D6FF44" font-size="11">A</text>
+                    <circle cx="455" cy="180" r="11" fill="#0A2540"/>
+                    <text x="455" y="184" text-anchor="middle" fill="#D6FF44" font-size="11">B</text>
+                    <circle cx="455" cy="260" r="11" fill="#0A2540"/>
+                    <text x="455" y="264" text-anchor="middle" fill="#D6FF44" font-size="11">C</text>
+                    <circle cx="455" cy="340" r="11" fill="#0A2540"/>
+                    <text x="455" y="344" text-anchor="middle" fill="#D6FF44" font-size="11">D</text>
+                  </g>
+
+                  {/* Rosa de los vientos */}
+                  <g transform="translate(450, 30)" font-family="monospace" font-size="8" fill="#0A2540">
+                    <circle r="14" fill="none" stroke="#0A2540" stroke-width="1.5"/>
+                    <path d="M 0 -10 L 3 0 L 0 10 L -3 0 Z" fill="#0A2540"/>
+                    <path d="M -10 0 L 0 3 L 10 0 L 0 -3 Z" fill="none" stroke="#0A2540" stroke-width="1"/>
+                    <text y="-17" text-anchor="middle" font-weight="bold">N</text>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Pie del plano */}
+              <div class="co-blueprint__foot">
+                <span class="text-mono">PROY: J.L. RODRÍGUEZ</span>
+                <span class="text-mono">REV: 01</span>
+                <span class="text-mono">FECHA: 28.05.2026</span>
+                <span class="text-mono">★ APROBADO</span>
+              </div>
+            </div>
+
+            {/* Sello "PROYECTO APROBADO" */}
+            <div class="co-stamp" aria-hidden="true">
+              <svg viewBox="0 0 110 110" width="100%" height="100%">
+                <defs>
+                  <path id="co-stamp-arc" d="M55,55 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/>
+                </defs>
+                <circle cx="55" cy="55" r="52" fill="#0A2540"/>
+                <circle cx="55" cy="55" r="46" fill="none" stroke="#D6FF44" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                <g class="co-spin">
+                  <text font-family="monospace" font-size="8" font-weight="bold" fill="#D6FF44" letter-spacing="2.5">
+                    <textPath href="#co-stamp-arc" startOffset="0%">★ PROYECTO APROBADO ★ NIVEL A ★</textPath>
+                  </text>
+                </g>
+                <text x="55" y="50" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#D6FF44">✓</text>
+                <text x="55" y="68" text-anchor="middle" font-family="monospace" font-size="7" fill="#D6FF44" letter-spacing="2">VERA · 2026</text>
               </svg>
             </div>
-            <h3 class="text-2xl font-bold text-brutal-text mb-4" style="font-family:'Anton',sans-serif">Moderniza tu empresa</h3>
-            <p class="text-brutal-text-secondary mb-6">
-              Analizamos tu sitio actual y te proponemos una estrategia de renovación sin comprometer tu imagen establecida.
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="co-marquee">
+        <div class="co-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ WCAG AA ★ RGPD ★ CWV VERDE ★ MULTILINGÜE ★ 99.9% UPTIME SLA ★ AUDITORÍA GRATUITA ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* AUDITORÍA GRATUITA — 15 PUNTOS                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-audit-section" id="audit">
+      <div class="container-brutal">
+        <header class="co-audit-head">
+          <div class="co-audit-head__l">
+            <span class="text-meta" style="color:var(--co-gold)">Cap. 02 / Sin compromiso</span>
+            <h2 class="heading-display co-audit-title">
+              Auditoría técnica
+              <em class="heading-editorial">gratuita.</em>
+            </h2>
+            <p class="co-audit-lead">
+              Te revisamos <strong>15 puntos críticos</strong> de tu web actual.
+              Te enviamos informe detallado en <strong>menos de 5 días</strong>.
+              Te lo explicamos en 30 min por videollamada.
+              <strong>Sin venderte nada. Sin compromiso.</strong>
             </p>
-            <a href="/contacto" class="btn-brutal group inline-flex items-center justify-center gap-2 w-full px-6 py-4 bg-brutal-accent text-brutal-text font-semibold">
-              <span class="relative">Solicitar Auditoría</span>
-              <svg class="relative w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
+            <a href="/contacto?asunto=auditoria-empresa" class="co-audit-cta">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Pedir auditoría gratis</span>
             </a>
-            <p class="mt-4 text-center text-sm text-brutal-text-muted">
-              Auditoría básica gratuita incluida.
+          </div>
+
+          {/* Sello "AUDITORÍA" */}
+          <aside class="co-audit-head__r" aria-hidden="true">
+            <div class="co-audit-stamp">
+              <svg viewBox="0 0 200 240" width="100%" height="100%">
+                <defs>
+                  <pattern id="co-audit-bg" width="6" height="6" patternUnits="userSpaceOnUse">
+                    <circle cx="3" cy="3" r="0.6" fill="rgba(10,37,64,0.1)"/>
+                  </pattern>
+                </defs>
+                {/* Folio */}
+                <rect x="14" y="14" width="172" height="212" fill="#FFFCF6" stroke="#0A2540" stroke-width="3"/>
+                <rect x="14" y="14" width="172" height="212" fill="url(#co-audit-bg)"/>
+                {/* Esquinas dobladas */}
+                <path d="M 162 14 L 186 14 L 186 38 Z" fill="#0A2540"/>
+                {/* Cabecera */}
+                <text x="100" y="36" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#0A2540" letter-spacing="3">★ INFORME TÉCNICO ★</text>
+                <text x="100" y="58" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#0A2540">AUDITORÍA</text>
+                <text x="100" y="76" text-anchor="middle" font-family="serif" font-size="18" font-weight="bold" fill="#0A2540">EMPRESARIAL</text>
+                <line x1="30" y1="86" x2="170" y2="86" stroke="#0A2540" stroke-width="1.5"/>
+                {/* Items mock */}
+                <g font-family="monospace" font-size="8" fill="#0A2540">
+                  <text x="30" y="106">✓ PERFORMANCE</text>
+                  <text x="30" y="122">✓ SEO TÉCNICO</text>
+                  <text x="30" y="138">✓ ACCESIBILIDAD</text>
+                  <text x="30" y="154">✓ RGPD</text>
+                  <text x="30" y="170">✓ CONVERSIÓN</text>
+                </g>
+                {/* Sello rojo */}
+                <g transform="translate(100, 200)">
+                  <circle r="26" fill="none" stroke="#DC1B2C" stroke-width="2"/>
+                  <circle r="20" fill="none" stroke="#DC1B2C" stroke-width="1" stroke-dasharray="2 1.5"/>
+                  <text y="-2" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#DC1B2C" letter-spacing="2">★ GRATIS ★</text>
+                  <text y="10" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#DC1B2C">2026</text>
+                </g>
+              </svg>
+            </div>
+          </aside>
+        </header>
+
+        {/* Lista de 15 puntos en 5 grupos */}
+        <ol class="co-audit-grid">
+          {auditPoints.map((g, gi) => (
+            <article class="co-audit-card">
+              <header class="co-audit-card__head">
+                <span class="text-mono co-audit-card__code">§ 0{gi+1}</span>
+                <h3 class="co-audit-card__title">{g.c}</h3>
+                <span class="text-mono co-audit-card__num">{g.items.length} PUNTOS</span>
+              </header>
+              <ul class="co-audit-card__list">
+                {g.items.map((it, ii) => (
+                  <li>
+                    <span class="text-mono co-audit-card__i">{String(gi*3 + ii + 1).padStart(2,'0')}</span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* 6 PILARES ARQUITECTÓNICOS                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-pillars-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 03 / Arquitectura web</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Seis pilares,
+              <em class="heading-editorial">un edificio sólido.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            No se construye una web corporativa improvisando. Estos son los
+            <strong>6 sistemas estructurales</strong> que diseñamos en cada proyecto.
+          </p>
+        </header>
+
+        <ol class="co-pillars">
+          {pillars.map((p) => (
+            <li class={`co-pillar co-pillar--${p.color}`}>
+              <header class="co-pillar__head">
+                <span class="text-mono co-pillar__num">{p.num}</span>
+                <span class="co-pillar__code">{p.code}</span>
+              </header>
+              <div class="co-pillar__icon" aria-hidden="true">
+                {p.icon === 'foundation' && (
+                  <svg viewBox="0 0 60 60" width="100%" height="100%">
+                    <rect x="6" y="40" width="48" height="14" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <line x1="6" y1="46" x2="54" y2="46" stroke="#0E0D0B" stroke-width="1"/>
+                    {Array.from({length: 6}).map((_, i) => (
+                      <line x1={10+i*8} y1="40" x2={10+i*8} y2="54" stroke="#0E0D0B" stroke-width="1"/>
+                    ))}
+                    <rect x="14" y="20" width="32" height="20" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="14" y1="30" x2="46" y2="30" stroke="#0E0D0B" stroke-width="1"/>
+                  </svg>
+                )}
+                {p.icon === 'facade' && (
+                  <svg viewBox="0 0 60 60" width="100%" height="100%">
+                    <rect x="8" y="8" width="44" height="50" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <rect x="14" y="14" width="10" height="14" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="28" y="14" width="10" height="14" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="42" y="14" width="6"  height="14" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="14" y="32" width="10" height="14" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="28" y="32" width="20" height="14" fill="#0E0D0B"/>
+                    <line x1="38" y1="32" x2="38" y2="46" stroke="#FFFCF6" stroke-width="1"/>
+                  </svg>
+                )}
+                {p.icon === 'structure' && (
+                  <svg viewBox="0 0 60 60" width="100%" height="100%">
+                    <rect x="6" y="6"  width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5"/>
+                    <line x1="6"  y1="22" x2="54" y2="22" stroke="currentColor" stroke-width="2"/>
+                    <line x1="6"  y1="38" x2="54" y2="38" stroke="currentColor" stroke-width="2"/>
+                    <line x1="22" y1="6"  x2="22" y2="54" stroke="currentColor" stroke-width="2"/>
+                    <line x1="38" y1="6"  x2="38" y2="54" stroke="currentColor" stroke-width="2"/>
+                    <rect x="22" y="22" width="16" height="16" fill="currentColor" opacity="0.5"/>
+                  </svg>
+                )}
+                {p.icon === 'wiring' && (
+                  <svg viewBox="0 0 60 60" width="100%" height="100%">
+                    <circle cx="12" cy="12" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="48" cy="12" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="12" cy="48" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="48" cy="48" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    <circle cx="30" cy="30" r="9" fill="#0E0D0B"/>
+                    <circle cx="30" cy="30" r="4" fill="#FFFCF6"/>
+                    <line x1="18" y1="12" x2="22" y2="24" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="42" y1="12" x2="38" y2="24" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="18" y1="48" x2="22" y2="36" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="42" y1="48" x2="38" y2="36" stroke="#0E0D0B" stroke-width="2"/>
+                  </svg>
+                )}
+                {p.icon === 'shield' && (
+                  <svg viewBox="0 0 60 60" width="100%" height="100%">
+                    <path d="M 30 6 C 22 6 16 9 8 12 L 8 30 C 8 44 30 54 30 54 C 30 54 52 44 52 30 L 52 12 C 44 9 38 6 30 6 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 18 30 L 26 38 L 42 22" fill="none" stroke="#0E0D0B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                )}
+                {p.icon === 'service' && (
+                  <svg viewBox="0 0 60 60" width="100%" height="100%">
+                    <circle cx="30" cy="30" r="18" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 30 18 L 32 28 L 42 28 L 34 34 L 36 44 L 30 38 L 24 44 L 26 34 L 18 28 L 28 28 Z" fill="#0E0D0B"/>
+                  </svg>
+                )}
+              </div>
+              <h3 class="co-pillar__title heading-display">{p.title}</h3>
+              <span class="text-mono co-pillar__sub">{p.sub}</span>
+              <p class="co-pillar__desc">{p.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ANTES vs DESPUÉS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-transform-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--co-mint)">Cap. 04 / Transformación</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--co-paper)">
+              Lo que mejora
+              <em class="heading-editorial" style="color:var(--co-lime)">de verdad.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.7)">
+            Métricas reales medidas en proyectos corporativos durante
+            los últimos 24 meses. <strong style="color:var(--co-paper)">Mejora media observada</strong>.
+          </p>
+        </header>
+
+        <ul class="co-transform">
+          {transformation.map((t, i) => (
+            <li class="co-transform__item">
+              <header class="co-transform__head">
+                <span class="text-mono co-transform__num">{String(i+1).padStart(2,'0')}</span>
+                <h3 class="co-transform__metric">{t.metric}</h3>
+              </header>
+              <div class="co-transform__values">
+                <div class="co-transform__before">
+                  <span class="text-mono co-transform__lbl">ANTES</span>
+                  <span class="co-transform__v co-transform__v--bad">{t.before}</span>
+                </div>
+                <div class="co-transform__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="28" height="28"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="co-transform__after">
+                  <span class="text-mono co-transform__lbl">DESPUÉS</span>
+                  <span class="co-transform__v co-transform__v--good">{t.after}</span>
+                </div>
+              </div>
+              <div class="co-transform__improvement text-mono">{t.improvement}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* INTEGRACIONES EMPRESARIALES                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-integ-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Integraciones</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Tu web habla
+              <em class="heading-editorial">con todo.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Conexión nativa con las herramientas empresariales que ya usas —
+            CRM, ERP, email marketing, booking. Sin parches, sin Zapier
+            obligatorio, sin pérdida de datos.
+          </p>
+        </header>
+
+        <ol class="co-integ">
+          {integrations.map((cat, ci) => (
+            <article class="co-integ__cat">
+              <header class="co-integ__cat-head">
+                <span class="text-mono co-integ__cat-num">0{ci+1}</span>
+                <h3 class="co-integ__cat-name">{cat.cat}</h3>
+              </header>
+              <ul class="co-integ__list">
+                {cat.items.map((it) => (
+                  <li class={`co-integ__item co-integ__item--${it.color}`}>
+                    <span class="co-integ__item-dot" aria-hidden="true"></span>
+                    <span>{it.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </ol>
+
+        <p class="co-integ-note">
+          <strong>★ ¿No ves tu herramienta?</strong> Casi todo lo que tiene API se puede integrar.
+          Pregúntanos sin compromiso — en el 95 % de los casos es viable.
+        </p>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-sectors-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Sectores</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Especialistas
+              <em class="heading-editorial">por sector.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Cada sector tiene su lenguaje, sus métricas y sus regulaciones.
+            Llevamos años construyendo para estos 8.
+          </p>
+        </header>
+
+        <ol class="co-sectors">
+          {sectors.map((s) => (
+            <li class="co-sector">
+              <div class="co-sector__icon" aria-hidden="true">
+                {s.icon === 'scale' && <svg viewBox="0 0 48 48" width="100%" height="100%"><line x1="24" y1="6" x2="24" y2="42" stroke="currentColor" stroke-width="2.5"/><line x1="8" y1="14" x2="40" y2="14" stroke="currentColor" stroke-width="2.5"/><path d="M 8 14 L 4 26 L 12 26 Z" fill="currentColor"/><path d="M 40 14 L 36 26 L 44 26 Z" fill="currentColor"/><rect x="18" y="40" width="12" height="3" fill="currentColor"/></svg>}
+                {s.icon === 'briefcase' && <svg viewBox="0 0 48 48" width="100%" height="100%"><rect x="6" y="14" width="36" height="28" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 18 14 L 18 8 L 30 8 L 30 14" fill="none" stroke="#0E0D0B" stroke-width="2.5"/><line x1="6" y1="24" x2="42" y2="24" stroke="#0E0D0B" stroke-width="2"/></svg>}
+                {s.icon === 'building' && <svg viewBox="0 0 48 48" width="100%" height="100%"><rect x="8" y="6" width="32" height="38" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><rect x="14" y="12" width="6" height="6" fill="#FFFCF6"/><rect x="28" y="12" width="6" height="6" fill="#FFFCF6"/><rect x="14" y="22" width="6" height="6" fill="#FFFCF6"/><rect x="28" y="22" width="6" height="6" fill="#FFFCF6"/><rect x="20" y="32" width="8" height="12" fill="#FFFCF6"/></svg>}
+                {s.icon === 'bed' && <svg viewBox="0 0 48 48" width="100%" height="100%"><rect x="6" y="26" width="36" height="14" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><rect x="10" y="20" width="14" height="10" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="13" cy="24" r="2" fill="#0E0D0B"/><line x1="2" y1="40" x2="46" y2="40" stroke="#0E0D0B" stroke-width="3"/></svg>}
+                {s.icon === 'gear' && <svg viewBox="0 0 48 48" width="100%" height="100%"><circle cx="24" cy="24" r="10" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="24" cy="24" r="4" fill="#FFFCF6"/>{Array.from({length: 8}).map((_, i) => (<rect x="22" y="4" width="4" height="6" fill="currentColor" stroke="#0E0D0B" stroke-width="1.5" transform={`rotate(${i*45} 24 24)`}/>))}</svg>}
+                {s.icon === 'cross' && <svg viewBox="0 0 48 48" width="100%" height="100%"><circle cx="24" cy="24" r="20" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><rect x="20" y="12" width="8" height="24" fill="#FFFCF6"/><rect x="12" y="20" width="24" height="8" fill="#FFFCF6"/></svg>}
+                {s.icon === 'tower' && <svg viewBox="0 0 48 48" width="100%" height="100%"><path d="M 18 4 L 30 4 L 28 14 L 32 14 L 32 44 L 16 44 L 16 14 L 20 14 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><rect x="20" y="20" width="4" height="6" fill="#FFFCF6"/><rect x="24" y="20" width="4" height="6" fill="#FFFCF6"/><rect x="20" y="30" width="8" height="14" fill="#FFFCF6"/></svg>}
+                {s.icon === 'cap' && <svg viewBox="0 0 48 48" width="100%" height="100%"><path d="M 4 18 L 24 8 L 44 18 L 24 28 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 12 22 L 12 32 C 12 38 36 38 36 32 L 36 22" fill="none" stroke="#0E0D0B" stroke-width="2.5"/><line x1="42" y1="18" x2="42" y2="32" stroke="#0E0D0B" stroke-width="2"/></svg>}
+              </div>
+              <div class="co-sector__body">
+                <h3 class="co-sector__name heading-display">{s.name}</h3>
+                <p class="co-sector__desc">{s.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PRICING                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-pricing-section" id="planes">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 07 / Planes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Tres niveles
+              <em class="heading-editorial">de servicio.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Pago único · presupuesto cerrado · SLA por escrito.
+            Pago contra hitos (50 % al iniciar · 50 % al lanzar). NDA si lo necesitas.
+          </p>
+        </header>
+
+        <ol class="co-plans">
+          {plans.map((p, i) => (
+            <li class={`co-plan co-plan--${p.color} ${p.popular ? 'co-plan--popular' : ''}`}>
+              {p.popular && <div class="co-plan__ribbon">★ RECOMENDADO ★</div>}
+
+              <div class="co-plan__badge" aria-hidden="true">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                  <rect x="10" y="10" width="80" height="80" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                  <rect x="18" y="18" width="64" height="64" fill="none" stroke="#FFFCF6" stroke-width="1" stroke-dasharray="2 1.5"/>
+                  <text x="50" y="32" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6" letter-spacing="2">PLAN</text>
+                  <text x="50" y="60" text-anchor="middle" font-family="serif" font-size="16" font-weight="bold" fill="#FFFCF6">{p.code}</text>
+                  <text x="50" y="78" text-anchor="middle" font-family="monospace" font-size="7" fill="#FFFCF6" letter-spacing="1.5">{p.days}</text>
+                </svg>
+              </div>
+
+              <header class="co-plan__head">
+                <span class="text-meta">Plan {String(i+1).padStart(2,'0')}</span>
+                <span class="text-mono co-plan__days">⏱ {p.days}</span>
+              </header>
+              <h3 class="heading-display co-plan__name">{p.name}</h3>
+              <p class="co-plan__sub">{p.sub}</p>
+
+              <div class="co-plan__pages">
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="3" y="2" width="10" height="12" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                <span>{p.pages}</span>
+              </div>
+
+              <div class="co-plan__price">
+                <span class="co-plan__price-v text-mono">{p.price}</span>
+                <span class="co-plan__price-p">{p.period}</span>
+              </div>
+
+              <ul class="co-plan__feat">
+                {p.features.map((f) => (
+                  <li>
+                    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M 3 8 L 7 12 L 13 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="/contacto" class={`co-plan__cta ${p.popular ? 'co-plan__cta--primary' : ''}`}>
+                Solicitar propuesta →
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SLA — Tabla comparativa                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-sla-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / SLA</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Service Level
+              <em class="heading-editorial">Agreement.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Compromisos por escrito. <strong>Plan Plus con penalizaciones económicas</strong>
+            si incumplimos. Cumplimos el 100% desde 2018.
+          </p>
+        </header>
+
+        <div class="co-sla">
+          <div class="co-sla-head">
+            <span class="text-mono">CONCEPTO</span>
+            <span class="text-mono co-sla-head__es">ESENCIAL</span>
+            <span class="text-mono co-sla-head__pr">PRO</span>
+            <span class="text-mono co-sla-head__pl">PLUS</span>
+          </div>
+
+          {sla.map((row, i) => (
+            <div class="co-sla-row">
+              <div class="co-sla-row__k">
+                <span class="text-mono co-sla-row__n">{String(i+1).padStart(2,'0')}</span>
+                {row.metric}
+              </div>
+              <div class="co-sla-row__es text-mono">{row.essential}</div>
+              <div class="co-sla-row__pr text-mono">{row.pro}</div>
+              <div class="co-sla-row__pl text-mono">{row.plus}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO CORPORATIVO                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Proceso</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Ocho fases,
+              <em class="heading-editorial">ocho puertas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Cada fase tiene <strong>gate de aprobación</strong> documentado.
+            Apto para procesos corporativos con varios stakeholders.
+            Sin sorpresas en ningún hito.
+          </p>
+        </header>
+
+        <ol class="co-proc">
+          {proceso.map((s) => (
+            <li class="co-proc__step">
+              <header class="co-proc__head">
+                <span class="text-mono co-proc__num">{s.num}</span>
+                <span class="text-mono co-proc__gate">★ {s.gate}</span>
+              </header>
+              <h3 class="heading-display co-proc__title">{s.title}</h3>
+              <p class="co-proc__body">{s.body}</p>
+              <footer class="co-proc__foot text-mono">ETA · {s.eta}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIALS                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Clientes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que dicen
+              <em class="heading-editorial">las empresas.</em>
+            </h2>
+          </div>
+        </header>
+
+        <ul class="co-quotes">
+          {testimonials.map((t, i) => (
+            <li class={`co-quote co-quote--${i}`}>
+              <span class="co-quote__metric">{t.metric}</span>
+              <p class="co-quote__t">"{t.text}"</p>
+              <footer class="co-quote__f">
+                <span class="co-quote__avatar">{t.author[0]}</span>
+                <div>
+                  <span class="co-quote__name">{t.author}</span>
+                  <span class="co-quote__role">{t.role}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que pregunta
+              <em class="heading-editorial">una dirección.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            10 preguntas reales de comités directivos que enfrentan un
+            proyecto de renovación web. Respuestas honestas.
+          </p>
+        </header>
+
+        <ol class="co-faq">
+          {faq.map((f, i) => (
+            <li class="co-faq__item">
+              <details class="co-faq__det" open={i === 0}>
+                <summary class="co-faq__sum">
+                  <span class="text-mono co-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="co-faq__q">{f.q}</span>
+                  <span class="co-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="co-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="co-final">
+      <div class="container-brutal">
+        <div class="co-final__grid">
+          <div class="co-final__l">
+            <span class="text-meta co-final__chapter">★ Cap. 12 · Próximo paso</span>
+            <h2 class="heading-display co-final__title">
+              ¿Empezamos
+              <em class="heading-editorial">por la auditoría?</em>
+            </h2>
+            <p class="co-final__lead">
+              Sin compromiso. Sin venta agresiva. Te entregamos un informe técnico
+              real de tu web actual y te decimos honestamente si te conviene
+              renovar — y con qué prioridad.
+              <strong>200+ empresas. 0 venta agresiva.</strong>
             </p>
+            <div class="co-final__cta">
+              <a href="/contacto?asunto=auditoria-empresa" class="co-final__btn co-final__btn--primary">
+                <span>Pedir auditoría gratuita</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="co-final__btn co-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>Hablar con dirección</span>
+              </a>
+            </div>
+            <div class="co-final__trust">
+              <span><span class="co-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ NDA SI LO NECESITAS</span>
+              <span>★ PAGO CONTRA HITOS</span>
+              <span>★ PRESUPUESTO CERRADO</span>
+            </div>
+          </div>
+
+          {/* Edificio final SVG */}
+          <div class="co-final__r" aria-hidden="true">
+            <svg viewBox="0 0 280 320" class="co-final-building">
+              <defs>
+                <radialGradient id="co-final-glow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%"  stop-color="#D6FF44" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#D6FF44" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="140" cy="160" r="150" fill="url(#co-final-glow)"/>
+
+              {/* Edificio rascacielos */}
+              <g class="co-final-building-g">
+                {/* Base ancha */}
+                <rect x="40" y="270" width="200" height="20" fill="#0A2540" stroke="#FFFCF6" stroke-width="2"/>
+
+                {/* Cuerpo principal */}
+                <rect x="80" y="80" width="120" height="190" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="3"/>
+
+                {/* Ventanas grid */}
+                <g fill="#0066CC" stroke="#0A2540" stroke-width="1">
+                  {Array.from({length: 6}).map((_, r) =>
+                    Array.from({length: 4}).map((_, c) => (
+                      <rect x={88 + c*28} y={90 + r*28} width="20" height="20"/>
+                    ))
+                  )}
+                </g>
+
+                {/* Algunas ventanas iluminadas (lima) */}
+                <rect x="88"  y="118" width="20" height="20" fill="#D6FF44" stroke="#0A2540" stroke-width="1"/>
+                <rect x="144" y="146" width="20" height="20" fill="#D6FF44" stroke="#0A2540" stroke-width="1"/>
+                <rect x="172" y="202" width="20" height="20" fill="#D6FF44" stroke="#0A2540" stroke-width="1"/>
+                <rect x="116" y="230" width="20" height="20" fill="#FFD600" stroke="#0A2540" stroke-width="1"/>
+
+                {/* Coronación */}
+                <path d="M 80 80 L 140 40 L 200 80 Z" fill="#C9A24F" stroke="#0E0D0B" stroke-width="3"/>
+                <rect x="135" y="20" width="10" height="22" fill="#0E0D0B"/>
+                <circle cx="140" cy="18" r="4" fill="#DC1B2C"/>
+
+                {/* Banner empresa */}
+                <rect x="90" y="252" width="100" height="14" fill="#0E0D0B"/>
+                <text x="140" y="262" text-anchor="middle" font-family="serif" font-size="10" font-weight="bold" fill="#D6FF44">PLATANITO</text>
+              </g>
+
+              {/* Estrellas + texto */}
+              <text x="30"  y="50" font-family="monospace" font-size="14" fill="#D6FF44">★</text>
+              <text x="240" y="60" font-family="monospace" font-size="10" fill="#FFD600">★</text>
+              <text x="140" y="305" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FFFCF6" letter-spacing="3">★ TU EDIFICIO DIGITAL ★</text>
+            </svg>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+
+      <div class="co-final__marquee">
+        <div class="co-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ AUDITORÍA GRATUITA ★ SLA POR ESCRITO ★ RGPD · WCAG AA ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
 
   <Footer />
 </BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · CORPORATIVA · BLUEPRINT                        */
+  /* ═══════════════════════════════════════════════════════ */
+  .co {
+    --co-paper:    #FFFCF6;
+    --co-paper-2:  #F2EEE4;
+    --co-cream:    #ECE3CB;
+    --co-ink:      #0E0D0B;
+    --co-navy:     #0A2540;
+    --co-blue:     #0066CC;
+    --co-cyan:     #00B8D9;
+    --co-gold:     #C9A24F;
+    --co-lime:     #D6FF44;
+    --co-red:      #DC1B2C;
+    --co-mint:     #C8F2D6;
+    --co-yellow:   #FFD600;
+    --co-orange:   #FF6B35;
+    --co-shadow:   8px 8px 0 var(--co-ink);
+  }
+  .co-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--co-gold);
+    box-shadow: 0 0 0 0 rgba(201,162,79,0.55);
+    animation: co-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes co-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(201,162,79,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(201,162,79,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,162,79,0); }
+  }
+  .co-spin { transform-origin: 50% 50%; animation: co-spin 25s linear infinite; }
+  @keyframes co-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO — BLUEPRINT                                        */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(10,37,64,0.08), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(201,162,79,0.06), transparent 50%),
+      var(--co-paper);
+    border-bottom: 3px solid var(--co-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .co-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,102,204,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,102,204,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .co-hero > * { position: relative; }
+
+  .co-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .co-hero__status { color: var(--co-gold); font-weight: 700; }
+
+  .co-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) { .co-hero__grid { grid-template-columns: 1fr 1.1fr; align-items: center; gap: 4rem; } }
+  .co-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .co-hero__chapter { color: var(--co-navy); }
+  .co-hero__title {
+    font-size: clamp(2.5rem, 8vw, 5.75rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .co-hero__title em { color: var(--co-navy); font-style: italic; display: inline-block; margin: 0 .1em; }
+  .co-hero__title-stamp {
+    display: inline-block;
+    color: var(--co-gold);
+    border-bottom: 6px solid var(--co-gold);
+    padding: 0 .1em;
+    transform: rotate(-1deg);
+  }
+  .co-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 58ch;
+  }
+  .co-hero__lead strong { color: var(--co-ink); font-weight: 700; }
+  .co-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .co-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--co-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .co-btn--primary {
+    background: var(--co-navy);
+    color: var(--co-paper);
+    box-shadow: 6px 6px 0 var(--co-ink);
+  }
+  .co-btn--primary:hover {
+    background: var(--co-gold);
+    color: var(--co-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--co-ink);
+  }
+  .co-btn--ghost {
+    background: transparent;
+    color: var(--co-ink);
+    box-shadow: 6px 6px 0 var(--co-navy);
+  }
+  .co-btn--ghost:hover {
+    background: var(--co-ink);
+    color: var(--co-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--co-navy);
+  }
+
+  /* KPIs */
+  .co-hero__kpis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--co-ink);
+    background: var(--co-ink);
+  }
+  @media (min-width: 768px) { .co-hero__kpis { grid-template-columns: repeat(4, 1fr); } }
+  .co-kpi {
+    background: var(--co-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--co-ink);
+    border-bottom: 2px solid var(--co-ink);
+  }
+  .co-kpi:nth-child(2n) { border-right: none; }
+  .co-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .co-kpi:nth-child(2n)      { border-right: 2px solid var(--co-ink); }
+    .co-kpi:nth-child(4n)      { border-right: none; }
+    .co-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--co-ink); }
+    .co-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .co-kpi--navy { background: var(--co-navy); color: var(--co-paper); }
+  .co-kpi--navy .co-kpi__v { color: var(--co-lime); }
+  .co-kpi--gold { background: var(--co-gold); color: var(--co-ink); }
+  .co-kpi--ink  { background: var(--co-ink); color: var(--co-paper); }
+  .co-kpi--ink  .co-kpi__v { color: var(--co-lime); }
+  .co-kpi__v { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1; }
+  .co-kpi__v small { font-size: .5em; opacity: .8; }
+  .co-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* BLUEPRINT */
+  .co-hero__plan {
+    position: relative;
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(10,37,64,0.18));
+  }
+  .co-blueprint {
+    background: var(--co-paper);
+    border: 3px solid var(--co-ink);
+    box-shadow: var(--co-shadow);
+    overflow: hidden;
+  }
+  .co-blueprint__head, .co-blueprint__foot {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--co-navy);
+    color: var(--co-paper);
+    font-size: .55rem;
+    letter-spacing: .15em;
+  }
+  .co-blueprint__foot { background: var(--co-paper-2); color: var(--co-ink); border-top: 2px solid var(--co-ink); font-size: .58rem; }
+  .co-blueprint__body { padding: 1rem; background: var(--co-paper); }
+  .co-plan-svg { display: block; width: 100%; height: auto; }
+
+  .co-stamp {
+    position: absolute;
+    top: -25px; right: -15px;
+    width: 110px; aspect-ratio: 1;
+    transform: rotate(-12deg);
+    filter: drop-shadow(0 6px 14px rgba(10,37,64,0.4));
+    animation: co-bob 4.5s ease-in-out infinite;
+    z-index: 3;
+  }
+  @keyframes co-bob {
+    0%, 100% { transform: rotate(-12deg) translateY(0); }
+    50%      { transform: rotate(-12deg) translateY(-6px); }
+  }
+
+  /* Marquee */
+  .co-marquee {
+    background: var(--co-navy);
+    color: var(--co-lime);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--co-ink);
+  }
+  .co-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: co-marquee 32s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes co-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* AUDIT                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-audit-section {
+    background: var(--co-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-audit-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .co-audit-head { grid-template-columns: 1.5fr 1fr; gap: 3rem; } }
+
+  .co-audit-title {
+    font-size: clamp(2.25rem, 6vw, 4.25rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: 1rem 0;
+  }
+  .co-audit-title em { color: var(--co-gold); }
+  .co-audit-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 56ch;
+  }
+  .co-audit-lead strong { color: var(--co-ink); font-weight: 700; }
+  .co-audit-cta {
+    display: inline-flex; align-items: center; gap: .65rem;
+    background: var(--co-gold);
+    color: var(--co-ink);
+    padding: 1rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--co-ink);
+    box-shadow: 6px 6px 0 var(--co-navy);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .co-audit-cta:hover {
+    background: var(--co-navy);
+    color: var(--co-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--co-gold);
+  }
+
+  .co-audit-stamp {
+    max-width: 220px;
+    margin: 0 auto;
+    transform: rotate(3deg);
+    filter: drop-shadow(0 8px 18px rgba(220,27,44,0.18));
+  }
+
+  /* Grid 5 cards de auditoría */
+  .co-audit-grid {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px)  { .co-audit-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .co-audit-grid { grid-template-columns: repeat(5, 1fr); } }
+  .co-audit-card {
+    background: var(--co-paper);
+    border: 2.5px solid var(--co-ink);
+    box-shadow: 5px 5px 0 var(--co-ink);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .co-audit-card:hover {
+    background: var(--co-paper-2);
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--co-gold);
+  }
+  .co-audit-card__head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: .5rem;
+    align-items: baseline;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed var(--co-ink);
+  }
+  .co-audit-card__code { font-size: .65rem; letter-spacing: .2em; color: var(--co-navy); font-weight: 800; }
+  .co-audit-card__title {
+    font-family: var(--font-display);
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    color: var(--co-ink);
+    margin: 0;
+  }
+  .co-audit-card__num { font-size: .55rem; letter-spacing: .15em; color: var(--co-gold); }
+  .co-audit-card__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .55rem; }
+  .co-audit-card__list li { display: grid; grid-template-columns: 22px 1fr; gap: .5rem; align-items: baseline; font-size: .82rem; line-height: 1.4; color: var(--co-ink); }
+  .co-audit-card__i { font-size: .65rem; color: var(--co-gold); font-weight: 800; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PILARES                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-pillars-section {
+    background: var(--co-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-pillars {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .co-pillars { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .co-pillars { grid-template-columns: repeat(3, 1fr); } }
+  .co-pillar {
+    background: var(--co-paper);
+    border: 2.5px solid var(--co-ink);
+    box-shadow: var(--co-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .co-pillar::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .co-pillar:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 var(--co-ink); }
+  .co-pillar--navy { color: var(--co-navy); }
+  .co-pillar--gold { color: var(--co-gold); }
+  .co-pillar--blue { color: var(--co-blue); }
+  .co-pillar--cyan { color: var(--co-cyan); }
+  .co-pillar--red  { color: var(--co-red); }
+  .co-pillar--mint { color: var(--co-mint); background: var(--co-mint); }
+
+  .co-pillar__head { display: flex; justify-content: space-between; align-items: baseline; padding: .5rem 0; }
+  .co-pillar__num { font-size: 1rem; font-weight: 800; color: currentColor; }
+  .co-pillar__code {
+    background: var(--co-ink);
+    color: var(--co-lime);
+    padding: .25rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+  }
+  .co-pillar__icon { width: 60px; height: 60px; color: currentColor; }
+  .co-pillar__title {
+    font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    color: var(--co-ink);
+    margin: 0;
+  }
+  .co-pillar__sub {
+    font-size: .62rem;
+    letter-spacing: .25em;
+    color: currentColor;
+    font-weight: 800;
+  }
+  .co-pillar__desc {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TRANSFORM                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-transform-section {
+    background: var(--co-navy);
+    color: var(--co-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .co-transform-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(214,255,68,0.05) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .co-transform-section > * { position: relative; }
+  .co-transform {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--co-paper);
+    border: 2.5px solid var(--co-paper);
+  }
+  @media (min-width: 768px)  { .co-transform { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .co-transform { grid-template-columns: repeat(4, 1fr); } }
+  .co-transform__item {
+    background: var(--co-navy);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: background .25s;
+  }
+  .co-transform__item:hover { background: rgba(214,255,68,0.08); }
+  .co-transform__head { display: flex; align-items: baseline; gap: .65rem; padding-bottom: .65rem; border-bottom: 1.5px dashed rgba(255,252,246,0.18); }
+  .co-transform__num { font-size: .75rem; color: var(--co-gold); font-weight: 800; }
+  .co-transform__metric {
+    font-family: var(--font-display);
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--co-paper);
+    margin: 0;
+    line-height: 1.15;
+  }
+  .co-transform__values {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: .5rem;
+    align-items: center;
+  }
+  .co-transform__before, .co-transform__after { display: flex; flex-direction: column; gap: 2px; text-align: center; }
+  .co-transform__lbl { font-size: .55rem; letter-spacing: .2em; color: var(--co-paper); opacity: .55; }
+  .co-transform__v {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .co-transform__v--bad  { color: var(--co-red); text-decoration: line-through; opacity: .7; }
+  .co-transform__v--good { color: var(--co-lime); }
+  .co-transform__arrow { color: var(--co-gold); }
+  .co-transform__improvement {
+    text-align: center;
+    background: var(--co-lime);
+    color: var(--co-ink);
+    padding: .35rem;
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    border: 1.5px solid var(--co-paper);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* INTEGRACIONES                                           */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-integ-section {
+    background: var(--co-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-integ {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px)  { .co-integ { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .co-integ { grid-template-columns: repeat(4, 1fr); } }
+  .co-integ__cat {
+    background: var(--co-paper);
+    border: 2px solid var(--co-ink);
+    box-shadow: 5px 5px 0 var(--co-ink);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .co-integ__cat:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--co-navy); }
+  .co-integ__cat-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: .65rem;
+    align-items: baseline;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed var(--co-ink);
+  }
+  .co-integ__cat-num { font-size: .85rem; color: var(--co-gold); font-weight: 800; letter-spacing: .15em; }
+  .co-integ__cat-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--co-ink);
+    margin: 0;
+  }
+  .co-integ__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .5rem; }
+  .co-integ__item {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: .65rem;
+    align-items: center;
+    padding: .55rem .75rem;
+    background: var(--co-paper-2);
+    border: 1.5px solid var(--co-ink);
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--co-ink);
+    transition: background .2s;
+  }
+  .co-integ__item:hover { background: var(--co-cream); }
+  .co-integ__item-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: currentColor;
+    border: 1.5px solid var(--co-ink);
+  }
+  .co-integ__item--orange { color: var(--co-orange); }
+  .co-integ__item--cyan   { color: var(--co-cyan); }
+  .co-integ__item--red    { color: var(--co-red); }
+  .co-integ__item--lime   { color: var(--co-lime); }
+  .co-integ__item--navy   { color: var(--co-navy); }
+  .co-integ__item--blue   { color: var(--co-blue); }
+  .co-integ__item--gold   { color: var(--co-gold); }
+  .co-integ__item--mint   { color: var(--co-mint); }
+  .co-integ__item--yellow { color: var(--co-yellow); }
+
+  .co-integ-note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--co-cream);
+    border: 2px solid var(--co-ink);
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--co-ink);
+  }
+  .co-integ-note strong { color: var(--co-navy); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SECTORES                                                */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-sectors-section {
+    background: var(--co-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-sectors {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px)  { .co-sectors { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .co-sectors { grid-template-columns: repeat(4, 1fr); } }
+  .co-sector {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: center;
+    background: var(--co-paper);
+    border: 2px solid var(--co-ink);
+    box-shadow: 5px 5px 0 var(--co-ink);
+    padding: 1.1rem;
+    transition: transform .2s, box-shadow .2s, color .2s;
+    color: var(--co-navy);
+  }
+  .co-sector:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--co-gold);
+    color: var(--co-gold);
+  }
+  .co-sector__icon { width: 60px; height: 60px; }
+  .co-sector__body { display: flex; flex-direction: column; gap: 4px; }
+  .co-sector__name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--co-ink);
+    margin: 0;
+    letter-spacing: -.015em;
+    line-height: 1.05;
+  }
+  .co-sector__desc {
+    font-size: .8rem;
+    line-height: 1.4;
+    color: var(--brutal-text-secondary);
+    margin: 0;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PRICING                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-pricing-section {
+    background: var(--co-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-plans {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1024px) { .co-plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 2rem; } }
+  .co-plan {
+    position: relative;
+    background: var(--co-paper);
+    border: 3px solid var(--co-ink);
+    box-shadow: var(--co-shadow);
+    padding: 2.5rem 1.75rem 2rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .co-plan:hover { transform: translateY(-4px); }
+  .co-plan--navy .co-plan__badge { color: var(--co-navy); }
+  .co-plan--gold .co-plan__badge { color: var(--co-gold); }
+  .co-plan--lime .co-plan__badge { color: var(--co-lime); }
+  .co-plan--popular {
+    background: var(--co-navy);
+    color: var(--co-paper);
+    border-color: var(--co-gold);
+    box-shadow: 12px 12px 0 var(--co-gold);
+    transform: scale(1.02);
+  }
+  @media (min-width: 1024px) { .co-plan--popular { transform: scale(1.05); } }
+  .co-plan--popular:hover { transform: scale(1.02) translateY(-4px); }
+  @media (min-width: 1024px) { .co-plan--popular:hover { transform: scale(1.05) translateY(-4px); } }
+
+  .co-plan__ribbon {
+    position: absolute;
+    top: -16px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--co-gold);
+    color: var(--co-ink);
+    padding: .35rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--co-ink);
+    box-shadow: 3px 3px 0 var(--co-ink);
+    white-space: nowrap;
+  }
+  .co-plan__badge { width: 100px; margin: 0 auto; }
+  .co-plan__head { display: flex; justify-content: space-between; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; opacity: .85; }
+  .co-plan__days { font-size: .68rem; letter-spacing: .15em; opacity: .8; }
+  .co-plan__name {
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: -.03em;
+    margin: 0;
+  }
+  .co-plan__sub { font-size: .9rem; opacity: .85; line-height: 1.4; }
+  .co-plan__pages {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    letter-spacing: .12em;
+    color: var(--co-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .co-plan--popular .co-plan__pages { color: var(--co-lime); }
+  .co-plan__price {
+    display: flex; align-items: baseline; gap: .65rem;
+    border-block: 2px solid currentColor;
+    padding: 1rem 0;
+    margin: .5rem 0;
+  }
+  .co-plan__price-v { font-size: clamp(2.5rem, 4vw, 3.25rem); font-weight: 800; line-height: 1; letter-spacing: -.03em; }
+  .co-plan__price-p { font-family: var(--font-mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .15em; opacity: .7; }
+  .co-plan__feat {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: .55rem;
+    flex: 1;
+  }
+  .co-plan__feat li {
+    display: flex; align-items: flex-start; gap: .65rem;
+    font-size: .9rem;
+    line-height: 1.4;
+  }
+  .co-plan__feat svg { color: var(--co-gold); flex-shrink: 0; margin-top: 3px; }
+  .co-plan--popular .co-plan__feat svg { color: var(--co-lime); }
+  .co-plan__cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    color: currentColor;
+    border: 2.5px solid currentColor;
+    padding: 1rem 1.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    margin-top: .5rem;
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .co-plan__cta:hover { background: currentColor; color: var(--co-paper); transform: translateY(-2px); }
+  .co-plan__cta--primary { background: var(--co-gold); color: var(--co-ink); border-color: var(--co-gold); }
+  .co-plan__cta--primary:hover { background: var(--co-lime); color: var(--co-ink); border-color: var(--co-lime); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SLA tabla                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-sla-section {
+    background: var(--co-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-sla {
+    border: 3px solid var(--co-ink);
+    box-shadow: var(--co-shadow);
+    background: var(--co-paper);
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+  .co-sla-head {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    background: var(--co-ink);
+    color: var(--co-paper);
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .2em;
+    font-weight: 800;
+  }
+  .co-sla-head__es { text-align: center; color: var(--co-paper); opacity: .85; }
+  .co-sla-head__pr { text-align: center; color: var(--co-gold); }
+  .co-sla-head__pl { text-align: center; color: var(--co-lime); }
+
+  .co-sla-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    align-items: center;
+  }
+  .co-sla-row:last-of-type { border-bottom: none; }
+  .co-sla-row:nth-child(odd) { background: var(--co-paper-2); }
+  .co-sla-row__k {
+    display: flex; align-items: baseline; gap: .65rem;
+    font-size: .92rem;
+    color: var(--co-ink);
+    font-weight: 600;
+  }
+  .co-sla-row__n { font-size: .65rem; letter-spacing: .15em; color: var(--co-gold); font-weight: 800; }
+  .co-sla-row__es, .co-sla-row__pr, .co-sla-row__pl {
+    text-align: center;
+    font-size: .9rem;
+    font-weight: 700;
+  }
+  .co-sla-row__es { color: var(--brutal-text-secondary); }
+  .co-sla-row__pr { color: var(--co-navy); font-weight: 800; }
+  .co-sla-row__pl { color: var(--co-gold); font-weight: 800; }
+
+  @media (max-width: 768px) {
+    .co-sla-head, .co-sla-row { grid-template-columns: 1fr; gap: .5rem; }
+    .co-sla-row__es::before { content: "Esencial: "; font-family: var(--font-mono); font-size: .6rem; opacity: .55; letter-spacing: .15em; margin-right: .35rem; }
+    .co-sla-row__pr::before { content: "Pro: ";       font-family: var(--font-mono); font-size: .6rem; opacity: .55; letter-spacing: .15em; margin-right: .35rem; }
+    .co-sla-row__pl::before { content: "Plus: ";      font-family: var(--font-mono); font-size: .6rem; opacity: .55; letter-spacing: .15em; margin-right: .35rem; }
+    .co-sla-row__es, .co-sla-row__pr, .co-sla-row__pl { text-align: left; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-proc-section {
+    background: var(--co-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px)  { .co-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .co-proc { grid-template-columns: repeat(4, 1fr); } }
+  .co-proc__step {
+    background: var(--co-paper);
+    border: 2.5px solid var(--co-ink);
+    box-shadow: 5px 5px 0 var(--co-ink);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .co-proc__step:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--co-navy); }
+  .co-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 2px dashed var(--co-navy); align-items: baseline; }
+  .co-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--co-navy); line-height: 1; }
+  .co-proc__gate {
+    background: var(--co-gold); color: var(--co-ink);
+    padding: .2rem .5rem;
+    font-size: .55rem;
+    letter-spacing: .15em;
+    font-weight: 800;
+    border: 1.5px solid var(--co-ink);
+  }
+  .co-proc__title { font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.05; letter-spacing: -.02em; color: var(--co-ink); margin: .25rem 0 0; }
+  .co-proc__body { font-size: .85rem; line-height: 1.45; color: var(--brutal-text-secondary); flex: 1; }
+  .co-proc__foot {
+    font-size: .58rem;
+    letter-spacing: .25em;
+    color: var(--co-navy);
+    font-weight: 800;
+    padding-top: .5rem;
+    border-top: 1.5px solid var(--co-ink);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIALS                                            */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-quote-section {
+    background: var(--co-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-quotes {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .co-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .co-quote {
+    position: relative;
+    background: var(--co-paper);
+    border: 2.5px solid var(--co-ink);
+    box-shadow: var(--co-shadow);
+    padding: 2rem 1.5rem 1.5rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .co-quote:hover { transform: translateY(-3px); }
+  .co-quote--0 { background: var(--co-cream); }
+  .co-quote--1 { background: var(--co-mint); }
+  .co-quote--2 { background: var(--co-paper); }
+  .co-quote__metric {
+    position: absolute;
+    top: -12px; left: 16px;
+    background: var(--co-navy);
+    color: var(--co-lime);
+    padding: .3rem .75rem;
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    border: 2px solid var(--co-ink);
+    box-shadow: 3px 3px 0 var(--co-ink);
+  }
+  .co-quote__t {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--co-ink);
+    margin: 0;
+    flex: 1;
+  }
+  .co-quote__f { display: flex; align-items: center; gap: .85rem; padding-top: 1rem; border-top: 2px dashed var(--co-ink); }
+  .co-quote__avatar {
+    width: 40px; height: 40px;
+    background: var(--co-navy); color: var(--co-lime);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .co-quote__f div { display: flex; flex-direction: column; }
+  .co-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--co-ink); }
+  .co-quote__role { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-faq-section {
+    background: var(--co-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--co-ink);
+  }
+  .co-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--co-ink);
+  }
+  .co-faq__item { border-bottom: 2px solid var(--co-ink); }
+  .co-faq__det summary { list-style: none; cursor: pointer; }
+  .co-faq__det summary::-webkit-details-marker { display: none; }
+  .co-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .co-faq__sum:hover { padding-inline: 1rem; background: var(--co-paper-2); }
+  .co-faq__num { font-size: 1rem; font-weight: 800; color: var(--co-navy); letter-spacing: .1em; }
+  .co-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--co-ink);
+    font-weight: 700;
+  }
+  .co-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--co-ink);
+    background: var(--co-paper);
+    color: var(--co-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .co-faq__det[open] .co-faq__toggle { transform: rotate(180deg); background: var(--co-navy); color: var(--co-lime); }
+  .co-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .co-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .co-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .co-final {
+    background: var(--co-navy);
+    color: var(--co-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .co-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(214,255,68,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .co-final > * { position: relative; }
+  .co-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .co-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .co-final__chapter { color: var(--co-gold); }
+  .co-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--co-paper);
+    margin: 1rem 0;
+  }
+  .co-final__title em { color: var(--co-gold); font-style: italic; display: block; }
+  .co-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,252,246,0.75);
+    max-width: 52ch;
+  }
+  .co-final__lead strong { color: var(--co-lime); }
+  .co-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .co-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .co-final__btn--primary {
+    background: var(--co-gold); color: var(--co-ink); border-color: var(--co-gold);
+    box-shadow: 6px 6px 0 var(--co-lime);
+  }
+  .co-final__btn--primary:hover {
+    background: var(--co-lime); color: var(--co-ink); border-color: var(--co-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--co-gold);
+  }
+  .co-final__btn--ghost {
+    background: transparent; color: var(--co-paper); border-color: var(--co-paper);
+    box-shadow: 6px 6px 0 var(--co-paper);
+  }
+  .co-final__btn--ghost:hover {
+    background: var(--co-paper); color: var(--co-navy);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--co-paper);
+  }
+  .co-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,252,246,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .co-final__trust .co-pulse { background: var(--co-lime); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(214,255,68,0.55); }
+
+  .co-final__r {
+    display: flex; align-items: center; justify-content: center;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .co-final-building { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(214,255,68,0.2)); }
+  .co-final-building-g {
+    transform-origin: 140px 200px;
+    animation: co-build-breathe 4s ease-in-out infinite;
+  }
+  @keyframes co-build-breathe {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+
+  .co-final__marquee {
+    background: var(--co-gold);
+    color: var(--co-ink);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--co-ink);
+    margin: 0 -1.5rem;
+  }
+  .co-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: co-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+</style>
