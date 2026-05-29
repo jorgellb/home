@@ -1,42 +1,94 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
-import Hero from '../components/sections/Hero.astro';
-import Problem from '../components/sections/Problem.astro';
-import Solution from '../components/sections/Solution.astro';
-import Process from '../components/sections/Process.astro';
-import Portfolio from '../components/sections/Portfolio.astro';
-import Testimonials from '../components/sections/Testimonials.astro';
-import Technology from '../components/sections/Technology.astro';
-import FAQ from '../components/sections/FAQ.astro';
 import Contact from '../components/sections/Contact.astro';
-import { getCollection } from 'astro:content';
 import { comarcas, getPueblosByComarca } from '../data/pueblos-almeria';
 
-// Get services from content collection
-const servicesCollection = await getCollection('services');
-const services = servicesCollection
-  .filter(service => !service.data.draft)
-  .sort((a, b) => (a.data.order || 999) - (b.data.order || 999));
+type Post = CollectionEntry<'posts'>;
 
-// Get testimonials from content collection
-const testimonialsCollection = await getCollection('testimonials');
-const testimonials = testimonialsCollection
-  .filter(t => !t.data.draft)
-  .sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf())
-  .map(t => ({
-    name: t.data.name,
-    role: t.data.role,
-    company: t.data.company,
-    companyUrl: t.data.companyUrl,
-    text: t.data.text,
-    rating: t.data.rating,
-    image: t.data.image,
-    imageAlt: t.data.imageAlt,
-  }));
+// Posts recientes (3 últimos)
+const allPosts = await getCollection('posts', ({ data }: Post) => !data.draft);
+const recentPosts = allPosts
+  .sort((a: Post, b: Post) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
 
+function formatDateShort(d: Date): string {
+  return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
+}
 
+// ─── DATOS HOME ────────────────────────────────
+
+// Servicios cluster (con preview color por área)
+const servicios = [
+  { num: '01', href: '/desarrollo-web/',  title: 'Diseño Web',       sub: 'Astro · WordPress · Custom', desc: 'Webs que cargan en <2s y aparecen en Google. CWV verde, accesibles, indexables.', icon: 'web',    color: 'green',    metric: '99+', metricLbl: 'Lighthouse' },
+  { num: '02', href: '/audiovisual/',     title: 'Audiovisual',      sub: 'Dron 4K · Vídeo · Foto',     desc: 'Producción con Mavic 3 Pro. Vídeo corporativo, reels, tours 360°, fotografía aérea.', icon: 'cam',    color: 'red',      metric: '4K', metricLbl: 'Resolución' },
+  { num: '03', href: '/marketing/',       title: 'Marketing · SEO',  sub: 'SEM · SEO · Email · RRSS',   desc: 'Tráfico cualificado vía Google Ads, SEO local y email automation. Conversión medida.', icon: 'mkt',    color: 'blue',     metric: '+180%', metricLbl: 'Leads medio' },
+  { num: '04', href: '/diseno-grafico/',  title: 'Diseño Gráfico',   sub: 'Branding · Print · Editorial', desc: 'Identidad visual, papelería corporativa, packaging, catálogos y editorial.', icon: 'art',    color: 'magenta',  metric: '∞', metricLbl: 'Conceptos' },
+  { num: '05', href: '/soluciones/ecommerce/', title: 'E-commerce',  sub: 'WooCommerce · 0% comisión',  desc: 'Tienda WooCommerce con Stripe + Bizum + Redsys. Sin comisiones por venta.',         icon: 'cart',   color: 'woo',      metric: '0%', metricLbl: 'Comisión venta' },
+  { num: '06', href: '/soporte/',         title: 'Mantenimiento',    sub: 'Soporte · Backups · WAF',    desc: 'Vigilancia 24/7, backups diarios, parches de seguridad <24h. Sin permanencia.',      icon: 'shield', color: 'gold',     metric: '99.9%', metricLbl: 'Uptime' },
+];
+
+// 4 razones diferenciales
+const razones = [
+  { num: '01', t: 'Equipo local en Almería',    s: 'Aquí desde 2018. Tomamos café juntos si quieres. Hablas con quien va a trabajar — sin intermediarios, sin comerciales.' },
+  { num: '02', t: 'Sin permanencia',            s: 'Nadie firma contratos eternos. Pago contra hitos. Si no encajamos, te exportamos todo y te vas. Nuestros clientes se quedan por resultados.' },
+  { num: '03', t: 'Respuesta < 4 horas',        s: 'WhatsApp, email o teléfono. Sin tickets, sin filtros, sin "te derivamos a otro compañero". Personas reales en tiempo real.' },
+  { num: '04', t: 'Cero plantillas',            s: 'Cada web a medida. Diseñamos por TÚ negocio, no por catálogo de Wix. Si quieres una plantilla — hay opciones más baratas en otro sitio.' },
+];
+
+// KPIs / stats
+const stats = [
+  { k: '200+', l: 'Proyectos lanzados' },
+  { k: '8',    l: 'Años en Almería' },
+  { k: '99%',  l: 'Clientes satisfechos' },
+  { k: '<4h',  l: 'Respuesta media' },
+];
+
+// Proceso 5 pasos
+const proceso = [
+  { num: '01', t: 'Briefing',         body: 'Llamada de 30 min · te escuchamos, sin presentaciones interminables.', eta: 'Día 1' },
+  { num: '02', t: 'Propuesta',         body: 'Presupuesto cerrado por escrito · plan de trabajo · fecha de entrega.', eta: 'Día 3' },
+  { num: '03', t: 'Diseño',            body: 'Mockups + revisiones. Lo apruebas antes de programar nada.',           eta: 'Sem 1–2' },
+  { num: '04', t: 'Desarrollo',        body: 'Construcción real. Acceso a entorno staging para que veas el progreso.', eta: 'Sem 2–4' },
+  { num: '05', t: 'Lanzamiento',       body: 'Migración, monitorización, formación de tu equipo, soporte activo.',    eta: 'Sem 4–6' },
+];
+
+// Casos / portfolio destacados (mock)
+const casos = [
+  { sector: 'INMOBILIARIA',  cliente: 'Inmo Vera Playa',      result: '+210% leads · 6 meses', color: 'green',   slug: '#' },
+  { sector: 'HOSTELERÍA',    cliente: 'Hotel Mojácar Premium', result: '+45% reservas directas', color: 'red',     slug: '#' },
+  { sector: 'E-COMMERCE',    cliente: 'Pastelería online',     result: '12k€ · primer mes',     color: 'woo',     slug: '#' },
+  { sector: 'INDUSTRIA',     cliente: 'Distribuidora Almería', result: 'Top 3 Google · 4 keys', color: 'blue',    slug: '#' },
+  { sector: 'CLÍNICA',       cliente: 'Estética Roquetas',     result: '+38% nuevas consultas',  color: 'magenta', slug: '#' },
+  { sector: 'CONSULTORÍA',   cliente: 'Despacho legal',        result: 'Top 3 abogados Almería', color: 'gold',    slug: '#' },
+];
+
+// Tech stack home
+const tech = [
+  { k: 'Astro',       v: 'Estático ultrarrápido' },
+  { k: 'WordPress',   v: 'Blog · contenido editable' },
+  { k: 'WooCommerce', v: 'Tiendas sin comisión' },
+  { k: 'Netlify',     v: 'Hosting + CDN global' },
+  { k: 'Cloudflare',  v: 'WAF + DDoS protection' },
+  { k: 'GA4 · GSC',   v: 'Analytics + Search Console' },
+];
+
+// Testimonios destacados (subset de los del JSON-LD)
+const testimonios = [
+  { text: 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y dedicación excepcionales.',          author: 'Ana Padilla',  role: 'Directora · Almería', metric: '★★★★★ · 2026' },
+  { text: 'Nuestra inmobiliaria en Vera Playa necesitaba captar clientes internacionales. El portal es impecable y recibimos leads diarios.', author: 'Javier Ruiz',  role: 'Vera Playa · Inmo',   metric: '+210% LEADS' },
+  { text: 'La creación de nuestro sitio web corporativo fue un proceso impecable. El equipo capturó a la perfección nuestros valores.',     author: 'Juan Poveda',  role: 'Corporate · Almería', metric: 'TOP 3 GOOGLE' },
+];
+
+// FAQ home (resumida)
+const faqHome = [
+  { q: '¿Cuánto cuesta una web profesional en Almería?', a: 'Web corporativa desde 3.490€. Tienda online WooCommerce desde 1.490€. Lanzamiento emprendedor desde 450€. Presupuesto cerrado, sin sorpresas, sin comisiones por venta.' },
+  { q: '¿Cuánto tarda en estar lista?',                   a: 'De 1 semana (lanzamiento exprés) a 14 semanas (corporativa premium multilingüe). Cumplimos plazos siempre que las aprobaciones lleguen a tiempo.' },
+  { q: '¿Hay permanencia?',                                a: 'No. Sin permanencia. Cancelas cuando quieras. Tu web es 100% tuya, exportable, migrable. Nuestros clientes se quedan por resultados.' },
+  { q: '¿Qué pasa después del primer año (hosting)?',     a: 'Hosting + correo desde 90€/año si sigues con nosotros, o exportas y te vas. Sin extorsión, sin sorpresas. Tú decides cada año.' },
+];
 ---
 
 <BaseLayout
@@ -59,57 +111,19 @@ const testimonials = testimonialsCollection
       'telephone': '+34657085019',
       'email': 'hola@platanitorico.com',
       'priceRange': '€€',
-      'sameAs': [
-        'https://www.instagram.com/platanitorico/',
-        'https://www.linkedin.com/company/platanitorico/'
-      ],
-      'address': {
-        '@type': 'PostalAddress',
-        'streetAddress': 'Ctra de Ronda, 82',
-        'addressLocality': 'Vera',
-        'addressRegion': 'Almería',
-        'postalCode': '04620',
-        'addressCountry': 'ES'
-      },
-      'geo': {
-        '@type': 'GeoCoordinates',
-        'latitude': 37.2471,
-        'longitude': -1.8673
-      },
+      'sameAs': ['https://www.instagram.com/platanitorico/', 'https://www.linkedin.com/company/platanitorico/'],
+      'address': { '@type': 'PostalAddress', 'streetAddress': 'Ctra de Ronda, 82', 'addressLocality': 'Vera', 'addressRegion': 'Almería', 'postalCode': '04620', 'addressCountry': 'ES' },
+      'geo': { '@type': 'GeoCoordinates', 'latitude': 37.2471, 'longitude': -1.8673 },
       'areaServed': [
-        { '@type': 'City', 'name': 'Almería' },
-        { '@type': 'City', 'name': 'Vera' },
-        { '@type': 'City', 'name': 'Mojácar' },
-        { '@type': 'City', 'name': 'Huércal-Overa' },
-        { '@type': 'City', 'name': 'Garrucha' },
+        { '@type': 'City', 'name': 'Almería' }, { '@type': 'City', 'name': 'Vera' }, { '@type': 'City', 'name': 'Mojácar' },
+        { '@type': 'City', 'name': 'Huércal-Overa' }, { '@type': 'City', 'name': 'Garrucha' },
         { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' }
       ],
-      'aggregateRating': {
-        '@type': 'AggregateRating',
-        'ratingValue': '4.9',
-        'reviewCount': '87',
-        'bestRating': '5',
-        'worstRating': '1'
-      },
+      'aggregateRating': { '@type': 'AggregateRating', 'ratingValue': '4.9', 'reviewCount': '87', 'bestRating': '5', 'worstRating': '1' },
       'review': [
-        {
-          '@type': 'Review',
-          'author': { '@type': 'Person', 'name': 'Ana Padilla' },
-          'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' },
-          'reviewBody': 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y dedicación excepcionales. Muy recomendables.'
-        },
-        {
-          '@type': 'Review',
-          'author': { '@type': 'Person', 'name': 'Juan Poveda' },
-          'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' },
-          'reviewBody': 'La creación de nuestro sitio web corporativo fue un proceso impecable. El equipo capturó a la perfección nuestros valores y visión.'
-        },
-        {
-          '@type': 'Review',
-          'author': { '@type': 'Person', 'name': 'Javier Ruiz' },
-          'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' },
-          'reviewBody': 'Nuestra inmobiliaria en Vera Playa necesitaba captar clientes internacionales. El portal web es impecable y recibimos leads diarios.'
-        }
+        { '@type': 'Review', 'author': { '@type': 'Person', 'name': 'Ana Padilla' }, 'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }, 'reviewBody': 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y dedicación excepcionales. Muy recomendables.' },
+        { '@type': 'Review', 'author': { '@type': 'Person', 'name': 'Juan Poveda' }, 'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }, 'reviewBody': 'La creación de nuestro sitio web corporativo fue un proceso impecable. El equipo capturó a la perfección nuestros valores y visión.' },
+        { '@type': 'Review', 'author': { '@type': 'Person', 'name': 'Javier Ruiz' }, 'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }, 'reviewBody': 'Nuestra inmobiliaria en Vera Playa necesitaba captar clientes internacionales. El portal web es impecable y recibimos leads diarios.' }
       ],
       'offerCatalog': {
         '@type': 'OfferCatalog',
@@ -122,127 +136,373 @@ const testimonials = testimonialsCollection
           { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Marketing digital', 'description': 'Google Ads, redes sociales y email marketing' } }
         ]
       },
-      'openingHoursSpecification': {
-        '@type': 'OpeningHoursSpecification',
-        'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        'opens': '09:00',
-        'closes': '18:00'
-      }
+      'openingHoursSpecification': { '@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens': '09:00', 'closes': '18:00' }
     },
     {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      'name': 'Platanito Rico',
-      'url': 'https://platanitorico.com',
-      'logo': {
-        '@type': 'ImageObject',
-        'url': 'https://platanitorico.com/imagenes/logo.png',
-        'width': 200,
-        'height': 60
-      },
+      '@context': 'https://schema.org', '@type': 'Organization', 'name': 'Platanito Rico', 'url': 'https://platanitorico.com',
+      'logo': { '@type': 'ImageObject', 'url': 'https://platanitorico.com/imagenes/logo.png', 'width': 200, 'height': 60 },
       'image': 'https://platanitorico.com/imagenes/equipo-diseno-mantenimiento-web.jpg',
-      'description': 'Agencia de diseño web, marketing digital y producción audiovisual con sede en Vera, Almería. Especialistas en SEO local para pymes y autónomos de la provincia de Almería.',
-      'telephone': '+34657085019',
-      'email': 'hola@platanitorico.com',
-      'address': {
-        '@type': 'PostalAddress',
-        'streetAddress': 'Ctra de Ronda, 82',
-        'addressLocality': 'Vera',
-        'addressRegion': 'Almería',
-        'postalCode': '04620',
-        'addressCountry': 'ES'
-      },
-      'sameAs': [
-        'https://www.instagram.com/platanitorico/',
-        'https://www.linkedin.com/company/platanitorico/'
-      ],
-      'foundingDate': '2010',
-      'areaServed': { '@type': 'AdministrativeArea', 'name': 'Almería' }
+      'description': 'Agencia de diseño web, marketing digital y producción audiovisual con sede en Vera, Almería.',
+      'telephone': '+34657085019', 'email': 'hola@platanitorico.com',
+      'address': { '@type': 'PostalAddress', 'streetAddress': 'Ctra de Ronda, 82', 'addressLocality': 'Vera', 'addressRegion': 'Almería', 'postalCode': '04620', 'addressCountry': 'ES' },
+      'sameAs': ['https://www.instagram.com/platanitorico/', 'https://www.linkedin.com/company/platanitorico/'],
+      'foundingDate': '2018', 'areaServed': { '@type': 'AdministrativeArea', 'name': 'Almería' }
     },
+    { '@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Platanito Rico', 'url': 'https://platanitorico.com' },
     {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      'name': 'Platanito Rico',
-      'url': 'https://platanitorico.com',
-      'potentialAction': {
-        '@type': 'SearchAction',
-        'target': 'https://platanitorico.com/?s={search_term_string}',
-        'query-input': 'required name=search_term_string'
-      }
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      'mainEntity': [
-        {
-          '@type': 'Question',
-          'name': '¿Cuánto cuesta una página web profesional en Almería?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Una web corporativa profesional en Almería parte desde 450€. Tiendas online desde 900€. Incluimos hosting gratuito para webs estáticas, lo que supone un ahorro de 150-300€ al año frente a WordPress. Presupuesto personalizado sin compromiso.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': '¿Cuánto tiempo tarda en estar lista una web?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Entre 1 y 2 semanas para webs corporativas. Tiendas online y proyectos más complejos pueden tardar 3-4 semanas. Te mantenemos informado en cada fase del proceso.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': '¿Incluye hosting gratuito?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Sí. Nuestras webs estáticas con Astro se alojan en servidores premium sin coste anual para ti. Carga en menos de 1 segundo, 100/100 en PageSpeed y nunca cae. Sin renovaciones ni facturas sorpresa.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': '¿Puedo gestionar la web yo mismo?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Sí. Te entregamos todas las credenciales y documentación. También ofrecemos formación y planes de mantenimiento desde 50€/mes con soporte prioritario y actualizaciones incluidas.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': '¿Hacéis SEO local para negocios en Almería?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Sí, es nuestra especialidad. Optimizamos tu Google Business Profile, estructuramos el contenido con keywords locales y construimos una arquitectura SEO que te posicione para búsquedas como «diseño web Almería», «dentista Vera» o «hotel Mojácar».'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': '¿Qué formas de pago aceptan?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Aceptamos transferencia bancaria, PayPal y tarjeta. 50% al inicio del proyecto y 50% a la entrega. Incluimos dos rondas de revisiones y garantía de satisfacción.'
-          }
-        }
-      ]
+      '@context': 'https://schema.org', '@type': 'FAQPage',
+      'mainEntity': faqHome.map(f => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } }))
     }
   ]}
 >
   <Header />
 
-  <main id="main-content">
-    <Hero />
-    <Problem />
-    <Solution services={services} />
-    <Process />
-    <Portfolio />
-    <Testimonials testimonials={testimonials} />
-    <Technology />
+  <main id="main-content" class="ho">
 
-    {/* ── Cobertura geográfica — Editorial map / index ── */}
-    <section class="section-brutal" id="cobertura">
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — MANIFIESTO + LOGOTIPO GIGANTE              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-hero">
+      <div class="container-brutal">
+
+        {/* Top bar */}
+        <header class="ho-hero__top">
+          <span class="text-meta">N.º 001 — Portada · Vol. {new Date().getFullYear() - 2017}</span>
+          <span class="text-meta ho-hero__status">
+            <span class="ho-pulse"></span>
+            ACEPTANDO PROYECTOS · 2026 · ALMERÍA
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        {/* Logotipo gigante editorial */}
+        <div class="ho-mast">
+          <div class="ho-mast__l">
+            <span class="text-meta ho-mast__chapter">Cap. 01 / Estudio digital</span>
+            <h1 class="ho-mast__title">
+              <span class="ho-mast__pre">★ ESTUDIO ★</span>
+              <span class="ho-mast__line1">PLATANITO</span>
+              <span class="ho-mast__line2"><em>rico</em></span>
+              <span class="ho-mast__sub">— DISEÑO · WEB · DRON · MARKETING · DESDE 2018 —</span>
+            </h1>
+          </div>
+
+          {/* Sello giratorio */}
+          <aside class="ho-mast__seal" aria-hidden="true">
+            <svg viewBox="0 0 180 180" width="100%" height="100%">
+              <defs>
+                <path id="ho-seal-arc-1" d="M90,90 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/>
+                <path id="ho-seal-arc-2" d="M90,90 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/>
+              </defs>
+              {/* Anillo exterior */}
+              <circle cx="90" cy="90" r="86" fill="none" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="90" cy="90" r="78" fill="none" stroke="#0E0D0B" stroke-width="1.5" stroke-dasharray="3 2"/>
+              <g class="ho-spin">
+                <text font-family="monospace" font-size="11" font-weight="bold" fill="#0E0D0B" letter-spacing="3.5">
+                  <textPath href="#ho-seal-arc-1" startOffset="0%">★ PLATANITO RICO ★ ESTUDIO DIGITAL ★ ALMERÍA · ESPAÑA ★ EST. 2018 ★</textPath>
+                </text>
+              </g>
+              {/* Estrella central */}
+              <circle cx="90" cy="90" r="62" fill="#0E0D0B"/>
+              <circle cx="90" cy="90" r="56" fill="none" stroke="#D6FF44" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="ho-spin-rev">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#D6FF44" letter-spacing="2">
+                  <textPath href="#ho-seal-arc-2" startOffset="0%">RESPUESTA · 4H · SIN PERMANENCIA · </textPath>
+                </text>
+              </g>
+              <text x="90" y="78" text-anchor="middle" font-family="serif" font-size="32" font-weight="bold" fill="#D6FF44">P★</text>
+              <text x="90" y="100" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#FFFCF6" letter-spacing="2">RICO</text>
+              <text x="90" y="112" text-anchor="middle" font-family="monospace" font-size="6" fill="#FFFCF6" letter-spacing="1.5">★ 2026 ★</text>
+            </svg>
+          </aside>
+        </div>
+
+        {/* Manifiesto */}
+        <p class="ho-manifest">
+          Hacemos webs <em>brutalmente bonitas</em> que <strong>cargan en menos de 2 segundos</strong>,
+          <em>aparecen en Google</em> y <strong>convierten visitantes en clientes</strong>.
+          Sin plantillas. Sin permanencia. Sin tonterías.
+        </p>
+
+        {/* CTAs */}
+        <div class="ho-hero__cta">
+          <a href="/contacto" class="ho-btn ho-btn--primary">
+            <span>Empezar mi proyecto</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#servicios" class="ho-btn ho-btn--ghost">
+            Ver servicios ↓
+          </a>
+        </div>
+
+        {/* Stats band */}
+        <ul class="ho-stats">
+          {stats.map((s, i) => (
+            <li class={`ho-stat ho-stat--${i}`}>
+              <span class="ho-stat__k text-mono">{s.k}</span>
+              <span class="ho-stat__l">{s.l}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Marquee anuncio */}
+      <div class="ho-marquee">
+        <div class="ho-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ DISEÑO WEB ★ TIENDAS WOOCOMMERCE ★ MARKETING SEO ★ DRON 4K ★ MANTENIMIENTO 24/7 ★ BRANDING ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* RAZONES — POR QUÉ NOSOTROS                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-why-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 09 / Cobertura</span>
+            <span class="text-meta">Cap. 02 / Por qué nosotros</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones,
+              <em class="heading-editorial">cero excusas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            En 8 años en Almería hemos aprendido qué <strong>importa de verdad</strong>
+            cuando contratas un equipo digital. Esto es lo que ofrecemos —
+            y lo que NO toleramos.
+          </p>
+        </header>
+
+        <ol class="ho-why">
+          {razones.map((r, i) => (
+            <li class={`ho-why__item ho-why__item--${i}`}>
+              <header class="ho-why__head">
+                <span class="text-mono ho-why__num">{r.num}</span>
+                <span class="ho-why__check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 5 12 L 10 17 L 19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </header>
+              <h3 class="ho-why__t heading-display">{r.t}</h3>
+              <p class="ho-why__s">{r.s}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SERVICIOS — BENTO 6-UP                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-svc-section" id="servicios">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 03 / Servicios</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Seis disciplinas,
+              <em class="heading-editorial">un solo equipo.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Diseño web, audiovisual, marketing, identidad, e-commerce y
+            mantenimiento. Hechos por el <strong>mismo equipo bajo el mismo techo</strong>.
+            Sin descoordinación, sin "te derivamos al freelance X".
+          </p>
+        </header>
+
+        <ol class="ho-svc">
+          {servicios.map((s) => (
+            <li class={`ho-svc__item ho-svc__item--${s.color}`}>
+              <a href={s.href} class="ho-svc__link">
+
+                <header class="ho-svc__head">
+                  <span class="text-mono ho-svc__num">{s.num}</span>
+                  <span class="text-mono ho-svc__sub">{s.sub}</span>
+                </header>
+
+                <div class="ho-svc__icon" aria-hidden="true">
+                  {s.icon === 'web'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="10" width="48" height="36" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><line x1="6" y1="18" x2="54" y2="18" stroke="#0E0D0B" stroke-width="2"/><circle cx="11" cy="14" r="1.5" fill="#0E0D0B"/><circle cx="16" cy="14" r="1.5" fill="#0E0D0B"/><circle cx="21" cy="14" r="1.5" fill="#0E0D0B"/><line x1="14" y1="28" x2="46" y2="28" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/><line x1="14" y1="36" x2="38" y2="36" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/></svg>}
+                  {s.icon === 'cam'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="16" width="38" height="28" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><path d="M 44 24 L 54 18 L 54 42 L 44 36 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><circle cx="22" cy="30" r="7" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="22" cy="30" r="3" fill="#0E0D0B"/><circle cx="38" cy="22" r="2" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
+                  {s.icon === 'mkt'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 6 50 L 18 36 L 30 44 L 42 22 L 54 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="54" cy="10" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="42" cy="22" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="30" cy="44" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="18" cy="36" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><line x1="6" y1="54" x2="54" y2="54" stroke="#0E0D0B" stroke-width="2"/></svg>}
+                  {s.icon === 'art'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 30 8 C 18 8 8 18 8 30 C 8 42 18 50 30 50 C 33 50 35 47 35 44 C 35 41 32 41 32 38 C 32 35 35 33 38 33 L 44 33 C 49 33 52 30 52 24 C 52 16 42 8 30 8 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="15" cy="24" r="3" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="22" cy="14" r="3" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="38" cy="14" r="3" fill="#00B85C" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="45" cy="24" r="3" fill="#7F54B3" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
+                  {s.icon === 'cart'   && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="22" cy="50" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="44" cy="50" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><path d="M 4 8 L 12 8 L 18 38 L 48 38 L 54 16 L 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 30 22 L 30 28 M 27 25 L 33 25" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/></svg>}
+                  {s.icon === 'shield' && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 30 6 C 22 6 16 9 8 12 L 8 30 C 8 44 30 54 30 54 C 30 54 52 44 52 30 L 52 12 C 44 9 38 6 30 6 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 18 30 L 26 38 L 42 22" fill="none" stroke="#0E0D0B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>}
+                </div>
+
+                <h3 class="ho-svc__title heading-display">{s.title}</h3>
+                <p class="ho-svc__desc">{s.desc}</p>
+
+                <footer class="ho-svc__foot">
+                  <div class="ho-svc__metric">
+                    <span class="ho-svc__metric-v text-mono">{s.metric}</span>
+                    <span class="ho-svc__metric-l">{s.metricLbl}</span>
+                  </div>
+                  <span class="ho-svc__cta">Ver más →</span>
+                </footer>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 5 PASOS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--ho-lime)">Cap. 04 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--ho-paper)">
+              Cómo
+              <em class="heading-editorial" style="color:var(--ho-accent)">trabajamos.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.7)">
+            Cinco fases bien definidas. Cada una con entregables claros, fecha y
+            tu aprobación antes de avanzar. <strong style="color:var(--ho-paper)">Sin sorpresas.</strong>
+          </p>
+        </header>
+
+        <ol class="ho-proc">
+          {proceso.map((p) => (
+            <li class="ho-proc__step">
+              <header class="ho-proc__head">
+                <span class="text-mono ho-proc__num">{p.num}</span>
+                <span class="text-mono ho-proc__eta">{p.eta}</span>
+              </header>
+              <h3 class="heading-display ho-proc__t">{p.t}</h3>
+              <p class="ho-proc__body">{p.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PORTFOLIO / CASOS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-port-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Casos</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Resultados
+              <em class="heading-editorial">de verdad.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Una pequeña muestra de proyectos lanzados en los últimos 24 meses.
+            <strong>200+ empresas confían en nosotros</strong> — estos son algunos
+            de los resultados que medimos.
+          </p>
+        </header>
+
+        <ol class="ho-port">
+          {casos.map((c) => (
+            <li class={`ho-port__item ho-port__item--${c.color}`}>
+              <a href={c.slug} class="ho-port__link">
+                <div class="ho-port__visual" aria-hidden="true">
+                  <span class="ho-port__sector">{c.sector}</span>
+                  <div class="ho-port__pattern"></div>
+                </div>
+                <div class="ho-port__body">
+                  <h3 class="ho-port__client heading-display">{c.cliente}</h3>
+                  <div class="ho-port__result">
+                    <span class="ho-port__result-arrow" aria-hidden="true">↗</span>
+                    <span class="ho-port__result-v text-mono">{c.result}</span>
+                  </div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Lo que dicen</span>
+            <h2 class="heading-display brutal-section-head__title">
+              4,9 / 5 estrellas
+              <em class="heading-editorial">en 87 reseñas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Reseñas reales de empresas, autónomos y emprendedores con los
+            que hemos trabajado. Sin filtros.
+          </p>
+        </header>
+
+        <ul class="ho-quotes">
+          {testimonios.map((t, i) => (
+            <li class={`ho-quote ho-quote--${i}`}>
+              <span class="ho-quote__metric">{t.metric}</span>
+              <p class="ho-quote__t">"{t.text}"</p>
+              <footer class="ho-quote__f">
+                <span class="ho-quote__avatar">{t.author[0]}</span>
+                <div>
+                  <span class="ho-quote__name">{t.author}</span>
+                  <span class="ho-quote__role">{t.role}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* STACK TECNOLÓGICO                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-tech-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 07 / Stack</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Tecnología
+              <em class="heading-editorial">estándar.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Lo que usamos no tiene secretos. Herramientas probadas, escalables,
+            sin plataformas raras de las que no puedas escapar.
+          </p>
+        </header>
+
+        <ul class="ho-tech">
+          {tech.map((t, i) => (
+            <li class="ho-tech__item">
+              <span class="text-mono ho-tech__i">0{i+1}</span>
+              <strong class="ho-tech__k">{t.k}</strong>
+              <span class="ho-tech__sep" aria-hidden="true"></span>
+              <span class="ho-tech__v">{t.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* COBERTURA ALMERÍA                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-cover-section" id="cobertura">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Cobertura</span>
             <h2 class="heading-display brutal-section-head__title">
               Diseño web en
               <em class="heading-editorial">toda Almería.</em>
@@ -254,8 +514,8 @@ const testimonials = testimonialsCollection
           </p>
         </header>
 
-        {/* Destacadas — bento brutal */}
-        <ul class="cobertura-grid">
+        {/* Destacadas */}
+        <ul class="ho-cover-grid">
           {[
             { nombre: 'Almería',       slug: 'almeria',       sub: 'Capital · 200k hab.' },
             { nombre: 'Vera',          slug: 'vera',          sub: 'Levante · sede' },
@@ -265,31 +525,31 @@ const testimonials = testimonialsCollection
             { nombre: 'Garrucha',      slug: 'garrucha',      sub: 'Costa · puerto' },
           ].map((p, i) => (
             <li>
-              <a href={`/diseno-web/${p.slug}/`} class={`cobertura-tile cobertura-tile--${i % 6}`}>
+              <a href={`/diseno-web/${p.slug}/`} class={`ho-cover-tile ho-cover-tile--${i % 6}`}>
                 <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
-                <span class="cobertura-tile__name heading-display">{p.nombre}</span>
-                <span class="cobertura-tile__sub text-mono">{p.sub}</span>
-                <span class="cobertura-tile__arrow" aria-hidden="true">→</span>
+                <span class="ho-cover-tile__name heading-display">{p.nombre}</span>
+                <span class="ho-cover-tile__sub text-mono">{p.sub}</span>
+                <span class="ho-cover-tile__arrow" aria-hidden="true">→</span>
               </a>
             </li>
           ))}
         </ul>
 
-        {/* Comarcas — accordion brutalista */}
-        <h3 class="text-meta cobertura-h3">★ Por comarcas</h3>
-        <div class="cobertura-comarcas">
+        {/* Comarcas */}
+        <h3 class="text-meta ho-cover-h3">★ Por comarcas</h3>
+        <div class="ho-comarcas">
           {comarcas.map(comarca => {
             const list = getPueblosByComarca(comarca);
             return (
-              <details class="cobertura-comarca" name="comarca">
-                <summary class="cobertura-comarca__sum">
-                  <span class="cobertura-comarca__name heading-display">{comarca}</span>
-                  <span class="cobertura-comarca__count text-mono">{list.length} localidades</span>
-                  <span class="cobertura-comarca__toggle" aria-hidden="true">+</span>
+              <details class="ho-comarca" name="comarca">
+                <summary class="ho-comarca__sum">
+                  <span class="ho-comarca__name heading-display">{comarca}</span>
+                  <span class="ho-comarca__count text-mono">{list.length} localidades</span>
+                  <span class="ho-comarca__toggle" aria-hidden="true">+</span>
                 </summary>
-                <div class="cobertura-comarca__items">
+                <div class="ho-comarca__items">
                   {list.map(p => (
-                    <a href={`/diseno-web/${p.slug}/`} class="tag-brutal cobertura-comarca__chip">
+                    <a href={`/diseno-web/${p.slug}/`} class="tag-brutal ho-comarca__chip">
                       {p.nombre}
                     </a>
                   ))}
@@ -299,15 +559,103 @@ const testimonials = testimonialsCollection
           })}
         </div>
 
-        <div class="cobertura-cta">
-          <a href="/diseno-web/" class="btn-brutal btn-brutal--ghost">
+        <div class="ho-cover-cta">
+          <a href="/diseno-web/" class="ho-btn ho-btn--ghost">
             Ver todas las localidades →
           </a>
         </div>
       </div>
     </section>
 
-    <FAQ />
+    {/* ════════════════════════════════════════════════ */}
+    {/* BLOG — Últimas crónicas                          */}
+    {/* ════════════════════════════════════════════════ */}
+    {recentPosts.length > 0 && (
+      <section class="ho-blog-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 09 / Diario</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Lo último
+                <em class="heading-editorial">en el blog.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Tecnología, marketing, casos de estudio y opinión. Publicado
+              cuando tenemos algo que decir.
+            </p>
+          </header>
+
+          <ol class="ho-blog">
+            {recentPosts.map((p: Post, i: number) => (
+              <li class="ho-blog__item">
+                <a href={`/blog/${p.data.slug}`} class="ho-blog__link">
+                  <header class="ho-blog__head">
+                    <span class="text-mono ho-blog__num">N.º {String(i+1).padStart(2,'0')}</span>
+                    <span class="text-mono ho-blog__date">{formatDateShort(p.data.publishedAt)}</span>
+                  </header>
+                  <h3 class="ho-blog__title">{p.data.title}</h3>
+                  {p.data.excerpt && <p class="ho-blog__excerpt">{p.data.excerpt}</p>}
+                  <footer class="ho-blog__foot">
+                    {p.data.categories && p.data.categories[0] && (
+                      <span class="ho-blog__tag">★ {p.data.categories[0]}</span>
+                    )}
+                    <span class="ho-blog__cta">Leer →</span>
+                  </footer>
+                </a>
+              </li>
+            ))}
+          </ol>
+
+          <div class="ho-blog-cta">
+            <a href="/blog/" class="ho-btn ho-btn--ghost">Ver todas las crónicas →</a>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">nos preguntan.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Respuestas honestas. Si no está aquí, escríbenos por WhatsApp
+            y respondemos en menos de 4h.
+          </p>
+        </header>
+
+        <ol class="ho-faq">
+          {faqHome.map((f, i) => (
+            <li class="ho-faq__item">
+              <details class="ho-faq__det" open={i === 0}>
+                <summary class="ho-faq__sum">
+                  <span class="text-mono ho-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="ho-faq__q">{f.q}</span>
+                  <span class="ho-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="ho-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CONTACTO (componente existente)                  */}
+    {/* ════════════════════════════════════════════════ */}
     <Contact />
   </main>
 
@@ -315,89 +663,814 @@ const testimonials = testimonialsCollection
 </BaseLayout>
 
 <style>
-  /* Cobertura grid */
-  .cobertura-grid {
-    list-style: none; padding: 0; margin: 0 0 4rem;
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · HOME EDITORIAL                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho {
+    --ho-paper:    #FFFCF6;
+    --ho-paper-2:  #F5EFE0;
+    --ho-cream:    #ECE3CB;
+    --ho-ink:      #0E0D0B;
+    --ho-accent:   #FF6B35;
+    --ho-lime:     #D6FF44;
+    --ho-blue:     #003B7A;
+    --ho-cyan:     #00B8D9;
+    --ho-magenta:  #FF2D9A;
+    --ho-gold:     #C9A24F;
+    --ho-green:    #00B85C;
+    --ho-red:      #DC1B2C;
+    --ho-woo:      #7F54B3;
+    --ho-yellow:   #FFD600;
+    --ho-mint:     #C8F2D6;
+    --ho-shadow:   8px 8px 0 var(--ho-ink);
+  }
+
+  .ho-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ho-green);
+    box-shadow: 0 0 0 0 rgba(0,184,92,0.55);
+    animation: ho-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ho-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0,184,92,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(0,184,92,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,184,92,0); }
+  }
+  .ho-spin     { transform-origin: 50% 50%; animation: ho-spin 30s linear infinite; }
+  .ho-spin-rev { transform-origin: 50% 50%; animation: ho-spin 22s linear infinite reverse; }
+  @keyframes ho-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(255,107,53,0.10), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(214,255,68,0.15), transparent 50%),
+      var(--ho-paper);
+    border-bottom: 3px solid var(--ho-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ho-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(14,13,11,0.05) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .ho-hero > * { position: relative; }
+
+  .ho-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .ho-hero__status { color: var(--ho-green); font-weight: 700; }
+
+  /* MAST · Logotipo gigante */
+  .ho-mast {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-block: 3rem 2rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) { .ho-mast { grid-template-columns: 1fr auto; gap: 3rem; } }
+
+  .ho-mast__chapter { color: var(--ho-accent); display: block; margin-bottom: 1rem; }
+  .ho-mast__title {
+    margin: 0;
+    display: flex; flex-direction: column;
+    line-height: .85;
+    color: var(--ho-ink);
+  }
+  .ho-mast__pre {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    letter-spacing: .85em;
+    color: var(--ho-accent);
+    font-weight: 700;
+    margin-bottom: .85rem;
+    margin-left: .3em;
+  }
+  .ho-mast__line1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(3.5rem, 13vw, 9rem);
+    letter-spacing: -.045em;
+    line-height: .82;
+    text-transform: uppercase;
+  }
+  .ho-mast__line2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(3rem, 11vw, 7.5rem);
+    letter-spacing: -.025em;
+    color: var(--ho-accent);
+    line-height: .85;
+    margin-top: -.05em;
+  }
+  .ho-mast__line2 em { font-style: italic; }
+  .ho-mast__sub {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: var(--ho-ink);
+    opacity: .75;
+    margin-top: 1rem;
+    font-weight: 700;
+  }
+
+  .ho-mast__seal {
+    width: 180px;
+    max-width: 28vw;
+    aspect-ratio: 1;
+    justify-self: center;
+    filter: drop-shadow(0 8px 18px rgba(14,13,11,0.18));
+    animation: ho-seal-bob 5s ease-in-out infinite;
+  }
+  @keyframes ho-seal-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  /* Manifiesto */
+  .ho-manifest {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.5vw, 1.85rem);
+    line-height: 1.35;
+    color: var(--ho-ink);
+    max-width: 56ch;
+    margin: 0 0 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--ho-ink);
+    font-weight: 500;
+  }
+  .ho-manifest em {
+    color: var(--ho-accent);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .ho-manifest strong { color: var(--ho-ink); font-weight: 800; }
+
+  .ho-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+
+  .ho-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--ho-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .ho-btn--primary {
+    background: var(--ho-ink);
+    color: var(--ho-lime);
+    box-shadow: 6px 6px 0 var(--ho-accent);
+  }
+  .ho-btn--primary:hover {
+    background: var(--ho-accent);
+    color: var(--ho-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ho-ink);
+  }
+  .ho-btn--ghost {
+    background: transparent;
+    color: var(--ho-ink);
+    box-shadow: 6px 6px 0 var(--ho-ink);
+  }
+  .ho-btn--ghost:hover {
+    background: var(--ho-ink);
+    color: var(--ho-lime);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ho-accent);
+  }
+
+  /* Stats band */
+  .ho-stats {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 2.5px solid var(--ho-ink);
+    background: var(--ho-ink);
+  }
+  @media (min-width: 768px) { .ho-stats { grid-template-columns: repeat(4, 1fr); } }
+  .ho-stat {
+    background: var(--ho-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--ho-ink);
+    border-bottom: 2px solid var(--ho-ink);
+  }
+  .ho-stat:nth-child(2n) { border-right: none; }
+  .ho-stat:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .ho-stat:nth-child(2n)      { border-right: 2px solid var(--ho-ink); }
+    .ho-stat:nth-child(4n)      { border-right: none; }
+    .ho-stat:nth-last-child(-n+2) { border-bottom: 2px solid var(--ho-ink); }
+    .ho-stat:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .ho-stat--0 { background: var(--ho-accent); color: var(--ho-paper); }
+  .ho-stat--1 { background: var(--ho-paper); }
+  .ho-stat--2 { background: var(--ho-lime); }
+  .ho-stat--3 { background: var(--ho-ink); color: var(--ho-paper); }
+  .ho-stat--3 .ho-stat__k { color: var(--ho-lime); }
+  .ho-stat__k { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; line-height: 1; letter-spacing: -.03em; }
+  .ho-stat__l { font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* Marquee */
+  .ho-marquee {
+    background: var(--ho-ink);
+    color: var(--ho-lime);
+    overflow: hidden;
+    padding: .9rem 0;
+    border-top: 3px solid var(--ho-ink);
+    margin-top: 3rem;
+  }
+  .ho-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: ho-marquee 35s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes ho-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* WHY (4 razones)                                         */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-why-section {
+    background: var(--ho-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-why {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2.5px solid var(--ho-ink);
+    background: var(--ho-ink);
+  }
+  @media (min-width: 768px)  { .ho-why { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .ho-why { grid-template-columns: repeat(4, 1fr); } }
+  .ho-why__item {
+    background: var(--ho-paper);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: background .25s;
+  }
+  .ho-why__item:hover { background: var(--ho-paper-2); }
+  .ho-why__item--0 { background: var(--ho-lime); }
+  .ho-why__item--0:hover { background: var(--ho-accent); color: var(--ho-paper); }
+  .ho-why__item--3 { background: var(--ho-ink); color: var(--ho-paper); }
+  .ho-why__item--3:hover { background: var(--ho-accent); }
+  .ho-why__head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid currentColor;
+    opacity: .85;
+  }
+  .ho-why__num { font-size: 1.4rem; font-weight: 800; }
+  .ho-why__check { color: var(--ho-accent); }
+  .ho-why__item--3 .ho-why__check { color: var(--ho-lime); }
+  .ho-why__t {
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+    color: inherit;
+    margin: 0;
+  }
+  .ho-why__s {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: inherit;
+    opacity: .85;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SERVICIOS                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-svc-section {
+    background: var(--ho-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-svc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .ho-svc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ho-svc { grid-template-columns: repeat(3, 1fr); } }
+  .ho-svc__item {
+    background: var(--ho-paper);
+    border: 2.5px solid var(--ho-ink);
+    box-shadow: var(--ho-shadow);
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ho-svc__item::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .ho-svc__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .ho-svc__item--green   { color: var(--ho-green); }
+  .ho-svc__item--red     { color: var(--ho-red); }
+  .ho-svc__item--blue    { color: var(--ho-blue); }
+  .ho-svc__item--magenta { color: var(--ho-magenta); }
+  .ho-svc__item--woo     { color: var(--ho-woo); }
+  .ho-svc__item--gold    { color: var(--ho-gold); }
+
+  .ho-svc__link {
+    display: flex; flex-direction: column; gap: 1rem;
+    padding: 1.75rem 1.5rem 1.5rem;
+    text-decoration: none;
+    color: var(--ho-ink);
+    height: 100%;
+  }
+  .ho-svc__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+  }
+  .ho-svc__num { font-size: 1.5rem; font-weight: 800; color: currentColor; }
+  .ho-svc__sub { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; opacity: .65; text-align: right; }
+  .ho-svc__icon { width: 60px; height: 60px; color: currentColor; }
+  .ho-svc__title {
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    color: var(--ho-ink);
+    margin: .25rem 0 0;
+  }
+  .ho-svc__desc {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .ho-svc__foot {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-top: .85rem;
+    border-top: 2px solid var(--ho-ink);
+    margin-top: auto;
+  }
+  .ho-svc__metric { display: flex; flex-direction: column; gap: 2px; }
+  .ho-svc__metric-v { font-size: 1.5rem; font-weight: 800; line-height: 1; color: currentColor; }
+  .ho-svc__metric-l { font-family: var(--font-mono); font-size: .58rem; text-transform: uppercase; letter-spacing: .15em; opacity: .65; }
+  .ho-svc__cta {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-proc-section {
+    background: var(--ho-ink);
+    color: var(--ho-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ho-proc-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(214,255,68,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .ho-proc-section > * { position: relative; }
+  .ho-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px)  { .ho-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1280px) { .ho-proc { grid-template-columns: repeat(5, 1fr); } }
+  .ho-proc__step {
+    background: rgba(255,252,246,0.05);
+    border: 2px solid var(--ho-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: background .25s, transform .25s;
+  }
+  .ho-proc__step:hover { background: rgba(214,255,68,0.1); transform: translateY(-3px); }
+  .ho-proc__head { display: flex; justify-content: space-between; padding-bottom: .5rem; border-bottom: 1.5px dashed rgba(255,252,246,0.25); }
+  .ho-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ho-lime); line-height: 1; }
+  .ho-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ho-accent); }
+  .ho-proc__t {
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--ho-paper);
+    margin: 0;
+  }
+  .ho-proc__body {
+    font-size: .85rem;
+    line-height: 1.45;
+    color: rgba(255,252,246,0.75);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PORTFOLIO / CASOS                                       */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-port-section {
+    background: var(--ho-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-port {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px)  { .ho-port { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ho-port { grid-template-columns: repeat(3, 1fr); } }
+  .ho-port__item {
+    background: var(--ho-paper);
+    border: 2.5px solid var(--ho-ink);
+    box-shadow: var(--ho-shadow);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ho-port__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .ho-port__item--green   { color: var(--ho-green); }
+  .ho-port__item--red     { color: var(--ho-red); }
+  .ho-port__item--blue    { color: var(--ho-blue); }
+  .ho-port__item--magenta { color: var(--ho-magenta); }
+  .ho-port__item--woo     { color: var(--ho-woo); }
+  .ho-port__item--gold    { color: var(--ho-gold); }
+  .ho-port__link { display: flex; flex-direction: column; text-decoration: none; color: var(--ho-ink); }
+  .ho-port__visual {
+    aspect-ratio: 4 / 3;
+    background: currentColor;
+    position: relative;
+    border-bottom: 2px solid var(--ho-ink);
+    overflow: hidden;
+  }
+  .ho-port__sector {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    background: var(--ho-ink);
+    color: var(--ho-lime);
+    padding: .3rem .65rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 1.5px solid var(--ho-ink);
+    z-index: 2;
+  }
+  .ho-port__pattern {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,252,246,0.1) 12px 13px);
+  }
+  .ho-port__body { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: .65rem; }
+  .ho-port__client {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    margin: 0;
+    color: var(--ho-ink);
+  }
+  .ho-port__result { display: flex; align-items: center; gap: .5rem; }
+  .ho-port__result-arrow { color: currentColor; font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; }
+  .ho-port__result-v {
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    font-weight: 800;
+    color: currentColor;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIOS                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-quote-section {
+    background: var(--ho-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-quotes {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .ho-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .ho-quote {
+    position: relative;
+    background: var(--ho-paper);
+    border: 2.5px solid var(--ho-ink);
+    box-shadow: var(--ho-shadow);
+    padding: 2rem 1.5rem 1.5rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .ho-quote:hover { transform: translateY(-3px); }
+  .ho-quote--0 { background: var(--ho-lime); }
+  .ho-quote--1 { background: var(--ho-mint); }
+  .ho-quote--2 { background: var(--ho-cream); }
+  .ho-quote__metric {
+    position: absolute;
+    top: -12px; left: 16px;
+    background: var(--ho-ink);
+    color: var(--ho-lime);
+    padding: .3rem .75rem;
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    border: 2px solid var(--ho-ink);
+    box-shadow: 3px 3px 0 var(--ho-accent);
+  }
+  .ho-quote__t {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.45;
+    color: var(--ho-ink);
+    margin: 0;
+    flex: 1;
+  }
+  .ho-quote__f { display: flex; align-items: center; gap: .85rem; padding-top: 1rem; border-top: 2px dashed var(--ho-ink); }
+  .ho-quote__avatar {
+    width: 40px; height: 40px;
+    background: var(--ho-ink); color: var(--ho-lime);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .ho-quote__f div { display: flex; flex-direction: column; }
+  .ho-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--ho-ink); }
+  .ho-quote__role { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TECH STACK                                              */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-tech-section {
+    background: var(--ho-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-tech {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--ho-ink);
+  }
+  .ho-tech__item {
+    display: grid;
+    grid-template-columns: 40px auto 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1.5px dashed var(--ho-ink);
+    transition: padding .2s, background .2s;
+  }
+  .ho-tech__item:hover { padding-inline: 1rem; background: var(--ho-paper-2); }
+  .ho-tech__i { font-size: .75rem; font-weight: 800; color: var(--ho-accent); letter-spacing: .15em; }
+  .ho-tech__k {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--ho-ink);
+  }
+  .ho-tech__sep { border-bottom: 1px dotted var(--ho-ink); opacity: .35; align-self: end; margin-bottom: 6px; }
+  .ho-tech__v { font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; color: var(--brutal-text-secondary); text-align: right; }
+  @media (max-width: 640px) {
+    .ho-tech__item { grid-template-columns: 40px 1fr; gap: .5rem; }
+    .ho-tech__sep { display: none; }
+    .ho-tech__v { grid-column: 2; text-align: left; font-size: .75rem; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* COBERTURA                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-cover-section {
+    background: var(--ho-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-cover-grid {
+    list-style: none; padding: 0; margin: 2rem 0 3rem;
     display: grid; gap: 0;
     grid-template-columns: 1fr;
-    border: 2px solid var(--brutal-ink);
-    background: var(--brutal-ink);
+    border: 2px solid var(--ho-ink);
+    background: var(--ho-ink);
   }
-  @media (min-width: 640px) { .cobertura-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
-  @media (min-width: 1024px) { .cobertura-grid { grid-template-columns: repeat(3, 1fr); } }
-
-  .cobertura-tile {
+  @media (min-width: 640px) { .ho-cover-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .ho-cover-grid { grid-template-columns: repeat(3, 1fr); } }
+  .ho-cover-tile {
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto 1fr auto;
     gap: .35rem;
     padding: 1.75rem;
-    background: var(--brutal-card);
-    color: var(--brutal-ink);
+    background: var(--ho-paper);
+    color: var(--ho-ink);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
-    grid-template-areas:
-      'meta arrow'
-      'name name'
-      'sub  sub';
+    grid-template-areas: 'meta arrow' 'name name' 'sub sub';
   }
-  .cobertura-tile .text-meta { grid-area: meta; }
-  .cobertura-tile__name { grid-area: name; font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: .95; letter-spacing: -.025em; }
-  .cobertura-tile__sub { grid-area: sub; font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
-  .cobertura-tile__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--brutal-accent); font-size: 1.5rem; transition: transform .25s; }
-  .cobertura-tile:hover { background: var(--brutal-accent); color: var(--brutal-ink); }
-  .cobertura-tile:hover .cobertura-tile__sub { color: var(--brutal-ink); }
-  .cobertura-tile:hover .cobertura-tile__arrow { color: var(--brutal-ink); transform: translateX(4px); }
-  .cobertura-tile--0:hover { background: var(--brutal-accent); }
-  .cobertura-tile--1:hover { background: var(--brutal-lime); }
-  .cobertura-tile--2:hover { background: var(--brutal-ink); color: var(--brutal-bg); }
-  .cobertura-tile--2:hover .cobertura-tile__arrow { color: var(--brutal-lime); }
-  .cobertura-tile--2:hover .cobertura-tile__sub { color: var(--brutal-bg-alt); }
-  .cobertura-tile--3:hover { background: var(--brutal-accent); }
-  .cobertura-tile--4:hover { background: var(--brutal-lime); }
-  .cobertura-tile--5:hover { background: var(--brutal-ink); color: var(--brutal-bg); }
-  .cobertura-tile--5:hover .cobertura-tile__arrow { color: var(--brutal-lime); }
+  .ho-cover-tile .text-meta { grid-area: meta; }
+  .ho-cover-tile__name { grid-area: name; font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: .95; letter-spacing: -.025em; }
+  .ho-cover-tile__sub { grid-area: sub; font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
+  .ho-cover-tile__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ho-accent); font-size: 1.5rem; transition: transform .25s; }
+  .ho-cover-tile:hover { background: var(--ho-accent); color: var(--ho-paper); }
+  .ho-cover-tile:hover .ho-cover-tile__sub { color: var(--ho-paper); opacity: .85; }
+  .ho-cover-tile:hover .ho-cover-tile__arrow { color: var(--ho-paper); transform: translateX(4px); }
+  .ho-cover-tile--1:hover { background: var(--ho-lime); color: var(--ho-ink); }
+  .ho-cover-tile--2:hover { background: var(--ho-ink); color: var(--ho-paper); }
+  .ho-cover-tile--2:hover .ho-cover-tile__arrow { color: var(--ho-lime); }
+  .ho-cover-tile--4:hover { background: var(--ho-lime); color: var(--ho-ink); }
+  .ho-cover-tile--5:hover { background: var(--ho-ink); color: var(--ho-paper); }
+  .ho-cover-tile--5:hover .ho-cover-tile__arrow { color: var(--ho-lime); }
 
-  .cobertura-h3 { display: block; margin-bottom: 1rem; color: var(--brutal-accent); }
-  .cobertura-comarcas {
+  .ho-cover-h3 { display: block; margin-bottom: 1rem; color: var(--ho-accent); }
+  .ho-comarcas {
     display: grid; gap: 0;
     grid-template-columns: 1fr;
-    border: 2px solid var(--brutal-ink);
+    border: 2px solid var(--ho-ink);
   }
-  @media (min-width: 768px) { .cobertura-comarcas { grid-template-columns: 1fr 1fr; } }
-  .cobertura-comarca {
-    background: var(--brutal-card);
-    border-bottom: 1px solid var(--brutal-ink);
+  @media (min-width: 768px) { .ho-comarcas { grid-template-columns: 1fr 1fr; } }
+  .ho-comarca { background: var(--ho-paper); border-bottom: 1px solid var(--ho-ink); }
+  @media (min-width: 768px) { .ho-comarca:nth-child(odd) { border-right: 1px solid var(--ho-ink); } }
+  .ho-comarca[open] { background: var(--ho-paper-2); }
+  .ho-comarca__sum {
+    display: grid; grid-template-columns: 1fr auto auto;
+    align-items: center; gap: 1rem;
+    padding: 1.25rem 1.5rem; cursor: pointer; list-style: none;
   }
-  @media (min-width: 768px) {
-    .cobertura-comarca:nth-child(odd) { border-right: 1px solid var(--brutal-ink); }
-  }
-  .cobertura-comarca[open] { background: var(--brutal-bg-alt); }
-  .cobertura-comarca__sum {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.25rem 1.5rem;
-    cursor: pointer;
-    list-style: none;
-  }
-  .cobertura-comarca__sum::-webkit-details-marker { display: none; }
-  .cobertura-comarca__name { font-size: 1.4rem; line-height: 1; letter-spacing: -.025em; }
-  .cobertura-comarca__count { font-size: .65rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
-  .cobertura-comarca__toggle {
+  .ho-comarca__sum::-webkit-details-marker { display: none; }
+  .ho-comarca__name { font-size: 1.4rem; line-height: 1; letter-spacing: -.025em; }
+  .ho-comarca__count { font-size: .65rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
+  .ho-comarca__toggle {
     width: 30px; height: 30px;
     display: inline-flex; align-items: center; justify-content: center;
-    background: var(--brutal-card);
-    border: 2px solid var(--brutal-ink);
-    font-family: var(--font-mono);
-    font-weight: 700;
+    background: var(--ho-paper); border: 2px solid var(--ho-ink);
+    font-family: var(--font-mono); font-weight: 700;
     transition: transform .25s, background .15s, color .15s;
   }
-  .cobertura-comarca[open] .cobertura-comarca__toggle { background: var(--brutal-accent); color: var(--brutal-bg); transform: rotate(45deg); }
-  .cobertura-comarca__items { padding: 0 1.5rem 1.5rem; display: flex; flex-wrap: wrap; gap: .35rem; }
-  .cobertura-comarca__chip:hover { background: var(--brutal-ink); color: var(--brutal-lime); }
+  .ho-comarca[open] .ho-comarca__toggle { background: var(--ho-accent); color: var(--ho-paper); transform: rotate(45deg); }
+  .ho-comarca__items { padding: 0 1.5rem 1.5rem; display: flex; flex-wrap: wrap; gap: .35rem; }
+  .ho-comarca__chip:hover { background: var(--ho-ink); color: var(--ho-lime); }
+  .ho-cover-cta { margin-top: 3rem; text-align: center; }
 
-  .cobertura-cta { margin-top: 3rem; text-align: center; }
+  /* ═══════════════════════════════════════════════════════ */
+  /* BLOG preview                                            */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-blog-section {
+    background: var(--ho-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-blog {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .ho-blog { grid-template-columns: repeat(3, 1fr); } }
+  .ho-blog__item {
+    background: var(--ho-paper);
+    border: 2.5px solid var(--ho-ink);
+    box-shadow: 5px 5px 0 var(--ho-ink);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ho-blog__item:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ho-accent); }
+  .ho-blog__link { display: flex; flex-direction: column; gap: .85rem; padding: 1.5rem; text-decoration: none; color: var(--ho-ink); height: 100%; }
+  .ho-blog__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: .65rem;
+    border-bottom: 2px dashed var(--ho-ink);
+  }
+  .ho-blog__num { font-size: .7rem; letter-spacing: .15em; color: var(--ho-accent); font-weight: 800; }
+  .ho-blog__date { font-size: .65rem; letter-spacing: .15em; color: var(--ho-ink); opacity: .65; }
+  .ho-blog__title {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    line-height: 1.1;
+    letter-spacing: -.015em;
+    color: var(--ho-ink);
+    margin: 0;
+  }
+  .ho-blog__excerpt {
+    font-size: .88rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .ho-blog__foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: .75rem;
+    border-top: 1.5px solid var(--ho-ink);
+  }
+  .ho-blog__tag {
+    background: var(--ho-ink); color: var(--ho-lime);
+    padding: .2rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+  }
+  .ho-blog__cta {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    font-weight: 800;
+    color: var(--ho-accent);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  .ho-blog-cta { margin-top: 2rem; text-align: center; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-faq-section {
+    background: var(--ho-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--ho-ink);
+  }
+  .ho-faq__item { border-bottom: 2px solid var(--ho-ink); }
+  .ho-faq__det summary { list-style: none; cursor: pointer; }
+  .ho-faq__det summary::-webkit-details-marker { display: none; }
+  .ho-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .ho-faq__sum:hover { padding-inline: 1rem; background: var(--ho-paper); }
+  .ho-faq__num { font-size: 1rem; font-weight: 800; color: var(--ho-accent); letter-spacing: .1em; }
+  .ho-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--ho-ink);
+    font-weight: 700;
+  }
+  .ho-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--ho-ink);
+    background: var(--ho-paper);
+    color: var(--ho-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .ho-faq__det[open] .ho-faq__toggle { transform: rotate(180deg); background: var(--ho-accent); color: var(--ho-paper); }
+  .ho-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .ho-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .ho-faq__ans { padding-left: 48px; }
+  }
 </style>
