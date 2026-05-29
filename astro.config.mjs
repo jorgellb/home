@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 /** @typedef {import('@astrojs/sitemap').SitemapItem} SitemapItem */
 
@@ -15,7 +16,13 @@ export default defineConfig({
   },
 
   compressHTML: true,
+  // 'static' por defecto: páginas prerenderizadas. Las rutas /api/* marcadas con
+  // `export const prerender = false` se ejecutan como Vercel Functions (Node).
   output: 'static',
+  adapter: vercel({
+    webAnalytics: { enabled: false },
+    imageService: false,
+  }),
 
   build: {
     format: 'directory',
