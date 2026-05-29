@@ -55,24 +55,33 @@ const proceso = [
   { num: '05', t: 'Lanzamiento',       body: 'Migración, monitorización, formación de tu equipo, soporte activo.',    eta: 'Sem 4–6' },
 ];
 
-// Casos / portfolio destacados (mock)
-const casos = [
-  { sector: 'INMOBILIARIA',  cliente: 'Inmo Vera Playa',      result: '+210% leads · 6 meses', color: 'green',   slug: '#' },
-  { sector: 'HOSTELERÍA',    cliente: 'Hotel Mojácar Premium', result: '+45% reservas directas', color: 'red',     slug: '#' },
-  { sector: 'E-COMMERCE',    cliente: 'Pastelería online',     result: '12k€ · primer mes',     color: 'woo',     slug: '#' },
-  { sector: 'INDUSTRIA',     cliente: 'Distribuidora Almería', result: 'Top 3 Google · 4 keys', color: 'blue',    slug: '#' },
-  { sector: 'CLÍNICA',       cliente: 'Estética Roquetas',     result: '+38% nuevas consultas',  color: 'magenta', slug: '#' },
-  { sector: 'CONSULTORÍA',   cliente: 'Despacho legal',        result: 'Top 3 abogados Almería', color: 'gold',    slug: '#' },
+// Soluciones por perfil (audience-based)
+const soluciones = [
+  { href: '/soluciones/emprendedor/', code: 'MVP',  name: 'Emprendedores',  sub: 'Lanza tu primera web', desc: 'Pack todo-en-uno con dominio, hosting, correo y SEO. En 14 días vendiendo.', price: 'Desde 450€',   color: 'accent', icon: 'rocket' },
+  { href: '/soluciones/empresa/',     code: 'PRO',  name: 'Empresas',       sub: 'Web corporativa',      desc: 'Audit gratuita, integraciones CRM/ERP, SLA, RGPD + WCAG AA, multilingüe.', price: 'Desde 3.490€', color: 'navy',   icon: 'building' },
+  { href: '/soluciones/ecommerce/',   code: 'SHOP', name: 'Tienda online',  sub: 'WooCommerce',          desc: '0% comisión por venta. Stripe + Bizum + Redsys. Tienda 100% tuya.',          price: 'Desde 1.490€', color: 'woo',    icon: 'cart' },
 ];
 
-// Tech stack home
+// Casos reales con imágenes
+const casos = [
+  { id: 'clinica-koral',      cliente: 'Clínica Dental Koral',       sector: 'Web · SEO',         result: '+220% leads orgánicos', tags: ['WordPress', 'SEO', 'Multiidioma'], year: '2024', url: 'https://clinicadentalkoral.es/',     image: '/imagenes/clientes/clinica-dental-koral.jpg' },
+  { id: 'murcia-production',  cliente: 'Murcia Production Service',  sector: 'Web · Corporativa', result: '#1 keyword sector',     tags: ['Producción', 'Cine', 'AV'],         year: '2024', url: 'https://murciaproductionservice.com/', image: '/imagenes/clientes/murcia-production-services.jpg' },
+  { id: 'actualidad-almanzora',cliente: 'Actualidad Almanzora',      sector: 'Portal Noticias',   result: '+45k visitas/mes',      tags: ['Noticias', 'Radio', 'Podcast'],     year: '2023', url: 'https://www.actualidadalmanzora.es/',  image: '/imagenes/clientes/actualidad-almanzora.jpg' },
+  { id: 'oveja-bohemia',      cliente: 'Oveja Bohemia',              sector: 'E-commerce',        result: '+180% ventas',          tags: ['Shopify', 'E-com', 'Branding'],     year: '2024', url: 'https://ovejabohemia.com/',            image: '/imagenes/clientes/oveja-bohemia.jpg' },
+  { id: 'ysy',                cliente: 'YSY Arquitectura',           sector: 'Web · Diseño',      result: 'Lighthouse 100',        tags: ['Next.js', 'SEO', 'UI/UX'],          year: '2024', url: 'https://ysy.es/',                      image: '/imagenes/clientes/ysy.es.jpg' },
+  { id: 'metales-sureste',    cliente: 'Metales del Sureste',        sector: 'Web · B2B',         result: '+12 leads/mes',         tags: ['WordPress', 'SEO Local', 'B2B'],    year: '2023', url: 'https://metalesdelsureste.com/',       image: '/imagenes/clientes/metalesdelsureste.com.jpg' },
+];
+
+// Tech stack con SVGs custom — los renderizamos inline en la sección
 const tech = [
-  { k: 'Astro',       v: 'Estático ultrarrápido' },
-  { k: 'WordPress',   v: 'Blog · contenido editable' },
-  { k: 'WooCommerce', v: 'Tiendas sin comisión' },
-  { k: 'Netlify',     v: 'Hosting + CDN global' },
-  { k: 'Cloudflare',  v: 'WAF + DDoS protection' },
-  { k: 'GA4 · GSC',   v: 'Analytics + Search Console' },
+  { id: 'astro',     name: 'Astro',          v: 'Sitios estáticos ultrarrápidos · Lighthouse 99+',     bg: 'orange' },
+  { id: 'wp',        name: 'WordPress',      v: 'CMS rey · Blog editable · SEO de primer nivel',       bg: 'blue' },
+  { id: 'woo',       name: 'WooCommerce',    v: 'Tiendas online · 0% comisión por venta',              bg: 'woo' },
+  { id: 'stripe',    name: 'Stripe',         v: 'Pasarela líder · Apple/Google Pay · 1,4 % por venta', bg: 'purple' },
+  { id: 'bizum',     name: 'Bizum',          v: 'Pago móvil español · 24 M usuarios · 0,7 %',          bg: 'cyan' },
+  { id: 'netlify',   name: 'Netlify',        v: 'Hosting + CDN global · SSL · 99,9 % uptime',          bg: 'green' },
+  { id: 'cloudflare',name: 'Cloudflare',     v: 'CDN + WAF · protección DDoS · DNS rápido',            bg: 'orange-d' },
+  { id: 'ga4',       name: 'Analytics + GSC',v: 'GA4 · Search Console · Tag Manager configurados',    bg: 'yellow' },
 ];
 
 // Testimonios destacados (subset de los del JSON-LD)
@@ -351,13 +360,90 @@ const faqHome = [
     </section>
 
     {/* ════════════════════════════════════════════════ */}
+    {/* SOLUCIONES POR PERFIL                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ho-aud-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 04 / Soluciones</span>
+            <h2 class="heading-display brutal-section-head__title">
+              ¿Qué tipo
+              <em class="heading-editorial">de negocio tienes?</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Cada perfil tiene necesidades distintas. Estos son nuestros
+            <strong>3 packs principales</strong> con todo lo que incluyen, precios
+            cerrados y plazos de entrega claros.
+          </p>
+        </header>
+
+        <ol class="ho-aud">
+          {soluciones.map((s) => (
+            <li class={`ho-aud__item ho-aud__item--${s.color}`}>
+              <a href={s.href} class="ho-aud__link">
+                <div class="ho-aud__icon" aria-hidden="true">
+                  {s.icon === 'rocket' && (
+                    <svg viewBox="0 0 80 80" width="100%" height="100%">
+                      <path d="M 40 8 L 50 24 L 50 52 L 44 60 L 36 60 L 30 52 L 30 24 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                      <circle cx="40" cy="30" r="6" fill="#0E0D0B"/>
+                      <circle cx="40" cy="30" r="3" fill="#FFFCF6"/>
+                      <path d="M 30 44 L 22 56 L 30 56 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/>
+                      <path d="M 50 44 L 58 56 L 50 56 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/>
+                      <path d="M 34 60 L 40 72 L 46 60" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/>
+                    </svg>
+                  )}
+                  {s.icon === 'building' && (
+                    <svg viewBox="0 0 80 80" width="100%" height="100%">
+                      <rect x="12" y="14" width="56" height="56" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                      <rect x="20" y="22" width="10" height="10" fill="#FFFCF6"/>
+                      <rect x="34" y="22" width="10" height="10" fill="#FFFCF6"/>
+                      <rect x="48" y="22" width="10" height="10" fill="#FFFCF6"/>
+                      <rect x="20" y="36" width="10" height="10" fill="#FFFCF6"/>
+                      <rect x="34" y="36" width="10" height="10" fill="#C9A24F"/>
+                      <rect x="48" y="36" width="10" height="10" fill="#FFFCF6"/>
+                      <rect x="32" y="52" width="16" height="18" fill="#0E0D0B"/>
+                      <rect x="38" y="60" width="4" height="6" fill="#D6FF44"/>
+                    </svg>
+                  )}
+                  {s.icon === 'cart' && (
+                    <svg viewBox="0 0 80 80" width="100%" height="100%">
+                      <circle cx="32" cy="66" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                      <circle cx="56" cy="66" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
+                      <path d="M 8 14 L 18 14 L 26 52 L 60 52 L 68 24 L 22 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M 42 28 L 42 38 M 37 33 L 47 33" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                  )}
+                </div>
+                <header class="ho-aud__head">
+                  <span class="ho-aud__code text-mono">{s.code}</span>
+                  <span class="text-mono ho-aud__price">{s.price}</span>
+                </header>
+                <h3 class="ho-aud__name heading-display">{s.name}</h3>
+                <span class="ho-aud__sub text-mono">{s.sub}</span>
+                <p class="ho-aud__desc">{s.desc}</p>
+                <footer class="ho-aud__foot">
+                  <span class="ho-aud__cta">
+                    Ver pack completo
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </footer>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
     {/* PROCESO — 5 PASOS                                 */}
     {/* ════════════════════════════════════════════════ */}
     <section class="ho-proc-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta" style="color:var(--ho-lime)">Cap. 04 / Método</span>
+            <span class="text-meta" style="color:var(--ho-lime)">Cap. 05 / Método</span>
             <h2 class="heading-display brutal-section-head__title" style="color:var(--ho-paper)">
               Cómo
               <em class="heading-editorial" style="color:var(--ho-accent)">trabajamos.</em>
@@ -385,44 +471,67 @@ const faqHome = [
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* PORTFOLIO / CASOS                                 */}
+    {/* PORTFOLIO / CASOS REALES                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-port-section">
+    <section class="ho-port-section" id="portfolio">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 05 / Casos</span>
+            <span class="text-meta">Cap. 06 / Portfolio</span>
             <h2 class="heading-display brutal-section-head__title">
-              Resultados
-              <em class="heading-editorial">de verdad.</em>
+              Trabajos publicados,
+              <em class="heading-editorial">resultados reales.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Una pequeña muestra de proyectos lanzados en los últimos 24 meses.
-            <strong>200+ empresas confían en nosotros</strong> — estos son algunos
-            de los resultados que medimos.
+            Una selección de proyectos lanzados en los últimos años. Sin
+            renders falsos, sin maquetas vacías — <strong>todos en línea
+            ahora mismo</strong>. Puedes visitarlos.
           </p>
         </header>
 
         <ol class="ho-port">
-          {casos.map((c) => (
-            <li class={`ho-port__item ho-port__item--${c.color}`}>
-              <a href={c.slug} class="ho-port__link">
-                <div class="ho-port__visual" aria-hidden="true">
-                  <span class="ho-port__sector">{c.sector}</span>
-                  <div class="ho-port__pattern"></div>
+          {casos.map((c, i) => (
+            <li class="ho-port__item">
+              <a href={c.url} target="_blank" rel="noopener noreferrer" class="ho-port__link" aria-label={`Abrir ${c.cliente} en nueva pestaña`}>
+                <div class="ho-port__media">
+                  <span class="ho-port__num text-mono">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="ho-port__year text-mono">{c.year}</span>
+                  <img src={c.image} alt={`${c.cliente} — ${c.sector}`} width="600" height="375" loading="lazy" decoding="async" class="ho-port__img"/>
+                  <div class="ho-port__overlay">
+                    <span class="ho-port__overlay-cta">
+                      Visitar sitio
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 6h6m0 0v6m0-6L9 17"/>
+                      </svg>
+                    </span>
+                  </div>
                 </div>
                 <div class="ho-port__body">
-                  <h3 class="ho-port__client heading-display">{c.cliente}</h3>
-                  <div class="ho-port__result">
-                    <span class="ho-port__result-arrow" aria-hidden="true">↗</span>
-                    <span class="ho-port__result-v text-mono">{c.result}</span>
+                  <div class="ho-port__meta">
+                    <span class="text-mono ho-port__cat">{c.sector}</span>
+                    <span class="text-mono ho-port__result">★ {c.result}</span>
                   </div>
+                  <h3 class="ho-port__client heading-display">{c.cliente}</h3>
+                  <div class="ho-port__tags">
+                    {c.tags.map(t => <span class="ho-port__tag text-mono">{t}</span>)}
+                  </div>
+                  <span class="ho-port__url text-mono">
+                    {c.url.replace('https://', '').replace('www.', '').replace(/\/$/, '')}
+                  </span>
                 </div>
               </a>
             </li>
           ))}
         </ol>
+
+        {/* Stats strip */}
+        <ul class="ho-port-strip">
+          <li><span class="text-mono ho-port-strip__v">50<sup>+</sup></span><span class="ho-port-strip__l">webs entregadas</span></li>
+          <li class="ho-port-strip__hi"><span class="text-mono ho-port-strip__v">99/100</span><span class="ho-port-strip__l">Lighthouse medio</span></li>
+          <li><span class="text-mono ho-port-strip__v">&lt;1<small>s</small></span><span class="ho-port-strip__l">Tiempo de carga</span></li>
+          <li class="ho-port-strip__hi2"><span class="text-mono ho-port-strip__v">100<small>%</small></span><span class="ho-port-strip__l">Clientes que repiten</span></li>
+        </ul>
       </div>
     </section>
 
@@ -433,7 +542,7 @@ const faqHome = [
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 06 / Lo que dicen</span>
+            <span class="text-meta">Cap. 07 / Lo que dicen</span>
             <h2 class="heading-display brutal-section-head__title">
               4,9 / 5 estrellas
               <em class="heading-editorial">en 87 reseñas.</em>
@@ -464,31 +573,110 @@ const faqHome = [
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* STACK TECNOLÓGICO                                 */}
+    {/* STACK TECNOLÓGICO con SVGs CUSTOM                 */}
     {/* ════════════════════════════════════════════════ */}
     <section class="ho-tech-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 07 / Stack</span>
+            <span class="text-meta">Cap. 08 / Stack</span>
             <h2 class="heading-display brutal-section-head__title">
-              Tecnología
-              <em class="heading-editorial">estándar.</em>
+              Las herramientas
+              <em class="heading-editorial">que dominamos.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Lo que usamos no tiene secretos. Herramientas probadas, escalables,
-            sin plataformas raras de las que no puedas escapar.
+            Tecnologías estándar de la industria, probadas en cientos de
+            proyectos. Sin plataformas raras de las que no puedas escapar.
+            <strong>Tu stack es tuyo. Para siempre.</strong>
           </p>
         </header>
 
         <ul class="ho-tech">
           {tech.map((t, i) => (
-            <li class="ho-tech__item">
+            <li class={`ho-tech__item ho-tech__item--${t.bg}`}>
               <span class="text-mono ho-tech__i">0{i+1}</span>
-              <strong class="ho-tech__k">{t.k}</strong>
-              <span class="ho-tech__sep" aria-hidden="true"></span>
-              <span class="ho-tech__v">{t.v}</span>
+              <div class="ho-tech__logo" aria-hidden="true">
+                {t.id === 'astro' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#0E0D0B" stroke="#0E0D0B" stroke-width="3"/>
+                    <path d="M 50 14 L 24 78 L 50 70 L 76 78 Z" fill="#FF6B35"/>
+                    <path d="M 38 60 Q 50 50 62 60" fill="none" stroke="#FFFCF6" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="38" cy="60" r="2.5" fill="#FFFCF6"/>
+                    <circle cx="62" cy="60" r="2.5" fill="#FFFCF6"/>
+                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" fill="#FFFCF6" letter-spacing="2.5">ASTRO</text>
+                  </svg>
+                )}
+                {t.id === 'wp' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <circle cx="50" cy="50" r="44" fill="#003B7A" stroke="#0E0D0B" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFCF6" stroke-width="2"/>
+                    <text x="50" y="64" text-anchor="middle" font-family="serif" font-size="44" font-weight="bold" fill="#FFFCF6">W</text>
+                    <line x1="14" y1="50" x2="86" y2="50" stroke="#FFFCF6" stroke-width="1.5" opacity="0.3"/>
+                  </svg>
+                )}
+                {t.id === 'woo' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#7F54B3" stroke="#0E0D0B" stroke-width="3"/>
+                    <path d="M 18 38 L 82 38 L 78 60 L 22 60 Z" fill="#FFFCF6"/>
+                    <text x="50" y="56" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="800" fill="#7F54B3" letter-spacing="-1">Woo</text>
+                    <circle cx="34" cy="74" r="5" fill="#0E0D0B"/>
+                    <circle cx="66" cy="74" r="5" fill="#0E0D0B"/>
+                    <circle cx="34" cy="74" r="2" fill="#FFFCF6"/>
+                    <circle cx="66" cy="74" r="2" fill="#FFFCF6"/>
+                    <text x="50" y="28" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6" letter-spacing="2">COMMERCE</text>
+                  </svg>
+                )}
+                {t.id === 'stripe' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#635BFF" stroke="#0E0D0B" stroke-width="3"/>
+                    <path d="M 38 36 L 38 28 C 38 24 42 22 48 22 C 58 22 68 26 68 26 L 68 38 C 68 38 58 32 50 32 C 46 32 46 33 46 35 C 46 37 48 38 54 40 C 64 43 70 48 70 56 C 70 66 62 72 50 72 C 42 72 32 68 32 68 L 32 56 C 32 56 44 62 50 62 C 54 62 56 60 56 58 C 56 56 54 55 48 53 C 38 50 32 46 32 38" fill="#FFFCF6"/>
+                    <text x="50" y="90" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6" letter-spacing="3">STRIPE</text>
+                  </svg>
+                )}
+                {t.id === 'bizum' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#00C3CB" stroke="#0E0D0B" stroke-width="3"/>
+                    <text x="50" y="58" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="800" fill="#FFFCF6" letter-spacing="-0.5">Bizum</text>
+                    <rect x="38" y="68" width="24" height="16" rx="2" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <circle cx="50" cy="76" r="3" fill="#00C3CB"/>
+                    <text x="50" y="24" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6" letter-spacing="2">PAGO MÓVIL</text>
+                  </svg>
+                )}
+                {t.id === 'netlify' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#06303A" stroke="#0E0D0B" stroke-width="3"/>
+                    <path d="M 28 50 L 50 28 L 72 50 L 50 72 Z" fill="#00C7B7"/>
+                    <path d="M 28 50 L 50 28 L 50 50 L 28 50 Z" fill="none" stroke="#06303A" stroke-width="2"/>
+                    <path d="M 50 50 L 50 72 L 28 50 L 50 50" fill="none" stroke="#06303A" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="6" fill="#FFFCF6" stroke="#06303A" stroke-width="2"/>
+                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6" letter-spacing="3">NETLIFY</text>
+                  </svg>
+                )}
+                {t.id === 'cloudflare' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#F38020" stroke="#0E0D0B" stroke-width="3"/>
+                    <path d="M 22 64 Q 22 50 38 50 Q 38 38 54 38 Q 74 38 74 56 Q 82 56 82 64 Q 82 70 76 70 L 26 70 Q 22 70 22 64 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/>
+                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6" letter-spacing="2">CLOUDFLARE</text>
+                  </svg>
+                )}
+                {t.id === 'ga4' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="3"/>
+                    <circle cx="28" cy="70" r="8" fill="#34A853" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="42" y="46" width="16" height="32" rx="2" fill="#FBBC04" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="64" y="26" width="16" height="52" rx="2" fill="#4285F4" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 18 30 L 36 22 L 54 28 L 70 18" fill="none" stroke="#EA4335" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="18" cy="30" r="2.5" fill="#EA4335"/>
+                    <circle cx="36" cy="22" r="2.5" fill="#EA4335"/>
+                    <circle cx="54" cy="28" r="2.5" fill="#EA4335"/>
+                    <circle cx="70" cy="18" r="2.5" fill="#EA4335"/>
+                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#0E0D0B" letter-spacing="2">ANALYTICS</text>
+                  </svg>
+                )}
+              </div>
+              <h3 class="ho-tech__name">{t.name}</h3>
+              <p class="ho-tech__desc">{t.v}</p>
             </li>
           ))}
         </ul>
@@ -502,7 +690,7 @@ const faqHome = [
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 08 / Cobertura</span>
+            <span class="text-meta">Cap. 09 / Cobertura</span>
             <h2 class="heading-display brutal-section-head__title">
               Diseño web en
               <em class="heading-editorial">toda Almería.</em>
@@ -575,7 +763,7 @@ const faqHome = [
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 09 / Diario</span>
+              <span class="text-meta">Cap. 10 / Diario</span>
               <h2 class="heading-display brutal-section-head__title">
                 Lo último
                 <em class="heading-editorial">en el blog.</em>
@@ -622,7 +810,7 @@ const faqHome = [
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 10 / Preguntas frecuentes</span>
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
             <h2 class="heading-display brutal-section-head__title">
               Lo que más
               <em class="heading-editorial">nos preguntan.</em>
@@ -1103,7 +1291,104 @@ const faqHome = [
   }
 
   /* ═══════════════════════════════════════════════════════ */
-  /* PORTFOLIO / CASOS                                       */
+  /* SOLUCIONES POR PERFIL (Para quién)                      */
+  /* ═══════════════════════════════════════════════════════ */
+  .ho-aud-section {
+    background: var(--ho-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ho-ink);
+  }
+  .ho-aud {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1024px) { .ho-aud { grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 2rem; } }
+  .ho-aud__item {
+    background: var(--ho-paper);
+    border: 3px solid var(--ho-ink);
+    box-shadow: var(--ho-shadow);
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ho-aud__item::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 8px;
+    background: currentColor;
+  }
+  .ho-aud__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .ho-aud__item--accent { color: var(--ho-accent); }
+  .ho-aud__item--navy   { color: var(--ho-blue); }
+  .ho-aud__item--woo    { color: var(--ho-woo); }
+
+  .ho-aud__link {
+    display: flex; flex-direction: column; gap: 1rem;
+    padding: 2.25rem 1.75rem 1.75rem;
+    text-decoration: none;
+    color: var(--ho-ink);
+    height: 100%;
+  }
+  .ho-aud__icon { width: 80px; height: 80px; color: currentColor; }
+  .ho-aud__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+  }
+  .ho-aud__code {
+    background: var(--ho-ink); color: var(--ho-lime);
+    padding: .3rem .65rem;
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+  }
+  .ho-aud__price {
+    font-size: .82rem;
+    font-weight: 800;
+    color: currentColor;
+    letter-spacing: .12em;
+  }
+  .ho-aud__name {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    color: var(--ho-ink);
+    margin: 0;
+  }
+  .ho-aud__sub {
+    font-size: .65rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: currentColor;
+    font-weight: 800;
+  }
+  .ho-aud__desc {
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .ho-aud__foot {
+    padding-top: 1rem;
+    border-top: 2px solid var(--ho-ink);
+    margin-top: auto;
+  }
+  .ho-aud__cta {
+    display: inline-flex; align-items: center; gap: .65rem;
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+  }
+  .ho-aud__item:hover .ho-aud__cta svg { transform: translateX(4px); }
+  .ho-aud__cta svg { transition: transform .25s; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PORTFOLIO REAL (con imágenes)                           */
   /* ═══════════════════════════════════════════════════════ */
   .ho-port-section {
     background: var(--ho-paper);
@@ -1114,66 +1399,155 @@ const faqHome = [
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  @media (min-width: 640px)  { .ho-port { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .ho-port { grid-template-columns: repeat(3, 1fr); } }
-  .ho-port__item {
-    background: var(--ho-paper);
+    gap: 0;
     border: 2.5px solid var(--ho-ink);
-    box-shadow: var(--ho-shadow);
-    transition: transform .25s, box-shadow .25s;
+    background: var(--ho-ink);
   }
-  .ho-port__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
-  .ho-port__item--green   { color: var(--ho-green); }
-  .ho-port__item--red     { color: var(--ho-red); }
-  .ho-port__item--blue    { color: var(--ho-blue); }
-  .ho-port__item--magenta { color: var(--ho-magenta); }
-  .ho-port__item--woo     { color: var(--ho-woo); }
-  .ho-port__item--gold    { color: var(--ho-gold); }
-  .ho-port__link { display: flex; flex-direction: column; text-decoration: none; color: var(--ho-ink); }
-  .ho-port__visual {
-    aspect-ratio: 4 / 3;
-    background: currentColor;
+  @media (min-width: 768px)  { .ho-port { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1280px) { .ho-port { grid-template-columns: repeat(3, 1fr); } }
+  .ho-port__item { background: var(--ho-paper); }
+  .ho-port__link {
+    display: flex; flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: var(--ho-ink);
+    background: var(--ho-paper);
+    transition: background .25s;
+  }
+  .ho-port__link:hover { background: var(--ho-paper-2); }
+
+  .ho-port__media {
     position: relative;
-    border-bottom: 2px solid var(--ho-ink);
     overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--ho-cream);
+    border-bottom: 2px solid var(--ho-ink);
   }
-  .ho-port__sector {
+  .ho-port__num, .ho-port__year {
     position: absolute;
-    top: 1rem; left: 1rem;
+    top: 1rem;
+    z-index: 2;
     background: var(--ho-ink);
     color: var(--ho-lime);
-    padding: .3rem .65rem;
-    font-family: var(--font-mono);
-    font-size: .6rem;
+    padding: .25rem .55rem;
+    font-size: .62rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
     font-weight: 800;
-    letter-spacing: .2em;
-    border: 1.5px solid var(--ho-ink);
-    z-index: 2;
   }
-  .ho-port__pattern {
+  .ho-port__num  { left: 1rem; }
+  .ho-port__year { right: 1rem; background: var(--ho-accent); color: var(--ho-ink); }
+  .ho-port__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .6s cubic-bezier(.16,1,.3,1), filter .4s;
+    filter: grayscale(.15) contrast(1.02);
+  }
+  .ho-port__link:hover .ho-port__img { transform: scale(1.04); filter: none; }
+  .ho-port__overlay {
     position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(45deg, transparent 0 12px, rgba(255,252,246,0.1) 12px 13px);
+    background: linear-gradient(180deg, transparent 50%, rgba(14,13,11,.85));
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity .35s;
   }
-  .ho-port__body { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: .65rem; }
+  .ho-port__link:hover .ho-port__overlay { opacity: 1; }
+  .ho-port__overlay-cta {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--ho-lime); color: var(--ho-ink);
+    padding: .75rem 1.25rem;
+    border: 2px solid var(--ho-ink);
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    box-shadow: 4px 4px 0 var(--ho-accent);
+  }
+
+  .ho-port__body { padding: 1.5rem; display: flex; flex-direction: column; gap: .65rem; flex: 1; }
+  .ho-port__meta {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: .5rem;
+  }
+  .ho-port__cat {
+    font-size: .65rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: var(--brutal-text-muted);
+  }
+  .ho-port__result {
+    font-size: .7rem;
+    color: var(--ho-accent);
+    font-weight: 800;
+    letter-spacing: .1em;
+  }
   .ho-port__client {
-    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    font-size: clamp(1.3rem, 2.2vw, 1.55rem);
     line-height: 1;
     letter-spacing: -.025em;
     margin: 0;
     color: var(--ho-ink);
+    transition: color .2s;
   }
-  .ho-port__result { display: flex; align-items: center; gap: .5rem; }
-  .ho-port__result-arrow { color: currentColor; font-family: var(--font-mono); font-size: 1.2rem; font-weight: 800; }
-  .ho-port__result-v {
-    font-family: var(--font-mono);
-    font-size: .82rem;
-    font-weight: 800;
-    color: currentColor;
-    letter-spacing: .08em;
+  .ho-port__link:hover .ho-port__client { color: var(--ho-accent); }
+  .ho-port__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .25rem; }
+  .ho-port__tag {
+    background: var(--ho-paper-2);
+    padding: .2rem .5rem;
+    border: 1.5px solid var(--ho-ink);
+    font-size: .58rem;
     text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--ho-ink);
+  }
+  .ho-port__url {
+    font-size: .68rem;
+    color: var(--brutal-text-muted);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    padding-top: .75rem;
+    border-top: 1.5px dashed var(--ho-ink);
+    margin-top: auto;
+  }
+
+  .ho-port-strip {
+    list-style: none; padding: 0;
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2.5px solid var(--ho-ink);
+    background: var(--ho-ink);
+  }
+  @media (min-width: 768px) { .ho-port-strip { grid-template-columns: repeat(4, 1fr); gap: 2px; } }
+  .ho-port-strip li {
+    background: var(--ho-paper);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; align-items: flex-start; gap: .35rem;
+  }
+  .ho-port-strip__hi  { background: var(--ho-accent) !important; color: var(--ho-paper); }
+  .ho-port-strip__hi2 { background: var(--ho-lime) !important; color: var(--ho-ink); }
+  .ho-port-strip__v {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.02em;
+  }
+  .ho-port-strip__v sup, .ho-port-strip__v small {
+    font-size: .5em;
+    vertical-align: super;
+    color: var(--ho-accent);
+  }
+  .ho-port-strip__hi .ho-port-strip__v sup, .ho-port-strip__hi .ho-port-strip__v small { color: var(--ho-ink); }
+  .ho-port-strip__hi2 .ho-port-strip__v sup, .ho-port-strip__hi2 .ho-port-strip__v small { color: var(--ho-accent); }
+  .ho-port-strip__l {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    opacity: .85;
   }
 
   /* ═══════════════════════════════════════════════════════ */
@@ -1240,41 +1614,86 @@ const faqHome = [
   .ho-quote__role { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
 
   /* ═══════════════════════════════════════════════════════ */
-  /* TECH STACK                                              */
+  /* TECH STACK con SVGs CUSTOM                              */
   /* ═══════════════════════════════════════════════════════ */
   .ho-tech-section {
-    background: var(--ho-paper);
+    background: var(--ho-paper-2);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--ho-ink);
+    position: relative;
+    overflow: hidden;
   }
+  .ho-tech-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(14,13,11,0.045) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .ho-tech-section > * { position: relative; }
   .ho-tech {
     list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--ho-ink);
-  }
-  .ho-tech__item {
     display: grid;
-    grid-template-columns: 40px auto 1fr auto;
-    gap: 1rem;
-    align-items: baseline;
-    padding: 1rem 0;
-    border-bottom: 1.5px dashed var(--ho-ink);
-    transition: padding .2s, background .2s;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
-  .ho-tech__item:hover { padding-inline: 1rem; background: var(--ho-paper-2); }
-  .ho-tech__i { font-size: .75rem; font-weight: 800; color: var(--ho-accent); letter-spacing: .15em; }
-  .ho-tech__k {
-    font-family: var(--font-display);
-    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  @media (min-width: 640px)  { .ho-tech { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ho-tech { grid-template-columns: repeat(4, 1fr); } }
+  .ho-tech__item {
+    background: var(--ho-paper);
+    border: 2.5px solid var(--ho-ink);
+    box-shadow: 6px 6px 0 var(--ho-ink);
+    padding: 1.25rem 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+  }
+  .ho-tech__item:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 var(--ho-ink);
+  }
+  .ho-tech__item--orange  { background: rgba(255, 107, 53, 0.10); }
+  .ho-tech__item--blue    { background: rgba(0, 59, 122, 0.08); }
+  .ho-tech__item--woo     { background: rgba(127, 84, 179, 0.10); }
+  .ho-tech__item--purple  { background: rgba(99, 91, 255, 0.10); }
+  .ho-tech__item--cyan    { background: rgba(0, 195, 203, 0.10); }
+  .ho-tech__item--green   { background: rgba(0, 184, 92, 0.10); }
+  .ho-tech__item--orange-d { background: rgba(243, 128, 32, 0.10); }
+  .ho-tech__item--yellow  { background: rgba(255, 214, 0, 0.15); }
+  .ho-tech__item:hover { background: var(--ho-paper); }
+
+  .ho-tech__i {
+    font-size: .65rem;
+    color: var(--ho-accent);
     font-weight: 800;
-    letter-spacing: -.02em;
-    color: var(--ho-ink);
+    letter-spacing: .2em;
   }
-  .ho-tech__sep { border-bottom: 1px dotted var(--ho-ink); opacity: .35; align-self: end; margin-bottom: 6px; }
-  .ho-tech__v { font-family: var(--font-mono); font-size: .85rem; letter-spacing: .05em; color: var(--brutal-text-secondary); text-align: right; }
-  @media (max-width: 640px) {
-    .ho-tech__item { grid-template-columns: 40px 1fr; gap: .5rem; }
-    .ho-tech__sep { display: none; }
-    .ho-tech__v { grid-column: 2; text-align: left; font-size: .75rem; }
+  .ho-tech__logo {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 120px;
+    margin: 0 auto;
+    filter: drop-shadow(0 4px 8px rgba(14,13,11,0.18));
+    transition: transform .25s;
+  }
+  .ho-tech__item:hover .ho-tech__logo { transform: scale(1.04) rotate(-2deg); }
+  .ho-tech__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+    letter-spacing: -.015em;
+    color: var(--ho-ink);
+    margin: .25rem 0 0;
+    text-align: center;
+  }
+  .ho-tech__desc {
+    font-size: .82rem;
+    line-height: 1.45;
+    color: var(--brutal-text-secondary);
+    margin: 0;
+    text-align: center;
   }
 
   /* ═══════════════════════════════════════════════════════ */

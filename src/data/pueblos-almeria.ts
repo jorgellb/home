@@ -417,16 +417,6 @@ export const pueblos: Pueblo[] = [
     coords: [-1.8504, 37.1404],
   },
   {
-    slug: "garrucha",
-    nombre: "Garrucha",
-    comarca: "Levante Almeriense",
-    poblacion: 9000,
-    descripcion:
-      "Puerto pesquero famoso por su gamba roja y tradición marinera",
-    caracteristicas: ["Puerto pesquero", "Gamba roja", "Gastronomía", "Playas"],
-    coords: [-1.8228, 37.1825],
-  },
-  {
     slug: "cuevas-del-almanzora",
     nombre: "Cuevas del Almanzora",
     comarca: "Levante Almeriense",
