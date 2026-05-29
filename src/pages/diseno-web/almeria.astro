@@ -7,54 +7,83 @@ import { getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const pueblosMetro = getPueblosByComarca('Almería Metropolitana').filter(p => p.slug !== 'almeria');
 
-const title = 'Diseño Web en Almería | Agencia de Páginas Web y SEO Local';
-const description = 'Agencia de diseño web en Almería capital. Creamos páginas web profesionales con hosting gratuito, tiendas online y SEO local para posicionar tu negocio en Google. Presupuesto sin compromiso.';
+const title = 'Diseño Web en Almería Capital | Agencia Web · SEO · E-commerce · Almeriwood';
+const description = 'Agencia de diseño web en Almería capital (200.000 hab). Webs profesionales con hosting gratuito, tiendas online, SEO local de alto volumen y proyectos para hostelería, salud, cine, puerto, universidad. Presupuesto sin compromiso.';
 const canonical = 'https://platanitorico.com/diseno-web/almeria/';
 
-const sectores = [
-  { nombre: 'Hostelería y restauración', stat: 'QR + reservas', desc: 'Webs con carta digital, sistema de reservas online y optimización para búsquedas tipo "restaurante en Almería". Tu mejor camarero 24h.', tags: ['Carta digital QR','Reservas online','SEO "restaurante Almería"','Fotos pro de platos'] },
-  { nombre: 'Inmobiliarias',              stat: 'Portal MLS', desc: 'Portales inmobiliarios con buscador de propiedades, fichas detalladas con galería y captación de leads cualificados en un mercado en auge.', tags: ['Portal propiedades','Buscador avanzado','Captación leads','Integración MLS'] },
-  { nombre: 'Salud y bienestar',          stat: 'Citas online', desc: 'Páginas web para clínicas dentales, centros médicos, fisioterapeutas y centros de estética en Almería. Con sistema de citas online y cumplimiento RGPD sanitario.', tags: ['Citas online','Ficha médica digital','RGPD sanitario','SEO local salud'] },
-  { nombre: 'Comercio y retail',          stat: 'E-com Astro', desc: 'Tiendas online para comercios almerienses que quieren vender a toda España. Desde productos locales hasta moda, con pasarela segura y envíos automatizados.', tags: ['E-commerce','Pasarela de pago','Gestión de stock','Envíos automáticos'] },
-  { nombre: 'Servicios profesionales',    stat: 'B2B / corporate', desc: 'Webs corporativas para abogados, gestorías, arquitectos e ingenieros de Almería. Diseño que transmite confianza con formularios cualificados.', tags: ['Web corporativa','Portfolio','Formularios inteligentes','Blog de autoridad'] },
-  { nombre: 'Turismo y ocio',             stat: 'Multiidioma', desc: 'Almería es destino de cine, playa y naturaleza. Webs para hoteles, casas rurales, empresas de actividades y guías turísticos con motor de reservas y multiidioma.', tags: ['Motor reservas','Multiidioma','Galería inmersiva','Booking integrado'] },
+// 3 iconos de Almería
+const iconos = [
+  { code: 'A', name: 'La Alcazaba',         sub: 'FORTALEZA ÁRABE',         desc: 'Segunda fortaleza musulmana más grande de España tras la Alhambra. Siglos VIII–XV. 43.000 m² de muralla.',           dato: '43.000 m²',  color: 'alcazaba' },
+  { code: 'B', name: 'Catedral-Fortaleza',  sub: 'CATÓLICA + DEFENSIVA',    desc: 'Única catedral fortaleza de España. Renacentista del siglo XVI, construida para defender de incursiones berberiscas.', dato: 'Siglo XVI', color: 'oro' },
+  { code: 'C', name: 'Cabo de Gata',        sub: '1.er PARQUE MARÍTIMO',     desc: 'Primer parque natural marítimo-terrestre de España. Volcán fósil, calas vírgenes, biodiversidad mediterránea única.', dato: '45.000 ha', color: 'gata' },
 ];
 
+// Películas filmadas en Almería (Almeriwood)
+const peliculas = [
+  { titulo: 'Lawrence de Arabia',         dir: 'David Lean',      year: '1962', escena: 'Dunas y desiertos · 4 Óscars' },
+  { titulo: 'El bueno, el feo y el malo', dir: 'Sergio Leone',    year: '1966', escena: 'Tabernas · western spaghetti' },
+  { titulo: 'Patton',                     dir: 'Franklin Schaffner', year: '1970', escena: 'Cabo de Gata · escenas Túnez' },
+  { titulo: 'Conan el Bárbaro',           dir: 'John Milius',     year: '1982', escena: 'Tabernas · paisajes salvajes' },
+  { titulo: 'Indiana Jones y la Última Cruzada', dir: 'Steven Spielberg', year: '1989', escena: 'Tabernas · desierto Hatay' },
+  { titulo: 'Juego de Tronos',            dir: 'HBO',             year: '2015', escena: 'Sevilla + Cabo de Gata · Bahía Ágata' },
+];
+
+// Sectores específicos de Almería capital
+const sectores = [
+  { nombre: 'Hostelería y restauración',  stat: 'QR · reservas',    desc: 'Webs con carta digital, sistema de reservas online y SEO local para búsquedas tipo "restaurante en Almería" o "tapas paseo marítimo". Tu mejor camarero 24h.',         tags: ['Carta digital QR','Reservas online','SEO "restaurante Almería"','Fotos pro de platos'] },
+  { nombre: 'Inmobiliarias',               stat: 'Portal MLS',       desc: 'Portales inmobiliarios con buscador de propiedades, fichas detalladas, galería y captación de leads cualificados en un mercado urbano en auge.',                              tags: ['Portal propiedades','Buscador avanzado','Captación leads','Integración MLS'] },
+  { nombre: 'Salud y bienestar',           stat: 'Citas online',     desc: 'Páginas web para clínicas dentales, centros médicos, fisioterapeutas y centros de estética. Sistema de citas online y cumplimiento RGPD sanitario.',                         tags: ['Citas online','Ficha médica digital','RGPD sanitario','SEO local salud'] },
+  { nombre: 'Comercio y retail',           stat: 'E-commerce',       desc: 'Tiendas online para comercios almerienses que quieren vender a toda España. Desde productos locales hasta moda, con pasarela segura y envíos automatizados.',                  tags: ['E-commerce','Pasarela de pago','Gestión de stock','Envíos automáticos'] },
+  { nombre: 'Servicios profesionales',     stat: 'B2B corporate',    desc: 'Webs corporativas para abogados, gestorías, arquitectos, ingenieros y consultoras almerienses. Diseño que transmite confianza con formularios cualificados.',                  tags: ['Web corporativa','Portfolio','Formularios inteligentes','Blog de autoridad'] },
+  { nombre: 'Turismo y cultura',           stat: 'Multiidioma',      desc: 'Almería es destino de cine, playa, naturaleza (Cabo de Gata) y patrimonio (Alcazaba). Webs para hoteles, casas rurales, empresas de actividades y guías turísticos.',           tags: ['Motor reservas','Multiidioma ES/EN/FR/DE','Galería 4K','Booking integrado'] },
+];
+
+// Hitos de la capital
+const hitos = [
+  { k: 'POBLACIÓN',     v: '200.000 hab · 1ª de la provincia' },
+  { k: 'ALCAZABA',      v: '2ª fortaleza árabe de España' },
+  { k: 'PUERTO',        v: 'Comercial + cruceros + N. África' },
+  { k: 'UNIVERSIDAD',   v: 'UAL · 15.000 estudiantes' },
+  { k: 'AEROPUERTO',    v: 'Internacional · 1M pax/año' },
+  { k: 'GASTRONOMÍA',   v: 'Capital Española 2019 · tapas' },
+];
+
+// Diferenciales de Almería
 const diferenciales = [
-  { title: 'Capital de provincia',        desc: 'Almería capital concentra servicios, comercio, salud, educación y administración. El mercado más diverso de la provincia — y el que más recompensa una web bien hecha.' },
-  { title: 'Volumen de búsquedas',        desc: 'Más de 200k habitantes y miles de búsquedas locales diarias en Google. SEO en Almería capital genera tráfico cualificado todos los días del año.' },
-  { title: 'Universidad y profesionales', desc: 'La UAL genera ecosistema de servicios profesionales, consultorías y proyectos de I+D. Webs corporativas que conecten con perfil cualificado.' },
-  { title: 'Puerto y conexiones',         desc: 'Almería capital es nodo logístico y turístico. Conexión con Norte de África, costa, aeropuerto. Audiencia internacional ya está aquí.' },
+  { title: 'Capital de la provincia',     desc: 'Almería concentra servicios, comercio, salud, educación y administración. El mercado más diverso de la provincia — y el que más recompensa una web bien posicionada en Google.' },
+  { title: 'Volumen de búsquedas alto',   desc: 'Más de 200.000 habitantes y miles de búsquedas locales diarias en Google. SEO en Almería capital genera tráfico cualificado los 365 días del año, no solo en temporada.' },
+  { title: 'Almeriwood vivo',             desc: 'Más de 500 películas y series rodadas aquí desde Lawrence de Arabia hasta Juego de Tronos. Equipos de cine, productoras y servicios al sector audiovisual buscan proveedores locales.' },
+  { title: 'Puerto + Universidad',        desc: 'Hub logístico-portuario + 15.000 universitarios + Norte de África a 1h de barco. La audiencia internacional y la profesional ya están aquí — solo hay que captarla.' },
 ];
 
 const proceso = [
-  { num: '01', title: 'Auditoría y estrategia',      eta: '1–2 días', body: 'Analizamos tu negocio, competencia y mercado en Almería. Definimos objetivos, keywords y arquitectura web ideal para tu sector.', deliverable: 'Briefing + roadmap' },
-  { num: '02', title: 'Diseño y prototipo',          eta: '3–5 días', body: 'Diseño visual de tu web: estructura, colores, tipografías y experiencia de usuario. Tú apruebas antes de pasar a desarrollo.', deliverable: 'Prototipo Figma navegable' },
-  { num: '03', title: 'Desarrollo + SEO técnico',    eta: '5–10 días', body: 'Programamos con Astro y Tailwind: velocidad óptima, datos estructurados y SEO técnico desde el código.', deliverable: 'Web en staging + auditoría' },
-  { num: '04', title: 'Lanzamiento y formación',     eta: '1–2 días', body: 'Publicamos con hosting gratuito, indexamos en Google y te formamos para que gestiones tu contenido con autonomía.', deliverable: 'Sitio en producción + manual' },
+  { num: '01', title: 'Auditoría + estrategia',     eta: '1–2 días',  body: 'Analizamos tu negocio, competencia y mercado en Almería capital. Definimos objetivos, keywords y arquitectura web ideal para tu sector.', deliverable: 'Briefing + roadmap' },
+  { num: '02', title: 'Diseño y prototipo',          eta: '3–5 días',  body: 'Diseño visual de tu web: estructura, colores, tipografías y experiencia de usuario. Tú apruebas antes de pasar a desarrollo.',          deliverable: 'Prototipo Figma navegable' },
+  { num: '03', title: 'Desarrollo + SEO técnico',    eta: '5–10 días', body: 'Programamos con Astro: velocidad óptima, datos estructurados, SEO técnico desde el código. Core Web Vitals verdes.',                  deliverable: 'Web staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + formación',     eta: '1–2 días',  body: 'Publicamos con hosting gratuito, indexamos en Google y te formamos para que gestiones tu contenido con autonomía.',                    deliverable: 'Sitio en producción + manual' },
 ];
 
 const testimonios = [
-  { nombre: 'María Bautista',  negocio: 'Clínica dental · Almería capital', texto: 'Nos modernizaron toda la imagen digital. El tráfico local desde Google se ha disparado y los pacientes que llegan ya vienen convencidos.' },
-  { nombre: 'Carlos D.',       negocio: 'Despacho de arquitectura · Almería', texto: 'La web nueva nos posiciona como referente del sector. Los proyectos entran más cualificados, presupuestos más altos y menos curiosos.' },
-  { nombre: 'Sofía R.',        negocio: 'Boutique · Almería centro',        texto: 'Pasamos de Instagram a tienda online y la facturación digital ya supera el 40% del total. Gestión muy sencilla y soporte impecable.' },
-  { nombre: 'Manuel G.',       negocio: 'Restaurante · Paseo Marítimo',     texto: 'La carta digital QR y las reservas online han cambiado el restaurante. Menos llamadas, más eficiencia y mucha mejor experiencia de cliente.' },
+  { nombre: 'María Bautista', negocio: 'Clínica dental · Almería capital',     texto: 'Nos modernizaron toda la imagen digital. El tráfico local desde Google se ha disparado y los pacientes que llegan ya vienen convencidos.' },
+  { nombre: 'Carlos D.',      negocio: 'Despacho de arquitectura · Almería',   texto: 'La web nueva nos posiciona como referente del sector. Los proyectos entran más cualificados, presupuestos más altos y menos curiosos.' },
+  { nombre: 'Sofía R.',       negocio: 'Boutique · Almería centro',            texto: 'Pasamos de Instagram a tienda online y la facturación digital ya supera el 40% del total. Gestión muy sencilla y soporte impecable.' },
+  { nombre: 'Manuel G.',      negocio: 'Restaurante · Paseo Marítimo',         texto: 'La carta digital QR y las reservas online han cambiado el restaurante. Menos llamadas, más eficiencia y mucha mejor experiencia.' },
 ];
 
 const faqs = [
-  { q: '¿Cuánto cuesta una página web profesional en Almería?', a: 'Web corporativa profesional desde 450€ con diseño personalizado, SEO técnico, hosting gratuito y formación. Tiendas online con pasarela: 900€–2.500€ según funcionalidades. Presupuesto cerrado sin sorpresas.' },
-  { q: '¿Por qué el hosting es gratuito en vuestras webs?', a: 'Usamos generación estática (Astro) que produce webs ultrarrápidas servidas desde CDN global sin servidor ni base de datos. Netlify o Cloudflare Pages ofrecen hosting gratuito ilimitado. Ahorras 60–200€/año en hosting para siempre.' },
-  { q: '¿En cuánto tiempo tendré mi web lista?', a: 'Web corporativa estándar: 1–2 semanas. Proyectos complejos (tiendas online, reservas): 3–4 semanas. Metodología ágil: ves avances desde la primera semana.' },
-  { q: '¿Mi web aparecerá en Google si os contrato?', a: 'Todas las webs se entregan optimizadas para SEO desde el código: velocidad óptima, datos estructurados (Schema.org), meta etiquetas, sitemap XML. Para posicionamiento en búsquedas competitivas (dentista Almería, restaurante Almería) ofrecemos planes de SEO mensual.' },
-  { q: '¿Qué ventaja tiene una web estática frente a WordPress?', a: 'Carga <1s (vs 3–8s en WP), sin base de datos hackeable, sin actualizaciones de plugins, hosting gratuito y mejor rendimiento en Google. Para webs corporativas, portfolios y landings es la mejor opción técnica y económica.' },
-  { q: '¿Puedo gestionar mi web yo mismo después?', a: 'Sí. Formación y documentación incluidas. Para webs con blog o catálogo integramos un CMS headless intuitivo. Soporte técnico disponible si necesitas ayuda.' },
-  { q: '¿Hacéis reuniones presenciales en Almería?', a: 'Sí. Nos reunimos en persona en Almería capital y en toda la provincia. También videollamada. Primera consulta gratuita y sin compromiso.' },
-  { q: '¿Trabajáis con negocios de toda la provincia de Almería?', a: 'Sí. Esta página se centra en la capital, pero damos servicio a Roquetas, Níjar, El Ejido, Mojácar, Vera, Huércal-Overa y más de 100 localidades. Cada pueblo tiene su propia página.' },
+  { q: '¿Cuánto cuesta una página web profesional en Almería?',     a: 'Web corporativa profesional desde 450€ con diseño personalizado, SEO técnico, hosting gratuito y formación. Tiendas online con pasarela: 900€–2.500€ según funcionalidades. Presupuesto cerrado sin sorpresas.' },
+  { q: '¿Por qué el hosting es gratuito en vuestras webs?',         a: 'Generación estática con Astro: webs ultrarrápidas servidas desde CDN global sin servidor ni base de datos. Netlify o Cloudflare Pages ofrecen hosting gratuito ilimitado. Ahorras 60–200€/año en hosting para siempre.' },
+  { q: '¿En cuánto tiempo tendré mi web lista?',                     a: 'Web corporativa estándar: 1–2 semanas. Proyectos complejos (tiendas online, reservas): 3–4 semanas. Metodología ágil: ves avances desde la primera semana.' },
+  { q: '¿Mi web aparecerá en Google si os contrato?',                a: 'Todas las webs se entregan optimizadas para SEO desde el código: velocidad óptima, datos estructurados (Schema.org), meta etiquetas, sitemap XML. Para keywords competitivas (dentista Almería, restaurante Almería) ofrecemos planes de SEO mensual.' },
+  { q: '¿Hacéis webs para empresas del sector audiovisual y Almeriwood?', a: 'Sí, lo tratamos a diario. Webs corporativas para productoras, agencias de localización, alquiler de equipos, casting y servicios de rodaje. Multiidioma EN para captar productoras internacionales.' },
+  { q: '¿Trabajáis con el sector turístico de Almería?',            a: 'Sí. Hoteles del centro y paseo marítimo, casas rurales en Cabo de Gata, empresas de actividades, guías turísticos del entorno Alcazaba. Multiidioma + reservas directas + SEO turístico.' },
+  { q: '¿Hacéis reuniones presenciales en Almería capital?',         a: 'Sí. Nos desplazamos sin coste a Almería capital. Nuestra sede está en Vera (1h en coche) pero conocemos perfectamente la capital. También videollamada si prefieres.' },
+  { q: '¿Qué ventaja tiene una web estática frente a WordPress?',   a: 'Carga <1s (vs 3–8s en WP), sin base de datos hackeable, sin actualizaciones de plugins, hosting gratuito y mejor rendimiento en Google. Para webs corporativas, portfolios y landings es la mejor opción técnica y económica.' },
 ];
 
 const jsonLd = [
   { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Almería","item":canonical}]} },
-  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico - Diseño Web Almería","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","priceRange":"€€","address":{"@type":"PostalAddress","streetAddress":"Ctra de Ronda, 82","addressLocality":"Vera","addressRegion":"Almería","postalCode":"04620","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":36.8340,"longitude":-2.4637},"areaServed":[{"@type":"City","name":"Almería"}],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"54","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web Almería Capital","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":"https://platanitorico.com/imagenes/diseno-web-almeria.jpg","priceRange":"€€","address":{"@type":"PostalAddress","streetAddress":"Ctra de Ronda, 82","addressLocality":"Vera","addressRegion":"Almería","postalCode":"04620","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":36.8381,"longitude":-2.4852},"areaServed":[{"@type":"City","name":"Almería"},{"@type":"AdministrativeArea","name":"Almería Metropolitana"}],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"54","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
   { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Almería","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
   { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
 ];
@@ -65,119 +94,535 @@ const jsonLd = [
   description={description}
   canonical={canonical}
   image="/imagenes/diseno-web-almeria.jpg"
-  imageAlt="Diseño web en Almería capital - Platanito Rico"
+  imageAlt="Diseño web en Almería capital - Alcazaba, Catedral y Cabo de Gata"
   type="service"
-  keywords="diseño web almería, agencia web almería, páginas web almería capital, seo almería, tienda online almería"
+  keywords="diseño web almería, agencia web almería capital, web alcazaba, almeriwood, seo almería, tienda online almería capital, cabo de gata web"
   jsonLd={jsonLd}
 >
   <Header />
 
-  <main id="main-content">
-    {/* HERO */}
-    <section class="svc-hero">
-      <div class="container-brutal">
-        <header class="svc-hero__head">
-          <span class="text-meta">N.º 200 — Capital de la provincia</span>
-          <span class="text-meta"><span class="live-dot"></span> 200k habitantes · puerto + UAL</span>
-        </header>
-        <div class="divider-brutal-thick"></div>
+  <main id="main-content" class="al">
 
-        <div class="svc-hero__grid">
-          <div>
-            <span class="text-meta">Diseño Web · Almería capital</span>
-            <h1 class="svc-hero__title">
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — ALCAZABA SILUETA                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-hero">
+      <div class="container-brutal">
+
+        <header class="al-hero__top">
+          <span class="text-meta">N.º 200 — Capital de la provincia</span>
+          <span class="text-meta al-hero__status">
+            <span class="al-pulse"></span>
+            ★ ALMERÍA · 200.000 HAB · CAPITAL ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="al-hero__grid">
+
+          <div class="al-hero__intro">
+            <span class="text-meta al-hero__chapter">Cap. 01 / Almería · Capital</span>
+            <h1 class="al-hero__title heading-display">
               Diseño web en
-              <em>Almería capital,</em>
-              <span class="text-stroke-ink">SEO</span>
-              que aparece.
+              <em class="heading-editorial">Almería,</em>
+              <span class="al-hero__title-stamp">la capital.</span>
             </h1>
-            <p class="svc-hero__lead">
-              Capital de provincia, <strong>200k habitantes</strong>, ecosistema universitario,
-              puerto y turismo. La audiencia más diversa de Almería — y la que mejor responde
-              a una web bien hecha.
+
+            <p class="al-hero__lead">
+              <strong>200.000 habitantes</strong>. La <em>Alcazaba</em>, la
+              Catedral-fortaleza, Cabo de Gata, la Universidad, el puerto
+              comercial y <em>Almeriwood</em> — 500+ películas rodadas aquí.
+              <strong>El mercado más diverso y rentable</strong> para una web
+              local en toda la provincia.
             </p>
-            <div class="svc-hero__cta">
-              <a href="/contacto" class="btn-brutal btn-brutal--lg">Presupuesto en 24h →</a>
-              <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">657 085 019</a>
+
+            <div class="al-hero__cta">
+              <a href="/contacto" class="al-btn al-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#almeriwood" class="al-btn al-btn--ghost">
+                Almeriwood ↓
+              </a>
             </div>
+
+            {/* KPIs */}
+            <ul class="al-kpis">
+              <li class="al-kpi al-kpi--alcazaba">
+                <span class="al-kpi__v text-mono">200<small>k</small></span>
+                <span class="al-kpi__l">Habitantes</span>
+              </li>
+              <li class="al-kpi al-kpi--oro">
+                <span class="al-kpi__v text-mono">500<small>+</small></span>
+                <span class="al-kpi__l">Películas rodadas</span>
+              </li>
+              <li class="al-kpi al-kpi--gata">
+                <span class="al-kpi__v text-mono">45<small>k ha</small></span>
+                <span class="al-kpi__l">Cabo de Gata</span>
+              </li>
+              <li class="al-kpi al-kpi--ink">
+                <span class="al-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="al-kpi__l">54 reseñas</span>
+              </li>
+            </ul>
           </div>
 
-          <aside class="svc-hero__specs">
-            <div class="svc-hero__spec svc-hero__spec--accent">
-              <span class="svc-hero__spec-num text-mono">200k</span>
-              <span class="svc-hero__spec-lbl">Habitantes</span>
-            </div>
-            <div class="svc-hero__spec svc-hero__spec--lime">
-              <span class="svc-hero__spec-num text-mono">450€</span>
-              <span class="svc-hero__spec-lbl">Desde · web pro</span>
-            </div>
-            <div class="svc-hero__spec">
-              <span class="svc-hero__spec-num text-mono">0€</span>
-              <span class="svc-hero__spec-lbl">Hosting web estática</span>
-            </div>
-            <div class="svc-hero__spec svc-hero__spec--ink">
-              <span class="svc-hero__spec-num text-mono">99/100</span>
-              <span class="svc-hero__spec-lbl">Lighthouse target</span>
+          {/* POSTAL Almería — ALCAZABA + Imagen */}
+          <aside class="al-hero__postcard" aria-hidden="true">
+            <div class="al-postcard">
+
+              <header class="al-postcard__head">
+                <span class="text-mono">ALMERÍA · 04001 · ANDALUCÍA</span>
+                <span class="text-mono">36.838° N · 2.485° W</span>
+              </header>
+
+              {/* LA ALCAZABA — SVG silueta */}
+              <div class="al-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 240" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="al-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#1A2647"/>
+                      <stop offset="55%" stop-color="#C25E2B"/>
+                      <stop offset="100%" stop-color="#E5A726"/>
+                    </linearGradient>
+                    <pattern id="al-stone" width="6" height="6" patternUnits="userSpaceOnUse">
+                      <circle cx="1" cy="1" r="0.6" fill="rgba(14,13,11,0.15)"/>
+                    </pattern>
+                  </defs>
+                  {/* Cielo (atardecer almeriense — del indigo al oro) */}
+                  <rect width="540" height="240" fill="url(#al-sky)"/>
+
+                  {/* Sol grande detrás de la Alcazaba */}
+                  <circle cx="380" cy="80" r="44" fill="#E5A726" opacity="0.9"/>
+                  <circle cx="380" cy="80" r="32" fill="#FFCC44"/>
+
+                  {/* Estrellas en el indigo superior */}
+                  <circle cx="40"  cy="20" r="1.5" fill="#FFFBF0"/>
+                  <circle cx="80"  cy="40" r="1"   fill="#FFFBF0"/>
+                  <circle cx="140" cy="15" r="1.5" fill="#FFFBF0"/>
+                  <circle cx="500" cy="20" r="1"   fill="#FFFBF0"/>
+
+                  {/* Cerro y montañas detrás */}
+                  <path d="M 0 180 L 80 130 L 160 165 L 240 120 L 320 145 L 400 110 L 480 140 L 540 125 L 540 240 L 0 240 Z" fill="#1A2647" opacity="0.6"/>
+
+                  {/* ALCAZABA - silueta principal */}
+                  <g stroke="#0E0D0B" stroke-width="2.5">
+                    {/* Cerro base */}
+                    <path d="M 0 200 L 60 195 L 100 175 L 140 170 L 200 165 L 280 168 L 360 172 L 420 178 L 480 188 L 540 195 L 540 240 L 0 240 Z" fill="#8E3F1A"/>
+
+                    {/* Muralla principal con almenas */}
+                    <path d="M 100 175 L 100 130 L 110 130 L 110 122 L 120 122 L 120 130 L 130 130 L 130 122 L 140 122 L 140 130 L 150 130 L 150 124 L 160 124 L 160 130 L 175 130 L 175 124 L 185 124 L 185 130 L 200 130 L 200 165" fill="#C25E2B" fill-rule="evenodd"/>
+                    {/* Pattern stone */}
+                    <path d="M 100 175 L 100 130 L 110 130 L 110 122 L 120 122 L 120 130 L 130 130 L 130 122 L 140 122 L 140 130 L 150 130 L 150 124 L 160 124 L 160 130 L 175 130 L 175 124 L 185 124 L 185 130 L 200 130 L 200 165" fill="url(#al-stone)"/>
+
+                    {/* Torre del Homenaje (central, más alta) */}
+                    <rect x="206" y="100" width="50" height="65" fill="#C25E2B"/>
+                    <rect x="206" y="100" width="50" height="65" fill="url(#al-stone)"/>
+                    <path d="M 206 100 L 206 92 L 214 92 L 214 98 L 224 98 L 224 92 L 232 92 L 232 98 L 240 98 L 240 92 L 248 92 L 248 98 L 256 98 L 256 100 Z" fill="#C25E2B" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Ventana de la torre */}
+                    <rect x="222" y="120" width="18" height="22" fill="#0E0D0B"/>
+                    <path d="M 222 120 Q 231 110 240 120" fill="#0E0D0B"/>
+
+                    {/* Bandera al viento */}
+                    <line x1="231" y1="92" x2="231" y2="64" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 231 64 L 268 70 L 264 78 L 268 86 L 231 80 Z" fill="#E5A726" stroke="#0E0D0B" stroke-width="1.5"/>
+
+                    {/* Muralla media (continuación a la derecha) */}
+                    <path d="M 256 145 L 256 138 L 268 138 L 268 144 L 280 144 L 280 138 L 292 138 L 292 144 L 305 144 L 305 138 L 318 138 L 318 144 L 330 144 L 330 138 L 345 138 L 345 144 L 360 144 L 360 172" fill="#C25E2B" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 256 145 L 256 138 L 268 138 L 268 144 L 280 144 L 280 138 L 292 138 L 292 144 L 305 144 L 305 138 L 318 138 L 318 144 L 330 144 L 330 138 L 345 138 L 345 144 L 360 144 L 360 172" fill="url(#al-stone)"/>
+
+                    {/* Torres secundarias */}
+                    <rect x="290" y="120" width="20" height="25" fill="#C25E2B"/>
+                    <rect x="290" y="120" width="20" height="25" fill="url(#al-stone)"/>
+                    <rect x="290" y="116" width="4" height="4" fill="#C25E2B"/>
+                    <rect x="298" y="116" width="4" height="4" fill="#C25E2B"/>
+                    <rect x="306" y="116" width="4" height="4" fill="#C25E2B"/>
+
+                    {/* Continuación muralla der */}
+                    <path d="M 360 172 L 360 150 L 372 150 L 372 156 L 384 156 L 384 150 L 396 150 L 396 156 L 408 156 L 408 150 L 420 150 L 420 178" fill="#C25E2B" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 360 172 L 360 150 L 372 150 L 372 156 L 384 156 L 384 150 L 396 150 L 396 156 L 408 156 L 408 150 L 420 150 L 420 178" fill="url(#al-stone)"/>
+
+                    {/* Continuación muralla izq */}
+                    <path d="M 100 175 L 100 168 L 88 168 L 88 174 L 76 174 L 76 168 L 64 168 L 64 174 L 50 174 L 50 168 L 38 168 L 38 174 L 26 174 L 26 168 L 14 168 L 14 174 L 0 174 L 0 195" fill="#C25E2B" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 100 175 L 100 168 L 88 168 L 88 174 L 76 174 L 76 168 L 64 168 L 64 174 L 50 174 L 50 168 L 38 168 L 38 174 L 26 174 L 26 168 L 14 168 L 14 174 L 0 174 L 0 195" fill="url(#al-stone)"/>
+                  </g>
+
+                  {/* CATEDRAL fortaleza a la derecha */}
+                  <g stroke="#0E0D0B" stroke-width="2">
+                    <rect x="445" y="155" width="65" height="45" fill="#EAD9B5"/>
+                    <path d="M 445 155 L 477 138 L 510 155 Z" fill="#C25E2B"/>
+                    {/* Torres catedral */}
+                    <rect x="450" y="140" width="14" height="60" fill="#EAD9B5"/>
+                    <rect x="492" y="140" width="14" height="60" fill="#EAD9B5"/>
+                    {/* Cúpulas */}
+                    <path d="M 450 140 Q 457 128 464 140 Z" fill="#C25E2B"/>
+                    <path d="M 492 140 Q 499 128 506 140 Z" fill="#C25E2B"/>
+                    {/* Cruces */}
+                    <line x1="457" y1="128" x2="457" y2="118" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <line x1="454" y1="122" x2="460" y2="122" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <line x1="499" y1="128" x2="499" y2="118" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <line x1="496" y1="122" x2="502" y2="122" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Puerta y rosetón */}
+                    <path d="M 470 175 L 470 200 L 485 200 L 485 175 Q 485 168 477 168 Q 470 168 470 175 Z" fill="#0E0D0B"/>
+                    <circle cx="477" cy="157" r="4" fill="#FFCC44"/>
+                  </g>
+
+                  {/* Barrio Chanca casas blancas al frente */}
+                  <g fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5">
+                    <rect x="8"  y="200" width="20" height="22"/>
+                    <rect x="30" y="195" width="20" height="27"/>
+                    <rect x="52" y="200" width="18" height="22"/>
+                    <rect x="72" y="198" width="22" height="24"/>
+                    <rect x="96" y="202" width="18" height="20"/>
+                    <rect x="116" y="198" width="20" height="24"/>
+                  </g>
+
+                  {/* Mini Indalo flotante */}
+                  <g transform="translate(420, 30)">
+                    <circle r="14" fill="#FFCC44" stroke="#0E0D0B" stroke-width="2"/>
+                    <g fill="none" stroke="#C25E2B" stroke-width="1.8" stroke-linecap="round">
+                      <path d="M -6 -2 Q 0 -6 6 -2"/>
+                      <circle cx="0" cy="0" r="1" fill="#C25E2B"/>
+                      <line x1="0" y1="1" x2="0" y2="7"/>
+                      <line x1="0" y1="3" x2="-3" y2="2"/>
+                      <line x1="0" y1="3" x2="3" y2="2"/>
+                      <line x1="0" y1="7" x2="-2" y2="9"/>
+                      <line x1="0" y1="7" x2="2" y2="9"/>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="al-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-almeria.jpg"
+                  alt="Almería capital - vista panorámica de la ciudad"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="al-postcard__img"
+                />
+                {/* Sello CAPITAL oro */}
+                <div class="al-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="al-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#1A2647"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#E5A726" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="al-spin">
+                      <text font-family="monospace" font-size="7" font-weight="bold" fill="#E5A726" letter-spacing="2.5">
+                        <textPath href="#al-seal-arc" startOffset="0%">★ CAPITAL · ANDALUCÍA · 04001 ★</textPath>
+                      </text>
+                    </g>
+                    <text x="40" y="46" text-anchor="middle" font-family="serif" font-size="24" font-weight="bold" fill="#E5A726">★</text>
+                  </svg>
+                </div>
+                <div class="al-postcard__tag">
+                  <span class="text-mono">★ CAPITAL DE PROVINCIA ★</span>
+                </div>
+              </div>
+
+              {/* Datos de la capital */}
+              <div class="al-postcard__data">
+                <div class="al-postcard__data-row">
+                  <span class="text-mono">PROVINCIA</span>
+                  <span class="text-mono al-postcard__data-v">Almería · Andalucía</span>
+                </div>
+                <div class="al-postcard__data-row">
+                  <span class="text-mono">FUNDADA</span>
+                  <span class="text-mono al-postcard__data-v">955 d.C. · Abd al-Rahman III</span>
+                </div>
+                <div class="al-postcard__data-row">
+                  <span class="text-mono">CLIMA</span>
+                  <span class="text-mono al-postcard__data-v">Cálido seco · 320 días sol</span>
+                </div>
+                <div class="al-postcard__data-row">
+                  <span class="text-mono">SUPERFICIE</span>
+                  <span class="text-mono al-postcard__data-v">295 km² · 200k hab</span>
+                </div>
+              </div>
             </div>
           </aside>
         </div>
       </div>
 
-      <div class="svc-hero__marquee">
-        <div class="svc-hero__marquee-track">
-          {Array.from({length: 6}).map(() => (
-            <span>★ ALMERÍA CAPITAL ★ UAL ★ PUERTO ★ COMERCIO ★ HOSTELERÍA ★ SERVICIOS ★ SALUD ★</span>
+      {/* Marquee */}
+      <div class="al-marquee">
+        <div class="al-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ ALCAZABA ★ ALMERIWOOD ★ CABO DE GATA ★ UAL ★ PUERTO COMERCIAL ★ CAPITAL DE PROVINCIA ★ </span>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="section-brutal" style="padding:0;background:var(--brutal-bg-alt);border-bottom:2px solid var(--brutal-ink);">
-      <div class="pueblo-map-wrap">
-        <InteractiveMap center={[-2.4637, 36.8340]} zoom={13} pitch={25} bearing={-15} label="Almería" />
-      </div>
-    </section>
-
-    {/* SECTORES */}
-    <section class="section-brutal" id="sectores">
+    {/* ════════════════════════════════════════════════ */}
+    {/* 3 ICONOS: Alcazaba · Catedral · Cabo de Gata     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-iconos-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 01 / Sectores Almería capital</span>
-            <h2 class="brutal-section-head__title">
-              Para quién
-              <em>diseñamos</em>
-              en Almería.
+            <span class="text-meta" style="color:var(--al-alcazaba)">Cap. 02 / Tres iconos</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Patrimonio, religión
+              <em class="heading-editorial">y naturaleza.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Seis sectores que dominan el ecosistema de la capital. Cada uno con
-            su estrategia SEO específica y su sistema técnico.
+            Almería no es un destino más. <strong>Tres iconos universales</strong>
+            la sitúan en la conversación global: la Alcazaba, la Catedral-fortaleza
+            única en España y Cabo de Gata, primer parque marítimo del país.
           </p>
         </header>
 
-        <ol class="svc-bento">
+        <ol class="al-iconos">
+          {iconos.map((i) => (
+            <li class={`al-icono al-icono--${i.color}`}>
+              <div class="al-icono__code">{i.code}</div>
+
+              {/* SVG por icono */}
+              <div class="al-icono__svg" aria-hidden="true">
+                {i.color === 'alcazaba' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Alcazaba mini */}
+                    <rect x="10" y="60" width="80" height="35" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 10 60 L 10 50 L 18 50 L 18 56 L 26 56 L 26 50 L 34 50 L 34 56 L 42 56 L 42 50 L 50 50 L 50 56 L 58 56 L 58 50 L 66 50 L 66 56 L 74 56 L 74 50 L 82 50 L 82 56 L 90 56 L 90 60" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Torre central */}
+                    <rect x="40" y="25" width="20" height="35" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 40 25 L 40 18 L 45 18 L 45 22 L 50 22 L 50 18 L 55 18 L 55 22 L 60 22 L 60 25" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <rect x="46" y="40" width="8" height="14" fill="#0E0D0B"/>
+                    <path d="M 46 40 Q 50 34 54 40" fill="#0E0D0B"/>
+                    {/* Bandera */}
+                    <line x1="50" y1="18" x2="50" y2="6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M 50 6 L 62 9 L 60 12 L 62 15 L 50 12 Z" fill="#E5A726" stroke="#0E0D0B" stroke-width="1"/>
+                  </svg>
+                )}
+                {i.color === 'oro' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Catedral fortaleza */}
+                    <rect x="35" y="55" width="30" height="42" fill="#EAD9B5" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 35 55 L 50 42 L 65 55 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Torres */}
+                    <rect x="15" y="45" width="14" height="52" fill="#EAD9B5" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <rect x="71" y="45" width="14" height="52" fill="#EAD9B5" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 15 45 Q 22 32 29 45 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 71 45 Q 78 32 85 45 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Cruces */}
+                    <line x1="22" y1="32" x2="22" y2="22" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="18" y1="26" x2="26" y2="26" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="78" y1="32" x2="78" y2="22" stroke="#0E0D0B" stroke-width="2"/>
+                    <line x1="74" y1="26" x2="82" y2="26" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Puerta arqueada */}
+                    <path d="M 44 80 L 44 97 L 56 97 L 56 80 Q 56 70 50 70 Q 44 70 44 80 Z" fill="#0E0D0B"/>
+                    {/* Rosetón */}
+                    <circle cx="50" cy="62" r="5" fill="currentColor" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <line x1="50" y1="57" x2="50" y2="67" stroke="#0E0D0B"/>
+                    <line x1="45" y1="62" x2="55" y2="62" stroke="#0E0D0B"/>
+                  </svg>
+                )}
+                {i.color === 'gata' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Cabo de Gata: cráter volcánico + mar */}
+                    {/* Mar */}
+                    <path d="M 0 60 Q 25 50 50 60 T 100 60 L 100 100 L 0 100 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Olas */}
+                    <path d="M 0 70 Q 25 62 50 70 T 100 70" fill="none" stroke="#FFFBF0" stroke-width="1.5" opacity="0.6"/>
+                    {/* Cráter volcán */}
+                    <path d="M 28 60 L 38 28 L 50 22 L 62 28 L 72 60 Z" fill="#8E3F1A" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Lava */}
+                    <ellipse cx="50" cy="28" rx="14" ry="4" fill="#E5A726" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Faro Cabo de Gata */}
+                    <rect x="76" y="32" width="6" height="28" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="74" y="60" width="10" height="4" fill="#0E0D0B"/>
+                    <path d="M 74 32 L 79 24 L 84 32 Z" fill="#B91C2C" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="77" y="28" width="4" height="4" fill="#FFCC44"/>
+                    {/* Pez salado */}
+                    <g transform="translate(25, 78)" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1">
+                      <path d="M -6 0 Q -2 -4 4 -2 L 8 0 L 4 2 Q -2 4 -6 0 Z"/>
+                      <path d="M 8 0 L 12 -3 L 11 0 L 12 3 Z"/>
+                      <circle cx="0" cy="-1" r="0.8" fill="#0E0D0B"/>
+                    </g>
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="al-icono__name heading-display">{i.name}</h3>
+              <span class="text-mono al-icono__sub">{i.sub}</span>
+              <p class="al-icono__desc">{i.desc}</p>
+              <footer class="al-icono__foot">
+                <span class="text-mono al-icono__dato">★ {i.dato}</span>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ALMERIWOOD — flagship section                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-aw-section" id="almeriwood">
+      <div class="container-brutal">
+        <header class="al-aw-head">
+          <div>
+            <span class="text-meta al-aw-chapter">Cap. 03 / Almeriwood</span>
+            <h2 class="al-aw-title heading-display">
+              ALMERÍA
+              <em class="heading-editorial">se rodaron aquí.</em>
+            </h2>
+            <p class="al-aw-lead">
+              Desde <strong>Lawrence de Arabia</strong> hasta
+              <em>Juego de Tronos</em>. Más de <strong>500 películas y series</strong>
+              han elegido los paisajes de Almería: desierto de Tabernas, dunas,
+              fortalezas y la costa virgen de Cabo de Gata.
+            </p>
+          </div>
+
+          {/* Claqueta de cine */}
+          <aside class="al-claqueta" aria-hidden="true">
+            <svg viewBox="0 0 220 180" width="100%" height="100%">
+              {/* Pizarra inferior */}
+              <rect x="10" y="60" width="200" height="110" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="3"/>
+              {/* Pizarra rayada */}
+              <line x1="10" y1="85"  x2="210" y2="85"  stroke="#0E0D0B" stroke-width="1.5" opacity="0.4"/>
+              <line x1="10" y1="115" x2="210" y2="115" stroke="#0E0D0B" stroke-width="1.5" opacity="0.4"/>
+              <line x1="10" y1="145" x2="210" y2="145" stroke="#0E0D0B" stroke-width="1.5" opacity="0.4"/>
+              {/* Tapa abierta arriba con franjas */}
+              <g transform="rotate(-10 110 60)">
+                <rect x="10" y="20" width="200" height="40" fill="#0E0D0B"/>
+                {/* Franjas blancas */}
+                <polygon points="10,20 40,20 30,60 0,60" fill="#FFFBF0"/>
+                <polygon points="60,20 90,20 80,60 50,60" fill="#FFFBF0"/>
+                <polygon points="110,20 140,20 130,60 100,60" fill="#FFFBF0"/>
+                <polygon points="160,20 190,20 180,60 150,60" fill="#FFFBF0"/>
+                <rect x="10" y="20" width="200" height="40" fill="none" stroke="#0E0D0B" stroke-width="2.5"/>
+              </g>
+              {/* Texto pizarra */}
+              <g font-family="monospace" fill="#0E0D0B">
+                <text x="20" y="80"  font-size="9" font-weight="bold" letter-spacing="2">SCENE</text>
+                <text x="80" y="80"  font-size="9" font-weight="bold" letter-spacing="2">TAKE</text>
+                <text x="140" y="80" font-size="9" font-weight="bold" letter-spacing="2">ROLL</text>
+                <text x="20" y="105" font-size="20" font-weight="800">200</text>
+                <text x="80" y="105" font-size="20" font-weight="800">1</text>
+                <text x="140" y="105" font-size="20" font-weight="800">04</text>
+                <text x="20" y="130" font-size="7" letter-spacing="1.5">DIRECTOR · PLATANITO RICO</text>
+                <text x="20" y="142" font-size="7" letter-spacing="1.5">PROD ·    DISEÑO WEB ALMERÍA</text>
+                <text x="20" y="160" font-size="11" font-weight="800" letter-spacing="2.5" fill="#B91C2C">★ ALMERIWOOD ★</text>
+              </g>
+            </svg>
+          </aside>
+        </header>
+
+        {/* Filmstrip con películas */}
+        <div class="al-filmstrip-wrap">
+          <div class="al-filmstrip">
+            {peliculas.map((p) => (
+              <article class="al-film">
+                <div class="al-film__perforation" aria-hidden="true"></div>
+                <div class="al-film__body">
+                  <div class="al-film__frame" aria-hidden="true">
+                    <span class="al-film__icon">🎬</span>
+                  </div>
+                  <div class="al-film__data">
+                    <header class="al-film__head">
+                      <span class="text-mono al-film__year">{p.year}</span>
+                      <span class="text-mono al-film__dir">DIR. {p.dir}</span>
+                    </header>
+                    <h3 class="al-film__title heading-display">{p.titulo}</h3>
+                    <p class="al-film__escena text-mono">★ {p.escena}</p>
+                  </div>
+                </div>
+                <div class="al-film__perforation" aria-hidden="true"></div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <p class="al-aw-note">
+          <strong>★ ¿Trabajas en el sector audiovisual?</strong>
+          Productoras, agencias de localización, servicios de rodaje, casting,
+          alquiler de equipos — hacemos webs corporativas multiidioma
+          orientadas a captar producción internacional.
+        </p>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS DE LA CAPITAL                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--al-oro)">Cap. 04 / Hitos</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--al-paper)">
+              Por qué Almería
+              <em class="heading-editorial" style="color:var(--al-oro)">pesa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,251,240,0.75)">
+            Datos reales que explican por qué la capital es <strong>el mercado
+            digital más grande y diverso</strong> de toda la provincia de Almería.
+          </p>
+        </header>
+
+        <ul class="al-hitos">
+          {hitos.map((h, i) => (
+            <li class={`al-hito al-hito--${i}`}>
+              <span class="text-mono al-hito__k">{h.k}</span>
+              <span class="al-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Sectores capital</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios para
+              <em class="heading-editorial">200.000 personas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con su estrategia digital propia. Almería capital
+            tiene <strong>volumen suficiente</strong> para invertir en SEO
+            local agresivo y captar tráfico todos los días del año.
+          </p>
+        </header>
+
+        <ol class="al-sec">
           {sectores.map((s, i) => {
-            const accents = ['accent', 'paper', 'lime', 'paper', 'ink', 'paper'];
+            const colors = ['alcazaba', 'oro', 'cine', 'gata', 'indigo', 'oro-d'];
             return (
-              <li class={`svc-card svc-card--${accents[i]}`}>
-                <header class="svc-card__head">
-                  <span class="svc-card__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="svc-card__kicker">{s.stat}</span>
+              <li class={`al-sec__card al-sec__card--${colors[i]}`}>
+                <header class="al-sec__head">
+                  <span class="text-mono al-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="al-sec__stat-box">
+                    <span class="al-sec__stat-v text-mono">{s.stat}</span>
+                  </div>
                 </header>
-                <h3 class="svc-card__title">{s.nombre}</h3>
-                <p class="svc-card__desc">{s.desc}</p>
-                <ul class="svc-card__features">
+                <h3 class="al-sec__title heading-display">{s.nombre}</h3>
+                <p class="al-sec__desc">{s.desc}</p>
+                <ul class="al-sec__tags">
                   {s.tags.map((t) => (
-                    <li class="svc-card__feat"><span class="svc-card__feat-mark">+</span><span>{t}</span></li>
+                    <li class="al-sec__tag"><span>+</span>{t}</li>
                   ))}
                 </ul>
-                <footer class="svc-card__foot">
-                  <div class="svc-card__figure">
-                    <span class="svc-card__figure-val">★</span>
-                    <span class="svc-card__figure-lbl">Almería capital</span>
-                  </div>
-                  <a href="/contacto" class="svc-card__cta">Pedir →</a>
+                <footer class="al-sec__foot">
+                  <a href="/contacto" class="al-sec__cta">Hablemos →</a>
                 </footer>
               </li>
             );
@@ -186,111 +631,185 @@ const jsonLd = [
       </div>
     </section>
 
-    {/* DIFERENCIALES */}
-    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 02 / Por qué Almería capital</span>
-            <h2 class="brutal-section-head__title">
-              Capital de
-              <em>oportunidades.</em>
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA con marco ámbar/oro                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-map-section">
+      <header class="al-map-head">
+        <div class="container-brutal al-map-head__inner">
+          <div>
+            <span class="text-meta al-map-chapter">Cap. 06 / Cartografía</span>
+            <h2 class="heading-display al-map-title">
+              La capital
+              <em class="heading-editorial">a vista de pájaro.</em>
             </h2>
           </div>
-          <p class="brutal-section-head__lead">
-            Almería capital es el mercado más diverso, conectado y exigente
-            de la provincia. Una web mediocre se ahoga; una web buena destaca.
-          </p>
-        </header>
+          <div class="al-map-coords">
+            <span class="text-mono">36.838° N · 2.485° W</span>
+            <span class="text-mono">295 km² · 200k HAB · CAPITAL PROVINCIA</span>
+          </div>
+        </div>
+      </header>
 
-        <ul class="svc-sectors">
-          {diferenciales.map((d, i) => (
-            <li class={`svc-sector svc-sector--${i % 3}`}>
-              <span class="text-meta">★ {String(i + 1).padStart(2, '0')}</span>
-              <h3 class="svc-sector__title">{d.title}</h3>
-              <p class="svc-sector__desc">{d.desc}</p>
-            </li>
-          ))}
-        </ul>
+      <div class="al-map-frame">
+        {/* Decoración esquinas — torres y media luna */}
+        <div class="al-map-deco al-map-deco--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            {/* Torre con almenas */}
+            <g stroke="#E5A726" stroke-width="2.5" fill="none">
+              <rect x="20" y="20" width="20" height="32"/>
+              <path d="M 20 20 L 20 14 L 24 14 L 24 18 L 28 18 L 28 14 L 32 14 L 32 18 L 36 18 L 36 14 L 40 14 L 40 20"/>
+              <rect x="26" y="32" width="8" height="14" fill="#E5A726"/>
+              <line x1="30" y1="14" x2="30" y2="6"/>
+            </g>
+          </svg>
+        </div>
+        <div class="al-map-deco al-map-deco--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            {/* Media luna (símbolo árabe) */}
+            <g fill="none" stroke="#E5A726" stroke-width="2.5">
+              <path d="M 22 30 A 14 14 0 1 0 38 16 A 12 12 0 1 1 22 30 Z" fill="#E5A726"/>
+              <path d="M 42 16 L 46 14 L 44 18 L 48 19 L 44 21 L 45 24" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="al-map-wrap">
+          <InteractiveMap center={[-2.4852, 36.8381]} zoom={13} pitch={55} bearing={-15} label="Almería capital" />
+        </div>
+
+        {/* Pin Alcazaba */}
+        <div class="al-map-pin">
+          <svg viewBox="0 0 70 90" width="70" height="90" aria-hidden="true">
+            <path d="M 35 4 C 19 4 6 16 6 32 C 6 58 35 86 35 86 C 35 86 64 58 64 32 C 64 16 51 4 35 4 Z" fill="#C25E2B" stroke="#0E0D0B" stroke-width="3"/>
+            <circle cx="35" cy="32" r="16" fill="#FFFBF0" stroke="#0E0D0B" stroke-width="2.5"/>
+            {/* Mini Alcazaba */}
+            <g stroke="#0E0D0B" stroke-width="1.5" fill="#C25E2B">
+              <rect x="25" y="34" width="20" height="10"/>
+              <path d="M 25 34 L 25 30 L 28 30 L 28 32 L 31 32 L 31 30 L 34 30 L 34 32 L 36 32 L 36 30 L 39 30 L 39 32 L 42 32 L 42 30 L 45 30 L 45 34"/>
+              <rect x="32" y="24" width="6" height="10"/>
+              <line x1="35" y1="20" x2="35" y2="22" stroke="#E5A726" stroke-width="1.5"/>
+            </g>
+          </svg>
+          <span class="al-map-pin__label">CAPITAL</span>
+        </div>
       </div>
     </section>
 
-    {/* PROCESO */}
-    <section class="section-brutal">
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-dif-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 03 / Método</span>
-            <h2 class="brutal-section-head__title">
-              De cero a producción
-              <em>en 2 semanas.</em>
+            <span class="text-meta">Cap. 07 / Por qué Almería</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para apostar por la capital.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Cuatro fases con entregables claros. Auditoría, diseño, desarrollo
-            con SEO técnico y lanzamiento con formación incluida.
+            Lo que hace única a Almería como ciudad para invertir en marketing
+            digital: tamaño, diversidad sectorial, sector audiovisual y
+            conexiones internacionales.
           </p>
         </header>
 
-        <ol class="svc-process">
-          {proceso.map((s, i) => (
-            <li class={`svc-process__step svc-process__step--${i % 2 === 0 ? 'a' : 'b'}`}>
-              <div class="svc-process__rail">
-                <span class="svc-process__dot"></span>
-                {i < proceso.length - 1 && <span class="svc-process__line"></span>}
-              </div>
-              <div class="svc-process__num">
-                <span class="text-mono">{s.num}</span>
-                <span class="svc-process__eta">{s.eta}</span>
-              </div>
-              <div class="svc-process__content">
-                <h3 class="svc-process__title">{s.title}</h3>
-                <p class="svc-process__body">{s.body}</p>
-              </div>
-              <aside class="svc-process__deliv">
-                <span class="text-meta">Entregable</span>
-                <p>{s.deliverable}</p>
-              </aside>
+        <ol class="al-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`al-dif__item al-dif__item--${i}`}>
+              <span class="text-mono al-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display al-dif__t">{d.title}</h3>
+              <p class="al-dif__desc">{d.desc}</p>
             </li>
           ))}
         </ol>
       </div>
     </section>
 
-    {/* TESTIMONIOS */}
-    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-proc-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 04 / Clientes en Almería capital</span>
-            <h2 class="brutal-section-head__title">
-              Negocios de la capital
-              <em>que ya venden más.</em>
+            <span class="text-meta" style="color:var(--al-oro)">Cap. 08 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--al-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--al-cine)">a tu web en Almería.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,251,240,0.75)">
+            Auditamos. Diseñamos. Programamos con SEO técnico de capital.
+            Lanzamos y formamos. Sin sorpresas, plazos claros.
+          </p>
+        </header>
+
+        <ol class="al-proc">
+          {proceso.map((s) => (
+            <li class="al-proc__step">
+              <header class="al-proc__head">
+                <span class="text-mono al-proc__num">{s.num}</span>
+                <span class="text-mono al-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display al-proc__t">{s.title}</h3>
+              <p class="al-proc__body">{s.body}</p>
+              <footer class="al-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Voces de la capital</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Almería
+              <em class="heading-editorial">que ya venden online.</em>
             </h2>
           </div>
         </header>
 
-        <figure class="svc-pull">
-          <div class="svc-pull__marks" aria-hidden="true">“</div>
-          <blockquote class="svc-pull__quote">{testimonios[0].texto}</blockquote>
-          <figcaption class="svc-pull__cap">
-            <span class="svc-pull__avatar">{testimonios[0].nombre[0]}</span>
+        <figure class="al-pull">
+          <div class="al-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="al-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#C25E2B" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#FFFBF0" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="al-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFBF0" letter-spacing="2.5"><textPath href="#al-pull-c" startOffset="0%">★ CAPITAL ★ ALMERÍA · 2026 ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#FFFBF0">"</text>
+            </svg>
+          </div>
+          <blockquote class="al-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="al-pull__cap">
+            <span class="al-pull__avatar">{testimonios[0].nombre[0]}</span>
             <div>
-              <span class="svc-pull__name">{testimonios[0].nombre}</span>
-              <span class="svc-pull__role">{testimonios[0].negocio}</span>
+              <span class="al-pull__name">{testimonios[0].nombre}</span>
+              <span class="al-pull__role">{testimonios[0].negocio}</span>
             </div>
           </figcaption>
         </figure>
 
-        <ul class="svc-quotes">
+        <ul class="al-quotes">
           {testimonios.slice(1).map((t, i) => (
-            <li class={`svc-quote svc-quote--${i}`}>
-              <p>"{t.texto}"</p>
+            <li class={`al-quote al-quote--${i}`}>
+              <span class="al-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
               <footer>
-                <span class="svc-quote__avatar">{t.nombre[0]}</span>
+                <span class="al-quote__avatar">{t.nombre[0]}</span>
                 <div>
-                  <span class="svc-quote__name">{t.nombre}</span>
-                  <span class="svc-quote__role">{t.negocio}</span>
+                  <span class="al-quote__name">{t.nombre}</span>
+                  <span class="al-quote__role">{t.negocio}</span>
                 </div>
               </footer>
             </li>
@@ -299,34 +818,37 @@ const jsonLd = [
       </div>
     </section>
 
-    {/* FAQ */}
-    <section class="section-brutal">
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-faq-section">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 05 / Preguntas Almería</span>
-            <h2 class="brutal-section-head__title">
+            <span class="text-meta">Cap. 10 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
               Lo que más
-              <em>preguntan</em>
-              en la capital.
+              <em class="heading-editorial">preguntan en Almería.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead">
-            Plazos, hosting, SEO, plataformas. Si no está aquí, escríbenos y
-            respondemos en menos de 24h.
+            Plazos, precios, hosting, SEO local agresivo, sector audiovisual
+            y turismo. Si no está aquí, escríbenos.
           </p>
         </header>
 
-        <ol class="svc-faq">
+        <ol class="al-faq">
           {faqs.map((f, i) => (
-            <li class="svc-faq__item">
-              <details class="svc-faq__details" open={i === 0}>
-                <summary class="svc-faq__sum">
-                  <span class="svc-faq__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="svc-faq__q">{f.q}</span>
-                  <span class="svc-faq__toggle" aria-hidden="true">+</span>
+            <li class="al-faq__item">
+              <details class="al-faq__det" open={i === 0}>
+                <summary class="al-faq__sum">
+                  <span class="text-mono al-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="al-faq__q">{f.q}</span>
+                  <span class="al-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
                 </summary>
-                <div class="svc-faq__answer"><p>{f.a}</p></div>
+                <div class="al-faq__ans"><p>{f.a}</p></div>
               </details>
             </li>
           ))}
@@ -334,32 +856,34 @@ const jsonLd = [
       </div>
     </section>
 
-    {/* OTROS PUEBLOS METRO */}
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS (Almería Metropolitana)          */}
+    {/* ════════════════════════════════════════════════ */}
     {pueblosMetro.length > 0 && (
-      <section class="section-brutal" style="background:var(--brutal-bg-alt);border-top:2px solid var(--brutal-ink);">
+      <section class="al-vecinos-section">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 06 / Almería metropolitana</span>
-              <h2 class="brutal-section-head__title">
-                También en el
-                <em>área metropolitana.</em>
+              <span class="text-meta">Cap. 11 / Almería Metropolitana</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en toda
+                <em class="heading-editorial">el área metropolitana.</em>
               </h2>
             </div>
             <p class="brutal-section-head__lead">
-              Localidades del entorno metropolitano de la capital donde ya
-              trabajamos. Si tu pueblo no está, escríbenos.
+              Roquetas, El Ejido, Níjar y el resto de municipios del área
+              metropolitana. Cobertura completa para la provincia.
             </p>
           </header>
 
-          <ul class="cobertura-grid" style="margin-top:2rem;">
+          <ul class="al-vecinos">
             {pueblosMetro.slice(0, 8).map((p, i) => (
               <li>
-                <a href={`/diseno-web/${p.slug}/`} class={`cobertura-tile cobertura-tile--${i % 6}`}>
-                  <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
-                  <span class="cobertura-tile__name heading-display">{p.nombre}</span>
-                  <span class="cobertura-tile__sub text-mono">{p.comarca}</span>
-                  <span class="cobertura-tile__arrow" aria-hidden="true">→</span>
+                <a href={`/diseno-web/${p.slug}/`} class={`al-vecino al-vecino--${i % 4}`}>
+                  <span class="text-mono al-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="al-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono al-vecino__sub">{p.comarca}</span>
+                  <span class="al-vecino__arrow" aria-hidden="true">→</span>
                 </a>
               </li>
             ))}
@@ -368,24 +892,105 @@ const jsonLd = [
       </section>
     )}
 
-    {/* CTA final */}
-    <section class="svc-final">
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="al-final">
       <div class="container-brutal">
-        <div class="svc-final__inner">
-          <span class="text-meta">★ Próximo paso</span>
-          <h2 class="svc-final__title">
-            ¿Empezamos tu web
-            <em>en Almería capital?</em>
-          </h2>
-          <p class="svc-final__text">
-            Cuéntanos qué necesitas — restaurante, clínica, despacho, comercio,
-            inmobiliaria — y te enviamos presupuesto detallado en 24h. Reuniones
-            presenciales disponibles en Almería capital.
-          </p>
-          <div class="svc-final__btns">
-            <a href="/contacto" class="btn-brutal btn-brutal--lg">Pedir presupuesto →</a>
-            <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Llamar al 657 085 019</a>
+        <div class="al-final__grid">
+
+          <div class="al-final__l">
+            <span class="text-meta al-final__chapter">★ Cap. 12 · Próximo paso</span>
+            <h2 class="heading-display al-final__title">
+              ¿Empezamos tu web
+              <em class="heading-editorial">en la capital?</em>
+            </h2>
+            <p class="al-final__lead">
+              Tu negocio en Almería capital con <strong>SEO local de alto volumen</strong>,
+              diseño que conecta y soporte humano. Hostelería, salud, comercio,
+              audiovisual — sea cual sea tu sector, captamos clientes en una
+              ciudad que <strong>busca y compra todo el año</strong>.
+            </p>
+            <div class="al-final__cta">
+              <a href="/contacto" class="al-final__btn al-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="al-final__btn al-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="al-final__trust">
+              <span><span class="al-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ CAPITAL · 200k HAB</span>
+              <span>★ ALMERIWOOD ★</span>
+              <span>4.9★ · 54 RESEÑAS</span>
+            </div>
           </div>
+
+          {/* Alcazaba gigante final */}
+          <div class="al-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="al-final-svg">
+              <defs>
+                <radialGradient id="al-final-glow" cx="50%" cy="40%" r="55%">
+                  <stop offset="0%" stop-color="#E5A726" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#E5A726" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="160" cy="140" r="140" fill="url(#al-final-glow)"/>
+
+              {/* Sol grande */}
+              <circle cx="240" cy="80" r="32" fill="#FFCC44" stroke="#FFFBF0" stroke-width="3"/>
+              {Array.from({length: 12}).map((_, i) => (
+                <line x1="240" y1="38" x2="240" y2="48" stroke="#FFCC44" stroke-width="3" stroke-linecap="round" transform={`rotate(${i*30} 240 80)`}/>
+              ))}
+
+              {/* Tierra/cerro */}
+              <path d="M 0 240 Q 60 215 120 230 Q 180 215 240 230 Q 280 220 320 235 L 320 320 L 0 320 Z" fill="#8E3F1A" stroke="#FFFBF0" stroke-width="3"/>
+
+              {/* ALCAZABA GRANDE */}
+              <g class="al-final-alc">
+                {/* Muralla principal */}
+                <rect x="60" y="180" width="200" height="55" fill="#C25E2B" stroke="#FFFBF0" stroke-width="3"/>
+                {/* Almenas */}
+                <path d="M 60 180 L 60 170 L 70 170 L 70 176 L 80 176 L 80 170 L 90 170 L 90 176 L 100 176 L 100 170 L 110 170 L 110 176 L 120 176 L 120 170 L 130 170 L 130 176 L 140 176 L 140 170 L 150 170 L 150 176 L 160 176 L 160 170 L 170 170 L 170 176 L 180 176 L 180 170 L 190 170 L 190 176 L 200 176 L 200 170 L 210 170 L 210 176 L 220 176 L 220 170 L 230 170 L 230 176 L 240 176 L 240 170 L 250 170 L 250 176 L 260 176 L 260 180 Z" fill="#C25E2B" stroke="#FFFBF0" stroke-width="3"/>
+
+                {/* Torre del Homenaje */}
+                <rect x="135" y="120" width="50" height="60" fill="#C25E2B" stroke="#FFFBF0" stroke-width="3"/>
+                <path d="M 135 120 L 135 112 L 142 112 L 142 117 L 150 117 L 150 112 L 158 112 L 158 117 L 167 117 L 167 112 L 175 112 L 175 117 L 185 117 L 185 120 Z" fill="#C25E2B" stroke="#FFFBF0" stroke-width="3"/>
+
+                {/* Ventana torre */}
+                <path d="M 152 138 L 152 158 L 168 158 L 168 138 Q 168 130 160 130 Q 152 130 152 138 Z" fill="#1A2647"/>
+
+                {/* Bandera */}
+                <line x1="160" y1="112" x2="160" y2="80" stroke="#FFFBF0" stroke-width="2.5"/>
+                <path d="M 160 80 L 200 86 L 196 96 L 200 106 L 160 100 Z" fill="#E5A726" stroke="#FFFBF0" stroke-width="2"/>
+
+                {/* Puerta arqueada */}
+                <path d="M 144 195 L 144 235 L 176 235 L 176 195 Q 176 180 160 180 Q 144 180 144 195 Z" fill="#1A2647" stroke="#FFFBF0" stroke-width="2"/>
+              </g>
+
+              {/* Casas blancas barrio Chanca */}
+              <g fill="#FFFBF0" stroke="#0E0D0B" stroke-width="1.5">
+                <rect x="20"  y="245" width="18" height="22"/>
+                <rect x="42"  y="240" width="18" height="27"/>
+                <rect x="270" y="240" width="20" height="27"/>
+                <rect x="294" y="245" width="18" height="22"/>
+              </g>
+
+              {/* Texto */}
+              <text x="160" y="305" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FFFBF0" letter-spacing="3">★ ALMERÍA · 04001 · CAPITAL ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="al-final__marquee">
+        <div class="al-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ CAPITAL DE PROVINCIA ★ ALCAZABA ★ ALMERIWOOD ★ HABLEMOS ★ </span>
+          ))}
         </div>
       </div>
     </section>
@@ -395,6 +1000,1081 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  .pueblo-map-wrap { width: 100%; height: clamp(360px, 50vh, 520px); overflow: hidden; }
-  .pueblo-map-wrap > * { width: 100%; height: 100%; }
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · ALMERÍA · CAPITAL                              */
+  /* ═══════════════════════════════════════════════════════ */
+  .al {
+    --al-paper:      #FFFBF0;
+    --al-paper-2:    #F2E8CC;
+    --al-piedra:     #EAD9B5;       /* piedra arenisca */
+    --al-arena:      #E5D4A8;
+    --al-ink:        #0E0D0B;
+    --al-alcazaba:   #C25E2B;       /* muralla terracota */
+    --al-alcazaba-d: #8E3F1A;
+    --al-oro:        #E5A726;       /* oro almeriense */
+    --al-oro-d:      #B07E15;
+    --al-indigo:     #1A2647;       /* mar/cielo profundo */
+    --al-cine:       #B91C2C;       /* rojo cine */
+    --al-gata:       #26A0A0;       /* turquesa Cabo Gata */
+    --al-sun:        #FFCC44;
+    --al-lima:       #D6FF44;
+    --al-shadow:     8px 8px 0 var(--al-ink);
+  }
+  .al-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--al-oro);
+    box-shadow: 0 0 0 0 rgba(229,167,38,0.55);
+    animation: al-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes al-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(229,167,38,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(229,167,38,0); }
+    100% { box-shadow: 0 0 0 0 rgba(229,167,38,0); }
+  }
+  .al-spin { transform-origin: 50% 50%; animation: al-spin 28s linear infinite; }
+  @keyframes al-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(229,167,38,0.12), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(194,94,43,0.10), transparent 50%),
+      var(--al-paper);
+    border-bottom: 3px solid var(--al-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .al-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(60deg, transparent 0 40px, rgba(194,94,43,0.04) 40px 41px);
+    pointer-events: none;
+  }
+  .al-hero > * { position: relative; }
+  .al-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .al-hero__status { color: var(--al-alcazaba); font-weight: 700; }
+
+  .al-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) { .al-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .al-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .al-hero__chapter { color: var(--al-alcazaba); }
+  .al-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .al-hero__title em { color: var(--al-alcazaba); font-style: italic; }
+  .al-hero__title-stamp {
+    display: inline-block;
+    color: var(--al-paper);
+    background: var(--al-cine);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+
+  .al-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 54ch;
+  }
+  .al-hero__lead strong { color: var(--al-ink); font-weight: 700; }
+  .al-hero__lead em { color: var(--al-cine); font-style: italic; font-weight: 600; }
+
+  .al-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+  .al-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--al-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .al-btn--primary {
+    background: var(--al-alcazaba);
+    color: var(--al-paper);
+    box-shadow: 6px 6px 0 var(--al-ink);
+  }
+  .al-btn--primary:hover {
+    background: var(--al-cine);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--al-ink);
+  }
+  .al-btn--ghost {
+    background: transparent;
+    color: var(--al-ink);
+    box-shadow: 6px 6px 0 var(--al-oro);
+  }
+  .al-btn--ghost:hover {
+    background: var(--al-ink);
+    color: var(--al-sun);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--al-oro);
+  }
+
+  /* KPIs */
+  .al-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--al-ink);
+    background: var(--al-ink);
+  }
+  @media (min-width: 768px) { .al-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .al-kpi {
+    background: var(--al-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--al-ink);
+    border-bottom: 2px solid var(--al-ink);
+  }
+  .al-kpi:nth-child(2n) { border-right: none; }
+  .al-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .al-kpi:nth-child(2n)      { border-right: 2px solid var(--al-ink); }
+    .al-kpi:nth-child(4n)      { border-right: none; }
+    .al-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--al-ink); }
+    .al-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .al-kpi--alcazaba { background: var(--al-alcazaba); color: var(--al-paper); }
+  .al-kpi--oro      { background: var(--al-oro); color: var(--al-ink); }
+  .al-kpi--gata     { background: var(--al-gata); color: var(--al-paper); }
+  .al-kpi--ink      { background: var(--al-ink); color: var(--al-paper); }
+  .al-kpi--ink .al-kpi__v { color: var(--al-sun); }
+  .al-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .al-kpi__v small { font-size: .55em; opacity: .8; }
+  .al-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .al-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
+  }
+  .al-postcard {
+    background: var(--al-paper);
+    border: 3px solid var(--al-ink);
+    box-shadow: var(--al-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .al-postcard:hover { transform: rotate(0); }
+  .al-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--al-indigo);
+    color: var(--al-sun);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--al-ink);
+  }
+  .al-postcard__profile {
+    width: 100%;
+    aspect-ratio: 540 / 240;
+    border-bottom: 2px solid var(--al-ink);
+    overflow: hidden;
+  }
+  .al-postcard__img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 2px solid var(--al-ink);
+  }
+  .al-postcard__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.1);
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .al-postcard:hover .al-postcard__img { transform: scale(1.05); }
+  .al-postcard__seal {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 80px; height: 80px;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 10px rgba(26,38,71,0.5));
+  }
+  .al-postcard__tag {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    background: var(--al-cine);
+    color: var(--al-paper);
+    padding: .4rem .75rem;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--al-ink);
+    box-shadow: 3px 3px 0 var(--al-ink);
+    transform: rotate(-2deg);
+  }
+  .al-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--al-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .al-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    font-size: .68rem;
+  }
+  .al-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .al-postcard__data-row > span:first-child { color: var(--al-alcazaba); letter-spacing: .2em; font-weight: 800; }
+  .al-postcard__data-v { color: var(--al-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .al-marquee {
+    background: var(--al-indigo);
+    color: var(--al-sun);
+    overflow: hidden;
+    padding: .9rem 0;
+    border-top: 3px solid var(--al-ink);
+  }
+  .al-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: al-marquee 36s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes al-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* ICONOS                                                  */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-iconos-section {
+    background: var(--al-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-iconos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1024px) { .al-iconos { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .al-icono {
+    position: relative;
+    background: var(--al-paper);
+    border: 3px solid var(--al-ink);
+    box-shadow: var(--al-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .al-icono:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .al-icono--alcazaba { color: var(--al-alcazaba); }
+  .al-icono--oro      { color: var(--al-oro); }
+  .al-icono--gata     { color: var(--al-gata); }
+  .al-icono__code {
+    position: absolute;
+    top: -16px; right: 20px;
+    background: var(--al-ink);
+    color: var(--al-sun);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.2rem;
+    border: 2.5px solid currentColor;
+    box-shadow: 3px 3px 0 currentColor;
+  }
+  .al-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
+  .al-icono__name { font-size: clamp(1.5rem, 2.8vw, 1.85rem); line-height: 1; letter-spacing: -.025em; color: var(--al-ink); margin: .5rem 0 0; text-align: center; }
+  .al-icono__sub { font-size: .62rem; letter-spacing: .25em; color: currentColor; font-weight: 800; text-align: center; }
+  .al-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .al-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
+  .al-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* ALMERIWOOD                                              */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-aw-section {
+    background: var(--al-ink);
+    color: var(--al-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .al-aw-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(229,167,38,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .al-aw-section > * { position: relative; }
+  .al-aw-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .al-aw-head { grid-template-columns: 1.4fr 1fr; gap: 3rem; } }
+  .al-aw-chapter { color: var(--al-cine); }
+  .al-aw-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--al-paper);
+    margin: 1rem 0;
+  }
+  .al-aw-title em { color: var(--al-cine); display: block; }
+  .al-aw-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,251,240,0.75);
+    max-width: 56ch;
+  }
+  .al-aw-lead strong { color: var(--al-sun); }
+  .al-aw-lead em { color: var(--al-cine); font-style: italic; }
+
+  .al-claqueta {
+    max-width: 260px;
+    margin: 0 auto;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.4));
+  }
+
+  /* Filmstrip */
+  .al-filmstrip-wrap {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin: 0 -1.5rem;
+    padding-inline: 1.5rem;
+  }
+  .al-filmstrip {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(280px, 1fr));
+    gap: 1rem;
+    min-width: max-content;
+  }
+  @media (min-width: 1280px) {
+    .al-filmstrip-wrap { overflow-x: visible; margin: 0; padding: 0; }
+    .al-filmstrip { min-width: 0; grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .al-filmstrip-wrap { overflow-x: visible; margin: 0; padding: 0; }
+    .al-filmstrip { min-width: 0; grid-template-columns: repeat(2, 1fr); }
+  }
+  .al-film {
+    background: var(--al-paper);
+    color: var(--al-ink);
+    border: 2.5px solid var(--al-paper);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 16px 1fr 16px;
+    transition: transform .25s, border-color .25s;
+  }
+  .al-film:hover { transform: translateY(-4px); border-color: var(--al-oro); }
+  .al-film__perforation {
+    background: var(--al-ink);
+    background-image:
+      repeating-linear-gradient(90deg,
+        var(--al-ink) 0 8px,
+        var(--al-paper) 8px 14px);
+    border-block: 1px solid var(--al-paper);
+  }
+  .al-film__body {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: center;
+  }
+  .al-film__frame {
+    background: var(--al-ink);
+    color: var(--al-sun);
+    aspect-ratio: 1;
+    border: 2px solid var(--al-cine);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    box-shadow: inset 0 0 0 4px var(--al-paper), inset 0 0 0 6px var(--al-ink);
+  }
+  .al-film__data { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .al-film__head { display: flex; justify-content: space-between; gap: .5rem; align-items: baseline; }
+  .al-film__year {
+    background: var(--al-cine); color: var(--al-paper);
+    padding: .15rem .4rem;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+  }
+  .al-film__dir { font-size: .55rem; letter-spacing: .15em; color: var(--al-alcazaba); opacity: .85; }
+  .al-film__title {
+    font-size: 1rem;
+    line-height: 1.1;
+    letter-spacing: -.015em;
+    color: var(--al-ink);
+    margin: .15rem 0 0;
+  }
+  .al-film__escena {
+    font-size: .65rem;
+    letter-spacing: .1em;
+    color: var(--al-alcazaba);
+    line-height: 1.3;
+  }
+
+  .al-aw-note {
+    margin-top: 2rem;
+    padding: 1rem 1.25rem;
+    background: rgba(229,167,38,0.1);
+    border: 2px solid var(--al-oro);
+    font-size: .92rem;
+    line-height: 1.5;
+    color: var(--al-paper);
+  }
+  .al-aw-note strong { color: var(--al-sun); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HITOS                                                   */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-hitos-section {
+    background: var(--al-indigo);
+    color: var(--al-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .al-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(229,167,38,0.07) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .al-hitos-section > * { position: relative; }
+  .al-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2.5px solid var(--al-paper);
+  }
+  @media (min-width: 640px)  { .al-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .al-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .al-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255,251,240,0.25);
+    border-right: 1px solid rgba(255,251,240,0.25);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(255,251,240,0.04);
+    transition: background .25s;
+  }
+  .al-hito:hover { background: rgba(229,167,38,0.15); }
+  @media (min-width: 1024px) {
+    .al-hito:nth-child(3n) { border-right: none; }
+    .al-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .al-hito:nth-child(2n) { border-right: none; }
+    .al-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) {
+    .al-hito { border-right: none; }
+    .al-hito:last-child { border-bottom: none; }
+  }
+  .al-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--al-oro); font-weight: 800; }
+  .al-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--al-paper); line-height: 1.35; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SECTORES                                                */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-sec-section {
+    background: var(--al-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-sec {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .al-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .al-sec { grid-template-columns: repeat(3, 1fr); } }
+  .al-sec__card {
+    background: var(--al-paper);
+    border: 2.5px solid var(--al-ink);
+    box-shadow: var(--al-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .al-sec__card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .al-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .al-sec__card--alcazaba { color: var(--al-alcazaba); }
+  .al-sec__card--oro      { color: var(--al-oro); }
+  .al-sec__card--cine     { color: var(--al-cine); }
+  .al-sec__card--gata     { color: var(--al-gata); }
+  .al-sec__card--indigo   { color: var(--al-indigo); }
+  .al-sec__card--oro-d    { color: var(--al-oro-d); }
+
+  .al-sec__head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+    gap: .5rem;
+  }
+  .al-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .al-sec__stat-box {
+    background: var(--al-ink); color: var(--al-paper);
+    padding: .35rem .65rem;
+    border: 1.5px solid currentColor;
+  }
+  .al-sec__stat-v { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+  .al-sec__title {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--al-ink);
+    margin: 0;
+  }
+  .al-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .al-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .al-sec__tag {
+    display: flex; align-items: flex-start; gap: .35rem;
+    font-size: .78rem;
+    line-height: 1.35;
+    color: var(--al-ink);
+  }
+  .al-sec__tag span { color: currentColor; font-weight: 800; }
+  .al-sec__foot {
+    padding-top: .65rem;
+    border-top: 2px solid var(--al-ink);
+  }
+  .al-sec__cta {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MAPA                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-map-section {
+    background: var(--al-piedra);
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-map-head { padding: 4rem 0 2rem; }
+  .al-map-head__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+  @media (min-width: 768px) { .al-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .al-map-chapter { color: var(--al-alcazaba); }
+  .al-map-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0 0;
+  }
+  .al-map-title em { color: var(--al-alcazaba); }
+  .al-map-coords {
+    background: var(--al-indigo);
+    color: var(--al-sun);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--al-ink);
+    box-shadow: 5px 5px 0 var(--al-oro);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem;
+    letter-spacing: .15em;
+  }
+
+  .al-map-frame {
+    position: relative;
+    border-top: 3px solid var(--al-ink);
+    border-bottom: 3px solid var(--al-ink);
+    background: var(--al-ink);
+  }
+  .al-map-deco {
+    position: absolute;
+    width: 60px; height: 60px;
+    z-index: 5;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 10px rgba(229,167,38,0.45));
+  }
+  .al-map-deco--tl { top: 16px; left: 16px; }
+  .al-map-deco--br { bottom: 16px; right: 16px; }
+
+  .al-map-wrap {
+    width: 100%;
+    height: clamp(420px, 60vh, 600px);
+    overflow: hidden;
+  }
+  .al-map-wrap > * { width: 100%; height: 100%; }
+
+  .al-map-pin {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -100%);
+    z-index: 4;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 14px rgba(194,94,43,0.55));
+    animation: al-pin-bounce 2.6s ease-in-out infinite;
+  }
+  @keyframes al-pin-bounce {
+    0%, 100% { transform: translate(-50%, -100%); }
+    50%      { transform: translate(-50%, -112%); }
+  }
+  .al-map-pin__label {
+    position: absolute;
+    bottom: -22px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--al-ink);
+    color: var(--al-sun);
+    padding: .2rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 1.5px solid var(--al-sun);
+    white-space: nowrap;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* DIFERENCIALES                                           */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-dif-section {
+    background: var(--al-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-dif {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--al-ink);
+  }
+  @media (min-width: 768px) { .al-dif { grid-template-columns: 1fr 1fr; } }
+  .al-dif__item {
+    padding: 1.75rem 1.5rem;
+    border-bottom: 1px solid var(--al-ink);
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .2s;
+  }
+  @media (min-width: 768px) {
+    .al-dif__item:nth-child(odd) { border-right: 1px solid var(--al-ink); }
+    .al-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) {
+    .al-dif__item:last-child { border-bottom: none; }
+  }
+  .al-dif__item--0 { background: var(--al-paper-2); }
+  .al-dif__item--1 { background: var(--al-paper); }
+  .al-dif__item--2 { background: var(--al-piedra); }
+  .al-dif__item--3 { background: var(--al-paper); }
+  .al-dif__item:hover { background: var(--al-oro); }
+  .al-dif__num { font-size: .85rem; color: var(--al-cine); font-weight: 800; letter-spacing: .15em; }
+  .al-dif__t {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+    color: var(--al-ink);
+    margin: 0;
+  }
+  .al-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-proc-section {
+    background: var(--al-indigo);
+    color: var(--al-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .al-proc-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(229,167,38,0.06) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .al-proc-section > * { position: relative; }
+  .al-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px)  { .al-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .al-proc { grid-template-columns: repeat(4, 1fr); } }
+  .al-proc__step {
+    background: rgba(255,251,240,0.05);
+    border: 2px solid var(--al-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .al-proc__step:hover { background: rgba(229,167,38,0.12); transform: translateY(-3px); }
+  .al-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(255,251,240,0.25); }
+  .al-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--al-sun); line-height: 1; }
+  .al-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--al-cine); }
+  .al-proc__t {
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--al-paper);
+    margin: .25rem 0 0;
+  }
+  .al-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,251,240,0.75); flex: 1; }
+  .al-proc__foot {
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--al-sun);
+    font-weight: 800;
+    padding-top: .5rem;
+    border-top: 1.5px solid rgba(255,251,240,0.25);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIOS                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-quote-section {
+    background: var(--al-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-pull {
+    position: relative;
+    background: var(--al-piedra);
+    border: 3px solid var(--al-ink);
+    box-shadow: var(--al-shadow);
+    padding: 3rem 2rem 2rem;
+    margin: 2rem 0;
+  }
+  .al-pull__seal {
+    position: absolute;
+    top: -30px; right: 30px;
+    width: 90px; aspect-ratio: 1;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 8px rgba(194,94,43,0.4));
+  }
+  .al-pull__q {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    line-height: 1.3;
+    margin: 0 0 1.5rem;
+    color: var(--al-ink);
+    max-width: 56ch;
+  }
+  .al-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--al-ink); }
+  .al-pull__avatar {
+    width: 48px; height: 48px;
+    background: var(--al-alcazaba); color: var(--al-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 800;
+    border-radius: 50%;
+  }
+  .al-pull__cap div { display: flex; flex-direction: column; }
+  .al-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--al-ink); }
+  .al-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+
+  .al-quotes {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .al-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .al-quote {
+    position: relative;
+    background: var(--al-paper);
+    border: 2px solid var(--al-ink);
+    box-shadow: 5px 5px 0 var(--al-ink);
+    padding: 1.75rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .al-quote:hover { transform: translateY(-3px); }
+  .al-quote--0 { background: var(--al-paper); }
+  .al-quote--1 { background: var(--al-piedra); }
+  .al-quote--2 { background: var(--al-paper-2); }
+  .al-quote__mark {
+    position: absolute;
+    top: -8px; left: 14px;
+    font-family: serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--al-alcazaba);
+    opacity: .45;
+  }
+  .al-quote p { font-size: .92rem; line-height: 1.5; color: var(--al-ink); flex: 1; margin: 0; }
+  .al-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--al-ink); }
+  .al-quote__avatar {
+    width: 36px; height: 36px;
+    background: var(--al-indigo); color: var(--al-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .al-quote footer div { display: flex; flex-direction: column; }
+  .al-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .al-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-faq-section {
+    background: var(--al-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--al-ink);
+  }
+  .al-faq__item { border-bottom: 2px solid var(--al-ink); }
+  .al-faq__det summary { list-style: none; cursor: pointer; }
+  .al-faq__det summary::-webkit-details-marker { display: none; }
+  .al-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .al-faq__sum:hover { padding-inline: 1rem; background: var(--al-paper-2); }
+  .al-faq__num { font-size: 1rem; font-weight: 800; color: var(--al-alcazaba); letter-spacing: .1em; }
+  .al-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--al-ink);
+    font-weight: 700;
+  }
+  .al-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--al-ink);
+    background: var(--al-paper);
+    color: var(--al-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .al-faq__det[open] .al-faq__toggle { transform: rotate(180deg); background: var(--al-alcazaba); color: var(--al-paper); }
+  .al-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .al-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .al-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PUEBLOS VECINOS                                         */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-vecinos-section {
+    background: var(--al-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--al-ink);
+  }
+  .al-vecinos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr;
+    border: 2px solid var(--al-ink);
+    background: var(--al-ink);
+  }
+  @media (min-width: 640px)  { .al-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .al-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .al-vecino {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    gap: .35rem;
+    padding: 1.5rem;
+    background: var(--al-paper);
+    color: var(--al-ink);
+    text-decoration: none;
+    min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .al-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .al-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .al-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .al-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--al-alcazaba); font-size: 1.3rem; transition: transform .25s; }
+  .al-vecino:hover { background: var(--al-alcazaba); color: var(--al-paper); }
+  .al-vecino:hover .al-vecino__sub, .al-vecino:hover .al-vecino__n { opacity: .85; }
+  .al-vecino:hover .al-vecino__arrow { color: var(--al-paper); transform: translateX(4px); }
+  .al-vecino--1:hover { background: var(--al-oro); color: var(--al-ink); }
+  .al-vecino--2:hover { background: var(--al-indigo); color: var(--al-sun); }
+  .al-vecino--2:hover .al-vecino__arrow { color: var(--al-sun); }
+  .al-vecino--3:hover { background: var(--al-cine); color: var(--al-paper); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .al-final {
+    background: var(--al-indigo);
+    color: var(--al-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .al-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(229,167,38,0.07) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .al-final > * { position: relative; }
+  .al-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .al-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .al-final__chapter { color: var(--al-sun); }
+  .al-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--al-paper);
+    margin: 1rem 0;
+  }
+  .al-final__title em { color: var(--al-oro); font-style: italic; display: block; }
+  .al-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,251,240,0.75);
+    max-width: 52ch;
+  }
+  .al-final__lead strong { color: var(--al-sun); }
+  .al-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .al-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .al-final__btn--primary {
+    background: var(--al-oro); color: var(--al-ink); border-color: var(--al-oro);
+    box-shadow: 6px 6px 0 var(--al-sun);
+  }
+  .al-final__btn--primary:hover {
+    background: var(--al-sun); color: var(--al-ink); border-color: var(--al-sun);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--al-oro);
+  }
+  .al-final__btn--ghost {
+    background: transparent; color: var(--al-paper); border-color: var(--al-paper);
+    box-shadow: 6px 6px 0 var(--al-paper);
+  }
+  .al-final__btn--ghost:hover {
+    background: var(--al-paper); color: var(--al-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--al-paper);
+  }
+  .al-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,251,240,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .al-final__trust .al-pulse { background: var(--al-sun); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(255,204,68,0.55); }
+
+  .al-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .al-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(229,167,38,0.3)); }
+  .al-final-alc {
+    transform-origin: center bottom;
+    animation: al-alc-breathe 4s ease-in-out infinite;
+  }
+  @keyframes al-alc-breathe {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+
+  .al-final__marquee {
+    background: var(--al-oro);
+    color: var(--al-ink);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--al-ink);
+    margin: 0 -1.5rem;
+  }
+  .al-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: al-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
 </style>
