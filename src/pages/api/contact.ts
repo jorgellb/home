@@ -79,7 +79,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
   const subject = `[Web] Briefing de ${name}${company ? ` · ${company}` : ''}`;
 
-  const bodyHtml = raw(html`
+  const bodyHtml = html`
     <!DOCTYPE html>
     <html lang="es">
     <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -107,7 +107,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       </div>
     </body>
     </html>
-  `);
+  `;
 
   try {
     await resend.emails.send({
