@@ -6,6 +6,10 @@ import vercel from '@astrojs/vercel';
 
 /** @typedef {import('@astrojs/sitemap').SitemapItem} SitemapItem */
 
+// Fecha de build para el lastmod del sitemap (refleja el último despliegue
+// en lugar de una constante obsoleta).
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
 export default defineConfig({
   site: 'https://platanitorico.com',
   base: '/',
@@ -52,12 +56,12 @@ export default defineConfig({
 
         // Homepage - máxima prioridad
         if (path === '/') {
-          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 1.0, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 1.0, lastmod: BUILD_DATE };
         }
 
         // Listado de blog
         if (path === '/blog/') {
-          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 0.8, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 0.8, lastmod: BUILD_DATE };
         }
 
         // Artículos de blog individuales
@@ -67,22 +71,22 @@ export default defineConfig({
 
         // Servicios principales
         if (path.match(/^\/(desarrollo-web|audiovisual|marketing|diseno-grafico|soporte)\/$/)) {
-          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.9, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.9, lastmod: BUILD_DATE };
         }
 
         // Contacto
         if (path === '/contacto/') {
-          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.6, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.6, lastmod: BUILD_DATE };
         }
 
         // Soluciones
         if (path.includes('/soluciones/')) {
-          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: BUILD_DATE };
         }
 
         // Páginas de diseño web por localidad — contenido único por pueblo
         if (path.includes('/diseno-web/')) {
-          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: '2026-04-16' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: BUILD_DATE };
         }
 
         // Páginas legales - prioridad mínima
@@ -91,7 +95,7 @@ export default defineConfig({
         }
 
         // Resto de páginas - prioridad media
-        return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: '2026-04-16' };
+        return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: BUILD_DATE };
       },
     }),
   ],
@@ -111,7 +115,6 @@ export default defineConfig({
           // Solo se aplica al bundle cliente; en SSR estas libs van externas.
           manualChunks(id) {
             if (id.includes('node_modules/gsap')) return 'gsap';
-            if (id.includes('node_modules/lenis')) return 'lenis';
             return undefined;
           },
         },
