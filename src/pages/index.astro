@@ -38,13 +38,16 @@ const razones = [
   { num: '04', t: 'Cero plantillas',            s: 'Cada web a medida. Diseñamos por TÚ negocio, no por catálogo de Wix. Si quieres una plantilla — hay opciones más baratas en otro sitio.' },
 ];
 
-// KPIs / stats
+// KPIs / stats (con contador animado: prefix/num/suffix)
 const stats = [
-  { k: '200+', l: 'Proyectos lanzados' },
-  { k: '8',    l: 'Años en Almería' },
-  { k: '99%',  l: 'Clientes satisfechos' },
-  { k: '<4h',  l: 'Respuesta media' },
+  { num: 200, prefix: '',  suffix: '+', l: 'Proyectos lanzados' },
+  { num: 8,   prefix: '',  suffix: '',  l: 'Años en Almería' },
+  { num: 99,  prefix: '',  suffix: '%', l: 'Clientes satisfechos' },
+  { num: 4,   prefix: '<', suffix: 'h', l: 'Respuesta media' },
 ];
+
+// Palabras rotatorias del titular cinético
+const kineticWords = ['VENDEN', 'VUELAN', 'CONVIERTEN', 'ENAMORAN'];
 
 // Proceso 5 pasos
 const proceso = [
@@ -166,12 +169,30 @@ const faqHome = [
 >
   <Header />
 
+  {/* Activa reveal/animaciones solo si hay JS (fallback: todo visible) */}
+  <script is:inline>document.documentElement.classList.add('ho-js');</script>
+
   <main id="main-content" class="ho">
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — MANIFIESTO + LOGOTIPO GIGANTE              */}
     {/* ════════════════════════════════════════════════ */}
     <section class="ho-hero">
+
+      {/* Fondo aurora animado + formas flotantes */}
+      <div class="ho-aurora" aria-hidden="true">
+        <span class="ho-aurora__blob ho-aurora__blob--1"></span>
+        <span class="ho-aurora__blob ho-aurora__blob--2"></span>
+        <span class="ho-aurora__blob ho-aurora__blob--3"></span>
+        <span class="ho-aurora__blob ho-aurora__blob--4"></span>
+      </div>
+      <div class="ho-shapes" aria-hidden="true">
+        <svg class="ho-shape ho-shape--star" viewBox="0 0 100 100" width="64" height="64"><path d="M50 4 L61 39 L98 39 L68 61 L79 96 L50 74 L21 96 L32 61 L2 39 L39 39 Z" fill="none" stroke="currentColor" stroke-width="4"/></svg>
+        <svg class="ho-shape ho-shape--ring" viewBox="0 0 100 100" width="80" height="80"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="10 8"/></svg>
+        <svg class="ho-shape ho-shape--tri" viewBox="0 0 100 100" width="54" height="54"><path d="M50 8 L92 84 L8 84 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/></svg>
+        <svg class="ho-shape ho-shape--plus" viewBox="0 0 100 100" width="46" height="46"><path d="M50 14 V86 M14 50 H86" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg>
+      </div>
+
       <div class="container-brutal">
 
         {/* Top bar */}
@@ -227,6 +248,17 @@ const faqHome = [
           </aside>
         </div>
 
+        {/* Titular cinético con palabra rotatoria */}
+        <p class="ho-kinetic" aria-label="Hacemos webs que venden, vuelan, convierten y enamoran">
+          <span class="ho-kinetic__pre" aria-hidden="true">Hacemos webs que</span>
+          <span class="ho-kinetic__rot" aria-hidden="true">
+            <span class="ho-kinetic__stack">
+              {kineticWords.map((w) => <span>{w}.</span>)}
+              <span>{kineticWords[0]}.</span>
+            </span>
+          </span>
+        </p>
+
         {/* Manifiesto */}
         <p class="ho-manifest">
           Hacemos webs <em>brutalmente bonitas</em> que <strong>cargan en menos de 2 segundos</strong>,
@@ -245,15 +277,21 @@ const faqHome = [
           </a>
         </div>
 
-        {/* Stats band */}
+        {/* Stats band — contadores animados */}
         <ul class="ho-stats">
           {stats.map((s, i) => (
             <li class={`ho-stat ho-stat--${i}`}>
-              <span class="ho-stat__k text-mono">{s.k}</span>
+              <span class="ho-stat__k text-mono" data-count={s.num} data-prefix={s.prefix} data-suffix={s.suffix}>{s.prefix}{s.num}{s.suffix}</span>
               <span class="ho-stat__l">{s.l}</span>
             </li>
           ))}
         </ul>
+
+        {/* Indicador de scroll */}
+        <a href="#servicios" class="ho-scrollcue" aria-label="Desplázate para ver más">
+          <span class="ho-scrollcue__txt text-mono">SCROLL</span>
+          <span class="ho-scrollcue__mouse" aria-hidden="true"><span></span></span>
+        </a>
       </div>
 
       {/* Marquee anuncio */}
@@ -846,6 +884,65 @@ const faqHome = [
 
   <Footer />
 </BaseLayout>
+
+<script>
+  // ✦ Contadores animados + scroll reveal de la home
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // — Stagger entre tarjetas de cada lista —
+  document.querySelectorAll('.ho-why, .ho-svc, .ho-aud, .ho-proc, .ho-port, .ho-quotes, .ho-tech, .ho-cover-grid').forEach((group) => {
+    Array.from(group.children).forEach((child, i) => {
+      (child as HTMLElement).style.transitionDelay = Math.min(i, 6) * 65 + 'ms';
+    });
+  });
+
+  // — Scroll reveal —
+  const revealEls = document.querySelectorAll('.brutal-section-head, .ho-why__item, .ho-svc__item, .ho-aud__item, .ho-proc__step, .ho-port__item, .ho-quote, .ho-tech__item, .ho-cover-grid > li');
+  if (reduce) {
+    revealEls.forEach((el) => el.classList.add('is-in'));
+  } else if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach((el) => io.observe(el));
+    // Salvaguarda: si algo no se revela en 2.5s, mostrarlo igualmente
+    setTimeout(() => revealEls.forEach((el) => el.classList.add('is-in')), 2500);
+  } else {
+    revealEls.forEach((el) => el.classList.add('is-in'));
+  }
+
+  // — Contadores —
+  function runCount(el: HTMLElement) {
+    const target = parseFloat(el.dataset.count || '0');
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    if (reduce) { el.textContent = prefix + target + suffix; return; }
+    const dur = 1500;
+    const start = performance.now();
+    function tick(now: number) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = prefix + Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+  if (counters.length) {
+    if (!('IntersectionObserver' in window)) {
+      counters.forEach(runCount);
+    } else {
+      const cio = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { runCount(e.target as HTMLElement); cio.unobserve(e.target); }
+        });
+      }, { threshold: 0.6 });
+      counters.forEach((el) => cio.observe(el));
+    }
+  }
+</script>
 
 <style>
   /* ═══════════════════════════════════════════════════════ */
@@ -1888,5 +1985,162 @@ const faqHome = [
   @media (max-width: 640px) {
     .ho-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
     .ho-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* ✦ UPGRADE · HERO VIVO + SCROLL REVEAL                   */
+  /* ═══════════════════════════════════════════════════════ */
+
+  /* Capas y apilamiento del hero */
+  .ho-hero::before { z-index: 1; }
+  .ho-hero > .container-brutal { position: relative; z-index: 2; }
+  .ho-hero > .ho-marquee { position: relative; z-index: 2; }
+
+  /* — Aurora animada — */
+  .ho-aurora {
+    position: absolute; inset: 0; z-index: 0;
+    pointer-events: none; overflow: hidden;
+  }
+  .ho-aurora__blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(64px); opacity: .45;
+    mix-blend-mode: multiply;
+    will-change: transform;
+  }
+  .ho-aurora__blob--1 { width: 48vw; height: 48vw; left: -10vw; top: -12vw;  background: radial-gradient(circle, var(--ho-accent), transparent 68%); animation: ho-drift-a 23s ease-in-out infinite; }
+  .ho-aurora__blob--2 { width: 42vw; height: 42vw; right: -8vw; top: 4vw;     background: radial-gradient(circle, var(--ho-lime),   transparent 68%); opacity: .6; animation: ho-drift-b 27s ease-in-out infinite; }
+  .ho-aurora__blob--3 { width: 38vw; height: 38vw; left: 18vw;  bottom: -16vw; background: radial-gradient(circle, var(--ho-magenta),transparent 70%); opacity: .3; animation: ho-drift-a 31s ease-in-out infinite reverse; }
+  .ho-aurora__blob--4 { width: 34vw; height: 34vw; right: 14vw; bottom: -10vw; background: radial-gradient(circle, var(--ho-cyan),   transparent 70%); opacity: .32; animation: ho-drift-b 25s ease-in-out infinite; }
+  @keyframes ho-drift-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(6vw, 4vw) scale(1.08); }
+    66%      { transform: translate(-4vw, 2vw) scale(.96); }
+  }
+  @keyframes ho-drift-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(-5vw, 3vw) scale(1.06); }
+    66%      { transform: translate(4vw, -3vw) scale(.95); }
+  }
+
+  /* — Formas flotantes — */
+  .ho-shapes { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+  .ho-shape { position: absolute; opacity: .16; will-change: transform; }
+  .ho-shape--star { top: 12%;  right: 7%;  color: var(--ho-accent);  animation: ho-float-y 8s ease-in-out infinite; }
+  .ho-shape--ring { bottom: 24%; left: 3%; color: var(--ho-blue);    animation: ho-spin 28s linear infinite; opacity: .12; }
+  .ho-shape--tri  { top: 46%;  left: 52%;  color: var(--ho-magenta); animation: ho-float-x 11s ease-in-out infinite; opacity: .1; }
+  .ho-shape--plus { bottom: 12%; right: 22%; color: var(--ho-green); animation: ho-float-y 6.5s ease-in-out infinite; }
+  @keyframes ho-float-y { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-22px) rotate(8deg); } }
+  @keyframes ho-float-x { 0%, 100% { transform: translateX(0) rotate(0); } 50% { transform: translateX(20px) rotate(-10deg); } }
+  @media (max-width: 768px) { .ho-shape--tri, .ho-shape--ring { display: none; } }
+
+  /* — Titular cinético con palabra rotatoria — */
+  .ho-kinetic {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.5rem, 4.4vw, 2.9rem);
+    letter-spacing: -.025em;
+    line-height: 1.1;
+    color: var(--ho-ink);
+    margin: 1.75rem 0 0;
+    display: flex; flex-wrap: wrap; align-items: baseline;
+    gap: .15em .4em;
+  }
+  .ho-kinetic__rot {
+    display: inline-block;
+    height: 1.16em;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .ho-kinetic__stack {
+    display: flex; flex-direction: column;
+    animation: ho-rotword 9s cubic-bezier(.76,0,.24,1) infinite;
+  }
+  .ho-kinetic__stack > span {
+    height: 1.16em; line-height: 1.16em;
+    white-space: nowrap; font-style: italic;
+  }
+  .ho-kinetic__stack > span:nth-child(1) { color: var(--ho-accent); }
+  .ho-kinetic__stack > span:nth-child(2) { color: var(--ho-blue); }
+  .ho-kinetic__stack > span:nth-child(3) { color: var(--ho-magenta); }
+  .ho-kinetic__stack > span:nth-child(4) { color: var(--ho-green); }
+  .ho-kinetic__stack > span:nth-child(5) { color: var(--ho-accent); }
+  @keyframes ho-rotword {
+    0%, 15%   { transform: translateY(0); }
+    20%, 35%  { transform: translateY(-20%); }
+    40%, 55%  { transform: translateY(-40%); }
+    60%, 75%  { transform: translateY(-60%); }
+    80%, 100% { transform: translateY(-80%); }
+  }
+
+  /* — Indicador de scroll — */
+  .ho-scrollcue {
+    display: flex; flex-direction: column; align-items: center; gap: .55rem;
+    width: max-content; margin: 1.75rem auto 2.5rem;
+    color: var(--ho-ink); text-decoration: none;
+    opacity: .65; transition: opacity .2s, transform .2s;
+  }
+  .ho-scrollcue:hover { opacity: 1; transform: translateY(3px); }
+  .ho-scrollcue__txt { font-size: .58rem; letter-spacing: .35em; font-weight: 700; }
+  .ho-scrollcue__mouse {
+    width: 22px; height: 34px; border: 2.5px solid var(--ho-ink);
+    border-radius: 12px; position: relative;
+  }
+  .ho-scrollcue__mouse > span {
+    position: absolute; top: 6px; left: 50%;
+    width: 3px; height: 7px; background: var(--ho-ink); border-radius: 2px;
+    transform: translateX(-50%);
+    animation: ho-scrolldot 1.7s ease-in-out infinite;
+  }
+  @keyframes ho-scrolldot {
+    0%   { opacity: 0; transform: translate(-50%, 0); }
+    30%  { opacity: 1; }
+    60%  { opacity: 1; transform: translate(-50%, 11px); }
+    100% { opacity: 0; transform: translate(-50%, 11px); }
+  }
+
+  /* — Entrada escalonada del hero (solo con JS y sin reduced-motion) — */
+  @keyframes ho-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @keyframes ho-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ho-seal-in { from { opacity: 0; transform: scale(.55) rotate(-45deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.ho-js) .ho-mast__pre   { animation: ho-rise .7s .05s both; }
+    :global(.ho-js) .ho-mast__line1 { animation: ho-rise .85s .12s both; }
+    :global(.ho-js) .ho-mast__line2 { animation: ho-rise .85s .20s both; }
+    :global(.ho-js) .ho-mast__sub   { animation: ho-rise .7s .30s both; }
+    :global(.ho-js) .ho-mast__seal  { animation: ho-seal-in .9s .22s both, ho-seal-bob 5s 1.15s ease-in-out infinite; }
+    :global(.ho-js) .ho-kinetic     { animation: ho-rise .7s .40s both; }
+    :global(.ho-js) .ho-manifest    { animation: ho-rise .7s .48s both; }
+    :global(.ho-js) .ho-hero__cta   { animation: ho-rise .7s .56s both; }
+    :global(.ho-js) .ho-stats       { animation: ho-rise .7s .64s both; }
+    :global(.ho-js) .ho-scrollcue   { animation: ho-fade 1s 1.5s both; }
+
+    /* — Scroll reveal global — */
+    :global(.ho-js) .brutal-section-head,
+    :global(.ho-js) .ho-why__item,
+    :global(.ho-js) .ho-svc__item,
+    :global(.ho-js) .ho-aud__item,
+    :global(.ho-js) .ho-proc__step,
+    :global(.ho-js) .ho-port__item,
+    :global(.ho-js) .ho-quote,
+    :global(.ho-js) .ho-tech__item,
+    :global(.ho-js) .ho-cover-grid > li {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1);
+    }
+    :global(.ho-js) .brutal-section-head.is-in,
+    :global(.ho-js) .is-in {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* — Respeto a reduced-motion — */
+  @media (prefers-reduced-motion: reduce) {
+    .ho-aurora, .ho-shapes { display: none; }
+    .ho-kinetic__stack { animation: none; }
+    .ho-scrollcue__mouse > span { animation: none; }
+    .ho-mast__seal { animation: none; }
   }
 </style>
