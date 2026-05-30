@@ -1,0 +1,1625 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'pulpi');
+
+const title = 'Diseño Web en Pulpí | Webs para Visitas a la Geoda Gigante, San Juan de los Terreros y Turismo';
+const description = 'Agencia de diseño web en Pulpí (Levante). Reservas online para la Geoda Gigante, alojamientos y restaurantes de San Juan de los Terreros, empresas de visitas y comercio local. Multiidioma EN, SEO "Geoda Pulpí" / "Giant Geode", motor de reservas para plazas limitadas.';
+const canonical = 'https://platanitorico.com/diseno-web/pulpi/';
+
+// Cristales de la geoda — anillo apuntando al centro (precomputado: nada de loops en el template)
+function makeCrystals(count, rx, ry, baseLen, prefix) {
+  return Array.from({ length: count }).map((_, i) => {
+    const a = (i / count) * Math.PI * 2;
+    const bx = +(Math.cos(a) * rx).toFixed(1);
+    const by = +(Math.sin(a) * ry).toFixed(1);
+    const len = baseLen + (i % 4) * (baseLen * 0.34);
+    const w = baseLen * 0.3 + (i % 3) * (baseLen * 0.12);
+    const deg = +((a * 180) / Math.PI - 90).toFixed(1);
+    const path = `M ${(-w).toFixed(1)} 0 L ${(-w * 0.62).toFixed(1)} ${(-len * 0.66).toFixed(1)} L 0 ${(-len).toFixed(1)} L ${(w * 0.62).toFixed(1)} ${(-len * 0.66).toFixed(1)} L ${w.toFixed(1)} 0 Z`;
+    const facet = `M 0 0 L 0 ${(-len).toFixed(1)}`;
+    const grad = `${prefix}${i % 4}`;
+    return { bx, by, deg, path, facet, grad };
+  });
+}
+const geodeHero = makeCrystals(16, 150, 66, 26, 'ph-cz');
+const geodeBig = makeCrystals(22, 116, 148, 32, 'pb-cz');
+const sparkles = [
+  { x: 0, y: -10, r: 5 }, { x: -54, y: -40, r: 3 }, { x: 60, y: -26, r: 3.5 },
+  { x: -36, y: 44, r: 2.6 }, { x: 44, y: 56, r: 3 }, { x: 12, y: 78, r: 2.4 },
+  { x: -72, y: 18, r: 2.2 }, { x: 78, y: 20, r: 2.6 },
+];
+
+// 3 ICONOS Pulpí
+const iconos = [
+  { code: 'A', name: 'La Geoda Gigante', sub: 'LA MAYOR DEL MUNDO',     desc: 'Una cavidad de 8 metros tapizada de cristales de yeso transparentes de hasta 2 metros. Única en el mundo por su tamaño y pureza — se visita descendiendo a la Mina Rica.',         dato: '8 m', color: 'violet' },
+  { code: 'B', name: 'Castillo de Terreros', sub: 'FORTALEZA SOBRE EL MAR', desc: 'El castillo de San Juan de los Terreros (siglo XVIII) vigila la costa desde su promontorio. Bajo él, playas de arena dorada y aguas tranquilas, lejos de la masificación.',           dato: 'S. XVIII', color: 'cyan' },
+  { code: 'C', name: 'Islas de Terreros', sub: 'ISLOTES VOLCÁNICOS',     desc: 'La Isla Negra y la Isla de Terreros emergen frente a la costa: pequeños volcanes en el mar, fondos cristalinos para snorkel y kayak y un atardecer de postal.',                       dato: 'Volcánicas', color: 'amber' },
+];
+
+// Reservas timeline / cómo funciona la visita
+const reservaPasos = [
+  { n: '01', t: 'Plazas limitadas', d: 'La geoda se visita en grupos reducidos con cita previa. Sin reserva online, pierdes al visitante que decide a última hora.' },
+  { n: '02', t: 'Reserva 24/7', d: 'Tu web vende entradas y visitas guiadas a cualquier hora, desde cualquier país, mientras tú descansas. Pago seguro y confirmación automática.' },
+  { n: '03', t: 'En su idioma', d: 'El turista de la geoda es internacional. Web en inglés y SEO para "Giant Geode Pulpí tour" capta al visitante extranjero antes de que llegue.' },
+];
+
+// Sectores Pulpí
+const sectores = [
+  { nombre: 'Turismo de la Geoda y naturaleza',   stat: '#1',   statLabel: 'imán internacional',  desc: 'La Geoda de Pulpí es un atractivo geológico de primer orden mundial. Empresas de visitas guiadas, hoteles y servicios turísticos tienen una oportunidad única de posicionarse en Google para búsquedas internacionales con muy poca competencia.', tags: ['Reservas de visitas','SEO "Geoda Pulpí"','Multiidioma EN','Pago online'] },
+  { nombre: 'Alojamiento y hostelería costera',    stat: 'mar',  statLabel: 'San Juan Terreros',   desc: 'San Juan de los Terreros concentra la vida playera de Pulpí. Apartamentos y restaurantes frente al mar pueden captar el turismo familiar de calidad que busca una alternativa menos masificada que Águilas o Roquetas.',                       tags: ['Motor de reservas','Galería de playas','Restaurante marino','Sin comisiones OTA'] },
+  { nombre: 'Visitas guiadas y experiencias',      stat: '4.9★', statLabel: 'tours y actividades', desc: 'Geoda, buceo en las islas, kayak, snorkel y rutas. Empresas de experiencias que necesitan calendario de salidas en tiempo real, pago de señal y gestión de plazas para no perder ninguna reserva.',                                            tags: ['Calendario salidas','Pago de señal','Gestión de plazas','Reseñas TripAdvisor'] },
+  { nombre: 'Comercio y servicios de frontera',    stat: 'ES/MU', statLabel: 'Almería + Murcia',  desc: 'El núcleo de Pulpí sirve a los municipios fronterizos con Murcia. Estar bien posicionado en Google Maps capta clientes de ambos lados de la frontera provincial — Águilas está a un paso.',                                                  tags: ['SEO frontera Murcia','Google Business','Captación comarca','Web rápida'] },
+  { nombre: 'Agricultura del Campo de Pulpí',      stat: 'km0',  statLabel: 'lechuga y brócoli',   desc: 'Pulpí es una gran potencia agrícola: lechuga, brócoli y hortaliza de exportación. Cooperativas y productores que quieran vender, exportar o construir marca necesitan web con catálogo, multiidioma y SEO de producto.',                       tags: ['Catálogo producto','Multiidioma export','Marca territorial','Fichas técnicas'] },
+  { nombre: 'Restauración y comercio local',       stat: 'QR',   statLabel: 'carta digital',       desc: 'Bares, restaurantes y comercios que sirven al vecino y al turista de la geoda y la playa. Carta digital, fotografía de producto y presencia en Google para captar al que busca dónde comer en Pulpí o Terreros.',                            tags: ['Carta digital QR','SEO local','Reservas mesa','Fotografía'] },
+];
+
+// Hitos Pulpí
+const hitos = [
+  { k: 'LA GEODA',     v: 'La mayor del mundo visitable · 8 m' },
+  { k: 'CRISTALES',    v: 'Yeso selenita transparente · hasta 2 m' },
+  { k: 'MINA RICA',    v: 'Descubierta en 1999 · Sierra del Aguilón' },
+  { k: 'TERREROS',     v: 'Castillo s. XVIII · islas · playas' },
+  { k: 'FRONTERA',     v: 'Murcia y Águilas a 15 minutos' },
+  { k: 'AGRICULTURA',  v: 'Campo de Pulpí · lechuga y brócoli' },
+];
+
+// Diferenciales
+const diferenciales = [
+  { title: 'Un imán único en el mundo',         desc: 'No hay otra geoda visitable de este tamaño en el planeta. "Geoda de Pulpí" y "Giant Geode" son búsquedas con demanda internacional creciente y casi sin competencia digital seria. Quien se posicione bien ahora se queda con ese tráfico durante años.' },
+  { title: 'Plazas limitadas = reservas online', desc: 'La geoda solo se visita con cita previa y grupos reducidos. Sin un sistema de reservas en la web, pierdes al turista que decide sobre la marcha o que reserva de madrugada desde otro país. La web vende mientras duermes.' },
+  { title: 'Turismo internacional = multiidioma', desc: 'El visitante de la geoda viene de toda Europa. Una web en inglés con SEO para "Giant Geode Pulpí tour" y contenido localizado convierte la curiosidad mundial por esta maravilla en reservas reales para tu negocio.' },
+  { title: 'Dos destinos en uno: cristal y mar',  desc: 'Pulpí combina la geoda con San Juan de los Terreros: castillo, islas y playas tranquilas. Quien viene a ver el cristal se queda a dormir y a comer junto al mar. Tu web puede capturar las dos motivaciones a la vez.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Conocemos tu proyecto',     eta: '1–2 días',  body: 'Analizamos tu negocio (visitas, alojamiento, restaurante o comercio), tu público y la competencia. Definimos idiomas, keywords ("Geoda Pulpí", "Giant Geode") y arquitectura.', deliverable: 'Briefing + roadmap' },
+  { num: '02', title: 'Diseño con magia',          eta: '3–5 días',  body: 'Diseño que transmite la maravilla del cristal o la calma de Terreros, según tu sector. Fotografía y un sistema visual con carácter. Apruebas antes de programar.', deliverable: 'Prototipo Figma · approved' },
+  { num: '03', title: 'Desarrollo + reservas',      eta: '5–10 días', body: 'Astro ultrarrápido + motor de reservas o tienda de entradas, calendario de plazas y pago online. Multiidioma con hreflang, Schema y Core Web Vitals en verde.', deliverable: 'Web staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + SEO global',   eta: '1–2 días',  body: 'Publicamos, optimizamos Google Business, indexamos y posicionamos para las búsquedas de la geoda y Terreros, en español e inglés. Te formamos para gestionarla.', deliverable: 'Sitio en producción + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Cristóbal Navarro', negocio: 'Visitas guiadas a la Geoda',           texto: 'La geoda trae turistas solos, pero necesitábamos web para que nos reservaran las visitas privadas directamente. Ahora somos la primera opción que aparece y tenemos grupos internacionales cada semana.' },
+  { nombre: 'Dolores Pérez',     negocio: 'Restaurante · San Juan de los Terreros', texto: 'Estamos en una zona preciosa pero poco conocida. La web con SEO nos puso en el mapa para familias que buscan playas tranquilas con buen restaurante. El verano nos cambió la vida.' },
+  { nombre: 'Emily Watson',      negocio: 'Touring agency · UK',                   texto: 'We bring small groups to see the Giant Geode and needed an English booking site. The team built a fast, clear multilingual page with live availability. Our UK and German bookings have doubled since.' },
+  { nombre: 'Paco Segura',       negocio: 'Apartamentos · Terreros',               texto: 'Tenía los apartamentos solo en plataformas con comisión. Ahora con la web y reservas directas me escriben familias que vienen a la geoda y se quedan toda la semana. He recuperado el control y el margen.' },
+];
+
+const faqs = [
+  { q: '¿Podéis hacer una web en inglés para turistas que visitan la Geoda de Pulpí?',                a: 'Sí, hacemos webs multiidioma para atraer turismo internacional a la geoda y San Juan de los Terreros. Incluimos SEO en inglés para búsquedas como "Giant Geode Pulpí tour", contenido localizado y hreflang. El visitante de la geoda es internacional — tu web debe hablar su idioma.' },
+  { q: '¿Integráis un sistema de reservas para las visitas guiadas a la geoda?',                      a: 'Sí, es clave para este negocio. Integramos motor de reservas con calendario de plazas en tiempo real, venta de entradas, pago online seguro y confirmación automática. Como la geoda tiene aforo limitado y cita previa, una web que reserva 24/7 capta al turista de cualquier país y a cualquier hora.' },
+  { q: '¿Cuánto cuesta una web para alojamiento vacacional en San Juan de los Terreros?',            a: 'Una web para apartamentos o casa vacacional en San Juan de los Terreros desde 500€ con motor de reservas, galería, hosting gratuito y SEO local. Si quieres reservas avanzadas con calendario y pagos, entre 900€ y 1.500€. Presupuesto cerrado, sin sorpresas.' },
+  { q: '¿Cuánto tarda en posicionarse un negocio turístico de Pulpí en Google?',                     a: 'Para términos como "visitas geoda Pulpí" o "apartamentos San Juan de los Terreros", entre 6 y 12 semanas con trabajo SEO continuo. La competencia es baja y los resultados, rápidos. En inglés ("Giant Geode tour") la oportunidad es aún mayor por la poca competencia.' },
+  { q: '¿Hacéis webs para empresas de buceo, kayak y actividades en las islas de Terreros?',         a: 'Sí. Integramos calendario de salidas, pago de señal online, gestión de plazas por actividad y conexión con tus reseñas. Ideal para buceo y snorkel en la Isla Negra, kayak y rutas. Reduces el caos del teléfono y llenas más salidas.' },
+  { q: '¿Trabajáis con restaurantes y comercios de Pulpí pueblo, no solo de la costa?',              a: 'Por supuesto. El núcleo de Pulpí tiene comercio activo que sirve a la comarca y a la frontera con Murcia. Hacemos webs rápidas con carta digital, SEO local y Google Business optimizado para captar al vecino y al turista que pasa.' },
+  { q: '¿Trabajáis con cooperativas y productores del Campo de Pulpí?',                               a: 'Sí. Pulpí es potencia en lechuga, brócoli y hortaliza de exportación. Hacemos webs B2B con catálogo de producto, fichas técnicas, marca territorial y multiidioma para vender y exportar. Convertimos a un productor local en una marca que vende fuera.' },
+  { q: '¿En cuánto tiempo está lista mi web?',                                                       a: 'Web de comercio o restaurante: 1–2 semanas. Web turística con reservas o venta de entradas: 2–3 semanas. Multiidioma y catálogo agro: 3–4 semanas. Trabajamos en sprints y ves avances cada semana. Si llegas con la temporada encima, priorizamos.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Pulpí","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web Pulpí","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":"https://platanitorico.com/imagenes/hero.jpg","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Pulpí","addressRegion":"Almería","postalCode":"04640","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3936,"longitude":-1.7508},"areaServed":["Pulpí","San Juan de los Terreros","Geoda de Pulpí","Levante Almeriense","Águilas"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"39","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Pulpí","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/hero.jpg"
+  imageAlt="Diseño web en Pulpí - Geoda Gigante y San Juan de los Terreros"
+  type="service"
+  keywords="diseño web pulpí, reservas geoda pulpí, giant geode web, web san juan de los terreros, apartamentos terreros, visitas guiadas geoda, seo turismo pulpí"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="pu">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — LA GEODA / CRISTAL MÁGICO                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-hero">
+      <div class="container-brutal">
+
+        <header class="pu-hero__top">
+          <span class="text-meta">N.º 035 — Levante · Frontera de Murcia · Almería</span>
+          <span class="text-meta pu-hero__status">
+            <span class="pu-pulse"></span>
+            ★ LA GEODA MÁS GRANDE DEL MUNDO ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="pu-hero__grid">
+
+          <div class="pu-hero__intro">
+            <span class="text-meta pu-hero__chapter">Cap. 01 / Pulpí · Levante Almeriense</span>
+            <h1 class="pu-hero__title heading-display">
+              Diseño web para
+              <em class="heading-editorial">Pulpí</em>
+              <span class="pu-hero__title-stamp">y su geoda gigante.</span>
+            </h1>
+
+            <p class="pu-hero__lead">
+              La <strong>maravilla geológica más grande del mundo</strong>: una
+              cueva tapizada de <em>cristales transparentes</em> que asombra a
+              visitantes de todo el planeta. Webs con <strong>reservas online y
+              multiidioma</strong> para la geoda, Terreros y el comercio local.
+            </p>
+
+            <div class="pu-hero__cta">
+              <a href="/contacto" class="pu-btn pu-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#reservas" class="pu-btn pu-btn--ghost">
+                Reservas online ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="pu-kpis">
+              <li class="pu-kpi pu-kpi--violet">
+                <span class="pu-kpi__v text-mono">8<small>m</small></span>
+                <span class="pu-kpi__l">La geoda</span>
+              </li>
+              <li class="pu-kpi pu-kpi--cyan">
+                <span class="pu-kpi__v text-mono">2<small>m</small></span>
+                <span class="pu-kpi__l">Cristales</span>
+              </li>
+              <li class="pu-kpi pu-kpi--amber">
+                <span class="pu-kpi__v text-mono">1.ª</span>
+                <span class="pu-kpi__l">Del mundo</span>
+              </li>
+              <li class="pu-kpi pu-kpi--ink">
+                <span class="pu-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="pu-kpi__l">39 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — geoda de cristal SVG */}
+          <aside class="pu-hero__postcard" aria-hidden="true">
+            <div class="pu-postcard">
+
+              <header class="pu-postcard__head">
+                <span class="text-mono">PULPÍ · 04640 · GEODA GIGANTE</span>
+                <span class="text-mono">37.394° N · 1.751° W</span>
+              </header>
+
+              {/* Geoda — cavidad de cristales SVG */}
+              <div class="pu-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 240" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <radialGradient id="pu-cave" cx="50%" cy="50%" r="62%">
+                      <stop offset="0%" stop-color="#3A2C66"/>
+                      <stop offset="60%" stop-color="#241C49"/>
+                      <stop offset="100%" stop-color="#161031"/>
+                    </radialGradient>
+                    <radialGradient id="pu-halo" cx="50%" cy="48%" r="40%">
+                      <stop offset="0%" stop-color="#B79BE8" stop-opacity="0.55"/>
+                      <stop offset="100%" stop-color="#B79BE8" stop-opacity="0"/>
+                    </radialGradient>
+                    <linearGradient id="ph-cz0" x1="0" y1="1" x2="0" y2="0">
+                      <stop offset="0%" stop-color="#5B3E94"/><stop offset="60%" stop-color="#B79BE8"/><stop offset="100%" stop-color="#F3ECFB"/>
+                    </linearGradient>
+                    <linearGradient id="ph-cz1" x1="0" y1="1" x2="0" y2="0">
+                      <stop offset="0%" stop-color="#2C6E84"/><stop offset="60%" stop-color="#5FC6D6"/><stop offset="100%" stop-color="#E6FAFD"/>
+                    </linearGradient>
+                    <linearGradient id="ph-cz2" x1="0" y1="1" x2="0" y2="0">
+                      <stop offset="0%" stop-color="#6E4E9E"/><stop offset="55%" stop-color="#8FB6E8"/><stop offset="100%" stop-color="#F0F5FE"/>
+                    </linearGradient>
+                    <linearGradient id="ph-cz3" x1="0" y1="1" x2="0" y2="0">
+                      <stop offset="0%" stop-color="#9A6E2E"/><stop offset="60%" stop-color="#E0A33E"/><stop offset="100%" stop-color="#FBF1D8"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Fondo cueva */}
+                  <rect width="540" height="240" fill="url(#pu-cave)"/>
+                  {/* Roca exterior textura */}
+                  <g stroke="#0F0A22" stroke-width="2" opacity="0.5" fill="none">
+                    <path d="M 0 40 Q 70 20 140 44 M 400 30 Q 470 14 540 40"/>
+                    <path d="M 0 210 Q 80 230 160 208 M 380 220 Q 460 236 540 210"/>
+                  </g>
+
+                  {/* Cavidad de la geoda */}
+                  <g transform="translate(270, 120)">
+                    {/* Halo */}
+                    <ellipse cx="0" cy="0" rx="190" ry="120" fill="url(#pu-halo)"/>
+                    {/* Pared interior de la cavidad */}
+                    <ellipse cx="0" cy="0" rx="158" ry="74" fill="#1B1438" stroke="#4E2E70" stroke-width="3"/>
+                    {/* Cristales en anillo */}
+                    {geodeHero.map((c) => (
+                      <g transform={`translate(${c.bx}, ${c.by}) rotate(${c.deg})`}>
+                        <path d={c.path} fill={`url(#${c.grad})`} stroke="#2A1C4A" stroke-width="1"/>
+                        <path d={c.facet} stroke="#FFFFFF" stroke-width="0.7" opacity="0.45"/>
+                      </g>
+                    ))}
+                    {/* Cristales centrales grandes */}
+                    <g transform="translate(-18, 6) rotate(8)">
+                      <path d="M -13 0 L -8 -40 L 0 -56 L 8 -40 L 13 0 Z" fill="url(#ph-cz0)" stroke="#2A1C4A" stroke-width="1.2"/>
+                      <path d="M 0 0 L 0 -56" stroke="#FFFFFF" stroke-width="0.8" opacity="0.5"/>
+                    </g>
+                    <g transform="translate(22, 2) rotate(-12)">
+                      <path d="M -11 0 L -7 -34 L 0 -48 L 7 -34 L 11 0 Z" fill="url(#ph-cz1)" stroke="#2A1C4A" stroke-width="1.2"/>
+                      <path d="M 0 0 L 0 -48" stroke="#FFFFFF" stroke-width="0.8" opacity="0.5"/>
+                    </g>
+                    {/* Persona a escala (linterna) */}
+                    <g transform="translate(2, 50)">
+                      <circle cx="0" cy="-12" r="3.4" fill="#14111F" stroke="#7B4FA3" stroke-width="1"/>
+                      <path d="M -4 0 L -3 -9 Q 0 -11 3 -9 L 4 0 Z" fill="#14111F" stroke="#7B4FA3" stroke-width="1"/>
+                      <line x1="-4" y1="-6" x2="-9" y2="-3" stroke="#14111F" stroke-width="1.5"/>
+                      <circle cx="-11" cy="-2" r="3" fill="#E0A33E"/>
+                      <circle cx="-11" cy="-2" r="6" fill="#E0A33E" opacity="0.3"/>
+                    </g>
+                    {/* Destellos */}
+                    {sparkles.slice(0, 6).map((s) => (
+                      <g transform={`translate(${s.x}, ${s.y})`}>
+                        <path d={`M 0 ${-s.r} L ${s.r*0.32} ${-s.r*0.32} L ${s.r} 0 L ${s.r*0.32} ${s.r*0.32} L 0 ${s.r} L ${-s.r*0.32} ${s.r*0.32} L ${-s.r} 0 L ${-s.r*0.32} ${-s.r*0.32} Z`} fill="#FFFFFF" opacity="0.85"/>
+                      </g>
+                    ))}
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="pu-postcard__img-wrap">
+                <img
+                  src="/imagenes/hero.jpg"
+                  alt="Pulpí - Geoda Gigante y San Juan de los Terreros"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="pu-postcard__img"
+                />
+                {/* Sello maravilla */}
+                <div class="pu-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="pu-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#4E2E70"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F3ECFB" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="pu-spin">
+                      <text font-family="monospace" font-size="6" font-weight="bold" fill="#F3ECFB" letter-spacing="2.2">
+                        <textPath href="#pu-seal-arc" startOffset="0%">★ GEODA GIGANTE · WONDER · 1999 ★</textPath>
+                      </text>
+                    </g>
+                    {/* Cristal dentro */}
+                    <g transform="translate(40, 42)">
+                      <path d="M -8 12 L -5 -14 L 0 -22 L 5 -14 L 8 12 Z" fill="#C7AEEC" stroke="#F3ECFB" stroke-width="1.5"/>
+                      <path d="M 0 12 L 0 -22 M -5 -14 L 5 -14" stroke="#F3ECFB" stroke-width="1" opacity="0.7"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="pu-postcard__tag">
+                  <span class="text-mono">★ ÚNICA EN EL MUNDO ★</span>
+                </div>
+              </div>
+
+              {/* Datos */}
+              <div class="pu-postcard__data">
+                <div class="pu-postcard__data-row">
+                  <span class="text-mono">ALTITUD</span>
+                  <span class="text-mono pu-postcard__data-v">87 m s.n.m.</span>
+                </div>
+                <div class="pu-postcard__data-row">
+                  <span class="text-mono">DENTRO</span>
+                  <span class="text-mono pu-postcard__data-v">~22 °C todo el año</span>
+                </div>
+                <div class="pu-postcard__data-row">
+                  <span class="text-mono">COSTA</span>
+                  <span class="text-mono pu-postcard__data-v">San Juan de los Terreros</span>
+                </div>
+                <div class="pu-postcard__data-row">
+                  <span class="text-mono">DIST. SEDE</span>
+                  <span class="text-mono pu-postcard__data-v">35 min · Vera</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="pu-marquee">
+        <div class="pu-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ GEODA GIGANTE · GIANT GEODE ★ RESERVAS ONLINE ★ SAN JUAN DE LOS TERREROS ★ TURISMO INTERNACIONAL ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* LA GEODA GIGANTE — flagship                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-geode-section">
+      <div class="container-brutal">
+        <div class="pu-geode-grid">
+
+          <div class="pu-geode-l">
+            <span class="text-meta pu-geode-chapter">Cap. 02 / La maravilla</span>
+            <h2 class="pu-geode-title heading-display">
+              La Geoda
+              <em class="heading-editorial">Gigante.</em>
+            </h2>
+            <p class="pu-geode-lead">
+              En lo profundo de la <strong>Mina Rica</strong>, una burbuja de
+              roca de <strong>ocho metros</strong> está completamente tapizada
+              de <em>cristales de yeso transparentes</em> de hasta dos metros.
+              Es la <strong>geoda más grande del mundo que se puede visitar</strong>
+              — una rareza geológica que asombra al planeta entero.
+            </p>
+
+            <div class="pu-geode-facts">
+              {[
+                { k: 'TAMAÑO', v: 'Cavidad de ~8 metros de largo' },
+                { k: 'CRISTALES', v: 'Yeso selenita transparente hasta 2 m' },
+                { k: 'PUREZA', v: 'Cristales casi perfectos y diáfanos' },
+                { k: 'DESCUBIERTA', v: '1999 · Mina Rica, Sierra del Aguilón' },
+                { k: 'VISITA', v: 'Guiada, con cita previa y aforo limitado' },
+                { k: 'RÉCORD', v: 'La mayor geoda visitable del mundo' },
+              ].map(f => (
+                <div class="pu-geode-fact">
+                  <span class="text-mono pu-geode-fact__k">{f.k}</span>
+                  <span class="pu-geode-fact__v">{f.v}</span>
+                </div>
+              ))}
+            </div>
+
+            <p class="pu-geode-note">
+              <strong>★ El mundo quiere verla.</strong> Cuando alguien busca
+              "Geoda de Pulpí" o "Giant Geode tour", tu web debe ser la que
+              aparece y la que le deja reservar. Te ayudamos a ser esa web.
+            </p>
+          </div>
+
+          {/* Geoda grande SVG */}
+          <aside class="pu-geode-r" aria-hidden="true">
+            <svg viewBox="0 0 300 360" width="100%" height="100%">
+              <defs>
+                <radialGradient id="pu-cave-big" cx="50%" cy="48%" r="62%">
+                  <stop offset="0%" stop-color="#3E2E6E"/>
+                  <stop offset="60%" stop-color="#241C49"/>
+                  <stop offset="100%" stop-color="#140E2C"/>
+                </radialGradient>
+                <radialGradient id="pu-halo-big" cx="50%" cy="46%" r="44%">
+                  <stop offset="0%" stop-color="#C0A6F0" stop-opacity="0.6"/>
+                  <stop offset="100%" stop-color="#C0A6F0" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="pb-cz0" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#5B3E94"/><stop offset="60%" stop-color="#B79BE8"/><stop offset="100%" stop-color="#F3ECFB"/>
+                </linearGradient>
+                <linearGradient id="pb-cz1" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#2C6E84"/><stop offset="60%" stop-color="#5FC6D6"/><stop offset="100%" stop-color="#E6FAFD"/>
+                </linearGradient>
+                <linearGradient id="pb-cz2" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#6E4E9E"/><stop offset="55%" stop-color="#8FB6E8"/><stop offset="100%" stop-color="#F0F5FE"/>
+                </linearGradient>
+                <linearGradient id="pb-cz3" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stop-color="#9A6E2E"/><stop offset="60%" stop-color="#E0A33E"/><stop offset="100%" stop-color="#FBF1D8"/>
+                </linearGradient>
+              </defs>
+
+              <rect width="300" height="360" fill="url(#pu-cave-big)"/>
+              {/* Roca / galería exterior */}
+              <g stroke="#0F0A22" stroke-width="2.5" opacity="0.55" fill="none">
+                <path d="M 0 50 Q 60 28 120 52 M 180 40 Q 240 22 300 50"/>
+                <path d="M 0 320 Q 70 342 150 318 Q 230 342 300 320"/>
+              </g>
+
+              <g transform="translate(150, 178)">
+                {/* Halo */}
+                <ellipse cx="0" cy="0" rx="150" ry="170" fill="url(#pu-halo-big)"/>
+                {/* Cavidad */}
+                <ellipse cx="0" cy="0" rx="124" ry="156" fill="#170F35" stroke="#4E2E70" stroke-width="3.5"/>
+                {/* Anillo de cristales */}
+                {geodeBig.map((c) => (
+                  <g transform={`translate(${c.bx}, ${c.by}) rotate(${c.deg})`}>
+                    <path d={c.path} fill={`url(#${c.grad})`} stroke="#2A1C4A" stroke-width="1.1"/>
+                    <path d={c.facet} stroke="#FFFFFF" stroke-width="0.8" opacity="0.45"/>
+                  </g>
+                ))}
+                {/* Cristales centrales protagonistas */}
+                <g transform="translate(-26, 20) rotate(10)">
+                  <path d="M -18 0 L -11 -64 L 0 -90 L 11 -64 L 18 0 Z" fill="url(#pb-cz0)" stroke="#2A1C4A" stroke-width="1.5"/>
+                  <path d="M 0 0 L 0 -90 M -11 -64 L 11 -64" stroke="#FFFFFF" stroke-width="1" opacity="0.5"/>
+                </g>
+                <g transform="translate(28, 28) rotate(-12)">
+                  <path d="M -15 0 L -9 -52 L 0 -74 L 9 -52 L 15 0 Z" fill="url(#pb-cz1)" stroke="#2A1C4A" stroke-width="1.5"/>
+                  <path d="M 0 0 L 0 -74 M -9 -52 L 9 -52" stroke="#FFFFFF" stroke-width="1" opacity="0.5"/>
+                </g>
+                <g transform="translate(4, 8) rotate(-2)">
+                  <path d="M -12 0 L -7 -44 L 0 -62 L 7 -44 L 12 0 Z" fill="url(#pb-cz2)" stroke="#2A1C4A" stroke-width="1.4"/>
+                  <path d="M 0 0 L 0 -62" stroke="#FFFFFF" stroke-width="1" opacity="0.5"/>
+                </g>
+                {/* Persona a escala con linterna */}
+                <g transform="translate(0, 116)">
+                  <circle cx="0" cy="-22" r="6" fill="#14111F" stroke="#7B4FA3" stroke-width="1.5"/>
+                  <path d="M -7 0 L -5 -16 Q 0 -20 5 -16 L 7 0 Z" fill="#14111F" stroke="#7B4FA3" stroke-width="1.5"/>
+                  <line x1="-7" y1="-11" x2="-17" y2="-5" stroke="#14111F" stroke-width="2.5"/>
+                  <circle cx="-20" cy="-3" r="5" fill="#E0A33E"/>
+                  <circle cx="-20" cy="-3" r="11" fill="#E0A33E" opacity="0.28"/>
+                  <text x="14" y="-6" font-family="monospace" font-size="8" font-weight="bold" fill="#C7AEEC">2 m →</text>
+                </g>
+                {/* Destellos */}
+                {sparkles.map((s) => (
+                  <g transform={`translate(${s.x}, ${s.y})`} class="pu-sparkle">
+                    <path d={`M 0 ${-s.r} L ${s.r*0.32} ${-s.r*0.32} L ${s.r} 0 L ${s.r*0.32} ${s.r*0.32} L 0 ${s.r} L ${-s.r*0.32} ${s.r*0.32} L ${-s.r} 0 L ${-s.r*0.32} ${-s.r*0.32} Z`} fill="#FFFFFF" opacity="0.9"/>
+                  </g>
+                ))}
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* 3 ICONOS                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-iconos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--pu-cyan)">Cap. 03 / Tres maravillas</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cristal, castillo
+              <em class="heading-editorial">y mar.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            La geoda bajo tierra, el castillo sobre el mar y los islotes
+            volcánicos. <strong>Tres motivos</strong> para venir a Pulpí — y
+            para que tu web los aproveche todos.
+          </p>
+        </header>
+
+        <ol class="pu-iconos">
+          {iconos.map((i) => (
+            <li class={`pu-icono pu-icono--${i.color}`}>
+              <div class="pu-icono__code">{i.code}</div>
+
+              <div class="pu-icono__svg" aria-hidden="true">
+                {i.color === 'violet' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs>
+                      <linearGradient id="pu-ic-c1" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="#5B3E94"/><stop offset="100%" stop-color="#E6DBFA"/>
+                      </linearGradient>
+                      <linearGradient id="pu-ic-c2" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stop-color="#3F86A0"/><stop offset="100%" stop-color="#DBF6FB"/>
+                      </linearGradient>
+                    </defs>
+                    {/* Geoda: cluster de cristales */}
+                    <ellipse cx="50" cy="58" rx="40" ry="30" fill="#1B1438" stroke="#1A1410" stroke-width="2.5"/>
+                    <path d="M 34 70 L 30 36 L 40 22 L 48 38 L 44 70 Z" fill="url(#pu-ic-c1)" stroke="#2A1C4A" stroke-width="1.5"/>
+                    <path d="M 48 72 L 46 44 L 54 30 L 60 46 L 58 72 Z" fill="url(#pu-ic-c2)" stroke="#2A1C4A" stroke-width="1.5"/>
+                    <path d="M 60 70 L 60 48 L 68 36 L 74 50 L 70 70 Z" fill="url(#pu-ic-c1)" stroke="#2A1C4A" stroke-width="1.5"/>
+                    {/* Destellos */}
+                    <path d="M 40 22 L 41.5 26 L 45 27.5 L 41.5 29 L 40 33 L 38.5 29 L 35 27.5 L 38.5 26 Z" fill="#FFFFFF"/>
+                    <path d="M 78 40 L 79 43 L 82 44 L 79 45 L 78 48 L 77 45 L 74 44 L 77 43 Z" fill="#FFFFFF"/>
+                  </svg>
+                )}
+                {i.color === 'cyan' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Castillo redondo sobre el mar */}
+                    <path d="M 0 72 Q 25 66 50 72 T 100 72 L 100 100 L 0 100 Z" fill="currentColor" stroke="#1A1410" stroke-width="2"/>
+                    <path d="M 0 80 Q 25 75 50 80 T 100 80" fill="none" stroke="#E6FAFD" stroke-width="1.3" opacity="0.6"/>
+                    {/* Promontorio */}
+                    <path d="M 28 72 Q 50 64 72 72 L 70 56 Q 50 50 30 56 Z" fill="#9A7B58" stroke="#1A1410" stroke-width="2"/>
+                    {/* Torre circular */}
+                    <path d="M 38 56 L 40 26 Q 50 22 60 26 L 62 56 Z" fill="#C9A24B" stroke="#1A1410" stroke-width="2.5"/>
+                    <path d="M 38 28 L 40 22 L 44 22 L 44 26 L 50 26 L 50 22 L 54 22 L 54 26 L 60 26 L 60 22 L 62 28" fill="#C9A24B" stroke="#1A1410" stroke-width="2"/>
+                    <rect x="46" y="38" width="8" height="12" fill="#1A1410"/>
+                    {/* Bandera */}
+                    <line x1="50" y1="22" x2="50" y2="12" stroke="#1A1410" stroke-width="1.5"/>
+                    <path d="M 50 12 L 62 15 L 50 18 Z" fill="#7B4FA3" stroke="#1A1410" stroke-width="1"/>
+                  </svg>
+                )}
+                {i.color === 'amber' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Islas volcánicas en mar cristalino */}
+                    <path d="M 0 64 Q 25 58 50 64 T 100 64 L 100 100 L 0 100 Z" fill="#36B0C4" stroke="#1A1410" stroke-width="2"/>
+                    <path d="M 0 74 Q 25 69 50 74 T 100 74" fill="none" stroke="#E6FAFD" stroke-width="1.2" opacity="0.6"/>
+                    {/* Isla grande */}
+                    <path d="M 18 64 Q 30 36 44 44 Q 54 32 64 64 Z" fill="currentColor" stroke="#1A1410" stroke-width="2.5"/>
+                    <path d="M 34 46 L 40 40 L 46 47" fill="none" stroke="#8E6E26" stroke-width="1.5"/>
+                    {/* Isla pequeña */}
+                    <path d="M 70 64 Q 78 50 86 64 Z" fill="currentColor" stroke="#1A1410" stroke-width="2.5" opacity="0.85"/>
+                    {/* Sol */}
+                    <circle cx="80" cy="26" r="10" fill="#E0A33E" stroke="#1A1410" stroke-width="2"/>
+                    <g fill="#E6FAFD"><circle cx="30" cy="84" r="1.5"/><circle cx="60" cy="88" r="1.5"/></g>
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="pu-icono__name heading-display">{i.name}</h3>
+              <span class="text-mono pu-icono__sub">{i.sub}</span>
+              <p class="pu-icono__desc">{i.desc}</p>
+              <footer class="pu-icono__foot">
+                <span class="text-mono pu-icono__dato">★ {i.dato}</span>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* RESERVAS — flagship                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-res-section" id="reservas">
+      <div class="container-brutal">
+        <header class="pu-res-head">
+          <span class="text-meta pu-res-chapter">Cap. 04 / Plazas limitadas</span>
+          <h2 class="pu-res-title heading-display">
+            La geoda se llena.
+            <em class="heading-editorial">Que reserven en tu web.</em>
+          </h2>
+          <p class="pu-res-lead">
+            La visita es <strong>guiada, con aforo limitado y cita previa</strong>.
+            El turista que no puede reservar online se va a otra cosa. Una web con
+            <em>motor de reservas en inglés y español</em> vende entradas
+            <strong>24 horas, desde cualquier país</strong>.
+          </p>
+        </header>
+
+        <div class="pu-res-grid">
+          {/* Pasos */}
+          <ol class="pu-res-steps">
+            {reservaPasos.map((s) => (
+              <li class="pu-res-step">
+                <span class="text-mono pu-res-step__n">{s.n}</span>
+                <div>
+                  <h3 class="pu-res-step__t heading-display">{s.t}</h3>
+                  <p class="pu-res-step__d">{s.d}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          {/* Mock de widget de reservas */}
+          <aside class="pu-res-mock" aria-hidden="true">
+            <div class="pu-ticket">
+              <div class="pu-ticket__bar">
+                <span class="text-mono">◆ RESERVA · GEODA</span>
+                <span class="text-mono pu-ticket__live"><span class="pu-dot"></span>LIVE</span>
+              </div>
+              <div class="pu-ticket__body">
+                <span class="pu-ticket__label text-mono">ELIGE DÍA · MAYO</span>
+                <div class="pu-cal">
+                  {Array.from({length: 14}).map((_, i) => {
+                    const day = 18 + i;
+                    const full = [0, 3, 4, 7].includes(i);
+                    const sel = i === 9;
+                    return (
+                      <span class={`pu-cal__d${full ? ' pu-cal__d--full' : ''}${sel ? ' pu-cal__d--sel' : ''}`}>{day}</span>
+                    );
+                  })}
+                </div>
+                <div class="pu-ticket__slots">
+                  <span class="pu-slot pu-slot--off">10:00 · COMPLETO</span>
+                  <span class="pu-slot pu-slot--on">12:30 · 4 plazas</span>
+                  <span class="pu-slot">17:00 · 9 plazas</span>
+                </div>
+                <div class="pu-ticket__row">
+                  <div class="pu-ticket__lang">
+                    <span class="pu-ticket__flag" aria-hidden="true">
+                      <svg viewBox="0 0 60 40" width="100%" height="100%">
+                        <rect width="60" height="40" fill="#012169"/>
+                        <path d="M0 0L60 40M60 0L0 40" stroke="#FFFFFF" stroke-width="6"/>
+                        <path d="M0 0L60 40M60 0L0 40" stroke="#C8102E" stroke-width="3"/>
+                        <path d="M30 0V40M0 20H60" stroke="#FFFFFF" stroke-width="10"/>
+                        <path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="5"/>
+                      </svg>
+                    </span>
+                    <span class="text-mono">EN · ES</span>
+                  </div>
+                  <span class="pu-ticket__price text-mono">€ PAGO ONLINE</span>
+                </div>
+                <div class="pu-ticket__cta">RESERVAR · BOOK NOW →</div>
+              </div>
+            </div>
+            <p class="pu-res-mock__note text-mono">★ ASÍ DE FÁCIL PARA TU CLIENTE</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--pu-amber)">Cap. 05 / Cifras</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--pu-paper)">
+              Por qué Pulpí
+              <em class="heading-editorial" style="color:var(--pu-amber)">brilla.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(243,236,251,0.75)">
+            Datos que explican por qué Pulpí tiene un <strong>imán turístico
+            único en el mundo</strong> y una costa tranquila con muchísimo
+            potencial digital sin explotar.
+          </p>
+        </header>
+
+        <ul class="pu-hitos">
+          {hitos.map((h, i) => (
+            <li class={`pu-hito pu-hito--${i}`}>
+              <span class="text-mono pu-hito__k">{h.k}</span>
+              <span class="pu-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Sectores Pulpí</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">viven del cristal y el mar.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con estrategia digital propia. Del tour de la geoda
+            al apartamento de Terreros, pasando por el comercio de frontera y
+            el campo.
+          </p>
+        </header>
+
+        <ol class="pu-sec">
+          {sectores.map((s, i) => {
+            const colors = ['violet', 'cyan', 'amber', 'rose', 'green', 'indigo'];
+            return (
+              <li class={`pu-sec__card pu-sec__card--${colors[i]}`}>
+                <header class="pu-sec__head">
+                  <span class="text-mono pu-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="pu-sec__stat-box">
+                    <span class="pu-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="pu-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="pu-sec__title heading-display">{s.nombre}</h3>
+                <p class="pu-sec__desc">{s.desc}</p>
+                <ul class="pu-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="pu-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="pu-sec__foot">
+                  <a href="/contacto" class="pu-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-map-section">
+      <header class="pu-map-head">
+        <div class="container-brutal pu-map-head__inner">
+          <div>
+            <span class="text-meta pu-map-chapter">Cap. 07 / Cartografía</span>
+            <h2 class="heading-display pu-map-title">
+              El pueblo
+              <em class="heading-editorial">y su costa.</em>
+            </h2>
+          </div>
+          <div class="pu-map-coords">
+            <span class="text-mono">37.394° N · 1.751° W</span>
+            <span class="text-mono">87m · FRONTERA CON MURCIA</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="pu-map-frame">
+        <div class="pu-map-wrap">
+          <InteractiveMap
+            center={[-1.7508, 37.3936]}
+            zoom={13}
+            pitch={50}
+            bearing={-12}
+            label="Pulpí"
+            themeColor="#7B4FA3"
+            themeColorDark="#4E2E70"
+            townInitial="P"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Por qué Pulpí</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para invertir en tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Imán único + reservas online + turismo internacional + doble
+            destino. Pulpí tiene una de las oportunidades digitales más claras
+            de toda Almería.
+          </p>
+        </header>
+
+        <ol class="pu-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`pu-dif__item pu-dif__item--${i}`}>
+              <span class="text-mono pu-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display pu-dif__t">{d.title}</h3>
+              <p class="pu-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--pu-amber)">Cap. 09 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--pu-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--pu-cyan)">a tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(243,236,251,0.75)">
+            Conocemos tu proyecto. Diseño con magia. Desarrollo con reservas y
+            multiidioma. Lanzamiento y SEO global para la geoda y Terreros.
+          </p>
+        </header>
+
+        <ol class="pu-proc">
+          {proceso.map((s) => (
+            <li class="pu-proc__step">
+              <header class="pu-proc__head">
+                <span class="text-mono pu-proc__num">{s.num}</span>
+                <span class="text-mono pu-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display pu-proc__t">{s.title}</h3>
+              <p class="pu-proc__body">{s.body}</p>
+              <footer class="pu-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Voces de Pulpí</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Pulpí
+              <em class="heading-editorial">que ya reservan online.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="pu-pull">
+          <div class="pu-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="pu-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#4E2E70" stroke="#14111F" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#F3ECFB" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="pu-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#F3ECFB" letter-spacing="2.5"><textPath href="#pu-pull-c" startOffset="0%">★ PULPÍ · 2026 · GEODA ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#F3ECFB">"</text>
+            </svg>
+          </div>
+          <blockquote class="pu-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="pu-pull__cap">
+            <span class="pu-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="pu-pull__name">{testimonios[0].nombre}</span>
+              <span class="pu-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="pu-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`pu-quote pu-quote--${i}`}>
+              <span class="pu-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="pu-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="pu-quote__name">{t.nombre}</span>
+                  <span class="pu-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">preguntan en Pulpí.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Reservas, multiidioma, Terreros, actividades, agro, plazos y
+            precios. Si no está aquí, escríbenos.
+          </p>
+        </header>
+
+        <ol class="pu-faq">
+          {faqs.map((f, i) => (
+            <li class="pu-faq__item">
+              <details class="pu-faq__det" open={i === 0}>
+                <summary class="pu-faq__sum">
+                  <span class="text-mono pu-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="pu-faq__q">{f.q}</span>
+                  <span class="pu-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="pu-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosLevante.length > 0 && (
+      <section class="pu-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 12 / Levante Almeriense</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en todo
+                <em class="heading-editorial">el Levante.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del Levante almeriense donde trabajamos. De la
+              frontera de Murcia a la costa del Cabo, cobertura completa.
+            </p>
+          </header>
+
+          <ul class="pu-vecinos">
+            {pueblosLevante.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`pu-vecino pu-vecino--${i % 4}`}>
+                  <span class="text-mono pu-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="pu-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono pu-vecino__sub">{p.comarca}</span>
+                  <span class="pu-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pu-final">
+      <div class="container-brutal">
+        <div class="pu-final__grid">
+
+          <div class="pu-final__l">
+            <span class="text-meta pu-final__chapter">★ Cap. 13 · Próximo paso</span>
+            <h2 class="heading-display pu-final__title">
+              ¿Hacemos brillar tu negocio
+              <em class="heading-editorial">en internet?</em>
+            </h2>
+            <p class="pu-final__lead">
+              Tu empresa de visitas, alojamiento, restaurante o comercio de
+              Pulpí con <strong>web con reservas online</strong>, multiidioma
+              inglés, SEO para la geoda y Terreros y todo el <strong>imán de la
+              maravilla más grande del mundo</strong> trabajando para ti.
+            </p>
+            <div class="pu-final__cta">
+              <a href="/contacto" class="pu-final__btn pu-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="pu-final__btn pu-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="pu-final__trust">
+              <span><span class="pu-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ RESERVAS ONLINE</span>
+              <span>★ MULTIIDIOMA EN</span>
+              <span>4.9★ · 39 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* Cristal gigante animado */}
+          <div class="pu-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="pu-final-svg">
+              <defs>
+                <radialGradient id="pu-final-glow" cx="50%" cy="45%" r="55%">
+                  <stop offset="0%" stop-color="#B79BE8" stop-opacity="0.55"/>
+                  <stop offset="100%" stop-color="#B79BE8" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="pu-final-c0" x1="0" y1="1" x2="0.2" y2="0">
+                  <stop offset="0%" stop-color="#4E2E70"/><stop offset="55%" stop-color="#9B7BD4"/><stop offset="100%" stop-color="#F3ECFB"/>
+                </linearGradient>
+                <linearGradient id="pu-final-c1" x1="0" y1="1" x2="0.2" y2="0">
+                  <stop offset="0%" stop-color="#2C6E84"/><stop offset="55%" stop-color="#5FC6D6"/><stop offset="100%" stop-color="#E6FAFD"/>
+                </linearGradient>
+                <linearGradient id="pu-final-c2" x1="0" y1="1" x2="0.2" y2="0">
+                  <stop offset="0%" stop-color="#9A6E2E"/><stop offset="60%" stop-color="#E0A33E"/><stop offset="100%" stop-color="#FBF1D8"/>
+                </linearGradient>
+              </defs>
+              <circle cx="160" cy="150" r="150" fill="url(#pu-final-glow)"/>
+
+              {/* Cluster de cristales gigantes desde una base de roca */}
+              <ellipse cx="160" cy="270" rx="110" ry="26" fill="#1B1438" stroke="#F3ECFB" stroke-width="2.5"/>
+
+              {/* Cristal central grande */}
+              <g class="pu-float">
+                <path d="M 130 270 L 138 120 L 160 70 L 182 120 L 190 270 Z" fill="url(#pu-final-c0)" stroke="#14111F" stroke-width="3"/>
+                <path d="M 160 270 L 160 70 M 138 120 L 182 120" stroke="#FFFFFF" stroke-width="1.2" opacity="0.5"/>
+              </g>
+              {/* Cristal izquierdo */}
+              <g class="pu-float pu-float--b">
+                <path d="M 92 272 L 100 168 L 116 124 L 132 170 L 138 272 Z" fill="url(#pu-final-c1)" stroke="#14111F" stroke-width="3"/>
+                <path d="M 116 272 L 116 124" stroke="#FFFFFF" stroke-width="1.2" opacity="0.5"/>
+              </g>
+              {/* Cristal derecho */}
+              <g class="pu-float pu-float--c">
+                <path d="M 184 272 L 192 156 L 210 110 L 228 158 L 234 272 Z" fill="url(#pu-final-c2)" stroke="#14111F" stroke-width="3"/>
+                <path d="M 210 272 L 210 110" stroke="#FFFFFF" stroke-width="1.2" opacity="0.5"/>
+              </g>
+              {/* Cristal pequeño frontal */}
+              <g class="pu-float pu-float--b">
+                <path d="M 146 274 L 152 214 L 162 188 L 172 214 L 178 274 Z" fill="url(#pu-final-c0)" stroke="#14111F" stroke-width="2.5" opacity="0.95"/>
+              </g>
+
+              {/* Destellos */}
+              {[
+                { x: 160, y: 80, r: 8 }, { x: 110, y: 130, r: 5 }, { x: 214, y: 120, r: 6 },
+                { x: 70, y: 180, r: 4 }, { x: 250, y: 190, r: 5 }, { x: 160, y: 230, r: 4 },
+              ].map((s) => (
+                <g transform={`translate(${s.x}, ${s.y})`} class="pu-sparkle">
+                  <path d={`M 0 ${-s.r} L ${s.r*0.3} ${-s.r*0.3} L ${s.r} 0 L ${s.r*0.3} ${s.r*0.3} L 0 ${s.r} L ${-s.r*0.3} ${s.r*0.3} L ${-s.r} 0 L ${-s.r*0.3} ${-s.r*0.3} Z`} fill="#FFFFFF"/>
+                </g>
+              ))}
+
+              {/* Texto */}
+              <text x="160" y="306" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#F3ECFB" letter-spacing="3">★ GEODA GIGANTE · PULPÍ ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="pu-final__marquee">
+        <div class="pu-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ GEODA GIGANTE ★ RESERVAS ONLINE ★ MULTIIDIOMA ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ══════════════════════════════════════════════════════
+     PALETA · PULPÍ · GEODA GIGANTE · CRISTAL MÁGICO
+     ══════════════════════════════════════════════════════ */
+  .pu {
+    --pu-paper:    #F3EEF9;       /* Lila cristal muy pálido */
+    --pu-paper-2:  #E9E1F2;
+    --pu-arena:    #DED2EC;
+    --pu-ink:      #14111F;       /* Índigo casi negro */
+    --pu-violet:   #7B4FA3;       /* Amatista (PRIMARY) */
+    --pu-violet-d: #4E2E70;
+    --pu-indigo:   #211A45;       /* Noche de mina */
+    --pu-cyan:     #36B0C4;       /* Hielo cristal */
+    --pu-amber:    #E0A33E;       /* Ámbar yeso / linterna */
+    --pu-rose:     #DD7AA6;       /* Rosa cuarzo */
+    --pu-green:    #4FA38C;       /* Campo de Pulpí */
+    --pu-shadow:   8px 8px 0 var(--pu-ink);
+  }
+  .pu-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--pu-violet);
+    box-shadow: 0 0 0 0 rgba(123,79,163,0.55);
+    animation: pu-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes pu-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(123,79,163,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(123,79,163,0); }
+    100% { box-shadow: 0 0 0 0 rgba(123,79,163,0); }
+  }
+  .pu-spin { transform-origin: 50% 50%; animation: pu-spin 30s linear infinite; }
+  @keyframes pu-spin { to { transform: rotate(360deg); } }
+  .pu-sparkle { animation: pu-twinkle 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .pu-sparkle:nth-child(even) { animation-delay: -1.2s; }
+  @keyframes pu-twinkle { 0%, 100% { opacity: .35; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.15); } }
+
+  /* HERO */
+  .pu-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 18%, rgba(123,79,163,0.14), transparent 50%),
+      radial-gradient(circle at 12% 82%, rgba(54,176,196,0.12), transparent 50%),
+      var(--pu-paper);
+    border-bottom: 3px solid var(--pu-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .pu-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(120deg, transparent 0 38px, rgba(123,79,163,0.045) 38px 39px);
+    pointer-events: none;
+  }
+  .pu-hero > * { position: relative; }
+  .pu-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .pu-hero__status { color: var(--pu-violet); font-weight: 700; }
+  .pu-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .pu-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .pu-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .pu-hero__chapter { color: var(--pu-violet); }
+  .pu-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .pu-hero__title em { color: var(--pu-violet); font-style: italic; }
+  .pu-hero__title-stamp {
+    display: inline-block;
+    color: var(--pu-paper);
+    background: var(--pu-cyan);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .pu-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .pu-hero__lead strong { color: var(--pu-ink); font-weight: 700; }
+  .pu-hero__lead em { color: var(--pu-violet); font-style: italic; font-weight: 600; }
+  .pu-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .pu-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--pu-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .pu-btn--primary { background: var(--pu-violet); color: var(--pu-paper); box-shadow: 6px 6px 0 var(--pu-ink); }
+  .pu-btn--primary:hover { background: var(--pu-cyan); color: var(--pu-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pu-ink); }
+  .pu-btn--ghost { background: transparent; color: var(--pu-ink); box-shadow: 6px 6px 0 var(--pu-cyan); }
+  .pu-btn--ghost:hover { background: var(--pu-ink); color: var(--pu-cyan); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pu-cyan); }
+
+  /* KPIs */
+  .pu-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--pu-ink);
+    background: var(--pu-ink);
+  }
+  @media (min-width: 768px) { .pu-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .pu-kpi {
+    background: var(--pu-paper); padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--pu-ink); border-bottom: 2px solid var(--pu-ink);
+  }
+  .pu-kpi:nth-child(2n) { border-right: none; }
+  .pu-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .pu-kpi:nth-child(2n)      { border-right: 2px solid var(--pu-ink); }
+    .pu-kpi:nth-child(4n)      { border-right: none; }
+    .pu-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--pu-ink); }
+    .pu-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .pu-kpi--violet { background: var(--pu-violet); color: var(--pu-paper); }
+  .pu-kpi--cyan   { background: var(--pu-cyan); color: var(--pu-ink); }
+  .pu-kpi--amber  { background: var(--pu-amber); color: var(--pu-ink); }
+  .pu-kpi--ink    { background: var(--pu-ink); color: var(--pu-paper); }
+  .pu-kpi--ink .pu-kpi__v { color: var(--pu-cyan); }
+  .pu-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .pu-kpi__v small { font-size: .55em; opacity: .8; }
+  .pu-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .pu-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(20,17,31,0.28));
+  }
+  .pu-postcard {
+    background: var(--pu-paper);
+    border: 3px solid var(--pu-ink);
+    box-shadow: var(--pu-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .pu-postcard:hover { transform: rotate(0); }
+  .pu-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--pu-violet);
+    color: var(--pu-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--pu-ink);
+  }
+  .pu-postcard__profile {
+    width: 100%; aspect-ratio: 540 / 240;
+    border-bottom: 2px solid var(--pu-ink);
+    overflow: hidden;
+    background: #161031;
+  }
+  .pu-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--pu-ink); }
+  .pu-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.08); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .pu-postcard:hover .pu-postcard__img { transform: scale(1.05); }
+  .pu-postcard__seal { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(-9deg); filter: drop-shadow(0 4px 10px rgba(78,46,112,0.55)); }
+  .pu-postcard__tag {
+    position: absolute; bottom: 12px; left: 12px;
+    background: var(--pu-cyan); color: var(--pu-ink);
+    padding: .4rem .75rem;
+    font-size: .65rem; font-weight: 800; letter-spacing: .2em;
+    border: 2px solid var(--pu-ink);
+    box-shadow: 3px 3px 0 var(--pu-violet);
+    transform: rotate(-2deg);
+  }
+  .pu-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--pu-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .pu-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(20,17,31,0.18);
+    font-size: .68rem;
+  }
+  .pu-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .pu-postcard__data-row > span:first-child { color: var(--pu-violet-d); letter-spacing: .2em; font-weight: 800; }
+  .pu-postcard__data-v { color: var(--pu-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .pu-marquee {
+    background: var(--pu-violet); color: var(--pu-paper);
+    overflow: hidden; padding: .9rem 0;
+    border-top: 3px solid var(--pu-ink);
+  }
+  .pu-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: pu-marquee 40s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem; font-weight: 800;
+    letter-spacing: .15em; text-transform: uppercase;
+  }
+  @keyframes pu-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* GEODA SECTION */
+  .pu-geode-section {
+    background: var(--pu-indigo);
+    color: var(--pu-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--pu-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .pu-geode-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(183,155,232,0.1) 1.3px, transparent 1.3px);
+    background-size: 26px 26px;
+    pointer-events: none;
+  }
+  .pu-geode-section > * { position: relative; }
+  .pu-geode-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .pu-geode-grid { grid-template-columns: 1.2fr 1fr; gap: 4rem; } }
+  .pu-geode-chapter { color: var(--pu-cyan); }
+  .pu-geode-title { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: .9; letter-spacing: -.04em; margin: 1rem 0; color: var(--pu-paper); }
+  .pu-geode-title em { color: #C7AEEC; }
+  .pu-geode-lead { font-size: 1.05rem; line-height: 1.55; color: rgba(243,236,251,0.82); margin-bottom: 1.75rem; max-width: 56ch; }
+  .pu-geode-lead strong { color: var(--pu-paper); font-weight: 700; }
+  .pu-geode-lead em { color: var(--pu-cyan); font-style: italic; }
+  .pu-geode-facts { display: grid; grid-template-columns: 1fr; gap: 0; border: 2.5px solid var(--pu-paper); background: rgba(243,236,251,0.04); margin-bottom: 1.5rem; }
+  @media (min-width: 640px) { .pu-geode-facts { grid-template-columns: 1fr 1fr; } }
+  .pu-geode-fact { padding: .85rem 1rem; border-bottom: 1px solid rgba(243,236,251,0.25); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) {
+    .pu-geode-fact:nth-child(odd) { border-right: 1px solid rgba(243,236,251,0.25); }
+    .pu-geode-fact:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .pu-geode-fact:last-child { border-bottom: none; } }
+  .pu-geode-fact__k { font-size: .58rem; letter-spacing: .2em; color: var(--pu-cyan); font-weight: 800; }
+  .pu-geode-fact__v { font-size: .88rem; color: var(--pu-paper); font-weight: 600; line-height: 1.35; }
+  .pu-geode-note { padding: 1rem 1.25rem; background: var(--pu-violet); color: var(--pu-paper); border: 2px solid var(--pu-paper); font-size: .92rem; line-height: 1.5; }
+  .pu-geode-note strong { color: var(--pu-cyan); }
+  .pu-geode-r { max-width: 300px; margin: 0 auto; border: 3px solid var(--pu-paper); box-shadow: 8px 8px 0 var(--pu-violet); line-height: 0; }
+
+  /* ICONOS */
+  .pu-iconos-section { background: var(--pu-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); }
+  .pu-iconos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 1024px) { .pu-iconos { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .pu-icono {
+    position: relative;
+    background: var(--pu-paper);
+    border: 3px solid var(--pu-ink);
+    box-shadow: var(--pu-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .pu-icono:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .pu-icono--violet { color: var(--pu-violet); }
+  .pu-icono--cyan   { color: var(--pu-cyan); }
+  .pu-icono--amber  { color: var(--pu-amber); }
+  .pu-icono__code {
+    position: absolute; top: -16px; right: 20px;
+    background: var(--pu-ink); color: var(--pu-cyan);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.2rem;
+    border: 2.5px solid currentColor;
+    box-shadow: 3px 3px 0 currentColor;
+  }
+  .pu-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
+  .pu-icono__name { font-size: clamp(1.4rem, 2.8vw, 1.8rem); line-height: 1; letter-spacing: -.025em; color: var(--pu-ink); margin: .5rem 0 0; text-align: center; }
+  .pu-icono__sub { font-size: .6rem; letter-spacing: .22em; color: currentColor; font-weight: 800; text-align: center; }
+  .pu-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .pu-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
+  .pu-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+
+  /* RESERVAS */
+  .pu-res-section { background: var(--pu-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); position: relative; overflow: hidden; }
+  .pu-res-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(54,176,196,0.07) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .pu-res-section > * { position: relative; }
+  .pu-res-head { max-width: 760px; margin-bottom: 2.5rem; }
+  .pu-res-chapter { color: var(--pu-violet); }
+  .pu-res-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pu-res-title em { color: var(--pu-violet); }
+  .pu-res-lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 60ch; }
+  .pu-res-lead strong { color: var(--pu-ink); font-weight: 700; }
+  .pu-res-lead em { color: var(--pu-cyan); font-style: italic; }
+  .pu-res-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+  @media (min-width: 900px) { .pu-res-grid { grid-template-columns: 1.1fr 1fr; gap: 3rem; } }
+  .pu-res-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.25rem; }
+  .pu-res-step { display: grid; grid-template-columns: 56px 1fr; gap: 1rem; align-items: start; background: var(--pu-paper); border: 2.5px solid var(--pu-ink); box-shadow: 5px 5px 0 var(--pu-ink); padding: 1.25rem; transition: transform .2s, box-shadow .2s; }
+  .pu-res-step:hover { transform: translate(-3px,-3px); box-shadow: 8px 8px 0 var(--pu-violet); }
+  .pu-res-step__n { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 800; color: var(--pu-violet); background: var(--pu-arena); border: 2px solid var(--pu-ink); display: flex; align-items: center; justify-content: center; aspect-ratio: 1; }
+  .pu-res-step__t { font-size: 1.2rem; line-height: 1; letter-spacing: -.02em; color: var(--pu-ink); margin: .15rem 0 .4rem; }
+  .pu-res-step__d { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* Ticket mock */
+  .pu-res-mock { display: flex; flex-direction: column; align-items: center; gap: .85rem; }
+  .pu-ticket { width: 100%; max-width: 340px; background: var(--pu-indigo); border: 3px solid var(--pu-ink); box-shadow: var(--pu-shadow); overflow: hidden; }
+  .pu-ticket__bar { display: flex; justify-content: space-between; align-items: center; padding: .6rem .85rem; background: var(--pu-ink); color: var(--pu-cyan); font-size: .58rem; letter-spacing: .15em; }
+  .pu-ticket__live { display: inline-flex; align-items: center; gap: .35rem; color: var(--pu-amber); }
+  .pu-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pu-amber); animation: pu-pulse 1.6s ease-out infinite; }
+  .pu-ticket__body { padding: 1rem; display: flex; flex-direction: column; gap: .75rem; }
+  .pu-ticket__label { font-size: .6rem; letter-spacing: .2em; color: rgba(243,236,251,0.6); }
+  .pu-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .pu-cal__d { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: .68rem; font-weight: 700; color: var(--pu-paper); background: rgba(243,236,251,0.08); border: 1px solid rgba(243,236,251,0.15); }
+  .pu-cal__d--full { color: rgba(243,236,251,0.3); text-decoration: line-through; }
+  .pu-cal__d--sel { background: var(--pu-cyan); color: var(--pu-ink); border-color: var(--pu-cyan); }
+  .pu-ticket__slots { display: flex; flex-direction: column; gap: .35rem; }
+  .pu-slot { font-family: var(--font-mono); font-size: .7rem; font-weight: 700; padding: .5rem .65rem; border: 1.5px solid rgba(243,236,251,0.25); color: var(--pu-paper); background: rgba(243,236,251,0.05); }
+  .pu-slot--off { color: rgba(243,236,251,0.35); text-decoration: line-through; }
+  .pu-slot--on { background: var(--pu-violet); border-color: var(--pu-cyan); color: var(--pu-paper); }
+  .pu-ticket__row { display: flex; justify-content: space-between; align-items: center; padding-top: .35rem; border-top: 1px dashed rgba(243,236,251,0.2); }
+  .pu-ticket__lang { display: inline-flex; align-items: center; gap: .45rem; font-size: .62rem; color: var(--pu-paper); }
+  .pu-ticket__flag { width: 22px; border: 1px solid rgba(243,236,251,0.4); line-height: 0; }
+  .pu-ticket__price { font-size: .6rem; color: var(--pu-amber); letter-spacing: .12em; }
+  .pu-ticket__cta { margin-top: .25rem; text-align: center; background: var(--pu-cyan); color: var(--pu-ink); font-family: var(--font-display); font-weight: 800; font-size: .92rem; padding: .7rem; border: 2px solid var(--pu-ink); }
+  .pu-res-mock__note { font-size: .62rem; letter-spacing: .2em; color: var(--pu-violet-d); font-weight: 800; }
+
+  /* HITOS */
+  .pu-hitos-section {
+    background: var(--pu-ink); color: var(--pu-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--pu-ink);
+    position: relative; overflow: hidden;
+  }
+  .pu-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(183,155,232,0.1) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .pu-hitos-section > * { position: relative; }
+  .pu-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 2.5px solid var(--pu-paper);
+  }
+  @media (min-width: 640px)  { .pu-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .pu-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .pu-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(243,236,251,0.22);
+    border-right: 1px solid rgba(243,236,251,0.22);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(243,236,251,0.03);
+    transition: background .25s;
+  }
+  .pu-hito:hover { background: rgba(123,79,163,0.25); }
+  @media (min-width: 1024px) {
+    .pu-hito:nth-child(3n) { border-right: none; }
+    .pu-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .pu-hito:nth-child(2n) { border-right: none; }
+    .pu-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .pu-hito { border-right: none; } .pu-hito:last-child { border-bottom: none; } }
+  .pu-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--pu-amber); font-weight: 800; }
+  .pu-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--pu-paper); line-height: 1.35; }
+
+  /* SECTORES */
+  .pu-sec-section { background: var(--pu-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); }
+  .pu-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .pu-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .pu-sec { grid-template-columns: repeat(3, 1fr); } }
+  .pu-sec__card {
+    background: var(--pu-paper);
+    border: 2.5px solid var(--pu-ink);
+    box-shadow: var(--pu-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .pu-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .pu-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .pu-sec__card--violet { color: var(--pu-violet); }
+  .pu-sec__card--cyan   { color: var(--pu-cyan); }
+  .pu-sec__card--amber  { color: var(--pu-amber); }
+  .pu-sec__card--rose   { color: var(--pu-rose); }
+  .pu-sec__card--green  { color: var(--pu-green); }
+  .pu-sec__card--indigo { color: var(--pu-violet-d); }
+  .pu-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .pu-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .pu-sec__stat-box {
+    background: var(--pu-ink); color: var(--pu-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .pu-sec__stat-v { font-size: .9rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .pu-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .pu-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--pu-ink); margin: 0; }
+  .pu-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .pu-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .pu-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--pu-ink); }
+  .pu-sec__tag span { color: currentColor; font-weight: 800; }
+  .pu-sec__foot { padding-top: .65rem; border-top: 2px solid var(--pu-ink); }
+  .pu-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .pu-map-section { background: var(--pu-arena); border-bottom: 3px solid var(--pu-ink); }
+  .pu-map-head { padding: 4rem 0 2rem; }
+  .pu-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .pu-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .pu-map-chapter { color: var(--pu-violet); }
+  .pu-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .pu-map-title em { color: var(--pu-violet); }
+  .pu-map-coords {
+    background: var(--pu-violet); color: var(--pu-paper);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--pu-ink);
+    box-shadow: 5px 5px 0 var(--pu-cyan);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem; letter-spacing: .15em;
+  }
+  .pu-map-frame { border-top: 3px solid var(--pu-ink); border-bottom: 3px solid var(--pu-ink); background: var(--pu-ink); }
+  .pu-map-wrap > * { width: 100%; }
+
+  /* DIFERENCIALES */
+  .pu-dif-section { background: var(--pu-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); }
+  .pu-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--pu-ink); }
+  @media (min-width: 768px) { .pu-dif { grid-template-columns: 1fr 1fr; } }
+  .pu-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--pu-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) {
+    .pu-dif__item:nth-child(odd) { border-right: 1px solid var(--pu-ink); }
+    .pu-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) { .pu-dif__item:last-child { border-bottom: none; } }
+  .pu-dif__item--0 { background: var(--pu-paper-2); }
+  .pu-dif__item--1 { background: var(--pu-paper); }
+  .pu-dif__item--2 { background: var(--pu-arena); }
+  .pu-dif__item--3 { background: var(--pu-paper); }
+  .pu-dif__item:hover { background: var(--pu-cyan); }
+  .pu-dif__num { font-size: .85rem; color: var(--pu-violet); font-weight: 800; letter-spacing: .15em; }
+  .pu-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--pu-ink); margin: 0; }
+  .pu-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .pu-proc-section { background: var(--pu-indigo); color: var(--pu-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); position: relative; overflow: hidden; }
+  .pu-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(224,163,62,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .pu-proc-section > * { position: relative; }
+  .pu-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .pu-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .pu-proc { grid-template-columns: repeat(4, 1fr); } }
+  .pu-proc__step {
+    background: rgba(243,236,251,0.05);
+    border: 2px solid var(--pu-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .pu-proc__step:hover { background: rgba(123,79,163,0.22); transform: translateY(-3px); }
+  .pu-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(243,236,251,0.25); }
+  .pu-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--pu-amber); line-height: 1; }
+  .pu-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--pu-cyan); }
+  .pu-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--pu-paper); margin: .25rem 0 0; }
+  .pu-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(243,236,251,0.75); flex: 1; }
+  .pu-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--pu-amber); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(243,236,251,0.25); }
+
+  /* TESTIMONIOS */
+  .pu-quote-section { background: var(--pu-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); }
+  .pu-pull { position: relative; background: var(--pu-arena); border: 3px solid var(--pu-ink); box-shadow: var(--pu-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .pu-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-9deg); filter: drop-shadow(0 4px 8px rgba(78,46,112,0.4)); }
+  .pu-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--pu-ink); max-width: 56ch; }
+  .pu-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--pu-ink); }
+  .pu-pull__avatar { width: 48px; height: 48px; background: var(--pu-violet); color: var(--pu-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .pu-pull__cap div { display: flex; flex-direction: column; }
+  .pu-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--pu-ink); }
+  .pu-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .pu-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .pu-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .pu-quote { position: relative; background: var(--pu-paper); border: 2px solid var(--pu-ink); box-shadow: 5px 5px 0 var(--pu-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .pu-quote:hover { transform: translateY(-3px); }
+  .pu-quote--0 { background: var(--pu-paper); }
+  .pu-quote--1 { background: var(--pu-arena); }
+  .pu-quote--2 { background: var(--pu-paper-2); }
+  .pu-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--pu-violet); opacity: .4; }
+  .pu-quote p { font-size: .92rem; line-height: 1.5; color: var(--pu-ink); flex: 1; margin: 0; }
+  .pu-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--pu-ink); }
+  .pu-quote__avatar { width: 36px; height: 36px; background: var(--pu-cyan); color: var(--pu-ink); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .pu-quote footer div { display: flex; flex-direction: column; }
+  .pu-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .pu-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .pu-faq-section { background: var(--pu-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); }
+  .pu-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--pu-ink); }
+  .pu-faq__item { border-bottom: 2px solid var(--pu-ink); }
+  .pu-faq__det summary { list-style: none; cursor: pointer; }
+  .pu-faq__det summary::-webkit-details-marker { display: none; }
+  .pu-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .pu-faq__sum:hover { padding-inline: 1rem; background: var(--pu-paper-2); }
+  .pu-faq__num { font-size: 1rem; font-weight: 800; color: var(--pu-violet); letter-spacing: .1em; }
+  .pu-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pu-ink); font-weight: 700; }
+  .pu-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--pu-ink); background: var(--pu-paper); color: var(--pu-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .pu-faq__det[open] .pu-faq__toggle { transform: rotate(180deg); background: var(--pu-violet); color: var(--pu-paper); }
+  .pu-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .pu-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .pu-faq__ans { padding-left: 48px; } }
+
+  /* VECINOS */
+  .pu-vecinos-section { background: var(--pu-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pu-ink); }
+  .pu-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--pu-ink); background: var(--pu-ink); }
+  @media (min-width: 640px)  { .pu-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .pu-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .pu-vecino {
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto;
+    gap: .35rem; padding: 1.5rem;
+    background: var(--pu-paper); color: var(--pu-ink);
+    text-decoration: none; min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .pu-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .pu-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .pu-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .pu-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--pu-violet); font-size: 1.3rem; transition: transform .25s; }
+  .pu-vecino:hover { background: var(--pu-violet); color: var(--pu-paper); }
+  .pu-vecino:hover .pu-vecino__sub, .pu-vecino:hover .pu-vecino__n { opacity: .85; }
+  .pu-vecino:hover .pu-vecino__arrow { color: var(--pu-paper); transform: translateX(4px); }
+  .pu-vecino--1:hover { background: var(--pu-cyan); color: var(--pu-ink); }
+  .pu-vecino--1:hover .pu-vecino__arrow { color: var(--pu-ink); }
+  .pu-vecino--2:hover { background: var(--pu-amber); color: var(--pu-ink); }
+  .pu-vecino--2:hover .pu-vecino__arrow { color: var(--pu-ink); }
+  .pu-vecino--3:hover { background: var(--pu-ink); color: var(--pu-cyan); }
+  .pu-vecino--3:hover .pu-vecino__arrow { color: var(--pu-cyan); }
+
+  /* CTA FINAL */
+  .pu-final { background: var(--pu-ink); color: var(--pu-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .pu-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(183,155,232,0.1) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .pu-final > * { position: relative; }
+  .pu-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .pu-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .pu-final__chapter { color: var(--pu-amber); }
+  .pu-final__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .9; letter-spacing: -.045em; color: var(--pu-paper); margin: 1rem 0; }
+  .pu-final__title em { color: var(--pu-cyan); font-style: italic; display: block; }
+  .pu-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(243,236,251,0.75); max-width: 52ch; }
+  .pu-final__lead strong { color: var(--pu-cyan); }
+  .pu-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .pu-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .pu-final__btn--primary { background: var(--pu-violet); color: var(--pu-paper); border-color: var(--pu-violet); box-shadow: 6px 6px 0 var(--pu-cyan); }
+  .pu-final__btn--primary:hover { background: var(--pu-cyan); color: var(--pu-ink); border-color: var(--pu-cyan); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pu-violet); }
+  .pu-final__btn--ghost { background: transparent; color: var(--pu-paper); border-color: var(--pu-paper); box-shadow: 6px 6px 0 var(--pu-paper); }
+  .pu-final__btn--ghost:hover { background: var(--pu-paper); color: var(--pu-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pu-paper); }
+  .pu-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(243,236,251,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .pu-final__trust .pu-pulse { background: var(--pu-cyan); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(54,176,196,0.55); }
+  .pu-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .pu-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(123,79,163,0.4)); }
+  .pu-float { animation: pu-float 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+  .pu-float--b { animation-delay: -1.6s; }
+  .pu-float--c { animation-delay: -3.2s; }
+  @keyframes pu-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .pu-final__marquee { background: var(--pu-violet); color: var(--pu-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--pu-ink); margin: 0 -1.5rem; }
+  .pu-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: pu-marquee 30s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
