@@ -1,0 +1,704 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'macael');
+
+const title = 'Diseño Web en Macael | Mármol Blanco, Exportación e Industria · Almería';
+const description = 'Agencia de diseño web en Macael, la capital mundial del mármol blanco. Webs para empresas exportadoras de piedra natural, marmolistas internacionales, proveedores de maquinaria y turismo industrial. Multiidioma, catálogos B2B y SEO global para mármol.';
+const canonical = 'https://platanitorico.com/diseno-web/macael/';
+
+const sectores = [
+  { nombre: 'Marmolistas y Exportación', stat: '60+', statLabel: 'países', desc: 'Macael es sinónimo de mármol blanco en el mundo. Empresas marmolistas necesitan webs en inglés, italiano, árabe y francés para llegar a constructores, arquitectos y distribuidores de Oriente Medio, Europa y América. Cada idioma es un mercado abierto.', tags: ['Catálogo multiidioma','Exportación mundial','Fichas técnicas','Formulario B2B'] },
+  { nombre: 'Proveedores Industriales',  stat: 'B2B', statLabel: 'venta técnica',   desc: 'El ecosistema industrial de Macael incluye proveedores de maquinaria de corte, abrasivos, herramientas diamantadas y productos químicos para la piedra. Webs técnicas con catálogo descargable y solicitud de cotización que funciona como canal de venta.', tags: ['Catálogo técnico','PDF descargable','Cotización online','SEO industrial'] },
+  { nombre: 'Turismo Industrial',        stat: '★',   statLabel: 'ruta del mármol', desc: 'Las canteras de Macael atraen a profesionales y curiosos de todo el mundo. Museo del Mármol, rutas guiadas a canteras y visitas a fábricas. Web bilingüe con reservas y contenidos.', tags: ['Visitas a canteras','Museo del Mármol','Reservas online','Multiidioma'] },
+  { nombre: 'Arquitectura e Interiorismo', stat: '#1', statLabel: 'mármol premium',  desc: 'El mármol blanco de Macael es el material preferido de arquitectos e interioristas de lujo. Estudios que trabajen con este material pueden posicionarse globalmente con portfolio de proyectos y contenido aspiracional.', tags: ['Portfolio premium','Proyectos de lujo','SEO internacional','Catálogo de piedras'] },
+  { nombre: 'Transporte y Logística',    stat: '24/7', statLabel: 'envíos globales',  desc: 'El mármol de Macael viaja a más de 60 países. Empresas de transporte especializado en piedra natural, logística portuaria y embalaje para exportación necesitan web profesional.', tags: ['Logística mármol','Envíos internacionales','Seguro de carga','Gestión aduanas'] },
+  { nombre: 'Comercio y Servicios',      stat: '6K',  statLabel: 'habitantes',        desc: 'Macael tiene 6.000 habitantes y una actividad económica que atrae a profesionales de toda la comarca. Comercios, clínicas, gestorías y servicios locales que aparezcan en Google Maps captan el flujo constante de la industria.', tags: ['Google Maps','SEO local','Ficha de negocio','Servicios profesionales'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Mármol Blanco Macael', sub: 'PIEDRA DE LA ALHAMBRA',    desc: 'El mármol blanco de Macael adorna la Alhambra de Granada, el Palacio Real de Madrid y monumentos en más de 60 países. Su blancura, pureza y vetas sutiles lo convierten en el mármol más codiciado del Mediterráneo.', dato: '60+ países', color: 'marble' },
+  { code: 'B', name: 'Canteras Milenarias',  sub: 'DESDE LA ÉPOCA ROMANA',     desc: 'Las canteras de Macael llevan en explotación más de 2.000 años. Los romanos ya extraían este mármol para sus construcciones. Hoy la tecnología de corte se combina con una tradición milenaria.', dato: '+2.000 años', color: 'gold' },
+  { code: 'C', name: 'Exportación Global',   sub: 'A 60+ PAÍSES',              desc: 'Desde Macael se exporta mármol a Arabia Saudí, Emiratos Árabes, China, Estados Unidos, Italia y toda Europa. La marca "Mármol Macael" es un sello de calidad reconocido internacionalmente.', dato: 'Exportación top', color: 'blue' },
+  { code: 'D', name: 'Museo del Mármol',     sub: 'PATRIMONIO INDUSTRIAL',     desc: 'El Museo del Mármol de Macael es el único en España dedicado a la piedra natural. Recoge la historia de la extracción, herramientas tradicionales y piezas emblemáticas realizadas con mármol de Macael.', dato: 'Museo único', color: 'ink' },
+];
+
+const macaelData = [
+  { k: 'POBLACIÓN',     v: '6.000 hab · Capital del mármol' },
+  { k: 'EXPORTACIÓN',   v: 'A más de 60 países' },
+  { k: 'MATERIAL',      v: 'Mármol Blanco Macael · Pureza superior' },
+  { k: 'PRODUCCIÓN',    v: '500.000+ m²/año de piedra' },
+  { k: 'HISTORIA',      v: 'Canteras desde época romana' },
+  { k: 'MONUMENTOS',    v: 'Alhambra · Palacio Real · La Meca' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión en el mármol',    eta: '1–2 días',  body: 'Visitamos tu empresa en Macael. Vemos la cantera, el taller, el almacén. Entendemos el proceso: extracción, corte, acabado, exportación. Solo así podemos comunicar lo que te hace único en el mercado global.', deliverable: 'Briefing + análisis' },
+  { num: '02', title: 'Diseño premium',            eta: '3–5 días',  body: 'Diseño que refleja la nobleza del mármol. Tipografía editorial, paleta de blancos, grises y dorados. Fotografía profesional de tus piezas. Nada de plantillas — tu web será tan única como tu piedra.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Desarrollo multiidioma',     eta: '5–10 días', body: 'Astro ultrarrápido, catálogo de productos en todos tus idiomas, fichas técnicas descargables, formularios B2B inteligentes, Core Web Vitals verdes y accesibilidad AA.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + SEO global',   eta: '1–2 días',  body: 'Publicamos y configuramos SEO internacional: Google Search Console multiidioma, palabras clave del mármol en inglés/árabe, Google Business Profile para Macael.', deliverable: 'Sitio LIVE + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Jesús Rodríguez',  negocio: 'Empresa exportadora de mármol',       texto: 'Platanito Rico nos hizo una web en cuatro idiomas con catálogo de materiales y fichas técnicas descargables. Recibimos consultas de proyectos desde Arabia Saudí y Emiratos Árabes. El retorno ha sido brutal.' },
+  { nombre: 'Inmaculada Pérez', negocio: 'Proveedor de maquinaria para piedra', texto: 'Nuestros clientes son empresas de toda España y Portugal. La web nueva con formulario de cotización ha multiplicado por tres los presupuestos que recibimos cada mes.' },
+  { nombre: 'Ángel Martos',     negocio: 'Taller de corte y acabado',           texto: 'Trabajamos el mármol blanco Macael para proyectos de interiorismo de lujo. El portfolio online con fotos de nuestros trabajos nos ha abierto las puertas de estudios de arquitectura de Madrid y Barcelona.' },
+];
+
+const diferenciales = [
+  { title: 'El mármol más puro del Mediterráneo',  desc: 'El mármol blanco de Macael tiene una pureza y homogeneidad que pocas piedras en el mundo igualan. No es solo mármol — es un material con denominación de origen, historia milenaria y prestigio global.' },
+  { title: 'Exportación a 60+ países',             desc: 'Macael no vende solo en España. Sus empresas compiten en Arabia Saudí, Emiratos, China, EE.UU. y Europa. Una web multiidioma bien hecha es la herramienta de venta más importante para cualquier exportador.' },
+  { title: 'Conocimiento técnico milenario',        desc: 'Llevamos 2.000 años trabajando esta piedra. Ese conocimiento se traduce en calidad y acabados que otras regiones no pueden igualar. La web debe transmitir esa autoridad.' },
+  { title: 'Marca global desde un pueblo',          desc: '"Mármol Macael" es una marca reconocida en los cinco continentes. Desde un pueblo de 6.000 habitantes se compite con los grandes del sector mundial. La presencia digital es el altavoz.' },
+];
+
+const faq = [
+  { q: '¿Podéis hacer webs para empresas de mármol con catálogo en varios idiomas?', a: 'Sí, es nuestra especialidad en Macael. Hacemos catálogos en español, inglés, italiano y árabe, con fichas técnicas descargables y formularios de cotización para distribuidores internacionales.' },
+  { q: '¿Cómo posiciona una empresa de mármol de Macael en Google internacional?', a: 'Con SEO técnico en el idioma del mercado objetivo, contenido sobre el mármol blanco Macael y sus aplicaciones, y backlinks en publicaciones del sector de la piedra natural.' },
+  { q: '¿Cuánto cuesta una web para una empresa marmolista de Macael?', a: 'Desde 650€ para catálogos B2B en dos idiomas. Con tienda online o configurador de materiales desde 1.200€. Hosting gratuito incluido.' },
+  { q: '¿Hacéis fotografía profesional de producto para catálogos de mármol?', a: 'Sí, tenemos equipo de fotografía industrial para captar la textura, el brillo y las vetas del mármol. Fotos de alta resolución para web y catálogo.' },
+  { q: '¿Podéis hacer una web en árabe para exportar a Oriente Medio?', a: 'Sí, trabajamos con traductores nativos para árabe. El mármol blanco Macael tiene demanda enorme en Dubái, Arabia Saudí y Qatar.' },
+  { q: '¿En cuánto tiempo tengo mi web de Macael lista?', a: 'Web corporativa: 1–2 semanas. Catálogo B2B multiidioma: 2–4 semanas. Tienda online con configurador: 3–5 semanas.' },
+  { q: '¿Ayudáis con marketing digital para empresas de mármol?', a: 'Sí, ofrecemos SEO multidioma, Google Business Profile, redes sociales para sector industrial y campañas B2B para distribuidores.' },
+  { q: '¿Hacéis reuniones presenciales en Macael?', a: 'Sí, estamos en Vera, a 25 minutos de Macael. Nos vemos en tus oficinas, la cantera o el taller. Primera consulta gratuita.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Macael","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Macael","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seo-macael.jpg","address":{"@type":"PostalAddress","addressLocality":"Macael","addressRegion":"Almería","postalCode":"04867","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3431,"longitude":-2.3197},"areaServed":["Macael","Olula del Río","Fines","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"48","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Macael","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seo-macael.jpg"
+  imageAlt="Diseño web en Macael - Mármol Blanco y exportación mundial"
+  type="service"
+  keywords="diseño web macael, mármol blanco macael, web empresa mármol, exportación mármol, seo mármol internacional, catálogo piedra natural"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="mc">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-hero">
+      <div class="container-brutal">
+
+        <header class="mc-hero__top">
+          <span class="text-meta">N.º 033 — Valle del Almanzora · Mármol</span>
+          <span class="text-meta mc-hero__status">
+            <span class="mc-pulse"></span>
+            ★ CAPITAL MUNDIAL DEL MÁRMOL BLANCO · 60+ PAÍSES ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="mc-hero__grid">
+
+          <div class="mc-hero__intro">
+            <span class="text-meta mc-hero__chapter">Cap. 01 / Macael · Almería</span>
+            <h1 class="mc-hero__title heading-display">
+              Diseño web para el
+              <em class="heading-editorial">mármol</em>
+              <span class="mc-hero__title-stamp">más blanco del mundo.</span>
+            </h1>
+
+            <p class="mc-hero__lead">
+              <strong>Macael</strong> es la capital mundial del
+              <em>mármol blanco</em>. Su piedra adorna la Alhambra
+              y monumentos de 60 países. Empresas marmolistas,
+              exportadores y proveedores que necesitan una web
+              <strong>a la altura de su prestigio internacional.</strong>
+            </p>
+
+            <div class="mc-hero__cta">
+              <a href="/contacto" class="mc-btn mc-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="#marmol" class="mc-btn mc-btn--ghost">
+                El Mármol Macael ↓
+              </a>
+            </div>
+
+            <ul class="mc-kpis">
+              <li class="mc-kpi mc-kpi--marble"><span class="mc-kpi__v text-mono">#1</span><span class="mc-kpi__l">Mármol blanco mundial</span></li>
+              <li class="mc-kpi mc-kpi--gold"><span class="mc-kpi__v text-mono">60<small>+</small></span><span class="mc-kpi__l">Países de exportación</span></li>
+              <li class="mc-kpi mc-kpi--blue"><span class="mc-kpi__v text-mono">★</span><span class="mc-kpi__l">Alhambra · Palacio Real</span></li>
+              <li class="mc-kpi mc-kpi--ink"><span class="mc-kpi__v text-mono">4.9<small>★</small></span><span class="mc-kpi__l">48 reseñas</span></li>
+            </ul>
+          </div>
+
+          <aside class="mc-hero__postcard" aria-hidden="true">
+            <div class="mc-postcard">
+
+              <header class="mc-postcard__head">
+                <span class="text-mono">MACAEL · 04867 · ALMERÍA</span>
+                <span class="text-mono">37.343° N · 2.320° W</span>
+              </header>
+
+              <div class="mc-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="mc-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8D0D8"/><stop offset="100%" stop-color="#EDE8DC"/></linearGradient>
+                    <linearGradient id="mc-marble-block" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FAF7F0"/><stop offset="50%" stop-color="#EDE8DC"/><stop offset="100%" stop-color="#D6D0C4"/></linearGradient>
+                  </defs>
+                  <rect width="540" height="220" fill="url(#mc-sky)"/>
+                  <path d="M 0 160 L 80 80 L 120 100 L 180 70 L 240 110 L 300 80 L 360 120 L 420 90 L 500 130 L 540 110 L 540 220 L 0 220 Z" fill="#E8E4D8" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 180 L 60 120 L 140 140 L 200 100 L 260 130 L 340 110 L 400 150 L 460 120 L 540 150 L 540 220 L 0 220 Z" fill="#D6D0C4" stroke="#1A1816" stroke-width="1"/>
+                  <g transform="translate(140, 90)">
+                    <rect x="0" y="0" width="200" height="80" fill="#EDE8DC" stroke="#1A1816" stroke-width="2"/>
+                    <line x1="0" y1="18" x2="200" y2="18" stroke="#C4B898" stroke-width="1.5" opacity="0.5"/>
+                    <line x1="0" y1="36" x2="200" y2="36" stroke="#C4B898" stroke-width="1.5" opacity="0.5"/>
+                    <line x1="0" y1="54" x2="200" y2="54" stroke="#C4B898" stroke-width="1.5" opacity="0.5"/>
+                    <line x1="80" y1="0" x2="80" y2="80" stroke="#1A1816" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.4"/>
+                    <line x1="160" y1="0" x2="160" y2="80" stroke="#1A1816" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.4"/>
+                    <rect x="20" y="54" width="40" height="26" fill="url(#mc-marble-block)" stroke="#1A1816" stroke-width="2"/>
+                  </g>
+                  <g transform="translate(60, 145)">
+                    <rect x="0" y="0" width="30" height="20" fill="#FAF7F0" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="32" y="0" width="20" height="20" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="10" y="-12" width="24" height="14" fill="#FAF7F0" stroke="#1A1816" stroke-width="1.5"/>
+                  </g>
+                  <g transform="translate(380, 130)">
+                    <rect x="0" y="0" width="28" height="18" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="30" y="0" width="22" height="18" fill="#FAF7F0" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="8" y="-10" width="22" height="12" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5"/>
+                  </g>
+                  <g transform="translate(300, 70)">
+                    <rect x="0" y="60" width="6" height="6" fill="#1A1816"/>
+                    <line x1="3" y1="60" x2="3" y2="0" stroke="#8A7A5A" stroke-width="3"/>
+                    <line x1="3" y1="0" x2="60" y2="0" stroke="#8A7A5A" stroke-width="2.5"/>
+                    <line x1="60" y1="0" x2="60" y2="50" stroke="#8A7A5A" stroke-width="2.5"/>
+                    <line x1="60" y1="50" x2="55" y2="54" stroke="#1A1816" stroke-width="2"/>
+                    <line x1="60" y1="50" x2="65" y2="54" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="50" y="40" width="14" height="10" fill="#FAF7F0" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="57" y1="40" x2="57" y2="30" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+                  <g transform="translate(30, 170)">
+                    <rect x="0" y="8" width="28" height="12" rx="1" fill="#D6D0C4" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="28" y="4" width="14" height="16" rx="1" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="8" cy="22" r="4" fill="#1A1816"/>
+                    <circle cx="34" cy="22" r="4" fill="#1A1816"/>
+                    <rect x="4" y="4" width="18" height="6" fill="#FAF7F0" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+                  <circle cx="200" cy="80" r="3" fill="#EDE8DC" opacity="0.3"/>
+                  <circle cx="280" cy="105" r="2" fill="#EDE8DC" opacity="0.2"/>
+                  <path d="M 0 202 Q 140 196 280 202 T 540 202" fill="none" stroke="#D6D0C4" stroke-width="2" stroke-dasharray="4 5" opacity="0.4"/>
+                </svg>
+              </div>
+
+              <div class="mc-postcard__img-wrap">
+                <img src="/imagenes/diseno-web-seo-macael.jpg" alt="Macael — mármol blanco y exportación mundial" width="640" height="320" loading="eager" decoding="async" class="mc-postcard__img"/>
+                <div class="mc-postcard__gem" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#C4A44A" stroke="#1A1816" stroke-width="2"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#FAF7F0" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <rect x="22" y="30" width="36" height="24" rx="2" fill="#FAF7F0" stroke="#1A1816" stroke-width="2"/>
+                    <line x1="28" y1="36" x2="52" y2="36" stroke="#C4B898" stroke-width="0.8" opacity="0.4"/>
+                    <line x1="28" y1="42" x2="52" y2="42" stroke="#C4B898" stroke-width="0.8" opacity="0.4"/>
+                    <rect x="14" y="18" width="10" height="8" rx="1" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5" transform="rotate(-15,19,22)"/>
+                    <rect x="56" y="18" width="10" height="8" rx="1" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5" transform="rotate(15,61,22)"/>
+                  </svg>
+                </div>
+                <div class="mc-postcard__tag"><span class="text-mono">★ MÁRMOL BLANCO MACAEL · 60+ PAÍSES ★</span></div>
+              </div>
+
+              <div class="mc-postcard__data">
+                <div class="mc-postcard__data-row"><span class="text-mono">POBLACIÓN</span><span class="text-mono mc-postcard__data-v">6.000 hab</span></div>
+                <div class="mc-postcard__data-row"><span class="text-mono">MATERIAL</span><span class="text-mono mc-postcard__data-v">Mármol Blanco Macael</span></div>
+                <div class="mc-postcard__data-row"><span class="text-mono">EXPORTACIÓN</span><span class="text-mono mc-postcard__data-v">60+ países</span></div>
+                <div class="mc-postcard__data-row"><span class="text-mono">HISTORIA</span><span class="text-mono mc-postcard__data-v">+2.000 años de cantera</span></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div class="mc-marquee">
+          <div class="mc-marquee__track">
+            <span>★ MACAEL · CAPITAL MUNDIAL DEL MÁRMOL BLANCO ★ ALHAMBRA · PALACIO REAL · LA MECA ★ EXPORTACIÓN A 60+ PAÍSES ★ 2.000 AÑOS DE CANTERA ★ MÁRMOL MACAEL · PRESTIGIO GLOBAL ★</span>
+            <span>★ MACAEL · CAPITAL MUNDIAL DEL MÁRMOL BLANCO ★ ALHAMBRA · PALACIO REAL · LA MECA ★ EXPORTACIÓN A 60+ PAÍSES ★ 2.000 AÑOS DE CANTERA ★ MÁRMOL MACAEL · PRESTIGIO GLOBAL ★</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-iconos-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-iconos-chapter">Cap. 02 / Prontuario</span>
+        <h2 class="mc-iconos-title heading-display">Cuatro pilares del <em class="heading-editorial">mármol</em><span class="heading-display-block">que mueve el mundo.</span></h2>
+        <ol class="mc-iconos" style="counter-reset: iconos">
+          {iconos.map((ico, i) => (
+            <li class={`mc-icono mc-icono--${ico.color}`}>
+              <div class="mc-icono__code">
+                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                  <circle cx="40" cy="40" r="38" fill="var(--mc-ink)" stroke="var(--mc-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="var(--mc-paper)" stroke="var(--mc-ink)" stroke-width="2"/>
+                  {i === 0 && <><rect x="20" y="26" width="40" height="30" rx="2" fill="var(--mc-marble)" stroke="var(--mc-ink)" stroke-width="1.5"/><line x1="26" y1="32" x2="54" y2="32" stroke="var(--mc-ink)" stroke-width="0.8" opacity="0.3"/><line x1="26" y1="38" x2="54" y2="38" stroke="var(--mc-ink)" stroke-width="0.8" opacity="0.3"/><line x1="26" y1="44" x2="54" y2="44" stroke="var(--mc-ink)" stroke-width="0.8" opacity="0.3"/></>}
+                  {i === 1 && <><path d="M 16 56 L 24 28 L 32 26 L 40 28 L 48 30 L 56 34 L 64 56 Z" fill="var(--mc-stone)" stroke="var(--mc-ink)" stroke-width="1.5"/><rect x="36" y="44" width="8" height="14" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></>}
+                  {i === 2 && <><circle cx="40" cy="40" r="16" fill="var(--mc-blue)" stroke="var(--mc-ink)" stroke-width="1.5"/><circle cx="40" cy="40" r="10" fill="none" stroke="var(--mc-gold)" stroke-width="1.5"/><circle cx="40" cy="40" r="4" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></>}
+                  {i === 3 && <><rect x="22" y="24" width="36" height="32" rx="2" fill="var(--mc-stone)" stroke="var(--mc-ink)" stroke-width="1.5"/><rect x="26" y="28" width="28" height="10" fill="var(--mc-paper-2)" stroke="var(--mc-ink)" stroke-width="1"/><rect x="22" y="22" width="36" height="4" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></>}
+                </svg>
+              </div>
+              <span class="mc-icono__letter">{ico.code}</span>
+              <h3 class="mc-icono__name">{ico.name}</h3>
+              <span class="mc-icono__sub">{ico.sub}</span>
+              <p class="mc-icono__desc">{ico.desc}</p>
+              <span class="mc-icono__dato">{ico.dato}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MÁRMOL — FLAGSHIP                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-marble-section" id="marmol">
+      <div class="container-brutal">
+        <div class="mc-marble-grid">
+          <div class="mc-marble__content">
+            <span class="text-meta mc-marble-chapter">Cap. 03 / Patrimonio</span>
+            <h2 class="mc-marble-title heading-display">El mármol blanco que <em class="heading-editorial">vestía la Alhambra</em><span class="heading-display-block">hoy viaja a 60 países.</span></h2>
+            <p class="mc-marble-lead">El <strong>Mármol Blanco Macael</strong> no es una piedra cualquiera. Es el material que eligieron los nazaríes para la Alhambra, los Austrias para el <em>Palacio Real de Madrid</em> y que hoy se exporta a Arabia Saudí, Emiratos, China y Estados Unidos. Su blancura, su pureza y su capacidad de transmitir luz lo convierten en el mármol más codiciado del Mediterráneo.</p>
+            <p class="mc-marble-lead">Macael no es solo una cantera — es un ecosistema industrial completo: <strong>extracción, corte, pulido, acabado y exportación</strong>. Decenas de empresas compiten en el mercado global con un producto que tiene 2.000 años de historia y una marca reconocida en los cinco continentes.</p>
+            <ul class="mc-marble-facts">
+              {macaelData.map(d => (<li><span class="mc-marble-facts__k">{d.k}</span><span class="mc-marble-facts__v">{d.v}</span></li>))}
+            </ul>
+          </div>
+          <div class="mc-marble__r">
+            <svg viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+              <defs><linearGradient id="mc-ms-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4A6A8A"/><stop offset="50%" stop-color="#8A9BA8"/><stop offset="100%" stop-color="#C8D0D8"/></linearGradient><linearGradient id="mc-column-grad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FAF7F0"/><stop offset="30%" stop-color="#EDE8DC"/><stop offset="70%" stop-color="#FAF7F0"/><stop offset="100%" stop-color="#D6D0C4"/></linearGradient></defs>
+              <rect width="360" height="400" fill="url(#mc-ms-bg)" rx="8"/>
+              <g transform="translate(100, 80)">
+                <rect x="-10" y="170" width="80" height="16" rx="2" fill="#EDE8DC" stroke="#1A1816" stroke-width="2"/>
+                <rect x="-5" y="160" width="70" height="12" rx="1" fill="#FAF7F0" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="10" y="20" width="40" height="140" fill="url(#mc-column-grad)" stroke="#1A1816" stroke-width="2.5"/>
+                <line x1="18" y1="20" x2="18" y2="160" stroke="#C4B898" stroke-width="0.8" opacity="0.4"/>
+                <line x1="26" y1="20" x2="26" y2="160" stroke="#C4B898" stroke-width="0.8" opacity="0.4"/>
+                <line x1="34" y1="20" x2="34" y2="160" stroke="#C4B898" stroke-width="0.8" opacity="0.4"/>
+                <rect x="4" y="8" width="52" height="14" rx="2" fill="#FAF7F0" stroke="#1A1816" stroke-width="2"/>
+                <path d="M 4 8 Q 30 -8 56 8" fill="#EDE8DC" stroke="#1A1816" stroke-width="2"/>
+              </g>
+              <g transform="translate(200, 110)">
+                <rect x="-6" y="120" width="52" height="10" rx="1" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="4" y="16" width="26" height="106" fill="#FAF7F0" stroke="#1A1816" stroke-width="2"/>
+                <line x1="10" y1="16" x2="10" y2="122" stroke="#C4B898" stroke-width="0.8" opacity="0.3"/>
+                <rect x="-2" y="6" width="38" height="12" rx="2" fill="#FAF7F0" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M -2 6 Q 17 -6 36 6" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+              <g transform="translate(50, 290)"><rect x="0" y="0" width="80" height="28" rx="2" fill="#FAF7F0" stroke="#1A1816" stroke-width="2"/><path d="M 8 8 Q 30 14 60 10" fill="none" stroke="#C4B898" stroke-width="1" opacity="0.4"/></g>
+              <path d="M 0 340 Q 80 330 180 340 T 360 340 L 360 400 L 0 400 Z" fill="#8A7A5A" stroke="#1A1816" stroke-width="2"/>
+              <text x="180" y="385" text-anchor="middle" fill="#FAF7F0" opacity="0.2" font-family="monospace" font-size="9" letter-spacing="3">MÁRMOL BLANCO · MACAEL · +2.000 AÑOS</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MUSEO DEL MÁRMOL                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-museum-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-museum-chapter">Cap. 04 / Patrimonio industrial</span>
+        <h2 class="mc-museum-title heading-display">Un museo entero <em class="heading-editorial">dedicado a la piedra</em><span class="heading-display-block">que construye el mundo.</span></h2>
+        <p class="mc-museum-lead">El <strong>Museo del Mármol de Macael</strong> es el único en España dedicado íntegramente a la piedra natural. Sus salas recorren la historia de la extracción desde la época romana, con herramientas originales, maquetas de canteras y una reproducción en mármol blanco de la Alhambra tallada por artesanos locales.</p>
+        <div class="mc-museum-grid">
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">1</text></svg></span><h3>Herramientas romanas</h3><p>Martillos, cuñas y picos de la época romana usados para extraer mármol hace 2.000 años.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">2</text></svg></span><h3>Maquetas de cantera</h3><p>Reproducciones a escala de los sistemas de extracción tradicionales y modernos.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">3</text></svg></span><h3>Alhambra en miniatura</h3><p>Reproducción tallada en mármol blanco Macael de los palacios nazaríes.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">4</text></svg></span><h3>Piezas contemporáneas</h3><p>Obras de artistas y diseñadores actuales que trabajan el mármol como lienzo.</p></div>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-sec-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-sec-chapter">Cap. 05 / Oportunidades</span>
+        <h2 class="mc-sec-title heading-display">Seis sectores para <em class="heading-editorial">exportar</em><span class="heading-display-block">tu presencia digital.</span></h2>
+        <ul class="mc-sec">
+          {sectores.map((s, i) => (
+            <li class={`mc-sec__card mc-sec__card--${['marble','gold','blue','stone','accent','ink'][i]}`}>
+              <div class="mc-sec__head"><span class="mc-sec__num text-mono">{String(i+1).padStart(2,'0')}</span><div class="mc-sec__stat-box"><span class="mc-sec__stat-v">{s.stat}</span><span class="mc-sec__stat-l">{s.statLabel}</span></div></div>
+              <h3 class="mc-sec__title">{s.nombre}</h3>
+              <p class="mc-sec__desc">{s.desc}</p>
+              <ul class="mc-sec__tags">{s.tags.map(tag => (<li class="mc-sec__tag"><span>▸</span> {tag}</li>))}</ul>
+              <div class="mc-sec__foot"><a href="/contacto" class="mc-sec__cta">Solicitar información →</a></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                               */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-map-section">
+      <div class="container-brutal"><div class="mc-map-head"><div class="mc-map-head__inner"><div><span class="text-meta mc-map-chapter">Cap. 06 / Cartografía</span><h2 class="mc-map-title heading-display">Macael en el <em class="heading-editorial">mapa.</em></h2></div><div class="mc-map-coords"><span class="text-mono">37.343° N · 2.320° W</span><span class="text-mono">04867 · Macael · Valle del Almanzora</span><span class="text-mono">Capital mundial del mármol blanco</span></div></div></div></div>
+      <div class="mc-map-frame">
+        <div class="mc-map-icon mc-map-icon--tl" aria-hidden="true"><svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="14" y="14" width="32" height="32" rx="4" fill="var(--mc-marble)" stroke="var(--mc-ink)" stroke-width="2"/><rect x="18" y="18" width="10" height="10" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><rect x="32" y="18" width="10" height="20" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/></svg></div>
+        <div class="mc-map-icon mc-map-icon--br" aria-hidden="true"><svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="12" y="22" width="36" height="20" rx="3" fill="var(--mc-stone)" stroke="var(--mc-ink)" stroke-width="2"/><rect x="16" y="26" width="28" height="6" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></svg></div>
+        <div class="mc-map-wrap"><InteractiveMap center={[-2.3197, 37.3431]} zoom={11} pueblos={[{slug:"macael",nombre:"Macael",poblacion:6000,descripcion:"Capital mundial del mármol blanco",destacado:true,coords:[-2.3197,37.3431]},{slug:"olula-del-rio",nombre:"Olula del Río",poblacion:7000,descripcion:"Capital mundial del mármol",coords:[-1.8633,37.3867]},{slug:"fines",nombre:"Fines",poblacion:2500,descripcion:"Transformación del mármol",coords:[-1.8433,37.3558]},{slug:"albox",nombre:"Albox",poblacion:12000,descripcion:"Capital comercial del Almanzora",coords:[-2.1433,37.3833]}]}/></div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-dif-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="mc-dif-title heading-display">Por qué Macael <em class="heading-editorial">es único</em><span class="heading-display-block">en el mundo de la piedra.</span></h2>
+        <ol class="mc-dif">{diferenciales.map((d,i) => (<li class={`mc-dif__item mc-dif__item--${i}`}><span class="mc-dif__num text-mono">{String(i+1).padStart(2,'0')}</span><h3 class="mc-dif__t">{d.title}</h3><p class="mc-dif__desc">{d.desc}</p></li>))}</ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-proc-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-proc-chapter">Cap. 08 / Método</span>
+        <h2 class="mc-proc-title heading-display">Así creamos tu web <em class="heading-editorial">en</em><span class="heading-display-block">el taller de lo digital.</span></h2>
+        <ol class="mc-proc">{proceso.map(p => (<li class="mc-proc__step"><div class="mc-proc__head"><span class="mc-proc__num">{p.num}</span><span class="mc-proc__eta">{p.eta}</span></div><h3 class="mc-proc__t">{p.title}</h3><p class="mc-proc__body">{p.body}</p><div class="mc-proc__foot">{p.deliverable}</div></li>))}</ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-quote-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-quote-chapter">Cap. 09 / Resultados</span>
+        <h2 class="mc-quote-title heading-display">Lo que dicen <em class="heading-editorial">los que</em><span class="heading-display-block">exportan su marca al mundo.</span></h2>
+        {testimonios.length > 0 && (<figure class="mc-pull"><div class="mc-pull__seal" aria-hidden="true"><svg viewBox="0 0 90 90" width="100%" height="100%" class="mc-pull__spin"><circle cx="45" cy="45" r="43" fill="#C4A44A" stroke="#1A1816" stroke-width="2"/><circle cx="45" cy="45" r="38" fill="none" stroke="#FAF7F0" stroke-width="1.5" stroke-dasharray="2.5 2"/><rect x="28" y="32" width="34" height="24" rx="2" fill="#FAF7F0" stroke="#1A1816" stroke-width="2"/><text x="45" y="72" text-anchor="middle" fill="#FAF7F0" font-size="7" font-weight="800" font-family="monospace" letter-spacing="1">MACAEL</text></svg></div><blockquote class="mc-pull__q">"{testimonios[0].texto}"</blockquote><figcaption class="mc-pull__cap"><div class="mc-pull__avatar">{testimonios[0].nombre.charAt(0)}</div><div><span class="mc-pull__name">{testimonios[0].nombre}</span><span class="mc-pull__role">{testimonios[0].negocio}</span></div></figcaption></figure>)}
+        {testimonios.length > 1 && (<ul class="mc-quotes">{testimonios.slice(1).map((t,i) => (<li class={`mc-quote mc-quote--${i}`}><span class="mc-quote__mark" aria-hidden="true">&ldquo;</span><p>{t.texto}</p><footer><div class="mc-quote__avatar">{t.nombre.charAt(0)}</div><div><span class="mc-quote__name">{t.nombre}</span><span class="mc-quote__role">{t.negocio}</span></div></footer></li>))}</ul>)}
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-faq-section">
+      <div class="container-brutal">
+        <span class="text-meta mc-faq-chapter">Cap. 10 / FAQ</span>
+        <h2 class="mc-faq-title heading-display">Respuestas para <em class="heading-editorial">el mármol</em><span class="heading-display-block">de tus dudas.</span></h2>
+        <dl class="mc-faq">{faq.map((f,i) => (<div class="mc-faq__item"><details class="mc-faq__det" open={i===0}><summary><div class="mc-faq__sum"><span class="mc-faq__num text-mono">{String(i+1).padStart(2,'0')}</span><span class="mc-faq__q">{f.q}</span><span class="mc-faq__toggle" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></summary><div class="mc-faq__ans">{f.a}</div></details></div>))}</dl>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosAlmanzora.length > 0 && (<section class="mc-vecinos-section"><div class="container-brutal"><span class="text-meta mc-vecinos-chapter">Cap. 11 / Comarca</span><h2 class="mc-vecinos-title heading-display">Valle del Almanzora <em class="heading-editorial">al completo.</em></h2><ul class="mc-vecinos">{pueblosAlmanzora.slice(0,8).map((p,i) => (<a href={`/diseno-web/${p.slug}/`} class={`mc-vecino mc-vecino--${i}`} key={p.slug}><span class="mc-vecino__n">{String(i+1).padStart(2,'0')}</span><span class="mc-vecino__name">{p.nombre}</span><span class="mc-vecino__sub">{p.descripcion}</span><span class="mc-vecino__arrow" aria-hidden="true">→</span></a>))}</ul></div></section>)}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mc-final">
+      <div class="container-brutal">
+        <div class="mc-final__grid">
+          <div>
+            <span class="text-meta mc-final-chapter">Cap. 12 / Acción</span>
+            <h2 class="mc-final__title heading-display">Tu marca en <em>mármol.</em></h2>
+            <p class="mc-final__lead"><strong>Macael</strong> tiene el mejor mármol del mundo. Tu empresa merece la mejor web. Exporta tu marca con una presencia digital a la altura de tu piedra. <strong>Multiidioma. Global. Premium.</strong></p>
+            <div class="mc-final__cta"><a href="/contacto" class="mc-final__btn mc-final__btn--primary"><span>Pedir presupuesto</span><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="tel:+34657085019" class="mc-final__btn mc-final__btn--ghost">☎ 657 085 019</a></div>
+            <div class="mc-final__trust"><span><span class="mc-pulse"></span> ACEPTANDO PROYECTOS 2026</span><span>★ DISEÑO + SEO + HOSTING</span><span>★ 4.9 ★ 48 RESEÑAS</span></div>
+          </div>
+          <div class="mc-final__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="mc-final-svg">
+              <defs><radialGradient id="mc-final-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#C4A44A" stop-opacity="0.2"/><stop offset="100%" stop-color="#C4A44A" stop-opacity="0"/></radialGradient></defs>
+              <circle cx="170" cy="170" r="150" fill="url(#mc-final-glow)"/>
+              <g transform="translate(170, 140)" class="mc-final-gem"><polygon points="0,-70 60,-20 60,40 0,70 -60,40 -60,-20" fill="#FAF7F0" stroke="#1A1816" stroke-width="2.5" stroke-linejoin="round"/><polygon points="0,-70 60,-20 0,70 -60,-20" fill="#EDE8DC" stroke="#1A1816" stroke-width="1.5" opacity="0.7"/><line x1="0" y1="-70" x2="0" y2="70" stroke="#C4A44A" stroke-width="1" opacity="0.6"/></g>
+              <circle cx="100" cy="120" r="2" fill="#C4A44A" opacity="0.3"/><circle cx="240" cy="100" r="2.5" fill="#C4A44A" opacity="0.25"/>
+              <text x="170" y="320" text-anchor="middle" fill="#FAF7F0" opacity="0.12" font-family="monospace" font-size="12" font-weight="800" letter-spacing="4">MACAEL</text>
+            </svg>
+          </div>
+        </div>
+        <div class="mc-final__marquee"><div class="mc-final__marquee-track"><span>★ MACAEL · DISEÑO WEB PARA EL MÁRMOL ★ EXPORTACIÓN · MARMOLISTAS · PROVEEDORES ★ MÁRMOL BLANCO MACAEL · 60+ PAÍSES ★ HABLAMOS?</span><span>★ MACAEL · DISEÑO WEB PARA EL MÁRMOL ★ EXPORTACIÓN · MARMOLISTAS · PROVEEDORES ★ MÁRMOL BLANCO MACAEL · 60+ PAÍSES ★ HABLAMOS?</span></div></div>
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  :root{--mc-paper:#FAF7F0;--mc-paper-2:#EDE8DC;--mc-stone:#D6D0C4;--mc-ink:#1A1816;--mc-marble:#E8E4D8;--mc-gold:#C4A44A;--mc-accent:#8A7A5A;--mc-blue:#4A6A8A;--mc-shadow:8px 8px 0 var(--mc-ink)}
+  .mc-pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--mc-gold);box-shadow:0 0 0 0 rgba(196,164,74,0.55);animation:mc-pulse 1.8s ease-out infinite;vertical-align:middle;margin-right:.35rem}
+  @keyframes mc-pulse{0%{box-shadow:0 0 0 0 rgba(196,164,74,0.6)}70%{box-shadow:0 0 0 10px rgba(196,164,74,0)}100%{box-shadow:0 0 0 0 rgba(196,164,74,0)}}
+  .mc-pull__spin{transform-origin:50% 50%;animation:mc-spin 24s linear infinite}
+  @keyframes mc-spin{to{transform:rotate(360deg)}}
+  .mc-final-gem{transform-origin:50% 50%;animation:mc-float 4s ease-in-out infinite}
+  @keyframes mc-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+
+  .mc-hero{padding-top:3rem;padding-bottom:0;background:radial-gradient(circle at 70% 30%,rgba(196,164,74,0.08),transparent 50%),radial-gradient(circle at 20% 70%,rgba(74,106,138,0.08),transparent 50%),var(--mc-paper);border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(45deg,transparent 0 22px,rgba(196,164,74,0.05) 22px 23px,transparent 23px 44px),linear-gradient(-45deg,transparent 0 22px,rgba(196,164,74,0.05) 22px 23px,transparent 23px 44px);pointer-events:none}
+  .mc-hero>*{position:relative}
+  .mc-hero__top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-bottom:1rem}
+  .mc-hero__status{color:var(--mc-gold);font-weight:700}
+  .mc-hero__grid{display:grid;grid-template-columns:1fr;gap:3rem;padding-block:3rem 4rem}
+  @media(min-width:1024px){.mc-hero__grid{grid-template-columns:1fr 1fr;align-items:center;gap:4rem}}
+  .mc-hero__intro{display:flex;flex-direction:column;gap:1.25rem}
+  .mc-hero__chapter{color:var(--mc-blue)}
+  .mc-hero__title{font-size:clamp(2.5rem,7vw,5rem);line-height:.92;letter-spacing:-.04em;margin:.25rem 0}
+  .mc-hero__title em{color:var(--mc-blue);font-style:italic}
+  .mc-hero__title-stamp{display:inline-block;color:var(--mc-paper);background:var(--mc-gold);padding:0 .2em;transform:rotate(-1deg)}
+  .mc-hero__lead{font-size:1.1rem;line-height:1.55;color:var(--brutal-text-secondary);max-width:54ch}
+  .mc-hero__lead strong{color:var(--mc-ink);font-weight:700}
+  .mc-hero__lead em{color:var(--mc-gold);font-style:italic;font-weight:600}
+  .mc-hero__cta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.5rem}
+  .mc-btn{display:inline-flex;align-items:center;gap:.75rem;padding:1.1rem 1.85rem;font-family:var(--font-display);font-weight:800;font-size:1.05rem;border:2.5px solid var(--mc-ink);text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s,color .2s;cursor:pointer}
+  .mc-btn--primary{background:var(--mc-gold);color:var(--mc-ink);box-shadow:6px 6px 0 var(--mc-ink)}
+  .mc-btn--primary:hover{background:var(--mc-blue);color:var(--mc-paper);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-ink)}
+  .mc-btn--ghost{background:transparent;color:var(--mc-ink);box-shadow:6px 6px 0 var(--mc-blue)}
+  .mc-btn--ghost:hover{background:var(--mc-ink);color:var(--mc-gold);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-blue)}
+  .mc-kpis{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:1.5rem;border:2.5px solid var(--mc-ink);background:var(--mc-ink)}
+  @media(min-width:768px){.mc-kpis{grid-template-columns:repeat(4,1fr)}}
+  .mc-kpi{background:var(--mc-paper);padding:1.25rem;display:flex;flex-direction:column;gap:.35rem;border-right:2px solid var(--mc-ink);border-bottom:2px solid var(--mc-ink)}
+  .mc-kpi:nth-child(2n){border-right:none}
+  .mc-kpi:nth-last-child(-n+2){border-bottom:none}
+  @media(min-width:768px){.mc-kpi:nth-child(2n){border-right:2px solid var(--mc-ink)}.mc-kpi:nth-child(4n){border-right:none}.mc-kpi:nth-last-child(-n+2){border-bottom:2px solid var(--mc-ink)}.mc-kpi:nth-last-child(-n+4){border-bottom:none}}
+  .mc-kpi--marble{background:var(--mc-marble);color:var(--mc-ink)}.mc-kpi--gold{background:var(--mc-gold);color:var(--mc-ink)}.mc-kpi--blue{background:var(--mc-blue);color:var(--mc-paper)}.mc-kpi--ink{background:var(--mc-ink);color:var(--mc-paper)}.mc-kpi--ink .mc-kpi__v{color:var(--mc-gold)}
+  .mc-kpi__v{font-size:clamp(1.65rem,3.8vw,2.25rem);font-weight:800;line-height:1}
+  .mc-kpi__v small{font-size:.55em;opacity:.8}
+  .mc-kpi__l{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.15em;opacity:.85}
+  .mc-hero__postcard{width:100%;max-width:540px;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(26,24,22,0.18))}
+  .mc-postcard{background:var(--mc-paper);border:3px solid var(--mc-ink);box-shadow:var(--mc-shadow);overflow:hidden;transform:rotate(1deg);transition:transform .35s}
+  .mc-postcard:hover{transform:rotate(0)}
+  .mc-postcard__head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.65rem 1rem;background:var(--mc-ink);color:var(--mc-paper);font-size:.58rem;letter-spacing:.15em;border-bottom:2px solid var(--mc-ink)}
+  .mc-postcard__profile{width:100%;aspect-ratio:540/220;border-bottom:2px solid var(--mc-ink);overflow:hidden}
+  .mc-postcard__img-wrap{position:relative;aspect-ratio:16/9;overflow:hidden;border-bottom:2px solid var(--mc-ink)}
+  .mc-postcard__img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05)saturate(1.1);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+  .mc-postcard:hover .mc-postcard__img{transform:scale(1.05)}
+  .mc-postcard__gem{position:absolute;top:12px;right:12px;width:80px;height:80px;transform:rotate(-8deg);filter:drop-shadow(0 4px 10px rgba(196,164,74,0.5))}
+  .mc-postcard__tag{position:absolute;bottom:12px;left:12px;background:var(--mc-paper);color:var(--mc-ink);padding:.4rem .75rem;font-size:.65rem;font-weight:800;letter-spacing:.2em;border:2px solid var(--mc-ink);box-shadow:3px 3px 0 var(--mc-gold);transform:rotate(2deg)}
+  .mc-postcard__data{padding:1rem 1.25rem;background:var(--mc-paper-2);display:grid;gap:.35rem}
+  .mc-postcard__data-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:.35rem;border-bottom:1px dashed rgba(26,24,22,0.15);font-size:.68rem}
+  .mc-postcard__data-row:last-child{border-bottom:none;padding-bottom:0}
+  .mc-postcard__data-row>span:first-child{color:var(--mc-blue);letter-spacing:.2em;font-weight:800}
+  .mc-postcard__data-v{color:var(--mc-ink);font-weight:700;letter-spacing:.05em}
+  .mc-marquee{background:var(--mc-ink);color:var(--mc-gold);overflow:hidden;padding:.9rem 0;border-top:3px solid var(--mc-ink)}
+  .mc-marquee__track{display:flex;gap:3rem;width:max-content;animation:mc-marquee 40s linear infinite;font-family:var(--font-mono);font-size:.82rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+  @keyframes mc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .mc-iconos-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-iconos-section::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.04) 1.2px,transparent 1.2px);background-size:24px 24px;pointer-events:none}
+  .mc-iconos-section>*{position:relative}
+  .mc-iconos-chapter{color:var(--mc-blue)}
+  .mc-iconos-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-iconos-title em{color:var(--mc-gold)}
+  .mc-iconos{list-style:none;padding:0;margin:2.5rem 0 0;display:grid;grid-template-columns:1fr;gap:1.5rem}
+  @media(min-width:640px){.mc-iconos{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.mc-iconos{grid-template-columns:repeat(4,1fr)}}
+  .mc-icono{display:flex;flex-direction:column;gap:.5rem;padding:2rem 1.5rem;background:var(--mc-paper);border:2.5px solid var(--mc-ink);box-shadow:var(--mc-shadow);align-items:center;text-align:center;transition:transform .25s,box-shadow .25s}
+  .mc-icono:hover{transform:translate(-4px,-4px)}
+  .mc-icono--marble:hover{box-shadow:12px 12px 0 var(--mc-marble)}.mc-icono--gold:hover{box-shadow:12px 12px 0 var(--mc-gold)}.mc-icono--blue:hover{box-shadow:12px 12px 0 var(--mc-blue)}.mc-icono--ink:hover{box-shadow:12px 12px 0 var(--mc-ink)}
+  .mc-icono__code{width:80px;height:80px;flex-shrink:0}
+  .mc-icono__letter{font-family:var(--font-display);font-size:2.5rem;font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--mc-gold)}
+  .mc-icono--marble .mc-icono__letter{color:var(--mc-marble)}.mc-icono--blue .mc-icono__letter{color:var(--mc-blue)}.mc-icono--ink .mc-icono__letter{color:var(--mc-ink)}
+  .mc-icono__name{font-size:clamp(1.2rem,2.2vw,1.5rem);line-height:1;letter-spacing:-.025em;color:var(--mc-ink);margin:0}
+  .mc-icono__sub{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.2em;color:var(--mc-gold);font-weight:800}
+  .mc-icono--marble .mc-icono__sub{color:var(--mc-marble)}.mc-icono--blue .mc-icono__sub{color:var(--mc-blue)}.mc-icono--ink .mc-icono__sub{color:var(--mc-ink)}
+  .mc-icono__desc{font-size:.82rem;line-height:1.45;color:var(--brutal-text-secondary);margin:0;flex:1}
+  .mc-icono__dato{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--mc-ink);border-top:2px dashed var(--mc-ink);padding-top:.5rem;width:100%}
+  .mc-marble-section{background:var(--mc-stone);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-marble-section::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.04) 1.2px,transparent 1.2px);background-size:22px 22px;pointer-events:none}
+  .mc-marble-section>*{position:relative}
+  .mc-marble-grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center}
+  @media(min-width:1024px){.mc-marble-grid{grid-template-columns:1.3fr 1fr;gap:4rem}}
+  .mc-marble-chapter{color:var(--mc-blue)}
+  .mc-marble-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-marble-title em{color:var(--mc-blue);font-style:italic}
+  .mc-marble-lead{font-size:1.05rem;line-height:1.55;color:var(--brutal-text-secondary);margin-bottom:1rem;max-width:54ch}
+  .mc-marble-lead strong{color:var(--mc-accent);font-weight:800}
+  .mc-marble-lead em{color:var(--mc-blue);font-style:italic}
+  .mc-marble-facts{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr;gap:0;border:2px solid var(--mc-ink);background:var(--mc-paper)}
+  @media(min-width:640px){.mc-marble-facts{grid-template-columns:1fr 1fr}}
+  .mc-marble-facts li{padding:.75rem 1rem;border-bottom:1px solid var(--mc-ink);display:flex;flex-direction:column;gap:2px;background:var(--mc-paper)}
+  @media(min-width:640px){.mc-marble-facts li:nth-child(odd){border-right:1px solid var(--mc-ink)}.mc-marble-facts li:nth-last-child(-n+2){border-bottom:none}}
+  @media(max-width:639px){.mc-marble-facts li:last-child{border-bottom:none}}
+  .mc-marble-facts__k{font-size:.58rem;letter-spacing:.2em;color:var(--mc-blue);font-weight:800}
+  .mc-marble-facts__v{font-size:.9rem;color:var(--mc-ink);font-weight:600;line-height:1.35}
+  .mc-marble__r{width:100%;max-width:360px;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(0,0,0,0.3))}
+  .mc-museum-section{background:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-museum-chapter{color:var(--mc-gold)}
+  .mc-museum-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-museum-title em{color:var(--mc-gold);font-style:italic}
+  .mc-museum-lead{font-size:1.05rem;line-height:1.55;color:var(--brutal-text-secondary);margin-bottom:2rem;max-width:64ch}
+  .mc-museum-lead strong{color:var(--mc-accent);font-weight:700}
+  .mc-museum-grid{display:grid;grid-template-columns:1fr;gap:1.25rem}
+  @media(min-width:640px){.mc-museum-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.mc-museum-grid{grid-template-columns:repeat(4,1fr)}}
+  .mc-museum-card{background:var(--mc-paper-2);border:2.5px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-ink);padding:1.75rem 1.25rem;display:flex;flex-direction:column;gap:.65rem;transition:transform .25s,box-shadow .25s}
+  .mc-museum-card:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--mc-gold)}
+  .mc-museum-card__icon{margin-bottom:.25rem}
+  .mc-museum-card h3{font-size:clamp(1.1rem,1.8vw,1.25rem);line-height:1.05;letter-spacing:-.02em;color:var(--mc-ink);margin:0}
+  .mc-museum-card p{font-size:.82rem;line-height:1.45;color:var(--brutal-text-secondary);margin:0;flex:1}
+  .mc-sec-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-sec-chapter{color:var(--mc-blue)}
+  .mc-sec-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-sec-title em{color:var(--mc-gold)}
+  .mc-sec{list-style:none;padding:0;margin:2rem 0 0;display:grid;grid-template-columns:1fr;gap:1.5rem}
+  @media(min-width:768px){.mc-sec{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.mc-sec{grid-template-columns:repeat(3,1fr)}}
+  .mc-sec__card{background:var(--mc-paper);border:2.5px solid var(--mc-ink);box-shadow:var(--mc-shadow);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
+  .mc-sec__card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:currentColor}
+  .mc-sec__card:hover{transform:translate(-3px,-3px);box-shadow:12px 12px 0 currentColor}
+  .mc-sec__card--marble{color:var(--mc-marble)}.mc-sec__card--gold{color:var(--mc-gold)}.mc-sec__card--blue{color:var(--mc-blue)}.mc-sec__card--stone{color:var(--mc-stone)}.mc-sec__card--accent{color:var(--mc-accent)}.mc-sec__card--ink{color:var(--mc-ink)}
+  .mc-sec__head{display:flex;justify-content:space-between;align-items:center;padding-bottom:.5rem;border-bottom:2px dashed currentColor;gap:.5rem}
+  .mc-sec__num{font-size:1.5rem;font-weight:800;color:currentColor;line-height:1}
+  .mc-sec__stat-box{background:var(--mc-ink);color:var(--mc-paper);padding:.35rem .65rem;display:flex;flex-direction:column;border:1.5px solid currentColor;text-align:right}
+  .mc-sec__stat-v{font-size:.95rem;font-weight:800;color:currentColor;line-height:1}
+  .mc-sec__stat-l{font-size:.5rem;letter-spacing:.12em;opacity:.85;text-transform:uppercase}
+  .mc-sec__title{font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.1;letter-spacing:-.02em;color:var(--mc-ink);margin:0}
+  .mc-sec__desc{font-size:.88rem;line-height:1.5;color:var(--brutal-text-secondary);flex:1}
+  .mc-sec__tags{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.3rem}
+  .mc-sec__tag{display:flex;align-items:flex-start;gap:.35rem;font-size:.78rem;line-height:1.35;color:var(--mc-ink)}
+  .mc-sec__tag span{color:currentColor;font-weight:800}
+  .mc-sec__foot{padding-top:.65rem;border-top:2px solid var(--mc-ink)}
+  .mc-sec__cta{font-family:var(--font-mono);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:currentColor;text-decoration:none;border-bottom:2px solid currentColor;padding-bottom:2px}
+  .mc-map-section{background:var(--mc-stone);border-bottom:3px solid var(--mc-ink)}
+  .mc-map-head{padding:4rem 0 2rem}
+  .mc-map-head__inner{display:grid;grid-template-columns:1fr;gap:1rem;align-items:end}
+  @media(min-width:768px){.mc-map-head__inner{grid-template-columns:1.5fr 1fr}}
+  .mc-map-chapter{color:var(--mc-blue)}
+  .mc-map-title{font-size:clamp(2.25rem,5vw,3.5rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0 0}
+  .mc-map-title em{color:var(--mc-blue)}
+  .mc-map-coords{background:var(--mc-gold);color:var(--mc-ink);padding:1rem 1.25rem;border:2px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-blue);display:flex;flex-direction:column;gap:.35rem;font-size:.7rem;letter-spacing:.15em}
+  .mc-map-frame{position:relative;border-top:3px solid var(--mc-ink);border-bottom:3px solid var(--mc-ink);background:var(--mc-ink)}
+  .mc-map-icon{position:absolute;width:60px;height:60px;z-index:5;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.45));opacity:.85}
+  .mc-map-icon--tl{top:16px;left:16px}
+  .mc-map-icon--br{bottom:16px;right:16px}
+  .mc-map-wrap{width:100%;height:clamp(420px,60vh,600px);overflow:hidden}
+  .mc-map-wrap>*{width:100%;height:100%}
+  .mc-dif-section{background:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-dif-chapter{color:var(--mc-gold)}
+  .mc-dif-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-dif-title em{color:var(--mc-gold)}
+  .mc-dif{list-style:none;padding:0;margin:2rem 0 0;display:grid;gap:0;border:2px solid var(--mc-ink)}
+  @media(min-width:768px){.mc-dif{grid-template-columns:1fr 1fr}}
+  .mc-dif__item{padding:1.75rem 1.5rem;border-bottom:1px solid var(--mc-ink);display:flex;flex-direction:column;gap:.65rem;transition:background .2s}
+  @media(min-width:768px){.mc-dif__item:nth-child(odd){border-right:1px solid var(--mc-ink)}.mc-dif__item:nth-last-child(-n+2){border-bottom:none}}
+  @media(max-width:767px){.mc-dif__item:last-child{border-bottom:none}}
+  .mc-dif__item--0{background:var(--mc-paper-2)}.mc-dif__item--1{background:var(--mc-paper)}.mc-dif__item--2{background:var(--mc-stone)}.mc-dif__item--3{background:var(--mc-paper)}
+  .mc-dif__item:hover{background:var(--mc-gold)}
+  .mc-dif__num{font-size:.85rem;color:var(--mc-gold);font-weight:800;letter-spacing:.15em}
+  .mc-dif__t{font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.05;letter-spacing:-.025em;color:var(--mc-ink);margin:0}
+  .mc-dif__desc{font-size:.92rem;line-height:1.5;color:var(--brutal-text-secondary);margin:0}
+  .mc-proc-section{background:var(--mc-ink);color:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-proc-section::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.08) 1.2px,transparent 1.2px);background-size:22px 22px;pointer-events:none}
+  .mc-proc-section>*{position:relative}
+  .mc-proc-chapter{color:var(--mc-gold)}
+  .mc-proc-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-proc-title em{color:var(--mc-gold)}
+  .mc-proc{list-style:none;padding:0;margin:2rem 0 0;display:grid;gap:1.25rem}
+  @media(min-width:768px){.mc-proc{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.mc-proc{grid-template-columns:repeat(4,1fr)}}
+  .mc-proc__step{background:rgba(250,247,240,0.05);border:2px solid var(--mc-paper);padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:.65rem;transition:background .25s,transform .25s}
+  .mc-proc__step:hover{background:rgba(196,164,74,0.12);transform:translateY(-3px)}
+  .mc-proc__head{display:flex;justify-content:space-between;padding-bottom:.35rem;border-bottom:1.5px dashed rgba(250,247,240,0.25)}
+  .mc-proc__num{font-size:1.5rem;font-weight:800;color:var(--mc-gold);line-height:1}
+  .mc-proc__eta{font-size:.6rem;letter-spacing:.15em;color:var(--mc-gold)}
+  .mc-proc__t{font-size:clamp(1.1rem,1.8vw,1.3rem);line-height:1.05;letter-spacing:-.02em;color:var(--mc-paper);margin:.25rem 0 0}
+  .mc-proc__body{font-size:.85rem;line-height:1.45;color:rgba(250,247,240,0.75);flex:1}
+  .mc-proc__foot{font-size:.58rem;letter-spacing:.2em;color:var(--mc-gold);font-weight:800;padding-top:.5rem;border-top:1.5px solid rgba(250,247,240,0.25)}
+  .mc-quote-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-quote-chapter{color:var(--mc-blue)}
+  .mc-quote-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-quote-title em{color:var(--mc-gold)}
+  .mc-pull{position:relative;background:var(--mc-stone);border:3px solid var(--mc-ink);box-shadow:var(--mc-shadow);padding:3rem 2rem 2rem;margin:2rem 0}
+  .mc-pull__seal{position:absolute;top:-30px;right:30px;width:90px;aspect-ratio:1;transform:rotate(-10deg);filter:drop-shadow(0 4px 8px rgba(196,164,74,0.4))}
+  .mc-pull__q{font-family:var(--font-display);font-style:italic;font-size:clamp(1.35rem,2.4vw,2rem);line-height:1.3;margin:0 0 1.5rem;color:var(--mc-ink);max-width:56ch}
+  .mc-pull__cap{display:flex;align-items:center;gap:1rem;padding-top:1.25rem;border-top:2px dashed var(--mc-ink)}
+  .mc-pull__avatar{width:48px;height:48px;background:var(--mc-gold);color:var(--mc-ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.35rem;font-weight:800;border-radius:50%}
+  .mc-pull__cap div{display:flex;flex-direction:column}
+  .mc-pull__name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--mc-ink)}
+  .mc-pull__role{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;opacity:.65;text-transform:uppercase}
+  .mc-quotes{list-style:none;padding:0;margin:0;display:grid;gap:1.5rem}
+  @media(min-width:768px){.mc-quotes{grid-template-columns:repeat(2,1fr)}}
+  .mc-quote{position:relative;background:var(--mc-paper);border:2px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-ink);padding:1.75rem 1.5rem 1.25rem;display:flex;flex-direction:column;gap:1rem;transition:transform .25s}
+  .mc-quote:hover{transform:translateY(-3px)}
+  .mc-quote--0{background:var(--mc-paper)}.mc-quote--1{background:var(--mc-stone)}
+  .mc-quote__mark{position:absolute;top:-8px;left:14px;font-family:serif;font-size:4rem;line-height:1;color:var(--mc-gold);opacity:.45}
+  .mc-quote p{font-size:.92rem;line-height:1.5;color:var(--mc-ink);flex:1;margin:0}
+  .mc-quote footer{display:flex;align-items:center;gap:.75rem;padding-top:.85rem;border-top:1.5px dashed var(--mc-ink)}
+  .mc-quote__avatar{width:36px;height:36px;background:var(--mc-blue);color:var(--mc-paper);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;border-radius:50%;flex-shrink:0}
+  .mc-quote footer div{display:flex;flex-direction:column}
+  .mc-quote__name{font-family:var(--font-display);font-weight:700;font-size:.9rem}
+  .mc-quote__role{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;opacity:.65;text-transform:uppercase}
+  .mc-faq-section{background:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-faq-chapter{color:var(--mc-blue)}
+  .mc-faq-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-faq-title em{color:var(--mc-gold)}
+  .mc-faq{list-style:none;padding:0;margin:2rem 0 0;border-top:2.5px solid var(--mc-ink)}
+  .mc-faq__item{border-bottom:2px solid var(--mc-ink)}
+  .mc-faq__det summary{list-style:none;cursor:pointer}
+  .mc-faq__det summary::-webkit-details-marker{display:none}
+  .mc-faq__sum{display:grid;grid-template-columns:60px 1fr 40px;gap:1rem;align-items:center;padding:1.5rem 0;transition:padding .2s,background .2s}
+  .mc-faq__sum:hover{padding-inline:1rem;background:var(--mc-paper-2)}
+  .mc-faq__num{font-size:1rem;font-weight:800;color:var(--mc-blue);letter-spacing:.1em}
+  .mc-faq__q{font-family:var(--font-display);font-size:clamp(1.05rem,1.8vw,1.25rem);line-height:1.3;letter-spacing:-.015em;color:var(--mc-ink);font-weight:700}
+  .mc-faq__toggle{width:40px;height:40px;border:2px solid var(--mc-ink);background:var(--mc-paper);color:var(--mc-ink);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .2s,color .2s}
+  .mc-faq__det[open] .mc-faq__toggle{transform:rotate(180deg);background:var(--mc-gold);color:var(--mc-ink)}
+  .mc-faq__ans{padding:0 0 1.5rem 76px;color:var(--brutal-text-secondary);font-size:.98rem;line-height:1.55;max-width:70ch}
+  @media(max-width:640px){.mc-faq__sum{grid-template-columns:40px 1fr 32px;gap:.5rem}.mc-faq__ans{padding-left:48px}}
+  .mc-vecinos-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-vecinos-chapter{color:var(--mc-blue)}
+  .mc-vecinos-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
+  .mc-vecinos-title em{color:var(--mc-gold)}
+  .mc-vecinos{list-style:none;padding:0;margin:2rem 0 0;display:grid;gap:0;grid-template-columns:1fr;border:2px solid var(--mc-ink);background:var(--mc-ink)}
+  @media(min-width:640px){.mc-vecinos{grid-template-columns:repeat(2,1fr);gap:2px}}
+  @media(min-width:1024px){.mc-vecinos{grid-template-columns:repeat(4,1fr)}}
+  .mc-vecino{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;gap:.35rem;padding:1.5rem;background:var(--mc-paper);color:var(--mc-ink);text-decoration:none;min-height:160px;transition:background .25s,color .25s;grid-template-areas:'n arrow' 'name name' 'sub sub'}
+  .mc-vecino__n{grid-area:n;font-size:.58rem;letter-spacing:.2em;opacity:.55}
+  .mc-vecino__name{grid-area:name;font-size:clamp(1.4rem,2.5vw,1.8rem);line-height:.95;letter-spacing:-.025em}
+  .mc-vecino__sub{grid-area:sub;font-size:.58rem;letter-spacing:.15em;opacity:.55;text-transform:uppercase}
+  .mc-vecino__arrow{grid-area:arrow;align-self:start;font-family:var(--font-mono);color:var(--mc-gold);font-size:1.3rem;transition:transform .25s}
+  .mc-vecino:hover{background:var(--mc-gold);color:var(--mc-ink)}
+  .mc-vecino:hover .mc-vecino__sub,.mc-vecino:hover .mc-vecino__n{opacity:.85}
+  .mc-vecino:hover .mc-vecino__arrow{color:var(--mc-ink);transform:translateX(4px)}
+  .mc-vecino--1:hover{background:var(--mc-blue);color:var(--mc-paper)}
+  .mc-vecino--2:hover{background:var(--mc-stone);color:var(--mc-ink)}
+  .mc-vecino--3:hover{background:var(--mc-accent);color:var(--mc-paper)}
+  .mc-final{background:#1A1A18;color:var(--mc-paper);padding:6rem 1.5rem 0;position:relative;overflow:hidden}
+  .mc-final::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.06) 1.2px,transparent 1.2px);background-size:24px 24px;pointer-events:none}
+  .mc-final>*{position:relative}
+  .mc-final__grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center;padding-bottom:4rem}
+  @media(min-width:1024px){.mc-final__grid{grid-template-columns:1.3fr 1fr;gap:4rem}}
+  .mc-final-chapter{color:var(--mc-gold)}
+  .mc-final__title{font-size:clamp(2.5rem,7vw,5.5rem);line-height:.9;letter-spacing:-.045em;color:var(--mc-paper);margin:1rem 0}
+  .mc-final__title em{color:var(--mc-gold);font-style:italic;display:block}
+  .mc-final__lead{font-size:1.05rem;line-height:1.55;color:rgba(250,247,240,0.75);max-width:52ch}
+  .mc-final__lead strong{color:var(--mc-gold)}
+  .mc-final__cta{display:flex;flex-wrap:wrap;gap:1rem;margin:1.75rem 0 1.5rem}
+  .mc-final__btn{display:inline-flex;align-items:center;gap:.75rem;padding:1.15rem 1.85rem;font-family:var(--font-display);font-weight:800;font-size:1.05rem;border:2.5px solid;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+  .mc-final__btn--primary{background:var(--mc-gold);color:var(--mc-ink);border-color:var(--mc-gold);box-shadow:6px 6px 0 var(--mc-blue)}
+  .mc-final__btn--primary:hover{background:var(--mc-blue);color:var(--mc-paper);border-color:var(--mc-blue);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-gold)}
+  .mc-final__btn--ghost{background:transparent;color:var(--mc-paper);border-color:var(--mc-paper);box-shadow:6px 6px 0 var(--mc-paper)}
+  .mc-final__btn--ghost:hover{background:var(--mc-paper);color:var(--mc-ink);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-paper)}
+  .mc-final__trust{display:flex;flex-wrap:wrap;gap:1rem 1.75rem;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.15em;color:rgba(250,247,240,0.55);text-transform:uppercase;margin-top:1.5rem}
+  .mc-final__trust .mc-pulse{background:var(--mc-gold);margin:0 .25rem 0 0;box-shadow:0 0 0 0 rgba(196,164,74,0.55)}
+  .mc-final__r{display:flex;align-items:center;justify-content:center;max-width:360px;margin:0 auto}
+  .mc-final-svg{display:block;width:100%;height:100%;filter:drop-shadow(0 12px 36px rgba(196,164,74,0.25))}
+  .mc-final__marquee{background:var(--mc-gold);color:var(--mc-ink);overflow:hidden;padding:.85rem 0;border-top:3px solid var(--mc-ink);margin:0 -1.5rem}
+  .mc-final__marquee-track{display:flex;gap:3rem;width:max-content;animation:mc-marquee 36s linear infinite;font-family:var(--font-mono);font-size:.85rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+</style>
