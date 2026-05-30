@@ -1,0 +1,2028 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosTabernas = getPueblosByComarca('Los Filabres-Tabernas').filter(p => p.slug !== 'tabernas');
+
+const title = 'Diseño Web en Tabernas | Desierto, Parques del Oeste y Astroturismo · Almería';
+const description = 'Agencia de diseño web en Tabernas, el único desierto de Europa y el Hollywood almeriense. Webs para parques temáticos del oeste, alojamientos rurales con astroturismo, restaurantes y comercio local. SEO turístico, multiidioma, venta de entradas online y reservas directas.';
+const canonical = 'https://platanitorico.com/diseno-web/tabernas/';
+
+const sectores = [
+  { nombre: 'Parques Temáticos del Oeste', stat: '3',  statLabel: 'parques del oeste',     desc: 'Mini Hollywood, Texas Hollywood y Fort Bravo atraen a miles de turistas cada año. Estos parques necesitan webs multiidioma con venta de entradas online, calendario de espectáculos y galerías inmersivas que capturen la magia del western desde el primer clic.', tags: ['Venta entradas online','Multiidioma','Calendario espectáculos','SEO "Mini Hollywood"'] },
+  { nombre: 'Astroturismo Starlight',       stat: '★',  statLabel: 'Reserva Starlight',      desc: 'El Desierto de Tabernas es uno de los mejores cielos de Europa para observar estrellas. Empresas de astroturismo, alojamientos con cúpulas astronómicas y guías especializadas necesitan webs que vendan la experiencia de mirar al cosmos.', tags: ['Reservas observatorio','Astroturismo','Starlight Reserve','Calendario lunar'] },
+  { nombre: 'Alojamiento Rural y Glamping', stat: '+60%', statLabel: 'demanda en crecimiento', desc: 'Casas rurales, hoteles boutique con vistas al desierto y glamping temático western. El turista que visita Tabernas busca alojamiento con personalidad. Motor de reservas directas para eliminar comisiones de Booking.', tags: ['Motor reservas propio','Glamping temático','Experiencias únicas','Multiidioma'] },
+  { nombre: 'Restauración del Desierto',    stat: '#1',  statLabel: 'cocina almeriense',     desc: 'Bares, restaurantes y ventas en la carretera de los parques del oeste. Cocina tradicional almeriense para los miles de visitantes que recorren la ruta del spaghetti western diariamente.', tags: ['Carta digital QR','Reservas online','SEO "comer Tabernas"','Google Business'] },
+  { nombre: 'Turismo de Cine y Rodajes',    stat: '+150', statLabel: 'películas desde 1964',  desc: 'Desde "Por un puñado de dólares" hasta "La Peste" y "Juego de Tronos". Rutas cinéfilas guiadas, visita a sets de rodaje y contenido para amantes del cine western.', tags: ['Rutas de cine','Visitas a sets','Paquetes cinéfilos','Galería de rodajes'] },
+  { nombre: 'Comercio y Artesanía Western', stat: '24/7', statLabel: 'tienda online',          desc: 'Merchandising de los parques, artesanía almeriense, souvenirs western y productos gastronómicos locales. E-commerce para vender todo el año, no solo en temporada turística.', tags: ['E-commerce','Merchandising','Envíos nacionales','Producto local'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Desierto',           sub: 'ÚNICO EN EUROPA',      desc: '280 km² de badlands, cárcavas y ramblas que forman el único desierto del continente. Un paisaje lunar que no existe en ningún otro lugar de Europa.', dato: '280 km²', color: 'terracota' },
+  { code: 'B', name: 'Spaghetti Western',   sub: 'HOLLYWOOD EN ALMERÍA', desc: 'Más de 150 películas desde 1964. Clint Eastwood, Sean Connery, Harrison Ford y Brad Pitt han rodado aquí. Tabernas es la meca del cine de aventuras europeo.', dato: '+150 films', color: 'gold' },
+  { code: 'C', name: 'Reserva Starlight',   sub: 'ASTRONOMÍA ★ UNESCO', desc: 'Cielos despejados 300+ noches al año, contaminación lumínica casi nula. Certificación Starlight. Observación astronómica de clase mundial en pleno desierto.', dato: '300+ noches', color: 'sky' },
+  { code: 'D', name: 'Mini Hollywood',      sub: 'PARQUE DEL OESTE',    desc: 'El parque western más famoso de España. Diligencias, duelos al sol, salón y cantina. Miles de visitantes cada fin de semana reviven el Lejano Oeste en Almería.', dato: '195K+ vis/año', color: 'sage' },
+];
+
+const desertData = [
+  { k: 'EXTENSIÓN',     v: '280 km² · Paraje Natural' },
+  { k: 'CLIMA',         v: 'Árido · 300+ días sol/año' },
+  { k: 'TEMP. MÁX.',    v: 'Hasta 50 °C en superficie' },
+  { k: 'PRECIPITACIÓN', v: '< 200 mm · clima subdesértico' },
+  { k: 'PROTECCIÓN',    v: 'ZEPA · LIC · Reserva Natural' },
+  { k: 'FLORA',         v: 'Especies endémicas de estepa' },
+];
+
+const platos = [
+  { plato: 'Migas del Desierto',  desc: 'Harina, ajo, pimientos y torreznos — receta de pastores y labrantíos',   rating: '★★★★', color: 'terracota' },
+  { plato: 'Cordero Segureño',    desc: 'Lechal asado al horno de leña con hierbas aromáticas de la sierra',       rating: '★★★★★', color: 'gold' },
+  { plato: 'Trigo con conejo',    desc: 'Guiso tradicional con trigo, conejo, caracoles y garbanzos de la tierra', rating: '★★★★', color: 'sage' },
+  { plato: 'Vinos D.O. Almería',  desc: 'Vinos ecológicos de uva cultivada en el desierto — autenticidad líquida',  rating: '★★★★', color: 'sun' },
+];
+
+const diferenciales = [
+  { title: 'Único desierto de Europa',           desc: 'No hay otro lugar igual en el continente. 280 km² de badlands que atraen viajeros de todo el mundo. Una rareza geográfica que vende sola — si la web sabe contarlo.' },
+  { title: 'Hollywood en Almería',                desc: '+150 películas desde Clint Eastwood hasta Juego de Tronos. El cine ha puesto Tabernas en el mapa global. La historia cinematográfica bien contada atrae fans, curiosos y peregrinos del spaghetti western.' },
+  { title: 'Cielo Starlight certificado',         desc: 'Uno de los mejores firmamentos de Europa. Certificación Starlight de la UNESCO. 300+ noches despejadas. El astroturismo crece un 30% anual y Tabernas es el mejor sitio de España para practicarlo.' },
+  { title: 'Autenticidad extrema',                desc: 'No es un parque temático de Disney — es un desierto real con ecosistema propio, clima extremo y paisajes que parecen de otro planeta. Esa verdad geológica es el lujo que venden los negocios locales.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión en el desierto',   eta: '1–2 días',  body: 'Visitamos tu negocio en Tabernas. Si tienes un parque, vemos el espectáculo. Si es hotel, sentimos el paisaje. Entendemos el negocio en su contexto real del desierto.', deliverable: 'Briefing + análisis' },
+  { num: '02', title: 'Diseño western',              eta: '3–5 días',  body: 'Tipografía robusta, fotografía épica del paisaje, paleta de atardecer desértico. Sin plantillas. Una identidad visual tan única como las dunas de Tabernas.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Desarrollo + entradas',       eta: '5–10 días', body: 'Astro ultrarrápido, venta de entradas online, motor de reservas, multiidioma, Core Web Vitals verdes y accesibilidad AA.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + SEO Tabernas',  eta: '1–2 días',  body: 'Publicamos y configuramos Google Business Profile para Tabernas, keywords de desierto, western y cine, e indexamos en Search Console.', deliverable: 'Sitio LIVE + manual' },
+];
+
+const testimonios = [
+  { nombre: 'José Luis Romero', negocio: 'Parque temático del oeste',         texto: 'Con la web nueva en cuatro idiomas, las reservas de entradas online subieron un 70%. Los turistas alemanes y franceses buscan "Mini Hollywood" desde casa y compran antes de viajar. El sistema de preventa nos cambió el negocio por completo.' },
+  { nombre: 'Carmen Flores',    negocio: 'Alojamiento rural con observatorio', texto: 'Montamos un telescopio en el jardín y con la web de astroturismo atraemos aficionados de toda Europa. Las noches de observación guiada se llenan. Nunca habíamos tenido clientes en noviembre hasta que empezamos.' },
+  { nombre: 'Juan Castaño',     negocio: 'Restaurante carretera de los parques', texto: 'Estamos en la ruta de los parques del oeste pero nadie paraba. Desde que optimizamos Google Maps y la web con reseñas, hemos multiplicado por tres los clientes de temporada baja.' },
+];
+
+const faq = [
+  { q: '¿Podéis hacer una web multiidioma para mi negocio en Tabernas?', a: 'Sí, trabajamos ES, EN, DE y FR. El turismo de Tabernas es eminentemente internacional — alemanes y británicos son los perfiles más frecuentes en los parques y alojamientos. SEO real en cada idioma, nada de traducción automática.' },
+  { q: '¿Cuánto cuesta una web con venta de entradas online para un parque temático?', a: 'Parque del oeste con venta de entradas, multiidioma y calendario de espectáculos: desde 1.200€. Alojamiento rural con motor de reservas desde 650€. Restaurante con carta digital y reservas desde 550€. Hosting gratuito siempre.' },
+  { q: '¿Hacéis fotografía profesional del desierto para la web?', a: 'Sí, tenemos equipo para fotografía de paisaje, atardeceres en el desierto, astrofotografía y contenido visual impactante. El desierto de Tabernas es un escenario espectacular y hay que aprovecharlo al máximo.' },
+  { q: '¿Tenéis experiencia con astroturismo y observaciones astronómicas?', a: 'Sí, hemos trabajado con alojamientos que ofrecen experiencias de astroturismo. Integramos calendario de fases lunares, reserva de noches de observación y descripción del equipamiento astronómico disponible.' },
+  { q: '¿Qué hago si mi negocio está en la carretera de los parques del oeste?', a: 'Optimizamos tu presencia para captar el tráfico de visitantes que va a Mini Hollywood, Texas Hollywood y Fort Bravo. Google Business Profile + web con contenido local. Hay mucho tráfico pasante que se puede capturar.' },
+  { q: '¿En cuánto tiempo tengo mi web de Tabernas lista?', a: 'Web corporativa: 1–2 semanas. Parque temático con entradas online: 2–4 semanas. Astroturismo con calendario astronómico: 2–3 semanas. Alojamiento con motor de reservas: 2–4 semanas.' },
+  { q: '¿Ayudáis con marketing digital para mi negocio en Tabernas?', a: 'Sí, ofrecemos SEO local, Google Business Profile, gestión de reseñas y contenido para redes. Posicionamos para keywords como "Mini Hollywood entradas", "Desierto de Tabernas visitas", "astroturismo Almería" y "hotel desierto".' },
+  { q: '¿Hacéis webs para empresas de rodajes y localizaciones?', a: 'Sí, desarrollamos plataformas para film commissions con catálogo de sets, galería de fotos de producción, información técnica de accesos y permisos, y formulario de solicitud de rodaje.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Tabernas","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Tabernas","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-tabernas.jpg","address":{"@type":"PostalAddress","addressLocality":"Tabernas","addressRegion":"Almería","postalCode":"04200","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.0525,"longitude":-2.3914},"areaServed":["Tabernas","Sorbas","Uleila del Campo","Los Filabres","Desierto de Tabernas"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"52","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Tabernas","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-tabernas.jpg"
+  imageAlt="Diseño web en Tabernas - Desierto, Parques del Oeste y Cine"
+  type="service"
+  keywords="diseño web tabernas, desierto de tabernas, mini hollywood, parques del oeste almería, astroturismo almería, spaghetti western"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="tb">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — DESIERTO DE TABERNAS                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-hero">
+      <div class="container-brutal">
+
+        <header class="tb-hero__top">
+          <span class="text-meta">N.º 027 — Los Filabres-Tabernas · Desierto</span>
+          <span class="text-meta tb-hero__status">
+            <span class="tb-pulse"></span>
+            ★ ÚNICO DESIERTO DE EUROPA · PARQUE NATURAL ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="tb-hero__grid">
+
+          <div class="tb-hero__intro">
+            <span class="text-meta tb-hero__chapter">Cap. 01 / Tabernas · Almería</span>
+            <h1 class="tb-hero__title heading-display">
+              Diseño web para el
+              <em class="heading-editorial">desierto</em>
+              <span class="tb-hero__title-stamp">del spaghetti western.</span>
+            </h1>
+
+            <p class="tb-hero__lead">
+              <strong>Tabernas</strong> es el único desierto de Europa y el
+              <em>Hollywood almeriense</em>. Sus badlands han sido escenario de
+              más de 150 películas y sus cielos tienen certificación Starlight.
+              <strong>Tu web tiene que estar a la altura del paisaje.</strong>
+            </p>
+
+            <div class="tb-hero__cta">
+              <a href="/contacto" class="tb-btn tb-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#desierto" class="tb-btn tb-btn--ghost">
+                El Desierto de Tabernas ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="tb-kpis">
+              <li class="tb-kpi tb-kpi--terracota">
+                <span class="tb-kpi__v text-mono">#1</span>
+                <span class="tb-kpi__l">Único desierto Europa</span>
+              </li>
+              <li class="tb-kpi tb-kpi--gold">
+                <span class="tb-kpi__v text-mono">150<small>+</small></span>
+                <span class="tb-kpi__l">Películas rodadas</span>
+              </li>
+              <li class="tb-kpi tb-kpi--sky">
+                <span class="tb-kpi__v text-mono">★</span>
+                <span class="tb-kpi__l">Reserva Starlight</span>
+              </li>
+              <li class="tb-kpi tb-kpi--ink">
+                <span class="tb-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="tb-kpi__l">52 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — paisaje desértico + imagen real */}
+          <aside class="tb-hero__postcard" aria-hidden="true">
+            <div class="tb-postcard">
+
+              <header class="tb-postcard__head">
+                <span class="text-mono">TABERNAS · 04200 · ALMERÍA</span>
+                <span class="text-mono">37.052° N · 2.391° W</span>
+              </header>
+
+              {/* Perfil del desierto SVG */}
+              <div class="tb-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="tb-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#E8732E"/>
+                      <stop offset="40%" stop-color="#C85A3A"/>
+                      <stop offset="75%" stop-color="#8C3A5A"/>
+                      <stop offset="100%" stop-color="#2C4C6B"/>
+                    </linearGradient>
+                    <linearGradient id="tb-sun" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#FFD600"/>
+                      <stop offset="100%" stop-color="#E8732E"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo atardecer */}
+                  <rect width="540" height="220" fill="url(#tb-sky)"/>
+
+                  {/* Sol poniente */}
+                  <circle cx="120" cy="100" r="28" fill="url(#tb-sun)" opacity="0.7"/>
+                  <circle cx="120" cy="100" r="20" fill="#FFD600" opacity="0.4"/>
+
+                  {/* Estrellas tempranas */}
+                  <circle cx="420" cy="20" r="1.5" fill="#FFFBF0"/>
+                  <circle cx="480" cy="35" r="1" fill="#FFFBF0"/>
+                  <circle cx="380" cy="50" r="1" fill="#FFFBF0"/>
+                  <circle cx="500" cy="15" r="1.2" fill="#FFFBF0"/>
+
+                  {/* Mesas lejanas (buttes) */}
+                  <path d="M 0 160 L 40 80 L 60 80 L 80 100 L 100 90 L 120 100 L 140 160 Z" fill="#5A3A2A" stroke="#1C1512" stroke-width="1.5"/>
+                  <path d="M 300 170 L 330 100 L 350 95 L 380 120 L 410 170 Z" fill="#6A4A3A" stroke="#1C1512" stroke-width="1.5"/>
+                  <path d="M 420 180 L 440 120 L 460 130 L 490 160 L 540 170 L 540 220 L 420 220 Z" fill="#4A2A1A" stroke="#1C1512" stroke-width="1.5"/>
+
+                  {/* Mesa central con detalle de estratos */}
+                  <g transform="translate(170, 70)">
+                    <path d="M 0 90 L 10 0 L 70 0 L 90 30 L 130 30 L 140 90 Z" fill="#7A5A3A" stroke="#1C1512" stroke-width="2"/>
+                    <path d="M 15 8 L 65 8 L 80 30 L 125 30" fill="none" stroke="#C85A3A" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M 10 40 L 135 40" fill="none" stroke="#5A3A2A" stroke-width="2" opacity="0.5"/>
+                    <path d="M 10 60 L 135 60" fill="none" stroke="#4A2A1A" stroke-width="1.5" opacity="0.4"/>
+                  </g>
+
+                  {/* Suelo del desierto */}
+                  <path d="M 0 178 Q 60 170 140 178 T 280 178 T 420 178 T 540 178 L 540 220 L 0 220 Z" fill="#D4B88C" stroke="#1C1512" stroke-width="2"/>
+                  <path d="M 0 190 Q 80 184 180 190 T 360 190 T 540 190" fill="none" stroke="#B8986A" stroke-width="1.5" opacity="0.6"/>
+                  <path d="M 0 202 Q 100 196 200 202 T 400 202 T 540 202" fill="none" stroke="#B8986A" stroke-width="1" opacity="0.4"/>
+
+                  {/* Saguaro cactus izq */}
+                  <g transform="translate(50, 120)">
+                    <rect x="-3" y="0" width="6" height="58" fill="#4A7A4A" stroke="#1C1512" stroke-width="1.5"/>
+                    <path d="M -3 12 L -16 12 L -16 6 L -18 6 L -18 16 L -3 16" fill="#4A7A4A" stroke="#1C1512" stroke-width="1.5"/>
+                    <path d="M 3 22 L 16 22 L 16 14 L 18 14 L 18 26 L 3 26" fill="#4A7A4A" stroke="#1C1512" stroke-width="1.5"/>
+                    <path d="M -3 34 L -12 34 L -12 28 L -14 28 L -14 38 L -3 38" fill="#4A7A4A" stroke="#1C1512" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Saguaro cactus dcha peque */}
+                  <g transform="translate(420, 130)">
+                    <rect x="-2" y="0" width="4" height="48" fill="#3A6A3A" stroke="#1C1512" stroke-width="1.5"/>
+                    <path d="M -2 16 L -12 16 L -12 10 L -14 10 L -14 20 L -2 20" fill="#3A6A3A" stroke="#1C1512" stroke-width="1.5"/>
+                    <path d="M 2 28 L 12 28 L 12 22 L 14 22 L 14 32 L 2 32" fill="#3A6A3A" stroke="#1C1512" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Arbusto seco estepa */}
+                  <g transform="translate(320, 165)">
+                    <circle cx="0" cy="0" r="5" fill="#7A9A7A" stroke="#1C1512" stroke-width="1"/>
+                    <circle cx="6" cy="-3" r="3" fill="#6A8A6A" stroke="#1C1512" stroke-width="0.8"/>
+                    <circle cx="-5" cy="2" r="4" fill="#5A7A5A" stroke="#1C1512" stroke-width="0.8"/>
+                  </g>
+                  <g transform="translate(230, 170)">
+                    <circle cx="0" cy="0" r="4" fill="#6A8A6A" stroke="#1C1512" stroke-width="1"/>
+                    <circle cx="4" cy="-2" r="2.5" fill="#5A7A5A" stroke="#1C1512" stroke-width="0.8"/>
+                  </g>
+
+                  {/* Rastro/camino polvoriento */}
+                  <path d="M 60 195 Q 160 188 260 194 Q 360 200 460 196" fill="none" stroke="#C8A87C" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.6"/>
+
+                  {/* Silueta jinete a caballo al fondo */}
+                  <g transform="translate(280, 155)" opacity="0.4">
+                    <path d="M 0 0 L 4 -12 L 6 -12 L 8 -2 L 12 -2 L 14 -10 L 16 -10 L 18 0 L 0 0 Z" fill="#1C1512"/>
+                    <path d="M 2 -12 L 4 -18 L 6 -18 L 8 -12 Z" fill="#1C1512"/>
+                  </g>
+
+                  {/* Cartel western (silueta) */}
+                  <g transform="translate(190, 145)">
+                    <rect x="0" y="0" width="16" height="22" fill="#C85A3A" stroke="#1C1512" stroke-width="1.5" opacity="0.7"/>
+                    <rect x="6" y="-4" width="4" height="6" fill="#5A3A2A" stroke="#1C1512" stroke-width="1" opacity="0.7"/>
+                  </g>
+
+                </svg>
+              </div>
+
+              {/* Imagen real Tabernas */}
+              <div class="tb-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-tabernas.jpg"
+                  alt="Tabernas — desierto, badlands y paisaje lunar de Almería"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="tb-postcard__img"
+                />
+                {/* Estrella de sheriff flotante */}
+                <div class="tb-postcard__badge" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#C85A3A"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#FFD600" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    {/* Estrella de sheriff */}
+                    <g fill="#FFD600" stroke="#1C1512" stroke-width="1.5" stroke-linejoin="round">
+                      <polygon points="40,10 46,30 66,30 50,42 56,62 40,50 24,62 30,42 14,30 34,30"/>
+                    </g>
+                    <circle cx="40" cy="40" r="4" fill="#C85A3A" stroke="#1C1512" stroke-width="1"/>
+                  </svg>
+                </div>
+                <div class="tb-postcard__tag">
+                  <span class="text-mono">★ ÚNICO DESIERTO DE EUROPA ★</span>
+                </div>
+              </div>
+
+              {/* Datos del desierto */}
+              <div class="tb-postcard__data">
+                <div class="tb-postcard__data-row">
+                  <span class="text-mono">EXTENSIÓN</span>
+                  <span class="text-mono tb-postcard__data-v">280 km²</span>
+                </div>
+                <div class="tb-postcard__data-row">
+                  <span class="text-mono">PELÍCULAS</span>
+                  <span class="text-mono tb-postcard__data-v">150+ · desde 1964</span>
+                </div>
+                <div class="tb-postcard__data-row">
+                  <span class="text-mono">CIELO</span>
+                  <span class="text-mono tb-postcard__data-v">Starlight · 300+ noches</span>
+                </div>
+                <div class="tb-postcard__data-row">
+                  <span class="text-mono">PARQUES</span>
+                  <span class="text-mono tb-postcard__data-v">3 · Mini Hollywood · Texas · Fort</span>
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+        </div>
+
+        {/* Marquee base */}
+        <div class="tb-marquee">
+          <div class="tb-marquee__track">
+            <span>★ DESIERTO DE TABERNAS · ÚNICO EN EUROPA ★ PARQUE NATURAL 280 KM² ★ SPAGHETTI WESTERN DESDE 1964 ★ RESERVA STARLIGHT UNESCO ★ MINI HOLLYWOOD · TEXAS HOLLYWOOD · FORT BRAVO ★ ASTROTURISMO · 300+ NOCHES DESPEJADAS ★</span>
+            <span>★ DESIERTO DE TABERNAS · ÚNICO EN EUROPA ★ PARQUE NATURAL 280 KM² ★ SPAGHETTI WESTERN DESDE 1964 ★ RESERVA STARLIGHT UNESCO ★ MINI HOLLYWOOD · TEXAS HOLLYWOOD · FORT BRAVO ★ ASTROTURISMO · 300+ NOCHES DESPEJADAS ★</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-iconos-section" id="desierto">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-iconos-chapter">Cap. 02 / Prontuario</span>
+        <h2 class="tb-iconos-title heading-display">
+          Cuatro señas de
+          <em class="heading-editorial">identidad</em>
+          <span class="heading-display-block">de Tabernas.</span>
+        </h2>
+
+        <ol class="tb-iconos" style="counter-reset: iconos">
+          {iconos.map((ico, i) => (
+            <li class={`tb-icono tb-icono--${ico.color}`}>
+              <div class="tb-icono__code">
+                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                  <circle cx="40" cy="40" r="38" fill="var(--tb-ink)" stroke="var(--tb-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                  {i === 0 && (
+                    <>
+                      {/* SVG: dunas/sol */}
+                      <path d="M 12 56 Q 28 42 40 56 T 68 56" fill="none" stroke="var(--tb-terracota)" stroke-width="2.5" stroke-linecap="round"/>
+                      <path d="M 12 64 Q 28 52 40 64 T 68 64" fill="none" stroke="#D4A14A" stroke-width="2" stroke-linecap="round"/>
+                      <circle cx="40" cy="32" r="10" fill="#D4A14A" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <circle cx="40" cy="32" r="6" fill="var(--tb-terracota)"/>
+                    </>
+                  )}
+                  {i === 1 && (
+                    <>
+                      {/* SVG: claqueta de cine */}
+                      <rect x="18" y="26" width="44" height="32" rx="2" fill="var(--tb-ink)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <rect x="20" y="28" width="40" height="12" fill="var(--tb-paper)"/>
+                      <line x1="20" y1="32" x2="60" y2="32" stroke="var(--tb-ink)" stroke-width="1"/>
+                      <line x1="20" y1="36" x2="60" y2="36" stroke="var(--tb-ink)" stroke-width="1"/>
+                      <rect x="20" y="42" width="40" height="14" fill="var(--tb-gold)"/>
+                      <polygon points="22,44 34,50 22,56" fill="var(--tb-ink)" opacity="0.3"/>
+                      <path d="M 14 24 L 22 28 L 14 32 Z" fill="var(--tb-ink)"/>
+                    </>
+                  )}
+                  {i === 2 && (
+                    <>
+                      {/* SVG: estrella/telescopio */}
+                      <circle cx="32" cy="30" r="2" fill="var(--tb-gold)"/>
+                      <circle cx="52" cy="24" r="1.5" fill="var(--tb-gold)"/>
+                      <circle cx="44" cy="16" r="2" fill="var(--tb-gold)"/>
+                      <circle cx="28" cy="18" r="1" fill="var(--tb-gold)"/>
+                      <circle cx="58" cy="38" r="1" fill="var(--tb-gold)"/>
+                      <circle cx="40" cy="40" r="10" fill="var(--tb-sky)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <path d="M 40 30 L 64 70 L 58 72 L 36 34 Z" fill="var(--tb-ink)"/>
+                      <circle cx="44" cy="38" r="4" fill="var(--tb-sky)" stroke="var(--tb-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                  {i === 3 && (
+                    <>
+                      {/* SVG: estrella sheriff */}
+                      <polygon points="40,18 44,30 56,30 46,38 50,50 40,42 30,50 34,38 24,30 36,30" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1.5" stroke-linejoin="round"/>
+                      <circle cx="40" cy="36" r="3" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <span class="tb-icono__letter">{ico.code}</span>
+              <h3 class="tb-icono__name">{ico.name}</h3>
+              <span class="tb-icono__sub">{ico.sub}</span>
+              <p class="tb-icono__desc">{ico.desc}</p>
+              <span class="tb-icono__dato">{ico.dato}</span>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DESIERTO — FLAGSHIP SECTION                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-desert-section">
+      <div class="container-brutal">
+        <div class="tb-desert-grid">
+
+          <div class="tb-desert__content">
+            <span class="text-meta tb-desert-chapter">Cap. 03 / Patrimonio Natural</span>
+            <h2 class="tb-desert-title heading-display">
+              El único desierto
+              <em class="heading-editorial">de Europa</em>
+              <span class="heading-display-block">está en Almería.</span>
+            </h2>
+            <p class="tb-desert-lead">
+              El <strong>Desierto de Tabernas</strong> es una rareza geológica:
+              un paisaje semiárido de badlands, cárcavas y ramblas que no existe
+              en ningún otro lugar del continente europeo. Declarado
+              <em>Paraje Natural</em> en 1989, sus 280 km² albergan un
+              ecosistema único adaptado a la aridez extrema.
+            </p>
+            <p class="tb-desert-lead">
+              Pero Tabernas no es solo geología: es el <strong>Hollywood almeriense</strong>,
+              el escenario donde Clint Eastwood, Sean Connery y Harrison Ford
+              protagonizaron algunas de las películas de aventuras más
+              icónicas del cine. Y es también <strong>Reserva Starlight</strong>
+              de la UNESCO, con unos de los cielos más oscuros y limpios de Europa.
+            </p>
+
+            <ul class="tb-desert-facts">
+              {desertData.map(d => (
+                <li>
+                  <span class="tb-desert-facts__k">{d.k}</span>
+                  <span class="tb-desert-facts__v">{d.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* SVG decorativo — paisaje desértico con luna */}
+          <div class="tb-desert__r">
+            <svg viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+              <defs>
+                <linearGradient id="tb-ds-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1A1A3A"/>
+                  <stop offset="50%" stop-color="#2C4C6B"/>
+                  <stop offset="100%" stop-color="#C85A3A"/>
+                </linearGradient>
+              </defs>
+              <rect width="360" height="400" fill="url(#tb-ds-sky)" rx="8"/>
+
+              {/* Luna llena */}
+              <circle cx="280" cy="60" r="22" fill="#FFFBF0" opacity="0.9"/>
+              <circle cx="286" cy="56" r="20" fill="#1A1A3A"/>
+
+              {/* Estrellas */}
+              <circle cx="60" cy="40" r="2" fill="#FFFBF0"/>
+              <circle cx="120" cy="30" r="1.5" fill="#FFFBF0"/>
+              <circle cx="180" cy="55" r="1" fill="#FFFBF0"/>
+              <circle cx="320" cy="20" r="1.5" fill="#FFFBF0"/>
+              <circle cx="40" cy="70" r="1" fill="#FFFBF0"/>
+              <circle cx="200" cy="25" r="2" fill="#FFFBF0"/>
+              <circle cx="150" cy="70" r="1" fill="#FFFBF0"/>
+
+              {/* Mesas/buttes noche */}
+              <path d="M 0 260 L 60 180 L 80 180 L 100 210 L 140 200 L 160 260 Z" fill="#3A2A1A" stroke="#1C1512" stroke-width="2"/>
+              <path d="M 200 270 L 240 200 L 260 190 L 300 230 L 360 260 L 360 400 L 200 400 Z" fill="#2A1A0A" stroke="#1C1512" stroke-width="2"/>
+
+              {/* Mesa central con estratos */}
+              <g transform="translate(80, 160)">
+                <path d="M 0 100 L 20 10 L 80 0 L 120 10 L 140 100 Z" fill="#5A3A2A" stroke="#1C1512" stroke-width="2"/>
+                <path d="M 0 40 L 140 40" fill="none" stroke="#C85A3A" stroke-width="1.5" opacity="0.5"/>
+                <path d="M 0 60 L 140 60" fill="none" stroke="#8C3A5A" stroke-width="1.5" opacity="0.4"/>
+                <path d="M 0 80 L 140 80" fill="none" stroke="#4A2A1A" stroke-width="1.5" opacity="0.3"/>
+              </g>
+
+              {/* Suelo desierto noche */}
+              <path d="M 0 310 Q 80 300 180 310 T 360 310 L 360 400 L 0 400 Z" fill="#4A3A2A" stroke="#1C1512" stroke-width="2"/>
+              <path d="M 0 340 Q 100 330 200 340 T 360 340" fill="none" stroke="#6A5A4A" stroke-width="1" opacity="0.4"/>
+              <path d="M 0 360 Q 120 350 240 360 T 360 360" fill="none" stroke="#5A4A3A" stroke-width="1" opacity="0.3"/>
+
+              {/* Cactus noche */}
+              <g transform="translate(40, 280)">
+                <rect x="-3" y="0" width="6" height="30" fill="#3A5A3A" stroke="#1C1512" stroke-width="1.5"/>
+                <path d="M -3 8 L -14 8 L -14 3 L -16 3 L -16 12 L -3 12" fill="#3A5A3A" stroke="#1C1512" stroke-width="1.5"/>
+              </g>
+
+              {/* Telescopio silueta */}
+              <g transform="translate(260, 260)">
+                <line x1="0" y1="0" x2="30" y2="-30" stroke="#1C1512" stroke-width="3"/>
+                <line x1="15" y1="-15" x2="15" y2="30" stroke="#1C1512" stroke-width="2"/>
+                <rect x="-4" y="28" width="8" height="10" fill="#1C1512"/>
+                <circle cx="30" cy="-30" r="5" fill="#1C1512"/>
+                <line x1="30" y1="-30" x2="42" y2="-36" stroke="#1C1512" stroke-width="1.5"/>
+              </g>
+
+              {/* Esquirlas rocosas */}
+              <path d="M 160 310 L 165 290 L 170 310" fill="#5A3A2A" stroke="#1C1512" stroke-width="1"/>
+              <path d="M 300 310 L 308 285 L 316 310" fill="#4A2A1A" stroke="#1C1512" stroke-width="1"/>
+
+              {/* Label */}
+              <text x="180" y="385" text-anchor="middle" fill="#FFFBF0" opacity="0.3" font-family="monospace" font-size="10" letter-spacing="3">DESIERTO DE TABERNAS · 280 KM²</text>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PLATÓ — HOLLYWOOD ALMERIENSE                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-cine-section">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-cine-chapter">Cap. 04 / Spaghetti Western</span>
+        <h2 class="tb-cine-title heading-display">
+          El Hollywood
+          <em class="heading-editorial">almeriense</em>
+          <span class="heading-display-block">donde el cine se hizo polvo.</span>
+        </h2>
+
+        <p class="tb-cine-lead">
+          En 1964 Sergio Leone llegó a Tabernas buscando un desierto para rodar
+          <strong>"Por un puñado de dólares"</strong>. Desde entonces, más de
+          <strong>150 producciones</strong> han pisado sus badlands. Clint Eastwood,
+          Sean Connery, Harrison Ford, Brad Pitt, Natalie Portman y Anthony Hopkins
+          han trabajado aquí. Tabernas es el decorado natural más versátil de Europa.
+        </p>
+
+        <ul class="tb-cine-list">
+          {platos.map((p, i) => (
+            <li class={`tb-cine-card tb-cine-card--${p.color}`}>
+              <div class="tb-cine-card__icon">
+                <svg viewBox="0 0 60 60" width="100%" height="100%">
+                  {i === 0 && (
+                    <>
+                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                      <path d="M 20 34 Q 30 28 40 34" fill="none" stroke="var(--tb-terracota)" stroke-width="2"/>
+                      <circle cx="25" cy="40" r="2" fill="var(--tb-gold)"/>
+                      <circle cx="35" cy="40" r="2" fill="var(--tb-gold)"/>
+                      <circle cx="30" cy="22" r="5" fill="var(--tb-gold)"/>
+                    </>
+                  )}
+                  {i === 1 && (
+                    <>
+                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                      <path d="M 18 34 L 24 26 L 30 30 L 36 24 L 42 34 Z" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <rect x="22" y="36" width="16" height="10" rx="2" fill="var(--tb-ink)"/>
+                    </>
+                  )}
+                  {i === 2 && (
+                    <>
+                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                      <circle cx="30" cy="24" r="6" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <path d="M 18 42 Q 24 34 30 42 Q 36 34 42 42" fill="none" stroke="var(--tb-sage)" stroke-width="2"/>
+                      <circle cx="26" cy="22" r="1.5" fill="var(--tb-ink)"/>
+                    </>
+                  )}
+                  {i === 3 && (
+                    <>
+                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                      <path d="M 22 34 Q 30 28 38 34" fill="none" stroke="#C85A3A" stroke-width="1.5"/>
+                      <circle cx="30" cy="26" r="10" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1"/>
+                      <circle cx="30" cy="26" r="4" fill="#C85A3A"/>
+                      <line x1="30" y1="26" x2="30" y2="14" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <line x1="30" y1="26" x2="42" y2="20" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <h3 class="tb-cine-card__title">{p.plato}</h3>
+              <p class="tb-cine-card__desc">{p.desc}</p>
+              <span class="tb-cine-card__rating">{p.rating}</span>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-sec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-sec-chapter">Cap. 05 / Oportunidades</span>
+        <h2 class="tb-sec-title heading-display">
+          Seis sectores para
+          <em class="heading-editorial">llegar</em>
+          <span class="heading-display-block">más lejos que el horizonte.</span>
+        </h2>
+
+        <ul class="tb-sec">
+          {sectores.map((s, i) => (
+            <li class={`tb-sec__card tb-sec__card--${['terracota','gold','sky','sage','sun','ink'][i]}`}>
+              <div class="tb-sec__head">
+                <span class="tb-sec__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                <div class="tb-sec__stat-box">
+                  <span class="tb-sec__stat-v">{s.stat}</span>
+                  <span class="tb-sec__stat-l">{s.statLabel}</span>
+                </div>
+              </div>
+              <h3 class="tb-sec__title">{s.nombre}</h3>
+              <p class="tb-sec__desc">{s.desc}</p>
+              <ul class="tb-sec__tags">
+                {s.tags.map(tag => (
+                  <li class="tb-sec__tag"><span>▸</span> {tag}</li>
+                ))}
+              </ul>
+              <div class="tb-sec__foot">
+                <a href="/contacto" class="tb-sec__cta">Solicitar información →</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-map-section">
+      <div class="container-brutal">
+        <div class="tb-map-head">
+          <div class="tb-map-head__inner">
+            <div>
+              <span class="text-meta tb-map-chapter">Cap. 06 / Cartografía</span>
+              <h2 class="tb-map-title heading-display">
+                El desierto en el
+                <em class="heading-editorial">mapa.</em>
+              </h2>
+            </div>
+            <div class="tb-map-coords">
+              <span class="text-mono">37.052° N · 2.391° W</span>
+              <span class="text-mono">04200 · Tabernas · Los Filabres-Tabernas</span>
+              <span class="text-mono">Altitud: 400 m · Clima: Árido</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tb-map-frame">
+        {/* Estrella decorativa TL */}
+        <div class="tb-map-icon tb-map-icon--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <polygon points="30,6 34,20 48,20 36,28 40,42 30,34 20,42 24,28 12,20 26,20" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        {/* Cactus decorativo BR */}
+        <div class="tb-map-icon tb-map-icon--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <rect x="27" y="10" width="6" height="40" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+            <path d="M 27 22 L 16 22 L 16 16 L 14 16 L 14 26 L 27 26" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+            <path d="M 33 32 L 44 32 L 44 26 L 46 26 L 46 36 L 33 36" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="tb-map-wrap">
+          <InteractiveMap
+            center={[-2.3914, 37.0525]}
+            zoom={11}
+            pueblos={[
+              { slug: "tabernas", nombre: "Tabernas", poblacion: 4000, descripcion: "Desierto y Hollywood almeriense", destacado: true, coords: [-2.3914, 37.0525] },
+              { slug: "sorbas", nombre: "Sorbas", poblacion: 3000, descripcion: "Cuevas de yeso únicas en Europa", coords: [-2.1073, 37.0934] },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="tb-dif-title heading-display">
+          Por qué Tabernas
+          <em class="heading-editorial">no es</em>
+          <span class="heading-display-block">como ningún otro sitio.</span>
+        </h2>
+
+        <ol class="tb-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`tb-dif__item tb-dif__item--${i}`}>
+              <span class="tb-dif__num text-mono">{String(i+1).padStart(2,'0')}</span>
+              <h3 class="tb-dif__t">{d.title}</h3>
+              <p class="tb-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-proc-section">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-proc-chapter">Cap. 08 / Método</span>
+        <h2 class="tb-proc-title heading-display">
+          Así trabajamos
+          <em class="heading-editorial">en</em>
+          <span class="heading-display-block">el desierto.</span>
+        </h2>
+
+        <ol class="tb-proc">
+          {proceso.map(p => (
+            <li class="tb-proc__step">
+              <div class="tb-proc__head">
+                <span class="tb-proc__num">{p.num}</span>
+                <span class="tb-proc__eta">{p.eta}</span>
+              </div>
+              <h3 class="tb-proc__t">{p.title}</h3>
+              <p class="tb-proc__body">{p.body}</p>
+              <div class="tb-proc__foot">{p.deliverable}</div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS — 3                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-quote-section">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-quote-chapter">Cap. 09 / Resultados</span>
+        <h2 class="tb-quote-title heading-display">
+          Lo que dicen
+          <em class="heading-editorial">los que</em>
+          <span class="heading-display-block">ya están en el desierto digital.</span>
+        </h2>
+
+        {testimonios.length > 0 && (
+          <figure class="tb-pull">
+            {/* Sello estrella animada */}
+            <div class="tb-pull__seal" aria-hidden="true">
+              <svg viewBox="0 0 90 90" width="100%" height="100%" class="tb-pull__spin">
+                <circle cx="45" cy="45" r="43" fill="#C85A3A" stroke="#1C1512" stroke-width="2"/>
+                <circle cx="45" cy="45" r="38" fill="none" stroke="#FFD600" stroke-width="1.5" stroke-dasharray="2.5 2"/>
+                <polygon points="45,12 50,28 66,28 54,38 58,54 45,44 32,54 36,38 24,28 40,28" fill="#FFD600" stroke="#1C1512" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="45" cy="36" r="3" fill="#C85A3A" stroke="#1C1512" stroke-width="1"/>
+                <text x="45" y="68" text-anchor="middle" fill="#FFFBF0" font-size="7" font-weight="800" font-family="monospace" letter-spacing="1">TABERNAS</text>
+              </svg>
+            </div>
+            <blockquote class="tb-pull__q">
+              "{testimonios[0].texto}"
+            </blockquote>
+            <figcaption class="tb-pull__cap">
+              <div class="tb-pull__avatar">
+                {testimonios[0].nombre.charAt(0)}
+              </div>
+              <div>
+                <span class="tb-pull__name">{testimonios[0].nombre}</span>
+                <span class="tb-pull__role">{testimonios[0].negocio}</span>
+              </div>
+            </figcaption>
+          </figure>
+        )}
+
+        {testimonios.length > 1 && (
+          <ul class="tb-quotes">
+            {testimonios.slice(1).map((t, i) => (
+              <li class={`tb-quote tb-quote--${i}`}>
+                <span class="tb-quote__mark" aria-hidden="true">&ldquo;</span>
+                <p>{t.texto}</p>
+                <footer>
+                  <div class="tb-quote__avatar">{t.nombre.charAt(0)}</div>
+                  <div>
+                    <span class="tb-quote__name">{t.nombre}</span>
+                    <span class="tb-quote__role">{t.negocio}</span>
+                  </div>
+                </footer>
+              </li>
+            ))}
+          </ul>
+        )}
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-faq-section">
+      <div class="container-brutal">
+
+        <span class="text-meta tb-faq-chapter">Cap. 10 / FAQ</span>
+        <h2 class="tb-faq-title heading-display">
+          Respuestas para
+          <em class="heading-editorial">el desierto</em>
+          <span class="heading-display-block">de dudas.</span>
+        </h2>
+
+        <dl class="tb-faq">
+          {faq.map((f, i) => (
+            <div class="tb-faq__item">
+              <details class="tb-faq__det" open={i === 0}>
+                <summary>
+                  <div class="tb-faq__sum">
+                    <span class="tb-faq__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                    <span class="tb-faq__q">{f.q}</span>
+                    <span class="tb-faq__toggle" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </summary>
+                <div class="tb-faq__ans">
+                  {f.a}
+                </div>
+              </details>
+            </div>
+          ))}
+        </dl>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosTabernas.length > 0 && (
+      <section class="tb-vecinos-section">
+        <div class="container-brutal">
+
+          <span class="text-meta tb-vecinos-chapter">Cap. 11 / Comarca</span>
+          <h2 class="tb-vecinos-title heading-display">
+            Los Filabres-Tabernas
+            <em class="heading-editorial">al completo.</em>
+          </h2>
+
+          <ul class="tb-vecinos">
+            {pueblosTabernas.slice(0, 8).map((p, i) => (
+              <a href={`/diseno-web/${p.slug}/`} class={`tb-vecino tb-vecino--${i}`} key={p.slug}>
+                <span class="tb-vecino__n">{String(i+1).padStart(2,'0')}</span>
+                <span class="tb-vecino__name">{p.nombre}</span>
+                <span class="tb-vecino__sub">{p.descripcion}</span>
+                <span class="tb-vecino__arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </ul>
+
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="tb-final">
+      <div class="container-brutal">
+        <div class="tb-final__grid">
+
+          <div>
+            <span class="text-meta tb-final-chapter">Cap. 12 / Acción</span>
+            <h2 class="tb-final__title heading-display">
+              Tu web en el
+              <em>desierto.</em>
+            </h2>
+            <p class="tb-final__lead">
+              <strong>Tabernas</strong> es único en Europa. Tu negocio también.
+              Desde parques del oeste hasta alojamientos con telescopio,
+              te ayudamos a construir la web que tu desierto merece.
+              <strong>Sin polvo. Sin plantillas. Con resultados.</strong>
+            </p>
+
+            <div class="tb-final__cta">
+              <a href="/contacto" class="tb-final__btn tb-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="tb-final__btn tb-final__btn--ghost">
+                ☎ 657 085 019
+              </a>
+            </div>
+
+            <div class="tb-final__trust">
+              <span><span class="tb-pulse"></span> ACEPTANDO PROYECTOS 2026</span>
+              <span>★ DISEÑO + SEO + HOSTING</span>
+              <span>★ 4.9 ★ 52 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* SVG — cowboy hat / cactus / estrella */}
+          <div class="tb-final__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="tb-final-svg">
+              <defs>
+                <radialGradient id="tb-final-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#C85A3A" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#C85A3A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#tb-final-glow)"/>
+
+              {/* Sol radiante */}
+              <circle cx="170" cy="110" r="40" fill="#D4A14A" opacity="0.3"/>
+              <circle cx="170" cy="110" r="28" fill="#E8732E" opacity="0.4"/>
+
+              {/* Estrella grande central */}
+              <g transform="translate(170, 170)" class="tb-final-star">
+                <polygon points="0,-60 16,-20 60,-20 24,10 38,56 0,28 -38,56 -24,10 -60,-20 -16,-20" fill="#D4A14A" stroke="#1C1512" stroke-width="2.5" stroke-linejoin="round"/>
+                <polygon points="0,-44 12,-14 44,-14 18,8 28,40 0,20 -28,40 -18,8 -44,-14 -12,-14" fill="#FFD600" stroke="none"/>
+                <circle cx="0" cy="0" r="5" fill="#C85A3A" stroke="#1C1512" stroke-width="1.5"/>
+              </g>
+
+              {/* Cactus pequeños alrededor */}
+              <g transform="translate(80, 240)">
+                <rect x="-2" y="-24" width="4" height="24" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
+                <path d="M -2 -12 L -10 -12 L -10 -16 L -12 -16 L -12 -8 L -2 -8" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
+                <path d="M 2 -4 L 10 -4 L 10 -8 L 12 -8 L 12 0 L 2 0" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
+              </g>
+
+              <g transform="translate(240, 230)">
+                <rect x="-2" y="-18" width="4" height="18" fill="#4A6A4A" stroke="#1C1512" stroke-width="1.5"/>
+                <path d="M -2 -8 L -8 -8 L -8 -12 L -10 -12 L -10 -4 L -2 -4" fill="#4A6A4A" stroke="#1C1512" stroke-width="1.5"/>
+              </g>
+
+              {/* Huellas en la arena */}
+              <circle cx="120" cy="270" r="3" fill="none" stroke="#D4A14A" stroke-width="1" opacity="0.4"/>
+              <circle cx="132" cy="274" r="3" fill="none" stroke="#D4A14A" stroke-width="1" opacity="0.4"/>
+              <circle cx="144" cy="270" r="3" fill="none" stroke="#D4A14A" stroke-width="1" opacity="0.4"/>
+              <circle cx="156" cy="276" r="3" fill="none" stroke="#D4A14A" stroke-width="1" opacity="0.4"/>
+
+              {/* Texto curvo */}
+              <path d="M 60 300 Q 170 330 280 300" fill="none" stroke="none"/>
+                <text font-family="monospace" font-size="10" font-weight="800" fill="#FFFBF0" opacity="0.2" letter-spacing="4" text-anchor="middle">
+                  <tspan x="170" dy="0">TABERNAS · ÚNICO DESIERTO DE EUROPA</tspan>
+                </text>
+            </svg>
+          </div>
+
+        </div>
+
+        {/* Marquee final */}
+        <div class="tb-final__marquee">
+          <div class="tb-final__marquee-track">
+            <span>★ TABERNAS · DISEÑO WEB PARA EL DESIERTO ★ PARQUES DEL OESTE · ASTROTURISMO · HOSTELERÍA · COMERCIO ★ MINI HOLLYWOOD · TEXAS HOLLYWOOD · FORT BRAVO ★ HABLAMOS?</span>
+            <span>★ TABERNAS · DISEÑO WEB PARA EL DESIERTO ★ PARQUES DEL OESTE · ASTROTURISMO · HOSTELERÍA · COMERCIO ★ MINI HOLLYWOOD · TEXAS HOLLYWOOD · FORT BRAVO ★ HABLAMOS?</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* TABERNAS DESIGN SYSTEM                          */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --tb-paper:    #FFF5E6;
+    --tb-paper-2:  #F0E2CC;
+    --tb-sand:     #E3CDA4;
+    --tb-ink:      #1C1512;
+    --tb-terracota:#C85A3A;
+    --tb-gold:     #D4A14A;
+    --tb-sky:      #2C4C6B;
+    --tb-sage:     #5A7A5A;
+    --tb-sun:      #E8732E;
+    --tb-rose:     #8C3A5A;
+    --tb-shadow:   8px 8px 0 var(--tb-ink);
+  }
+
+  .tb-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--tb-terracota);
+    box-shadow: 0 0 0 0 rgba(200,90,58,0.55);
+    animation: tb-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes tb-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(200,90,58,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(200,90,58,0); }
+    100% { box-shadow: 0 0 0 0 rgba(200,90,58,0); }
+  }
+  .tb-pull__spin { transform-origin: 50% 50%; animation: tb-spin 22s linear infinite; }
+  @keyframes tb-spin { to { transform: rotate(360deg); } }
+  .tb-final-star { transform-origin: 50% 50%; animation: tb-pulse-star 3s ease-in-out infinite; }
+  @keyframes tb-pulse-star {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%      { transform: scale(1.08); opacity: 0.85; }
+  }
+
+  /* HERO */
+  .tb-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 75% 30%, rgba(200,90,58,0.10), transparent 50%),
+      radial-gradient(circle at 25% 75%, rgba(212,161,74,0.08), transparent 50%),
+      var(--tb-paper);
+    border-bottom: 3px solid var(--tb-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .tb-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 0 22px, rgba(200,90,58,0.06) 22px 23px, transparent 23px 44px),
+      linear-gradient(-45deg, transparent 0 22px, rgba(200,90,58,0.06) 22px 23px, transparent 23px 44px);
+    pointer-events: none;
+  }
+  .tb-hero > * { position: relative; }
+  .tb-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .tb-hero__status { color: var(--tb-terracota); font-weight: 700; }
+
+  .tb-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) { .tb-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .tb-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .tb-hero__chapter { color: var(--tb-sky); }
+  .tb-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .tb-hero__title em { color: var(--tb-sky); font-style: italic; }
+  .tb-hero__title-stamp {
+    display: inline-block;
+    color: var(--tb-paper);
+    background: var(--tb-terracota);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .tb-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 54ch;
+  }
+  .tb-hero__lead strong { color: var(--tb-ink); font-weight: 700; }
+  .tb-hero__lead em { color: var(--tb-terracota); font-style: italic; font-weight: 600; }
+  .tb-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .tb-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--tb-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .tb-btn--primary {
+    background: var(--tb-terracota);
+    color: var(--tb-paper);
+    box-shadow: 6px 6px 0 var(--tb-ink);
+  }
+  .tb-btn--primary:hover {
+    background: var(--tb-sky);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--tb-ink);
+  }
+  .tb-btn--ghost {
+    background: transparent;
+    color: var(--tb-ink);
+    box-shadow: 6px 6px 0 var(--tb-gold);
+  }
+  .tb-btn--ghost:hover {
+    background: var(--tb-ink);
+    color: var(--tb-gold);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--tb-gold);
+  }
+
+  /* KPIs */
+  .tb-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--tb-ink);
+    background: var(--tb-ink);
+  }
+  @media (min-width: 768px) { .tb-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .tb-kpi {
+    background: var(--tb-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--tb-ink);
+    border-bottom: 2px solid var(--tb-ink);
+  }
+  .tb-kpi:nth-child(2n) { border-right: none; }
+  .tb-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .tb-kpi:nth-child(2n)       { border-right: 2px solid var(--tb-ink); }
+    .tb-kpi:nth-child(4n)       { border-right: none; }
+    .tb-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--tb-ink); }
+    .tb-kpi:nth-last-child(-n+4)  { border-bottom: none; }
+  }
+  .tb-kpi--terracota  { background: var(--tb-terracota); color: var(--tb-paper); }
+  .tb-kpi--gold       { background: var(--tb-gold); color: var(--tb-ink); }
+  .tb-kpi--sky        { background: var(--tb-sky); color: var(--tb-paper); }
+  .tb-kpi--ink        { background: var(--tb-ink); color: var(--tb-paper); }
+  .tb-kpi--ink .tb-kpi__v { color: var(--tb-gold); }
+  .tb-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .tb-kpi__v small { font-size: .55em; opacity: .8; }
+  .tb-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .tb-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(28,21,18,0.18));
+  }
+  .tb-postcard {
+    background: var(--tb-paper);
+    border: 3px solid var(--tb-ink);
+    box-shadow: var(--tb-shadow);
+    overflow: hidden;
+    transform: rotate(1deg);
+    transition: transform .35s;
+  }
+  .tb-postcard:hover { transform: rotate(0); }
+  .tb-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--tb-ink);
+    color: var(--tb-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--tb-ink);
+  }
+  .tb-postcard__profile {
+    width: 100%;
+    aspect-ratio: 540 / 220;
+    border-bottom: 2px solid var(--tb-ink);
+    overflow: hidden;
+  }
+  .tb-postcard__img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 2px solid var(--tb-ink);
+  }
+  .tb-postcard__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.1);
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .tb-postcard:hover .tb-postcard__img { transform: scale(1.05); }
+  .tb-postcard__badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 80px; height: 80px;
+    transform: rotate(10deg);
+    filter: drop-shadow(0 4px 10px rgba(200,90,58,0.5));
+  }
+  .tb-postcard__tag {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    background: var(--tb-paper);
+    color: var(--tb-ink);
+    padding: .4rem .75rem;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--tb-ink);
+    box-shadow: 3px 3px 0 var(--tb-terracota);
+    transform: rotate(2deg);
+  }
+  .tb-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--tb-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .tb-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(28,21,18,0.15);
+    font-size: .68rem;
+  }
+  .tb-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .tb-postcard__data-row > span:first-child { color: var(--tb-sky); letter-spacing: .2em; font-weight: 800; }
+  .tb-postcard__data-v { color: var(--tb-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .tb-marquee {
+    background: var(--tb-ink);
+    color: var(--tb-gold);
+    overflow: hidden;
+    padding: .9rem 0;
+    border-top: 3px solid var(--tb-ink);
+  }
+  .tb-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: tb-marquee 40s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes tb-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ICONOS */
+  .tb-iconos-section {
+    background: var(--tb-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .tb-iconos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(200,90,58,0.04) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .tb-iconos-section > * { position: relative; }
+  .tb-iconos-chapter { color: var(--tb-sky); }
+  .tb-iconos-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-iconos-title em { color: var(--tb-terracota); }
+
+  .tb-iconos {
+    list-style: none; padding: 0; margin: 2.5rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px)  { .tb-iconos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .tb-iconos { grid-template-columns: repeat(4, 1fr); } }
+  .tb-icono {
+    display: flex; flex-direction: column; gap: .5rem;
+    padding: 2rem 1.5rem;
+    background: var(--tb-paper);
+    border: 2.5px solid var(--tb-ink);
+    box-shadow: var(--tb-shadow);
+    align-items: center;
+    text-align: center;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .tb-icono:hover { transform: translate(-4px, -4px); }
+  .tb-icono--terracota:hover { box-shadow: 12px 12px 0 var(--tb-terracota); }
+  .tb-icono--gold:hover      { box-shadow: 12px 12px 0 var(--tb-gold); }
+  .tb-icono--sky:hover       { box-shadow: 12px 12px 0 var(--tb-sky); }
+  .tb-icono--sage:hover      { box-shadow: 12px 12px 0 var(--tb-sage); }
+  .tb-icono__code { width: 80px; height: 80px; flex-shrink: 0; }
+  .tb-icono__letter {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.04em;
+    color: var(--tb-terracota);
+  }
+  .tb-icono--gold .tb-icono__letter      { color: var(--tb-gold); }
+  .tb-icono--sky .tb-icono__letter       { color: var(--tb-sky); }
+  .tb-icono--sage .tb-icono__letter      { color: var(--tb-sage); }
+  .tb-icono__name {
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    line-height: 1;
+    letter-spacing: -.025em;
+    color: var(--tb-ink);
+    margin: 0;
+  }
+  .tb-icono__sub {
+    font-family: var(--font-mono);
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--tb-terracota);
+    font-weight: 800;
+  }
+  .tb-icono--gold .tb-icono__sub   { color: var(--tb-gold); }
+  .tb-icono--sky .tb-icono__sub    { color: var(--tb-sky); }
+  .tb-icono--sage .tb-icono__sub   { color: var(--tb-sage); }
+  .tb-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
+  .tb-icono__dato {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--tb-ink);
+    border-top: 2px dashed var(--tb-ink);
+    padding-top: .5rem;
+    width: 100%;
+  }
+
+  /* DESIERTO SECTION */
+  .tb-desert-section {
+    background: var(--tb-sand);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .tb-desert-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(44,76,107,0.04) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .tb-desert-section > * { position: relative; }
+  .tb-desert-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .tb-desert-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .tb-desert-chapter { color: var(--tb-sky); }
+  .tb-desert-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-desert-title em { color: var(--tb-sky); }
+  .tb-desert-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    margin-bottom: 1rem;
+    max-width: 54ch;
+  }
+  .tb-desert-lead strong { color: var(--tb-terracota-d, #A04020); font-weight: 700; }
+  .tb-desert-lead em { color: var(--tb-sky); font-style: italic; }
+
+  .tb-desert-facts {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--tb-ink);
+    background: var(--tb-paper);
+  }
+  @media (min-width: 640px) { .tb-desert-facts { grid-template-columns: 1fr 1fr; } }
+  .tb-desert-facts li {
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--tb-ink);
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  @media (min-width: 640px) {
+    .tb-desert-facts li:nth-child(odd) { border-right: 1px solid var(--tb-ink); }
+    .tb-desert-facts li:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) {
+    .tb-desert-facts li:last-child { border-bottom: none; }
+  }
+  .tb-desert-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--tb-sky); font-weight: 800; }
+  .tb-desert-facts__v { font-size: .9rem; color: var(--tb-ink); font-weight: 600; line-height: 1.35; }
+
+  .tb-desert__r {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3));
+  }
+
+  /* CINE / PLATÓ SECTION */
+  .tb-cine-section {
+    background: var(--tb-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-cine-chapter { color: var(--tb-terracota); }
+  .tb-cine-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-cine-title em { color: var(--tb-gold); }
+  .tb-cine-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    margin-bottom: 2rem;
+    max-width: 64ch;
+  }
+  .tb-cine-lead strong { color: var(--tb-ink); font-weight: 700; }
+
+  .tb-cine-list {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 640px)  { .tb-cine-list { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .tb-cine-list { grid-template-columns: repeat(4, 1fr); } }
+  .tb-cine-card {
+    display: flex; flex-direction: column; gap: .5rem; align-items: center; text-align: center;
+    padding: 1.75rem 1.25rem;
+    background: var(--tb-paper);
+    border: 2.5px solid var(--tb-ink);
+    box-shadow: 5px 5px 0 var(--tb-ink);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .tb-cine-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 currentColor; }
+  .tb-cine-card--terracota { color: var(--tb-terracota); }
+  .tb-cine-card--gold      { color: var(--tb-gold); }
+  .tb-cine-card--sage      { color: var(--tb-sage); }
+  .tb-cine-card--sun       { color: var(--tb-sun); }
+  .tb-cine-card__icon { width: 60px; height: 60px; }
+  .tb-cine-card__title {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1;
+    letter-spacing: -.02em;
+    color: var(--tb-ink);
+    margin: .5rem 0 0;
+  }
+  .tb-cine-card__desc {
+    font-size: .82rem;
+    line-height: 1.4;
+    color: var(--brutal-text-secondary);
+    margin: 0;
+    flex: 1;
+  }
+  .tb-cine-card__rating {
+    font-family: var(--font-mono);
+    color: var(--tb-gold);
+    font-size: 1rem;
+  }
+
+  /* SECTORES */
+  .tb-sec-section {
+    background: var(--tb-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-sec-chapter { color: var(--tb-sky); }
+  .tb-sec-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-sec-title em { color: var(--tb-terracota); }
+
+  .tb-sec {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .tb-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .tb-sec { grid-template-columns: repeat(3, 1fr); } }
+  .tb-sec__card {
+    background: var(--tb-paper);
+    border: 2.5px solid var(--tb-ink);
+    box-shadow: var(--tb-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .tb-sec__card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .tb-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .tb-sec__card--terracota { color: var(--tb-terracota); }
+  .tb-sec__card--gold      { color: var(--tb-gold); }
+  .tb-sec__card--sky       { color: var(--tb-sky); }
+  .tb-sec__card--sage      { color: var(--tb-sage); }
+  .tb-sec__card--sun       { color: var(--tb-sun); }
+  .tb-sec__card--ink       { color: var(--tb-ink); }
+  .tb-sec__head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+    gap: .5rem;
+  }
+  .tb-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .tb-sec__stat-box {
+    background: var(--tb-ink); color: var(--tb-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .tb-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .tb-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .tb-sec__title {
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--tb-ink);
+    margin: 0;
+  }
+  .tb-sec__desc {
+    font-size: .88rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .tb-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .tb-sec__tag {
+    display: flex; align-items: flex-start; gap: .35rem;
+    font-size: .78rem;
+    line-height: 1.35;
+    color: var(--tb-ink);
+  }
+  .tb-sec__tag span { color: currentColor; font-weight: 800; }
+  .tb-sec__foot {
+    padding-top: .65rem;
+    border-top: 2px solid var(--tb-ink);
+  }
+  .tb-sec__cta {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* MAPA */
+  .tb-map-section {
+    background: var(--tb-sand);
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-map-head { padding: 4rem 0 2rem; }
+  .tb-map-head__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+  @media (min-width: 768px) { .tb-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .tb-map-chapter { color: var(--tb-sky); }
+  .tb-map-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0 0;
+  }
+  .tb-map-title em { color: var(--tb-sky); }
+  .tb-map-coords {
+    background: var(--tb-terracota);
+    color: var(--tb-paper);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--tb-ink);
+    box-shadow: 5px 5px 0 var(--tb-gold);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem;
+    letter-spacing: .15em;
+  }
+  .tb-map-frame {
+    position: relative;
+    border-top: 3px solid var(--tb-ink);
+    border-bottom: 3px solid var(--tb-ink);
+    background: var(--tb-ink);
+  }
+  .tb-map-icon {
+    position: absolute;
+    width: 60px; height: 60px;
+    z-index: 5;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45));
+    opacity: 0.85;
+  }
+  .tb-map-icon--tl { top: 16px; left: 16px; }
+  .tb-map-icon--br { bottom: 16px; right: 16px; }
+  .tb-map-wrap {
+    width: 100%;
+    height: clamp(420px, 60vh, 600px);
+    overflow: hidden;
+  }
+  .tb-map-wrap > * { width: 100%; height: 100%; }
+
+  /* DIFERENCIALES */
+  .tb-dif-section {
+    background: var(--tb-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-dif-chapter { color: var(--tb-gold); }
+  .tb-dif-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-dif-title em { color: var(--tb-terracota); }
+  .tb-dif {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--tb-ink);
+  }
+  @media (min-width: 768px) { .tb-dif { grid-template-columns: 1fr 1fr; } }
+  .tb-dif__item {
+    padding: 1.75rem 1.5rem;
+    border-bottom: 1px solid var(--tb-ink);
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .2s;
+  }
+  @media (min-width: 768px) {
+    .tb-dif__item:nth-child(odd) { border-right: 1px solid var(--tb-ink); }
+    .tb-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) {
+    .tb-dif__item:last-child { border-bottom: none; }
+  }
+  .tb-dif__item--0 { background: var(--tb-paper-2); }
+  .tb-dif__item--1 { background: var(--tb-paper); }
+  .tb-dif__item--2 { background: var(--tb-sand); }
+  .tb-dif__item--3 { background: var(--tb-paper); }
+  .tb-dif__item:hover { background: var(--tb-gold); }
+  .tb-dif__num { font-size: .85rem; color: var(--tb-terracota); font-weight: 800; letter-spacing: .15em; }
+  .tb-dif__t {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1.05;
+    letter-spacing: -.025em;
+    color: var(--tb-ink);
+    margin: 0;
+  }
+  .tb-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .tb-proc-section {
+    background: var(--tb-ink);
+    color: var(--tb-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .tb-proc-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(200,90,58,0.08) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .tb-proc-section > * { position: relative; }
+  .tb-proc-chapter { color: var(--tb-gold); }
+  .tb-proc-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-proc-title em { color: var(--tb-terracota); }
+  .tb-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px)  { .tb-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .tb-proc { grid-template-columns: repeat(4, 1fr); } }
+  .tb-proc__step {
+    background: rgba(255,245,230,0.05);
+    border: 2px solid var(--tb-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .tb-proc__step:hover { background: rgba(200,90,58,0.12); transform: translateY(-3px); }
+  .tb-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(255,245,230,0.25); }
+  .tb-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--tb-gold); line-height: 1; }
+  .tb-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--tb-terracota); }
+  .tb-proc__t {
+    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--tb-paper);
+    margin: .25rem 0 0;
+  }
+  .tb-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,245,230,0.75); flex: 1; }
+  .tb-proc__foot {
+    font-size: .58rem;
+    letter-spacing: .2em;
+    color: var(--tb-gold);
+    font-weight: 800;
+    padding-top: .5rem;
+    border-top: 1.5px solid rgba(255,245,230,0.25);
+  }
+
+  /* TESTIMONIOS */
+  .tb-quote-section {
+    background: var(--tb-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-quote-chapter { color: var(--tb-sky); }
+  .tb-quote-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-quote-title em { color: var(--tb-terracota); }
+  .tb-pull {
+    position: relative;
+    background: var(--tb-sand);
+    border: 3px solid var(--tb-ink);
+    box-shadow: var(--tb-shadow);
+    padding: 3rem 2rem 2rem;
+    margin: 2rem 0;
+  }
+  .tb-pull__seal {
+    position: absolute;
+    top: -30px; right: 30px;
+    width: 90px; aspect-ratio: 1;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 8px rgba(200,90,58,0.4));
+  }
+  .tb-pull__q {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    line-height: 1.3;
+    margin: 0 0 1.5rem;
+    color: var(--tb-ink);
+    max-width: 56ch;
+  }
+  .tb-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--tb-ink); }
+  .tb-pull__avatar {
+    width: 48px; height: 48px;
+    background: var(--tb-terracota); color: var(--tb-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 800;
+    border-radius: 50%;
+  }
+  .tb-pull__cap div { display: flex; flex-direction: column; }
+  .tb-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--tb-ink); }
+  .tb-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+
+  .tb-quotes {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .tb-quotes { grid-template-columns: repeat(2, 1fr); } }
+  .tb-quote {
+    position: relative;
+    background: var(--tb-paper);
+    border: 2px solid var(--tb-ink);
+    box-shadow: 5px 5px 0 var(--tb-ink);
+    padding: 1.75rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .tb-quote:hover { transform: translateY(-3px); }
+  .tb-quote--0 { background: var(--tb-paper); }
+  .tb-quote--1 { background: var(--tb-sand); }
+  .tb-quote__mark {
+    position: absolute;
+    top: -8px; left: 14px;
+    font-family: serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--tb-terracota);
+    opacity: .45;
+  }
+  .tb-quote p { font-size: .92rem; line-height: 1.5; color: var(--tb-ink); flex: 1; margin: 0; }
+  .tb-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--tb-ink); }
+  .tb-quote__avatar {
+    width: 36px; height: 36px;
+    background: var(--tb-sky); color: var(--tb-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tb-quote footer div { display: flex; flex-direction: column; }
+  .tb-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .tb-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .tb-faq-section {
+    background: var(--tb-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-faq-chapter { color: var(--tb-sky); }
+  .tb-faq-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-faq-title em { color: var(--tb-terracota); }
+  .tb-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--tb-ink);
+  }
+  .tb-faq__item { border-bottom: 2px solid var(--tb-ink); }
+  .tb-faq__det summary { list-style: none; cursor: pointer; }
+  .tb-faq__det summary::-webkit-details-marker { display: none; }
+  .tb-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .tb-faq__sum:hover { padding-inline: 1rem; background: var(--tb-paper-2); }
+  .tb-faq__num { font-size: 1rem; font-weight: 800; color: var(--tb-sky); letter-spacing: .1em; }
+  .tb-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--tb-ink);
+    font-weight: 700;
+  }
+  .tb-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--tb-ink);
+    background: var(--tb-paper);
+    color: var(--tb-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .tb-faq__det[open] .tb-faq__toggle { transform: rotate(180deg); background: var(--tb-terracota); color: var(--tb-paper); }
+  .tb-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .tb-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .tb-faq__ans { padding-left: 48px; }
+  }
+
+  /* PUEBLOS VECINOS */
+  .tb-vecinos-section {
+    background: var(--tb-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--tb-ink);
+  }
+  .tb-vecinos-chapter { color: var(--tb-sky); }
+  .tb-vecinos-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0;
+  }
+  .tb-vecinos-title em { color: var(--tb-terracota); }
+  .tb-vecinos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr;
+    border: 2px solid var(--tb-ink);
+    background: var(--tb-ink);
+  }
+  @media (min-width: 640px)  { .tb-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .tb-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .tb-vecino {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    gap: .35rem;
+    padding: 1.5rem;
+    background: var(--tb-paper);
+    color: var(--tb-ink);
+    text-decoration: none;
+    min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .tb-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .tb-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .tb-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .tb-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--tb-terracota); font-size: 1.3rem; transition: transform .25s; }
+  .tb-vecino:hover { background: var(--tb-terracota); color: var(--tb-paper); }
+  .tb-vecino:hover .tb-vecino__sub, .tb-vecino:hover .tb-vecino__n { opacity: .85; }
+  .tb-vecino:hover .tb-vecino__arrow { color: var(--tb-paper); transform: translateX(4px); }
+  .tb-vecino--1:hover { background: var(--tb-sky); color: var(--tb-paper); }
+  .tb-vecino--2:hover { background: var(--tb-gold); color: var(--tb-ink); }
+  .tb-vecino--3:hover { background: var(--tb-sage); color: var(--tb-paper); }
+
+  /* CTA FINAL */
+  .tb-final {
+    background: #2A1A0A;
+    color: var(--tb-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .tb-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(212,161,74,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .tb-final > * { position: relative; }
+  .tb-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .tb-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .tb-final-chapter { color: var(--tb-gold); }
+  .tb-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--tb-paper);
+    margin: 1rem 0;
+  }
+  .tb-final__title em { color: var(--tb-terracota); font-style: italic; display: block; }
+  .tb-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,245,230,0.75);
+    max-width: 52ch;
+  }
+  .tb-final__lead strong { color: var(--tb-gold); }
+  .tb-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .tb-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .tb-final__btn--primary {
+    background: var(--tb-terracota); color: var(--tb-paper); border-color: var(--tb-terracota);
+    box-shadow: 6px 6px 0 var(--tb-gold);
+  }
+  .tb-final__btn--primary:hover {
+    background: var(--tb-gold); color: var(--tb-ink); border-color: var(--tb-gold);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--tb-terracota);
+  }
+  .tb-final__btn--ghost {
+    background: transparent; color: var(--tb-paper); border-color: var(--tb-paper);
+    box-shadow: 6px 6px 0 var(--tb-paper);
+  }
+  .tb-final__btn--ghost:hover {
+    background: var(--tb-paper); color: var(--tb-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--tb-paper);
+  }
+  .tb-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,245,230,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .tb-final__trust .tb-pulse { background: var(--tb-gold); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(212,161,74,0.55); }
+  .tb-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .tb-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(212,161,74,0.25)); }
+
+  .tb-final__marquee {
+    background: var(--tb-terracota);
+    color: var(--tb-paper);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--tb-ink);
+    margin: 0 -1.5rem;
+  }
+  .tb-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: tb-marquee 32s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+</style>
