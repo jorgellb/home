@@ -1,0 +1,1564 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'san-juan-de-los-terreros');
+
+const title = 'Diseño Web en San Juan de los Terreros | Webs para Apartamentos, Chiringuitos y Turismo Familiar';
+const description = 'Agencia de diseño web en San Juan de los Terreros (Pulpí, Levante). Webs para apartamentos y casas vacacionales, chiringuitos y restaurantes de playa, turismo del castillo. Reservas directas, SEO "playa tranquila Almería", fotografía que llena la temporada. Desde 350€.';
+const canonical = 'https://platanitorico.com/diseno-web/san-juan-de-los-terreros/';
+const heroImg = '/imagenes/diseno-web-seo-san-juan-terreros.jpg';
+
+// 3 ICONOS
+const iconos = [
+  { code: 'A', name: 'El Castillo',          sub: 'VIGÍA DEL MEDITERRÁNEO',  desc: 'La fortaleza costera que corona el pueblo desde su promontorio. Un monumento poco conocido con un potencial turístico enorme — la imagen perfecta para una web con carácter.',                  dato: 'Histórico', color: 'stone' },
+  { code: 'B', name: 'Playas familiares',    sub: 'ARENA DORADA · AGUA LIMPIA', desc: 'Calas y playas de arena dorada y aguas cristalinas, tranquilas y poco masificadas. El "secreto mejor guardado del Levante" para familias que buscan calma de verdad.',                            dato: 'Bandera azul', color: 'turq' },
+  { code: 'C', name: 'Islas volcánicas',     sub: 'ISLA NEGRA · SNORKEL',    desc: 'Frente a la costa emergen los islotes volcánicos de Terreros, reserva de vida marina. Fondos cristalinos perfectos para snorkel, kayak y un atardecer de postal.',                                dato: 'Volcánicas', color: 'coral' },
+];
+
+// Ocupación por meses — alargar la temporada
+const ocupacion = [
+  { m: 'MAY', antes: 14, ahora: 46 },
+  { m: 'JUN', antes: 28, ahora: 78 },
+  { m: 'JUL', antes: 68, ahora: 94 },
+  { m: 'AGO', antes: 100, ahora: 100 },
+  { m: 'SEP', antes: 34, ahora: 84 },
+  { m: 'OCT', antes: 12, ahora: 42 },
+];
+
+// Sectores
+const sectores = [
+  { nombre: 'Apartamentos y casas vacacionales',  stat: 'sin %', statLabel: 'comisión OTA',       desc: 'San Juan es el secreto mejor guardado del Levante: aguas limpias, arena dorada y tranquilidad. Apartamentos y casas que aparezcan bien en Google pueden saturar su ocupación con familias de Murcia, Lorca y Castilla — y con reservas directas, sin comisiones.', tags: ['Motor de reservas','Galería inmersiva','SEO "apartamento Terreros"','Sin comisiones OTA'] },
+  { nombre: 'Chiringuitos y bares de playa',       stat: 'QR',   statLabel: 'carta digital',       desc: 'Los chiringuitos y restaurantes frente al mar tienen una temporada corta pero intensa. Carta digital, ficha de Google Maps con fotos y horario hacen que los clientes vengan expresamente desde Águilas y Lorca en lugar de encontrarte por casualidad.',          tags: ['Carta digital QR','Google Maps + fotos','SEO "chiringuito playa"','Reservas mesa'] },
+  { nombre: 'Turismo histórico — el castillo',     stat: '★',    statLabel: 'qué ver',             desc: 'El castillo de San Juan es un monumento con potencial turístico que apenas tiene presencia digital. Empresas de visitas, guías y alojamientos pueden posicionarse para "qué ver en San Juan de los Terreros" y combinar cultura con playa.',                          tags: ['SEO "qué ver Terreros"','Turismo cultural','Rutas combinadas','Contenido local'] },
+  { nombre: 'Restauración y marisco',              stat: 'km0',  statLabel: 'pescado fresco',      desc: 'Restaurantes de pescado y marisco de la zona con cliente familiar y de temporada. Una web con buena fotografía de producto, reservas y SEO gastronómico capta al turista que busca "dónde comer en Terreros" antes de llegar.',                                      tags: ['Fotografía de producto','Reservas online','SEO gastronómico','Menús y eventos'] },
+  { nombre: 'Actividades náuticas y naturaleza',   stat: '4.9★', statLabel: 'experiencias',        desc: 'Snorkel y kayak en las islas, paddle surf, rutas y alquiler de material. Empresas de experiencias que necesitan calendario de salidas, pago de señal y reseñas para llenar plazas en los meses fuertes.',                                                           tags: ['Reservas de actividad','Calendario salidas','Pago de señal','Reseñas TripAdvisor'] },
+  { nombre: 'Comercio y servicios de temporada',   stat: '350€', statLabel: 'desde',               desc: 'Tiendas, supermercados, alquileres y servicios que viven del visitante estival y del segundo-residente. Webs sencillas y económicas con Google Business optimizado para captar a quien pasa el verano en San Juan.',                                                tags: ['Web desde 350€','Google Business','SEO local','Hosting gratis'] },
+];
+
+// Hitos
+const hitos = [
+  { k: 'EL SECRETO',   v: 'El mejor guardado del Levante' },
+  { k: 'CASTILLO',     v: 'Fortaleza vigía del Mediterráneo' },
+  { k: 'PLAYAS',       v: 'Arena dorada · aguas cristalinas' },
+  { k: 'ISLAS',        v: 'Islotes volcánicos · Isla Negra' },
+  { k: 'FAMILIAR',     v: 'Calma · sin masificación' },
+  { k: 'FRONTERA',     v: 'Águilas, Lorca y Murcia a un paso' },
+];
+
+// Diferenciales
+const diferenciales = [
+  { title: 'La temporada no es solo agosto',     desc: 'Aquí está el dinero que se escapa: junio y septiembre. Un apartamento o chiringuito que solo se llena en agosto deja la mitad de la temporada vacía. Con web + SEO local, las familias te encuentran y reservan también en los meses flojos. Es ocupación pura que hoy pierdes.' },
+  { title: 'El secreto mejor guardado vende',    desc: '"Playa tranquila, sin masificación, agua cristalina" es exactamente lo que media España busca y no encuentra. San Juan lo tiene — pero si no estás en Google, no existes. Posicionar esa promesa te trae al cliente que huye de Roquetas y Águilas.' },
+  { title: 'Competencia baja, resultados rápidos', desc: 'Muy pocos negocios de San Juan tienen web, y casi ninguno la tiene bien hecha. Posicionarse para "apartamento San Juan de los Terreros" o "chiringuito playa" es relativamente fácil y rápido. Llegas el primero a un mercado que casi nadie trabaja.' },
+  { title: 'Inversión que dura años',            desc: 'Una web de temporada hecha este año trabaja para ti las próximas 5–10 temporadas. El coste por cliente que te trae es mínimo y se amortiza el primer verano. Para un negocio estacional es la mejor inversión posible.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Conocemos tu negocio',      eta: '1–2 días',  body: 'Analizamos tu apartamento, chiringuito o proyecto, tu temporada y tu competencia. Definimos las keywords ("apartamento Terreros", "playa tranquila Almería") y la arquitectura.', deliverable: 'Briefing + roadmap' },
+  { num: '02', title: 'Diseño que enamora',        eta: '2–4 días',  body: 'Diseño luminoso que transmite calma, sol y agua cristalina. Fotografía de tu alojamiento o de la playa — porque un destino se elige con los ojos. Apruebas antes de programar.', deliverable: 'Prototipo Figma · approved' },
+  { num: '03', title: 'Desarrollo + reservas',      eta: '4–8 días',  body: 'Astro ultrarrápido + motor de reservas o carta digital y galería inmersiva. SEO local técnico, Google Business y Core Web Vitals en verde para que te encuentren.', deliverable: 'Web staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + temporada',    eta: '1–2 días',  body: 'Publicamos antes de que arranque la temporada, optimizamos Maps, indexamos y posicionamos. Te formamos para gestionar reservas y carta tú mismo, sin depender de nadie.', deliverable: 'Sitio en producción + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Patricia Cuenca', negocio: 'Apartamentos vacacionales',     texto: 'Tenía los apartamentos llenos en agosto y vacíos el resto del año. Con la web y el SEO local, junio y septiembre también están ocupados. San Juan es una joya que los turistas no conocen — hasta que te buscan en Google.' },
+  { nombre: 'Carlos Egea',     negocio: 'Chiringuito de temporada',      texto: 'Solo abría junio a septiembre y la gente me encontraba por casualidad. Ahora la ficha de Google Maps con fotos y horario hace que vengan expresamente desde Águilas y Lorca. La temporada ya no es solo agosto.' },
+  { nombre: 'Marga Soler',     negocio: 'Casa rural · familias',         texto: 'Buscaba un público familiar que valorase la tranquilidad. La web con galería y la promesa de "playa sin masificación" me trae justo a esas familias, que repiten cada verano y me recomiendan. He dejado de depender de los portales.' },
+  { nombre: 'Tomás Ríos',      negocio: 'Restaurante de pescado',        texto: 'En temporada baja estábamos muertos. Con la carta digital, las fotos de los platos y el SEO, ahora vienen a comer arroces los fines de semana de primavera y otoño. La web nos ha alargado el año entero.' },
+];
+
+const faqs = [
+  { q: '¿Cómo puede mi alojamiento en San Juan de los Terreros aparecer en Google?',                a: 'Con una web optimizada + ficha de Google Business completa + SEO para términos como "apartamento San Juan de los Terreros", "playa tranquila Almería" y "casa vacacional Terreros". La competencia es baja y posicionarse es rápido: en pocas semanas empiezas a recibir consultas directas de familias.' },
+  { q: '¿Vale la pena invertir en web para un negocio de temporada en San Juan?',                   a: 'Mucho. La web es una inversión permanente: la haces este año y trabaja para ti durante toda la temporada los próximos 5–10 años. El coste por cliente que te trae es mínimo y, sobre todo, te llena junio y septiembre — los meses que hoy pierdes y donde está el margen real.' },
+  { q: '¿Cuánto cuesta la web más sencilla para un chiringuito o apartamento?',                     a: 'Desde 350€ para un negocio de temporada: diseño limpio, galería de fotos, localización en Google Maps y formulario de contacto, con hosting gratuito incluido. Si quieres motor de reservas directas o carta digital QR, lo ampliamos según necesites con presupuesto cerrado.' },
+  { q: '¿Podéis ponerme un sistema de reservas para evitar comisiones de Booking y Airbnb?',         a: 'Sí. Integramos motor de reservas directas con calendario, para que las familias reserven contigo sin intermediarios. Te ahorras el 15–20% de comisión de las plataformas y te quedas los datos del cliente para que vuelva cada verano. La web se paga sola en una temporada.' },
+  { q: '¿Hacéis las fotos de la playa, el alojamiento y los platos?',                                a: 'Coordinamos sesión de fotografía profesional porque un destino de playa se elige con los ojos. Una galería bien hecha del agua cristalina, tu apartamento o un buen arroz vende sola. Es nuestra recomendación para cualquier negocio turístico de San Juan.' },
+  { q: '¿Trabajáis el turismo del castillo y las visitas culturales?',                               a: 'Sí. El castillo y las islas son atractivos con poca presencia digital. Hacemos webs y SEO para "qué ver en San Juan de los Terreros" y rutas que combinan cultura, playa y naturaleza, para guías, alojamientos y empresas de actividades que quieran captar a ese visitante.' },
+  { q: '¿En cuánto tiempo está lista mi web antes de la temporada?',                                a: 'Una web de temporada sencilla: 1 semana. Con motor de reservas o carta digital: 2–3 semanas. Si nos lo pides con margen antes del verano, la tienes lista y posicionando a tiempo para captar las reservas de junio en adelante.' },
+  { q: '¿Trabajáis también en Pulpí, Águilas y el resto del Levante?',                               a: 'Sí. San Juan de los Terreros pertenece a Pulpí, y cubrimos todo el Levante almeriense y la zona fronteriza con Murcia: Pulpí, Villaricos, Cuevas del Almanzora, Vera y la costa de Águilas. Trabajamos online y nos desplazamos para la sesión de fotos cuando hace falta.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"San Juan de los Terreros","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web San Juan de los Terreros","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":`https://platanitorico.com${heroImg}`,"priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"San Juan de los Terreros","addressRegion":"Almería","postalCode":"04648","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.4008,"longitude":-1.6789},"areaServed":["San Juan de los Terreros","Pulpí","Villaricos","Águilas","Levante Almeriense"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"38","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en San Juan de los Terreros","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image={heroImg}
+  imageAlt="Diseño web y SEO en San Juan de los Terreros - castillo, playas y turismo familiar"
+  type="service"
+  keywords="diseño web san juan de los terreros, web apartamento terreros, chiringuito playa almería, reservas directas terreros, seo playa tranquila, web turismo familiar levante"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="sj">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — CASTILLO, CALMA Y MAR DE CRISTAL           */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-hero">
+      <div class="container-brutal">
+
+        <header class="sj-hero__top">
+          <span class="text-meta">N.º 037 — Levante · Costa de Pulpí · Almería</span>
+          <span class="text-meta sj-hero__status">
+            <span class="sj-pulse"></span>
+            ★ EL SECRETO MEJOR GUARDADO DEL LEVANTE ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="sj-hero__grid">
+
+          <div class="sj-hero__intro">
+            <span class="text-meta sj-hero__chapter">Cap. 01 / San Juan de los Terreros</span>
+            <h1 class="sj-hero__title heading-display">
+              Diseño web para
+              <em class="heading-editorial">San Juan</em>
+              <span class="sj-hero__title-stamp">de los Terreros.</span>
+            </h1>
+
+            <p class="sj-hero__lead">
+              <strong>Castillo, calma y mar de cristal.</strong> Webs para
+              <em>apartamentos, chiringuitos y turismo familiar</em> que
+              <strong>llenan toda la temporada</strong> — no solo agosto — con
+              reservas directas y fotografía que enamora.
+            </p>
+
+            <div class="sj-hero__cta">
+              <a href="/contacto" class="sj-btn sj-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#temporada" class="sj-btn sj-btn--ghost">
+                Alarga tu temporada ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="sj-kpis">
+              <li class="sj-kpi sj-kpi--gold">
+                <span class="sj-kpi__v text-mono">350<small>€</small></span>
+                <span class="sj-kpi__l">Desde</span>
+              </li>
+              <li class="sj-kpi sj-kpi--turq">
+                <span class="sj-kpi__v text-mono">6</span>
+                <span class="sj-kpi__l">Meses temporada</span>
+              </li>
+              <li class="sj-kpi sj-kpi--coral">
+                <span class="sj-kpi__v text-mono">0<small>%</small></span>
+                <span class="sj-kpi__l">Comisión OTA</span>
+              </li>
+              <li class="sj-kpi sj-kpi--ink">
+                <span class="sj-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="sj-kpi__l">38 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — castillo + playa dorada + islas SVG + foto real */}
+          <aside class="sj-hero__postcard" aria-hidden="true">
+            <div class="sj-postcard">
+
+              <header class="sj-postcard__head">
+                <span class="text-mono">SAN JUAN DE LOS TERREROS · 04648</span>
+                <span class="text-mono">37.401° N · 1.679° W</span>
+              </header>
+
+              {/* Atardecer dorado: castillo + cala + islas SVG */}
+              <div class="sj-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 240" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="sj-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#FBD98C"/>
+                      <stop offset="50%" stop-color="#F4B05E"/>
+                      <stop offset="100%" stop-color="#EC8A66"/>
+                    </linearGradient>
+                    <linearGradient id="sj-sea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#37D2CE"/>
+                      <stop offset="55%" stop-color="#22B4B0"/>
+                      <stop offset="100%" stop-color="#178E8B"/>
+                    </linearGradient>
+                    <linearGradient id="sj-stone" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#D9A862"/>
+                      <stop offset="100%" stop-color="#B07C3C"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo atardecer */}
+                  <rect width="540" height="124" fill="url(#sj-sky)"/>
+
+                  {/* Sol dorado bajo (golden hour) */}
+                  <circle cx="150" cy="72" r="34" fill="#FCEBBE" opacity="0.9"/>
+                  <circle cx="150" cy="72" r="23" fill="#FFF7E2"/>
+                  {/* Reflejo del sol en el agua */}
+                  <g opacity="0.5" fill="#FCEBBE"><ellipse cx="150" cy="150" rx="20" ry="3"/><ellipse cx="150" cy="160" rx="14" ry="2.5"/><ellipse cx="150" cy="170" rx="10" ry="2"/></g>
+
+                  {/* Gaviotas */}
+                  <g fill="none" stroke="#B07C3C" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M 230 40 Q 235 36 240 40 Q 245 36 250 40"/>
+                    <path d="M 280 30 Q 284 26 288 30 Q 292 26 296 30"/>
+                  </g>
+
+                  {/* Islas volcánicas al fondo (Isla Negra) */}
+                  <path d="M 350 124 Q 366 104 388 112 Q 404 102 420 124 Z" fill="#8E5A39" stroke="#3A2410" stroke-width="1.5" opacity="0.85"/>
+                  <path d="M 430 124 Q 442 110 456 124 Z" fill="#7A4A2E" stroke="#3A2410" stroke-width="1.5" opacity="0.8"/>
+
+                  {/* Promontorio + CASTILLO redondo (derecha) */}
+                  <path d="M 446 124 L 458 96 L 520 96 L 540 124 L 540 134 L 446 134 Z" fill="url(#sj-stone)" stroke="#3A2410" stroke-width="2"/>
+                  <g transform="translate(489, 96)">
+                    {/* Torre cilíndrica */}
+                    <path d="M -20 0 L -18 -42 Q 0 -50 18 -42 L 20 0 Z" fill="url(#sj-stone)" stroke="#3A2410" stroke-width="2.5"/>
+                    {/* Almenas */}
+                    <path d="M -18 -42 L -18 -50 L -12 -50 L -12 -45 L -6 -45 L -6 -50 L 0 -50 L 0 -45 L 6 -45 L 6 -50 L 12 -50 L 12 -45 L 18 -45 L 18 -42" fill="url(#sj-stone)" stroke="#3A2410" stroke-width="2"/>
+                    {/* Tronera */}
+                    <rect x="-5" y="-30" width="10" height="14" fill="#3A2410"/>
+                    <path d="M -5 -30 Q 0 -36 5 -30" fill="#3A2410"/>
+                    {/* Bandera */}
+                    <line x1="0" y1="-50" x2="0" y2="-64" stroke="#3A2410" stroke-width="1.5"/>
+                    <path d="M 0 -64 L 16 -60 L 0 -56 Z" fill="#F2674B" stroke="#3A2410" stroke-width="1"/>
+                  </g>
+
+                  {/* Mar de cristal — la cala */}
+                  <path d="M 0 124 Q 90 130 180 124 T 360 126 T 540 124 L 540 178 L 0 178 Z" fill="url(#sj-sea)" stroke="#3A2410" stroke-width="2"/>
+                  {/* Transparencia (cantos bajo el agua) */}
+                  <g fill="#9CEDEA" opacity="0.35"><ellipse cx="120" cy="150" rx="24" ry="6"/><ellipse cx="300" cy="158" rx="30" ry="7"/></g>
+                  <path d="M 20 142 Q 80 137 140 142 T 260 142 T 380 142 T 520 142" fill="none" stroke="#EAFBFA" stroke-width="1.3" opacity="0.6"/>
+                  <path d="M 20 160 Q 80 155 140 160 T 260 160 T 380 160 T 520 160" fill="none" stroke="#EAFBFA" stroke-width="1" opacity="0.4"/>
+
+                  {/* Playa de arena dorada */}
+                  <path d="M 0 178 L 540 178 L 540 240 L 0 240 Z" fill="#EAD6A6" stroke="#3A2410" stroke-width="2"/>
+                  <g fill="#D2B574" opacity="0.5"><circle cx="60" cy="206" r="1.6"/><circle cx="120" cy="220" r="1.6"/><circle cx="210" cy="210" r="1.6"/><circle cx="430" cy="214" r="1.6"/></g>
+
+                  {/* Sombrilla familiar */}
+                  <g transform="translate(80, 198)">
+                    <line x1="0" y1="0" x2="0" y2="-26" stroke="#3A2410" stroke-width="2"/>
+                    <path d="M -20 -26 Q 0 -40 20 -26 Z" fill="#F2674B" stroke="#3A2410" stroke-width="1.5"/>
+                    <path d="M -20 -26 Q 0 -33 20 -26" fill="none" stroke="#FBF4E4" stroke-width="1" opacity="0.6"/>
+                  </g>
+                  {/* Castillo de arena (familiar) */}
+                  <g transform="translate(190, 214)">
+                    <rect x="-16" y="0" width="32" height="14" fill="#D9A862" stroke="#3A2410" stroke-width="1.5"/>
+                    <path d="M -16 0 L -16 -4 L -11 -4 L -11 -1 L -6 -1 L -6 -4 L 0 -4 L 0 -1 L 6 -1 L 6 -4 L 11 -4 L 11 -1 L 16 -1 L 16 0" fill="#D9A862" stroke="#3A2410" stroke-width="1.2"/>
+                    <line x1="0" y1="-4" x2="0" y2="-12" stroke="#3A2410" stroke-width="1"/>
+                    <path d="M 0 -12 L 8 -9 L 0 -6 Z" fill="#25C0BE" stroke="#3A2410" stroke-width="0.8"/>
+                    {/* Cubo y pala */}
+                    <path d="M 22 6 L 30 6 L 28 14 L 24 14 Z" fill="#25C0BE" stroke="#3A2410" stroke-width="1.2"/>
+                  </g>
+                  {/* Palmera */}
+                  <g transform="translate(490, 196)">
+                    <path d="M 0 0 Q -2 -20 0 -34" fill="none" stroke="#7A4A28" stroke-width="3.5"/>
+                    <g stroke="#2F7D52" stroke-width="3" stroke-linecap="round" fill="none">
+                      <path d="M 0 -34 Q -14 -40 -24 -34"/><path d="M 0 -34 Q 14 -40 24 -34"/>
+                      <path d="M 0 -34 Q -12 -46 -18 -54"/><path d="M 0 -34 Q 12 -46 18 -54"/>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="sj-postcard__img-wrap">
+                <img
+                  src={heroImg}
+                  alt="Diseño web y SEO en San Juan de los Terreros"
+                  width="640" height="360"
+                  loading="eager"
+                  decoding="async"
+                  class="sj-postcard__img"
+                />
+                {/* Sello secreto */}
+                <div class="sj-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="sj-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#E3A52C"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#16120A" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="sj-spin">
+                      <text font-family="monospace" font-size="6" font-weight="bold" fill="#16120A" letter-spacing="2.2">
+                        <textPath href="#sj-seal-arc" startOffset="0%">★ PLAYA · CASTILLO · CALMA · SEO ★</textPath>
+                      </text>
+                    </g>
+                    {/* Sol dentro */}
+                    <g transform="translate(40, 41)">
+                      <circle cx="0" cy="0" r="9" fill="#16120A"/>
+                      {Array.from({length: 8}).map((_, i) => (
+                        <line x1="0" y1="-14" x2="0" y2="-11" stroke="#16120A" stroke-width="2.5" stroke-linecap="round" transform={`rotate(${i*45} 0 0)`}/>
+                      ))}
+                    </g>
+                  </svg>
+                </div>
+                <div class="sj-postcard__tag">
+                  <span class="text-mono">★ PLAYA SIN MASIFICACIÓN ★</span>
+                </div>
+              </div>
+
+              {/* Datos */}
+              <div class="sj-postcard__data">
+                <div class="sj-postcard__data-row">
+                  <span class="text-mono">MUNICIPIO</span>
+                  <span class="text-mono sj-postcard__data-v">Pulpí · Levante</span>
+                </div>
+                <div class="sj-postcard__data-row">
+                  <span class="text-mono">PLAYAS</span>
+                  <span class="text-mono sj-postcard__data-v">Arena dorada · bandera azul</span>
+                </div>
+                <div class="sj-postcard__data-row">
+                  <span class="text-mono">CLIMA</span>
+                  <span class="text-mono sj-postcard__data-v">320 días de sol/año</span>
+                </div>
+                <div class="sj-postcard__data-row">
+                  <span class="text-mono">DIST. SEDE</span>
+                  <span class="text-mono sj-postcard__data-v">40 min · Vera</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="sj-marquee">
+        <div class="sj-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ APARTAMENTOS Y CASAS ★ CHIRINGUITOS DE PLAYA ★ RESERVAS DIRECTAS ★ ALARGA LA TEMPORADA ★ EL CASTILLO ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* EL CASTILLO — flagship                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-castle-section">
+      <div class="container-brutal">
+        <div class="sj-castle-grid">
+
+          <div class="sj-castle-l">
+            <span class="text-meta sj-castle-chapter">Cap. 02 / El emblema</span>
+            <h2 class="sj-castle-title heading-display">
+              El Castillo que
+              <em class="heading-editorial">vigila el mar.</em>
+            </h2>
+            <p class="sj-castle-lead">
+              Sobre su promontorio, <strong>la fortaleza costera</strong> da
+              nombre y carácter al pueblo. Un <em>monumento poco conocido con un
+              potencial turístico enorme</em> — y la imagen perfecta para que tu
+              web transmita <strong>historia, mar y autenticidad</strong>.
+            </p>
+
+            <div class="sj-castle-facts">
+              {[
+                { k: 'UBICACIÓN', v: 'Promontorio sobre el Mediterráneo' },
+                { k: 'FUNCIÓN', v: 'Antigua vigía y defensa de la costa' },
+                { k: 'VISTAS', v: 'Islas volcánicas y toda la bahía' },
+                { k: 'TURISMO', v: 'Cultura + playa en una misma visita' },
+                { k: 'COMPETENCIA', v: 'Casi nula presencia digital' },
+                { k: 'OPORTUNIDAD', v: '"Qué ver en San Juan de los Terreros"' },
+              ].map(f => (
+                <div class="sj-castle-fact">
+                  <span class="text-mono sj-castle-fact__k">{f.k}</span>
+                  <span class="sj-castle-fact__v">{f.v}</span>
+                </div>
+              ))}
+            </div>
+
+            <p class="sj-castle-note">
+              <strong>★ El que cuente bien el castillo, se queda el tráfico.</strong>
+              Guías, alojamientos y restauración que lo aprovechen captan al turista
+              cultural que combina monumento y playa. Te ayudamos a ser el primero.
+            </p>
+          </div>
+
+          {/* Castillo redondo grande SVG */}
+          <aside class="sj-castle-r" aria-hidden="true">
+            <svg viewBox="0 0 300 340" width="100%" height="100%">
+              <defs>
+                <linearGradient id="sj-castle-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FBD98C"/><stop offset="100%" stop-color="#F4B988"/>
+                </linearGradient>
+                <linearGradient id="sj-castle-stone" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#E0B36C"/><stop offset="100%" stop-color="#A9762F"/>
+                </linearGradient>
+                <linearGradient id="sj-castle-sea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#37D2CE"/><stop offset="100%" stop-color="#157E7B"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sj-castle-sky)"/>
+              <circle cx="240" cy="56" r="28" fill="#FFF7E2"/>
+
+              {/* Mar */}
+              <rect x="0" y="170" width="300" height="60" fill="url(#sj-castle-sea)"/>
+              <path d="M 0 188 Q 40 183 80 188 T 160 188 T 240 188 T 320 188" fill="none" stroke="#EAFBFA" stroke-width="1.5" opacity="0.6"/>
+
+              {/* Roca / promontorio */}
+              <path d="M 30 230 L 60 150 L 240 150 L 270 230 Z" fill="#9A6E3A" stroke="#3A2410" stroke-width="3"/>
+              <path d="M 0 230 L 300 230 L 300 340 L 0 340 Z" fill="#9A6E3A" stroke="#3A2410" stroke-width="3"/>
+              <g stroke="#6E4A24" stroke-width="1.5" opacity="0.5"><path d="M 80 160 L 88 226"/><path d="M 210 158 L 218 226"/><path d="M 150 152 L 150 226"/></g>
+
+              {/* TORRE redonda del castillo */}
+              <path d="M 96 152 L 100 50 Q 150 34 200 50 L 204 152 Z" fill="url(#sj-castle-stone)" stroke="#3A2410" stroke-width="3.5"/>
+              {/* Sillería */}
+              <g stroke="#3A2410" stroke-width="0.7" opacity="0.28">
+                <path d="M 99 80 Q 150 68 201 80"/><path d="M 98 110 Q 150 99 202 110"/><path d="M 97 140 Q 150 130 203 140"/>
+                <line x1="124" y1="50" x2="123" y2="152"/><line x1="150" y1="42" x2="150" y2="152"/><line x1="176" y1="50" x2="177" y2="152"/>
+              </g>
+              {/* Almenas */}
+              <path d="M 100 50 L 100 36 L 114 36 L 114 46 L 128 46 L 128 36 L 143 36 L 143 46 L 157 46 L 157 36 L 172 36 L 172 46 L 186 46 L 186 36 L 200 36 L 200 50" fill="url(#sj-castle-stone)" stroke="#3A2410" stroke-width="3"/>
+
+              {/* Troneras / cañoneras */}
+              <g fill="#3A2410">
+                <rect x="118" y="90" width="12" height="20"/>
+                <rect x="170" y="90" width="12" height="20"/>
+              </g>
+              <path d="M 118 90 Q 124 82 130 90 M 170 90 Q 176 82 182 90" fill="#3A2410"/>
+              {/* Puerta */}
+              <path d="M 138 152 L 138 116 Q 138 104 150 104 Q 162 104 162 116 L 162 152 Z" fill="#3A2410"/>
+              <path d="M 150 104 L 150 152 M 138 116 Q 150 110 162 116" fill="none" stroke="#5E4528" stroke-width="1.5"/>
+
+              {/* Bandera ondeando */}
+              <line x1="150" y1="36" x2="150" y2="14" stroke="#3A2410" stroke-width="2.5"/>
+              <path d="M 150 14 L 184 20 L 178 26 L 184 32 L 150 26 Z" fill="#F2674B" stroke="#3A2410" stroke-width="2" class="sj-flag-wave"/>
+
+              {/* Cañón sobre la roca */}
+              <g transform="translate(64, 216)">
+                <circle cx="0" cy="0" r="5" fill="#3A2410"/>
+                <rect x="-2" y="-14" width="20" height="7" rx="3" fill="#3A2410" transform="rotate(-18)"/>
+                <circle cx="-8" cy="6" r="3" fill="#3A2410"/>
+              </g>
+
+              {/* Gaviota */}
+              <g transform="translate(70, 70)" fill="none" stroke="#B07C3C" stroke-width="2" stroke-linecap="round">
+                <path d="M 0 0 Q 6 -6 12 0 Q 18 -6 24 0"/>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* 3 ICONOS                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-iconos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--sj-coral)">Cap. 03 / Tres joyas</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Castillo, playa
+              <em class="heading-editorial">e islas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            La fortaleza sobre el mar, las playas familiares de agua cristalina
+            y los islotes volcánicos. <strong>Tres motivos</strong> para venir —
+            y para que tu web los venda.
+          </p>
+        </header>
+
+        <ol class="sj-iconos">
+          {iconos.map((i) => (
+            <li class={`sj-icono sj-icono--${i.color}`}>
+              <div class="sj-icono__code">{i.code}</div>
+
+              <div class="sj-icono__svg" aria-hidden="true">
+                {i.color === 'stone' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Castillo redondo */}
+                    <path d="M 30 84 L 32 36 Q 50 28 68 36 L 70 84 Z" fill="currentColor" stroke="#16120A" stroke-width="2.5"/>
+                    <path d="M 32 36 L 32 28 L 39 28 L 39 33 L 46 33 L 46 28 L 54 28 L 54 33 L 61 33 L 61 28 L 68 28 L 68 36" fill="currentColor" stroke="#16120A" stroke-width="2.5"/>
+                    <rect x="44" y="52" width="12" height="18" fill="#16120A"/>
+                    <path d="M 44 52 Q 50 46 56 52" fill="#16120A"/>
+                    <line x1="50" y1="28" x2="50" y2="14" stroke="#16120A" stroke-width="2"/>
+                    <path d="M 50 14 L 66 18 L 50 22 Z" fill="#F2674B" stroke="#16120A" stroke-width="1.2"/>
+                    <line x1="22" y1="84" x2="78" y2="84" stroke="#16120A" stroke-width="2.5"/>
+                  </svg>
+                )}
+                {i.color === 'turq' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Playa familiar */}
+                    <path d="M 0 64 Q 25 58 50 64 T 100 64 L 100 100 L 0 100 Z" fill="currentColor" stroke="#16120A" stroke-width="2"/>
+                    <path d="M 0 74 Q 25 69 50 74 T 100 74" fill="none" stroke="#EAFBFA" stroke-width="1.3" opacity="0.6"/>
+                    <path d="M 0 64 Q 30 60 60 64 L 60 88 L 0 88 Z" fill="#EAD6A6" stroke="#16120A" stroke-width="2"/>
+                    {/* Sombrilla */}
+                    <line x1="30" y1="64" x2="30" y2="44" stroke="#16120A" stroke-width="2.5"/>
+                    <path d="M 14 44 Q 30 32 46 44 Z" fill="#F2674B" stroke="#16120A" stroke-width="2"/>
+                    {/* Sol */}
+                    <circle cx="80" cy="24" r="10" fill="#E3A52C" stroke="#16120A" stroke-width="2"/>
+                    {Array.from({length: 8}).map((_, j) => (
+                      <line x1="80" y1="10" x2="80" y2="14" stroke="#E3A52C" stroke-width="1.8" transform={`rotate(${j*45} 80 24)`}/>
+                    ))}
+                  </svg>
+                )}
+                {i.color === 'coral' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Islas volcánicas + snorkel */}
+                    <rect x="0" y="48" width="100" height="52" fill="#25C0BE"/>
+                    <path d="M 0 56 Q 25 51 50 56 T 100 56" fill="none" stroke="#EAFBFA" stroke-width="1.3" opacity="0.6"/>
+                    {/* Isla grande */}
+                    <path d="M 16 48 Q 30 22 44 32 Q 54 20 64 48 Z" fill="currentColor" stroke="#16120A" stroke-width="2.5"/>
+                    <path d="M 34 34 L 40 28 L 46 35" fill="none" stroke="#16120A" stroke-width="1.2"/>
+                    {/* Isla pequeña */}
+                    <path d="M 72 48 Q 80 34 88 48 Z" fill="currentColor" stroke="#16120A" stroke-width="2.5" opacity="0.85"/>
+                    {/* Snorkel (máscara) */}
+                    <g transform="translate(40, 74)">
+                      <circle cx="0" cy="0" r="7" fill="#EAFBFA" stroke="#16120A" stroke-width="2"/>
+                      <rect x="-5" y="-3" width="10" height="5" rx="1" fill="#E3A52C" stroke="#16120A" stroke-width="1"/>
+                      <path d="M 6 -2 Q 13 -3 14 4" fill="none" stroke="#16120A" stroke-width="1.8"/>
+                    </g>
+                    {/* Burbujas */}
+                    <g fill="#EAFBFA" stroke="#16120A" stroke-width="0.6"><circle cx="56" cy="70" r="2.5"/><circle cx="62" cy="62" r="2"/></g>
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="sj-icono__name heading-display">{i.name}</h3>
+              <span class="text-mono sj-icono__sub">{i.sub}</span>
+              <p class="sj-icono__desc">{i.desc}</p>
+              <footer class="sj-icono__foot">
+                <span class="text-mono sj-icono__dato">★ {i.dato}</span>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ALARGA LA TEMPORADA — flagship                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-season-section" id="temporada">
+      <div class="container-brutal">
+        <header class="sj-season-head">
+          <span class="text-meta sj-season-chapter">Cap. 04 / La temporada</span>
+          <h2 class="sj-season-title heading-display">
+            Tu temporada no es agosto.
+            <em class="heading-editorial">Es de junio a septiembre.</em>
+          </h2>
+          <p class="sj-season-lead">
+            Agosto se llena solo. El dinero que se te escapa está en
+            <strong>junio y septiembre</strong> — meses con sol, sin masificación
+            y con familias buscando playa tranquila. <em>Si tu web trabaja</em>,
+            esos meses también se llenan.
+          </p>
+        </header>
+
+        <div class="sj-season-card">
+          <div class="sj-season-card__head">
+            <span class="text-mono">◆ OCUPACIÓN POR MES</span>
+            <div class="sj-season-legend">
+              <span class="sj-leg sj-leg--antes"><span></span>Sin web</span>
+              <span class="sj-leg sj-leg--ahora"><span></span>Con web + SEO</span>
+            </div>
+          </div>
+
+          <ol class="sj-chart">
+            {ocupacion.map((o) => (
+              <li class="sj-chart__col">
+                <div class="sj-chart__bars">
+                  <span class="sj-bar sj-bar--antes" style={`--h:${o.antes}%`}><b>{o.antes}</b></span>
+                  <span class="sj-bar sj-bar--ahora" style={`--h:${o.ahora}%`}><b>{o.ahora}</b></span>
+                </div>
+                <span class="sj-chart__m text-mono">{o.m}</span>
+              </li>
+            ))}
+          </ol>
+
+          <p class="sj-season-card__foot">
+            <strong>+50 puntos de ocupación</strong> en junio y septiembre es
+            temporada nueva que hoy pierdes. Eso es lo que paga una web — y lo que
+            la competencia que solo vive de agosto no está captando.
+          </p>
+          <a href="/contacto" class="sj-season-cta">Quiero llenar mi temporada →</a>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--sj-gold)">Cap. 05 / Cifras</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--sj-paper)">
+              Por qué San Juan
+              <em class="heading-editorial" style="color:var(--sj-gold)">enamora.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(251,244,228,0.75)">
+            Datos que explican por qué San Juan de los Terreros es <strong>el
+            secreto mejor guardado del Levante</strong> y un mercado turístico
+            con muchísimo potencial digital sin explotar.
+          </p>
+        </header>
+
+        <ul class="sj-hitos">
+          {hitos.map((h, i) => (
+            <li class={`sj-hito sj-hito--${i}`}>
+              <span class="text-mono sj-hito__k">{h.k}</span>
+              <span class="sj-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Sectores San Juan</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">viven del verano.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con estrategia digital propia. Del apartamento
+            familiar al chiringuito de playa, pasando por el castillo y las
+            actividades náuticas.
+          </p>
+        </header>
+
+        <ol class="sj-sec">
+          {sectores.map((s, i) => {
+            const colors = ['gold', 'turq', 'coral', 'blue', 'stone', 'ink'];
+            return (
+              <li class={`sj-sec__card sj-sec__card--${colors[i]}`}>
+                <header class="sj-sec__head">
+                  <span class="text-mono sj-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="sj-sec__stat-box">
+                    <span class="sj-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="sj-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="sj-sec__title heading-display">{s.nombre}</h3>
+                <p class="sj-sec__desc">{s.desc}</p>
+                <ul class="sj-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="sj-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="sj-sec__foot">
+                  <a href="/contacto" class="sj-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-map-section">
+      <header class="sj-map-head">
+        <div class="container-brutal sj-map-head__inner">
+          <div>
+            <span class="text-meta sj-map-chapter">Cap. 07 / Cartografía</span>
+            <h2 class="heading-display sj-map-title">
+              El pueblo
+              <em class="heading-editorial">y su costa.</em>
+            </h2>
+          </div>
+          <div class="sj-map-coords">
+            <span class="text-mono">37.401° N · 1.679° W</span>
+            <span class="text-mono">COSTA DE PULPÍ · LEVANTE</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sj-map-frame">
+        <div class="sj-map-wrap">
+          <InteractiveMap
+            center={[-1.6789, 37.4008]}
+            zoom={14}
+            pitch={50}
+            bearing={-16}
+            label="San Juan de los Terreros"
+            themeColor="#E3A52C"
+            themeColorDark="#B27C1B"
+            townInitial="S"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Por qué San Juan</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para invertir en tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Temporada que se alarga + posicionamiento de "playa tranquila" +
+            competencia baja + inversión que dura años. San Juan rinde rápido
+            para quien llega primero.
+          </p>
+        </header>
+
+        <ol class="sj-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`sj-dif__item sj-dif__item--${i}`}>
+              <span class="text-mono sj-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display sj-dif__t">{d.title}</h3>
+              <p class="sj-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--sj-gold)">Cap. 09 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--sj-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--sj-turq)">a tu web de playa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(251,244,228,0.75)">
+            Conocemos tu negocio. Diseño que enamora. Desarrollo con reservas y
+            galería. Lanzamiento antes de la temporada y SEO local.
+          </p>
+        </header>
+
+        <ol class="sj-proc">
+          {proceso.map((s) => (
+            <li class="sj-proc__step">
+              <header class="sj-proc__head">
+                <span class="text-mono sj-proc__num">{s.num}</span>
+                <span class="text-mono sj-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display sj-proc__t">{s.title}</h3>
+              <p class="sj-proc__body">{s.body}</p>
+              <footer class="sj-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Voces de la playa</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de San Juan
+              <em class="heading-editorial">que llenan el año.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="sj-pull">
+          <div class="sj-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="sj-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#E3A52C" stroke="#16120A" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#16120A" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="sj-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#16120A" letter-spacing="2.5"><textPath href="#sj-pull-c" startOffset="0%">★ SAN JUAN · 2026 · PLAYA ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#16120A">"</text>
+            </svg>
+          </div>
+          <blockquote class="sj-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="sj-pull__cap">
+            <span class="sj-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="sj-pull__name">{testimonios[0].nombre}</span>
+              <span class="sj-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="sj-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`sj-quote sj-quote--${i}`}>
+              <span class="sj-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="sj-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="sj-quote__name">{t.nombre}</span>
+                  <span class="sj-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">preguntan en la playa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Aparecer en Google, negocios de temporada, reservas, fotos, el
+            castillo, plazos y precios. Si no está aquí, escríbenos.
+          </p>
+        </header>
+
+        <ol class="sj-faq">
+          {faqs.map((f, i) => (
+            <li class="sj-faq__item">
+              <details class="sj-faq__det" open={i === 0}>
+                <summary class="sj-faq__sum">
+                  <span class="text-mono sj-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="sj-faq__q">{f.q}</span>
+                  <span class="sj-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="sj-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosLevante.length > 0 && (
+      <section class="sj-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 12 / Levante Almeriense</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en toda
+                <em class="heading-editorial">la costa.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del Levante almeriense donde trabajamos. De la
+              frontera de Murcia al Cabo de Gata, cobertura completa.
+            </p>
+          </header>
+
+          <ul class="sj-vecinos">
+            {pueblosLevante.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`sj-vecino sj-vecino--${i % 4}`}>
+                  <span class="text-mono sj-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="sj-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono sj-vecino__sub">{p.comarca}</span>
+                  <span class="sj-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sj-final">
+      <div class="container-brutal">
+        <div class="sj-final__grid">
+
+          <div class="sj-final__l">
+            <span class="text-meta sj-final__chapter">★ Cap. 13 · Próximo paso</span>
+            <h2 class="heading-display sj-final__title">
+              ¿Llenamos tu temporada
+              <em class="heading-editorial">en San Juan?</em>
+            </h2>
+            <p class="sj-final__lead">
+              Tu apartamento, chiringuito, restaurante o negocio de playa con
+              <strong>web que enamora</strong>, reservas directas, galería y
+              <strong>SEO de "playa tranquila"</strong>. Que las familias te
+              encuentren — en junio, en agosto y en septiembre. Desde 350€.
+            </p>
+            <div class="sj-final__cta">
+              <a href="/contacto" class="sj-final__btn sj-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="sj-final__btn sj-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="sj-final__trust">
+              <span><span class="sj-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ RESERVAS DIRECTAS</span>
+              <span>★ DESDE 350€</span>
+              <span>4.9★ · 38 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* Atardecer dorado + castillo + islas animados */}
+          <div class="sj-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="sj-final-svg">
+              <defs>
+                <radialGradient id="sj-final-glow" cx="50%" cy="42%" r="55%">
+                  <stop offset="0%" stop-color="#E3A52C" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#E3A52C" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="sj-final-sea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#37D2CE"/><stop offset="100%" stop-color="#157E7B"/>
+                </linearGradient>
+                <linearGradient id="sj-final-stone" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#E0B36C"/><stop offset="100%" stop-color="#A9762F"/>
+                </linearGradient>
+              </defs>
+              <circle cx="160" cy="150" r="150" fill="url(#sj-final-glow)"/>
+
+              {/* SOL GIGANTE de atardecer */}
+              <circle cx="160" cy="104" r="50" fill="#E3A52C" stroke="#FBF4E4" stroke-width="3"/>
+              <circle cx="160" cy="104" r="38" fill="#FBF4E4"/>
+              <circle cx="160" cy="104" r="30" fill="#F4B05E"/>
+              {Array.from({length: 16}).map((_, i) => (
+                <line x1="160" y1="42" x2="160" y2="52" stroke="#E3A52C" stroke-width="4" stroke-linecap="round" transform={`rotate(${i*22.5} 160 104)`}/>
+              ))}
+
+              {/* Islas volcánicas */}
+              <path d="M 36 210 Q 56 180 78 192 Q 92 176 108 210 Z" fill="#8E5A39" stroke="#FBF4E4" stroke-width="2.5"/>
+              <path d="M 232 208 Q 248 186 266 208 Z" fill="#7A4A2E" stroke="#FBF4E4" stroke-width="2.5"/>
+
+              {/* Mar de cristal */}
+              <path d="M 0 210 Q 40 202 80 210 T 160 210 T 240 210 T 320 210 L 320 320 L 0 320 Z" fill="url(#sj-final-sea)" stroke="#FBF4E4" stroke-width="3"/>
+              {/* Reflejo del sol */}
+              <g opacity="0.5" fill="#FBF4E4"><ellipse cx="160" cy="232" rx="26" ry="4"/><ellipse cx="160" cy="248" rx="18" ry="3"/><ellipse cx="160" cy="262" rx="12" ry="2.5"/></g>
+              <path d="M 0 232 Q 40 224 80 232 T 160 232 T 240 232 T 320 232" fill="none" stroke="#EAFBFA" stroke-width="2" opacity="0.5"/>
+
+              {/* Promontorio + castillo redondo */}
+              <g transform="translate(248, 150)">
+                <path d="M -34 60 L -20 0 L 28 0 L 42 60 Z" fill="#9A6E3A" stroke="#FBF4E4" stroke-width="2.5"/>
+                <path d="M -16 2 L -14 -56 Q 4 -68 22 -56 L 24 2 Z" fill="url(#sj-final-stone)" stroke="#16120A" stroke-width="3"/>
+                <path d="M -14 -56 L -14 -66 L -7 -66 L -7 -60 L 0 -60 L 0 -66 L 8 -66 L 8 -60 L 15 -60 L 15 -66 L 22 -66 L 22 -56" fill="url(#sj-final-stone)" stroke="#16120A" stroke-width="2.5"/>
+                <rect x="-1" y="-40" width="9" height="16" fill="#16120A"/>
+                <line x1="4" y1="-66" x2="4" y2="-82" stroke="#16120A" stroke-width="2.5"/>
+                <path d="M 4 -82 L 30 -76 L 24 -70 L 30 -64 L 4 -70 Z" fill="#F2674B" stroke="#16120A" stroke-width="2" class="sj-final-flag"/>
+              </g>
+
+              {/* Velero / barquita meciéndose */}
+              <g transform="translate(96, 226)" class="sj-final-boat">
+                <path d="M -22 0 L 22 0 L 16 11 L -16 11 Z" fill="#FBF4E4" stroke="#16120A" stroke-width="2.5"/>
+                <line x1="0" y1="0" x2="0" y2="-24" stroke="#16120A" stroke-width="2.5"/>
+                <path d="M 0 -24 L 18 -4 L 0 -4 Z" fill="#F2674B" stroke="#16120A" stroke-width="2"/>
+                <path d="M 0 -22 L -14 -4 L 0 -4 Z" fill="#FBF4E4" stroke="#16120A" stroke-width="2"/>
+              </g>
+
+              {/* Texto */}
+              <text x="160" y="306" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FBF4E4" letter-spacing="3">★ SAN JUAN DE LOS TERREROS ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="sj-final__marquee">
+        <div class="sj-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ PLAYA SIN MASIFICACIÓN ★ RESERVAS DIRECTAS ★ ALARGA LA TEMPORADA ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ══════════════════════════════════════════════════════
+     PALETA · SAN JUAN DE LOS TERREROS · ATARDECER DORADO
+     ══════════════════════════════════════════════════════ */
+  .sj {
+    --sj-paper:    #FBF4E4;       /* Crema arena cálida */
+    --sj-paper-2:  #F2E7CE;
+    --sj-sand:     #EAD6A6;       /* Arena dorada */
+    --sj-ink:      #16120A;       /* Tierra cálida oscura */
+    --sj-gold:     #E3A52C;       /* Oro miel / sol (PRIMARY) */
+    --sj-gold-d:   #B27C1B;
+    --sj-turq:     #25C0BE;       /* Turquesa laguna */
+    --sj-turq-d:   #14807E;
+    --sj-coral:    #F2674B;       /* Coral atardecer */
+    --sj-stone:    #C98A4B;       /* Sillería castillo */
+    --sj-blue:     #2E7196;       /* Mar profundo */
+    --sj-shadow:   8px 8px 0 var(--sj-ink);
+  }
+  .sj-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--sj-gold);
+    box-shadow: 0 0 0 0 rgba(227,165,44,0.55);
+    animation: sj-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes sj-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(227,165,44,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(227,165,44,0); }
+    100% { box-shadow: 0 0 0 0 rgba(227,165,44,0); }
+  }
+  .sj-spin { transform-origin: 50% 50%; animation: sj-spin 30s linear infinite; }
+  @keyframes sj-spin { to { transform: rotate(360deg); } }
+  .sj-flag-wave, .sj-final-flag { transform-origin: left center; animation: sj-flag 2.6s ease-in-out infinite; }
+  @keyframes sj-flag { 0%, 100% { transform: skewY(0deg) scaleX(1); } 50% { transform: skewY(-4deg) scaleX(.94); } }
+
+  /* HERO */
+  .sj-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 16%, rgba(227,165,44,0.14), transparent 50%),
+      radial-gradient(circle at 12% 84%, rgba(37,192,190,0.12), transparent 50%),
+      var(--sj-paper);
+    border-bottom: 3px solid var(--sj-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .sj-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(125deg, transparent 0 38px, rgba(227,165,44,0.05) 38px 39px);
+    pointer-events: none;
+  }
+  .sj-hero > * { position: relative; }
+  .sj-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .sj-hero__status { color: var(--sj-gold-d); font-weight: 700; }
+  .sj-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .sj-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .sj-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .sj-hero__chapter { color: var(--sj-gold-d); }
+  .sj-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .sj-hero__title em { color: var(--sj-gold-d); font-style: italic; }
+  .sj-hero__title-stamp {
+    display: inline-block;
+    color: var(--sj-paper);
+    background: var(--sj-turq-d);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .sj-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .sj-hero__lead strong { color: var(--sj-ink); font-weight: 700; }
+  .sj-hero__lead em { color: var(--sj-turq-d); font-style: italic; font-weight: 600; }
+  .sj-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .sj-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--sj-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .sj-btn--primary { background: var(--sj-gold); color: var(--sj-ink); box-shadow: 6px 6px 0 var(--sj-ink); }
+  .sj-btn--primary:hover { background: var(--sj-coral); color: var(--sj-paper); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--sj-ink); }
+  .sj-btn--ghost { background: transparent; color: var(--sj-ink); box-shadow: 6px 6px 0 var(--sj-turq); }
+  .sj-btn--ghost:hover { background: var(--sj-ink); color: var(--sj-turq); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--sj-turq); }
+
+  /* KPIs */
+  .sj-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--sj-ink);
+    background: var(--sj-ink);
+  }
+  @media (min-width: 768px) { .sj-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .sj-kpi {
+    background: var(--sj-paper); padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--sj-ink); border-bottom: 2px solid var(--sj-ink);
+  }
+  .sj-kpi:nth-child(2n) { border-right: none; }
+  .sj-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .sj-kpi:nth-child(2n)      { border-right: 2px solid var(--sj-ink); }
+    .sj-kpi:nth-child(4n)      { border-right: none; }
+    .sj-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--sj-ink); }
+    .sj-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .sj-kpi--gold  { background: var(--sj-gold); color: var(--sj-ink); }
+  .sj-kpi--turq  { background: var(--sj-turq); color: var(--sj-ink); }
+  .sj-kpi--coral { background: var(--sj-coral); color: var(--sj-paper); }
+  .sj-kpi--ink   { background: var(--sj-ink); color: var(--sj-paper); }
+  .sj-kpi--ink .sj-kpi__v { color: var(--sj-gold); }
+  .sj-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .sj-kpi__v small { font-size: .55em; opacity: .8; }
+  .sj-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .sj-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(22,18,10,0.2));
+  }
+  .sj-postcard {
+    background: var(--sj-paper);
+    border: 3px solid var(--sj-ink);
+    box-shadow: var(--sj-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .sj-postcard:hover { transform: rotate(0); }
+  .sj-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--sj-gold);
+    color: var(--sj-ink);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--sj-ink);
+  }
+  .sj-postcard__profile {
+    width: 100%; aspect-ratio: 540 / 240;
+    border-bottom: 2px solid var(--sj-ink);
+    overflow: hidden;
+  }
+  .sj-postcard__img-wrap { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 2px solid var(--sj-ink); }
+  .sj-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.04) saturate(1.08); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .sj-postcard:hover .sj-postcard__img { transform: scale(1.05); }
+  .sj-postcard__seal { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(-9deg); filter: drop-shadow(0 4px 10px rgba(227,165,44,0.55)); }
+  .sj-postcard__tag {
+    position: absolute; bottom: 12px; left: 12px;
+    background: var(--sj-turq); color: var(--sj-ink);
+    padding: .4rem .75rem;
+    font-size: .62rem; font-weight: 800; letter-spacing: .18em;
+    border: 2px solid var(--sj-ink);
+    box-shadow: 3px 3px 0 var(--sj-coral);
+    transform: rotate(-2deg);
+  }
+  .sj-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--sj-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .sj-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(22,18,10,0.18);
+    font-size: .68rem;
+  }
+  .sj-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .sj-postcard__data-row > span:first-child { color: var(--sj-gold-d); letter-spacing: .2em; font-weight: 800; }
+  .sj-postcard__data-v { color: var(--sj-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .sj-marquee {
+    background: var(--sj-gold); color: var(--sj-ink);
+    overflow: hidden; padding: .9rem 0;
+    border-top: 3px solid var(--sj-ink);
+  }
+  .sj-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: sj-marquee 40s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem; font-weight: 800;
+    letter-spacing: .15em; text-transform: uppercase;
+  }
+  @keyframes sj-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* CASTILLO SECTION */
+  .sj-castle-section {
+    background: var(--sj-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sj-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .sj-castle-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(227,165,44,0.07) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .sj-castle-section > * { position: relative; }
+  .sj-castle-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .sj-castle-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .sj-castle-chapter { color: var(--sj-gold-d); }
+  .sj-castle-title { font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: .92; letter-spacing: -.04em; margin: 1rem 0; }
+  .sj-castle-title em { color: var(--sj-turq-d); }
+  .sj-castle-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1.75rem; max-width: 56ch; }
+  .sj-castle-lead strong { color: var(--sj-ink); font-weight: 700; }
+  .sj-castle-lead em { color: var(--sj-coral); font-style: italic; }
+  .sj-castle-facts { display: grid; grid-template-columns: 1fr; gap: 0; border: 2.5px solid var(--sj-ink); background: var(--sj-paper); box-shadow: 6px 6px 0 var(--sj-ink); margin-bottom: 1.5rem; }
+  @media (min-width: 640px) { .sj-castle-facts { grid-template-columns: 1fr 1fr; } }
+  .sj-castle-fact { padding: .85rem 1rem; border-bottom: 1px solid var(--sj-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) {
+    .sj-castle-fact:nth-child(odd) { border-right: 1px solid var(--sj-ink); }
+    .sj-castle-fact:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .sj-castle-fact:last-child { border-bottom: none; } }
+  .sj-castle-fact__k { font-size: .58rem; letter-spacing: .2em; color: var(--sj-gold-d); font-weight: 800; }
+  .sj-castle-fact__v { font-size: .88rem; color: var(--sj-ink); font-weight: 600; line-height: 1.35; }
+  .sj-castle-note { padding: 1rem 1.25rem; background: var(--sj-turq); color: var(--sj-ink); border: 2px solid var(--sj-ink); font-size: .92rem; line-height: 1.5; }
+  .sj-castle-note strong { color: var(--sj-turq-d); }
+  .sj-castle-r { max-width: 320px; margin: 0 auto; border: 3px solid var(--sj-ink); box-shadow: var(--sj-shadow); line-height: 0; background: #FBD98C; }
+
+  /* ICONOS */
+  .sj-iconos-section { background: var(--sj-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); }
+  .sj-iconos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 1024px) { .sj-iconos { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .sj-icono {
+    position: relative;
+    background: var(--sj-paper);
+    border: 3px solid var(--sj-ink);
+    box-shadow: var(--sj-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .sj-icono:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .sj-icono--stone { color: var(--sj-stone); }
+  .sj-icono--turq  { color: var(--sj-turq-d); }
+  .sj-icono--coral { color: var(--sj-coral); }
+  .sj-icono__code {
+    position: absolute; top: -16px; right: 20px;
+    background: var(--sj-ink); color: var(--sj-gold);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.2rem;
+    border: 2.5px solid currentColor;
+    box-shadow: 3px 3px 0 currentColor;
+  }
+  .sj-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
+  .sj-icono__name { font-size: clamp(1.4rem, 2.8vw, 1.8rem); line-height: 1; letter-spacing: -.025em; color: var(--sj-ink); margin: .5rem 0 0; text-align: center; }
+  .sj-icono__sub { font-size: .6rem; letter-spacing: .22em; color: currentColor; font-weight: 800; text-align: center; }
+  .sj-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .sj-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
+  .sj-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+
+  /* TEMPORADA */
+  .sj-season-section { background: var(--sj-blue); color: var(--sj-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); position: relative; overflow: hidden; }
+  .sj-season-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(251,244,228,0.06) 1.3px, transparent 1.3px); background-size: 26px 26px; pointer-events: none; }
+  .sj-season-section > * { position: relative; }
+  .sj-season-head { max-width: 760px; margin-bottom: 2.5rem; }
+  .sj-season-chapter { color: var(--sj-gold); }
+  .sj-season-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; color: var(--sj-paper); }
+  .sj-season-title em { color: var(--sj-gold); }
+  .sj-season-lead { font-size: 1.1rem; line-height: 1.55; color: rgba(251,244,228,0.82); max-width: 60ch; }
+  .sj-season-lead strong { color: var(--sj-paper); font-weight: 700; }
+  .sj-season-lead em { color: var(--sj-gold); font-style: italic; }
+
+  .sj-season-card { background: var(--sj-paper); border: 3px solid var(--sj-ink); box-shadow: var(--sj-shadow); padding: 1.75rem; }
+  .sj-season-card__head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; padding-bottom: 1.25rem; border-bottom: 2px dashed var(--sj-ink); }
+  .sj-season-card__head > .text-mono { font-size: .68rem; letter-spacing: .2em; font-weight: 800; color: var(--sj-blue); }
+  .sj-season-legend { display: flex; gap: 1rem; }
+  .sj-leg { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono); font-size: .62rem; font-weight: 700; color: var(--sj-ink); letter-spacing: .05em; }
+  .sj-leg > span { width: 12px; height: 12px; border: 1.5px solid var(--sj-ink); }
+  .sj-leg--antes > span { background: var(--sj-sand); }
+  .sj-leg--ahora > span { background: var(--sj-gold); }
+
+  .sj-chart { list-style: none; margin: 1.5rem 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: .5rem; align-items: end; }
+  .sj-chart__col { display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+  .sj-chart__bars { display: flex; align-items: flex-end; gap: 4px; height: 180px; width: 100%; justify-content: center; }
+  .sj-bar { position: relative; width: 42%; max-width: 26px; border: 2px solid var(--sj-ink); transform-origin: bottom; }
+  .sj-bar--antes { background: var(--sj-sand); height: var(--h); animation: sj-grow .9s cubic-bezier(.16,1,.3,1) both; }
+  .sj-bar--ahora { background: var(--sj-gold); height: var(--h); animation: sj-grow 1.1s .15s cubic-bezier(.16,1,.3,1) both; }
+  .sj-bar b { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: .56rem; font-weight: 800; color: var(--sj-ink); }
+  .sj-bar--ahora b { color: var(--sj-gold-d); }
+  @keyframes sj-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .sj-chart__m { font-family: var(--font-mono); font-size: .62rem; font-weight: 800; letter-spacing: .12em; color: var(--sj-ink); }
+  .sj-chart__col:nth-child(4) .sj-chart__m { color: var(--sj-coral); }
+
+  .sj-season-card__foot { font-size: .95rem; line-height: 1.55; color: var(--sj-ink); margin: 1.25rem 0 1.25rem; padding-top: 1.25rem; border-top: 2px dashed var(--sj-ink); }
+  .sj-season-card__foot strong { color: var(--sj-blue); }
+  .sj-season-cta { display: inline-flex; align-items: center; justify-content: center; padding: .9rem 1.5rem; background: var(--sj-gold); color: var(--sj-ink); font-family: var(--font-display); font-weight: 800; border: 2.5px solid var(--sj-ink); box-shadow: 4px 4px 0 var(--sj-ink); text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .sj-season-cta:hover { background: var(--sj-coral); color: var(--sj-paper); transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--sj-ink); }
+
+  /* HITOS */
+  .sj-hitos-section {
+    background: var(--sj-ink); color: var(--sj-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sj-ink);
+    position: relative; overflow: hidden;
+  }
+  .sj-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(227,165,44,0.1) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .sj-hitos-section > * { position: relative; }
+  .sj-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 2.5px solid var(--sj-paper);
+  }
+  @media (min-width: 640px)  { .sj-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sj-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .sj-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(251,244,228,0.22);
+    border-right: 1px solid rgba(251,244,228,0.22);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(251,244,228,0.03);
+    transition: background .25s;
+  }
+  .sj-hito:hover { background: rgba(227,165,44,0.2); }
+  @media (min-width: 1024px) {
+    .sj-hito:nth-child(3n) { border-right: none; }
+    .sj-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .sj-hito:nth-child(2n) { border-right: none; }
+    .sj-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .sj-hito { border-right: none; } .sj-hito:last-child { border-bottom: none; } }
+  .sj-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--sj-gold); font-weight: 800; }
+  .sj-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--sj-paper); line-height: 1.35; }
+
+  /* SECTORES */
+  .sj-sec-section { background: var(--sj-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); }
+  .sj-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .sj-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sj-sec { grid-template-columns: repeat(3, 1fr); } }
+  .sj-sec__card {
+    background: var(--sj-paper);
+    border: 2.5px solid var(--sj-ink);
+    box-shadow: var(--sj-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .sj-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .sj-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .sj-sec__card--gold  { color: var(--sj-gold-d); }
+  .sj-sec__card--turq  { color: var(--sj-turq-d); }
+  .sj-sec__card--coral { color: var(--sj-coral); }
+  .sj-sec__card--blue  { color: var(--sj-blue); }
+  .sj-sec__card--stone { color: var(--sj-stone); }
+  .sj-sec__card--ink   { color: var(--sj-gold-d); }
+  .sj-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .sj-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .sj-sec__stat-box {
+    background: var(--sj-ink); color: var(--sj-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .sj-sec__stat-v { font-size: .9rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .sj-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .sj-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--sj-ink); margin: 0; }
+  .sj-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .sj-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .sj-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--sj-ink); }
+  .sj-sec__tag span { color: currentColor; font-weight: 800; }
+  .sj-sec__foot { padding-top: .65rem; border-top: 2px solid var(--sj-ink); }
+  .sj-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .sj-map-section { background: var(--sj-sand); border-bottom: 3px solid var(--sj-ink); }
+  .sj-map-head { padding: 4rem 0 2rem; }
+  .sj-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .sj-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .sj-map-chapter { color: var(--sj-gold-d); }
+  .sj-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .sj-map-title em { color: var(--sj-gold-d); }
+  .sj-map-coords {
+    background: var(--sj-gold); color: var(--sj-ink);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--sj-ink);
+    box-shadow: 5px 5px 0 var(--sj-turq);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem; letter-spacing: .15em;
+  }
+  .sj-map-frame { border-top: 3px solid var(--sj-ink); border-bottom: 3px solid var(--sj-ink); background: var(--sj-ink); }
+  .sj-map-wrap > * { width: 100%; }
+
+  /* DIFERENCIALES */
+  .sj-dif-section { background: var(--sj-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); }
+  .sj-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--sj-ink); }
+  @media (min-width: 768px) { .sj-dif { grid-template-columns: 1fr 1fr; } }
+  .sj-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--sj-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) {
+    .sj-dif__item:nth-child(odd) { border-right: 1px solid var(--sj-ink); }
+    .sj-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) { .sj-dif__item:last-child { border-bottom: none; } }
+  .sj-dif__item--0 { background: var(--sj-paper-2); }
+  .sj-dif__item--1 { background: var(--sj-paper); }
+  .sj-dif__item--2 { background: var(--sj-sand); }
+  .sj-dif__item--3 { background: var(--sj-paper); }
+  .sj-dif__item:hover { background: var(--sj-gold); }
+  .sj-dif__num { font-size: .85rem; color: var(--sj-coral); font-weight: 800; letter-spacing: .15em; }
+  .sj-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--sj-ink); margin: 0; }
+  .sj-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .sj-proc-section { background: var(--sj-ink); color: var(--sj-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); position: relative; overflow: hidden; }
+  .sj-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(37,192,190,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .sj-proc-section > * { position: relative; }
+  .sj-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .sj-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sj-proc { grid-template-columns: repeat(4, 1fr); } }
+  .sj-proc__step {
+    background: rgba(251,244,228,0.05);
+    border: 2px solid var(--sj-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .sj-proc__step:hover { background: rgba(37,192,190,0.16); transform: translateY(-3px); }
+  .sj-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(251,244,228,0.25); }
+  .sj-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--sj-gold); line-height: 1; }
+  .sj-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--sj-turq); }
+  .sj-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--sj-paper); margin: .25rem 0 0; }
+  .sj-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(251,244,228,0.75); flex: 1; }
+  .sj-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--sj-gold); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(251,244,228,0.25); }
+
+  /* TESTIMONIOS */
+  .sj-quote-section { background: var(--sj-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); }
+  .sj-pull { position: relative; background: var(--sj-sand); border: 3px solid var(--sj-ink); box-shadow: var(--sj-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .sj-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-9deg); filter: drop-shadow(0 4px 8px rgba(227,165,44,0.4)); }
+  .sj-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--sj-ink); max-width: 56ch; }
+  .sj-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--sj-ink); }
+  .sj-pull__avatar { width: 48px; height: 48px; background: var(--sj-gold); color: var(--sj-ink); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .sj-pull__cap div { display: flex; flex-direction: column; }
+  .sj-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--sj-ink); }
+  .sj-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .sj-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .sj-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .sj-quote { position: relative; background: var(--sj-paper); border: 2px solid var(--sj-ink); box-shadow: 5px 5px 0 var(--sj-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .sj-quote:hover { transform: translateY(-3px); }
+  .sj-quote--0 { background: var(--sj-paper); }
+  .sj-quote--1 { background: var(--sj-sand); }
+  .sj-quote--2 { background: var(--sj-paper-2); }
+  .sj-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--sj-gold); opacity: .5; }
+  .sj-quote p { font-size: .92rem; line-height: 1.5; color: var(--sj-ink); flex: 1; margin: 0; }
+  .sj-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--sj-ink); }
+  .sj-quote__avatar { width: 36px; height: 36px; background: var(--sj-turq-d); color: var(--sj-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .sj-quote footer div { display: flex; flex-direction: column; }
+  .sj-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .sj-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .sj-faq-section { background: var(--sj-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); }
+  .sj-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--sj-ink); }
+  .sj-faq__item { border-bottom: 2px solid var(--sj-ink); }
+  .sj-faq__det summary { list-style: none; cursor: pointer; }
+  .sj-faq__det summary::-webkit-details-marker { display: none; }
+  .sj-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .sj-faq__sum:hover { padding-inline: 1rem; background: var(--sj-paper-2); }
+  .sj-faq__num { font-size: 1rem; font-weight: 800; color: var(--sj-gold-d); letter-spacing: .1em; }
+  .sj-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--sj-ink); font-weight: 700; }
+  .sj-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--sj-ink); background: var(--sj-paper); color: var(--sj-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .sj-faq__det[open] .sj-faq__toggle { transform: rotate(180deg); background: var(--sj-gold); color: var(--sj-ink); }
+  .sj-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .sj-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .sj-faq__ans { padding-left: 48px; } }
+
+  /* VECINOS */
+  .sj-vecinos-section { background: var(--sj-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--sj-ink); }
+  .sj-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--sj-ink); background: var(--sj-ink); }
+  @media (min-width: 640px)  { .sj-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .sj-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .sj-vecino {
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto;
+    gap: .35rem; padding: 1.5rem;
+    background: var(--sj-paper); color: var(--sj-ink);
+    text-decoration: none; min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .sj-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .sj-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .sj-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .sj-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--sj-gold-d); font-size: 1.3rem; transition: transform .25s; }
+  .sj-vecino:hover { background: var(--sj-gold); color: var(--sj-ink); }
+  .sj-vecino:hover .sj-vecino__sub, .sj-vecino:hover .sj-vecino__n { opacity: .85; }
+  .sj-vecino:hover .sj-vecino__arrow { color: var(--sj-ink); transform: translateX(4px); }
+  .sj-vecino--1:hover { background: var(--sj-turq); color: var(--sj-ink); }
+  .sj-vecino--2:hover { background: var(--sj-coral); color: var(--sj-paper); }
+  .sj-vecino--2:hover .sj-vecino__arrow { color: var(--sj-paper); }
+  .sj-vecino--3:hover { background: var(--sj-ink); color: var(--sj-gold); }
+  .sj-vecino--3:hover .sj-vecino__arrow { color: var(--sj-gold); }
+
+  /* CTA FINAL */
+  .sj-final { background: var(--sj-ink); color: var(--sj-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .sj-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(227,165,44,0.1) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .sj-final > * { position: relative; }
+  .sj-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .sj-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .sj-final__chapter { color: var(--sj-gold); }
+  .sj-final__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .9; letter-spacing: -.045em; color: var(--sj-paper); margin: 1rem 0; }
+  .sj-final__title em { color: var(--sj-gold); font-style: italic; display: block; }
+  .sj-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(251,244,228,0.75); max-width: 52ch; }
+  .sj-final__lead strong { color: var(--sj-gold); }
+  .sj-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .sj-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .sj-final__btn--primary { background: var(--sj-gold); color: var(--sj-ink); border-color: var(--sj-gold); box-shadow: 6px 6px 0 var(--sj-coral); }
+  .sj-final__btn--primary:hover { background: var(--sj-coral); color: var(--sj-paper); border-color: var(--sj-coral); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--sj-gold); }
+  .sj-final__btn--ghost { background: transparent; color: var(--sj-paper); border-color: var(--sj-paper); box-shadow: 6px 6px 0 var(--sj-paper); }
+  .sj-final__btn--ghost:hover { background: var(--sj-paper); color: var(--sj-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--sj-paper); }
+  .sj-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(251,244,228,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .sj-final__trust .sj-pulse { background: var(--sj-gold); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(227,165,44,0.55); }
+  .sj-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .sj-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(227,165,44,0.3)); }
+  .sj-final-boat { transform-origin: 96px 232px; animation: sj-boat 5s ease-in-out infinite; }
+  @keyframes sj-boat { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-4px) rotate(1.5deg); } }
+  .sj-final__marquee { background: var(--sj-gold); color: var(--sj-ink); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--sj-ink); margin: 0 -1.5rem; }
+  .sj-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: sj-marquee 30s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
