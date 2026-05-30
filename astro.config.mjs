@@ -40,8 +40,12 @@ export default defineConfig({
       filter: (page) => {
         const path = new URL(page).pathname;
 
-        // Excluir páginas que no deben indexarse
-        const excludedPaths = ['/robots.txt', '/404', '/404.html', '/success/', '/musica/', '/soluciones/agencia'];
+        // Excluir páginas que no deben indexarse (noindex o redirecciones)
+        const excludedPaths = [
+          '/robots.txt', '/404', '/404.html', '/success/',
+          '/soluciones/agencia',
+          '/aviso-legal/', '/privacidad/', '/cookies/', '/terminos-condiciones/'
+        ];
         if (excludedPaths.some(ep => path.startsWith(ep.replace(/\/$/, '')))) return false;
 
         // Todas las páginas /diseno-web/ se indexan (contenido único por pueblo)
@@ -66,7 +70,7 @@ export default defineConfig({
 
         // Artículos de blog individuales
         if (path.startsWith('/blog/')) {
-          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: '2025-06-01' };
+          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: BUILD_DATE };
         }
 
         // Servicios principales
@@ -86,7 +90,7 @@ export default defineConfig({
 
         // Páginas de diseño web por localidad — contenido único por pueblo
         if (path.includes('/diseno-web/')) {
-          return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: BUILD_DATE };
+          return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 0.9, lastmod: BUILD_DATE };
         }
 
         // Páginas legales - prioridad mínima
