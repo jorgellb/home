@@ -484,6 +484,11 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" is:inline></script>
 
 <script is:inline>
+(function() {
+  /* ═══ Guard global: si este IIFE ya corrió, no re-registrar listeners ═══ */
+  if (window.__iMapScriptLoaded) return;
+  window.__iMapScriptLoaded = true;
+
   /* Polígono de círculo geodésico para el anillo de cobertura */
   function iMapCircle(center, radiusKm, points) {
     var coords = [];
@@ -497,16 +502,58 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
     return { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [coords] } };
   }
 
+  /* Crea el marcador SVG brutal */
+  function buildMarkerElement(theme, themeD, label, initial, containerId) {
+    var el = document.createElement('div');
+    el.className = 'iMap-marker';
+    el.innerHTML = ''
+      + '<div class="iMap-marker__glow" style="background:radial-gradient(ellipse at center,' + theme + ' 0%,transparent 70%)"></div>'
+      + '<div class="iMap-marker__rings">'
+      +   '<div class="iMap-marker__ring iMap-marker__ring--1" style="border-color:' + theme + '"></div>'
+      +   '<div class="iMap-marker__ring iMap-marker__ring--2" style="border-color:' + theme + '"></div>'
+      +   '<div class="iMap-marker__ring iMap-marker__ring--3" style="border-color:' + theme + '"></div>'
+      + '</div>'
+      + (label ? '<div class="iMap-marker__label" style="color:' + theme + '">★ ' + label.toUpperCase() + ' ★</div>' : '')
+      + '<svg class="iMap-marker__pin" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">'
+      +   '<defs>'
+      +     '<linearGradient id="iMap-grad-' + containerId + '" x1="0" y1="0" x2="0" y2="70" gradientUnits="userSpaceOnUse">'
+      +       '<stop offset="0%" stop-color="' + theme + '"/>'
+      +       '<stop offset="100%" stop-color="' + themeD + '"/>'
+      +     '</linearGradient>'
+      +   '</defs>'
+      +   '<path d="M27 4 C13 4 4 14 4 26 C 4 44 27 64 27 64 C 27 64 50 44 50 26 C 50 14 41 4 27 4 Z" fill="#0E0D0B" transform="translate(3 3)"/>'
+      +   '<path d="M27 4 C13 4 4 14 4 26 C 4 44 27 64 27 64 C 27 64 50 44 50 26 C 50 14 41 4 27 4 Z" fill="url(#iMap-grad-' + containerId + ')" stroke="#0E0D0B" stroke-width="3"/>'
+      +   '<circle cx="27" cy="26" r="13" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>'
+      +   '<text x="27" y="32" text-anchor="middle" font-family="\'Bricolage Grotesque\', serif" font-size="16" font-weight="800" fill="#0E0D0B">' + initial + '</text>'
+      +   '<text x="27" y="48" text-anchor="middle" font-family="monospace" font-size="6" fill="#FFFCF6" letter-spacing="1.5">★ ★ ★</text>'
+      + '</svg>';
+    return el;
+  }
+
+  /* Limpia TODOS los marcadores maplibre del contenedor (nuclear cleanup) */
+  function purgeMarkers(container) {
+    /* 1. Quitar marcador almacenado en la propiedad */
+    if (container._iMapMarker) {
+      try { container._iMapMarker.remove(); } catch(e) {}
+      container._iMapMarker = null;
+    }
+    /* 2. Quitar cualquier elemento .iMap-marker huérfano del DOM del mapa */
+    var orphans = container.querySelectorAll('.maplibregl-marker, .iMap-marker');
+    for (var i = 0; i < orphans.length; i++) {
+      try { orphans[i].remove(); } catch(e) {}
+    }
+  }
+
+  /* ═══ Init principal ═══ */
   function initIMaps() {
     if (typeof maplibregl === 'undefined') {
-      setTimeout(initIMaps, 150);
+      setTimeout(initIMaps, 200);
       return;
     }
 
     document.querySelectorAll('.iMap__canvas').forEach(function(container) {
-      /* Idempotente: un mapa por contenedor, pase lo que pase (evita pines duplicados) */
-      if (container.dataset.iMapDone === '1') return;
-      container.dataset.iMapDone = '1';
+      /* Guard por contenedor: un solo mapa por elemento, siempre */
+      if (container._iMapInstance) return;
 
       var center  = JSON.parse(container.dataset.center  || '[0,0]');
       var zoom    = parseFloat(container.dataset.zoom    || '13');
@@ -552,10 +599,14 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
         minZoom: 8
       });
 
+      /* Guardar instancia en el contenedor → guard definitivo */
+      container._iMapInstance = map;
+
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
 
-      map.on('load', function() {
-        /* ── Anillo de cobertura temático (capa cartográfica con estilo) ── */
+      /* ── map.once: se dispara UNA sola vez, imposible duplicar ── */
+      map.once('load', function() {
+        /* Anillo de cobertura temático */
         try {
           map.addSource('iMap-ring', { type: 'geojson', data: iMapCircle(center, 1.6, 96) });
           map.addLayer({
@@ -568,47 +619,17 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
           });
         } catch (e) {}
 
-        /* ── Marcador brutal (idempotente: borra cualquier marcador previo) ── */
-        if (container._iMapMarker) { container._iMapMarker.remove(); }
+        /* Nuclear cleanup antes de crear el pin → 0 posibilidad de duplicado */
+        purgeMarkers(container);
 
-        var el = document.createElement('div');
-        el.className = 'iMap-marker';
-
-        var pinHTML = ''
-          + '<div class="iMap-marker__glow" style="background:radial-gradient(ellipse at center,' + theme + ' 0%,transparent 70%)"></div>'
-          + '<div class="iMap-marker__rings">'
-          +   '<div class="iMap-marker__ring iMap-marker__ring--1" style="border-color:' + theme + '"></div>'
-          +   '<div class="iMap-marker__ring iMap-marker__ring--2" style="border-color:' + theme + '"></div>'
-          +   '<div class="iMap-marker__ring iMap-marker__ring--3" style="border-color:' + theme + '"></div>'
-          + '</div>'
-          + (label ? '<div class="iMap-marker__label" style="color:' + theme + '">★ ' + label.toUpperCase() + ' ★</div>' : '')
-          + '<svg class="iMap-marker__pin" viewBox="0 0 54 70" fill="none" xmlns="http://www.w3.org/2000/svg">'
-          +   '<defs>'
-          +     '<linearGradient id="iMap-grad-' + container.id + '" x1="0" y1="0" x2="0" y2="70" gradientUnits="userSpaceOnUse">'
-          +       '<stop offset="0%" stop-color="' + theme + '"/>'
-          +       '<stop offset="100%" stop-color="' + themeD + '"/>'
-          +     '</linearGradient>'
-          +   '</defs>'
-          // Sombra brutal (offset)
-          +   '<path d="M27 4 C13 4 4 14 4 26 C 4 44 27 64 27 64 C 27 64 50 44 50 26 C 50 14 41 4 27 4 Z" fill="#0E0D0B" transform="translate(3 3)"/>'
-          // Pin principal
-          +   '<path d="M27 4 C13 4 4 14 4 26 C 4 44 27 64 27 64 C 27 64 50 44 50 26 C 50 14 41 4 27 4 Z" fill="url(#iMap-grad-' + container.id + ')" stroke="#0E0D0B" stroke-width="3"/>'
-          // Círculo inner blanco
-          +   '<circle cx="27" cy="26" r="13" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2.5"/>'
-          // Inicial
-          +   '<text x="27" y="32" text-anchor="middle" font-family="\'Bricolage Grotesque\', serif" font-size="16" font-weight="800" fill="#0E0D0B">' + initial + '</text>'
-          // Star debajo de la inicial
-          +   '<text x="27" y="48" text-anchor="middle" font-family="monospace" font-size="6" fill="#FFFCF6" letter-spacing="1.5">★ ★ ★</text>'
-          + '</svg>';
-
-        el.innerHTML = pinHTML;
+        var el = buildMarkerElement(theme, themeD, label, initial, container.id);
 
         var marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat(center)
           .addTo(map);
         container._iMapMarker = marker;
 
-        /* ── Intro cinematográfico: vuela suave hasta el encuadre final ── */
+        /* Intro cinematográfico: vuela suave hasta el encuadre final */
         map.easeTo({
           center: center, zoom: zoom, pitch: pitch, bearing: bearing,
           duration: 2400,
@@ -621,10 +642,23 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
     });
   }
 
-  document.addEventListener('astro:page-load', initIMaps);
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initIMaps);
-  } else {
-    initIMaps();
+  /* ═══ Único punto de entrada con deduplicación ═══ */
+  var _initScheduled = false;
+  function scheduleInit() {
+    if (_initScheduled) return;
+    _initScheduled = true;
+    /* Micro-delay para que el DOM esté estable */
+    setTimeout(function() {
+      _initScheduled = false;
+      initIMaps();
+    }, 0);
   }
+
+  document.addEventListener('astro:page-load', scheduleInit);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scheduleInit);
+  } else {
+    scheduleInit();
+  }
+})();
 </script>
