@@ -1,0 +1,1696 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosMetro = getPueblosByComarca('Almería Metropolitana').filter(p => p.slug !== 'roquetas-de-mar');
+
+const title = 'Diseño Web en Roquetas de Mar | Webs Multilingües para Hoteles, Restaurantes y Apartamentos';
+const description = 'Agencia de diseño web en Roquetas de Mar (97.000 hab). Hoteles, restaurantes, apartamentos turísticos e inmobiliarias. Multiidioma ES/EN/DE/FR, motores de reservas directos (sin comisiones Booking), SEO turístico de alto volumen. Bandera Azul.';
+const canonical = 'https://platanitorico.com/diseno-web/roquetas-de-mar/';
+
+// 3 ICONOS Roquetas
+const iconos = [
+  { code: 'A', name: 'Las Salinas',          sub: 'PLAYA + FLAMENCOS',          desc: '7 km de playa con bandera azul · humedal RAMSAR · más de 100 especies de aves migratorias entre flamencos, garzas y cigüeñuelas.',     dato: '7 km', color: 'turquesa' },
+  { code: 'B', name: 'Castillo Santa Ana',   sub: 'FORTALEZA DEL SIGLO XVIII',  desc: 'Construido en 1764 para defender la costa de piratas berberiscos. Hoy símbolo cultural y vista emblemática del puerto pesquero.',       dato: '1764', color: 'coral' },
+  { code: 'C', name: 'Faro y puerto',         sub: 'NÁUTICA + ACUICULTURA',      desc: 'Puerto deportivo + pesquero · acuicultura de dorada y lubina de referencia europea. Centro náutico para vela, kayak y pesca deportiva.', dato: '500+ amarres', color: 'sun' },
+];
+
+// 4 mercados turísticos
+const mercados = [
+  { lang: 'ES', name: 'España',         country: 'Nacional',          pct: '45%', search: '«hotel Roquetas»',          flag: 'es' },
+  { lang: 'EN', name: 'UK · Ireland',   country: 'Reino Unido',       pct: '20%', search: '«hotels Roquetas Mar»',     flag: 'gb' },
+  { lang: 'DE', name: 'Deutsch',        country: 'Alemania · Austria', pct: '18%', search: '«Roquetas de Mar Hotel»',  flag: 'de' },
+  { lang: 'FR', name: 'Français',       country: 'Francia · Bélgica', pct: '12%', search: '«hôtel Roquetas de Mar»',  flag: 'fr' },
+];
+
+// Sectores Roquetas
+const sectores = [
+  { nombre: 'Hoteles y alojamiento',         stat: '3M+',  statLabel: 'turistas/año',         desc: 'Roquetas acoge más de 3 millones de turistas al año. Hoteles, apartamentos y bungalows necesitan webs con motor de reservas propio para reducir comisiones de Booking y Airbnb, y captar el turista europeo que busca directamente.', tags: ['Motor reservas propio','Multiidioma EN/DE/FR','Sin comisiones OTA','Galería inmersiva 4K'] },
+  { nombre: 'Restauración y chiringuitos',    stat: '#1',   statLabel: 'Google Maps',           desc: 'La primera playa de Almería tiene una oferta gastronómica enorme. Restaurantes de mariscos, chiringuitos y bares de tapas compiten por aparecer en Google Maps cuando el turista busca "dónde comer en Roquetas".',                  tags: ['Carta digital QR','Reservas online','SEO "restaurante Roquetas"','Google Business optimizado'] },
+  { nombre: 'Inmobiliarias y alquileres',     stat: '+40%', statLabel: 'leads internacionales', desc: 'El mercado inmobiliario de Roquetas es uno de los más activos de Almería, con fuerte demanda internacional. Portales con fichas de propiedades, buscador avanzado y captación de leads desde Google.',                                tags: ['Portal de propiedades','Captación leads','Multiidioma','Buscador avanzado'] },
+  { nombre: 'Golf y actividades náuticas',    stat: '5 ★',  statLabel: 'campos premium',        desc: 'Playa Serena Golf · Alborán Golf · escuela de vela · pesca deportiva. Webs para reservas, equipamiento, clases y paquetes golf+hotel.',                                                                                                  tags: ['Reservas tee time','Paquetes golf+hotel','Multiidioma','Calendario actividades'] },
+  { nombre: 'Comercio y retail vacacional',   stat: '24/7', statLabel: 'venta online',          desc: 'Tiendas de moda, complementos, souvenirs y productos locales. E-commerce para vender a turistas tras la estancia y a residentes europeos durante el invierno.',                                                                            tags: ['E-commerce','Pasarela de pago','Envíos UE','Gestión stock'] },
+  { nombre: 'Salud y bienestar resort',       stat: 'B2B+B2C', statLabel: 'turistas + locales', desc: 'Clínicas dentales, fisioterapia, dermatología y centros de estética con cliente nacional + turista internacional. Citas online y multiidioma.',                                                                                            tags: ['Citas online','Multiidioma','RGPD sanitario','Paquetes wellness'] },
+];
+
+// Hitos Roquetas
+const hitos = [
+  { k: 'POBLACIÓN',     v: '97.000 hab · 2ª de la provincia' },
+  { k: 'TURISTAS',      v: '3.000.000+ visitantes/año' },
+  { k: 'COSTA',         v: '15 km playa · 7 banderas azules' },
+  { k: 'PLAZAS HOTEL',  v: '~25.000 plazas hoteleras' },
+  { k: 'GOLF',          v: '2 campos premium · 36 hoyos' },
+  { k: 'ACUICULTURA',   v: 'Top exportador dorada/lubina' },
+];
+
+// Diferenciales
+const diferenciales = [
+  { title: 'Capital turística de la Costa',       desc: 'Con 97.000 habitantes residentes que se multiplican en temporada, Roquetas es la 2ª ciudad de Almería y el principal destino de sol y playa de la provincia. El volumen de búsquedas en Google es enorme.' },
+  { title: 'Turismo internacional masivo',         desc: 'UK, Alemania, Francia, Bélgica, Holanda. Tu web monolingüe pierde el 55% de tu mercado. Webs ES/EN/DE/FR con SEO real en cada idioma (no traducción automática) son la diferencia entre llenar o no.' },
+  { title: 'Reservas directas vs OTAs',            desc: 'Las comisiones del 15-20% de Booking y Airbnb son veneno. Cada reserva directa son 50€-200€ que se quedan en tu bolsillo. Un motor propio en la web + email marketing devuelve fidelización y márgenes.' },
+  { title: 'Bandera Azul + acuicultura premium',   desc: '7 banderas azules + costa preparada + acuicultura líder europea + golf premium. Roquetas no es "una playa más" — es un destino completo. Tu web debe contar esa historia bien.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Auditoría + estrategia',     eta: '1–2 días',  body: 'Analizamos tu negocio, mercado y competencia. Identificamos las nacionalidades clave a captar y definimos arquitectura web + keywords por idioma.', deliverable: 'Briefing + roadmap multiidioma' },
+  { num: '02', title: 'Diseño visual',               eta: '3–5 días',  body: 'Diseño que respira sol, mar y vacaciones. Fotografía pro de instalaciones, mockups en alta fidelidad. Tú apruebas antes de programar.',         deliverable: 'Prototipo Figma · approved' },
+  { num: '03', title: 'Desarrollo + motor reservas', eta: '5–10 días', body: 'Astro ultrarrápido + integración con motor de reservas (Smoobu, Lodgify, custom). Multiidioma técnico con hreflang, Schema HotelRoom y CWV verde.', deliverable: 'Web staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + SEO turístico', eta: '1–2 días',  body: 'Publicamos, configuramos Google Hotel Ads/Booking widget si aplica, GMB optimizado en 4 idiomas, Search Console, indexación.',                  deliverable: 'Sitio en producción + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Enrique Pastor', negocio: 'Hotel · 1ª línea playa',         texto: 'Llevábamos años dependiendo de Booking al 100%. Platanito Rico nos hizo una web con motor de reservas propio y en 6 meses ya el 30% de nuestras reservas son directas. El ahorro en comisiones paga con creces la inversión.' },
+  { nombre: 'Rosa Fernández', negocio: 'Restaurante mariscos · Roquetas', texto: 'Somos el restaurante más buscado de Roquetas para mariscos en Google. Antes no aparecíamos ni en la tercera página. Ahora tenemos la ficha perfecta y la web carga en medio segundo. Los clientes nos encuentran solos.' },
+  { nombre: 'Hans Müller',    negocio: 'Apartamentos · Las Marinas',     texto: 'Mis clientes son 90% alemanes. Necesitábamos web en alemán optimizada para Google.de. Nos hicieron una página rapidísima y posicionada — ahora recibo emails directos de Hamburgo y Berlín sin pagar comisión.' },
+  { nombre: 'Sarah Williams', negocio: 'Estate agent · Roquetas',         texto: 'As a British estate agent in Roquetas, I needed a bilingual portal that works for British buyers AND Spanish sellers. The team got it perfectly — listings, search, contact forms in both languages. Excellent work.' },
+];
+
+const faqs = [
+  { q: '¿Hacéis webs multiidioma para captar turismo internacional en Roquetas?',                       a: 'Sí, es nuestra especialidad. Webs en español + inglés + alemán + francés con hreflang, contenido localizado (no traducción automática), SEO técnico por idioma y schema apropiado. Cada versión es nativa y optimizada para Google del país (.com / .co.uk / .de / .fr).' },
+  { q: '¿Podéis integrar un motor de reservas para evitar comisiones de Booking?',                      a: 'Exactamente. Integramos motores de reservas directas (Smoobu, Lodgify, Beds24, o soluciones propias) que permiten a tus clientes reservar sin intermediarios. Te ahorras el 15-20% de comisión + el control total de los datos de tus huéspedes para fidelización.' },
+  { q: '¿Cuánto cuesta una web para un hotel o apartamento en Roquetas?',                                a: 'Web corporativa profesional desde 450€ con hosting gratuito. Hotel/apartamento con motor de reservas + multiidioma: 900€–2.500€ según funcionalidades. Portales inmobiliarios con MLS + buscador avanzado: desde 1.800€. Presupuesto cerrado sin sorpresas.' },
+  { q: '¿Hacéis webs para restaurantes de Roquetas?',                                                    a: 'Sí. Carta digital QR (escaneable desde la mesa) multiidioma, sistema de reservas online, integración con Google Maps y Google Business, fotografía profesional de platos y SEO local para "restaurante Roquetas", "marisquería Roquetas" y similares.' },
+  { q: '¿En cuánto tiempo tengo lista mi web en Roquetas?',                                              a: 'Web corporativa: 1–2 semanas. Web hotelera con motor de reservas + 4 idiomas: 3–4 semanas. Portal inmobiliario multiidioma con MLS: 4–6 semanas. Trabajamos en sprints — ves avances cada semana.' },
+  { q: '¿Hacéis SEO local para posicionar en búsquedas tipo "hotel Roquetas" o "apartamento Roquetas"?', a: 'Sí, especialidad. Optimizamos Google Business Profile en 4 idiomas, estructuramos contenido con keywords por nacionalidad ("apartamento Roquetas vacaciones" vs "Roquetas Ferienwohnung") y trabajamos schema HotelRoom + HotelStandard para resultados enriquecidos.' },
+  { q: '¿Trabajáis con inmobiliarias y estate agents que atienden compradores británicos/alemanes?',     a: 'Sí, frecuentemente. Portales bilingües con buscador avanzado, fichas de propiedad detalladas con galería, captura de leads, integración con MLS y CRM (HubSpot, Pipedrive). Hacemos también web en alemán específicamente para Inmaculadia ZIL/German buyers.' },
+  { q: '¿Ofrecéis paquetes golf+hotel y reservas náuticas?',                                             a: 'Sí. Para hoteles con paquetes golf integramos calendario de tee time, paquetes combinados (hotel+green fee+transfer), reservas para escuela de vela, pesca deportiva y actividades náuticas. Todo gestionable por ti desde un panel.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Roquetas de Mar","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web Roquetas de Mar","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":"https://platanitorico.com/imagenes/hero.jpg","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Roquetas de Mar","addressRegion":"Almería","postalCode":"04740","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":36.7640,"longitude":-2.6148},"areaServed":["Roquetas de Mar","Aguadulce","El Parador","Las Marinas","Almería Metropolitana"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"58","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Roquetas de Mar","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/hero.jpg"
+  imageAlt="Diseño web en Roquetas de Mar - Costa de Almería"
+  type="service"
+  keywords="diseño web roquetas de mar, web hotel roquetas, motor reservas roquetas, multiidioma roquetas, seo turístico roquetas, inmobiliaria roquetas, golf roquetas"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="rq">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — RESORT COSTERO                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-hero">
+      <div class="container-brutal">
+
+        <header class="rq-hero__top">
+          <span class="text-meta">N.º 030 — Costa de Almería · Capital turística</span>
+          <span class="text-meta rq-hero__status">
+            <span class="rq-pulse"></span>
+            ★ 97.000 HABS · 3M+ TURISTAS · BANDERA AZUL ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="rq-hero__grid">
+
+          <div class="rq-hero__intro">
+            <span class="text-meta rq-hero__chapter">Cap. 01 / Roquetas de Mar · Almería</span>
+            <h1 class="rq-hero__title heading-display">
+              Diseño web para
+              <em class="heading-editorial">Roquetas,</em>
+              <span class="rq-hero__title-stamp">capital turística.</span>
+            </h1>
+
+            <p class="rq-hero__lead">
+              <strong>97.000 habitantes</strong>, costa de bandera azul y
+              <em>3+ millones de turistas al año</em>. Webs <strong>multiidioma
+              ES/EN/DE/FR</strong> con motor de reservas directo — porque el
+              <strong>15-20% que pagas a Booking</strong> es tu margen.
+            </p>
+
+            <div class="rq-hero__cta">
+              <a href="/contacto" class="rq-btn rq-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#bandera" class="rq-btn rq-btn--ghost">
+                Bandera Azul ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="rq-kpis">
+              <li class="rq-kpi rq-kpi--azul">
+                <span class="rq-kpi__v text-mono">3<small>M+</small></span>
+                <span class="rq-kpi__l">Turistas/año</span>
+              </li>
+              <li class="rq-kpi rq-kpi--sol">
+                <span class="rq-kpi__v text-mono">15<small>km</small></span>
+                <span class="rq-kpi__l">Costa playa</span>
+              </li>
+              <li class="rq-kpi rq-kpi--coral">
+                <span class="rq-kpi__v text-mono">4</span>
+                <span class="rq-kpi__l">Idiomas web</span>
+              </li>
+              <li class="rq-kpi rq-kpi--ink">
+                <span class="rq-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="rq-kpi__l">58 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — skyline resort costero SVG */}
+          <aside class="rq-hero__postcard" aria-hidden="true">
+            <div class="rq-postcard">
+
+              <header class="rq-postcard__head">
+                <span class="text-mono">ROQUETAS DE MAR · 04740 · ALMERÍA</span>
+                <span class="text-mono">36.764° N · 2.615° W</span>
+              </header>
+
+              {/* Skyline resort SVG */}
+              <div class="rq-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 240" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="rq-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#9b5de5"/>
+                      <stop offset="50%" stop-color="#FF6B6B"/>
+                      <stop offset="100%" stop-color="#FFD230"/>
+                    </linearGradient>
+                    <linearGradient id="rq-sea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#00B8C7"/>
+                      <stop offset="100%" stop-color="#0099CC"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo atardecer */}
+                  <rect width="540" height="120" fill="url(#rq-sky)"/>
+
+                  {/* Sol grande */}
+                  <circle cx="420" cy="60" r="32" fill="#FFD230" opacity="0.9"/>
+                  <circle cx="420" cy="60" r="22" fill="#FFFCF6"/>
+
+                  {/* Estrellas en cielo morado */}
+                  <circle cx="40" cy="25" r="1.2" fill="#FFFCF6"/>
+                  <circle cx="80" cy="40" r="0.8" fill="#FFFCF6"/>
+                  <circle cx="120" cy="20" r="1" fill="#FFFCF6"/>
+
+                  {/* Pájaros */}
+                  <g fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M 200 45 Q 205 41 210 45 Q 215 41 220 45"/>
+                    <path d="M 270 35 Q 274 31 278 35 Q 282 31 286 35"/>
+                  </g>
+
+                  {/* Skyline urbano — torres apartamentos */}
+                  <g stroke="#0E0D0B" stroke-width="2">
+                    {/* Torres izquierda */}
+                    <rect x="20" y="80" width="32" height="50" fill="#FFFCF6"/>
+                    {Array.from({length: 5}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={24 + c*9} y={85 + r*9} width="6" height="6" fill={(r+c) % 3 === 0 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    <rect x="58" y="60" width="36" height="70" fill="#FFFCF6"/>
+                    {Array.from({length: 7}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={62 + c*10} y={65 + r*9} width="6" height="6" fill={(r+c) % 4 === 0 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    <rect x="100" y="70" width="30" height="60" fill="#FFFCF6"/>
+                    {Array.from({length: 6}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={104 + c*8.5} y={75 + r*9} width="5.5" height="6" fill={(r+c) % 3 === 1 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    {/* CASTILLO Santa Ana — centro */}
+                    <rect x="160" y="80" width="50" height="40" fill="#F4E8D0"/>
+                    <path d="M 160 80 L 160 72 L 166 72 L 166 76 L 173 76 L 173 72 L 180 72 L 180 76 L 187 76 L 187 72 L 194 72 L 194 76 L 201 76 L 201 72 L 210 72 L 210 80" fill="#F4E8D0" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Torre central */}
+                    <rect x="178" y="58" width="14" height="22" fill="#F4E8D0"/>
+                    <path d="M 178 58 L 178 52 L 182 52 L 182 56 L 188 56 L 188 52 L 192 52 L 192 58" fill="#F4E8D0" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Bandera */}
+                    <line x1="185" y1="52" x2="185" y2="40" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M 185 40 L 198 43 L 196 46 L 198 49 L 185 46 Z" fill="#0099CC" stroke="#0E0D0B" stroke-width="1"/>
+                    {/* Ventanas */}
+                    <rect x="170" y="95" width="8" height="14" fill="#0E0D0B"/>
+                    <path d="M 170 95 Q 174 90 178 95" fill="#0E0D0B"/>
+                    <rect x="195" y="95" width="8" height="14" fill="#0E0D0B"/>
+                    <path d="M 195 95 Q 199 90 203 95" fill="#0E0D0B"/>
+
+                    {/* Más apartamentos derecha */}
+                    <rect x="220" y="75" width="34" height="55" fill="#FFFCF6"/>
+                    {Array.from({length: 6}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={224 + c*10} y={80 + r*8} width="6" height="6" fill={(r+c) % 3 === 0 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    <rect x="260" y="65" width="32" height="65" fill="#FFFCF6"/>
+                    {Array.from({length: 7}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={264 + c*9} y={70 + r*8} width="5.5" height="6" fill={(r+c) % 4 === 1 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    <rect x="298" y="78" width="30" height="52" fill="#FFFCF6"/>
+                    {Array.from({length: 5}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={302 + c*8.5} y={83 + r*8.5} width="5.5" height="6" fill={(r+c) % 3 === 0 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    {/* FARO de Roquetas */}
+                    <rect x="340" y="65" width="14" height="65" fill="#FFFCF6"/>
+                    <rect x="340" y="78" width="14" height="6" fill="#FF6B6B"/>
+                    <rect x="340" y="98" width="14" height="6" fill="#FF6B6B"/>
+                    <rect x="340" y="118" width="14" height="6" fill="#FF6B6B"/>
+                    <rect x="336" y="60" width="22" height="6" fill="#0E0D0B"/>
+                    <rect x="343" y="50" width="8" height="10" fill="#FFD230" stroke="#0E0D0B" stroke-width="1"/>
+                    <path d="M 336 50 L 358 50 L 354 44 L 340 44 Z" fill="#FF6B6B" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Haz de luz */}
+                    <path d="M 347 47 L 320 35 L 335 47 Z" fill="#FFD230" opacity="0.5"/>
+                    <path d="M 347 47 L 374 35 L 359 47 Z" fill="#FFD230" opacity="0.5"/>
+
+                    {/* Más torres */}
+                    <rect x="370" y="80" width="30" height="50" fill="#FFFCF6"/>
+                    {Array.from({length: 5}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={374 + c*8.5} y={85 + r*9} width="5.5" height="6" fill={(r+c) % 3 === 1 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    <rect x="450" y="85" width="36" height="45" fill="#FFFCF6"/>
+                    {Array.from({length: 4}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={454 + c*10} y={90 + r*10} width="6" height="6" fill={(r+c) % 3 === 0 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+
+                    <rect x="490" y="70" width="32" height="60" fill="#FFFCF6"/>
+                    {Array.from({length: 6}).map((_, r) =>
+                      Array.from({length: 3}).map((_, c) => (
+                        <rect x={494 + c*9} y={75 + r*9} width="5.5" height="6" fill={(r+c) % 4 === 0 ? "#FFD230" : "#0E0D0B"}/>
+                      ))
+                    )}
+                  </g>
+
+                  {/* Mar turquesa */}
+                  <path d="M 0 130 Q 30 124 60 130 T 120 130 T 180 130 T 240 130 T 300 130 T 360 130 T 420 130 T 480 130 T 540 130 L 540 180 L 0 180 Z" fill="url(#rq-sea)" stroke="#0E0D0B" stroke-width="2"/>
+                  <path d="M 0 145 Q 30 139 60 145 T 120 145 T 180 145 T 240 145 T 300 145 T 360 145 T 420 145 T 480 145 T 540 145" fill="none" stroke="#FFFCF6" stroke-width="1.5" opacity="0.6"/>
+                  <path d="M 0 160 Q 30 154 60 160 T 120 160 T 180 160 T 240 160 T 300 160 T 360 160 T 420 160 T 480 160 T 540 160" fill="none" stroke="#FFFCF6" stroke-width="1" opacity="0.4"/>
+
+                  {/* Arena */}
+                  <rect x="0" y="180" width="540" height="60" fill="#F4E8D0" stroke="#0E0D0B" stroke-width="2"/>
+
+                  {/* Sombrillas en la playa */}
+                  {[40, 130, 220, 320, 420, 500].map((x, i) => {
+                    const colors = ['#FF6B6B', '#FFD230', '#9b5de5', '#FF6B6B', '#00B8C7', '#FFD230'];
+                    return (<g transform={`translate(${x}, 185)`}>
+                      <line x1="0" y1="0" x2="0" y2="40" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <path d="M -22 0 Q 0 -18 22 0 Z" fill={colors[i]} stroke="#0E0D0B" stroke-width="1.5"/>
+                      <line x1="-12" y1="-6" x2="-12" y2="0" stroke="#0E0D0B" stroke-width="0.8"/>
+                      <line x1="0" y1="-12" x2="0" y2="0" stroke="#0E0D0B" stroke-width="0.8"/>
+                      <line x1="12" y1="-6" x2="12" y2="0" stroke="#0E0D0B" stroke-width="0.8"/>
+                      {/* Tumbona pequeña */}
+                      <rect x="-15" y="32" width="30" height="4" fill={colors[i]} stroke="#0E0D0B" stroke-width="1" opacity="0.85"/>
+                    </g>);
+                  })}
+
+                  {/* BANDERA AZUL ondeando flotando */}
+                  <g transform="translate(60, 195)">
+                    <line x1="0" y1="0" x2="0" y2="-30" stroke="#0E0D0B" stroke-width="2"/>
+                    <path d="M 0 -30 L 28 -27 L 25 -22 L 28 -17 L 0 -20 Z" fill="#0099CC" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <text x="14" y="-22" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6">BLUE</text>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="rq-postcard__img-wrap">
+                <img
+                  src="/imagenes/hero.jpg"
+                  alt="Roquetas de Mar - capital turística de Almería"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="rq-postcard__img"
+                />
+                {/* Sello Bandera Azul */}
+                <div class="rq-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="rq-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#0099CC"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="rq-spin">
+                      <text font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5">
+                        <textPath href="#rq-seal-arc" startOffset="0%">★ BANDERA AZUL · BLUE FLAG ★</textPath>
+                      </text>
+                    </g>
+                    {/* Mini bandera dentro */}
+                    <g transform="translate(40, 44)">
+                      <line x1="-12" y1="14" x2="-12" y2="-12" stroke="#FFFCF6" stroke-width="2.5"/>
+                      <path d="M -12 -12 L 14 -9 L 11 -4 L 14 1 L -12 -2 Z" fill="#FFFCF6" stroke="#FFFCF6" stroke-width="1"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rq-postcard__tag">
+                  <span class="text-mono">★ DESTINO BANDERA AZUL ★</span>
+                </div>
+              </div>
+
+              {/* Datos */}
+              <div class="rq-postcard__data">
+                <div class="rq-postcard__data-row">
+                  <span class="text-mono">ALTITUD</span>
+                  <span class="text-mono rq-postcard__data-v">7 m s.n.m.</span>
+                </div>
+                <div class="rq-postcard__data-row">
+                  <span class="text-mono">SUPERFICIE</span>
+                  <span class="text-mono rq-postcard__data-v">59 km²</span>
+                </div>
+                <div class="rq-postcard__data-row">
+                  <span class="text-mono">CLIMA</span>
+                  <span class="text-mono rq-postcard__data-v">Mediterráneo · 320 días sol</span>
+                </div>
+                <div class="rq-postcard__data-row">
+                  <span class="text-mono">DIST. SEDE</span>
+                  <span class="text-mono rq-postcard__data-v">1h 15min · Vera</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="rq-marquee">
+        <div class="rq-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ BANDERA AZUL ★ MULTIIDIOMA ES · EN · DE · FR ★ RESERVAS DIRECTAS ★ COSTA DE ALMERÍA ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* BANDERA AZUL — flagship section                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-flag-section" id="bandera">
+      <div class="container-brutal">
+        <div class="rq-flag-grid">
+
+          <div class="rq-flag-l">
+            <span class="text-meta rq-flag-chapter">Cap. 02 / Certificación</span>
+            <h2 class="rq-flag-title heading-display">
+              7 banderas
+              <em class="heading-editorial">azules.</em>
+            </h2>
+            <p class="rq-flag-lead">
+              <strong>Roquetas tiene 7 banderas azules</strong> — distinción
+              internacional FEE que certifica calidad de agua, accesibilidad,
+              servicios, seguridad y educación ambiental. Tu hotel, restaurante
+              o inmobiliaria <em>vive de esto</em>. Tu web tiene que
+              <strong>contarlo bien en 4 idiomas</strong>.
+            </p>
+            <ul class="rq-flag-facts">
+              <li>
+                <span class="text-mono rq-flag-facts__k">PLAYAS BA</span>
+                <span class="rq-flag-facts__v">7 playas con Bandera Azul</span>
+              </li>
+              <li>
+                <span class="text-mono rq-flag-facts__k">PUERTOS</span>
+                <span class="rq-flag-facts__v">2 puertos deportivos certificados</span>
+              </li>
+              <li>
+                <span class="text-mono rq-flag-facts__k">CRITERIO</span>
+                <span class="rq-flag-facts__v">FEE · Foundation Environmental Education</span>
+              </li>
+              <li>
+                <span class="text-mono rq-flag-facts__k">RENOVADA</span>
+                <span class="rq-flag-facts__v">Anualmente · controles mensuales</span>
+              </li>
+              <li>
+                <span class="text-mono rq-flag-facts__k">SERVICIOS</span>
+                <span class="rq-flag-facts__v">Socorrismo · accesibilidad · WC · duchas</span>
+              </li>
+              <li>
+                <span class="text-mono rq-flag-facts__k">EUROPA</span>
+                <span class="rq-flag-facts__v">Reconocida en 48 países</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Bandera Azul gigante */}
+          <aside class="rq-flag-r" aria-hidden="true">
+            <svg viewBox="0 0 280 320" width="100%" height="100%">
+              <defs>
+                <radialGradient id="rq-flag-glow" cx="50%" cy="40%" r="60%">
+                  <stop offset="0%" stop-color="#0099CC" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#0099CC" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="140" cy="140" r="135" fill="url(#rq-flag-glow)"/>
+
+              {/* Mástil */}
+              <rect x="50" y="20" width="8" height="280" fill="#F4E8D0" stroke="#0E0D0B" stroke-width="2.5"/>
+              {/* Punta del mástil */}
+              <circle cx="54" cy="18" r="6" fill="#FFD230" stroke="#0E0D0B" stroke-width="2"/>
+              {/* Base mástil */}
+              <rect x="40" y="296" width="28" height="14" fill="#0E0D0B"/>
+
+              {/* BANDERA ondeando */}
+              <g class="rq-flag-wave">
+                <path d="M 58 30 L 240 26 Q 248 60 232 90 Q 248 120 232 150 Q 248 180 232 200 L 58 196 Z" fill="#0099CC" stroke="#0E0D0B" stroke-width="3"/>
+
+                {/* Texto BLUE FLAG */}
+                <text x="148" y="55" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FFFCF6" letter-spacing="2">★ FEE · 2026 ★</text>
+                <text x="148" y="100" text-anchor="middle" font-family="serif" font-size="38" font-weight="bold" fill="#FFFCF6" letter-spacing="-1">BLUE</text>
+                <text x="148" y="140" text-anchor="middle" font-family="serif" font-size="38" font-weight="bold" fill="#FFFCF6" letter-spacing="-1">FLAG</text>
+
+                {/* Decoración onda */}
+                <path d="M 80 160 Q 110 153 140 160 T 200 160" fill="none" stroke="#FFFCF6" stroke-width="2.5"/>
+                <path d="M 80 175 Q 110 168 140 175 T 200 175" fill="none" stroke="#FFFCF6" stroke-width="2"/>
+
+                <text x="148" y="195" text-anchor="middle" font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2">★ ROQUETAS DE MAR ★</text>
+              </g>
+
+              {/* Sol pequeño */}
+              <circle cx="240" cy="50" r="14" fill="#FFD230"/>
+              {Array.from({length: 8}).map((_, i) => (
+                <line x1="240" y1="34" x2="240" y2="38" stroke="#FFD230" stroke-width="2.5" stroke-linecap="round" transform={`rotate(${i*45} 240 50)`}/>
+              ))}
+
+              {/* Pelícano (turismo costero) */}
+              <g transform="translate(220, 230)" fill="none" stroke="#FFFCF6" stroke-width="1.8" stroke-linecap="round">
+                <path d="M 0 0 Q 8 -8 16 -4 L 20 -8 L 22 -4 L 14 0 Q 8 4 0 0 Z" fill="#FFFCF6" stroke-width="1.5"/>
+                <circle cx="20" cy="-6" r="1" fill="#0E0D0B"/>
+                <path d="M 4 4 Q 8 6 12 4"/>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* 3 ICONOS                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-iconos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--rq-coral)">Cap. 03 / Tres iconos</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que hace única
+              <em class="heading-editorial">a Roquetas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            No es un destino "playa y ya". Roquetas combina <strong>naturaleza
+            protegida, patrimonio defensivo y un puerto pesquero/acuicultor</strong>
+            de primer nivel europeo.
+          </p>
+        </header>
+
+        <ol class="rq-iconos">
+          {iconos.map((i) => (
+            <li class={`rq-icono rq-icono--${i.color}`}>
+              <div class="rq-icono__code">{i.code}</div>
+
+              <div class="rq-icono__svg" aria-hidden="true">
+                {i.color === 'turquesa' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Salinas con flamencos */}
+                    <rect x="6" y="60" width="88" height="34" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 6 70 Q 25 66 50 70 T 94 70" fill="none" stroke="#FFFCF6" stroke-width="1.5"/>
+                    {/* Flamenco 1 */}
+                    <g transform="translate(28, 60)" fill="#FF6B6B" stroke="#0E0D0B" stroke-width="1.3">
+                      <ellipse cx="0" cy="0" rx="8" ry="3"/>
+                      <path d="M 4 0 L 5 -12 L 7 -14" fill="none" stroke="#FF6B6B" stroke-width="2"/>
+                      <path d="M 7 -14 L 9 -12 L 9 -8" fill="#FF6B6B"/>
+                      <line x1="-2" y1="3" x2="-2" y2="14" stroke="#FF6B6B" stroke-width="1.8"/>
+                      <line x1="2" y1="3" x2="2" y2="14" stroke="#FF6B6B" stroke-width="1.8"/>
+                    </g>
+                    {/* Flamenco 2 */}
+                    <g transform="translate(60, 64)" fill="#FF6B6B" stroke="#0E0D0B" stroke-width="1.3">
+                      <ellipse cx="0" cy="0" rx="7" ry="2.5"/>
+                      <path d="M 3 0 L 4 -10 L 6 -12" fill="none" stroke="#FF6B6B" stroke-width="1.8"/>
+                      <path d="M 6 -12 L 8 -10 L 8 -7" fill="#FF6B6B"/>
+                      <line x1="-1" y1="2.5" x2="-1" y2="10" stroke="#FF6B6B" stroke-width="1.5"/>
+                      <line x1="2" y1="2.5" x2="2" y2="10" stroke="#FF6B6B" stroke-width="1.5"/>
+                    </g>
+                    {/* Sol */}
+                    <circle cx="78" cy="20" r="10" fill="#FFD230" stroke="#0E0D0B" stroke-width="2"/>
+                    {Array.from({length: 8}).map((_, j) => (
+                      <line x1="78" y1="6" x2="78" y2="10" stroke="#FFD230" stroke-width="1.8" transform={`rotate(${j*45} 78 20)`}/>
+                    ))}
+                  </svg>
+                )}
+                {i.color === 'coral' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Castillo Santa Ana */}
+                    <rect x="20" y="50" width="60" height="40" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 20 50 L 20 42 L 28 42 L 28 48 L 36 48 L 36 42 L 44 42 L 44 48 L 52 48 L 52 42 L 60 42 L 60 48 L 68 48 L 68 42 L 76 42 L 76 48 L 80 48 L 80 50" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Torre central */}
+                    <rect x="42" y="28" width="16" height="22" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    <path d="M 42 28 L 42 22 L 46 22 L 46 26 L 50 26 L 50 22 L 54 22 L 54 26 L 58 26 L 58 28" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/>
+                    {/* Bandera */}
+                    <line x1="50" y1="22" x2="50" y2="10" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M 50 10 L 64 13 L 62 16 L 64 19 L 50 16 Z" fill="#0099CC" stroke="#0E0D0B" stroke-width="1.2"/>
+                    {/* Ventanas */}
+                    <rect x="30" y="65" width="6" height="10" fill="#0E0D0B"/>
+                    <path d="M 30 65 Q 33 60 36 65" fill="#0E0D0B"/>
+                    <rect x="64" y="65" width="6" height="10" fill="#0E0D0B"/>
+                    <path d="M 64 65 Q 67 60 70 65" fill="#0E0D0B"/>
+                    {/* Puerta */}
+                    <path d="M 46 90 L 46 78 Q 46 72 50 72 Q 54 72 54 78 L 54 90 Z" fill="#0E0D0B"/>
+                  </svg>
+                )}
+                {i.color === 'sun' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Faro + puerto */}
+                    {/* Mar */}
+                    <path d="M 0 70 Q 25 64 50 70 T 100 70 L 100 100 L 0 100 Z" fill="#00B8C7" stroke="#0E0D0B" stroke-width="2"/>
+                    {/* Olas */}
+                    <path d="M 0 78 Q 25 73 50 78 T 100 78" fill="none" stroke="#FFFCF6" stroke-width="1.2" opacity="0.6"/>
+                    {/* FARO */}
+                    <rect x="44" y="20" width="12" height="50" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="44" y="30" width="12" height="4" fill="#FF6B6B"/>
+                    <rect x="44" y="44" width="12" height="4" fill="#FF6B6B"/>
+                    <rect x="44" y="58" width="12" height="4" fill="#FF6B6B"/>
+                    <rect x="40" y="14" width="20" height="6" fill="#0E0D0B"/>
+                    <rect x="46" y="6" width="8" height="8" fill="currentColor" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M 40 6 L 60 6 L 56 0 L 44 0 Z" fill="#FF6B6B" stroke="#0E0D0B" stroke-width="1.5"/>
+                    {/* Barco */}
+                    <path d="M 12 70 L 30 70 L 28 76 L 14 76 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <line x1="21" y1="70" x2="21" y2="60" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M 21 60 L 28 64 L 21 66 Z" fill="#FF6B6B" stroke="#0E0D0B" stroke-width="1"/>
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="rq-icono__name heading-display">{i.name}</h3>
+              <span class="text-mono rq-icono__sub">{i.sub}</span>
+              <p class="rq-icono__desc">{i.desc}</p>
+              <footer class="rq-icono__foot">
+                <span class="text-mono rq-icono__dato">★ {i.dato}</span>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MULTIIDIOMA — 4 MERCADOS                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-idiomas-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--rq-coral)">Cap. 04 / 4 mercados</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro idiomas,
+              <em class="heading-editorial">4 nacionalidades de turistas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Los <strong>3 millones de turistas</strong> de Roquetas no
+            hablan todos español. Tu web monolingüe pierde el <strong>55% de
+            tu mercado</strong>. Esto cubrimos por idioma.
+          </p>
+        </header>
+
+        <ol class="rq-idiomas">
+          {mercados.map((m, i) => (
+            <li class={`rq-idioma rq-idioma--${i}`}>
+              <header class="rq-idioma__head">
+                <span class="rq-idioma__flag" aria-hidden="true">
+                  {m.flag === 'es' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="60" height="10" fill="#AA151B"/>
+                      <rect y="10" width="60" height="20" fill="#F1BF00"/>
+                      <rect y="30" width="60" height="10" fill="#AA151B"/>
+                    </svg>
+                  )}
+                  {m.flag === 'gb' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="60" height="40" fill="#012169"/>
+                      <path d="M0 0L60 40M60 0L0 40" stroke="#FFFFFF" stroke-width="6"/>
+                      <path d="M0 0L60 40M60 0L0 40" stroke="#C8102E" stroke-width="3"/>
+                      <path d="M30 0V40M0 20H60" stroke="#FFFFFF" stroke-width="10"/>
+                      <path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="5"/>
+                    </svg>
+                  )}
+                  {m.flag === 'de' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="60" height="13.33" fill="#000000"/>
+                      <rect y="13.33" width="60" height="13.33" fill="#DD0000"/>
+                      <rect y="26.66" width="60" height="13.33" fill="#FFCE00"/>
+                    </svg>
+                  )}
+                  {m.flag === 'fr' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="20" height="40" fill="#002395"/>
+                      <rect x="20" width="20" height="40" fill="#FFFFFF"/>
+                      <rect x="40" width="20" height="40" fill="#ED2939"/>
+                    </svg>
+                  )}
+                </span>
+                <div class="rq-idioma__head-r">
+                  <span class="rq-idioma__code text-mono">{m.lang}</span>
+                  <span class="rq-idioma__name">{m.name}</span>
+                </div>
+                <div class="rq-idioma__pct">{m.pct}</div>
+              </header>
+              <div class="rq-idioma__body">
+                <div class="rq-idioma__row">
+                  <span class="text-mono rq-idioma__k">MERCADO</span>
+                  <span class="rq-idioma__v">{m.country}</span>
+                </div>
+                <div class="rq-idioma__row">
+                  <span class="text-mono rq-idioma__k">BÚSQUEDA</span>
+                  <span class="rq-idioma__v rq-idioma__keyword">{m.search}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <p class="rq-idiomas-note">
+          <strong>★ Importante:</strong> usamos hreflang + contenido localizado
+          (no traducción automática). Cada idioma posiciona en su Google
+          (.co.uk, .de, .fr) con keywords reales del turista de ese país.
+        </p>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--rq-sol)">Cap. 05 / Cifras</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--rq-paper)">
+              Por qué Roquetas
+              <em class="heading-editorial" style="color:var(--rq-sol)">factura.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.75)">
+            Datos reales que explican por qué Roquetas es <strong>el
+            mercado más rentable de la costa</strong> para negocios
+            turísticos, hosteleros e inmobiliarios.
+          </p>
+        </header>
+
+        <ul class="rq-hitos">
+          {hitos.map((h, i) => (
+            <li class={`rq-hito rq-hito--${i}`}>
+              <span class="text-mono rq-hito__k">{h.k}</span>
+              <span class="rq-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Sectores Roquetas</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">viven del verano · todo el año.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con estrategia digital específica. Cada uno con
+            multiidioma, motor de reservas, SEO turístico y captación
+            internacional.
+          </p>
+        </header>
+
+        <ol class="rq-sec">
+          {sectores.map((s, i) => {
+            const colors = ['azul', 'coral', 'turquesa', 'green', 'sol', 'morado'];
+            return (
+              <li class={`rq-sec__card rq-sec__card--${colors[i]}`}>
+                <header class="rq-sec__head">
+                  <span class="text-mono rq-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="rq-sec__stat-box">
+                    <span class="rq-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="rq-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="rq-sec__title heading-display">{s.nombre}</h3>
+                <p class="rq-sec__desc">{s.desc}</p>
+                <ul class="rq-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="rq-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="rq-sec__foot">
+                  <a href="/contacto" class="rq-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-map-section">
+      <header class="rq-map-head">
+        <div class="container-brutal rq-map-head__inner">
+          <div>
+            <span class="text-meta rq-map-chapter">Cap. 07 / Cartografía</span>
+            <h2 class="heading-display rq-map-title">
+              La costa
+              <em class="heading-editorial">desde el aire.</em>
+            </h2>
+          </div>
+          <div class="rq-map-coords">
+            <span class="text-mono">36.764° N · 2.615° W</span>
+            <span class="text-mono">7m s.n.m. · 59 km² · COSTA MEDITERRÁNEA</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="rq-map-frame">
+        <div class="rq-map-wrap">
+          <InteractiveMap
+            center={[-2.6148, 36.7640]}
+            zoom={13}
+            pitch={50}
+            bearing={-10}
+            label="Roquetas de Mar"
+            themeColor="#0099CC"
+            themeColorDark="#005F80"
+            townInitial="R"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Por qué Roquetas</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para invertir en la costa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Tamaño + turismo internacional + tecnología de reservas directas
+            + diversidad de sectores. Roquetas es la oportunidad digital
+            más grande de Almería.
+          </p>
+        </header>
+
+        <ol class="rq-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`rq-dif__item rq-dif__item--${i}`}>
+              <span class="text-mono rq-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display rq-dif__t">{d.title}</h3>
+              <p class="rq-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--rq-sol)">Cap. 09 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--rq-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--rq-coral)">a tu web turística.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.75)">
+            Auditoría. Diseño que vende verano. Desarrollo con motor de
+            reservas + multiidioma. SEO turístico de alto volumen.
+          </p>
+        </header>
+
+        <ol class="rq-proc">
+          {proceso.map((s) => (
+            <li class="rq-proc__step">
+              <header class="rq-proc__head">
+                <span class="text-mono rq-proc__num">{s.num}</span>
+                <span class="text-mono rq-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display rq-proc__t">{s.title}</h3>
+              <p class="rq-proc__body">{s.body}</p>
+              <footer class="rq-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Voces de la costa</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Roquetas
+              <em class="heading-editorial">que venden directo.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="rq-pull">
+          <div class="rq-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="rq-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#0099CC" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="rq-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FFFCF6" letter-spacing="2.5"><textPath href="#rq-pull-c" startOffset="0%">★ ROQUETAS · 2026 · COSTA ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#FFFCF6">"</text>
+            </svg>
+          </div>
+          <blockquote class="rq-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="rq-pull__cap">
+            <span class="rq-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="rq-pull__name">{testimonios[0].nombre}</span>
+              <span class="rq-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="rq-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`rq-quote rq-quote--${i}`}>
+              <span class="rq-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="rq-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="rq-quote__name">{t.nombre}</span>
+                  <span class="rq-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">preguntan en la costa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Multiidioma, motor de reservas, comisiones OTA, plazos, SEO
+            turístico y precios. Si no está aquí, escríbenos.
+          </p>
+        </header>
+
+        <ol class="rq-faq">
+          {faqs.map((f, i) => (
+            <li class="rq-faq__item">
+              <details class="rq-faq__det" open={i === 0}>
+                <summary class="rq-faq__sum">
+                  <span class="text-mono rq-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="rq-faq__q">{f.q}</span>
+                  <span class="rq-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="rq-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosMetro.length > 0 && (
+      <section class="rq-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 12 / Almería Metropolitana</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en toda
+                <em class="heading-editorial">la metropolitana.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del área metropolitana de Almería donde
+              trabajamos. Cobertura completa para la costa y el cinturón.
+            </p>
+          </header>
+
+          <ul class="rq-vecinos">
+            {pueblosMetro.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`rq-vecino rq-vecino--${i % 4}`}>
+                  <span class="text-mono rq-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="rq-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono rq-vecino__sub">{p.comarca}</span>
+                  <span class="rq-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="rq-final">
+      <div class="container-brutal">
+        <div class="rq-final__grid">
+
+          <div class="rq-final__l">
+            <span class="text-meta rq-final__chapter">★ Cap. 13 · Próximo paso</span>
+            <h2 class="heading-display rq-final__title">
+              ¿Empezamos tu web
+              <em class="heading-editorial">en la costa?</em>
+            </h2>
+            <p class="rq-final__lead">
+              Tu hotel, restaurante, apartamento o inmobiliaria en Roquetas
+              con <strong>multiidioma ES/EN/DE/FR</strong>, motor de reservas
+              directo (sin comisiones OTA), galería 4K y SEO turístico.
+              Capta los <strong>3M+ turistas que vienen cada año</strong>.
+            </p>
+            <div class="rq-final__cta">
+              <a href="/contacto" class="rq-final__btn rq-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="rq-final__btn rq-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="rq-final__trust">
+              <span><span class="rq-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ ES · EN · DE · FR</span>
+              <span>★ MOTOR RESERVAS</span>
+              <span>4.9★ · 58 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* Sombrillas + sol gigante */}
+          <div class="rq-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="rq-final-svg">
+              <defs>
+                <radialGradient id="rq-final-glow" cx="50%" cy="40%" r="55%">
+                  <stop offset="0%" stop-color="#FFD230" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#FFD230" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="160" cy="120" r="140" fill="url(#rq-final-glow)"/>
+
+              {/* SOL GIGANTE */}
+              <circle cx="160" cy="100" r="48" fill="#FFD230" stroke="#FFFCF6" stroke-width="3"/>
+              <circle cx="160" cy="100" r="36" fill="#FFFCF6"/>
+              <circle cx="160" cy="100" r="28" fill="#FFD230"/>
+              {Array.from({length: 16}).map((_, i) => (
+                <line x1="160" y1="40" x2="160" y2="50" stroke="#FFD230" stroke-width="4" stroke-linecap="round" transform={`rotate(${i*22.5} 160 100)`}/>
+              ))}
+
+              {/* Mar */}
+              <path d="M 0 220 Q 35 210 70 220 T 140 220 T 210 220 T 280 220 T 320 220 L 320 320 L 0 320 Z" fill="#0099CC" stroke="#FFFCF6" stroke-width="3"/>
+              <path d="M 0 240 Q 35 230 70 240 T 140 240 T 210 240 T 280 240 T 320 240" fill="none" stroke="#00B8C7" stroke-width="2" opacity="0.7"/>
+              <path d="M 0 256 Q 35 248 70 256 T 140 256 T 210 256 T 280 256 T 320 256" fill="none" stroke="#FFFCF6" stroke-width="1.5" opacity="0.4"/>
+
+              {/* Arena */}
+              <rect x="0" y="270" width="320" height="50" fill="#F4E8D0" stroke="#FFFCF6" stroke-width="3"/>
+
+              {/* SOMBRILLAS de colores */}
+              {[
+                { x: 50,  y: 260, color: '#FF6B6B' },
+                { x: 130, y: 255, color: '#FFD230' },
+                { x: 195, y: 258, color: '#9b5de5' },
+                { x: 265, y: 261, color: '#FF6B6B' },
+              ].map(s => (
+                <g transform={`translate(${s.x}, ${s.y})`}>
+                  {/* Mástil */}
+                  <line x1="0" y1="0" x2="0" y2="40" stroke="#FFFCF6" stroke-width="3"/>
+                  {/* Toldo */}
+                  <path d="M -34 0 Q 0 -26 34 0 Z" fill={s.color} stroke="#FFFCF6" stroke-width="2.5"/>
+                  {/* Varillas */}
+                  <line x1="-22" y1="-8" x2="-22" y2="0" stroke="#FFFCF6" stroke-width="1.5"/>
+                  <line x1="-10" y1="-16" x2="-10" y2="0" stroke="#FFFCF6" stroke-width="1.5"/>
+                  <line x1="0" y1="-22" x2="0" y2="0" stroke="#FFFCF6" stroke-width="1.5"/>
+                  <line x1="10" y1="-16" x2="10" y2="0" stroke="#FFFCF6" stroke-width="1.5"/>
+                  <line x1="22" y1="-8" x2="22" y2="0" stroke="#FFFCF6" stroke-width="1.5"/>
+                  {/* Tumbona */}
+                  <rect x="-22" y="42" width="44" height="6" fill={s.color} stroke="#FFFCF6" stroke-width="2" opacity="0.85"/>
+                </g>
+              ))}
+
+              {/* Bandera Azul flotante */}
+              <g transform="translate(40, 235)">
+                <line x1="0" y1="0" x2="0" y2="-30" stroke="#FFFCF6" stroke-width="2"/>
+                <path d="M 0 -30 L 26 -28 L 23 -23 L 26 -18 L 0 -20 Z" fill="#0099CC" stroke="#FFFCF6" stroke-width="1.5"/>
+                <text x="13" y="-22" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6">BLUE</text>
+              </g>
+
+              {/* Texto */}
+              <text x="160" y="305" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#0E0D0B" letter-spacing="3">★ ROQUETAS · 04740 ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="rq-final__marquee">
+        <div class="rq-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ BANDERA AZUL ★ 4 IDIOMAS ★ RESERVAS DIRECTAS ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ══════════════════════════════════════════════════════
+     PALETA · ROQUETAS · CAPITAL TURÍSTICA
+     ══════════════════════════════════════════════════════ */
+  .rq {
+    --rq-paper:    #FFFCF6;
+    --rq-paper-2:  #F4E8D0;
+    --rq-arena:    #EAD9B5;
+    --rq-ink:      #0E0D0B;
+    --rq-azul:     #0099CC;       /* Bandera azul FEE */
+    --rq-azul-d:   #005F80;
+    --rq-turquesa: #00B8C7;       /* Mar turquesa */
+    --rq-sol:      #FFD230;
+    --rq-coral:    #FF6B6B;       /* Coral resort */
+    --rq-morado:   #9b5de5;       /* Atardecer */
+    --rq-green:    #43AA8B;       /* Golf */
+    --rq-lima:     #D6FF44;
+    --rq-shadow:   8px 8px 0 var(--rq-ink);
+  }
+  .rq-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--rq-azul);
+    box-shadow: 0 0 0 0 rgba(0,153,204,0.55);
+    animation: rq-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes rq-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0,153,204,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(0,153,204,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,153,204,0); }
+  }
+  .rq-spin { transform-origin: 50% 50%; animation: rq-spin 28s linear infinite; }
+  @keyframes rq-spin { to { transform: rotate(360deg); } }
+
+  /* HERO */
+  .rq-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(0,153,204,0.10), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(255,210,48,0.10), transparent 50%),
+      var(--rq-paper);
+    border-bottom: 3px solid var(--rq-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .rq-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(120deg, transparent 0 40px, rgba(0,184,199,0.04) 40px 41px);
+    pointer-events: none;
+  }
+  .rq-hero > * { position: relative; }
+  .rq-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .rq-hero__status { color: var(--rq-azul); font-weight: 700; }
+  .rq-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .rq-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .rq-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .rq-hero__chapter { color: var(--rq-azul); }
+  .rq-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .rq-hero__title em { color: var(--rq-azul); font-style: italic; }
+  .rq-hero__title-stamp {
+    display: inline-block;
+    color: var(--rq-paper);
+    background: var(--rq-coral);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .rq-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .rq-hero__lead strong { color: var(--rq-ink); font-weight: 700; }
+  .rq-hero__lead em { color: var(--rq-coral); font-style: italic; font-weight: 600; }
+  .rq-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .rq-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--rq-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .rq-btn--primary { background: var(--rq-azul); color: var(--rq-paper); box-shadow: 6px 6px 0 var(--rq-ink); }
+  .rq-btn--primary:hover { background: var(--rq-coral); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--rq-ink); }
+  .rq-btn--ghost { background: transparent; color: var(--rq-ink); box-shadow: 6px 6px 0 var(--rq-azul); }
+  .rq-btn--ghost:hover { background: var(--rq-ink); color: var(--rq-sol); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--rq-azul); }
+
+  /* KPIs */
+  .rq-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--rq-ink);
+    background: var(--rq-ink);
+  }
+  @media (min-width: 768px) { .rq-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .rq-kpi {
+    background: var(--rq-paper); padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--rq-ink); border-bottom: 2px solid var(--rq-ink);
+  }
+  .rq-kpi:nth-child(2n) { border-right: none; }
+  .rq-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .rq-kpi:nth-child(2n)      { border-right: 2px solid var(--rq-ink); }
+    .rq-kpi:nth-child(4n)      { border-right: none; }
+    .rq-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--rq-ink); }
+    .rq-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .rq-kpi--azul  { background: var(--rq-azul); color: var(--rq-paper); }
+  .rq-kpi--sol   { background: var(--rq-sol); color: var(--rq-ink); }
+  .rq-kpi--coral { background: var(--rq-coral); color: var(--rq-paper); }
+  .rq-kpi--ink   { background: var(--rq-ink); color: var(--rq-paper); }
+  .rq-kpi--ink .rq-kpi__v { color: var(--rq-sol); }
+  .rq-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .rq-kpi__v small { font-size: .55em; opacity: .8; }
+  .rq-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .rq-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
+  }
+  .rq-postcard {
+    background: var(--rq-paper);
+    border: 3px solid var(--rq-ink);
+    box-shadow: var(--rq-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .rq-postcard:hover { transform: rotate(0); }
+  .rq-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--rq-azul);
+    color: var(--rq-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--rq-ink);
+  }
+  .rq-postcard__profile {
+    width: 100%; aspect-ratio: 540 / 240;
+    border-bottom: 2px solid var(--rq-ink);
+    overflow: hidden;
+  }
+  .rq-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--rq-ink); }
+  .rq-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.1); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .rq-postcard:hover .rq-postcard__img { transform: scale(1.05); }
+  .rq-postcard__seal { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(-10deg); filter: drop-shadow(0 4px 10px rgba(0,153,204,0.5)); }
+  .rq-postcard__tag {
+    position: absolute; bottom: 12px; left: 12px;
+    background: var(--rq-sol); color: var(--rq-ink);
+    padding: .4rem .75rem;
+    font-size: .65rem; font-weight: 800; letter-spacing: .2em;
+    border: 2px solid var(--rq-ink);
+    box-shadow: 3px 3px 0 var(--rq-azul);
+    transform: rotate(-2deg);
+  }
+  .rq-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--rq-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .rq-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    font-size: .68rem;
+  }
+  .rq-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .rq-postcard__data-row > span:first-child { color: var(--rq-azul-d); letter-spacing: .2em; font-weight: 800; }
+  .rq-postcard__data-v { color: var(--rq-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .rq-marquee {
+    background: var(--rq-azul); color: var(--rq-paper);
+    overflow: hidden; padding: .9rem 0;
+    border-top: 3px solid var(--rq-ink);
+  }
+  .rq-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: rq-marquee 36s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem; font-weight: 800;
+    letter-spacing: .15em; text-transform: uppercase;
+  }
+  @keyframes rq-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* BANDERA AZUL SECTION */
+  .rq-flag-section {
+    background: var(--rq-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--rq-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .rq-flag-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(0,153,204,0.05) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .rq-flag-section > * { position: relative; }
+  .rq-flag-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .rq-flag-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .rq-flag-chapter { color: var(--rq-azul); }
+  .rq-flag-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .rq-flag-title em { color: var(--rq-azul); }
+  .rq-flag-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1.5rem; max-width: 54ch; }
+  .rq-flag-lead strong { color: var(--rq-azul-d); font-weight: 700; }
+  .rq-flag-lead em { color: var(--rq-coral); font-style: italic; }
+  .rq-flag-facts {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 2px solid var(--rq-ink); background: var(--rq-paper);
+  }
+  @media (min-width: 640px) { .rq-flag-facts { grid-template-columns: 1fr 1fr; } }
+  .rq-flag-facts li { padding: .85rem 1rem; border-bottom: 1px solid var(--rq-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) {
+    .rq-flag-facts li:nth-child(odd) { border-right: 1px solid var(--rq-ink); }
+    .rq-flag-facts li:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .rq-flag-facts li:last-child { border-bottom: none; } }
+  .rq-flag-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--rq-coral); font-weight: 800; }
+  .rq-flag-facts__v { font-size: .9rem; color: var(--rq-ink); font-weight: 600; line-height: 1.35; }
+  .rq-flag-r { max-width: 360px; margin: 0 auto; }
+  .rq-flag-wave { transform-origin: 54px 113px; animation: rq-flag-wave 3s ease-in-out infinite; }
+  @keyframes rq-flag-wave {
+    0%, 100% { transform: skewX(0deg) skewY(0deg); }
+    50%      { transform: skewX(-3deg) skewY(1deg); }
+  }
+
+  /* ICONOS */
+  .rq-iconos-section { background: var(--rq-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-iconos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 1024px) { .rq-iconos { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .rq-icono {
+    position: relative;
+    background: var(--rq-paper);
+    border: 3px solid var(--rq-ink);
+    box-shadow: var(--rq-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .rq-icono:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .rq-icono--turquesa { color: var(--rq-turquesa); }
+  .rq-icono--coral    { color: var(--rq-coral); }
+  .rq-icono--sun      { color: var(--rq-sol); }
+  .rq-icono__code {
+    position: absolute; top: -16px; right: 20px;
+    background: var(--rq-ink); color: var(--rq-sol);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.2rem;
+    border: 2.5px solid currentColor;
+    box-shadow: 3px 3px 0 currentColor;
+  }
+  .rq-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
+  .rq-icono__name { font-size: clamp(1.5rem, 2.8vw, 1.85rem); line-height: 1; letter-spacing: -.025em; color: var(--rq-ink); margin: .5rem 0 0; text-align: center; }
+  .rq-icono__sub { font-size: .62rem; letter-spacing: .25em; color: currentColor; font-weight: 800; text-align: center; }
+  .rq-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .rq-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
+  .rq-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+
+  /* IDIOMAS */
+  .rq-idiomas-section { background: var(--rq-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-idiomas {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+  }
+  @media (min-width: 640px)  { .rq-idiomas { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .rq-idiomas { grid-template-columns: repeat(4, 1fr); } }
+  .rq-idioma {
+    background: var(--rq-paper);
+    border: 2.5px solid var(--rq-ink);
+    box-shadow: 6px 6px 0 var(--rq-ink);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .rq-idioma:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--rq-azul); }
+  .rq-idioma__head {
+    display: grid; grid-template-columns: 50px 1fr auto;
+    gap: .85rem; align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 2px solid var(--rq-ink);
+    background: var(--rq-paper-2);
+  }
+  .rq-idioma__flag { width: 50px; flex-shrink: 0; border: 1.5px solid var(--rq-ink); line-height: 0; }
+  .rq-idioma__head-r { display: flex; flex-direction: column; gap: 2px; }
+  .rq-idioma__code { font-size: 1.25rem; font-weight: 800; color: var(--rq-coral); letter-spacing: .1em; line-height: 1; }
+  .rq-idioma__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--rq-ink); }
+  .rq-idioma__pct {
+    background: var(--rq-azul); color: var(--rq-paper);
+    padding: .35rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .9rem; font-weight: 800;
+    border: 1.5px solid var(--rq-ink);
+  }
+  .rq-idioma__body { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; }
+  .rq-idioma__row {
+    display: flex; flex-direction: column; gap: 2px;
+    padding-bottom: .5rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+  }
+  .rq-idioma__row:last-child { border-bottom: none; padding-bottom: 0; }
+  .rq-idioma__k { font-size: .55rem; letter-spacing: .2em; color: var(--rq-azul-d); font-weight: 800; }
+  .rq-idioma__v { font-size: .85rem; color: var(--rq-ink); line-height: 1.35; }
+  .rq-idioma__keyword { font-family: var(--font-mono); color: var(--rq-coral); font-weight: 700; }
+  .rq-idiomas-note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--rq-azul);
+    color: var(--rq-paper);
+    border: 2px solid var(--rq-ink);
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+  .rq-idiomas-note strong { color: var(--rq-sol); }
+
+  /* HITOS */
+  .rq-hitos-section {
+    background: var(--rq-ink); color: var(--rq-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--rq-ink);
+    position: relative; overflow: hidden;
+  }
+  .rq-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(0,153,204,0.08) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .rq-hitos-section > * { position: relative; }
+  .rq-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 2.5px solid var(--rq-paper);
+  }
+  @media (min-width: 640px)  { .rq-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .rq-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .rq-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255,252,246,0.25);
+    border-right: 1px solid rgba(255,252,246,0.25);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(255,252,246,0.04);
+    transition: background .25s;
+  }
+  .rq-hito:hover { background: rgba(0,153,204,0.18); }
+  @media (min-width: 1024px) {
+    .rq-hito:nth-child(3n) { border-right: none; }
+    .rq-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .rq-hito:nth-child(2n) { border-right: none; }
+    .rq-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .rq-hito { border-right: none; } .rq-hito:last-child { border-bottom: none; } }
+  .rq-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--rq-sol); font-weight: 800; }
+  .rq-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--rq-paper); line-height: 1.35; }
+
+  /* SECTORES */
+  .rq-sec-section { background: var(--rq-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .rq-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .rq-sec { grid-template-columns: repeat(3, 1fr); } }
+  .rq-sec__card {
+    background: var(--rq-paper);
+    border: 2.5px solid var(--rq-ink);
+    box-shadow: var(--rq-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .rq-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .rq-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .rq-sec__card--azul     { color: var(--rq-azul); }
+  .rq-sec__card--coral    { color: var(--rq-coral); }
+  .rq-sec__card--turquesa { color: var(--rq-turquesa); }
+  .rq-sec__card--green    { color: var(--rq-green); }
+  .rq-sec__card--sol      { color: var(--rq-sol); }
+  .rq-sec__card--morado   { color: var(--rq-morado); }
+  .rq-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .rq-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .rq-sec__stat-box {
+    background: var(--rq-ink); color: var(--rq-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .rq-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .rq-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .rq-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--rq-ink); margin: 0; }
+  .rq-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .rq-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .rq-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--rq-ink); }
+  .rq-sec__tag span { color: currentColor; font-weight: 800; }
+  .rq-sec__foot { padding-top: .65rem; border-top: 2px solid var(--rq-ink); }
+  .rq-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .rq-map-section { background: var(--rq-arena); border-bottom: 3px solid var(--rq-ink); }
+  .rq-map-head { padding: 4rem 0 2rem; }
+  .rq-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .rq-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .rq-map-chapter { color: var(--rq-azul); }
+  .rq-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .rq-map-title em { color: var(--rq-azul); }
+  .rq-map-coords {
+    background: var(--rq-azul); color: var(--rq-paper);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--rq-ink);
+    box-shadow: 5px 5px 0 var(--rq-sol);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem; letter-spacing: .15em;
+  }
+  .rq-map-frame { border-top: 3px solid var(--rq-ink); border-bottom: 3px solid var(--rq-ink); background: var(--rq-ink); }
+  .rq-map-wrap > * { width: 100%; }
+
+  /* DIFERENCIALES */
+  .rq-dif-section { background: var(--rq-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--rq-ink); }
+  @media (min-width: 768px) { .rq-dif { grid-template-columns: 1fr 1fr; } }
+  .rq-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--rq-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) {
+    .rq-dif__item:nth-child(odd) { border-right: 1px solid var(--rq-ink); }
+    .rq-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) { .rq-dif__item:last-child { border-bottom: none; } }
+  .rq-dif__item--0 { background: var(--rq-paper-2); }
+  .rq-dif__item--1 { background: var(--rq-paper); }
+  .rq-dif__item--2 { background: var(--rq-arena); }
+  .rq-dif__item--3 { background: var(--rq-paper); }
+  .rq-dif__item:hover { background: var(--rq-sol); }
+  .rq-dif__num { font-size: .85rem; color: var(--rq-coral); font-weight: 800; letter-spacing: .15em; }
+  .rq-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--rq-ink); margin: 0; }
+  .rq-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .rq-proc-section { background: var(--rq-ink); color: var(--rq-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); position: relative; overflow: hidden; }
+  .rq-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,210,48,0.07) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .rq-proc-section > * { position: relative; }
+  .rq-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .rq-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .rq-proc { grid-template-columns: repeat(4, 1fr); } }
+  .rq-proc__step {
+    background: rgba(255,252,246,0.05);
+    border: 2px solid var(--rq-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .rq-proc__step:hover { background: rgba(0,153,204,0.12); transform: translateY(-3px); }
+  .rq-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(255,252,246,0.25); }
+  .rq-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--rq-sol); line-height: 1; }
+  .rq-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--rq-coral); }
+  .rq-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--rq-paper); margin: .25rem 0 0; }
+  .rq-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,252,246,0.75); flex: 1; }
+  .rq-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--rq-sol); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(255,252,246,0.25); }
+
+  /* TESTIMONIOS */
+  .rq-quote-section { background: var(--rq-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-pull { position: relative; background: var(--rq-arena); border: 3px solid var(--rq-ink); box-shadow: var(--rq-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .rq-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-10deg); filter: drop-shadow(0 4px 8px rgba(0,153,204,0.4)); }
+  .rq-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--rq-ink); max-width: 56ch; }
+  .rq-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--rq-ink); }
+  .rq-pull__avatar { width: 48px; height: 48px; background: var(--rq-azul); color: var(--rq-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .rq-pull__cap div { display: flex; flex-direction: column; }
+  .rq-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--rq-ink); }
+  .rq-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .rq-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .rq-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .rq-quote { position: relative; background: var(--rq-paper); border: 2px solid var(--rq-ink); box-shadow: 5px 5px 0 var(--rq-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .rq-quote:hover { transform: translateY(-3px); }
+  .rq-quote--0 { background: var(--rq-paper); }
+  .rq-quote--1 { background: var(--rq-arena); }
+  .rq-quote--2 { background: var(--rq-paper-2); }
+  .rq-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--rq-azul); opacity: .45; }
+  .rq-quote p { font-size: .92rem; line-height: 1.5; color: var(--rq-ink); flex: 1; margin: 0; }
+  .rq-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--rq-ink); }
+  .rq-quote__avatar { width: 36px; height: 36px; background: var(--rq-coral); color: var(--rq-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .rq-quote footer div { display: flex; flex-direction: column; }
+  .rq-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .rq-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .rq-faq-section { background: var(--rq-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--rq-ink); }
+  .rq-faq__item { border-bottom: 2px solid var(--rq-ink); }
+  .rq-faq__det summary { list-style: none; cursor: pointer; }
+  .rq-faq__det summary::-webkit-details-marker { display: none; }
+  .rq-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .rq-faq__sum:hover { padding-inline: 1rem; background: var(--rq-paper-2); }
+  .rq-faq__num { font-size: 1rem; font-weight: 800; color: var(--rq-azul); letter-spacing: .1em; }
+  .rq-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--rq-ink); font-weight: 700; }
+  .rq-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--rq-ink); background: var(--rq-paper); color: var(--rq-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .rq-faq__det[open] .rq-faq__toggle { transform: rotate(180deg); background: var(--rq-azul); color: var(--rq-paper); }
+  .rq-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .rq-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .rq-faq__ans { padding-left: 48px; } }
+
+  /* VECINOS */
+  .rq-vecinos-section { background: var(--rq-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--rq-ink); }
+  .rq-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--rq-ink); background: var(--rq-ink); }
+  @media (min-width: 640px)  { .rq-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .rq-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .rq-vecino {
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto;
+    gap: .35rem; padding: 1.5rem;
+    background: var(--rq-paper); color: var(--rq-ink);
+    text-decoration: none; min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .rq-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .rq-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .rq-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .rq-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--rq-azul); font-size: 1.3rem; transition: transform .25s; }
+  .rq-vecino:hover { background: var(--rq-azul); color: var(--rq-paper); }
+  .rq-vecino:hover .rq-vecino__sub, .rq-vecino:hover .rq-vecino__n { opacity: .85; }
+  .rq-vecino:hover .rq-vecino__arrow { color: var(--rq-paper); transform: translateX(4px); }
+  .rq-vecino--1:hover { background: var(--rq-coral); color: var(--rq-paper); }
+  .rq-vecino--2:hover { background: var(--rq-turquesa); color: var(--rq-paper); }
+  .rq-vecino--3:hover { background: var(--rq-ink); color: var(--rq-sol); }
+  .rq-vecino--3:hover .rq-vecino__arrow { color: var(--rq-sol); }
+
+  /* CTA FINAL */
+  .rq-final { background: var(--rq-ink); color: var(--rq-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .rq-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(0,153,204,0.08) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .rq-final > * { position: relative; }
+  .rq-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .rq-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .rq-final__chapter { color: var(--rq-sol); }
+  .rq-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--rq-paper); margin: 1rem 0; }
+  .rq-final__title em { color: var(--rq-sol); font-style: italic; display: block; }
+  .rq-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(255,252,246,0.75); max-width: 52ch; }
+  .rq-final__lead strong { color: var(--rq-sol); }
+  .rq-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .rq-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .rq-final__btn--primary { background: var(--rq-sol); color: var(--rq-ink); border-color: var(--rq-sol); box-shadow: 6px 6px 0 var(--rq-coral); }
+  .rq-final__btn--primary:hover { background: var(--rq-coral); color: var(--rq-paper); border-color: var(--rq-coral); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--rq-sol); }
+  .rq-final__btn--ghost { background: transparent; color: var(--rq-paper); border-color: var(--rq-paper); box-shadow: 6px 6px 0 var(--rq-paper); }
+  .rq-final__btn--ghost:hover { background: var(--rq-paper); color: var(--rq-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--rq-paper); }
+  .rq-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(255,252,246,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .rq-final__trust .rq-pulse { background: var(--rq-sol); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(255,210,48,0.55); }
+  .rq-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .rq-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(0,153,204,0.3)); }
+  .rq-final__marquee { background: var(--rq-azul); color: var(--rq-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--rq-ink); margin: 0 -1.5rem; }
+  .rq-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: rq-marquee 28s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
