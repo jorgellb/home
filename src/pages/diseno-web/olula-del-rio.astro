@@ -1,0 +1,1350 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'olula-del-rio');
+
+const title = 'Diseño Web en Olula del Río | Mármol Blanco, Exportación Mundial y Museo del Mármol · Almería';
+const description = 'Agencia de diseño web en Olula del Río, capital mundial del mármol blanco. Webs para empresas exportadoras de piedra natural, estudios de arquitectura e interiorismo, comercio local y servicios. Catálogo multiidioma, SEO internacional y presencia digital premium para la industria del mármol con proyección global.';
+const canonical = 'https://platanitorico.com/diseno-web/olula-del-rio/';
+
+const sectores = [
+  { nombre: 'Exportación de Mármol Blanco', stat: '80+', statLabel: 'países destino',           desc: 'Olula del Río exporta mármol blanco a los 5 continentes. Palacios en Oriente Medio, hoteles en Dubái, aeropuertos en China. Una web multiidioma con catálogo técnico premium es la tarjeta de presentación internacional que toda marmolista global necesita.', tags: ['Multiidioma','Catálogo técnico','Exportación 80+ países','SEO internacional'] },
+  { nombre: 'Museo del Mármol y Turismo',    stat: '★',   statLabel: 'patrimonio marmolero',    desc: 'El Museo del Mármol de Olula del Río es único en España. Una web turística que promocione el museo, las rutas del mármol y la historia de la piedra puede atraer visitantes culturales de toda Europa.', tags: ['Museo del Mármol','Rutas culturales','Turismo industrial','Historia viva'] },
+  { nombre: 'Arquitectura e Interiorismo',   stat: '#1',  statLabel: 'mármol para proyectos',    desc: 'El mármol blanco de Olula adorna monumentos históricos y edificios emblemáticos. Estudios de arquitectura e interiorismo con portfolio online en varios idiomas captan proyectos internacionales de alto nivel.', tags: ['Portfolio premium','Proyectos internacionales','Arquitectura mármol','Interiorismo lujo'] },
+  { nombre: 'Distribución y Logística',       stat: 'B2B', statLabel: 'venta a distribuidores',   desc: 'Distribuidores de mármol de Olula sirven a constructores y marmolistas de toda España y Europa. Web con sistema de pedidos, catálogo de existencias y precios B2B agiliza la relación comercial.', tags: ['Pedidos B2B','Stock online','Distribución','Precios mayoristas'] },
+  { nombre: 'Servicios Profesionales',        stat: '7.000', statLabel: 'habitantes · comarca',   desc: 'Con 7.000 habitantes y un polo industrial de primer nivel, Olula tiene una economía de servicios vibrante. Clínicas, asesorías y comercios que aparezcan en Google Maps captan a vecinos y profesionales del mármol.', tags: ['Google Maps','SEO local','Ficha negocio','Captación comarca'] },
+  { nombre: 'Maquinaria y Suministros',       stat: '+20', statLabel: 'proveedores activos',      desc: 'El ecosistema del mármol en Olula incluye proveedores de maquinaria de corte, herramientas diamantadas y consumibles. Empresas con catálogo técnico web captan marmolistas de toda la provincia.', tags: ['Maquinaria corte','Herramientas diamante','Catálogo técnico','Suministros industriales'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Capital del Mármol Blanco', sub: 'EXPORTACIÓN ★ 80+ PAÍSES',  desc: 'Olula del Río es el epicentro mundial del mármol blanco. Su piedra ha ornamentado palacios en Oriente Medio, hoteles de lujo en Dubái y aeropuertos en Asia. Una industria centenaria con proyección global inigualable.', dato: '#1 mundial', color: 'gold' },
+  { code: 'B', name: 'Museo del Mármol',          sub: 'PATRIMONIO ★ CULTURA',       desc: 'El Museo del Mármol de Olula del Río es el único en España dedicado a la piedra natural. Un recorrido por la historia de la extracción, la transformación y el arte del mármol almeriense.', dato: 'Museo único', color: 'marble' },
+  { code: 'C', name: '80 Países Exportación',     sub: 'PRESENCIA ★ GLOBAL',          desc: 'De Olula a los 5 continentes. El mármol blanco viaja a más de 80 países con una red de distribuidores y clientes internacionales que confían en la calidad de la piedra almeriense.', dato: '80+ países', color: 'navy' },
+  { code: 'D', name: 'Industria Centenaria',      sub: 'TRADICIÓN ★ 100+ AÑOS',       desc: 'Más de 100 años de industria marmolera que han pasado de generación en generación. Canteros, cortadores y empresarios que combinan el saber hacer heredado con tecnología de vanguardia.', dato: '+100 años', color: 'ink' },
+];
+
+const processData = [
+  { k: 'POBLACIÓN',     v: '7.000 hab · Valle del Almanzora' },
+  { k: 'INDUSTRIA',     v: 'Mármol blanco · Exportación global' },
+  { k: 'EXPORTACIÓN',   v: '80+ países · 5 continentes' },
+  { k: 'MUSEO',         v: 'Museo del Mármol · único en España' },
+  { k: 'ICONO',         v: 'Mármol blanco · palacios · hoteles de lujo' },
+  { k: 'COBERTURA',     v: 'B2B global · web multiidioma · premium' },
+];
+
+const diferenciales = [
+  { title: 'Capital mundial del mármol blanco',  desc: 'Olula del Río no es un pueblo marmolero más — es la capital mundial del mármol blanco. Su piedra está en edificios emblemáticos de los 5 continentes. Ese prestigio global es el activo digital más valioso que hay que comunicar.' },
+  { title: 'Exportación a 80+ países',            desc: 'China, Emiratos Árabes, Arabia Saudí, México, Estados Unidos, Japón... El mármol de Olula llega a todo el mundo. Una web multiidioma con presencia en inglés, árabe y chino multiplica las oportunidades de negocio internacional.' },
+  { title: 'Museo del Mármol, único en España',  desc: 'El Museo del Mármol es un activo turístico y cultural de primer orden. Una web que integre museo + empresas + turismo crea un ecosistema digital que posiciona a Olula como destino industrial y cultural.' },
+  { title: 'Industria centenaria con futuro digital', desc: 'Más de 100 años de tradición marmolera. El relevo generacional está combinando el oficio heredado con las herramientas digitales. Las empresas que lideren esta transformación captarán el mercado global de la próxima década.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión global',         eta: '1–2 días',  body: 'Visitamos tu empresa en Olula del Río. Entendemos tu proceso de producción, tu mercado objetivo y tu posición en la cadena de exportación. Analizamos tus competidores internacionales y tu propuesta de valor única.', deliverable: 'Briefing + análisis global' },
+  { num: '02', title: 'Diseño premium',            eta: '3–5 días',  body: 'Diseño que transmite la pureza del mármol blanco y la proyección global de tu marca. Tipografía elegante, paleta de blanco mármol y azul profundo, fotografía profesional de tus piedras y proyectos.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Catálogo + multiidioma',    eta: '5–10 días', body: 'Astro ultrarrápido, catálogo técnico interactivo con fichas de piedra, sistema de contacto B2B, versiones en inglés, árabe y chino, Core Web Vitals verdes y accesibilidad AAA.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + SEO global',  eta: '1–2 días',  body: 'Publicamos y configuramos SEO multidioma: inglés para marble supplier, árabe para mercados de lujo, chino para el mercado asiático. Google Business Profile y Search Console multi-región.', deliverable: 'Sitio LIVE + manual SEO' },
+];
+
+const testimonios = [
+  { nombre: 'Rafael Martínez', negocio: 'Empresa exportadora de mármol blanco', texto: 'Exportamos a China, México y Arabia pero nuestra web era básica en español. Platanito Rico nos hizo una web en inglés y árabe con catálogo técnico. Los distribuidores internacionales nos contactan directamente ahora.' },
+  { nombre: 'Pilar Ruiz',      negocio: 'Estudio de interiorismo',              texto: 'Mi estudio en Olula trabaja con mármol exclusivo que la mayoría desconoce. La web con portfolio de proyectos me ha traído clientes de Madrid, Barcelona y hasta de Portugal que buscan "interiorismo mármol Almería".' },
+  { nombre: 'José Miguel Haro', negocio: 'Distribuidor de maquinaria para mármol', texto: 'Vendemos maquinaria de corte a marmolistas de toda España. La web B2B con catálogo técnico y precios nos ha abierto clientes en Andalucía, Valencia y Cataluña que antes no llegaban.' },
+];
+
+const faq = [
+  { q: '¿Cuánto cuesta una web multiidioma para empresa de mármol en Olula del Río?', a: 'Una web en español + inglés desde 900€. Añadir árabe o chino (con caracteres correctos y SEO específico), desde 1.400€. Para empresas exportadoras, la inversión se amortiza con un solo pedido internacional.' },
+  { q: '¿Podéis hacer SEO en inglés para "marble supplier Spain" y términos similares?', a: 'Sí, hacemos SEO técnico en inglés para empresas del sector marmolero. Olula tiene reputación mundial — aprovecharla digitalmente es la siguiente frontera natural para estas empresas.' },
+  { q: '¿Podéis hacer una web con catálogo técnico de piedras para exportación?', a: 'Sí, creamos catálogos digitales con fichas técnicas: tipo de piedra, formato, acabados, resistencia, colores y descarga de DXF o PDF. Ideal para arquitectos y distribuidores internacionales.' },
+  { q: '¿Tenéis experiencia con empresas exportadoras de mármol?', a: 'Sí, trabajamos con empresas del mármol de toda la comarca del Almanzora. Entendemos el lenguaje técnico, los procesos de exportación y las necesidades B2B del sector a nivel global.' },
+  { q: '¿Podéis hacer una web para el Museo del Mármol o turismo industrial?', a: 'Sí, creamos webs turísticas con rutas del mármol, historia de la cantera, galería de piezas emblemáticas y sistema de reservas para visitas guiadas. Ideal para promocionar el patrimonio marmolero.' },
+  { q: '¿En cuánto tiempo tengo mi web de Olula del Río lista?', a: 'Web corporativa con catálogo: 2–3 semanas. Con multiidioma y sistema B2B: 3–4 semanas. Con catálogo técnico interactivo y SEO global: 4–5 semanas.' },
+  { q: '¿Ayudáis con fotografía profesional de producto para piedra natural?', a: 'Sí, ofrecemos sesión de fotografía profesional para tus mármoles y acabados. Una imagen de calidad premium multiplica el interés del comprador internacional.' },
+  { q: '¿Hacéis reuniones presenciales en Olula del Río?', a: 'Sí, estamos en Vera a 20 minutos de Olula. Podemos reunirnos en tu empresa, nave o taller para entender mejor tu negocio. La primera consulta es gratuita.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Olula del Río","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Olula del Río","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seo-olula.jpg","address":{"@type":"PostalAddress","addressLocality":"Olula del Río","addressRegion":"Almería","postalCode":"04860","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3867,"longitude":-1.8633},"areaServed":["Olula del Río","Cantoria","Fines","Macael","Albox","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"50","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Olula del Río","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seo-olula.jpg"
+  imageAlt="Diseño web en Olula del Río - Mármol Blanco, Exportación Mundial y Museo del Mármol"
+  type="service"
+  keywords="diseño web olula del río, mármol blanco, exportación mármol, museo del mármol, capital del mármol, seo internacional, web multiidioma"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="ol">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — MÁRMOL BLANCO · EXPORTACIÓN MUNDIAL            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-hero">
+      <div class="container-brutal">
+
+        <header class="ol-hero__top">
+          <span class="text-meta">N.º 034 — Valle del Almanzora · Mármol Blanco · 80+ Países</span>
+          <span class="text-meta ol-hero__status">
+            <span class="ol-pulse"></span>
+            ★ CAPITAL MUNDIAL DEL MÁRMOL BLANCO · OLULA DEL RÍO ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="ol-hero__grid">
+
+          <div class="ol-hero__intro">
+            <span class="text-meta ol-hero__chapter">Cap. 01 / Olula del Río · Almería</span>
+            <h1 class="ol-hero__title heading-display">
+              Diseño web para la
+              <em class="heading-editorial">capital</em>
+              <span class="ol-hero__title-stamp">del mármol mundial.</span>
+            </h1>
+
+            <p class="ol-hero__lead">
+              <strong>Olula del Río</strong> es la capital mundial del
+              <em>mármol blanco</em>. Su piedra viaja a
+              <strong>más de 80 países</strong> y adorna palacios, hoteles
+              de lujo y monumentos en los 5 continentes. Empresas
+              exportadoras, estudios de arquitectura y servicios que
+              necesitan una presencia digital a escala global.
+            </p>
+
+            <div class="ol-hero__cta">
+              <a href="/contacto" class="ol-btn ol-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="/contacto" class="ol-btn ol-btn--ghost">
+                Consulta internacional →
+              </a>
+            </div>
+
+            <ul class="ol-kpis">
+              <li class="ol-kpi ol-kpi--gold">
+                <span class="ol-kpi__v text-mono">#1</span>
+                <span class="ol-kpi__l">Mármol blanco mundial</span>
+              </li>
+              <li class="ol-kpi ol-kpi--navy">
+                <span class="ol-kpi__v text-mono">80<small>+</small></span>
+                <span class="ol-kpi__l">Países exportación</span>
+              </li>
+              <li class="ol-kpi ol-kpi--marble">
+                <span class="ol-kpi__v text-mono">★</span>
+                <span class="ol-kpi__l">Museo del Mármol</span>
+              </li>
+              <li class="ol-kpi ol-kpi--ink">
+                <span class="ol-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="ol-kpi__l">50 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — paisaje mármol blanco + museo */}
+          <aside class="ol-hero__postcard" aria-hidden="true">
+            <div class="ol-postcard">
+
+              <header class="ol-postcard__head">
+                <span class="text-mono">OLULA DEL RÍO · 04860 · ALMERÍA</span>
+                <span class="text-mono">37.387° N · 1.863° W</span>
+              </header>
+
+              {/* Perfil SVG Olula */}
+              <div class="ol-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="ol-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#C8D0D8"/>
+                      <stop offset="100%" stop-color="#E8E8E8"/>
+                    </linearGradient>
+                    <linearGradient id="ol-marble" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#FFFFFF"/>
+                      <stop offset="50%" stop-color="#F0F0F0"/>
+                      <stop offset="100%" stop-color="#E0E0E0"/>
+                    </linearGradient>
+                  </defs>
+
+                  <rect width="540" height="220" fill="url(#ol-sky)"/>
+
+                  {/* Montañas de mármol blanco */}
+                  <path d="M 0 110 L 60 60 L 100 70 L 140 50 L 200 90 L 260 60 L 320 100 L 380 70 L 440 110 L 540 90 L 540 220 L 0 220 Z" fill="#E0E0E0" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 130 L 40 80 L 100 90 L 160 70 L 220 100 L 280 80 L 340 110 L 400 90 L 460 120 L 540 100 L 540 220 L 0 220 Z" fill="#F0F0F0" stroke="#1A1816" stroke-width="1"/>
+
+                  {/* Museo del Mármol (fachada clásica) */}
+                  <g transform="translate(340, 80)">
+                    <rect x="0" y="20" width="60" height="40" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="2"/>
+                    <polygon points="30,0 60,20 0,20" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="8" y="28" width="10" height="16" fill="#1A1816"/>
+                    <rect x="24" y="28" width="12" height="18" fill="#1A1816"/>
+                    <rect x="42" y="28" width="10" height="16" fill="#1A1816"/>
+                    <rect x="0" y="20" width="60" height="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
+                    <text x="30" y="48" text-anchor="middle" fill="#C8A84E" font-size="5" font-weight="800" font-family="monospace">MUSEO</text>
+                  </g>
+
+                  {/* Grúa con bloque de mármol blanco */}
+                  <g transform="translate(180, 90)">
+                    <rect x="0" y="30" width="4" height="40" fill="#A0A0A0" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="2" y1="30" x2="40" y2="10" stroke="#C8A84E" stroke-width="2.5"/>
+                    <line x1="40" y1="10" x2="40" y2="35" stroke="#C8A84E" stroke-width="2"/>
+                    <rect x="36" y="35" width="8" height="7" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1"/>
+                    <circle cx="2" cy="70" r="3" fill="#1A1816"/>
+                  </g>
+
+                  {/* Columnas clásicas */}
+                  <g transform="translate(60, 110)">
+                    <rect x="0" y="14" width="6" height="40" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="12" y="14" width="6" height="40" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="24" y="14" width="6" height="40" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="-2" y="10" width="34" height="6" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="-2" y="50" width="34" height="4" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Bloque mármol blanco */}
+                  <g transform="translate(440, 140)">
+                    <rect x="0" y="0" width="24" height="16" fill="url(#ol-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="6" y1="0" x2="6" y2="16" stroke="#1A1816" stroke-width="0.4" opacity="0.2"/>
+                    <line x1="14" y1="0" x2="14" y2="16" stroke="#1A1816" stroke-width="0.4" opacity="0.2"/>
+                    <line x1="0" y1="5" x2="24" y2="5" stroke="#1A1816" stroke-width="0.4" opacity="0.2"/>
+                    <line x1="0" y1="11" x2="24" y2="11" stroke="#1A1816" stroke-width="0.4" opacity="0.2"/>
+                  </g>
+
+                  {/* Camión exportación */}
+                  <g transform="translate(100, 170)">
+                    <rect x="0" y="6" width="28" height="12" rx="2" fill="#A0A0A0" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="28" y="2" width="14" height="16" rx="2" fill="#C8A84E" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="8" cy="20" r="4" fill="#1A1816"/>
+                    <circle cx="34" cy="20" r="4" fill="#1A1816"/>
+                  </g>
+
+                  {/* Partículas brillo mármol */}
+                  <circle cx="200" cy="170" r="1.5" fill="#FFF" opacity="0.5"/>
+                  <circle cx="280" cy="160" r="1" fill="#FFF" opacity="0.4"/>
+                  <circle cx="360" cy="175" r="1.5" fill="#FFF" opacity="0.3"/>
+
+                </svg>
+              </div>
+
+              {/* Imagen real Olula */}
+              <div class="ol-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-seo-olula.jpg"
+                  alt="Olula del Río — capital mundial del mármol blanco"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="ol-postcard__img"
+                />
+                {/* Icono mármol */}
+                <div class="ol-postcard__gear" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#C8A84E" stroke="#1A1816" stroke-width="2"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g transform="translate(40,40)" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5">
+                      <rect x="-12" y="-2" width="24" height="4" rx="1"/>
+                      <rect x="-2" y="-12" width="4" height="24" rx="1"/>
+                      <rect x="-10" y="-10" width="4" height="4" rx="1" transform="rotate(45)"/>
+                      <rect x="6" y="-10" width="4" height="4" rx="1" transform="rotate(45)"/>
+                      <circle cx="0" cy="0" r="5" fill="#C8A84E" stroke="#1A1816" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="ol-postcard__tag">
+                  <span class="text-mono">★ MÁRMOL BLANCO · EXPORTACIÓN ★ MUSEO DEL MÁRMOL</span>
+                </div>
+              </div>
+
+              {/* Datos Olula */}
+              <div class="ol-postcard__data">
+                <div class="ol-postcard__data-row">
+                  <span class="text-mono">POBLACIÓN</span>
+                  <span class="text-mono ol-postcard__data-v">7.000 hab</span>
+                </div>
+                <div class="ol-postcard__data-row">
+                  <span class="text-mono">INDUSTRIA</span>
+                  <span class="text-mono ol-postcard__data-v">Mármol blanco · Exportación</span>
+                </div>
+                <div class="ol-postcard__data-row">
+                  <span class="text-mono">EXPORTACIÓN</span>
+                  <span class="text-mono ol-postcard__data-v">80+ países · 5 continentes</span>
+                </div>
+                <div class="ol-postcard__data-row">
+                  <span class="text-mono">ICONO</span>
+                  <span class="text-mono ol-postcard__data-v">Museo del Mármol</span>
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+        </div>
+
+        {/* Marquee */}
+        <div class="ol-marquee">
+          <div class="ol-marquee__track">
+            <span>★ OLULA DEL RÍO · CAPITAL MUNDIAL DEL MÁRMOL BLANCO ★ EXPORTACIÓN A 80+ PAÍSES ★ MUSEO DEL MÁRMOL ★ 5 CONTINENTES ★ TU WEB, TU PUERTA AL MERCADO GLOBAL ★</span>
+            <span>★ OLULA DEL RÍO · CAPITAL MUNDIAL DEL MÁRMOL BLANCO ★ EXPORTACIÓN A 80+ PAÍSES ★ MUSEO DEL MÁRMOL ★ 5 CONTINENTES ★ TU WEB, TU PUERTA AL MERCADO GLOBAL ★</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-iconos-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ol-iconos-chapter">Cap. 02 / Prontuario</span>
+        <h2 class="ol-iconos-title heading-display">
+          Cuatro sellos de
+          <em class="heading-editorial">identidad</em>
+          <span class="heading-display-block">de Olula del Río.</span>
+        </h2>
+
+        <ol class="ol-iconos" style="counter-reset: iconos">
+          {iconos.map((ico, i) => (
+            <li class={`ol-icono ol-icono--${ico.color}`}>
+              <div class="ol-icono__code">
+                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                  <circle cx="40" cy="40" r="38" fill="var(--ol-ink)" stroke="var(--ol-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="var(--ol-paper)" stroke="var(--ol-ink)" stroke-width="2"/>
+                  {i === 0 && (
+                    <>
+                      <circle cx="40" cy="32" r="14" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+                      <circle cx="40" cy="32" r="7" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+                      <line x1="26" y1="50" x2="54" y2="50" stroke="var(--ol-ink)" stroke-width="2"/>
+                      <line x1="30" y1="46" x2="50" y2="46" stroke="var(--ol-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                  {i === 1 && (
+                    <>
+                      <rect x="20" y="22" width="40" height="34" rx="2" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+                      <polygon points="20,22 40,14 60,22" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+                      <rect x="28" y="30" width="8" height="10" fill="var(--ol-ink)"/>
+                      <rect x="40" y="34" width="12" height="10" fill="var(--ol-ink)"/>
+                      <rect x="20" y="22" width="40" height="4" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                  {i === 2 && (
+                    <>
+                      <circle cx="40" cy="34" r="16" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+                      <path d="M 24 44 Q 40 56 56 44" fill="none" stroke="var(--ol-gold)" stroke-width="2"/>
+                      <circle cx="28" cy="30" r="2" fill="var(--ol-gold)"/>
+                      <circle cx="40" cy="28" r="2" fill="var(--ol-gold)"/>
+                      <circle cx="52" cy="30" r="2" fill="var(--ol-gold)"/>
+                      <circle cx="40" cy="38" r="4" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                  {i === 3 && (
+                    <>
+                      <circle cx="40" cy="30" r="12" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+                      <path d="M 26 44 Q 40 54 54 44" fill="none" stroke="var(--ol-ink)" stroke-width="2"/>
+                      <rect x="34" y="24" width="12" height="14" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
+                      <circle cx="40" cy="30" r="3" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <span class="ol-icono__letter">{ico.code}</span>
+              <h3 class="ol-icono__name">{ico.name}</h3>
+              <span class="ol-icono__sub">{ico.sub}</span>
+              <p class="ol-icono__desc">{ico.desc}</p>
+              <span class="ol-icono__dato">{ico.dato}</span>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* OLULA — FLAGSHIP SECTION                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-flagship-section">
+      <div class="container-brutal">
+        <div class="ol-flagship-grid">
+
+          <div class="ol-flagship__content">
+            <span class="text-meta ol-flagship-chapter">Cap. 03 / Industria</span>
+            <h2 class="ol-flagship-title heading-display">
+              El mármol que viste
+              <em class="heading-editorial">el mundo</em>
+              <span class="heading-display-block">nace en Olula.</span>
+            </h2>
+            <p class="ol-flagship-lead">
+              <strong>Olula del Río</strong> no es solo la capital del mármol
+              almeriense — es la <em>capital mundial del mármol blanco</em>.
+              Su piedra, de una pureza y calidad reconocidas internacionalmente,
+              ha sido seleccionada para los proyectos arquitectónicos más
+              exigentes del planeta.
+            </p>
+            <p class="ol-flagship-lead">
+              El <strong>Museo del Mármol</strong>, único en España, es el
+              testimonio de más de 100 años de industria que ha llevado el
+              nombre de Olula a los 5 continentes. Empresas familiares que
+              combinan tradición centenaria con tecnología de vanguardia
+              para competir en el mercado global del lujo.
+            </p>
+
+            <ul class="ol-flagship-facts">
+              {processData.map(d => (
+                <li>
+                  <span class="ol-flagship-facts__k">{d.k}</span>
+                  <span class="ol-flagship-facts__v">{d.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* SVG decorativo — mármol blanco / columnas */}
+          <div class="ol-flagship__r">
+            <svg viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+              <defs>
+                <linearGradient id="ol-fs-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1A2A3A"/>
+                  <stop offset="60%" stop-color="#4A5A6A"/>
+                  <stop offset="100%" stop-color="#C8D0D8"/>
+                </linearGradient>
+                <linearGradient id="ol-white-marble" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#FFFFFF"/>
+                  <stop offset="30%" stop-color="#F5F5F5"/>
+                  <stop offset="60%" stop-color="#E8E8E8"/>
+                  <stop offset="100%" stop-color="#F5F5F5"/>
+                </linearGradient>
+              </defs>
+              <rect width="360" height="400" fill="url(#ol-fs-sky)" rx="8"/>
+
+              {/* Fachada clásica con columnas */}
+              <g transform="translate(80, 80)">
+                <rect x="0" y="60" width="200" height="100" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="2.5"/>
+                <polygon points="100,0 200,60 0,60" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="2.5"/>
+                {/* Columnas */}
+                <rect x="10" y="60" width="12" height="100" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="48" y="60" width="12" height="100" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="86" y="60" width="12" height="100" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="130" y="60" width="12" height="100" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="178" y="60" width="12" height="100" fill="url(#ol-white-marble)" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Puerta */}
+                <rect x="80" y="100" width="30" height="60" fill="#1A1816"/>
+                <rect x="80" y="60" width="200" height="6" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
+                {/* Frontón */}
+                <circle cx="100" cy="30" r="14" fill="#C8A84E" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Globo terráqueo */}
+              <g transform="translate(280, 280)">
+                <circle cx="0" cy="0" r="20" fill="#1A2A3A" stroke="#1A1816" stroke-width="2"/>
+                <path d="M -10 -10 Q 0 0 10 -10" fill="none" stroke="#C8A84E" stroke-width="1.5" opacity="0.6"/>
+                <path d="M -12 2 Q 0 8 10 -4" fill="none" stroke="#C8A84E" stroke-width="1.5" opacity="0.6"/>
+                <path d="M -8 12 Q 2 4 12 10" fill="none" stroke="#C8A84E" stroke-width="1.5" opacity="0.6"/>
+              </g>
+
+              {/* Partículas brillo */}
+              <circle cx="120" cy="280" r="2" fill="#FFF" opacity="0.4"/>
+              <circle cx="180" cy="270" r="1.5" fill="#FFF" opacity="0.3"/>
+              <circle cx="240" cy="290" r="2.5" fill="#FFF" opacity="0.25"/>
+
+              {/* Suelo */}
+              <path d="M 0 345 Q 80 335 180 345 T 360 345 L 360 400 L 0 400 Z" fill="#A0A0A0" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Texto */}
+              <text x="180" y="385" text-anchor="middle" fill="#F5F0E8" opacity="0.25" font-family="monospace" font-size="9" letter-spacing="3">OLULA DEL RÍO · MÁRMOL BLANCO</text>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* EXPORTACIÓN MUNDIAL — CASO DE ÉXITO                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-export-section">
+      <div class="container-brutal">
+
+        <div class="ol-export-grid">
+
+          <div class="ol-export__content">
+            <span class="text-meta ol-export-chapter">Cap. 04 / Caso de éxito</span>
+            <h2 class="ol-export-title heading-display">
+              Del museo
+              <em class="heading-editorial">al mercado</em>
+              <span class="heading-display-block">global.</span>
+            </h2>
+
+            <p class="ol-export-lead">
+              Las empresas de Olula del Río que han apostado por una
+              presencia digital profesional están <strong>multiplicando
+              su alcance internacional</strong>. Desde exportadores que
+              venden mármol blanco a China con catálogo en mandarín
+              hasta estudios de interiorismo que captan proyectos
+              de Madrid y Barcelona.
+            </p>
+
+            <p class="ol-export-lead">
+              La clave: una web que <em>hable el idioma del comprador</em>,
+              con catálogo técnico de primera calidad, fotografía
+              profesional de la piedra y un sistema de contacto que
+              funcione 24/7 en cualquier huso horario.
+            </p>
+
+            <div class="ol-export-stats">
+              <div class="ol-export-stat">
+                <span class="ol-export-stat__v">80+</span>
+                <span class="ol-export-stat__l">Países con presencia</span>
+              </div>
+              <div class="ol-export-stat">
+                <span class="ol-export-stat__v">4</span>
+                <span class="ol-export-stat__l">Idiomas disponibles</span>
+              </div>
+              <div class="ol-export-stat">
+                <span class="ol-export-stat__v">100+</span>
+                <span class="ol-export-stat__l">Años de tradición</span>
+              </div>
+              <div class="ol-export-stat">
+                <span class="ol-export-stat__v">24h</span>
+                <span class="ol-export-stat__l">Presupuesto</span>
+              </div>
+            </div>
+
+            <a href="/contacto" class="ol-btn ol-btn--primary" style="margin-top:1rem;">
+              <span>Tu web de exportación →</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          {/* SVG decorativo — exportación mundial */}
+          <div class="ol-export__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="ol-export-svg">
+              <defs>
+                <radialGradient id="ol-export-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#C8A84E" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#C8A84E" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#ol-export-glow)"/>
+
+              {/* Círculos concéntricos */}
+              <circle cx="170" cy="170" r="130" fill="none" stroke="#C8A84E" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+              <circle cx="170" cy="170" r="110" fill="none" stroke="#1A2A3A" stroke-width="1" stroke-dasharray="2 4" opacity="0.2"/>
+              <circle cx="170" cy="170" r="90" fill="none" stroke="#C8A84E" stroke-width="0.8" stroke-dasharray="1 3" opacity="0.15"/>
+
+              {/* Mapa mundi */}
+              <g transform="translate(170, 160)" fill="none" stroke="#C8A84E" stroke-width="1.2" opacity="0.5">
+                <ellipse cx="0" cy="0" rx="46" ry="28"/>
+                <ellipse cx="0" cy="0" rx="28" ry="46"/>
+                <path d="M 0 -28 Q 16 -18 36 0 Q 16 18 0 28"/>
+                <path d="M 0 -28 Q -16 -18 -36 0 Q -16 18 0 28"/>
+              </g>
+
+              {/* Engranaje central */}
+              <g transform="translate(170, 200)" class="ol-export-gear">
+                <circle cx="0" cy="0" r="30" fill="none" stroke="#1A2A3A" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="16" fill="none" stroke="#C8A84E" stroke-width="2"/>
+                <circle cx="0" cy="0" r="8" fill="#C8A84E" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="0" cy="0" r="3" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5"/>
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-2.5" y="-34" width="5" height="8" rx="1" fill="#C8A84E" stroke="#1A1816" stroke-width="1" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Puntos conexión global */}
+              <circle cx="100" cy="120" r="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+              <circle cx="240" cy="110" r="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+              <circle cx="250" cy="190" r="3.5" fill="#C8A84E" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+              <circle cx="90" cy="200" r="3" fill="#C8A84E" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+
+              {/* Líneas conexión */}
+              <line x1="170" y1="160" x2="100" y2="120" stroke="#C8A84E" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+              <line x1="170" y1="160" x2="240" y2="110" stroke="#C8A84E" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+              <line x1="170" y1="160" x2="250" y2="190" stroke="#C8A84E" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+              <line x1="170" y1="160" x2="90" y2="200" stroke="#C8A84E" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+
+              <text x="170" y="315" text-anchor="middle" fill="#F5F0E8" opacity="0.15" font-family="monospace" font-size="11" font-weight="800" letter-spacing="3">OLULA</text>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-sec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ol-sec-chapter">Cap. 05 / Oportunidades</span>
+        <h2 class="ol-sec-title heading-display">
+          Seis sectores para
+          <em class="heading-editorial">exportar</em>
+          <span class="heading-display-block">tu presencia global.</span>
+        </h2>
+
+        <ul class="ol-sec">
+          {sectores.map((s, i) => (
+            <li class={`ol-sec__card ol-sec__card--${['gold','marble','navy','ink','stone','gold2'][i]}`}>
+              <div class="ol-sec__head">
+                <span class="ol-sec__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                <div class="ol-sec__stat-box">
+                  <span class="ol-sec__stat-v">{s.stat}</span>
+                  <span class="ol-sec__stat-l">{s.statLabel}</span>
+                </div>
+              </div>
+              <h3 class="ol-sec__title">{s.nombre}</h3>
+              <p class="ol-sec__desc">{s.desc}</p>
+              <ul class="ol-sec__tags">
+                {s.tags.map(tag => (
+                  <li class="ol-sec__tag"><span>▸</span> {tag}</li>
+                ))}
+              </ul>
+              <div class="ol-sec__foot">
+                <a href="/contacto" class="ol-sec__cta">Solicitar información →</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-map-section">
+      <div class="container-brutal">
+        <div class="ol-map-head">
+          <div class="ol-map-head__inner">
+            <div>
+              <span class="text-meta ol-map-chapter">Cap. 06 / Cartografía</span>
+              <h2 class="ol-map-title heading-display">
+                Olula del Río en el
+                <em class="heading-editorial">mapa.</em>
+              </h2>
+            </div>
+            <div class="ol-map-coords">
+              <span class="text-mono">37.387° N · 1.863° W</span>
+              <span class="text-mono">04860 · Olula del Río · Valle del Almanzora</span>
+              <span class="text-mono">Altitud: 560 m · Capital: Mármol Blanco</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ol-map-frame">
+        <div class="ol-map-icon ol-map-icon--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <rect x="14" y="20" width="32" height="28" rx="2" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="2"/>
+            <polygon points="14,20 30,12 46,20" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="2"/>
+            <rect x="14" y="20" width="32" height="4" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
+            <rect x="24" y="30" width="12" height="18" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="ol-map-icon ol-map-icon--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <circle cx="30" cy="30" r="22" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="2"/>
+            <circle cx="30" cy="30" r="12" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+            <path d="M 16 34 Q 30 46 44 34" fill="none" stroke="var(--ol-gold)" stroke-width="2"/>
+            <circle cx="30" cy="26" r="3" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="ol-map-wrap">
+          <InteractiveMap
+            center={[-1.8633, 37.3867]}
+            zoom={11}
+            pueblos={[
+              { slug: "olula-del-rio", nombre: "Olula del Río", poblacion: 7000, descripcion: "Capital mundial del mármol blanco", destacado: true, coords: [-1.8633, 37.3867] },
+              { slug: "cantoria", nombre: "Cantoria", poblacion: 4000, descripcion: "Capital extractora del mármol", coords: [-1.8700, 37.3667] },
+              { slug: "fines", nombre: "Fines", poblacion: 2500, descripcion: "Centro de la industria del mármol", coords: [-1.8433, 37.3558] },
+              { slug: "macael", nombre: "Macael", poblacion: 5500, descripcion: "Capital mundial del mármol", coords: [-1.8633, 37.3867] },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ol-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="ol-dif-title heading-display">
+          Por qué Olula del Río
+          <em class="heading-editorial">marca la diferencia</em>
+          <span class="heading-display-block">en el mármol global.</span>
+        </h2>
+
+        <ol class="ol-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`ol-dif__item ol-dif__item--${i}`}>
+              <span class="ol-dif__num text-mono">{String(i+1).padStart(2,'0')}</span>
+              <h3 class="ol-dif__t">{d.title}</h3>
+              <p class="ol-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-proc-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ol-proc-chapter">Cap. 08 / Método</span>
+        <h2 class="ol-proc-title heading-display">
+          Así trabajamos
+          <em class="heading-editorial">en</em>
+          <span class="heading-display-block">el taller global.</span>
+        </h2>
+
+        <ol class="ol-proc">
+          {proceso.map(p => (
+            <li class="ol-proc__step">
+              <div class="ol-proc__head">
+                <span class="ol-proc__num">{p.num}</span>
+                <span class="ol-proc__eta">{p.eta}</span>
+              </div>
+              <h3 class="ol-proc__t">{p.title}</h3>
+              <p class="ol-proc__body">{p.body}</p>
+              <div class="ol-proc__foot">{p.deliverable}</div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS — 3                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-quote-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ol-quote-chapter">Cap. 09 / Resultados</span>
+        <h2 class="ol-quote-title heading-display">
+          Lo que dicen
+          <em class="heading-editorial">los que</em>
+          <span class="heading-display-block">ya exportan con su web.</span>
+        </h2>
+
+        {testimonios.length > 0 && (
+          <figure class="ol-pull">
+            <div class="ol-pull__seal" aria-hidden="true">
+              <svg viewBox="0 0 90 90" width="100%" height="100%" class="ol-pull__spin">
+                <circle cx="45" cy="45" r="43" fill="#C8A84E" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="45" cy="45" r="38" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2.5 2"/>
+                <g transform="translate(45,45)">
+                  <rect x="-14" y="-2" width="28" height="4" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <rect x="-2" y="-14" width="4" height="28" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <circle cx="0" cy="0" r="6" fill="#C8A84E" stroke="#1A1816" stroke-width="1.5"/>
+                </g>
+                <text x="45" y="72" text-anchor="middle" fill="#F5F0E8" font-size="6.5" font-weight="800" font-family="monospace" letter-spacing="1">OLULA</text>
+              </svg>
+            </div>
+            <blockquote class="ol-pull__q">
+              "{testimonios[0].texto}"
+            </blockquote>
+            <figcaption class="ol-pull__cap">
+              <div class="ol-pull__avatar">
+                {testimonios[0].nombre.charAt(0)}
+              </div>
+              <div>
+                <span class="ol-pull__name">{testimonios[0].nombre}</span>
+                <span class="ol-pull__role">{testimonios[0].negocio}</span>
+              </div>
+            </figcaption>
+          </figure>
+        )}
+
+        {testimonios.length > 1 && (
+          <ul class="ol-quotes">
+            {testimonios.slice(1).map((t, i) => (
+              <li class={`ol-quote ol-quote--${i}`}>
+                <span class="ol-quote__mark" aria-hidden="true">&ldquo;</span>
+                <p>{t.texto}</p>
+                <footer>
+                  <div class="ol-quote__avatar">{t.nombre.charAt(0)}</div>
+                  <div>
+                    <span class="ol-quote__name">{t.nombre}</span>
+                    <span class="ol-quote__role">{t.negocio}</span>
+                  </div>
+                </footer>
+              </li>
+            ))}
+          </ul>
+        )}
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-faq-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ol-faq-chapter">Cap. 10 / FAQ</span>
+        <h2 class="ol-faq-title heading-display">
+          Respuestas para
+          <em class="heading-editorial">el mármol</em>
+          <span class="heading-display-block">de tus dudas.</span>
+        </h2>
+
+        <dl class="ol-faq">
+          {faq.map((f, i) => (
+            <div class="ol-faq__item">
+              <details class="ol-faq__det" open={i === 0}>
+                <summary>
+                  <div class="ol-faq__sum">
+                    <span class="ol-faq__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                    <span class="ol-faq__q">{f.q}</span>
+                    <span class="ol-faq__toggle" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </summary>
+                <div class="ol-faq__ans">
+                  {f.a}
+                </div>
+              </details>
+            </div>
+          ))}
+        </dl>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosAlmanzora.length > 0 && (
+      <section class="ol-vecinos-section">
+        <div class="container-brutal">
+
+          <span class="text-meta ol-vecinos-chapter">Cap. 11 / Comarca</span>
+          <h2 class="ol-vecinos-title heading-display">
+            Valle del Almanzora
+            <em class="heading-editorial">al completo.</em>
+          </h2>
+
+          <ul class="ol-vecinos">
+            {pueblosAlmanzora.slice(0, 8).map((p, i) => (
+              <a href={`/diseno-web/${p.slug}/`} class={`ol-vecino ol-vecino--${i}`} key={p.slug}>
+                <span class="ol-vecino__n">{String(i+1).padStart(2,'0')}</span>
+                <span class="ol-vecino__name">{p.nombre}</span>
+                <span class="ol-vecino__sub">{p.descripcion}</span>
+                <span class="ol-vecino__arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </ul>
+
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ol-final">
+      <div class="container-brutal">
+        <div class="ol-final__grid">
+
+          <div>
+            <span class="text-meta ol-final-chapter">Cap. 12 / Acción</span>
+            <h2 class="ol-final__title heading-display">
+              Tu web
+              <em>al mundo.</em>
+            </h2>
+            <p class="ol-final__lead">
+              <strong>Olula del Río</strong> es mármol blanco, museo y
+              exportación global. Tu empresa merece una web que abra
+              mercados internacionales.
+              <strong>Sin plantillas. Con proyección mundial. Con mármol de verdad.</strong>
+            </p>
+
+            <div class="ol-final__cta">
+              <a href="/contacto" class="ol-final__btn ol-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="ol-final__btn ol-final__btn--ghost">
+                ☎ 657 085 019
+              </a>
+            </div>
+
+            <div class="ol-final__trust">
+              <span><span class="ol-pulse"></span> ACEPTANDO PROYECTOS 2026</span>
+              <span>★ DISEÑO + SEO + HOSTING</span>
+              <span>★ 4.9 ★ 50 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* SVG — mármol blanco / columna clásica */}
+          <div class="ol-final__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="ol-final-svg">
+              <defs>
+                <radialGradient id="ol-final-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#1A2A3A" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#1A2A3A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#ol-final-glow)"/>
+
+              {/* Engranaje grande central */}
+              <g transform="translate(170, 170)" class="ol-final-gear">
+                <circle cx="0" cy="0" r="70" fill="none" stroke="#1A2A3A" stroke-width="2" stroke-dasharray="8 6"/>
+                <circle cx="0" cy="0" r="60" fill="none" stroke="#C8A84E" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#A0A0A0" stroke-width="3" stroke-dasharray="12 6"/>
+                <circle cx="0" cy="0" r="32" fill="none" stroke="#1A2A3A" stroke-width="2"/>
+                <circle cx="0" cy="0" r="18" fill="#C8A84E" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="7" fill="#F5F0E8" stroke="#1A1816" stroke-width="2"/>
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-4" y="-76" width="8" height="12" rx="1" fill="#1A2A3A" stroke="#1A1816" stroke-width="1.5" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Columnas clásicas */}
+              <g transform="translate(100, 250)">
+                <rect x="0" y="0" width="8" height="20" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="12" y="0" width="8" height="20" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="24" y="0" width="8" height="20" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="-2" y="-2" width="36" height="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
+              </g>
+
+              <g transform="translate(200, 250)">
+                <rect x="0" y="0" width="6" height="16" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="10" y="0" width="6" height="16" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="-2" y="-2" width="20" height="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
+              </g>
+
+              {/* Puntos brillo */}
+              <circle cx="100" cy="120" r="2" fill="#C8A84E" opacity="0.3"/>
+              <circle cx="230" cy="100" r="2.5" fill="#C8A84E" opacity="0.25"/>
+              <circle cx="80" cy="200" r="1.5" fill="#C8A84E" opacity="0.2"/>
+
+              <text x="170" y="320" text-anchor="middle" fill="#F5F0E8" opacity="0.12" font-family="monospace" font-size="11" font-weight="800" letter-spacing="3">OLULA</text>
+            </svg>
+          </div>
+
+        </div>
+
+        <div class="ol-final__marquee">
+          <div class="ol-final__marquee-track">
+            <span>★ OLULA DEL RÍO · DISEÑO WEB PARA LA EXPORTACIÓN ★ MÁRMOL BLANCO · MUSEO · 80+ PAÍSES ★ TU WEB, TU PUERTA AL MUNDO ★ HABLAMOS?</span>
+            <span>★ OLULA DEL RÍO · DISEÑO WEB PARA LA EXPORTACIÓN ★ MÁRMOL BLANCO · MUSEO · 80+ PAÍSES ★ TU WEB, TU PUERTA AL MUNDO ★ HABLAMOS?</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* OLULA DEL RÍO DESIGN SYSTEM                       */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --ol-paper:    #F5F0E8;
+    --ol-paper-2:  #E8E0D0;
+    --ol-stone:    #A0A0A0;
+    --ol-marble:   #F0F0F0;
+    --ol-ink:      #1A1816;
+    --ol-navy:     #1A2A3A;
+    --ol-gold:     #C8A84E;
+    --ol-gold2:    #B89840;
+    --ol-shadow:   8px 8px 0 var(--ol-ink);
+  }
+
+  .ol-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ol-gold);
+    box-shadow: 0 0 0 0 rgba(200,168,78,0.55);
+    animation: ol-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ol-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(200,168,78,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(200,168,78,0); }
+    100% { box-shadow: 0 0 0 0 rgba(200,168,78,0); }
+  }
+  .ol-pull__spin { transform-origin: 50% 50%; animation: ol-spin 24s linear infinite; }
+  @keyframes ol-spin { to { transform: rotate(360deg); } }
+  .ol-final-gear { transform-origin: 50% 50%; animation: ol-gear-spin 20s linear infinite; }
+  @keyframes ol-gear-spin { to { transform: rotate(360deg); } }
+  .ol-export-svg .ol-export-gear { transform-origin: 50% 50%; animation: ol-gear-spin 18s linear infinite; }
+
+  /* HERO */
+  .ol-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 65% 30%, rgba(200,168,78,0.08), transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(26,42,58,0.08), transparent 50%),
+      var(--ol-paper);
+    border-bottom: 3px solid var(--ol-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ol-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 0 22px, rgba(200,168,78,0.05) 22px 23px, transparent 23px 44px),
+      linear-gradient(-45deg, transparent 0 22px, rgba(200,168,78,0.05) 22px 23px, transparent 23px 44px);
+    pointer-events: none;
+  }
+  .ol-hero > * { position: relative; }
+  .ol-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .ol-hero__status { color: var(--ol-gold); font-weight: 700; }
+  .ol-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .ol-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .ol-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .ol-hero__chapter { color: var(--ol-navy); }
+  .ol-hero__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .92; letter-spacing: -.04em; margin: .25rem 0; }
+  .ol-hero__title em { color: var(--ol-navy); font-style: italic; }
+  .ol-hero__title-stamp { display: inline-block; color: var(--ol-paper); background: var(--ol-navy); padding: 0 .2em; transform: rotate(-1deg); }
+  .ol-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .ol-hero__lead strong { color: var(--ol-ink); font-weight: 700; }
+  .ol-hero__lead em { color: var(--ol-gold); font-style: italic; font-weight: 600; }
+  .ol-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .ol-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--ol-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .ol-btn--primary { background: var(--ol-gold); color: var(--ol-ink); box-shadow: 6px 6px 0 var(--ol-ink); }
+  .ol-btn--primary:hover { background: var(--ol-navy); color: var(--ol-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-ink); }
+  .ol-btn--ghost { background: transparent; color: var(--ol-ink); box-shadow: 6px 6px 0 var(--ol-stone); }
+  .ol-btn--ghost:hover { background: var(--ol-ink); color: var(--ol-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-stone); }
+
+  /* KPIs */
+  .ol-kpis { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 1.5rem; border: 2.5px solid var(--ol-ink); background: var(--ol-ink); }
+  @media (min-width: 768px) { .ol-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .ol-kpi { background: var(--ol-paper); padding: 1.25rem; display: flex; flex-direction: column; gap: .35rem; border-right: 2px solid var(--ol-ink); border-bottom: 2px solid var(--ol-ink); }
+  .ol-kpi:nth-child(2n) { border-right: none; }
+  .ol-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .ol-kpi:nth-child(2n)       { border-right: 2px solid var(--ol-ink); }
+    .ol-kpi:nth-child(4n)       { border-right: none; }
+    .ol-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--ol-ink); }
+    .ol-kpi:nth-last-child(-n+4)  { border-bottom: none; }
+  }
+  .ol-kpi--gold   { background: var(--ol-gold); color: var(--ol-ink); }
+  .ol-kpi--navy   { background: var(--ol-navy); color: var(--ol-paper); }
+  .ol-kpi--marble { background: var(--ol-marble); color: var(--ol-ink); }
+  .ol-kpi--ink    { background: var(--ol-ink); color: var(--ol-paper); }
+  .ol-kpi--ink .ol-kpi__v { color: var(--ol-gold); }
+  .ol-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .ol-kpi__v small { font-size: .55em; opacity: .8; }
+  .ol-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .ol-hero__postcard { width: 100%; max-width: 540px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(26,24,22,0.18)); }
+  .ol-postcard { background: var(--ol-paper); border: 3px solid var(--ol-ink); box-shadow: var(--ol-shadow); overflow: hidden; transform: rotate(-1deg); transition: transform .35s; }
+  .ol-postcard:hover { transform: rotate(0); }
+  .ol-postcard__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .65rem 1rem; background: var(--ol-ink); color: var(--ol-paper); font-size: .58rem; letter-spacing: .15em; border-bottom: 2px solid var(--ol-ink); }
+  .ol-postcard__profile { width: 100%; aspect-ratio: 540 / 220; border-bottom: 2px solid var(--ol-ink); overflow: hidden; }
+  .ol-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--ol-ink); }
+  .ol-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.1); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .ol-postcard:hover .ol-postcard__img { transform: scale(1.05); }
+  .ol-postcard__gear { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(10deg); filter: drop-shadow(0 4px 10px rgba(200,168,78,0.5)); }
+  .ol-postcard__tag { position: absolute; bottom: 12px; left: 12px; background: var(--ol-paper); color: var(--ol-ink); padding: .4rem .75rem; font-size: .65rem; font-weight: 800; letter-spacing: .2em; border: 2px solid var(--ol-ink); box-shadow: 3px 3px 0 var(--ol-gold); transform: rotate(-2deg); }
+  .ol-postcard__data { padding: 1rem 1.25rem; background: var(--ol-paper-2); display: grid; gap: .35rem; }
+  .ol-postcard__data-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 1px dashed rgba(26,24,22,0.15); font-size: .68rem; }
+  .ol-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .ol-postcard__data-row > span:first-child { color: var(--ol-navy); letter-spacing: .2em; font-weight: 800; }
+  .ol-postcard__data-v { color: var(--ol-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .ol-marquee { background: var(--ol-ink); color: var(--ol-gold); overflow: hidden; padding: .9rem 0; border-top: 3px solid var(--ol-ink); }
+  .ol-marquee__track { display: flex; gap: 3rem; width: max-content; animation: ol-marquee 42s linear infinite; font-family: var(--font-mono); font-size: .82rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+  @keyframes ol-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ICONOS */
+  .ol-iconos-section { background: var(--ol-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
+  .ol-iconos-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,168,78,0.04) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .ol-iconos-section > * { position: relative; }
+  .ol-iconos-chapter { color: var(--ol-stone); }
+  .ol-iconos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-iconos-title em { color: var(--ol-gold); }
+  .ol-iconos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 640px)  { .ol-iconos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ol-iconos { grid-template-columns: repeat(4, 1fr); } }
+  .ol-icono { display: flex; flex-direction: column; gap: .5rem; padding: 2rem 1.5rem; background: var(--ol-paper); border: 2.5px solid var(--ol-ink); box-shadow: var(--ol-shadow); align-items: center; text-align: center; transition: transform .25s, box-shadow .25s; }
+  .ol-icono:hover { transform: translate(-4px, -4px); }
+  .ol-icono--gold:hover   { box-shadow: 12px 12px 0 var(--ol-gold); }
+  .ol-icono--marble:hover { box-shadow: 12px 12px 0 var(--ol-marble); }
+  .ol-icono--navy:hover   { box-shadow: 12px 12px 0 var(--ol-navy); }
+  .ol-icono--ink:hover    { box-shadow: 12px 12px 0 var(--ol-ink); }
+  .ol-icono__code { width: 80px; height: 80px; flex-shrink: 0; }
+  .ol-icono__letter { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--ol-gold); }
+  .ol-icono--marble .ol-icono__letter { color: var(--ol-stone); }
+  .ol-icono--navy .ol-icono__letter  { color: var(--ol-navy); }
+  .ol-icono--ink .ol-icono__letter   { color: var(--ol-ink); }
+  .ol-icono__name { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1; letter-spacing: -.025em; color: var(--ol-ink); margin: 0; }
+  .ol-icono__sub { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .2em; color: var(--ol-gold); font-weight: 800; }
+  .ol-icono--marble .ol-icono__sub { color: var(--ol-stone); }
+  .ol-icono--navy .ol-icono__sub  { color: var(--ol-navy); }
+  .ol-icono--ink .ol-icono__sub   { color: var(--ol-ink); }
+  .ol-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
+  .ol-icono__dato { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--ol-ink); border-top: 2px dashed var(--ol-ink); padding-top: .5rem; width: 100%; }
+
+  /* FLAGSHIP */
+  .ol-flagship-section { background: var(--ol-stone); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
+  .ol-flagship-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(26,42,58,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ol-flagship-section > * { position: relative; }
+  .ol-flagship-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .ol-flagship-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ol-flagship-chapter { color: var(--ol-navy); }
+  .ol-flagship-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-flagship-title em { color: var(--ol-navy); }
+  .ol-flagship-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .ol-flagship-lead strong { color: var(--ol-gold); font-weight: 800; }
+  .ol-flagship-lead em { color: var(--ol-ink); font-style: italic; }
+  .ol-flagship-facts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--ol-ink); background: var(--ol-paper); }
+  @media (min-width: 640px) { .ol-flagship-facts { grid-template-columns: 1fr 1fr; } }
+  .ol-flagship-facts li { padding: .75rem 1rem; border-bottom: 1px solid var(--ol-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) { .ol-flagship-facts li:nth-child(odd) { border-right: 1px solid var(--ol-ink); } .ol-flagship-facts li:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 639px) { .ol-flagship-facts li:last-child { border-bottom: none; } }
+  .ol-flagship-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--ol-navy); font-weight: 800; }
+  .ol-flagship-facts__v { font-size: .9rem; color: var(--ol-ink); font-weight: 600; line-height: 1.35; }
+  .ol-flagship__r { width: 100%; max-width: 360px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3)); }
+
+  /* EXPORT SECTION */
+  .ol-export-section { background: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
+  .ol-export-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,168,78,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ol-export-section > * { position: relative; }
+  .ol-export-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .ol-export-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ol-export-chapter { color: var(--ol-navy); }
+  .ol-export-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-export-title em { color: var(--ol-navy); }
+  .ol-export-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .ol-export-lead strong { color: var(--ol-ink); font-weight: 700; }
+  .ol-export-lead em { color: var(--ol-gold); font-style: italic; font-weight: 600; }
+  .ol-export-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.5rem; }
+  .ol-export-stat { background: var(--ol-paper-2); border: 2px solid var(--ol-ink); padding: 1rem; display: flex; flex-direction: column; gap: .25rem; text-align: center; }
+  .ol-export-stat__v { font-size: 1.65rem; font-weight: 800; color: var(--ol-navy); line-height: 1; }
+  .ol-export-stat__l { font-family: var(--font-mono); font-size: .55rem; text-transform: uppercase; letter-spacing: .12em; opacity: .75; }
+  .ol-export__r { max-width: 340px; margin: 0 auto; }
+  .ol-export-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(200,168,78,0.18)); }
+
+  /* SECTORES */
+  .ol-sec-section { background: var(--ol-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-sec-chapter { color: var(--ol-stone); }
+  .ol-sec-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-sec-title em { color: var(--ol-gold); }
+  .ol-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .ol-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ol-sec { grid-template-columns: repeat(3, 1fr); } }
+  .ol-sec__card { background: var(--ol-paper); border: 2.5px solid var(--ol-ink); box-shadow: var(--ol-shadow); padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; transition: transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
+  .ol-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .ol-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .ol-sec__card--gold   { color: var(--ol-gold); }
+  .ol-sec__card--marble { color: var(--ol-stone); }
+  .ol-sec__card--navy   { color: var(--ol-navy); }
+  .ol-sec__card--ink    { color: var(--ol-ink); }
+  .ol-sec__card--stone  { color: var(--ol-stone); }
+  .ol-sec__card--gold2  { color: var(--ol-gold2); }
+  .ol-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .ol-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ol-sec__stat-box { background: var(--ol-ink); color: var(--ol-paper); padding: .35rem .65rem; display: flex; flex-direction: column; border: 1.5px solid currentColor; text-align: right; }
+  .ol-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ol-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .ol-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--ol-ink); margin: 0; }
+  .ol-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .ol-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .ol-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--ol-ink); }
+  .ol-sec__tag span { color: currentColor; font-weight: 800; }
+  .ol-sec__foot { padding-top: .65rem; border-top: 2px solid var(--ol-ink); }
+  .ol-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .ol-map-section { background: var(--ol-marble); border-bottom: 3px solid var(--ol-ink); }
+  .ol-map-head { padding: 4rem 0 2rem; }
+  .ol-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .ol-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .ol-map-chapter { color: var(--ol-navy); }
+  .ol-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .ol-map-title em { color: var(--ol-navy); }
+  .ol-map-coords { background: var(--ol-gold); color: var(--ol-ink); padding: 1rem 1.25rem; border: 2px solid var(--ol-ink); box-shadow: 5px 5px 0 var(--ol-ink); display: flex; flex-direction: column; gap: .35rem; font-size: .7rem; letter-spacing: .15em; }
+  .ol-map-frame { position: relative; border-top: 3px solid var(--ol-ink); border-bottom: 3px solid var(--ol-ink); background: var(--ol-ink); }
+  .ol-map-icon { position: absolute; width: 60px; height: 60px; z-index: 5; pointer-events: none; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); opacity: 0.85; }
+  .ol-map-icon--tl { top: 16px; left: 16px; }
+  .ol-map-icon--br { bottom: 16px; right: 16px; }
+  .ol-map-wrap { width: 100%; height: clamp(420px, 60vh, 600px); overflow: hidden; }
+  .ol-map-wrap > * { width: 100%; height: 100%; }
+
+  /* DIFERENCIALES */
+  .ol-dif-section { background: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-dif-chapter { color: var(--ol-navy); }
+  .ol-dif-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-dif-title em { color: var(--ol-gold); }
+  .ol-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--ol-ink); }
+  @media (min-width: 768px) { .ol-dif { grid-template-columns: 1fr 1fr; } }
+  .ol-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--ol-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) { .ol-dif__item:nth-child(odd) { border-right: 1px solid var(--ol-ink); } .ol-dif__item:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 767px) { .ol-dif__item:last-child { border-bottom: none; } }
+  .ol-dif__item--0 { background: var(--ol-paper-2); }
+  .ol-dif__item--1 { background: var(--ol-paper); }
+  .ol-dif__item--2 { background: var(--ol-stone); }
+  .ol-dif__item--3 { background: var(--ol-paper); }
+  .ol-dif__item:hover { background: var(--ol-gold); }
+  .ol-dif__num { font-size: .85rem; color: var(--ol-navy); font-weight: 800; letter-spacing: .15em; }
+  .ol-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--ol-ink); margin: 0; }
+  .ol-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .ol-proc-section { background: var(--ol-ink); color: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
+  .ol-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,168,78,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ol-proc-section > * { position: relative; }
+  .ol-proc-chapter { color: var(--ol-gold); }
+  .ol-proc-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-proc-title em { color: var(--ol-gold); }
+  .ol-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .ol-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ol-proc { grid-template-columns: repeat(4, 1fr); } }
+  .ol-proc__step { background: rgba(245,240,232,0.05); border: 2px solid var(--ol-paper); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; transition: background .25s, transform .25s; }
+  .ol-proc__step:hover { background: rgba(200,168,78,0.12); transform: translateY(-3px); }
+  .ol-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(245,240,232,0.25); }
+  .ol-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ol-gold); line-height: 1; }
+  .ol-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ol-gold); }
+  .ol-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ol-paper); margin: .25rem 0 0; }
+  .ol-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(245,240,232,0.75); flex: 1; }
+  .ol-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--ol-gold); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(245,240,232,0.25); }
+
+  /* TESTIMONIOS */
+  .ol-quote-section { background: var(--ol-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-quote-chapter { color: var(--ol-stone); }
+  .ol-quote-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-quote-title em { color: var(--ol-gold); }
+  .ol-pull { position: relative; background: var(--ol-stone); border: 3px solid var(--ol-ink); box-shadow: var(--ol-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .ol-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-10deg); filter: drop-shadow(0 4px 8px rgba(200,168,78,0.4)); }
+  .ol-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--ol-ink); max-width: 56ch; }
+  .ol-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--ol-ink); }
+  .ol-pull__avatar { width: 48px; height: 48px; background: var(--ol-navy); color: var(--ol-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .ol-pull__cap div { display: flex; flex-direction: column; }
+  .ol-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ol-ink); }
+  .ol-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .ol-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .ol-quotes { grid-template-columns: repeat(2, 1fr); } }
+  .ol-quote { position: relative; background: var(--ol-paper); border: 2px solid var(--ol-ink); box-shadow: 5px 5px 0 var(--ol-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .ol-quote:hover { transform: translateY(-3px); }
+  .ol-quote--0 { background: var(--ol-paper); }
+  .ol-quote--1 { background: var(--ol-stone); }
+  .ol-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--ol-gold); opacity: .45; }
+  .ol-quote p { font-size: .92rem; line-height: 1.5; color: var(--ol-ink); flex: 1; margin: 0; }
+  .ol-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--ol-ink); }
+  .ol-quote__avatar { width: 36px; height: 36px; background: var(--ol-navy); color: var(--ol-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .ol-quote footer div { display: flex; flex-direction: column; }
+  .ol-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .ol-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .ol-faq-section { background: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-faq-chapter { color: var(--ol-stone); }
+  .ol-faq-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-faq-title em { color: var(--ol-gold); }
+  .ol-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--ol-ink); }
+  .ol-faq__item { border-bottom: 2px solid var(--ol-ink); }
+  .ol-faq__det summary { list-style: none; cursor: pointer; }
+  .ol-faq__det summary::-webkit-details-marker { display: none; }
+  .ol-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .ol-faq__sum:hover { padding-inline: 1rem; background: var(--ol-paper-2); }
+  .ol-faq__num { font-size: 1rem; font-weight: 800; color: var(--ol-navy); letter-spacing: .1em; }
+  .ol-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--ol-ink); font-weight: 700; }
+  .ol-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--ol-ink); background: var(--ol-paper); color: var(--ol-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .ol-faq__det[open] .ol-faq__toggle { transform: rotate(180deg); background: var(--ol-navy); color: var(--ol-gold); }
+  .ol-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .ol-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .ol-faq__ans { padding-left: 48px; } }
+
+  /* PUEBLOS VECINOS */
+  .ol-vecinos-section { background: var(--ol-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-vecinos-chapter { color: var(--ol-stone); }
+  .ol-vecinos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ol-vecinos-title em { color: var(--ol-gold); }
+  .ol-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--ol-ink); background: var(--ol-ink); }
+  @media (min-width: 640px)  { .ol-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .ol-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .ol-vecino { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: .35rem; padding: 1.5rem; background: var(--ol-paper); color: var(--ol-ink); text-decoration: none; min-height: 160px; transition: background .25s, color .25s; grid-template-areas: 'n arrow' 'name name' 'sub sub'; }
+  .ol-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .ol-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .ol-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .ol-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ol-gold); font-size: 1.3rem; transition: transform .25s; }
+  .ol-vecino:hover { background: var(--ol-gold); color: var(--ol-ink); }
+  .ol-vecino:hover .ol-vecino__sub, .ol-vecino:hover .ol-vecino__n { opacity: .85; }
+  .ol-vecino:hover .ol-vecino__arrow { color: var(--ol-ink); transform: translateX(4px); }
+  .ol-vecino--1:hover { background: var(--ol-navy); color: var(--ol-gold); }
+  .ol-vecino--2:hover { background: var(--ol-stone); color: var(--ol-ink); }
+  .ol-vecino--3:hover { background: var(--ol-marble); color: var(--ol-ink); }
+
+  /* CTA FINAL */
+  .ol-final { background: #1C1A16; color: var(--ol-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .ol-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(26,42,58,0.06) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .ol-final > * { position: relative; }
+  .ol-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .ol-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ol-final-chapter { color: var(--ol-navy); }
+  .ol-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--ol-paper); margin: 1rem 0; }
+  .ol-final__title em { color: var(--ol-gold); font-style: italic; display: block; }
+  .ol-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(245,240,232,0.75); max-width: 52ch; }
+  .ol-final__lead strong { color: var(--ol-gold); }
+  .ol-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .ol-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .ol-final__btn--primary { background: var(--ol-gold); color: var(--ol-ink); border-color: var(--ol-gold); box-shadow: 6px 6px 0 var(--ol-navy); }
+  .ol-final__btn--primary:hover { background: var(--ol-navy); color: var(--ol-gold); border-color: var(--ol-navy); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-gold); }
+  .ol-final__btn--ghost { background: transparent; color: var(--ol-paper); border-color: var(--ol-paper); box-shadow: 6px 6px 0 var(--ol-paper); }
+  .ol-final__btn--ghost:hover { background: var(--ol-paper); color: var(--ol-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-paper); }
+  .ol-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(245,240,232,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .ol-final__trust .ol-pulse { background: var(--ol-navy); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(26,42,58,0.55); }
+  .ol-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .ol-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(26,42,58,0.25)); }
+  .ol-final__marquee { background: var(--ol-navy); color: var(--ol-gold); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--ol-ink); margin: 0 -1.5rem; }
+  .ol-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: ol-marquee 34s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
