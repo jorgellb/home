@@ -47,7 +47,16 @@ const articleSchema = {
   type="article"
   keywords={post.data.seo?.keywords?.join(', ') || post.data.tags?.join(', ')}
   image={post.data.seo?.image || post.data.featuredImage}
-  jsonLd={articleSchema}
+  jsonLd={[
+    articleSchema,
+    {
+      '@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
+        { '@type': 'ListItem', 'position': 1, 'name': 'Inicio', 'item': 'https://platanitorico.com/' },
+        { '@type': 'ListItem', 'position': 2, 'name': 'Blog', 'item': 'https://platanitorico.com/blog/' },
+        { '@type': 'ListItem', 'position': 3, 'name': post.data.title, 'item': `https://platanitorico.com/blog/${post.data.slug}/` }
+      ]
+    }
+  ]}
 >
   <Header />
 
