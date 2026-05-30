@@ -1,0 +1,1373 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'purchena');
+
+const title = 'Diseño Web en Purchena | Talleres Mecánicos, Comercio y Turismo Histórico · Almería';
+const description = 'Agencia de diseño web en Purchena, centro histórico del Valle del Almanzora. Webs para talleres mecánicos, servicios comarcales, hostelería, comercio local y turismo cultural. Caso de éxito: Taller Mecánico el Piñón. SEO local, presupuesto online y presencia digital para empresas de la comarca alta.';
+const canonical = 'https://platanitorico.com/diseno-web/purchena/';
+
+const sectores = [
+  { nombre: 'Talleres Mecánicos y Automoción', stat: '★',  statLabel: 'cliente El Piñón',      desc: 'Purchena es punto de paso para toda la comarca alta. Los talleres mecánicos como El Piñón atienden a conductores de Tíjola, Serón, Bacares y Laroya. Una web con servicios, presupuesto online y SEO local capta clientes de todo el valle.', tags: ['Servicios mecánicos','Presupuesto online','SEO local','Caso El Piñón'] },
+  { nombre: 'Turismo Cultural e Histórico',     stat: '#1',  statLabel: 'casco monumental',      desc: 'El casco histórico de Purchena es uno de los mejor conservados del Almanzora. Una web turística con rutas, alojamientos y experiencias puede convertir la riqueza arquitectónica en destino de fin de semana.', tags: ['Rutas históricas','Turismo interior','Patrimonio','Guía local'] },
+  { nombre: 'Servicios Profesionales',          stat: 'Hub', statLabel: 'comarca alta',           desc: 'Purchena ejerce de capital de servicios para el Alto Almanzora: médicos, abogados, gestorías y comercios que aparezcan en Google Maps captan clientes de 20 municipios del entorno. SEO local multiplaza.', tags: ['Google Maps','SEO local','Captación comarca','Multiubicación'] },
+  { nombre: 'Hostelería y Gastronomía',         stat: 'Mercado', statLabel: 'tradición semanal',  desc: 'El mercado de los martes es el corazón comercial de Purchena. Bares, restaurantes y casas rurales con web, carta digital y ficha de Google optimizada atraen a visitantes y vecinos de la comarca.', tags: ['Carta digital','Google Maps','Reservas online','Tapas'] },
+  { nombre: 'Comercio Local y Agroalimentación', stat: 'Valle', statLabel: 'producto km 0',       desc: 'Purchena es puerta de entrada a la Sierra de las Estancias. Comercios de productos locales, almazaras y bodegas pueden vender online con una tienda que comunique origen y calidad.', tags: ['E-commerce','Producto local','Almanzora','Envíos nacionales'] },
+  { nombre: 'Agricultura y Explotaciones',      stat: '20+',  statLabel: 'fincas activas',        desc: 'El olivar y la agricultura de secano son el pulso económico de la comarca alta. Cooperativas y explotaciones con web corporativa y catálogo de productos acceden a distribuidores y mercados.', tags: ['Catálogo agrícola','Venta B2B','SEO rural','Cooperativas'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Taller El Piñón',        sub: 'CLIENTE ★ CASO DE ÉXITO', desc: 'Taller Mecánico el Piñón, desde Purchena, da servicio a toda la comarca alta con más de 20 años de experiencia en mecánica general, electricidad, chapa y pintura. Su web les ha multiplicado los clientes del valle con presupuesto online y diagnóstico gratuito.', dato: '★ 4.9 / 500+', color: 'accent' },
+  { code: 'B', name: 'Casco Histórico',         sub: 'PATRIMONIO DEL ALMANZORA', desc: 'Purchena conserva uno de los centros históricos más interesantes del valle, con calles empedradas y plazas porticadas. Un destino de turismo cultural que crece cada año.', dato: 'Ruta monumental', color: 'green' },
+  { code: 'C', name: 'Alto Almanzora',          sub: 'CAPITAL DE COMARCA',      desc: 'Purchena es el centro de servicios del Alto Almanzora. Su posición estratégica entre Tíjola, Serón y la Sierra de las Estancias la convierte en el nodo comercial de la comarca alta.', dato: 'Hub comarcal', color: 'steel' },
+  { code: 'D', name: 'Mercado y Tradición',     sub: 'MARTES · DÍA DE MERCADO', desc: 'El mercado semanal de los martes es la cita comercial de toda la comarca. Agricultores, artesanos y comerciantes convierten Purchena en el epicentro del valle cada semana.', dato: 'Tradición viva', color: 'ink' },
+];
+
+const processData = [
+  { k: 'POBLACIÓN',     v: '2.000 hab · Valle del Almanzora' },
+  { k: 'COMARCA',       v: 'Alto Almanzora · Hub de servicios' },
+  { k: 'CLIENTE TOP',   v: 'Taller El Piñón · +20 años' },
+  { k: 'SECTOR CLAVE',  v: 'Automoción · Turismo · Servicios' },
+  { k: 'ICONO',         v: 'Casco histórico · Mercado tradicional' },
+  { k: 'COBERTURA',     v: 'Tíjola · Serón · Bacares · Laroya · +' },
+];
+
+const diferenciales = [
+  { title: 'Capital del Alto Almanzora',      desc: 'Purchena no es un pueblo más del valle — es el centro de servicios de la comarca alta. Médicos, abogados, talleres y comercios que se posicionan bien en Google captan clientes de un radio de 20 km con decenas de aldeas y municipios.' },
+  { title: 'Taller El Piñón, caso real',       desc: 'Un taller mecánico de Purchena que pasó del boca-oreja a captar clientes de toda la comarca con presupuesto online, servicios visibles y SEO local. El caso lo cuentan mejor en su web: tallerelpinon.com.' },
+  { title: 'Casco histórico + mercado vivo',  desc: 'Turismo cultural de interior + mercado semanal activo. Purchena une tradición y oportunidad digital. Una web bien hecha para hostelería o turismo atrae visitantes de Almería capital, la costa y provincias vecinas.' },
+  { title: 'Mecánica y oficio con futuro',    desc: 'El sector de la automoción tiene una oportunidad digital enorme. La mayoría de talleres aún no tienen web competitiva. Quien se mueve primero, capta el mercado de la comarca alta.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión en el valle',   eta: '1–2 días',  body: 'Visitamos tu taller, comercio o negocio en Purchena. Vemos cómo trabajas, qué te hace único y quién es tu cliente ideal en el Alto Almanzora. Entendemos el negocio en su contexto real.', deliverable: 'Briefing + análisis' },
+  { num: '02', title: 'Diseño con carácter',      eta: '3–5 días',  body: 'Diseño que transmite solidez artesanal y confianza mecánica. Tipografía robusta, paleta de acero y tierra, fotografía real de tu taller o negocio. Nada de plantillas.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Desarrollo + motor SEO',   eta: '5–10 días', body: 'Astro ultrarrápido, sistema de presupuesto online, formularios inteligentes, páginas por municipio del Alto Almanzora, Core Web Vitals verdes y accesibilidad AAA.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + rodaje',     eta: '1–2 días',  body: 'Publicamos y configuramos Google Business Profile para Purchena y cada municipio de tu zona de cobertura. Indexamos en Search Console y arrancamos el SEO local.', deliverable: 'Sitio LIVE + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Antonio Piñón',     negocio: 'Taller El Piñón · Purchena',  texto: 'Pasamos de ser el taller de confianza del pueblo a dar servicio a clientes de toda la comarca alta. La web con presupuesto online y páginas por municipio nos ha traído conductores de Tíjola, Serón, Laroya y hasta de Huércal-Overa. Ahora entran solos.' },
+  { nombre: 'María Espinosa',    negocio: 'Bar con cocina tradicional',  texto: 'El mercado de los martes trae gente pero los otros días estaba muy parado. Desde que tenemos la carta digital y el perfil de Google bien actualizado, nos llegan familias de toda la comarca que salen a comer fuera del fin de semana.' },
+  { nombre: 'José Antonio Ruiz', negocio: 'Gestoría y asesoría fiscal',  texto: 'Atendemos a autónomos y agricultores de Tíjola, Serón y Bacares. La web con formulario online y Google Maps optimizado nos ha traído clientes que antes iban a Huércal-Overa. Ahora somos su gestoría de referencia en la comarca alta.' },
+];
+
+const faq = [
+  { q: '¿Puede un taller mecánico de Purchena captar clientes de toda la comarca con una web?', a: 'Sí, con SEO local por municipio, páginas específicas para cada servicio y un sistema de presupuesto online. Taller El Piñón lo hace y recibe clientes de Tíjola, Serón, Bacares y Laroya gracias a su presencia digital bien trabajada.' },
+  { q: '¿Tenéis experiencia con talleres mecánicos y automoción?', a: 'Sí, Taller Mecánico el Piñón es cliente nuestro. Su web tiene secciones detalladas por servicio, presupuesto online, testimonios reales y un diseño que transmite la confianza y el oficio de más de 20 años de experiencia en Purchena.' },
+  { q: '¿Cuánto cuesta una web para un taller mecánico o servicio profesional en Purchena?', a: 'Desde 500€ para web corporativa con servicios, formulario de presupuesto y hosting gratuito. Con sistema de presupuesto online completo y SEO por municipios desde 750€.' },
+  { q: '¿Hacéis webs para hostelería con carta digital y reservas?', a: 'Sí, es de lo más demandado en la comarca. Web con carta digital interactiva, enlace directo a Google Maps para reseñas, sistema de reservas y SEO local para "restaurante en Purchena" o "comer en el Almanzora".' },
+  { q: '¿Hacéis reuniones presenciales en Purchena?', a: 'Sí, estamos en Vera a 30 minutos de Purchena. Nos desplazamos al Alto Almanzora para reunirnos en tu taller, comercio u oficina. La primera consulta es gratuita.' },
+  { q: '¿En cuánto tiempo tengo la web lista?', a: 'Web corporativa: 1–2 semanas. Con catálogo de servicios o productos: 2–3 semanas. Con presupuesto online y SEO multi-municipio: 2–3 semanas.' },
+  { q: '¿Ayudáis con el marketing digital para negocios de la comarca?', a: 'Sí, ofrecemos SEO local, Google Business Profile optimizado, gestión de reseñas, contenido para redes sociales y campañas de Google Ads para captar clientes en el Alto Almanzora y la provincia.' },
+  { q: '¿Puedo vender productos locales de Purchena online?', a: 'Sí, montamos tiendas online para productos agroalimentarios, artesanía y comercio local. Con pasarela de pago, gestión de envíos y SEO para "productos del Almanzora" o "aceite de la sierra".' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Purchena","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Purchena","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seo-purchena.jpg","address":{"@type":"PostalAddress","addressLocality":"Purchena","addressRegion":"Almería","postalCode":"04869","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3267,"longitude":-2.0917},"areaServed":["Purchena","Tíjola","Serón","Bacares","Laroya","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"50","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Purchena","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seo-purchena.jpg"
+  imageAlt="Diseño web en Purchena - Talleres Mecánicos, Casco Histórico y Valle del Almanzora"
+  type="service"
+  keywords="diseño web purchena, taller mecánico el piñón, valle del almanzora, seo comarca alta, diseño web almería, taller el pinon purchena"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="pn">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — MECÁNICA · MERCADO · MONTAÑA                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-hero">
+      <div class="container-brutal">
+
+        <header class="pn-hero__top">
+          <span class="text-meta">N.º 032 — Valle del Almanzora · Alto Almanzora</span>
+          <span class="text-meta pn-hero__status">
+            <span class="pn-pulse"></span>
+            ★ PUERTA DEL ALTO ALMANZORA · PURCHENA ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="pn-hero__grid">
+
+          <div class="pn-hero__intro">
+            <span class="text-meta pn-hero__chapter">Cap. 01 / Purchena · Almería</span>
+            <h1 class="pn-hero__title heading-display">
+              Diseño web para la
+              <em class="heading-editorial">comarca</em>
+              <span class="pn-hero__title-stamp">del Alto Almanzora.</span>
+            </h1>
+
+            <p class="pn-hero__lead">
+              <strong>Purchena</strong> es el centro histórico y comercial del
+              <em>Alto Almanzora</em>. Talleres mecánicos, servicios profesionales,
+              comercio local y turismo cultural que necesitan una presencia digital
+              a la altura de su comarca.
+              <strong>Como Taller El Piñón.</strong>
+            </p>
+
+            <div class="pn-hero__cta">
+              <a href="/contacto" class="pn-btn pn-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#pinon" class="pn-btn pn-btn--ghost">
+                Caso El Piñón ↓
+              </a>
+            </div>
+
+            <ul class="pn-kpis">
+              <li class="pn-kpi pn-kpi--green">
+                <span class="pn-kpi__v text-mono">★</span>
+                <span class="pn-kpi__l">Caso El Piñón éxito</span>
+              </li>
+              <li class="pn-kpi pn-kpi--accent">
+                <span class="pn-kpi__v text-mono">Hub</span>
+                <span class="pn-kpi__l">Servicios comarca alta</span>
+              </li>
+              <li class="pn-kpi pn-kpi--steel">
+                <span class="pn-kpi__v text-mono">20<small>+</small></span>
+                <span class="pn-kpi__l">Municipios alcance</span>
+              </li>
+              <li class="pn-kpi pn-kpi--ink">
+                <span class="pn-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="pn-kpi__l">50 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — paisaje mecánico + casco histórico */}
+          <aside class="pn-hero__postcard" aria-hidden="true">
+            <div class="pn-postcard">
+
+              <header class="pn-postcard__head">
+                <span class="text-mono">PURCHENA · 04870 · ALMERÍA</span>
+                <span class="text-mono">37.327° N · 2.092° W</span>
+              </header>
+
+              {/* Perfil mecánico SVG */}
+              <div class="pn-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="pn-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#6B7B8D"/>
+                      <stop offset="100%" stop-color="#A8B8C8"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo mecánico */}
+                  <rect width="540" height="220" fill="url(#pn-sky)"/>
+
+                  {/* Sierra de las Estancias */}
+                  <path d="M 0 150 L 60 100 L 100 110 L 140 80 L 200 120 L 260 90 L 320 130 L 380 100 L 440 140 L 540 120 L 540 220 L 0 220 Z" fill="#6B7B5A" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 170 L 80 130 L 160 140 L 220 110 L 280 150 L 340 120 L 400 160 L 460 140 L 540 160 L 540 220 L 0 220 Z" fill="#5A6B4A" stroke="#1A1816" stroke-width="1"/>
+
+                  {/* Carretera */}
+                  <path d="M 0 200 Q 120 190 260 195 Q 380 200 540 190" fill="none" stroke="#4A3A2A" stroke-width="4"/>
+                  <path d="M 0 200 Q 120 190 260 195 Q 380 200 540 190" fill="none" stroke="#B89850" stroke-width="1" stroke-dasharray="8 6"/>
+
+                  {/* TALLER MECÁNICO — nave central */}
+                  <g transform="translate(200, 120)">
+                    <rect x="0" y="0" width="120" height="65" fill="#A0907A" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="0" y="0" width="120" height="8" fill="#C84A2E" stroke="#1A1816" stroke-width="1"/>
+                    {/* Puertas taller */}
+                    <rect x="10" y="12" width="18" height="20" fill="#3A5A4A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="38" y="12" width="18" height="20" fill="#3A5A4A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="66" y="12" width="18" height="20" fill="#3A5A4A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="96" y="8" width="6" height="22" fill="#3A5A4A" stroke="#1A1816" stroke-width="1"/>
+                    {/* Ventanas */}
+                    <rect x="8" y="36" width="12" height="6" fill="#6B7B8D" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="28" y="36" width="12" height="6" fill="#6B7B8D" stroke="#1A1816" stroke-width="1"/>
+                    {/* Techo cartel */}
+                    <rect x="30" y="-14" width="60" height="10" fill="#C84A2E" stroke="#1A1816" stroke-width="1.5"/>
+                    <text x="60" y="-6" text-anchor="middle" fill="#F5F0E8" font-size="6" font-weight="800" font-family="monospace" letter-spacing="1">TALLER</text>
+                  </g>
+
+                  {/* Coche elevado / puente */}
+                  <g transform="translate(420, 138)">
+                    <rect x="0" y="10" width="40" height="34" fill="#8A7A6A" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="0" y="10" width="40" height="6" fill="#C84A2E" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="6" y="22" width="10" height="14" fill="#3A5A4A" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="24" y="22" width="10" height="14" fill="#3A5A4A" stroke="#1A1816" stroke-width="1"/>
+                    <circle cx="10" cy="44" r="5" fill="#1A1816"/>
+                    <circle cx="30" cy="44" r="5" fill="#1A1816"/>
+                  </g>
+
+                  {/* Casco histórico — torre */}
+                  <g transform="translate(70, 130)">
+                    <rect x="0" y="20" width="30" height="40" fill="#D1C9B8" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="6" y="0" width="18" height="22" fill="#B8A898" stroke="#1A1816" stroke-width="1.5"/>
+                    <polygon points="6,0 15,-10 24,0" fill="#C84A2E" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="10" y="26" width="10" height="10" fill="#3A5A4A" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="10" y="40" width="10" height="8" fill="#3A5A4A" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Llave inglesa icono */}
+                  <g transform="translate(340, 170)">
+                    <rect x="0" y="4" width="28" height="4" rx="1" fill="#A0907A" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 0 0 L 0 12 L -6 12 L -6 0 Z" fill="#A0907A" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="24" cy="6" r="4" fill="none" stroke="#1A1816" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Mercado / puesto */}
+                  <g transform="translate(160, 165)">
+                    <rect x="0" y="4" width="18" height="4" fill="#B89850" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="0" y="0" width="6" height="6" fill="#C84A2E" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="6" y="0" width="6" height="6" fill="#3A5A4A" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="12" y="0" width="6" height="6" fill="#B89850" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Árbol olivo */}
+                  <g transform="translate(500, 150)">
+                    <rect x="4" y="10" width="4" height="14" fill="#5A6B4A" stroke="#1A1816" stroke-width="1"/>
+                    <circle cx="6" cy="6" r="10" fill="#6B7B5A" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="6" cy="6" r="6" fill="#7A8B6A" stroke="none"/>
+                  </g>
+
+                  {/* Señal de tráfico */}
+                  <g transform="translate(130, 152)">
+                    <rect x="5" y="0" width="2" height="16" fill="#4A3A2A" stroke="#1A1816" stroke-width="0.8"/>
+                    <circle cx="6" cy="0" r="6" fill="#C84A2E" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="6" cy="0" r="3" fill="#F5F0E8"/>
+                  </g>
+
+                </svg>
+              </div>
+
+              {/* Imagen real Purchena */}
+              <div class="pn-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-seo-purchena.jpg"
+                  alt="Purchena — casco histórico y Alto Almanzora"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="pn-postcard__img"
+                />
+                {/* Icono mecánico */}
+                <div class="pn-postcard__gear" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#C84A2E" stroke="#1A1816" stroke-width="2"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g transform="translate(40,40)" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5">
+                      <rect x="-12" y="-3" width="24" height="6" rx="1"/>
+                      <rect x="-3" y="-12" width="6" height="24" rx="1"/>
+                      <rect x="-10" y="-10" width="5" height="5" rx="1" transform="rotate(45)"/>
+                      <rect x="5" y="-10" width="5" height="5" rx="1" transform="rotate(45)"/>
+                      <circle cx="0" cy="0" r="5" fill="#C84A2E" stroke="#1A1816" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="pn-postcard__tag">
+                  <span class="text-mono">★ ALTO ALMANZORA · MECÁNICA · OFICIO ★</span>
+                </div>
+              </div>
+
+              {/* Datos Purchena */}
+              <div class="pn-postcard__data">
+                <div class="pn-postcard__data-row">
+                  <span class="text-mono">POBLACIÓN</span>
+                  <span class="text-mono pn-postcard__data-v">2.000 hab</span>
+                </div>
+                <div class="pn-postcard__data-row">
+                  <span class="text-mono">COMARCA</span>
+                  <span class="text-mono pn-postcard__data-v">Alto Almanzora</span>
+                </div>
+                <div class="pn-postcard__data-row">
+                  <span class="text-mono">CLIENTE TOP</span>
+                  <span class="text-mono pn-postcard__data-v">Taller El Piñón</span>
+                </div>
+                <div class="pn-postcard__data-row">
+                  <span class="text-mono">SECTORES</span>
+                  <span class="text-mono pn-postcard__data-v">Automoción · Turismo · Servicios</span>
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+        </div>
+
+        {/* Marquee */}
+        <div class="pn-marquee">
+          <div class="pn-marquee__track">
+            <span>★ PURCHENA · PUERTA DEL ALTO ALMANZORA ★ TALLER EL PIÑÓN · +20 AÑOS ★ MECÁNICA · ELECTRICIDAD · CHAPA ★ CASCO HISTÓRICO · MERCADO TRADICIONAL ★ VALLE DEL ALMANZORA ★ TU WEB, TU TALLER DIGITAL ★</span>
+            <span>★ PURCHENA · PUERTA DEL ALTO ALMANZORA ★ TALLER EL PIÑÓN · +20 AÑOS ★ MECÁNICA · ELECTRICIDAD · CHAPA ★ CASCO HISTÓRICO · MERCADO TRADICIONAL ★ VALLE DEL ALMANZORA ★ TU WEB, TU TALLER DIGITAL ★</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-iconos-section">
+      <div class="container-brutal">
+
+        <span class="text-meta pn-iconos-chapter">Cap. 02 / Prontuario</span>
+        <h2 class="pn-iconos-title heading-display">
+          Cuatro sellos de
+          <em class="heading-editorial">identidad</em>
+          <span class="heading-display-block">de Purchena.</span>
+        </h2>
+
+        <ol class="pn-iconos" style="counter-reset: iconos">
+          {iconos.map((ico, i) => (
+            <li class={`pn-icono pn-icono--${ico.color}`}>
+              <div class="pn-icono__code">
+                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                  <circle cx="40" cy="40" r="38" fill="var(--pn-ink)" stroke="var(--pn-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="2"/>
+                  {i === 0 && (
+                    <>
+                      <circle cx="30" cy="32" r="10" fill="var(--pn-green)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+                      <rect x="18" y="44" width="24" height="6" rx="1" fill="var(--pn-accent)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <rect x="26" y="34" width="8" height="10" fill="var(--pn-steel)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <line x1="30" y1="34" x2="30" y2="44" stroke="var(--pn-ink)" stroke-width="0.8"/>
+                    </>
+                  )}
+                  {i === 1 && (
+                    <>
+                      <rect x="22" y="22" width="14" height="22" rx="2" fill="var(--pn-stone)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+                      <polygon points="22,22 29,14 36,22" fill="var(--pn-accent)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+                      <rect x="26" y="30" width="6" height="6" fill="var(--pn-ink)"/>
+                      <rect x="26" y="40" width="6" height="4" fill="var(--pn-ink)"/>
+                    </>
+                  )}
+                  {i === 2 && (
+                    <>
+                      <circle cx="28" cy="32" r="6" fill="var(--pn-green)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <circle cx="48" cy="28" r="5" fill="var(--pn-accent)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <circle cx="40" cy="44" r="4.5" fill="var(--pn-steel)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <circle cx="52" cy="44" r="3.5" fill="var(--pn-green)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <path d="M 20 50 L 28 32 L 48 28 L 60 50 Z" fill="none" stroke="var(--pn-ink)" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.3"/>
+                    </>
+                  )}
+                  {i === 3 && (
+                    <>
+                      <rect x="20" y="30" width="40" height="18" rx="2" fill="var(--pn-green)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+                      <rect x="24" y="34" width="8" height="6" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <rect x="36" y="34" width="8" height="6" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <rect x="48" y="34" width="8" height="6" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1"/>
+                      <line x1="20" y1="44" x2="60" y2="44" stroke="var(--pn-ink)" stroke-width="0.8" opacity="0.5"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <span class="pn-icono__letter">{ico.code}</span>
+              <h3 class="pn-icono__name">{ico.name}</h3>
+              <span class="pn-icono__sub">{ico.sub}</span>
+              <p class="pn-icono__desc">{ico.desc}</p>
+              <span class="pn-icono__dato">{ico.dato}</span>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PURCHENA — FLAGSHIP SECTION                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-flagship-section">
+      <div class="container-brutal">
+        <div class="pn-flagship-grid">
+
+          <div class="pn-flagship__content">
+            <span class="text-meta pn-flagship-chapter">Cap. 03 / Identidad</span>
+            <h2 class="pn-flagship-title heading-display">
+              Donde la historia
+              <em class="heading-editorial">se encuentra</em>
+              <span class="heading-display-block">con el oficio.</span>
+            </h2>
+            <p class="pn-flagship-lead">
+              <strong>Purchena</strong> no es un pueblo de paso. Es destino:
+              su <em>casco histórico</em>, uno de los mejor conservados del
+              Almanzora, y su <strong>mercado de los martes</strong>, que
+              sigue siendo el corazón comercial de la comarca alta.
+            </p>
+            <p class="pn-flagship-lead">
+              Pero Purchena también es oficio. Aquí está
+              <strong>Taller Mecánico el Piñón</strong>, más de 20 años
+              reparando coches con mecánica honesta, presupuesto claro
+              y garantía escrita. Desde Purchena atienden a conductores
+              de todo el Alto Almanzora.
+            </p>
+
+            <ul class="pn-flagship-facts">
+              {processData.map(d => (
+                <li>
+                  <span class="pn-flagship-facts__k">{d.k}</span>
+                  <span class="pn-flagship-facts__v">{d.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* SVG decorativo — taller / montañas */}
+          <div class="pn-flagship__r">
+            <svg viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+              <defs>
+                <linearGradient id="pn-fs-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3A5A4A"/>
+                  <stop offset="60%" stop-color="#6B7B8D"/>
+                  <stop offset="100%" stop-color="#A8B8C8"/>
+                </linearGradient>
+                <linearGradient id="pn-metal-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#A0907A"/>
+                  <stop offset="30%" stop-color="#B8A898"/>
+                  <stop offset="60%" stop-color="#8A7A6A"/>
+                  <stop offset="100%" stop-color="#B8A898"/>
+                </linearGradient>
+              </defs>
+              <rect width="360" height="400" fill="url(#pn-fs-sky)" rx="8"/>
+
+              {/* Engranaje principal */}
+              <g transform="translate(280, 80)">
+                <circle cx="0" cy="0" r="28" fill="none" stroke="#C84A2E" stroke-width="3" stroke-dasharray="5 4"/>
+                <circle cx="0" cy="0" r="16" fill="#C84A2E" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="0" cy="0" r="7" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5"/>
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-3" y="-32" width="6" height="8" rx="1" fill="#C84A2E" stroke="#1A1816" stroke-width="1" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Llave inglesa grande */}
+              <g transform="translate(80, 100)">
+                <rect x="0" y="0" width="80" height="6" rx="2" fill="url(#pn-metal-grad)" stroke="#1A1816" stroke-width="2" transform="rotate(-20)"/>
+                <path d="M -10 -4 L -10 10 L -4 10 L -4 -4 Z" fill="url(#pn-metal-grad)" stroke="#1A1816" stroke-width="2"/>
+              </g>
+
+              {/* Tuerca hexagonal */}
+              <g transform="translate(150, 150)">
+                <polygon points="0,-16 14,-8 14,8 0,16 -14,8 -14,-8" fill="#A0907A" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="6" fill="#C84A2E" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Silueta coche */}
+              <g transform="translate(100, 240)">
+                <rect x="0" y="10" width="50" height="18" rx="3" fill="#4A3A2A" stroke="#1A1816" stroke-width="2"/>
+                <rect x="30" y="0" width="20" height="12" rx="2" fill="#3A5A4A" stroke="#1A1816" stroke-width="1.5"/>
+                <circle cx="10" cy="30" r="6" fill="#1A1816"/>
+                <circle cx="40" cy="30" r="6" fill="#1A1816"/>
+                <rect x="8" y="6" width="10" height="6" fill="#6B7B8D" stroke="#1A1816" stroke-width="1"/>
+              </g>
+
+              {/* Partículas / chispas */}
+              <circle cx="120" cy="280" r="2" fill="#C84A2E" opacity="0.4"/>
+              <circle cx="160" cy="270" r="1.5" fill="#C84A2E" opacity="0.3"/>
+              <circle cx="200" cy="285" r="2.5" fill="#C84A2E" opacity="0.25"/>
+              <circle cx="240" cy="275" r="1.5" fill="#C84A2E" opacity="0.35"/>
+              <circle cx="280" cy="282" r="2" fill="#C84A2E" opacity="0.2"/>
+
+              {/* Suelo */}
+              <path d="M 0 320 Q 80 310 180 320 T 360 320 L 360 400 L 0 400 Z" fill="#4A3A2A" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Texto */}
+              <text x="180" y="385" text-anchor="middle" fill="#F5F0E8" opacity="0.25" font-family="monospace" font-size="9" letter-spacing="3">PURCHENA · ALTO ALMANZORA</text>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* EL PIÑÓN — CASO DE ÉXITO                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-pinon-section" id="pinon">
+      <div class="container-brutal">
+
+        <div class="pn-pinon-grid">
+
+          <div class="pn-pinon__content">
+            <span class="text-meta pn-pinon-chapter">Cap. 04 / Caso de éxito</span>
+            <h2 class="pn-pinon-title heading-display">
+              Taller El Piñón:
+              <em class="heading-editorial">de Purchena</em>
+              <span class="heading-display-block">a toda la comarca.</span>
+            </h2>
+
+            <p class="pn-pinon-lead">
+              <strong>Taller Mecánico el Piñón</strong> es un taller familiar de
+              Purchena con <em>más de 20 años de experiencia</em> en mecánica
+              general, electricidad automotriz, chapa y pintura, diagnóstico
+              avanzado y mantenimiento. Con repuestos de calidad y la
+              honestidad como herramienta principal.
+            </p>
+
+            <p class="pn-pinon-lead">
+              Su web, diseñada y desarrollada por nosotros, les ha permitido
+              pasar del boca-oreja a <strong>captar clientes en toda la comarca alta</strong>
+              del Almanzora. Con páginas por servicio, presupuesto online,
+              testimonios reales y un diseño que transmite la confianza
+              de más de dos décadas de oficio.
+            </p>
+
+            <div class="pn-pinon-stats">
+              <div class="pn-pinon-stat">
+                <span class="pn-pinon-stat__v">20+</span>
+                <span class="pn-pinon-stat__l">Años de experiencia</span>
+              </div>
+              <div class="pn-pinon-stat">
+                <span class="pn-pinon-stat__v">4.9</span>
+                <span class="pn-pinon-stat__l">Valoración media</span>
+              </div>
+              <div class="pn-pinon-stat">
+                <span class="pn-pinon-stat__v">500+</span>
+                <span class="pn-pinon-stat__l">Clientes atendidos</span>
+              </div>
+              <div class="pn-pinon-stat">
+                <span class="pn-pinon-stat__v">24h</span>
+                <span class="pn-pinon-stat__l">Presupuesto</span>
+              </div>
+            </div>
+
+            <a href="https://tallerelpinon.com/" target="_blank" rel="noopener" class="pn-btn pn-btn--primary" style="margin-top:1rem;">
+              <span>Ver web de El Piñón →</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          {/* SVG decorativo — taller / herramientas */}
+          <div class="pn-pinon__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="pn-pinon-svg">
+              <defs>
+                <radialGradient id="pn-pinon-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#C84A2E" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#C84A2E" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#pn-pinon-glow)"/>
+
+              {/* Círculo exterior graduado */}
+              <circle cx="170" cy="170" r="130" fill="none" stroke="#C84A2E" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+              <circle cx="170" cy="170" r="120" fill="none" stroke="#3A5A4A" stroke-width="1" stroke-dasharray="2 4" opacity="0.2"/>
+
+              {/* Engranaje central */}
+              <g transform="translate(170, 150)" class="pn-pinon-gear">
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#C84A2E" stroke-width="2" stroke-dasharray="6 4"/>
+                <circle cx="0" cy="0" r="38" fill="none" stroke="#3A5A4A" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="20" fill="none" stroke="#C84A2E" stroke-width="2"/>
+                <circle cx="0" cy="0" r="10" fill="#C84A2E" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="0" cy="0" r="4" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5"/>
+                {[0,30,60,90,120,150,180,210,240,270,300,330].map(a => (
+                  <rect key={a} x="-3" y="-55" width="6" height="10" rx="1" fill="#C84A2E" stroke="#1A1816" stroke-width="1" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Llave inglesa */}
+              <g transform="translate(80, 220) rotate(-30)">
+                <rect x="0" y="0" width="50" height="5" rx="1.5" fill="#A0907A" stroke="#1A1816" stroke-width="1.5"/>
+                <circle cx="0" cy="2.5" r="6" fill="none" stroke="#C84A2E" stroke-width="2"/>
+              </g>
+
+              {/* Tuerca */}
+              <g transform="translate(250, 240)">
+                <polygon points="0,-10 9,-5 9,5 0,10 -9,5 -9,-5" fill="#A0907A" stroke="#1A1816" stroke-width="1.5"/>
+                <circle cx="0" cy="0" r="3" fill="#C84A2E"/>
+              </g>
+
+              {/* Estrella / sello */}
+              <g transform="translate(100, 100)">
+                <polygon points="0,-15 5,-5 15,-5 7,2 10,14 0,8 -10,14 -7,2 -15,-5 -5,-5" fill="#3A5A4A" stroke="#1A1816" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="0" cy="3" r="2.5" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+              </g>
+
+              {/* Chispas */}
+              <circle cx="130" cy="180" r="3" fill="#C84A2E" opacity="0.4"/>
+              <circle cx="200" cy="170" r="2" fill="#C84A2E" opacity="0.3"/>
+              <circle cx="220" cy="190" r="2.5" fill="#C84A2E" opacity="0.25"/>
+              <circle cx="150" cy="200" r="2" fill="#C84A2E" opacity="0.35"/>
+
+              {/* Logo */}
+              <text x="170" y="310" text-anchor="middle" fill="#F5F0E8" opacity="0.15" font-family="monospace" font-size="14" font-weight="800" letter-spacing="4">EL PIÑÓN</text>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-sec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta pn-sec-chapter">Cap. 05 / Oportunidades</span>
+        <h2 class="pn-sec-title heading-display">
+          Seis sectores para
+          <em class="heading-editorial">construir</em>
+          <span class="heading-display-block">tu presencia digital.</span>
+        </h2>
+
+        <ul class="pn-sec">
+          {sectores.map((s, i) => (
+            <li class={`pn-sec__card pn-sec__card--${['accent','green','steel','ink','stone','green2'][i]}`}>
+              <div class="pn-sec__head">
+                <span class="pn-sec__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                <div class="pn-sec__stat-box">
+                  <span class="pn-sec__stat-v">{s.stat}</span>
+                  <span class="pn-sec__stat-l">{s.statLabel}</span>
+                </div>
+              </div>
+              <h3 class="pn-sec__title">{s.nombre}</h3>
+              <p class="pn-sec__desc">{s.desc}</p>
+              <ul class="pn-sec__tags">
+                {s.tags.map(tag => (
+                  <li class="pn-sec__tag"><span>▸</span> {tag}</li>
+                ))}
+              </ul>
+              <div class="pn-sec__foot">
+                <a href="/contacto" class="pn-sec__cta">Solicitar información →</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-map-section">
+      <div class="container-brutal">
+        <div class="pn-map-head">
+          <div class="pn-map-head__inner">
+            <div>
+              <span class="text-meta pn-map-chapter">Cap. 06 / Cartografía</span>
+              <h2 class="pn-map-title heading-display">
+                Purchena en el
+                <em class="heading-editorial">mapa.</em>
+              </h2>
+            </div>
+            <div class="pn-map-coords">
+              <span class="text-mono">37.327° N · 2.092° W</span>
+              <span class="text-mono">04870 · Purchena · Valle del Almanzora</span>
+              <span class="text-mono">Altitud: 560 m · Hub: Alto Almanzora</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pn-map-frame">
+        <div class="pn-map-icon pn-map-icon--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <circle cx="30" cy="30" r="20" fill="var(--pn-green)" stroke="var(--pn-ink)" stroke-width="2"/>
+            <circle cx="20" cy="28" r="6" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+            <circle cx="40" cy="28" r="6" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+            <rect x="22" y="24" width="16" height="4" rx="1" fill="var(--pn-accent)" stroke="var(--pn-ink)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="pn-map-icon pn-map-icon--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <rect x="12" y="18" width="36" height="28" rx="3" fill="var(--pn-steel)" stroke="var(--pn-ink)" stroke-width="2"/>
+            <rect x="16" y="22" width="12" height="10" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+            <rect x="32" y="22" width="12" height="16" fill="var(--pn-paper)" stroke="var(--pn-ink)" stroke-width="1.5"/>
+            <rect x="12" y="18" width="36" height="4" fill="var(--pn-accent)" stroke="var(--pn-ink)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="pn-map-wrap">
+          <InteractiveMap
+            center={[-2.0917, 37.3267]}
+            zoom={11}
+            pueblos={[
+              { slug: "purchena", nombre: "Purchena", poblacion: 2000, descripcion: "Centro histórico y hub de servicios del Alto Almanzora", destacado: true, coords: [-2.0917, 37.3267] },
+              { slug: "tijola", nombre: "Tíjola", poblacion: 4500, descripcion: "Pueblo agrícola del Almanzora", coords: [-2.4433, 37.3517] },
+              { slug: "seron", nombre: "Serón", poblacion: 3500, descripcion: "Puerta de la Sierra de las Estancias", coords: [-2.5167, 37.3500] },
+              { slug: "albox", nombre: "Albox", poblacion: 12000, descripcion: "Capital comercial del Almanzora", coords: [-2.1433, 37.3833] },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta pn-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="pn-dif-title heading-display">
+          Por qué Purchena
+          <em class="heading-editorial">marca la diferencia</em>
+          <span class="heading-display-block">en el Almanzora.</span>
+        </h2>
+
+        <ol class="pn-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`pn-dif__item pn-dif__item--${i}`}>
+              <span class="pn-dif__num text-mono">{String(i+1).padStart(2,'0')}</span>
+              <h3 class="pn-dif__t">{d.title}</h3>
+              <p class="pn-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-proc-section">
+      <div class="container-brutal">
+
+        <span class="text-meta pn-proc-chapter">Cap. 08 / Método</span>
+        <h2 class="pn-proc-title heading-display">
+          Así trabajamos
+          <em class="heading-editorial">en</em>
+          <span class="heading-display-block">el taller digital.</span>
+        </h2>
+
+        <ol class="pn-proc">
+          {proceso.map(p => (
+            <li class="pn-proc__step">
+              <div class="pn-proc__head">
+                <span class="pn-proc__num">{p.num}</span>
+                <span class="pn-proc__eta">{p.eta}</span>
+              </div>
+              <h3 class="pn-proc__t">{p.title}</h3>
+              <p class="pn-proc__body">{p.body}</p>
+              <div class="pn-proc__foot">{p.deliverable}</div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS — 3                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-quote-section">
+      <div class="container-brutal">
+
+        <span class="text-meta pn-quote-chapter">Cap. 09 / Resultados</span>
+        <h2 class="pn-quote-title heading-display">
+          Lo que dicen
+          <em class="heading-editorial">los que</em>
+          <span class="heading-display-block">ya confían en el taller digital.</span>
+        </h2>
+
+        {testimonios.length > 0 && (
+          <figure class="pn-pull">
+            <div class="pn-pull__seal" aria-hidden="true">
+              <svg viewBox="0 0 90 90" width="100%" height="100%" class="pn-pull__spin">
+                <circle cx="45" cy="45" r="43" fill="#C84A2E" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="45" cy="45" r="38" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2.5 2"/>
+                <g transform="translate(45,45)">
+                  <rect x="-16" y="-2" width="32" height="4" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <rect x="-2" y="-16" width="4" height="32" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <rect x="-14" y="-14" width="5" height="5" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1" transform="rotate(45)"/>
+                  <rect x="9" y="-14" width="5" height="5" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1" transform="rotate(45)"/>
+                  <circle cx="0" cy="0" r="5" fill="#C84A2E" stroke="#1A1816" stroke-width="1.5"/>
+                </g>
+                <text x="45" y="72" text-anchor="middle" fill="#F5F0E8" font-size="7" font-weight="800" font-family="monospace" letter-spacing="1">PURCHENA</text>
+              </svg>
+            </div>
+            <blockquote class="pn-pull__q">
+              "{testimonios[0].texto}"
+            </blockquote>
+            <figcaption class="pn-pull__cap">
+              <div class="pn-pull__avatar">
+                {testimonios[0].nombre.charAt(0)}
+              </div>
+              <div>
+                <span class="pn-pull__name">{testimonios[0].nombre}</span>
+                <span class="pn-pull__role">{testimonios[0].negocio}</span>
+              </div>
+            </figcaption>
+          </figure>
+        )}
+
+        {testimonios.length > 1 && (
+          <ul class="pn-quotes">
+            {testimonios.slice(1).map((t, i) => (
+              <li class={`pn-quote pn-quote--${i}`}>
+                <span class="pn-quote__mark" aria-hidden="true">&ldquo;</span>
+                <p>{t.texto}</p>
+                <footer>
+                  <div class="pn-quote__avatar">{t.nombre.charAt(0)}</div>
+                  <div>
+                    <span class="pn-quote__name">{t.nombre}</span>
+                    <span class="pn-quote__role">{t.negocio}</span>
+                  </div>
+                </footer>
+              </li>
+            ))}
+          </ul>
+        )}
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-faq-section">
+      <div class="container-brutal">
+
+        <span class="text-meta pn-faq-chapter">Cap. 10 / FAQ</span>
+        <h2 class="pn-faq-title heading-display">
+          Respuestas para
+          <em class="heading-editorial">la mecánica</em>
+          <span class="heading-display-block">de tus dudas.</span>
+        </h2>
+
+        <dl class="pn-faq">
+          {faq.map((f, i) => (
+            <div class="pn-faq__item">
+              <details class="pn-faq__det" open={i === 0}>
+                <summary>
+                  <div class="pn-faq__sum">
+                    <span class="pn-faq__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                    <span class="pn-faq__q">{f.q}</span>
+                    <span class="pn-faq__toggle" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </summary>
+                <div class="pn-faq__ans">
+                  {f.a}
+                </div>
+              </details>
+            </div>
+          ))}
+        </dl>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosAlmanzora.length > 0 && (
+      <section class="pn-vecinos-section">
+        <div class="container-brutal">
+
+          <span class="text-meta pn-vecinos-chapter">Cap. 11 / Comarca</span>
+          <h2 class="pn-vecinos-title heading-display">
+            Valle del Almanzora
+            <em class="heading-editorial">al completo.</em>
+          </h2>
+
+          <ul class="pn-vecinos">
+            {pueblosAlmanzora.slice(0, 8).map((p, i) => (
+              <a href={`/diseno-web/${p.slug}/`} class={`pn-vecino pn-vecino--${i}`} key={p.slug}>
+                <span class="pn-vecino__n">{String(i+1).padStart(2,'0')}</span>
+                <span class="pn-vecino__name">{p.nombre}</span>
+                <span class="pn-vecino__sub">{p.descripcion}</span>
+                <span class="pn-vecino__arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </ul>
+
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="pn-final">
+      <div class="container-brutal">
+        <div class="pn-final__grid">
+
+          <div>
+            <span class="text-meta pn-final-chapter">Cap. 12 / Acción</span>
+            <h2 class="pn-final__title heading-display">
+              Tu web
+              <em>en marcha.</em>
+            </h2>
+            <p class="pn-final__lead">
+              <strong>Purchena</strong> es historia, oficio y comarca.
+              Tu negocio merece una web que transmita esa solidez.
+              Como la de <strong>Taller El Piñón.</strong>
+              <strong>Sin plantillas. Con resultados. Con mecánica propia.</strong>
+            </p>
+
+            <div class="pn-final__cta">
+              <a href="/contacto" class="pn-final__btn pn-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="pn-final__btn pn-final__btn--ghost">
+                ☎ 657 085 019
+              </a>
+            </div>
+
+            <div class="pn-final__trust">
+              <span><span class="pn-pulse"></span> ACEPTANDO PROYECTOS 2026</span>
+              <span>★ DISEÑO + SEO + HOSTING</span>
+              <span>★ 4.9 ★ 50 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* SVG — engranaje / herramientas */}
+          <div class="pn-final__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="pn-final-svg">
+              <defs>
+                <radialGradient id="pn-final-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#3A5A4A" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#3A5A4A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#pn-final-glow)"/>
+
+              {/* Engranaje grande central */}
+              <g transform="translate(170, 170)" class="pn-final-gear">
+                <circle cx="0" cy="0" r="70" fill="none" stroke="#3A5A4A" stroke-width="2" stroke-dasharray="8 6"/>
+                <circle cx="0" cy="0" r="60" fill="none" stroke="#C84A2E" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#6B7B8D" stroke-width="3" stroke-dasharray="12 6"/>
+                <circle cx="0" cy="0" r="32" fill="none" stroke="#3A5A4A" stroke-width="2"/>
+                <circle cx="0" cy="0" r="18" fill="#C84A2E" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="7" fill="#F5F0E8" stroke="#1A1816" stroke-width="2"/>
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-4" y="-76" width="8" height="12" rx="1" fill="#3A5A4A" stroke="#1A1816" stroke-width="1.5" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Herramientas */}
+              <g transform="translate(80, 250)">
+                <rect x="0" y="0" width="20" height="4" rx="1" fill="#A0907A" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M 0 0 L 0 8 L -4 8 L -4 0 Z" fill="#A0907A" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              <g transform="translate(220, 250)">
+                <rect x="0" y="0" width="18" height="4" rx="1" fill="#B8A898" stroke="#1A1816" stroke-width="1.5"/>
+                <circle cx="18" cy="2" r="4" fill="none" stroke="#C84A2E" stroke-width="1.5"/>
+              </g>
+
+              {/* Partículas */}
+              <circle cx="100" cy="120" r="2" fill="#C84A2E" opacity="0.3"/>
+              <circle cx="230" cy="100" r="2.5" fill="#3A5A4A" opacity="0.25"/>
+              <circle cx="80" cy="200" r="1.5" fill="#C84A2E" opacity="0.2"/>
+
+              <text x="170" y="320" text-anchor="middle" fill="#F5F0E8" opacity="0.12" font-family="monospace" font-size="12" font-weight="800" letter-spacing="4">PURCHENA</text>
+            </svg>
+          </div>
+
+        </div>
+
+        <div class="pn-final__marquee">
+          <div class="pn-final__marquee-track">
+            <span>★ PURCHENA · DISEÑO WEB PARA LA COMARCA ALTA ★ TALLERES · TURISMO · SERVICIOS ★ TALLER EL PIÑÓN · CASO DE ÉXITO ★ HABLAMOS?</span>
+            <span>★ PURCHENA · DISEÑO WEB PARA LA COMARCA ALTA ★ TALLERES · TURISMO · SERVICIOS ★ TALLER EL PIÑÓN · CASO DE ÉXITO ★ HABLAMOS?</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* PURCHENA DESIGN SYSTEM                           */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --pn-paper:    #F5F0E8;
+    --pn-paper-2:  #E8E0D0;
+    --pn-stone:    #8A9BA8;
+    --pn-ink:      #1A1816;
+    --pn-green:    #3A7A5A;
+    --pn-green2:   #5A8B6A;
+    --pn-accent:   #C84A2E;
+    --pn-steel:    #6B7B8D;
+    --pn-shadow:   8px 8px 0 var(--pn-ink);
+  }
+
+  .pn-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--pn-accent);
+    box-shadow: 0 0 0 0 rgba(200,74,46,0.55);
+    animation: pn-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes pn-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(200,74,46,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(200,74,46,0); }
+    100% { box-shadow: 0 0 0 0 rgba(200,74,46,0); }
+  }
+  .pn-pull__spin { transform-origin: 50% 50%; animation: pn-spin 24s linear infinite; }
+  @keyframes pn-spin { to { transform: rotate(360deg); } }
+  .pn-final-gear { transform-origin: 50% 50%; animation: pn-gear-spin 20s linear infinite; }
+  @keyframes pn-gear-spin { to { transform: rotate(360deg); } }
+  .pn-pinon-svg .pn-pinon-gear { transform-origin: 50% 50%; animation: pn-gear-spin 18s linear infinite; }
+
+  /* HERO */
+  .pn-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 65% 30%, rgba(200,74,46,0.08), transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(58,122,90,0.08), transparent 50%),
+      var(--pn-paper);
+    border-bottom: 3px solid var(--pn-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .pn-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 0 22px, rgba(200,74,46,0.05) 22px 23px, transparent 23px 44px),
+      linear-gradient(-45deg, transparent 0 22px, rgba(200,74,46,0.05) 22px 23px, transparent 23px 44px);
+    pointer-events: none;
+  }
+  .pn-hero > * { position: relative; }
+  .pn-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .pn-hero__status { color: var(--pn-accent); font-weight: 700; }
+  .pn-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .pn-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .pn-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .pn-hero__chapter { color: var(--pn-green); }
+  .pn-hero__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .92; letter-spacing: -.04em; margin: .25rem 0; }
+  .pn-hero__title em { color: var(--pn-green); font-style: italic; }
+  .pn-hero__title-stamp { display: inline-block; color: var(--pn-paper); background: var(--pn-accent); padding: 0 .2em; transform: rotate(-1deg); }
+  .pn-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .pn-hero__lead strong { color: var(--pn-ink); font-weight: 700; }
+  .pn-hero__lead em { color: var(--pn-accent); font-style: italic; font-weight: 600; }
+  .pn-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .pn-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--pn-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .pn-btn--primary { background: var(--pn-accent); color: var(--pn-paper); box-shadow: 6px 6px 0 var(--pn-ink); }
+  .pn-btn--primary:hover { background: var(--pn-green); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pn-ink); }
+  .pn-btn--ghost { background: transparent; color: var(--pn-ink); box-shadow: 6px 6px 0 var(--pn-steel); }
+  .pn-btn--ghost:hover { background: var(--pn-ink); color: var(--pn-paper); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pn-steel); }
+
+  /* KPIs */
+  .pn-kpis { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 1.5rem; border: 2.5px solid var(--pn-ink); background: var(--pn-ink); }
+  @media (min-width: 768px) { .pn-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .pn-kpi { background: var(--pn-paper); padding: 1.25rem; display: flex; flex-direction: column; gap: .35rem; border-right: 2px solid var(--pn-ink); border-bottom: 2px solid var(--pn-ink); }
+  .pn-kpi:nth-child(2n) { border-right: none; }
+  .pn-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .pn-kpi:nth-child(2n)       { border-right: 2px solid var(--pn-ink); }
+    .pn-kpi:nth-child(4n)       { border-right: none; }
+    .pn-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--pn-ink); }
+    .pn-kpi:nth-last-child(-n+4)  { border-bottom: none; }
+  }
+  .pn-kpi--green  { background: var(--pn-green); color: var(--pn-paper); }
+  .pn-kpi--accent { background: var(--pn-accent); color: var(--pn-paper); }
+  .pn-kpi--steel  { background: var(--pn-steel); color: var(--pn-paper); }
+  .pn-kpi--ink    { background: var(--pn-ink); color: var(--pn-paper); }
+  .pn-kpi--ink .pn-kpi__v { color: var(--pn-accent); }
+  .pn-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .pn-kpi__v small { font-size: .55em; opacity: .8; }
+  .pn-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .pn-hero__postcard { width: 100%; max-width: 540px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(26,24,22,0.18)); }
+  .pn-postcard { background: var(--pn-paper); border: 3px solid var(--pn-ink); box-shadow: var(--pn-shadow); overflow: hidden; transform: rotate(-1deg); transition: transform .35s; }
+  .pn-postcard:hover { transform: rotate(0); }
+  .pn-postcard__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .65rem 1rem; background: var(--pn-ink); color: var(--pn-paper); font-size: .58rem; letter-spacing: .15em; border-bottom: 2px solid var(--pn-ink); }
+  .pn-postcard__profile { width: 100%; aspect-ratio: 540 / 220; border-bottom: 2px solid var(--pn-ink); overflow: hidden; }
+  .pn-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--pn-ink); }
+  .pn-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.1); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .pn-postcard:hover .pn-postcard__img { transform: scale(1.05); }
+  .pn-postcard__gear { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(10deg); filter: drop-shadow(0 4px 10px rgba(200,74,46,0.5)); }
+  .pn-postcard__tag { position: absolute; bottom: 12px; left: 12px; background: var(--pn-paper); color: var(--pn-ink); padding: .4rem .75rem; font-size: .65rem; font-weight: 800; letter-spacing: .2em; border: 2px solid var(--pn-ink); box-shadow: 3px 3px 0 var(--pn-accent); transform: rotate(-2deg); }
+  .pn-postcard__data { padding: 1rem 1.25rem; background: var(--pn-paper-2); display: grid; gap: .35rem; }
+  .pn-postcard__data-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 1px dashed rgba(26,24,22,0.15); font-size: .68rem; }
+  .pn-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .pn-postcard__data-row > span:first-child { color: var(--pn-green); letter-spacing: .2em; font-weight: 800; }
+  .pn-postcard__data-v { color: var(--pn-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .pn-marquee { background: var(--pn-ink); color: var(--pn-accent); overflow: hidden; padding: .9rem 0; border-top: 3px solid var(--pn-ink); }
+  .pn-marquee__track { display: flex; gap: 3rem; width: max-content; animation: pn-marquee 42s linear infinite; font-family: var(--font-mono); font-size: .82rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+  @keyframes pn-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ICONOS */
+  .pn-iconos-section { background: var(--pn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); position: relative; overflow: hidden; }
+  .pn-iconos-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,74,46,0.04) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .pn-iconos-section > * { position: relative; }
+  .pn-iconos-chapter { color: var(--pn-steel); }
+  .pn-iconos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-iconos-title em { color: var(--pn-accent); }
+  .pn-iconos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 640px)  { .pn-iconos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .pn-iconos { grid-template-columns: repeat(4, 1fr); } }
+  .pn-icono { display: flex; flex-direction: column; gap: .5rem; padding: 2rem 1.5rem; background: var(--pn-paper); border: 2.5px solid var(--pn-ink); box-shadow: var(--pn-shadow); align-items: center; text-align: center; transition: transform .25s, box-shadow .25s; }
+  .pn-icono:hover { transform: translate(-4px, -4px); }
+  .pn-icono--accent:hover  { box-shadow: 12px 12px 0 var(--pn-accent); }
+  .pn-icono--green:hover   { box-shadow: 12px 12px 0 var(--pn-green); }
+  .pn-icono--steel:hover   { box-shadow: 12px 12px 0 var(--pn-steel); }
+  .pn-icono--ink:hover     { box-shadow: 12px 12px 0 var(--pn-ink); }
+  .pn-icono__code { width: 80px; height: 80px; flex-shrink: 0; }
+  .pn-icono__letter { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--pn-accent); }
+  .pn-icono--green .pn-icono__letter  { color: var(--pn-green); }
+  .pn-icono--steel .pn-icono__letter  { color: var(--pn-steel); }
+  .pn-icono--ink .pn-icono__letter    { color: var(--pn-ink); }
+  .pn-icono__name { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1; letter-spacing: -.025em; color: var(--pn-ink); margin: 0; }
+  .pn-icono__sub { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .2em; color: var(--pn-accent); font-weight: 800; }
+  .pn-icono--green .pn-icono__sub { color: var(--pn-green); }
+  .pn-icono--steel .pn-icono__sub  { color: var(--pn-steel); }
+  .pn-icono--ink .pn-icono__sub    { color: var(--pn-ink); }
+  .pn-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
+  .pn-icono__dato { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--pn-ink); border-top: 2px dashed var(--pn-ink); padding-top: .5rem; width: 100%; }
+
+  /* FLAGSHIP */
+  .pn-flagship-section { background: var(--pn-stone); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); position: relative; overflow: hidden; }
+  .pn-flagship-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(58,122,90,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .pn-flagship-section > * { position: relative; }
+  .pn-flagship-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .pn-flagship-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .pn-flagship-chapter { color: var(--pn-green); }
+  .pn-flagship-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-flagship-title em { color: var(--pn-green); }
+  .pn-flagship-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .pn-flagship-lead strong { color: var(--pn-accent); font-weight: 800; }
+  .pn-flagship-lead em { color: var(--pn-ink); font-style: italic; }
+  .pn-flagship-facts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--pn-ink); background: var(--pn-paper); }
+  @media (min-width: 640px) { .pn-flagship-facts { grid-template-columns: 1fr 1fr; } }
+  .pn-flagship-facts li { padding: .75rem 1rem; border-bottom: 1px solid var(--pn-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) { .pn-flagship-facts li:nth-child(odd) { border-right: 1px solid var(--pn-ink); } .pn-flagship-facts li:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 639px) { .pn-flagship-facts li:last-child { border-bottom: none; } }
+  .pn-flagship-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--pn-green); font-weight: 800; }
+  .pn-flagship-facts__v { font-size: .9rem; color: var(--pn-ink); font-weight: 600; line-height: 1.35; }
+  .pn-flagship__r { width: 100%; max-width: 360px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3)); }
+
+  /* EL PIÑÓN */
+  .pn-pinon-section { background: var(--pn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); position: relative; overflow: hidden; }
+  .pn-pinon-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,74,46,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .pn-pinon-section > * { position: relative; }
+  .pn-pinon-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .pn-pinon-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .pn-pinon-chapter { color: var(--pn-accent); }
+  .pn-pinon-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-pinon-title em { color: var(--pn-accent); }
+  .pn-pinon-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .pn-pinon-lead strong { color: var(--pn-ink); font-weight: 700; }
+  .pn-pinon-lead em { color: var(--pn-accent); font-style: italic; font-weight: 600; }
+  .pn-pinon-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.5rem; }
+  .pn-pinon-stat { background: var(--pn-paper-2); border: 2px solid var(--pn-ink); padding: 1rem; display: flex; flex-direction: column; gap: .25rem; text-align: center; }
+  .pn-pinon-stat__v { font-size: 1.65rem; font-weight: 800; color: var(--pn-accent); line-height: 1; }
+  .pn-pinon-stat__l { font-family: var(--font-mono); font-size: .55rem; text-transform: uppercase; letter-spacing: .12em; opacity: .75; }
+  .pn-pinon__r { max-width: 340px; margin: 0 auto; }
+  .pn-pinon-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(200,74,46,0.18)); }
+
+  /* SECTORES */
+  .pn-sec-section { background: var(--pn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); }
+  .pn-sec-chapter { color: var(--pn-steel); }
+  .pn-sec-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-sec-title em { color: var(--pn-accent); }
+  .pn-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .pn-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .pn-sec { grid-template-columns: repeat(3, 1fr); } }
+  .pn-sec__card { background: var(--pn-paper); border: 2.5px solid var(--pn-ink); box-shadow: var(--pn-shadow); padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; transition: transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
+  .pn-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .pn-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .pn-sec__card--accent { color: var(--pn-accent); }
+  .pn-sec__card--green   { color: var(--pn-green); }
+  .pn-sec__card--steel   { color: var(--pn-steel); }
+  .pn-sec__card--ink     { color: var(--pn-ink); }
+  .pn-sec__card--stone   { color: var(--pn-stone); }
+  .pn-sec__card--green2  { color: var(--pn-green2); }
+  .pn-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .pn-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .pn-sec__stat-box { background: var(--pn-ink); color: var(--pn-paper); padding: .35rem .65rem; display: flex; flex-direction: column; border: 1.5px solid currentColor; text-align: right; }
+  .pn-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .pn-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .pn-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--pn-ink); margin: 0; }
+  .pn-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .pn-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .pn-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--pn-ink); }
+  .pn-sec__tag span { color: currentColor; font-weight: 800; }
+  .pn-sec__foot { padding-top: .65rem; border-top: 2px solid var(--pn-ink); }
+  .pn-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .pn-map-section { background: var(--pn-stone); border-bottom: 3px solid var(--pn-ink); }
+  .pn-map-head { padding: 4rem 0 2rem; }
+  .pn-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .pn-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .pn-map-chapter { color: var(--pn-green); }
+  .pn-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .pn-map-title em { color: var(--pn-green); }
+  .pn-map-coords { background: var(--pn-accent); color: var(--pn-paper); padding: 1rem 1.25rem; border: 2px solid var(--pn-ink); box-shadow: 5px 5px 0 var(--pn-ink); display: flex; flex-direction: column; gap: .35rem; font-size: .7rem; letter-spacing: .15em; }
+  .pn-map-frame { position: relative; border-top: 3px solid var(--pn-ink); border-bottom: 3px solid var(--pn-ink); background: var(--pn-ink); }
+  .pn-map-icon { position: absolute; width: 60px; height: 60px; z-index: 5; pointer-events: none; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); opacity: 0.85; }
+  .pn-map-icon--tl { top: 16px; left: 16px; }
+  .pn-map-icon--br { bottom: 16px; right: 16px; }
+  .pn-map-wrap { width: 100%; height: clamp(420px, 60vh, 600px); overflow: hidden; }
+  .pn-map-wrap > * { width: 100%; height: 100%; }
+
+  /* DIFERENCIALES */
+  .pn-dif-section { background: var(--pn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); }
+  .pn-dif-chapter { color: var(--pn-green); }
+  .pn-dif-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-dif-title em { color: var(--pn-accent); }
+  .pn-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--pn-ink); }
+  @media (min-width: 768px) { .pn-dif { grid-template-columns: 1fr 1fr; } }
+  .pn-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--pn-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) { .pn-dif__item:nth-child(odd) { border-right: 1px solid var(--pn-ink); } .pn-dif__item:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 767px) { .pn-dif__item:last-child { border-bottom: none; } }
+  .pn-dif__item--0 { background: var(--pn-paper-2); }
+  .pn-dif__item--1 { background: var(--pn-paper); }
+  .pn-dif__item--2 { background: var(--pn-stone); }
+  .pn-dif__item--3 { background: var(--pn-paper); }
+  .pn-dif__item:hover { background: var(--pn-green); }
+  .pn-dif__num { font-size: .85rem; color: var(--pn-accent); font-weight: 800; letter-spacing: .15em; }
+  .pn-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--pn-ink); margin: 0; }
+  .pn-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .pn-proc-section { background: var(--pn-ink); color: var(--pn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); position: relative; overflow: hidden; }
+  .pn-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,74,46,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .pn-proc-section > * { position: relative; }
+  .pn-proc-chapter { color: var(--pn-green); }
+  .pn-proc-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-proc-title em { color: var(--pn-accent); }
+  .pn-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .pn-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .pn-proc { grid-template-columns: repeat(4, 1fr); } }
+  .pn-proc__step { background: rgba(245,240,232,0.05); border: 2px solid var(--pn-paper); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; transition: background .25s, transform .25s; }
+  .pn-proc__step:hover { background: rgba(200,74,46,0.12); transform: translateY(-3px); }
+  .pn-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(245,240,232,0.25); }
+  .pn-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--pn-green); line-height: 1; }
+  .pn-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--pn-accent); }
+  .pn-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--pn-paper); margin: .25rem 0 0; }
+  .pn-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(245,240,232,0.75); flex: 1; }
+  .pn-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--pn-green); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(245,240,232,0.25); }
+
+  /* TESTIMONIOS */
+  .pn-quote-section { background: var(--pn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); }
+  .pn-quote-chapter { color: var(--pn-steel); }
+  .pn-quote-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-quote-title em { color: var(--pn-accent); }
+  .pn-pull { position: relative; background: var(--pn-stone); border: 3px solid var(--pn-ink); box-shadow: var(--pn-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .pn-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-10deg); filter: drop-shadow(0 4px 8px rgba(200,74,46,0.4)); }
+  .pn-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--pn-ink); max-width: 56ch; }
+  .pn-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--pn-ink); }
+  .pn-pull__avatar { width: 48px; height: 48px; background: var(--pn-accent); color: var(--pn-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .pn-pull__cap div { display: flex; flex-direction: column; }
+  .pn-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--pn-ink); }
+  .pn-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .pn-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .pn-quotes { grid-template-columns: repeat(2, 1fr); } }
+  .pn-quote { position: relative; background: var(--pn-paper); border: 2px solid var(--pn-ink); box-shadow: 5px 5px 0 var(--pn-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .pn-quote:hover { transform: translateY(-3px); }
+  .pn-quote--0 { background: var(--pn-paper); }
+  .pn-quote--1 { background: var(--pn-stone); }
+  .pn-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--pn-accent); opacity: .45; }
+  .pn-quote p { font-size: .92rem; line-height: 1.5; color: var(--pn-ink); flex: 1; margin: 0; }
+  .pn-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--pn-ink); }
+  .pn-quote__avatar { width: 36px; height: 36px; background: var(--pn-green); color: var(--pn-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .pn-quote footer div { display: flex; flex-direction: column; }
+  .pn-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .pn-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .pn-faq-section { background: var(--pn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); }
+  .pn-faq-chapter { color: var(--pn-steel); }
+  .pn-faq-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-faq-title em { color: var(--pn-accent); }
+  .pn-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--pn-ink); }
+  .pn-faq__item { border-bottom: 2px solid var(--pn-ink); }
+  .pn-faq__det summary { list-style: none; cursor: pointer; }
+  .pn-faq__det summary::-webkit-details-marker { display: none; }
+  .pn-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .pn-faq__sum:hover { padding-inline: 1rem; background: var(--pn-paper-2); }
+  .pn-faq__num { font-size: 1rem; font-weight: 800; color: var(--pn-green); letter-spacing: .1em; }
+  .pn-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--pn-ink); font-weight: 700; }
+  .pn-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--pn-ink); background: var(--pn-paper); color: var(--pn-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .pn-faq__det[open] .pn-faq__toggle { transform: rotate(180deg); background: var(--pn-accent); color: var(--pn-paper); }
+  .pn-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .pn-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .pn-faq__ans { padding-left: 48px; } }
+
+  /* PUEBLOS VECINOS */
+  .pn-vecinos-section { background: var(--pn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--pn-ink); }
+  .pn-vecinos-chapter { color: var(--pn-steel); }
+  .pn-vecinos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .pn-vecinos-title em { color: var(--pn-accent); }
+  .pn-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--pn-ink); background: var(--pn-ink); }
+  @media (min-width: 640px)  { .pn-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .pn-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .pn-vecino { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: .35rem; padding: 1.5rem; background: var(--pn-paper); color: var(--pn-ink); text-decoration: none; min-height: 160px; transition: background .25s, color .25s; grid-template-areas: 'n arrow' 'name name' 'sub sub'; }
+  .pn-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .pn-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .pn-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .pn-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--pn-accent); font-size: 1.3rem; transition: transform .25s; }
+  .pn-vecino:hover { background: var(--pn-accent); color: var(--pn-paper); }
+  .pn-vecino:hover .pn-vecino__sub, .pn-vecino:hover .pn-vecino__n { opacity: .85; }
+  .pn-vecino:hover .pn-vecino__arrow { color: var(--pn-paper); transform: translateX(4px); }
+  .pn-vecino--1:hover { background: var(--pn-green); color: var(--pn-paper); }
+  .pn-vecino--2:hover { background: var(--pn-steel); color: var(--pn-paper); }
+  .pn-vecino--3:hover { background: var(--pn-stone); color: var(--pn-ink); }
+
+  /* CTA FINAL */
+  .pn-final { background: #1C1A16; color: var(--pn-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .pn-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(58,122,90,0.06) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .pn-final > * { position: relative; }
+  .pn-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .pn-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .pn-final-chapter { color: var(--pn-green); }
+  .pn-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--pn-paper); margin: 1rem 0; }
+  .pn-final__title em { color: var(--pn-accent); font-style: italic; display: block; }
+  .pn-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(245,240,232,0.75); max-width: 52ch; }
+  .pn-final__lead strong { color: var(--pn-green); }
+  .pn-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .pn-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .pn-final__btn--primary { background: var(--pn-accent); color: var(--pn-paper); border-color: var(--pn-accent); box-shadow: 6px 6px 0 var(--pn-green); }
+  .pn-final__btn--primary:hover { background: var(--pn-green); color: var(--pn-paper); border-color: var(--pn-green); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pn-accent); }
+  .pn-final__btn--ghost { background: transparent; color: var(--pn-paper); border-color: var(--pn-paper); box-shadow: 6px 6px 0 var(--pn-paper); }
+  .pn-final__btn--ghost:hover { background: var(--pn-paper); color: var(--pn-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--pn-paper); }
+  .pn-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(245,240,232,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .pn-final__trust .pn-pulse { background: var(--pn-green); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(58,122,90,0.55); }
+  .pn-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .pn-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(58,122,90,0.25)); }
+  .pn-final__marquee { background: var(--pn-accent); color: var(--pn-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--pn-ink); margin: 0 -1.5rem; }
+  .pn-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: pn-marquee 34s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
