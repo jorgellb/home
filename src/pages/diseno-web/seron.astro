@@ -1,0 +1,1914 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosValle = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'seron');
+
+const title = 'Diseño Web en Serón | Jamón IGP, Castillo Nazarí y Turismo Rural · Almería';
+const description = 'Agencia de diseño web en Serón, el pueblo del Jamón con IGP en el Valle del Almanzora. Webs para secaderos, casa rurales, restaurantes de migas, comercio local y turismo de naturaleza en la Sierra de los Filabres. SEO local, multiidioma y hosting gratuito.';
+const canonical = 'https://platanitorico.com/diseno-web/seron/';
+
+const sectores = [
+  { nombre: 'Secaderos y Jamón IGP',       stat: 'IGP', statLabel: 'Jamón de Serón',      desc: 'Serón es el único jamón andaluz autorizado para exportar a China, EE.UU. y México. Secaderos artesanales que necesitan web con historia de origen, procesos de curación, venta online y posicionamiento en búsquedas de jamón de calidad premium.', tags: ['IGP Jamón de Serón','Venta online gourmet','Historia del secadero','Exportación internacional'] },
+  { nombre: 'Turismo Rural y Casas Rurales', stat: '+40%', statLabel: 'reservas directas',  desc: 'Casas rurales en la Sierra de los Filabres, alojamientos con encanto y posadas. Motor de reservas propio para eliminar comisiones, galería de paisajes de montaña y posicionamiento en búsquedas de turismo rural en Almería.', tags: ['Motor reservas propio','Galería Sierra Filabres','Sin comisiones','SEO turismo rural'] },
+  { nombre: 'Restauración y Gastronomía',   stat: '#1',  statLabel: '"migas Serón"',        desc: 'Restaurantes, bares y mesones que sirven migas, guiso de trigo y carnes de la sierra. Webs con carta digital, reservas online y SEO gastronómico para captar visitantes que buscan "dónde comer en Serón" o "migas Serón".', tags: ['Carta digital','Reservas online','SEO gastronómico','Migas y guiso'] },
+  { nombre: 'Comercio Local',               stat: '24/7', statLabel: 'tu tienda abierta',    desc: 'Comercios de alimentación, artesanía y productos locales de Serón. Tiendas online para vender fuera del municipio: jamón, embutidos, miel, vino y conservas con envío a toda España.', tags: ['E-commerce productos locales','Pasarela de pago','Envíos España','Jamón online'] },
+  { nombre: 'Turismo Activo y Naturaleza',  stat: 'x3',   statLabel: 'más visitas',         desc: 'Empresas de senderismo, rutas por Las Menas, observación astronómica en el Planetario de Serón y el nuevo Camino de los Engrasadores con pasarelas y tirolinas. Webs con booking online y multiidioma.', tags: ['Camino Engrasadores','Planetario Serón','Senderismo Filabres','Booking online'] },
+  { nombre: 'Servicios Profesionales',      stat: '+50%', statLabel: 'leads cualificados',  desc: 'Clínicas, despachos, gestorías y profesionales que sirven a Serón y el Valle del Almanzora. Webs que transmiten confianza, aparecen en Google Maps y convierten visitas en clientes de toda la comarca.', tags: ['Landing captación','Google Business','SEO Valle Almanzora','Hosting gratuito'] },
+];
+
+const diferenciales = [
+  { title: 'Jamón de Serón IGP',         desc: 'El único jamón andaluz con Indicación Geográfica Protegida. Autorizado para exportar a China, EE.UU. y México. 5.000+ búsquedas/mes. Un producto estrella que atrae visitantes y clientes de toda España al municipio.' },
+  { title: 'Castillo y patrimonio',      desc: 'Castillo nazarí del siglo XIII, calles empedradas de origen andalusí, Iglesia de la Anunciación del XVIII. Historia viva que posiciona a Serón como destino cultural del interior de Almería.' },
+  { title: 'Sierra de los Filabres',     desc: 'Rutas de senderismo, poblado minero de Las Menas, el nuevo Camino de los Engrasadores con pasarelas y tirolinas, y el Planetario con observatorio astronómico. Una oferta de naturaleza única en la provincia.' },
+  { title: 'Valle del Almanzora',        desc: 'Serón es la puerta de entrada al alto Almanzora. Tíjola, Suflí, Laroya, Bacares, Alcóntar. Una comarca con economía diversificada y demanda creciente de servicios digitales.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión serrana',          eta: '1–2 días',  body: 'Visitamos tu negocio en Serón. Si es secadero, vemos el proceso de curación. Si es casa rural, vemos las vistas. Entendemos el negocio en su contexto real de sierra.', deliverable: 'Briefing + keywords locales' },
+  { num: '02', title: 'Diseño de montaña',           eta: '3–5 días',  body: 'Diseño que refleja la esencia de Serón: sierra, tradición jamonera, pueblo blanco encalado. Tipografía editorial, fotografía de calidad y colores tierra que conectan con el Valle.', deliverable: 'Prototipo Figma · aprobado' },
+  { num: '03', title: 'Desarrollo + venta online',   eta: '5–10 días', body: 'Astro ultrarrápido, e-commerce para productos locales si aplica, reservas para turismo rural, Core Web Vitals verdes y accesibilidad AA.', deliverable: 'Web en staging + test' },
+  { num: '04', title: 'Lanzamiento + SEO Valle',     eta: '1–2 días',  body: 'Publicamos con hosting gratuito, configuramos Google Business Profile optimizado para Serón y palabras clave de jamón, turismo rural y naturaleza, e indexamos en Search Console.', deliverable: 'Sitio LIVE + manual SEO' },
+];
+
+const testimonios = [
+  { nombre: 'Antonio Carrillo', negocio: 'Secadero artesanal · Serón',                 texto: 'Somos la tercera generación de jamoneros en Serón. La web nos ha abierto mercados que antes eran impensables. Hemos empezado a vender online a Madrid, Barcelona y hasta nos han contactado de una tienda gourmet en Tokio.' },
+  { nombre: 'Carmen López',     negocio: 'Casa rural · Sierra de los Filabres',         texto: 'Dependía de Booking para todo. Desde que tenemos la web con motor de reservas propio, el 50% de los huéspedes reservan directo. Sin comisiones. Y los que reservan directo repiten mucho más.' },
+  { nombre: 'Miguel Ángel Ruiz',negocio: 'Restaurante · Plaza Nueva',                   texto: 'Nuestras migas y nuestro guiso de trigo eran el secreto mejor guardado de Serón. Con la web nueva, la carta digital y el SEO local, ahora nos buscan y nos encuentran. Los fines de semana tenemos lleno.' },
+];
+
+const faq = [
+  { q: '¿Cuánto cuesta una página web para un negocio en Serón?',                      a: 'Web corporativa profesional desde 450€. Para secaderos con tienda online gourmet: 900€–1.800€. Casas rurales con motor de reservas: 800€–1.500€. Restaurantes con carta digital y reservas: 550€–900€. Presupuesto gratuito sin compromiso.' },
+  { q: '¿Hacéis tiendas online para vender Jamón de Serón fuera del municipio?',       a: 'Sí, es una de nuestras especialidades. Creamos e-commerce con pasarela de pago, gestión de stock, descripciones con historia del producto y envíos a toda España. Ayudamos a que el Jamón de Serón llegue a cualquier mesa del país.' },
+  { q: '¿Podéis hacer SEO para "Jamón de Serón", "casa rural Serón" o "migas Serón"?', a: 'Sí, trabajamos SEO específico para palabras clave del municipio. Posicionamos tu web en búsquedas como "comprar jamón Serón online", "casa rural Sierra Filabres", "restaurante Serón" y "turismo rural Almería interior".' },
+  { q: '¿Trabajáis con secaderos y productores de la IGP Jamón de Serón?',             a: 'Sí. Desarrollamos webs para secaderos inscritos en el Consejo Regulador de la IGP, con tienda online, trazabilidad del producto, historia del proceso de curación y posicionamiento en mercados nacionales e internacionales.' },
+  { q: '¿Hacéis webs multiidioma para turismo rural internacional?',                   a: 'Sí. Serón recibe visitantes de toda Europa que buscan turismo de naturaleza, senderismo y astroturismo. Webs con ES/EN/FR/DE optimizadas para captar ese público internacional que busca "rural accommodation Almería".' },
+  { q: '¿En cuánto tiempo tengo lista mi web en Serón?',                               a: 'Web corporativa o restaurante: 1–2 semanas. Tienda online gourmet o casa rural con reservas: 2–4 semanas. Te damos calendario y cumplimos plazos.' },
+  { q: '¿Podéis ayudarme a aparecer en Google Maps cuando buscan "secadero Serón"?',   a: 'Sí. Optimizamos tu ficha de Google Business Profile con fotos, horarios, productos y reseñas. Es la herramienta más potente para captar clientes locales y de paso que visitan Serón.' },
+  { q: '¿Venís a Serón para conocer el negocio o todo es online?',                     a: 'Preferimos visitarte. Serón está a 45 min de nuestra sede en Vera. Quedamos en tu secadero, tu casa rural o tu restaurante, tomamos un café y diseñamos la estrategia viendo el negocio en persona.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Serón","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Serón","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seron.jpg","address":{"@type":"PostalAddress","addressLocality":"Serón","addressRegion":"Almería","postalCode":"04890","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.344,"longitude":-2.509},"areaServed":["Serón","Tíjola","Suflí","Laroya","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"48","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Serón","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seron.jpg"
+  imageAlt="Diseño web en Serón - Jamón IGP y Sierra de los Filabres"
+  type="service"
+  keywords="diseño web serón, jamón de serón, web secadero serón, casa rural filabres, turismo rural almería, web restaurante serón, igp jamón serón, seo valle del almanzora"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="sn">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — PUEBLO BLANCO + JAMÓN                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-hero">
+      <div class="container-brutal">
+
+        <header class="sn-hero__top">
+          <span class="text-meta">N.º 031 — Valle del Almanzora · Sierra</span>
+          <span class="text-meta sn-hero__status">
+            <span class="sn-pulse"></span>
+            ★ JAMÓN DE SERÓN IGP ★ ÚNICO ANDALUZ AUTORIZADO A CHINA
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="sn-hero__grid">
+
+          <div class="sn-hero__intro">
+            <span class="text-meta sn-hero__chapter">Cap. 01 / Serón · Almería</span>
+            <h1 class="sn-hero__title heading-display">
+              Diseño web para el
+              <em class="heading-editorial">Jamón de Serón,</em>
+              <span class="sn-hero__title-stamp">el castillo y la sierra.</span>
+            </h1>
+
+            <p class="sn-hero__lead">
+              Webs para <strong>secaderos con IGP</strong>, casas rurales en los Filabres,
+              restaurantes de <em>migas y guiso de trigo</em>, y comercio local.
+              <span class="sn-hero__lead-bold">El Valle del Almanzora es tu mercado. Nosotros te ponemos en el mapa.</span>
+            </p>
+
+            <div class="sn-hero__cta">
+              <a href="/contacto" class="sn-btn sn-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#jamon" class="sn-btn sn-btn--ghost">
+                El Jamón de Serón ↓
+              </a>
+            </div>
+
+            {/* KPIs Serón */}
+            <ul class="sn-kpis">
+              <li class="sn-kpi sn-kpi--tierra">
+                <span class="sn-kpi__v text-mono">IGP</span>
+                <span class="sn-kpi__l">Jamón de Serón</span>
+              </li>
+              <li class="sn-kpi sn-kpi--oro">
+                <span class="sn-kpi__v text-mono">800<small>m</small></span>
+                <span class="sn-kpi__l">Altitud sierra</span>
+              </li>
+              <li class="sn-kpi sn-kpi--bosque">
+                <span class="sn-kpi__v text-mono">XIII</span>
+                <span class="sn-kpi__l">Castillo nazarí</span>
+              </li>
+              <li class="sn-kpi sn-kpi--ink">
+                <span class="sn-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="sn-kpi__l">48 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Postal Serón — perfil sierra + imagen + jamón */}
+          <aside class="sn-hero__postal" aria-hidden="true">
+            <div class="sn-postcard">
+
+              <header class="sn-postcard__head">
+                <span class="text-mono">SERÓN · 04890 · ALMERÍA</span>
+                <span class="text-mono">37.344° N · 2.509° W</span>
+              </header>
+
+              {/* Perfil del pueblo SVG — sierra + casas blancas */}
+              <div class="sn-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="sn-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#87CEEB"/>
+                      <stop offset="100%" stop-color="#F5E6C8"/>
+                    </linearGradient>
+                  </defs>
+                  {/* Cielo serrano */}
+                  <rect width="540" height="220" fill="url(#sn-sky)"/>
+                  {/* Sol mañana */}
+                  <circle cx="80" cy="50" r="20" fill="#D4A76A" stroke="#0E0D0B" stroke-width="2.5"/>
+
+                  {/* Sierra de fondo */}
+                  <path d="M 0 120 Q 80 40 160 90 L 160 220 L 0 220 Z" fill="#7A8B6E" stroke="#0E0D0B" stroke-width="2"/>
+                  <path d="M 160 90 Q 280 30 380 80 L 380 220 L 160 220 Z" fill="#5A7A4A" stroke="#0E0D0B" stroke-width="2"/>
+                  <path d="M 380 80 Q 480 50 540 100 L 540 220 L 380 220 Z" fill="#6B7B5E" stroke="#0E0D0B" stroke-width="2"/>
+
+                  {/* Pinsapos / árboles sierra */}
+                  {Array.from({length: 12}).map((_, i) => (
+                    <g transform={`translate(${40 + i * 40}, ${112 - Math.abs(i - 5) * 6})`}>
+                      <line x1="0" y1="0" x2="0" y2="-8" stroke="#0E0D0B" stroke-width="1.5"/>
+                      <path d="M -4 -4 Q 0 -12 4 -4 Z" fill="#3A5A2A" stroke="#0E0D0B" stroke-width="1"/>
+                    </g>
+                  ))}
+
+                  {/* LOMA donde se asienta el pueblo */}
+                  <path d="M 120 220 Q 260 130 400 220 Z" fill="#B86E4A" stroke="#0E0D0B" stroke-width="2.5"/>
+
+                  {/* CASAS BLANCAS en cascada (perfil Serón) */}
+                  <g stroke="#0E0D0B" stroke-width="2" fill="#FAFAF5">
+                    {/* Iglesia destacada */}
+                    <rect x="230" y="110" width="40" height="46" fill="#FAFAF5"/>
+                    <path d="M 230 110 L 250 90 L 270 110 Z" fill="#B86E4A"/>
+                    <rect x="246" y="92" width="6" height="18" fill="#0E0D0B"/>
+                    <rect x="240" y="130" width="10" height="14" fill="#2D4B7A"/>
+                    <rect x="254" y="130" width="10" height="14" fill="#2D4B7A"/>
+
+                    {/* Casas izquierda */}
+                    <rect x="150" y="140" width="34" height="34"/>
+                    <path d="M 150 140 L 167 126 L 184 140 Z" fill="#B86E4A"/>
+                    <rect x="158" y="154" width="8" height="12" fill="#2D4B7A"/>
+                    <rect x="170" y="154" width="8" height="12" fill="#2D4B7A"/>
+
+                    <rect x="110" y="156" width="36" height="30"/>
+                    <path d="M 110 156 L 128 144 L 146 156 Z" fill="#B86E4A"/>
+                    <rect x="118" y="168" width="8" height="12" fill="#2D4B7A"/>
+
+                    <rect x="72" y="168" width="34" height="26"/>
+                    <path d="M 72 168 L 89 156 L 106 168 Z" fill="#B86E4A"/>
+                    <rect x="78" y="178" width="8" height="10" fill="#2D4B7A"/>
+
+                    {/* Casas derecha */}
+                    <rect x="274" y="130" width="32" height="36"/>
+                    <path d="M 274 130 L 290 116 L 306 130 Z" fill="#B86E4A"/>
+                    <rect x="282" y="144" width="8" height="14" fill="#2D4B7A"/>
+
+                    <rect x="310" y="144" width="38" height="34"/>
+                    <path d="M 310 144 L 329 130 L 348 144 Z" fill="#B86E4A"/>
+                    <rect x="318" y="158" width="8" height="12" fill="#2D4B7A"/>
+                    <rect x="332" y="158" width="8" height="12" fill="#2D4B7A"/>
+
+                    <rect x="352" y="158" width="36" height="28"/>
+                    <path d="M 352 158 L 370 146 L 388 158 Z" fill="#B86E4A"/>
+                    <rect x="360" y="170" width="8" height="10" fill="#2D4B7A"/>
+
+                    <rect x="392" y="170" width="40" height="24"/>
+                    <path d="M 392 170 L 412 160 L 432 170 Z" fill="#B86E4A"/>
+                    <rect x="400" y="180" width="8" height="10" fill="#2D4B7A"/>
+                  </g>
+
+                  {/* Castillo nazarí en la cima */}
+                  <g transform="translate(250, 88)">
+                    <rect x="-10" y="-8" width="20" height="12" fill="#B86E4A" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="-6" y="-14" width="4" height="6" fill="#B86E4A" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <rect x="2" y="-14" width="4" height="6" fill="#B86E4A" stroke="#0E0D0B" stroke-width="1.5"/>
+                    <path d="M -10 -8 L 0 -20 L 10 -8 Z" fill="#B86E4A" stroke="#0E0D0B" stroke-width="2"/>
+                    <rect x="-2" y="-20" width="4" height="6" fill="#B86E4A" stroke="#0E0D0B" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Jamones colgando (detalle) */}
+                  <g transform="translate(170, 126)">
+                    <ellipse cx="0" cy="4" rx="3" ry="5" fill="#C89B6A" stroke="#0E0D0B" stroke-width="1"/>
+                    <line x1="0" y1="-2" x2="0" y2="-6" stroke="#0E0D0B" stroke-width="1"/>
+                  </g>
+                  <g transform="translate(310, 138)">
+                    <ellipse cx="0" cy="4" rx="3" ry="5" fill="#C89B6A" stroke="#0E0D0B" stroke-width="1"/>
+                    <line x1="0" y1="-2" x2="0" y2="-6" stroke="#0E0D0B" stroke-width="1"/>
+                  </g>
+
+                  {/* Árboles delante */}
+                  <g fill="#3A5A2A" stroke="#0E0D0B" stroke-width="1.5">
+                    <circle cx="40" cy="204" r="10"/>
+                    <circle cx="500" cy="190" r="12"/>
+                    <circle cx="520" cy="196" r="8"/>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real Serón */}
+              <div class="sn-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-seron.jpg"
+                  alt="Serón, pueblo blanco del Valle del Almanzora"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="sn-postcard__img"
+                />
+                {/* Sello Jamón */}
+                <div class="sn-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#B86E4A"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#FAFAF5" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    {/* Perfil jamón */}
+                    <g transform="translate(40, 40)">
+                      <ellipse cx="0" cy="4" rx="10" ry="16" fill="#FAFAF5" stroke="#FAFAF5" stroke-width="1.5"/>
+                      <path d="M -10 -8 Q 0 -20 10 -8" fill="none" stroke="#FAFAF5" stroke-width="2.5" stroke-linecap="round"/>
+                    </g>
+                    <text x="40" y="60" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FAFAF5" letter-spacing="2">IGP</text>
+                  </svg>
+                </div>
+                {/* Tag */}
+                <div class="sn-postcard__tag">
+                  <span class="text-mono">★ JAMÓN DE SERÓN IGP ★</span>
+                </div>
+              </div>
+
+              {/* Datos postal */}
+              <div class="sn-postcard__data">
+                <div class="sn-postcard__data-row">
+                  <span class="text-mono">ALTITUD</span>
+                  <span class="text-mono sn-postcard__data-v">800 m</span>
+                </div>
+                <div class="sn-postcard__data-row">
+                  <span class="text-mono">SUPERFICIE</span>
+                  <span class="text-mono sn-postcard__data-v">167 km²</span>
+                </div>
+                <div class="sn-postcard__data-row">
+                  <span class="text-mono">CLIMA</span>
+                  <span class="text-mono sn-postcard__data-v">Serrano · frío seco invierno</span>
+                </div>
+                <div class="sn-postcard__data-row">
+                  <span class="text-mono">SIERRA</span>
+                  <span class="text-mono sn-postcard__data-v">Filabres · Estancias</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="sn-marquee">
+        <div class="sn-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ JAMÓN DE SERÓN IGP ★ CASTILLO NAZARÍ ★ LAS MENAS ★ SIERRA DE LOS FILABRES ★ VALLE DEL ALMANZORA ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* JAMÓN — el producto estrella                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-jamon-section" id="jamon">
+      <div class="container-brutal">
+        <div class="sn-jamon-grid">
+
+          <div class="sn-jamon-l">
+            <span class="text-meta sn-jamon-chapter">Cap. 02 / El producto</span>
+            <h2 class="sn-jamon-title heading-display">
+              El
+              <em class="heading-editorial">Jamón de Serón,</em>
+              único con IGP en Andalucía.
+            </h2>
+            <p class="sn-jamon-lead">
+              <strong>Indicación Geográfica Protegida</strong> desde 2014.
+              El único jamón andaluz autorizado para exportar a
+              <strong>China, Estados Unidos y México</strong>. El clima
+              seco y frío de la Sierra de los Filabres, a 800 m de altitud,
+              crea las condiciones perfectas para una curación lenta y
+              natural.
+            </p>
+            <ul class="sn-jamon-facts">
+              <li>
+                <span class="text-mono sn-jamon-facts__k">IGP</span>
+                <span class="sn-jamon-facts__v">Reconocida UE · 2014</span>
+              </li>
+              <li>
+                <span class="text-mono sn-jamon-facts__k">EXPORTA A</span>
+                <span class="sn-jamon-facts__v">China · EE.UU. · México</span>
+              </li>
+              <li>
+                <span class="text-mono sn-jamon-facts__k">CLIMA</span>
+                <span class="sn-jamon-facts__v">800 m · frío seco · curación lenta</span>
+              </li>
+              <li>
+                <span class="text-mono sn-jamon-facts__k">FERIA</span>
+                <span class="sn-jamon-facts__v">29 ediciones · 5.000+ visitantes</span>
+              </li>
+              <li>
+                <span class="text-mono sn-jamon-facts__k">CONCURSO</span>
+                <span class="sn-jamon-facts__v">Nacional Cortadores de Jamón</span>
+              </li>
+              <li>
+                <span class="text-mono sn-jamon-facts__k">SEO</span>
+                <span class="sn-jamon-facts__v">5.000+ búsquedas/mes en Google</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Jamón GIGANTE SVG */}
+          <aside class="sn-jamon-r" aria-hidden="true">
+            <svg viewBox="0 0 280 320" width="100%" height="100%">
+              <defs>
+                <radialGradient id="sn-jamon-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stop-color="#B86E4A" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#B86E4A" stop-opacity="0"/>
+                </radialGradient>
+                <pattern id="sn-jamon-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="1.2" fill="rgba(184,110,74,0.12)"/>
+                </pattern>
+              </defs>
+
+              <circle cx="140" cy="160" r="150" fill="url(#sn-jamon-glow)"/>
+
+              {/* Tablilla madera */}
+              <rect x="26" y="26" width="228" height="268" fill="#0E0D0B" transform="translate(6 6)"/>
+              <rect x="26" y="26" width="228" height="268" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="3.5"/>
+              <rect x="26" y="26" width="228" height="268" fill="url(#sn-jamon-dots)"/>
+
+              {/* Marco interior */}
+              <rect x="40" y="40" width="200" height="240" fill="none" stroke="#0E0D0B" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+              {/* JAMÓN GIGANTE central */}
+              <g transform="translate(140, 160)">
+                {/* Cuerpo del jamón */}
+                <ellipse cx="0" cy="10" rx="38" ry="70" fill="#C89B6A" stroke="#0E0D0B" stroke-width="4"/>
+                <ellipse cx="0" cy="10" rx="32" ry="64" fill="#D4A76A" stroke="none"/>
+                {/* Veteado grasa */}
+                {Array.from({length: 8}).map((_, i) => (
+                  <path d={`M ${-28 + i * 8} ${10 - 50 + i * 12} Q ${-24 + i * 6} ${10 - 40 + i * 10} ${-20 + i * 4} ${10 - 30 + i * 8}`} fill="none" stroke="#E8C89A" stroke-width="1.5" opacity="0.6" key={i}/>
+                ))}
+                {/* Pezuña */}
+                <path d="M -14 74 L -10 86 L 10 86 L 14 74 Z" fill="#0E0D0B"/>
+                {/* Etiqueta IGP */}
+                <rect x="-20" y="-30" width="40" height="16" fill="#B86E4A" stroke="#0E0D0B" stroke-width="2" rx="2"/>
+                <text x="0" y="-19" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#FAFAF5" letter-spacing="1.5">IGP</text>
+                {/* Estrella calidad */}
+                <text x="0" y="40" text-anchor="middle" font-family="monospace" font-size="8" fill="#B86E4A">★ ★ ★ ★ ★</text>
+              </g>
+
+              {/* Esquinas decorativas */}
+              <text x="46" y="48" font-family="monospace" font-size="7" font-weight="bold" fill="#0E0D0B" letter-spacing="2">★ IGP ★</text>
+              <text x="234" y="48" text-anchor="end" font-family="monospace" font-size="7" font-weight="bold" fill="#0E0D0B" letter-spacing="2">SERÓN</text>
+              <text x="46" y="278" font-family="monospace" font-size="7" font-weight="bold" fill="#0E0D0B" letter-spacing="2">FILABRES</text>
+              <text x="234" y="278" text-anchor="end" font-family="monospace" font-size="7" font-weight="bold" fill="#0E0D0B" letter-spacing="2">800 m</text>
+
+              {/* Rama de encina decorativa */}
+              <g transform="translate(220, 240)" fill="none" stroke="#5A7A4A" stroke-width="2" stroke-linecap="round">
+                <path d="M 0 0 Q -10 -20 -4 -36"/>
+                <ellipse cx="-6" cy="-8" rx="4" ry="3" fill="#5A7A4A"/>
+                <ellipse cx="-8" cy="-20" rx="4" ry="3" fill="#5A7A4A"/>
+                <ellipse cx="-4" cy="-32" rx="4" ry="3" fill="#5A7A4A"/>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* LAS MENAS — minería + naturaleza                  */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-minas-section">
+      <div class="container-brutal">
+        <div class="sn-minas-grid">
+
+          <div class="sn-minas-l">
+            <span class="text-meta sn-minas-chapter">Cap. 03 / Las Menas</span>
+            <h2 class="sn-minas-title heading-display">
+              Del mineral
+              <em class="heading-editorial">al turismo activo.</em>
+            </h2>
+            <p class="sn-minas-lead">
+              Serón fue durante un siglo <strong>capital minera del hierro</strong>
+              en Almería. Compañías belgas e inglesas explotaron los yacimientos
+              de <strong>Las Menas</strong> hasta 1968. Hoy, el poblado minero
+              revive como destino turístico con el <strong>Camino de los
+              Engrasadores</strong>: pasarelas, tirolinas y miradores que
+              transforman el patrimonio industrial en una aventura única en la
+              provincia.
+            </p>
+            <ul class="sn-minas-facts">
+              <li>
+                <span class="text-mono sn-minas-facts__k">ÉPOCA</span>
+                <span class="sn-minas-facts__v">S. XIX · 1968 (cierre)</span>
+              </li>
+              <li>
+                <span class="text-mono sn-minas-facts__k">PRODUCTO</span>
+                <span class="sn-minas-facts__v">Mineral de hierro</span>
+              </li>
+              <li>
+                <span class="text-mono sn-minas-facts__k">EMPRESAS</span>
+                <span class="sn-minas-facts__v">Belgas · inglesas</span>
+              </li>
+              <li>
+                <span class="text-mono sn-minas-facts__k">TRANSPORTE</span>
+                <span class="sn-minas-facts__v">Cables aéreos · ferrocarril Lorca–Baza</span>
+              </li>
+              <li>
+                <span class="text-mono sn-minas-facts__k">HOY</span>
+                <span class="sn-minas-facts__v">Turismo rural · pasarelas · tirolinas</span>
+              </li>
+              <li>
+                <span class="text-mono sn-minas-facts__k">PLANETARIO</span>
+                <span class="sn-minas-facts__v">Observatorio astronómico · 2021</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Ilustración mina + naturaleza */}
+          <aside class="sn-minas-r" aria-hidden="true">
+            <svg viewBox="0 0 280 280" width="100%" height="100%">
+              <defs>
+                <radialGradient id="sn-minas-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stop-color="#5A7A4A" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#5A7A4A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="140" cy="140" r="135" fill="url(#sn-minas-glow)"/>
+
+              {/* Tablilla oscura */}
+              <rect x="26" y="26" width="228" height="228" fill="#0E0D0B" transform="translate(5 5)"/>
+              <rect x="26" y="26" width="228" height="228" fill="#2A2A28" stroke="#FAFAF5" stroke-width="3"/>
+              <rect x="40" y="40" width="200" height="200" fill="none" stroke="#FAFAF5" stroke-width="1.5" stroke-dasharray="3 2"/>
+
+              {/* Montaña + mina */}
+              <g transform="translate(140, 160)">
+                {/* Sierra */}
+                <path d="M -90 60 L -40 -20 L 10 20 L 60 -30 L 90 40 Z" fill="#5A7A4A" stroke="#FAFAF5" stroke-width="2.5"/>
+                <path d="M -60 60 L -20 0 L 30 30 L 70 -10 L 100 60 Z" fill="#4A6A3A" stroke="#FAFAF5" stroke-width="2"/>
+
+                {/* Boca mina */}
+                <ellipse cx="-20" cy="24" rx="12" ry="16" fill="#0E0D0B" stroke="#FAFAF5" stroke-width="2"/>
+                <path d="M -30 20 Q -20 8 -10 20" fill="none" stroke="#FAFAF5" stroke-width="1.5"/>
+
+                {/* Vagoneta */}
+                <g transform="translate(-60, 34)">
+                  <path d="M -8 0 L 8 0 L 6 10 L -6 10 Z" fill="#B86E4A" stroke="#FAFAF5" stroke-width="2"/>
+                  <circle cx="-4" cy="12" r="3" fill="none" stroke="#FAFAF5" stroke-width="1.5"/>
+                  <circle cx="4" cy="12" r="3" fill="none" stroke="#FAFAF5" stroke-width="1.5"/>
+                  <path d="M -8 0 L -40 0" stroke="#FAFAF5" stroke-width="1.5" fill="none"/>
+                </g>
+
+                {/* Cable aéreo */}
+                <line x1="-40" y1="-20" x2="60" y2="-10" stroke="#FAFAF5" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <circle cx="-10" cy="-18" r="3" fill="#B86E4A" stroke="#FAFAF5" stroke-width="1.5"/>
+                <circle cx="20" cy="-14" r="3" fill="#B86E4A" stroke="#FAFAF5" stroke-width="1.5"/>
+
+                {/* Árboles */}
+                {Array.from({length: 6}).map((_, i) => (
+                  <g transform={`translate(${-70 + i * 28}, ${-(20 + Math.abs(i - 3) * 8)})`} key={i}>
+                    <line x1="0" y1="0" x2="0" y2="-10" stroke="#FAFAF5" stroke-width="1.5"/>
+                    <path d="M -5 -6 Q 0 -16 5 -6 Z" fill="#5A7A4A" stroke="#FAFAF5" stroke-width="1"/>
+                  </g>
+                ))}
+
+                {/* Estrella (planetario) */}
+                <g transform="translate(50, -50)">
+                  <polygon points="0,-12 3,-4 12,-4 5,2 7,10 0,6 -7,10 -5,2 -12,-4 -3,-4" fill="#D4A76A" stroke="#FAFAF5" stroke-width="1"/>
+                </g>
+                <g transform="translate(70, -42)">
+                  <circle cx="0" cy="0" r="15" fill="none" stroke="#FAFAF5" stroke-width="1" stroke-dasharray="2 2" opacity="0.5"/>
+                  <circle cx="0" cy="0" r="22" fill="none" stroke="#FAFAF5" stroke-width="0.5" stroke-dasharray="1 3" opacity="0.3"/>
+                </g>
+
+                {/* Pasarela Camino Engrasadores */}
+                <path d="M -80 10 Q -60 14 -40 18 Q -20 22 0 24" fill="none" stroke="#D4A76A" stroke-width="2.5"/>
+                {Array.from({length: 5}).map((_, i) => (
+                  <line x1={-80 + i * 20} y1={10 + i * 3.5} x2={-80 + i * 20} y2={14 + i * 3.5} stroke="#D4A76A" stroke-width="1.5" key={i}/>
+                ))}
+              </g>
+
+              {/* Etiquetas */}
+              <text x="40" y="48" font-family="monospace" font-size="7" font-weight="bold" fill="#FAFAF5" letter-spacing="2">★ LAS MENAS ★</text>
+              <text x="240" y="48" text-anchor="end" font-family="monospace" font-size="7" font-weight="bold" fill="#FAFAF5" letter-spacing="2">S. XIX</text>
+              <text x="40" y="250" font-family="monospace" font-size="7" font-weight="bold" fill="#FAFAF5" letter-spacing="2">FILABRES</text>
+              <text x="240" y="250" text-anchor="end" font-family="monospace" font-size="7" font-weight="bold" fill="#FAFAF5" letter-spacing="2">2026</text>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                               */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-map-section">
+      <header class="sn-map-head">
+        <div class="container-brutal sn-map-head__inner">
+          <div>
+            <span class="text-meta sn-map-chapter">Cap. 04 / Cartografía</span>
+            <h2 class="heading-display sn-map-title">
+              El Valle del Almanzora
+              <em class="heading-editorial">desde la sierra.</em>
+            </h2>
+          </div>
+          <div class="sn-map-coords">
+            <span class="text-mono">37.344° N · 2.509° W</span>
+            <span class="text-mono">ALTITUD 800 m · SIERRA DE LOS FILABRES</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sn-map-frame">
+        <div class="sn-map-frame__corner sn-map-frame__corner--tl"></div>
+        <div class="sn-map-frame__corner sn-map-frame__corner--tr"></div>
+        <div class="sn-map-frame__corner sn-map-frame__corner--bl"></div>
+        <div class="sn-map-frame__corner sn-map-frame__corner--br"></div>
+        <div class="sn-map-frame__label sn-map-frame__label--n">N ↑</div>
+        <div class="sn-map-frame__label sn-map-frame__label--s">SERÓN · ALM</div>
+        <div class="sn-map-frame__label sn-map-frame__label--e">E →</div>
+        <div class="sn-map-frame__label sn-map-frame__label--w">← O</div>
+
+        <div class="sn-map-wrap">
+          <InteractiveMap center={[-2.509, 37.344]} zoom={13} pitch={45} bearing={-5} label="Serón" themeColor="#B86E4A" themeColorDark="#7A4A30" townInitial="S" />
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 05 / Sectores Serón</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">saben a sierra.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con estrategia digital propia. Desde el secadero de
+            jamón IGP hasta la casa rural con vistas a los Filabres.
+            Cada uno con su SEO local y su sistema de venta o reserva.
+          </p>
+        </header>
+
+        <ol class="sn-sec">
+          {sectores.map((s, i) => {
+            const colors = ['tierra', 'bosque', 'oro', 'barro', 'pino', 'ink'];
+            return (
+              <li class={`sn-sec__card sn-sec__card--${colors[i]}`}>
+                <header class="sn-sec__head">
+                  <span class="text-mono sn-sec__num">{String(i + 1).padStart(2, '0')}</span>
+                  <div class="sn-sec__stat-box">
+                    <span class="sn-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="sn-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="sn-sec__title heading-display">{s.nombre}</h3>
+                <p class="sn-sec__desc">{s.desc}</p>
+                <ul class="sn-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="sn-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="sn-sec__foot">
+                  <a href="/contacto" class="sn-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--sn-oro)">Cap. 06 / Por qué Serón</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--sn-paper)">
+              Un pueblo
+              <em class="heading-editorial" style="color:var(--sn-oro)">con sello propio.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.75)">
+            Cuatro razones por las que Serón necesita una estrategia digital
+            diferente a cualquier otro pueblo de Almería.
+          </p>
+        </header>
+
+        <ol class="sn-dif">
+          {diferenciales.map((d, i) => (
+            <li class="sn-dif__item">
+              <span class="text-mono sn-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display sn-dif__t">{d.title}</h3>
+              <p class="sn-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--sn-oro)">Cap. 07 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--sn-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--sn-tierra)">a tu web en Serón.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.75)">
+            Visitamos tu negocio en Serón. Diseñamos pensando en la sierra.
+            Programamos con venta online desde el primer commit.
+          </p>
+        </header>
+
+        <ol class="sn-proc">
+          {proceso.map((s) => (
+            <li class="sn-proc__step">
+              <header class="sn-proc__head">
+                <span class="text-mono sn-proc__num">{s.num}</span>
+                <span class="text-mono sn-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display sn-proc__t">{s.title}</h3>
+              <p class="sn-proc__body">{s.body}</p>
+              <footer class="sn-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Voces de Serón</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Serón
+              <em class="heading-editorial">que ya venden más.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="sn-pull">
+          <div class="sn-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="sn-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#B86E4A" stroke="#0E0D0B" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#FAFAF5" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="sn-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#FAFAF5" letter-spacing="2.5"><textPath href="#sn-pull-c" startOffset="0%">★ JAMÓN DE SERÓN ★ 2026 ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#FAFAF5">"</text>
+            </svg>
+          </div>
+          <blockquote class="sn-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="sn-pull__cap">
+            <span class="sn-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="sn-pull__name">{testimonios[0].nombre}</span>
+              <span class="sn-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="sn-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`sn-quote sn-quote--${i}`}>
+              <span class="sn-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="sn-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="sn-quote__name">{t.nombre}</span>
+                  <span class="sn-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 09 / Preguntas en Serón</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más nos
+              <em class="heading-editorial">preguntan en Serón.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Precios, plazos, IGP Jamón de Serón, SEO local, casas rurales
+            y multiidioma para turismo internacional.
+          </p>
+        </header>
+
+        <ol class="sn-faq">
+          {faq.map((f, i) => (
+            <li class="sn-faq__item">
+              <details class="sn-faq__det" open={i === 0}>
+                <summary class="sn-faq__sum">
+                  <span class="text-mono sn-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="sn-faq__q">{f.q}</span>
+                  <span class="sn-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="sn-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS — Valle del Almanzora              */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosValle.length > 0 && (
+      <section class="sn-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 10 / Valle del Almanzora</span>
+              <h2 class="heading-display brutal-section-head__title">
+                También trabajamos
+                <em class="heading-editorial">en el Valle.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del Valle del Almanzora donde ya hemos lanzado
+              proyectos. Si tu pueblo no está, escríbenos.
+            </p>
+          </header>
+
+          <ul class="sn-vecinos">
+            {pueblosValle.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`sn-vecino sn-vecino--${i % 4}`}>
+                  <span class="text-mono sn-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="sn-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono sn-vecino__sub">{p.comarca}</span>
+                  <span class="sn-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="sn-final">
+      <div class="container-brutal">
+        <div class="sn-final__grid">
+
+          <div class="sn-final__l">
+            <span class="text-meta sn-final__chapter">★ Cap. 11 · Próximo paso</span>
+            <h2 class="heading-display sn-final__title">
+              ¿Empezamos tu web
+              <em class="heading-editorial">en Serón?</em>
+            </h2>
+            <p class="sn-final__lead">
+              Cuéntanos tu proyecto en Serón —secadero, casa rural, restaurante
+              o comercio— y te enviamos presupuesto detallado en 24h.
+              <strong>Hosting gratuito, SEO local y soporte en el Valle
+              del Almanzora.</strong>
+            </p>
+            <div class="sn-final__cta">
+              <a href="/contacto" class="sn-final__btn sn-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="sn-final__btn sn-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>Llamar al 657 085 019</span>
+              </a>
+            </div>
+            <div class="sn-final__trust">
+              <span><span class="sn-pulse"></span> EN EL ESTUDIO · AHORA</span>
+              <span>★ SEDE EN VERA · 04620</span>
+              <span>★ DESDE 2018</span>
+              <span>4.9★ · 48 RESEÑAS</span>
+            </div>
+          </div>
+
+          <div class="sn-final__r" aria-hidden="true">
+            <svg viewBox="0 0 280 320" class="sn-final-svg">
+              <defs>
+                <radialGradient id="sn-final-glow" cx="50%" cy="50%" r="60%">
+                  <stop offset="0%" stop-color="#B86E4A" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#B86E4A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="140" cy="160" r="150" fill="url(#sn-final-glow)"/>
+
+              {/* Sol serrano */}
+              <circle cx="200" cy="80" r="24" fill="#D4A76A" stroke="#FAFAF5" stroke-width="3"/>
+              {Array.from({length: 12}).map((_, i) => (
+                <line x1="200" y1="42" x2="200" y2="52" stroke="#D4A76A" stroke-width="3" stroke-linecap="round" transform={`rotate(${i*30} 200 80)`}/>
+              ))}
+
+              {/* Sierra */}
+              <path d="M 0 160 Q 40 90 80 130 T 140 100 T 200 130 T 280 160 L 280 240 L 0 240 Z" fill="#5A7A4A" stroke="#FAFAF5" stroke-width="3"/>
+              <path d="M -20 180 Q 30 130 70 160 T 150 140 T 230 170 T 300 180" fill="none" stroke="#FAFAF5" stroke-width="1.5" opacity="0.4"/>
+
+              {/* Pinsapos */}
+              {Array.from({length: 5}).map((_, i) => (
+                <g transform={`translate(${30 + i * 50}, ${150 - Math.abs(i - 2) * 12})`}>
+                  <line x1="0" y1="0" x2="0" y2="-14" stroke="#FAFAF5" stroke-width="2"/>
+                  <path d="M -6 -8 Q 0 -20 6 -8 Z" fill="#3A5A2A" stroke="#FAFAF5" stroke-width="1.5"/>
+                </g>
+              ))}
+
+              {/* Jamón */}
+              <g transform="translate(120, 210)">
+                <ellipse cx="0" cy="0" rx="30" ry="50" fill="#C89B6A" stroke="#FAFAF5" stroke-width="2.5"/>
+                <ellipse cx="0" cy="0" rx="24" ry="44" fill="#D4A76A"/>
+                <text x="0" y="6" text-anchor="middle" font-family="monospace" font-size="7" font-weight="bold" fill="#FAFAF5" letter-spacing="2">IGP</text>
+              </g>
+
+              {/* Estrella planetario */}
+              <g transform="translate(230, 130)">
+                <polygon points="0,-8 2,-3 8,-3 3,1 5,7 0,4 -5,7 -3,1 -8,-3 -2,-3" fill="#D4A76A" stroke="#FAFAF5" stroke-width="1"/>
+              </g>
+
+              <text x="140" y="300" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#FAFAF5" letter-spacing="3">★ SERÓN · 04890 · ALMERÍA ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="sn-final__marquee">
+        <div class="sn-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ JAMÓN DE SERÓN IGP ★ VISITAMOS TU NEGOCIO ★ PRESUPUESTO 24H ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════════════ */
+  /* PALETA · SERÓN · SIERRA                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn {
+    --sn-paper:    #FFFCF6;
+    --sn-paper-2:  #F0E9D7;
+    --sn-ink:      #0E0D0B;
+    --sn-tierra:   #B86E4A;
+    --sn-tierra-d: #7A4A30;
+    --sn-oro:      #D4A76A;
+    --sn-oro-d:    #B8894A;
+    --sn-bosque:   #5A7A4A;
+    --sn-bosque-d: #3A5A2A;
+    --sn-barro:    #8B6F4A;
+    --sn-pino:     #4A6A3A;
+    --sn-shadow:   8px 8px 0 var(--sn-ink);
+  }
+
+  .sn-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--sn-tierra);
+    box-shadow: 0 0 0 0 rgba(184,110,74,0.55);
+    animation: sn-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes sn-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(184,110,74,0.6); }
+    70% { box-shadow: 0 0 0 10px rgba(184,110,74,0); }
+    100% { box-shadow: 0 0 0 0 rgba(184,110,74,0); }
+  }
+  .sn-spin { transform-origin: 50% 50%; animation: sn-spin 25s linear infinite; }
+  @keyframes sn-spin { to { transform: rotate(360deg); } }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* HERO                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 20%, rgba(184,110,74,0.10), transparent 50%),
+      radial-gradient(circle at 10% 80%, rgba(90,122,74,0.08), transparent 50%),
+      var(--sn-paper);
+    border-bottom: 3px solid var(--sn-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .sn-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, transparent 0 24px, rgba(184,110,74,0.04) 24px 25px);
+    pointer-events: none;
+  }
+  .sn-hero > * { position: relative; }
+
+  .sn-hero__top {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1rem;
+  }
+  .sn-hero__status { color: var(--sn-tierra); font-weight: 700; }
+
+  .sn-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding-block: 3rem 4rem;
+  }
+  @media (min-width: 1024px) { .sn-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+
+  .sn-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .sn-hero__chapter { color: var(--sn-bosque); }
+  .sn-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .95;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .sn-hero__title em { color: var(--sn-tierra); font-style: italic; }
+  .sn-hero__title-stamp {
+    color: var(--sn-oro);
+    background: var(--sn-ink);
+    padding: 0 .15em;
+    display: inline-block;
+  }
+
+  .sn-hero__lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+    max-width: 54ch;
+  }
+  .sn-hero__lead strong { color: var(--sn-ink); font-weight: 700; }
+  .sn-hero__lead em { color: var(--sn-tierra); font-style: italic; font-weight: 600; }
+  .sn-hero__lead-bold {
+    display: block;
+    margin-top: .75rem;
+    background: var(--sn-bosque);
+    color: var(--sn-paper);
+    padding: .25rem .55rem;
+    font-weight: 800;
+    border: 2px solid var(--sn-ink);
+    box-shadow: 3px 3px 0 var(--sn-ink);
+  }
+
+  .sn-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .sn-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--sn-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .sn-btn--primary {
+    background: var(--sn-tierra);
+    color: var(--sn-paper);
+    box-shadow: 6px 6px 0 var(--sn-ink);
+  }
+  .sn-btn--primary:hover {
+    background: var(--sn-bosque);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--sn-ink);
+  }
+  .sn-btn--ghost {
+    background: transparent;
+    color: var(--sn-ink);
+    box-shadow: 6px 6px 0 var(--sn-tierra);
+  }
+  .sn-btn--ghost:hover {
+    background: var(--sn-ink);
+    color: var(--sn-oro);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--sn-tierra);
+  }
+
+  /* KPIs */
+  .sn-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--sn-ink);
+    background: var(--sn-ink);
+  }
+  @media (min-width: 768px) { .sn-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .sn-kpi {
+    background: var(--sn-paper);
+    padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--sn-ink);
+    border-bottom: 2px solid var(--sn-ink);
+  }
+  .sn-kpi:nth-child(2n) { border-right: none; }
+  .sn-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .sn-kpi:nth-child(2n)      { border-right: 2px solid var(--sn-ink); }
+    .sn-kpi:nth-child(4n)      { border-right: none; }
+    .sn-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--sn-ink); }
+    .sn-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .sn-kpi--tierra { background: var(--sn-tierra); color: var(--sn-paper); }
+  .sn-kpi--oro { background: var(--sn-oro); color: var(--sn-ink); }
+  .sn-kpi--bosque { background: var(--sn-bosque); color: var(--sn-paper); }
+  .sn-kpi--ink { background: var(--sn-ink); color: var(--sn-paper); }
+  .sn-kpi--ink .sn-kpi__v { color: var(--sn-oro); }
+  .sn-kpi__v { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1; }
+  .sn-kpi__v small { font-size: .5em; opacity: .8; }
+  .sn-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTAL SERÓN */
+  .sn-hero__postal {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
+  }
+  .sn-postcard {
+    background: var(--sn-paper);
+    border: 3px solid var(--sn-ink);
+    box-shadow: var(--sn-shadow);
+    overflow: hidden;
+    position: relative;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .sn-postcard:hover { transform: rotate(0); }
+  .sn-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    background: var(--sn-tierra);
+    color: var(--sn-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--sn-ink);
+  }
+  .sn-postcard__profile {
+    aspect-ratio: 540 / 200;
+    overflow: hidden;
+    border-bottom: 2px solid var(--sn-ink);
+  }
+  .sn-postcard__profile svg { display: block; width: 100%; height: 100%; }
+  .sn-postcard__img-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 2px solid var(--sn-ink);
+  }
+  .sn-postcard__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.1);
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .sn-postcard:hover .sn-postcard__img { transform: scale(1.05); }
+  .sn-postcard__seal {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 80px; height: 80px;
+    transform: rotate(-12deg);
+    filter: drop-shadow(0 4px 10px rgba(184,110,74,0.4));
+  }
+  .sn-postcard__tag {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    background: var(--sn-oro);
+    color: var(--sn-ink);
+    padding: .4rem .75rem;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 2px solid var(--sn-ink);
+    box-shadow: 3px 3px 0 var(--sn-ink);
+    transform: rotate(-2deg);
+  }
+  .sn-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--sn-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .sn-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    font-size: .68rem;
+  }
+  .sn-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .sn-postcard__data-row > span:first-child {
+    color: var(--sn-tierra-d);
+    letter-spacing: .2em;
+    font-weight: 800;
+  }
+  .sn-postcard__data-v {
+    color: var(--sn-ink);
+    font-weight: 700;
+    letter-spacing: .05em;
+  }
+
+  /* Marquee */
+  .sn-marquee {
+    background: var(--sn-tierra);
+    color: var(--sn-paper);
+    overflow: hidden;
+    padding: .9rem 0;
+    border-top: 3px solid var(--sn-ink);
+  }
+  .sn-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: sn-marquee 38s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+  @keyframes sn-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* JAMÓN DE SERÓN                                          */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-jamon-section {
+    padding: 6rem 1.5rem;
+    background: var(--sn-paper);
+    border-bottom: 3px solid var(--sn-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .sn-jamon-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(184,110,74,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .sn-jamon-section > * { position: relative; }
+  .sn-jamon-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .sn-jamon-grid { grid-template-columns: 1.1fr .9fr; gap: 4rem; } }
+
+  .sn-jamon-l { display: flex; flex-direction: column; gap: 1.25rem; }
+  .sn-jamon-chapter { color: var(--sn-tierra); }
+  .sn-jamon-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .sn-jamon-title em { color: var(--sn-tierra); font-style: italic; }
+  .sn-jamon-lead {
+    font-size: 1.1rem;
+    line-height: 1.55;
+    color: var(--brutal-text-secondary);
+  }
+  .sn-jamon-lead strong { color: var(--sn-ink); font-weight: 700; }
+
+  .sn-jamon-facts {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--sn-ink);
+    background: var(--sn-ink);
+  }
+  @media (min-width: 640px) { .sn-jamon-facts { grid-template-columns: 1fr 1fr; } }
+  .sn-jamon-facts li {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: .85rem 1rem;
+    background: var(--sn-paper);
+    border-bottom: 1px solid var(--sn-ink);
+    border-right: 1px solid var(--sn-ink);
+  }
+  .sn-jamon-facts li:nth-child(even) { border-right: none; }
+  .sn-jamon-facts li:nth-last-child(-n+2) { border-bottom: none; }
+  .sn-jamon-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--sn-tierra); font-weight: 800; }
+  .sn-jamon-facts__v { font-size: .85rem; color: var(--sn-ink); font-weight: 600; line-height: 1.35; }
+
+  .sn-jamon-r {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(184,110,74,0.2));
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* LAS MENAS                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-minas-section {
+    padding: 6rem 1.5rem;
+    background: var(--sn-ink);
+    color: var(--sn-paper);
+    border-bottom: 3px solid var(--sn-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .sn-minas-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(212,167,106,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .sn-minas-section > * { position: relative; }
+  .sn-minas-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) { .sn-minas-grid { grid-template-columns: 1.1fr .9fr; gap: 4rem; } }
+
+  .sn-minas-l { display: flex; flex-direction: column; gap: 1.25rem; }
+  .sn-minas-chapter { color: var(--sn-oro); }
+  .sn-minas-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    line-height: .95;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .sn-minas-title em { color: var(--sn-oro); font-style: italic; }
+  .sn-minas-lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,252,246,0.78);
+  }
+  .sn-minas-lead strong { color: var(--sn-paper); font-weight: 700; }
+
+  .sn-minas-facts {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 2px solid var(--sn-paper);
+    background: var(--sn-paper);
+  }
+  @media (min-width: 640px) { .sn-minas-facts { grid-template-columns: 1fr 1fr; } }
+  .sn-minas-facts li {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: .85rem 1rem;
+    background: rgba(255,252,246,0.06);
+    border-bottom: 1px solid rgba(255,252,246,0.15);
+    border-right: 1px solid rgba(255,252,246,0.15);
+  }
+  .sn-minas-facts li:nth-child(even) { border-right: none; }
+  .sn-minas-facts li:nth-last-child(-n+2) { border-bottom: none; }
+  .sn-minas-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--sn-oro); font-weight: 800; }
+  .sn-minas-facts__v { font-size: .82rem; color: var(--sn-paper); font-weight: 500; line-height: 1.35; }
+
+  .sn-minas-r {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3));
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* MAPA                                                    */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-map-section {
+    background: var(--sn-paper-2);
+    border-bottom: 3px solid var(--sn-ink);
+    padding-bottom: 0;
+  }
+  .sn-map-head { padding: 4rem 0 2rem; }
+  .sn-map-head__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: end;
+  }
+  @media (min-width: 768px) { .sn-map-head__inner { grid-template-columns: 1.6fr 1fr; } }
+  .sn-map-title {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    line-height: .95;
+    letter-spacing: -.035em;
+    margin: 1rem 0 0;
+  }
+  .sn-map-title em { color: var(--sn-tierra); }
+  .sn-map-coords {
+    background: var(--sn-ink);
+    color: var(--sn-oro);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--sn-oro);
+    box-shadow: 5px 5px 0 var(--sn-oro);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem;
+    letter-spacing: .15em;
+  }
+
+  .sn-map-frame {
+    position: relative;
+    border-top: 3px solid var(--sn-ink);
+    border-bottom: 3px solid var(--sn-ink);
+    background: var(--sn-ink);
+  }
+  .sn-map-frame__corner {
+    position: absolute;
+    width: 30px; height: 30px;
+    border: 3px solid var(--sn-tierra);
+    z-index: 5;
+    pointer-events: none;
+  }
+  .sn-map-frame__corner--tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+  .sn-map-frame__corner--tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+  .sn-map-frame__corner--bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+  .sn-map-frame__corner--br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+  .sn-map-frame__label {
+    position: absolute;
+    z-index: 5;
+    background: var(--sn-ink);
+    color: var(--sn-oro);
+    padding: .25rem .55rem;
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .2em;
+    border: 1.5px solid var(--sn-oro);
+    pointer-events: none;
+  }
+  .sn-map-frame__label--n { top: 14px; left: 50%; transform: translateX(-50%); }
+  .sn-map-frame__label--s { bottom: 14px; left: 50%; transform: translateX(-50%); }
+  .sn-map-frame__label--e { right: 14px; top: 50%; transform: translateY(-50%); }
+  .sn-map-frame__label--w { left: 14px; top: 50%; transform: translateY(-50%); }
+  @media (max-width: 640px) {
+    .sn-map-frame__label--e, .sn-map-frame__label--w { display: none; }
+  }
+  .sn-map-wrap {
+    width: 100%;
+    height: clamp(420px, 60vh, 600px);
+    overflow: hidden;
+  }
+  .sn-map-wrap > * { width: 100%; height: 100%; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* SECTORES                                                */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-sec-section {
+    background: var(--sn-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sn-ink);
+  }
+  .sn-sec {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .sn-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sn-sec { grid-template-columns: repeat(3, 1fr); } }
+  .sn-sec__card {
+    background: var(--sn-paper);
+    border: 2.5px solid var(--sn-ink);
+    box-shadow: var(--sn-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s, background .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .sn-sec__card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 6px;
+    background: currentColor;
+  }
+  .sn-sec__card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 12px 12px 0 currentColor;
+  }
+  .sn-sec__card--tierra { color: var(--sn-tierra); }
+  .sn-sec__card--bosque  { color: var(--sn-bosque); }
+  .sn-sec__card--oro     { color: var(--sn-oro); }
+  .sn-sec__card--barro   { color: var(--sn-barro); }
+  .sn-sec__card--pino    { color: var(--sn-pino); }
+  .sn-sec__card--ink     { color: var(--sn-ink); }
+
+  .sn-sec__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed currentColor;
+  }
+  .sn-sec__num { font-size: 1.25rem; font-weight: 800; color: currentColor; }
+  .sn-sec__stat-box { display: flex; flex-direction: column; align-items: flex-end; }
+  .sn-sec__stat-v { font-size: 1.1rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .sn-sec__stat-l { font-size: .55rem; letter-spacing: .12em; color: currentColor; font-weight: 700; text-transform: uppercase; }
+  .sn-sec__title {
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--sn-ink);
+    margin: 0;
+  }
+  .sn-sec__desc {
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--brutal-text-secondary);
+    flex: 1;
+  }
+  .sn-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .sn-sec__tag {
+    display: flex; align-items: flex-start; gap: .35rem;
+    font-size: .8rem;
+    line-height: 1.35;
+    color: var(--sn-ink);
+  }
+  .sn-sec__tag span { color: currentColor; font-weight: 800; }
+  .sn-sec__foot {
+    padding-top: .65rem;
+    border-top: 2px solid var(--sn-ink);
+  }
+  .sn-sec__cta {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .15em;
+    color: currentColor;
+    text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* DIFERENCIALES                                           */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-dif-section {
+    background: var(--sn-tierra-d);
+    color: var(--sn-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sn-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .sn-dif-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(212,167,106,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .sn-dif-section > * { position: relative; }
+  .sn-dif {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 768px)  { .sn-dif { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sn-dif { grid-template-columns: repeat(4, 1fr); } }
+  .sn-dif__item {
+    background: rgba(255,252,246,0.05);
+    border: 2px solid var(--sn-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .sn-dif__item:hover { background: rgba(212,167,106,0.12); transform: translateY(-3px); }
+  .sn-dif__num { font-size: .85rem; color: var(--sn-oro); font-weight: 800; letter-spacing: .15em; }
+  .sn-dif__t {
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--sn-paper);
+    margin: 0;
+  }
+  .sn-dif__desc { font-size: .85rem; line-height: 1.45; color: rgba(255,252,246,0.75); margin: 0; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PROCESO                                                 */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-proc-section {
+    background: var(--sn-bosque-d);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sn-ink);
+    position: relative;
+  }
+  .sn-proc-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, transparent 0 24px, rgba(212,167,106,0.04) 24px 25px);
+    pointer-events: none;
+  }
+  .sn-proc-section > * { position: relative; }
+  .sn-proc {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px)  { .sn-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sn-proc { grid-template-columns: repeat(4, 1fr); } }
+  .sn-proc__step {
+    background: rgba(255,252,246,0.06);
+    border: 2px solid var(--sn-oro);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: background .25s, transform .25s;
+    position: relative;
+  }
+  .sn-proc__step:hover { background: rgba(255,252,246,0.10); transform: translateY(-3px); }
+  .sn-proc__head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: .5rem;
+    border-bottom: 2px dashed var(--sn-oro);
+  }
+  .sn-proc__num { font-size: 1.35rem; font-weight: 800; color: var(--sn-oro); letter-spacing: .1em; }
+  .sn-proc__eta { font-size: .6rem; color: var(--sn-oro); letter-spacing: .15em; font-weight: 700; }
+  .sn-proc__t {
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--sn-paper);
+    margin: 0;
+  }
+  .sn-proc__body { font-size: .85rem; line-height: 1.5; color: rgba(255,252,246,0.7); flex: 1; }
+  .sn-proc__foot {
+    font-size: .65rem;
+    color: var(--sn-oro);
+    letter-spacing: .12em;
+    padding-top: .5rem;
+    border-top: 1.5px solid rgba(212,167,106,0.3);
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* TESTIMONIOS                                             */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-quote-section {
+    background: var(--sn-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sn-ink);
+  }
+  .sn-pull {
+    position: relative;
+    background: var(--sn-paper-2);
+    border: 3px solid var(--sn-ink);
+    box-shadow: var(--sn-shadow);
+    padding: 3rem 2rem 2rem;
+    margin: 2rem 0;
+  }
+  .sn-pull__seal {
+    position: absolute;
+    top: -30px; right: 30px;
+    width: 90px; aspect-ratio: 1;
+    transform: rotate(-10deg);
+    filter: drop-shadow(0 4px 8px rgba(184,110,74,0.35));
+  }
+  .sn-pull__q {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    line-height: 1.3;
+    margin: 0 0 1.5rem;
+    color: var(--sn-ink);
+    max-width: 56ch;
+  }
+  .sn-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--sn-ink); }
+  .sn-pull__avatar {
+    width: 48px; height: 48px;
+    background: var(--sn-tierra); color: var(--sn-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 800;
+    border-radius: 50%;
+  }
+  .sn-pull__cap div { display: flex; flex-direction: column; }
+  .sn-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--sn-ink); }
+  .sn-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+
+  .sn-quotes {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .sn-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .sn-quote {
+    position: relative;
+    background: var(--sn-paper);
+    border: 2px solid var(--sn-ink);
+    box-shadow: 5px 5px 0 var(--sn-ink);
+    padding: 1.75rem 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform .25s;
+  }
+  .sn-quote:hover { transform: translateY(-3px); }
+  .sn-quote--0 { background: var(--sn-paper-2); }
+  .sn-quote--1 { background: #EAE0C8; }
+  .sn-quote--2 { background: var(--sn-paper); }
+  .sn-quote__mark {
+    position: absolute;
+    top: -8px; left: 14px;
+    font-family: var(--font-serif, serif);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--sn-tierra);
+    opacity: .45;
+  }
+  .sn-quote p { font-size: .92rem; line-height: 1.5; color: var(--sn-ink); flex: 1; margin: 0; }
+  .sn-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--sn-ink); }
+  .sn-quote__avatar {
+    width: 36px; height: 36px;
+    background: var(--sn-bosque); color: var(--sn-paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 800;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .sn-quote footer div { display: flex; flex-direction: column; }
+  .sn-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .sn-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* FAQ                                                     */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-faq-section {
+    background: var(--sn-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sn-ink);
+  }
+  .sn-faq {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    border-top: 2.5px solid var(--sn-ink);
+  }
+  .sn-faq__item { border-bottom: 2px solid var(--sn-ink); }
+  .sn-faq__det summary { list-style: none; cursor: pointer; }
+  .sn-faq__det summary::-webkit-details-marker { display: none; }
+  .sn-faq__sum {
+    display: grid;
+    grid-template-columns: 60px 1fr 40px;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    transition: padding .2s, background .2s;
+  }
+  .sn-faq__sum:hover { padding-inline: 1rem; background: var(--sn-paper); }
+  .sn-faq__num { font-size: 1rem; font-weight: 800; color: var(--sn-tierra-d); letter-spacing: .1em; }
+  .sn-faq__q {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.3;
+    letter-spacing: -.015em;
+    color: var(--sn-ink);
+    font-weight: 700;
+  }
+  .sn-faq__toggle {
+    width: 40px; height: 40px;
+    border: 2px solid var(--sn-ink);
+    background: var(--sn-paper);
+    color: var(--sn-ink);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .3s, background .2s, color .2s;
+  }
+  .sn-faq__det[open] .sn-faq__toggle { transform: rotate(180deg); background: var(--sn-tierra); color: var(--sn-paper); }
+  .sn-faq__ans {
+    padding: 0 0 1.5rem 76px;
+    color: var(--brutal-text-secondary);
+    font-size: .98rem;
+    line-height: 1.55;
+    max-width: 70ch;
+  }
+  @media (max-width: 640px) {
+    .sn-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
+    .sn-faq__ans { padding-left: 48px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* PUEBLOS VECINOS                                         */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-vecinos-section {
+    background: var(--sn-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--sn-ink);
+  }
+  .sn-vecinos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr;
+    border: 2px solid var(--sn-ink);
+    background: var(--sn-ink);
+  }
+  @media (min-width: 640px)  { .sn-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .sn-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .sn-vecino {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 1fr auto;
+    gap: .35rem;
+    padding: 1.5rem;
+    background: var(--sn-paper);
+    color: var(--sn-ink);
+    text-decoration: none;
+    min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .sn-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .sn-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .sn-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .sn-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--sn-tierra); font-size: 1.3rem; transition: transform .25s; }
+  .sn-vecino:hover { background: var(--sn-tierra); color: var(--sn-paper); }
+  .sn-vecino:hover .sn-vecino__sub, .sn-vecino:hover .sn-vecino__n { opacity: .85; }
+  .sn-vecino:hover .sn-vecino__arrow { color: var(--sn-paper); transform: translateX(4px); }
+  .sn-vecino--1:hover { background: var(--sn-bosque); color: var(--sn-paper); }
+  .sn-vecino--2:hover { background: var(--sn-ink); color: var(--sn-oro); }
+  .sn-vecino--2:hover .sn-vecino__arrow { color: var(--sn-oro); }
+  .sn-vecino--3:hover { background: var(--sn-oro); color: var(--sn-ink); }
+
+  /* ═══════════════════════════════════════════════════════ */
+  /* CTA FINAL                                               */
+  /* ═══════════════════════════════════════════════════════ */
+  .sn-final {
+    background: var(--sn-ink);
+    color: var(--sn-paper);
+    padding: 6rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .sn-final::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(135deg, transparent 0 24px, rgba(212,167,106,0.04) 24px 25px);
+    pointer-events: none;
+  }
+  .sn-final > * { position: relative; }
+  .sn-final__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-bottom: 4rem;
+  }
+  @media (min-width: 1024px) { .sn-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .sn-final__chapter { color: var(--sn-oro); }
+  .sn-final__title {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: .9;
+    letter-spacing: -.045em;
+    color: var(--sn-paper);
+    margin: 1rem 0;
+  }
+  .sn-final__title em { color: var(--sn-oro); font-style: italic; display: block; }
+  .sn-final__lead {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: rgba(255,252,246,0.75);
+    max-width: 52ch;
+  }
+  .sn-final__lead strong { color: var(--sn-oro); }
+  .sn-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .sn-final__btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.15rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+  }
+  .sn-final__btn--primary {
+    background: var(--sn-tierra); color: var(--sn-paper); border-color: var(--sn-tierra);
+    box-shadow: 6px 6px 0 var(--sn-oro);
+  }
+  .sn-final__btn--primary:hover {
+    background: var(--sn-oro); color: var(--sn-ink); border-color: var(--sn-oro);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--sn-tierra);
+  }
+  .sn-final__btn--ghost {
+    background: transparent; color: var(--sn-paper); border-color: var(--sn-paper);
+    box-shadow: 6px 6px 0 var(--sn-paper);
+  }
+  .sn-final__btn--ghost:hover {
+    background: var(--sn-paper); color: var(--sn-ink);
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--sn-paper);
+  }
+  .sn-final__trust {
+    display: flex; flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .15em;
+    color: rgba(255,252,246,0.55);
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+  }
+  .sn-final__trust .sn-pulse { background: var(--sn-oro); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(212,167,106,0.55); }
+
+  .sn-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .sn-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(184,110,74,0.25)); }
+
+  .sn-final__marquee {
+    background: var(--sn-oro);
+    color: var(--sn-ink);
+    overflow: hidden;
+    padding: .85rem 0;
+    border-top: 3px solid var(--sn-ink);
+    margin: 0 -1.5rem;
+  }
+  .sn-final__marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: sn-marquee 28s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    font-weight: 800;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+  }
+</style>
