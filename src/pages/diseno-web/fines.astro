@@ -1,0 +1,1386 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'fines');
+
+const title = 'Diseño Web en Fines | Mármol, Industria y Negocios Locales · Almería';
+const description = 'Agencia de diseño web en Fines, centro de la industria del mármol en el Valle del Almanzora. Webs para talleres de piedra natural, empresas de construcción, excavaciones, comercio local y servicios profesionales. SEO industrial, catálogo de producto y presencia digital para empresas del mármol.';
+const canonical = 'https://platanitorico.com/diseno-web/fines/';
+
+const sectores = [
+  { nombre: 'Talleres de Mármol y Piedra Natural', stat: '#1',  statLabel: 'industria en Fines',     desc: 'Los talleres de corte y transformación del mármol en Fines suministran a constructoras de toda España. Una web con catálogo de acabados, formatos y galería de trabajos permite presupuestar online y captar proyectos de arquitectura e interiorismo.', tags: ['Catálogo de acabados','Galería de trabajos','Presupuesto online','SEO "mármol Fines"'] },
+  { nombre: 'Excavaciones y Movimiento de Tierras', stat: '★',  statLabel: 'cliente Tripiana',        desc: 'Empresas como Excavaciones Tripiana demuestran que una web bien hecha genera clientes en toda la provincia. Maquinaria propia, zonificación por municipios y presupuesto online son la combinación ganadora para el sector de la excavación.', tags: ['Presupuesto 24h','Zonificación municipios','Maquinaria propia','Casos de éxito'] },
+  { nombre: 'Construcción y Reformas',              stat: '+80%', statLabel: 'proyectos por web',       desc: 'Constructoras y reformistas de Fines pueden transmitir su experiencia en mármol y construcción tradicional con una web profesional. Portfolio de obras, testimoniales de clientes y SEO local para captar obras en todo el Valle del Almanzora.', tags: ['Portfolio de obras','SEO local','Testimoniales','Presupuesto online'] },
+  { nombre: 'Distribución y Proveedores',           stat: 'B2B', statLabel: 'venta nacional',          desc: 'Fines abastece de piedra natural a mercados de toda España. Distribuidores con web en español e inglés pueden expandir ventas a arquitectos, constructoras y particulares que buscan "mármol Almería precio" o "encimeras de mármol".', tags: ['Multiidioma','Pedidos B2B','Catálogo técnico','Envíos nacionales'] },
+  { nombre: 'Comercio y Servicios Locales',         stat: '24h', statLabel: 'atención al cliente',     desc: 'Fines tiene 2.500 habitantes y una actividad industrial que atrae profesionales de toda la comarca. Comercios, clínicas, gestorías y servicios que aparezcan en Google Maps captan tanto a vecinos como a trabajadores del mármol.', tags: ['Google Maps','SEO local','Ficha de negocio','Pedidos online'] },
+  { nombre: 'Maquinaria y Alquiler de Equipos',     stat: '+20',  statLabel: 'años de oficio',         desc: 'El sector de la maquinaria de obra y movimiento de tierras necesita presencia digital para que contratistas y particulares encuentren servicios de alquiler con garantías. Web con flota visible, zonificación y presupuesto rápido.', tags: ['Catálogo de maquinaria','Zonas de cobertura','Alquiler por horas','Presupuesto rápido'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Mármol del Almanzora', sub: 'PIEDRA NATURAL',        desc: 'Fines es el corazón de la industria transformadora del mármol almeriense. Talleres de corte, pulido y acabado que convierten bloques de piedra en encimeras, solería y piezas arquitectónicas para toda España.', dato: '#1 piedra', color: 'stone' },
+  { code: 'B', name: 'Excavaciones Tripiana', sub: 'CLIENTE ★ CASO DE ÉXITO', desc: 'Excavaciones Tripiana, desde Fines, da servicio a toda Almería con maquinaria propia y más de 20 años de experiencia. Su web les ha multiplicado los clientes de toda la provincia con presupuesto online y zonificación.', dato: '+20 años', color: 'accent' },
+  { code: 'C', name: 'Valle del Almanzora',   sub: 'COMARCA PRODUCTIVA',    desc: 'Fines se asienta en el corazón del Valle del Almanzora, la comarca más activa industrialmente de Almería. Su posición estratégica entre Albox, Olula del Río y Tíjola la convierte en nodo de servicios y logística.', dato: 'Eje industrial', color: 'blue' },
+  { code: 'D', name: 'Industria y Oficio',    sub: 'TRADICIÓN + TECNOLOGÍA', desc: 'El oficio del mármol y la construcción pesada se ha transmitido durante generaciones en Fines. Hoy se combina con maquinaria moderna y presencia digital para competir en mercados nacionales e internacionales.', dato: 'Tradición viva', color: 'ink' },
+];
+
+const processData = [
+  { k: 'POBLACIÓN',     v: '2.500 hab · Valle del Almanzora' },
+  { k: 'INDUSTRIA',     v: 'Mármol · Excavaciones · Construcción' },
+  { k: 'TALLERES',      v: '10+ talleres de corte y transformación' },
+  { k: 'UBICACIÓN',     v: 'Eje Albox · Olula del Río · Tíjola' },
+  { k: 'CLIENTE TOP',   v: 'Excavaciones Tripiana · desde 2004' },
+  { k: 'COBERTURA',     v: 'Maquinaria propia · toda Almería' },
+];
+
+const diferenciales = [
+  { title: 'Capital del mármol transformado',    desc: 'Fines no es cantera — es taller. Aquí se corta, pule y transforma el mármol en piezas acabadas. Ese valor añadido industrial es lo que diferencia a sus empresas y lo que hay que comunicar en cada web.' },
+  { title: 'Excavaciones Tripiana, caso real',    desc: 'Tenemos un cliente en Fines, Excavaciones Tripiana, que pasó de trabajar solo por recomendación a captar obras en toda la provincia con presupuesto online y web profesional. El caso lo cuentan ellos mejor que nosotros.' },
+  { title: 'Eje logístico del Almanzora',         desc: 'En el centro del valle, a 5 min de Albox y Olula, a 30 de Huércal-Overa. Cualquier negocio con web bien posicionada capta clientes de toda la comarca y del corredor hacia el Levante y la costa.' },
+  { title: 'Industria con futuro digital',        desc: 'El sector del mármol y la construcción tienen una oportunidad digital enorme. La mayoría de talleres y excavadoras aún no tienen web competitiva. Quien se mueve primero, capta el mercado.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión industrial',       eta: '1–2 días',  body: 'Visitamos tu taller, obra o negocio en Fines. Vemos cómo trabajáis, qué maquinaria usáis, qué os diferencia. Entendemos el negocio en su contexto real del mármol y la construcción.', deliverable: 'Briefing + análisis' },
+  { num: '02', title: 'Diseño industrial',           eta: '3–5 días',  body: 'Diseño que transmite solidez, maquinaria y oficio. Tipografía robusta, paleta de piedra y acero, fotografía de tus trabajos reales. Nada de plantillas genéricas.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Desarrollo + catálogo',       eta: '5–10 días', body: 'Astro ultrarrápido, catálogo de productos o servicios, sistema de presupuesto online, formularios de contacto inteligentes, Core Web Vitals verdes y accesibilidad AA.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + SEO industrial', eta: '1–2 días',  body: 'Publicamos y configuramos Google Business Profile para Fines, keywords del mármol, excavación y construcción, e indexamos en Search Console.', deliverable: 'Sitio LIVE + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Carlos Haro',      negocio: 'Taller de corte de mármol',         texto: 'Hacemos encimeras de cocina y baño para toda la provincia pero solo funcionábamos con recomendaciones. La web con galería de trabajos nos abre puertas con interioristas y arquitectos que nos encuentran en Google.' },
+  { nombre: 'Diego Tripiana',   negocio: 'Excavaciones Tripiana · Fines',     texto: 'Tripiana ha pasado de ser "el excavador de Fines" a dar servicio en toda la provincia. La web con presupuesto online y páginas por municipios nos ha traído clientes de Vera, Mojácar, Albox y Huércal-Overa. Multiplicamos las llamadas.' },
+  { nombre: 'Rafael Girona',    negocio: 'Distribuidor de piedra natural',    texto: 'Distribuimos mármol del Almanzora a constructoras de toda España. La web profesional nos da la imagen que necesitamos para cerrar contratos grandes. Ya no somos "el taller de Fines" — somos una empresa con presencia nacional.' },
+];
+
+const faq = [
+  { q: '¿Puede un taller de mármol de Fines vender sus productos a toda España con una web?', a: 'Sí, con catálogo de acabados y formatos, galería de trabajos reales y formulario de presupuesto. Los envíos de piezas cortadas a medida son habituales. SEO para "encimera mármol Almería" o "solería mármol precio" atrae clientes de toda España.' },
+  { q: '¿Tenéis experiencia con empresas de excavación y movimiento de tierras?', a: 'Sí, Excavaciones Tripiana es cliente nuestro. Su web tiene presupuesto online, zonificación por municipios, galería de trabajos reales y catálogo de maquinaria. El resultado: clientes de toda la provincia que antes no llegaban.' },
+  { q: '¿Cuánto cuesta una web con catálogo para taller de piedra natural?', a: 'Desde 750€ para web con galería de trabajos, catálogo básico de acabados, formulario de presupuesto y hosting gratuito. Con tienda online o catálogo interactivo desde 1.200€.' },
+  { q: '¿Hacéis webs para empresas de excavaciones con presupuesto online?', a: 'Sí, es uno de nuestros servicios más demandados en la comarca. Web con motor de presupuesto rápido, páginas por municipio, galería de maquinaria y trabajos, y llamada a la acción directa. Desde 650€.' },
+  { q: '¿Podéis hacer la web en inglés para captar clientes europeos?', a: 'Sí, añadimos versión en inglés para talleres de mármol que quieran captar arquitectos y promotoras de Europa. Términos como "marble countertops Spain" o "natural stone supplier" tienen demanda real en el sector.' },
+  { q: '¿En cuánto tiempo tengo mi web de Fines lista?', a: 'Web corporativa: 1–2 semanas. Taller con catálogo de producto: 2–3 semanas. Excavaciones con presupuesto online y zonificación: 2–3 semanas.' },
+  { q: '¿Ayudáis con el marketing digital para empresas industriales?', a: 'Sí, ofrecemos SEO local, Google Business Profile optimizado para sectores industriales, gestión de reseñas y contenido para redes. Posicionamos para keywords como "excavaciones Almería precio", "mármol Fines" o "alquiler maquinaria Almanzora".' },
+  { q: '¿Hacéis reuniones presenciales en Fines?', a: 'Sí, estamos en Vera, a 20 minutos de Fines. Podemos vernos en tu negocio, taller u obra. También por videollamada. La primera consulta es gratuita.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Fines","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Fines","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seo-fines.jpg","address":{"@type":"PostalAddress","addressLocality":"Fines","addressRegion":"Almería","postalCode":"04869","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3558,"longitude":-1.8433},"areaServed":["Fines","Albox","Olula del Río","Tíjola","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"50","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Fines","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seo-fines.jpg"
+  imageAlt="Diseño web en Fines - Mármol, Excavaciones e Industria del Almanzora"
+  type="service"
+  keywords="diseño web fines, mármol almanzora, excavaciones tripiana, web taller mármol, industria almería, diseño web valle del almanzora"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="fn">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — INDUSTRIA DEL MÁRMOL                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-hero">
+      <div class="container-brutal">
+
+        <header class="fn-hero__top">
+          <span class="text-meta">N.º 031 — Valle del Almanzora · Industria</span>
+          <span class="text-meta fn-hero__status">
+            <span class="fn-pulse"></span>
+            ★ CAPITAL DEL MÁRMOL TRANSFORMADO · FINES ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="fn-hero__grid">
+
+          <div class="fn-hero__intro">
+            <span class="text-meta fn-hero__chapter">Cap. 01 / Fines · Almería</span>
+            <h1 class="fn-hero__title heading-display">
+              Diseño web para la
+              <em class="heading-editorial">industria</em>
+              <span class="fn-hero__title-stamp">del mármol y la excavación.</span>
+            </h1>
+
+            <p class="fn-hero__lead">
+              <strong>Fines</strong> es el corazón industrial del
+              <em>Valle del Almanzora</em>. Talleres de mármol, empresas de
+              excavación y construcción que necesitan una presencia digital
+              a la altura de su oficio.
+              <strong>Como Excavaciones Tripiana.</strong>
+            </p>
+
+            <div class="fn-hero__cta">
+              <a href="/contacto" class="fn-btn fn-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#tripiana" class="fn-btn fn-btn--ghost">
+                Caso Tripiana ↓
+              </a>
+            </div>
+
+            <ul class="fn-kpis">
+              <li class="fn-kpi fn-kpi--stone">
+                <span class="fn-kpi__v text-mono">#1</span>
+                <span class="fn-kpi__l">Transformación mármol</span>
+              </li>
+              <li class="fn-kpi fn-kpi--accent">
+                <span class="fn-kpi__v text-mono">★</span>
+                <span class="fn-kpi__l">Caso Tripiana éxito</span>
+              </li>
+              <li class="fn-kpi fn-kpi--blue">
+                <span class="fn-kpi__v text-mono">10<small>+</small></span>
+                <span class="fn-kpi__l">Talleres de piedra</span>
+              </li>
+              <li class="fn-kpi fn-kpi--ink">
+                <span class="fn-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="fn-kpi__l">50 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — paisaje industrial + imagen real */}
+          <aside class="fn-hero__postcard" aria-hidden="true">
+            <div class="fn-postcard">
+
+              <header class="fn-postcard__head">
+                <span class="text-mono">FINES · 04869 · ALMERÍA</span>
+                <span class="text-mono">37.356° N · 1.843° W</span>
+              </header>
+
+              {/* Perfil industrial SVG */}
+              <div class="fn-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="fn-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#8A9BA8"/>
+                      <stop offset="100%" stop-color="#C8CDD0"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo industrial */}
+                  <rect width="540" height="220" fill="url(#fn-sky)"/>
+
+                  {/* Montañas lejanas */}
+                  <path d="M 0 160 L 80 90 L 120 100 L 160 80 L 220 120 L 280 90 L 340 130 L 400 100 L 460 140 L 540 120 L 540 220 L 0 220 Z" fill="#B8A898" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 180 L 60 130 L 120 140 L 180 110 L 240 150 L 300 120 L 360 160 L 420 130 L 480 170 L 540 150 L 540 220 L 0 220 Z" fill="#A09080" stroke="#1A1816" stroke-width="1"/>
+
+                  {/* Suelo industrial */}
+                  <path d="M 0 190 Q 80 184 180 190 T 360 190 T 540 190 L 540 220 L 0 220 Z" fill="#D1C9B8" stroke="#1A1816" stroke-width="2"/>
+
+                  {/* NAVE INDUSTRIAL grande */}
+                  <g transform="translate(200, 120)">
+                    <rect x="0" y="0" width="100" height="60" fill="#B0A898" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="0" y="0" width="100" height="8" fill="#D97A3A" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="10" y="12" width="14" height="18" fill="#3A5A7A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="38" y="12" width="14" height="18" fill="#3A5A7A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="66" y="12" width="14" height="18" fill="#3A5A7A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="94" y="6" width="6" height="54" fill="#D97A3A" stroke="#1A1816" stroke-width="1"/>
+                    {/* Chimenea */}
+                    <rect x="84" y="-20" width="10" height="24" fill="#8A7A6A" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 82 -20 Q 87 -26 94 -20" fill="none" stroke="#1A1816" stroke-width="1"/>
+                    {/* Humo */}
+                    <circle cx="90" cy="-28" r="4" fill="#D1C9B8" opacity="0.4"/>
+                    <circle cx="96" cy="-34" r="3" fill="#D1C9B8" opacity="0.3"/>
+                    <circle cx="88" cy="-36" r="2.5" fill="#D1C9B8" opacity="0.2"/>
+                  </g>
+
+                  {/* NAVE pequeña izquierda */}
+                  <g transform="translate(60, 140)">
+                    <rect x="0" y="0" width="70" height="40" fill="#C8BFA8" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="0" y="0" width="70" height="6" fill="#B89850" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="8" y="10" width="12" height="14" fill="#3A5A7A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="32" y="10" width="12" height="14" fill="#3A5A7A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="62" y="4" width="4" height="36" fill="#8A7A6A" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Silo / depósito */}
+                  <g transform="translate(330, 130)">
+                    <rect x="0" y="8" width="24" height="42" rx="2" fill="#B8A898" stroke="#1A1816" stroke-width="2"/>
+                    <path d="M -2 8 L 26 8 L 22 0 L 2 0 Z" fill="#8A7A6A" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="12" y1="12" x2="12" y2="46" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/>
+                    <line x1="12" y1="20" x2="28" y2="20" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/>
+                    <line x1="12" y1="30" x2="28" y2="30" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/>
+                  </g>
+
+                  {/* Grúa / maquinaria */}
+                  <g transform="translate(420, 120)">
+                    <rect x="-2" y="30" width="4" height="30" fill="#D97A3A" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="0" y1="30" x2="40" y2="10" stroke="#D97A3A" stroke-width="3"/>
+                    <line x1="40" y1="10" x2="40" y2="30" stroke="#D97A3A" stroke-width="2"/>
+                    <line x1="38" y1="30" x2="42" y2="32" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="-4" y="56" width="8" height="4" fill="#1A1816"/>
+                  </g>
+
+                  {/* Camión silueta */}
+                  <g transform="translate(100, 160)">
+                    <rect x="0" y="8" width="24" height="14" rx="2" fill="#3A5A7A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="24" y="4" width="12" height="18" rx="2" fill="#B89850" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="6" cy="24" r="4" fill="#1A1816"/>
+                    <circle cx="30" cy="24" r="4" fill="#1A1816"/>
+                    <line x1="12" y1="4" x2="12" y2="0" stroke="#B89850" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Bloque de mármol (icono) */}
+                  <g transform="translate(50, 168)">
+                    <rect x="0" y="0" width="14" height="10" fill="#E8E0D0" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="4" y1="0" x2="4" y2="10" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="10" y1="0" x2="10" y2="10" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="4" x2="14" y2="4" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                  </g>
+
+                  {/* Label route */}
+                  <path d="M 60 200 Q 200 194 380 200" fill="none" stroke="#D1C9B8" stroke-width="2" stroke-dasharray="3 4" opacity="0.5"/>
+
+                </svg>
+              </div>
+
+              {/* Imagen real Fines */}
+              <div class="fn-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-seo-fines.jpg"
+                  alt="Fines — industria del mármol y Valle del Almanzora"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="fn-postcard__img"
+                />
+                {/* Icono engranaje/industria */}
+                <div class="fn-postcard__gear" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#D97A3A" stroke="#1A1816" stroke-width="2"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <!-- Engranaje -->
+                    <g transform="translate(40,40)" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5">
+                      <rect x="-12" y="-3" width="24" height="6" rx="1"/>
+                      <rect x="-3" y="-12" width="6" height="24" rx="1"/>
+                      <rect x="-12" y="-12" width="6" height="6" rx="1" transform="rotate(45)"/>
+                      <rect x="6" y="-12" width="6" height="6" rx="1" transform="rotate(45)"/>
+                      <circle cx="0" cy="0" r="5" fill="#D97A3A" stroke="#1A1816" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="fn-postcard__tag">
+                  <span class="text-mono">★ INDUSTRIA · MÁRMOL · OFICIO ★</span>
+                </div>
+              </div>
+
+              {/* Datos Fines */}
+              <div class="fn-postcard__data">
+                <div class="fn-postcard__data-row">
+                  <span class="text-mono">POBLACIÓN</span>
+                  <span class="text-mono fn-postcard__data-v">2.500 hab</span>
+                </div>
+                <div class="fn-postcard__data-row">
+                  <span class="text-mono">INDUSTRIA</span>
+                  <span class="text-mono fn-postcard__data-v">Mármol · Excavación</span>
+                </div>
+                <div class="fn-postcard__data-row">
+                  <span class="text-mono">CLIENTE TOP</span>
+                  <span class="text-mono fn-postcard__data-v">Excavaciones Tripiana</span>
+                </div>
+                <div class="fn-postcard__data-row">
+                  <span class="text-mono">COMARCA</span>
+                  <span class="text-mono fn-postcard__data-v">Valle del Almanzora</span>
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+        </div>
+
+        {/* Marquee */}
+        <div class="fn-marquee">
+          <div class="fn-marquee__track">
+            <span>★ FINES · CORAZÓN DEL MÁRMOL ALMERIENSE ★ EXCAVACIONES TRIPIANA · +20 AÑOS ★ 10+ TALLERES DE PIEDRA NATURAL ★ VALLE DEL ALMANZORA ★ CONSTRUCCIÓN · EXCAVACIÓN · INDUSTRIA ★ TU WEB, TU OBRA MAESTRA ★</span>
+            <span>★ FINES · CORAZÓN DEL MÁRMOL ALMERIENSE ★ EXCAVACIONES TRIPIANA · +20 AÑOS ★ 10+ TALLERES DE PIEDRA NATURAL ★ VALLE DEL ALMANZORA ★ CONSTRUCCIÓN · EXCAVACIÓN · INDUSTRIA ★ TU WEB, TU OBRA MAESTRA ★</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-iconos-section">
+      <div class="container-brutal">
+
+        <span class="text-meta fn-iconos-chapter">Cap. 02 / Prontuario</span>
+        <h2 class="fn-iconos-title heading-display">
+          Cuatro sellos de
+          <em class="heading-editorial">identidad</em>
+          <span class="heading-display-block">de Fines.</span>
+        </h2>
+
+        <ol class="fn-iconos" style="counter-reset: iconos">
+          {iconos.map((ico, i) => (
+            <li class={`fn-icono fn-icono--${ico.color}`}>
+              <div class="fn-icono__code">
+                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                  <circle cx="40" cy="40" r="38" fill="var(--fn-ink)" stroke="var(--fn-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="var(--fn-paper)" stroke="var(--fn-ink)" stroke-width="2"/>
+                  {i === 0 && (
+                    <>
+                      <rect x="18" y="26" width="44" height="34" rx="2" fill="var(--fn-stone)" stroke="var(--fn-ink)" stroke-width="1.5"/>
+                      <line x1="24" y1="32" x2="56" y2="32" stroke="var(--fn-ink)" stroke-width="0.8" opacity="0.3"/>
+                      <line x1="24" y1="38" x2="56" y2="38" stroke="var(--fn-ink)" stroke-width="0.8" opacity="0.3"/>
+                      <line x1="24" y1="44" x2="56" y2="44" stroke="var(--fn-ink)" stroke-width="0.8" opacity="0.3"/>
+                      <line x1="24" y1="50" x2="56" y2="50" stroke="var(--fn-ink)" stroke-width="0.8" opacity="0.3"/>
+                    </>
+                  )}
+                  {i === 1 && (
+                    <>
+                      <rect x="22" y="32" width="14" height="18" rx="1" fill="var(--fn-accent)" stroke="var(--fn-ink)" stroke-width="1.5"/>
+                      <rect x="40" y="26" width="18" height="24" rx="1" fill="var(--fn-blue)" stroke="var(--fn-ink)" stroke-width="1.5"/>
+                      <circle cx="31" cy="24" r="4" fill="var(--fn-terrazo)" stroke="var(--fn-ink)" stroke-width="1"/>
+                      <line x1="28" y1="24" x2="34" y2="24" stroke="var(--fn-ink)" stroke-width="0.8"/>
+                      <path d="M 22 28 L 20 24 L 24 24 Z" fill="var(--fn-terrazo)" stroke="var(--fn-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                  {i === 2 && (
+                    <>
+                      <circle cx="32" cy="32" r="4" fill="var(--fn-blue)" stroke="var(--fn-ink)" stroke-width="1"/>
+                      <circle cx="48" cy="28" r="3" fill="var(--fn-accent)" stroke="var(--fn-ink)" stroke-width="1"/>
+                      <circle cx="44" cy="42" r="3.5" fill="var(--fn-terrazo)" stroke="var(--fn-ink)" stroke-width="1"/>
+                      <circle cx="36" cy="48" r="2.5" fill="var(--fn-blue)" stroke="var(--fn-ink)" stroke-width="1"/>
+                      <path d="M 20 50 L 32 32 L 48 28 L 60 50 Z" fill="none" stroke="var(--fn-ink)" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.3"/>
+                    </>
+                  )}
+                  {i === 3 && (
+                    <>
+                      <circle cx="40" cy="32" r="10" fill="var(--fn-stone)" stroke="var(--fn-ink)" stroke-width="1.5"/>
+                      <path d="M 28 44 Q 40 52 52 44" fill="none" stroke="var(--fn-ink)" stroke-width="2"/>
+                      <path d="M 34 40 L 34 48 M 40 38 L 40 50 M 46 40 L 46 48" stroke="var(--fn-ink)" stroke-width="1.5"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <span class="fn-icono__letter">{ico.code}</span>
+              <h3 class="fn-icono__name">{ico.name}</h3>
+              <span class="fn-icono__sub">{ico.sub}</span>
+              <p class="fn-icono__desc">{ico.desc}</p>
+              <span class="fn-icono__dato">{ico.dato}</span>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MÁRMOL — FLAGSHIP SECTION                           */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-marble-section">
+      <div class="container-brutal">
+        <div class="fn-marble-grid">
+
+          <div class="fn-marble__content">
+            <span class="text-meta fn-marble-chapter">Cap. 03 / Industria</span>
+            <h2 class="fn-marble-title heading-display">
+              El mármol no se extrae
+              <em class="heading-editorial">en Fines — se transforma.</em>
+            </h2>
+            <p class="fn-marble-lead">
+              Mientras Olula del Río exporta bloques y Macael es la cantera,
+              <strong>Fines es el taller</strong>. Aquí está la industria
+              transformadora: cortadoras de puente, pulidoras automáticas,
+              acabados artesanales. Los talleres de Fines convierten la
+              piedra bruta en <em>encimeras, solería, escaleras y
+              piezas arquitectónicas</em> que terminan en reformas de toda España.
+            </p>
+            <p class="fn-marble-lead">
+              Pero Fines no es solo mármol. Es también el hogar de
+              <strong>Excavaciones Tripiana</strong>, una empresa de
+              excavación y movimiento de tierras con más de 20 años de
+              oficio y maquinaria propia. Desde Fines dan servicio a toda
+              la provincia, desde piscinas en Vera hasta nivelaciones
+              en Huércal-Overa.
+            </p>
+
+            <ul class="fn-marble-facts">
+              {processData.map(d => (
+                <li>
+                  <span class="fn-marble-facts__k">{d.k}</span>
+                  <span class="fn-marble-facts__v">{d.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* SVG decorativo — bloque de mármol / engranajes */}
+          <div class="fn-marble__r">
+            <svg viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+              <defs>
+                <linearGradient id="fn-ms-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3A5A7A"/>
+                  <stop offset="60%" stop-color="#5A7A9A"/>
+                  <stop offset="100%" stop-color="#B8A898"/>
+                </linearGradient>
+                <linearGradient id="fn-marble-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#F5F0E8"/>
+                  <stop offset="30%" stop-color="#E8E0D0"/>
+                  <stop offset="60%" stop-color="#D1C9B8"/>
+                  <stop offset="100%" stop-color="#E8E0D0"/>
+                </linearGradient>
+              </defs>
+              <rect width="360" height="400" fill="url(#fn-ms-sky)" rx="8"/>
+
+              {/* Bloque de mármol principal */}
+              <g transform="translate(60, 120)">
+                <rect x="0" y="0" width="240" height="160" rx="4" fill="url(#fn-marble-grad)" stroke="#1A1816" stroke-width="3"/>
+                {/* Vetas del mármol */}
+                <path d="M 20 20 Q 80 40 120 30 T 200 50" fill="none" stroke="#C8BFA8" stroke-width="1.5" opacity="0.6"/>
+                <path d="M 0 60 Q 60 80 100 70 T 220 90" fill="none" stroke="#D1C9B8" stroke-width="1.2" opacity="0.5"/>
+                <path d="M 30 100 Q 90 110 140 100 T 240 120" fill="none" stroke="#B8A898" stroke-width="1" opacity="0.4"/>
+                <path d="M 0 140 Q 40 150 80 140 T 180 155" fill="none" stroke="#C8BFA8" stroke-width="0.8" opacity="0.3"/>
+                {/* Resalte de brillo */}
+                <rect x="10" y="10" width="80" height="40" rx="2" fill="#FFF" opacity="0.08"/>
+              </g>
+
+              {/* Engranaje decorativo */}
+              <g transform="translate(280, 80)">
+                <circle cx="0" cy="0" r="24" fill="none" stroke="#D97A3A" stroke-width="3" stroke-dasharray="5 4"/>
+                <circle cx="0" cy="0" r="14" fill="#D97A3A" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="0" cy="0" r="6" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Engranaje pequeño */}
+              <g transform="translate(60, 100)" opacity="0.6">
+                <circle cx="0" cy="0" r="12" fill="none" stroke="#B89850" stroke-width="2" stroke-dasharray="3 3"/>
+                <circle cx="0" cy="0" r="7" fill="#B89850" stroke="#1A1816" stroke-width="1.5"/>
+                <circle cx="0" cy="0" r="3" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+              </g>
+
+              {/* Regla / medición */}
+              <g transform="translate(180, 85)">
+                <rect x="0" y="0" width="80" height="6" fill="#B89850" stroke="#1A1816" stroke-width="1"/>
+                <line x1="10" y1="0" x2="10" y2="6" stroke="#1A1816" stroke-width="0.8"/>
+                <line x1="20" y1="0" x2="20" y2="4" stroke="#1A1816" stroke-width="0.8"/>
+                <line x1="30" y1="0" x2="30" y2="6" stroke="#1A1816" stroke-width="0.8"/>
+                <line x1="40" y1="0" x2="40" y2="4" stroke="#1A1816" stroke-width="0.8"/>
+                <line x1="50" y1="0" x2="50" y2="6" stroke="#1A1816" stroke-width="0.8"/>
+                <line x1="60" y1="0" x2="60" y2="4" stroke="#1A1816" stroke-width="0.8"/>
+                <line x1="70" y1="0" x2="70" y2="6" stroke="#1A1816" stroke-width="0.8"/>
+              </g>
+
+              {/* Polvo / partículas */}
+              <circle cx="100" cy="290" r="2" fill="#F5F0E8" opacity="0.4"/>
+              <circle cx="140" cy="280" r="1.5" fill="#F5F0E8" opacity="0.3"/>
+              <circle cx="180" cy="295" r="2.5" fill="#F5F0E8" opacity="0.25"/>
+              <circle cx="220" cy="285" r="1.5" fill="#F5F0E8" opacity="0.35"/>
+              <circle cx="260" cy="292" r="2" fill="#F5F0E8" opacity="0.2"/>
+
+              {/* Suelo */}
+              <path d="M 0 320 Q 80 310 180 320 T 360 320 L 360 400 L 0 400 Z" fill="#8A7A6A" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Texto */}
+              <text x="180" y="385" text-anchor="middle" fill="#F5F0E8" opacity="0.25" font-family="monospace" font-size="9" letter-spacing="3">TRANSFORMACIÓN DEL MÁRMOL · FINES</text>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TRIPIANA — CASO DE ÉXITO                           */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-tripiana-section" id="tripiana">
+      <div class="container-brutal">
+
+        <div class="fn-tripiana-grid">
+
+          <div class="fn-tripiana__content">
+            <span class="text-meta fn-tripiana-chapter">Cap. 04 / Caso de éxito</span>
+            <h2 class="fn-tripiana-title heading-display">
+              Excavaciones Tripiana:
+              <em class="heading-editorial">de Fines</em>
+              <span class="heading-display-block">a toda la provincia.</span>
+            </h2>
+
+            <p class="fn-tripiana-lead">
+              <strong>Excavaciones Tripiana</strong> es una empresa familiar de
+              Fines con <em>más de 20 años de experiencia</em> en excavaciones,
+              movimientos de tierra, nivelaciones, zanjas y preparación de
+              parcelas. Con maquinaria propia y un equipo de operarios
+              con oficio de toda la vida.
+            </p>
+
+            <p class="fn-tripiana-lead">
+              Su web, diseñada y desarrollada por nosotros, les ha permitido
+              pasar del boca-oreja a <strong>captar clientes en toda la provincia</strong>
+              de Almería. Con páginas por municipio, presupuesto online,
+              galería de trabajos reales y caso práctico interactivo.
+            </p>
+
+            <div class="fn-tripiana-stats">
+              <div class="fn-tripiana-stat">
+                <span class="fn-tripiana-stat__v">20+</span>
+                <span class="fn-tripiana-stat__l">Años de experiencia</span>
+              </div>
+              <div class="fn-tripiana-stat">
+                <span class="fn-tripiana-stat__v">100%</span>
+                <span class="fn-tripiana-stat__l">Maquinaria propia</span>
+              </div>
+              <div class="fn-tripiana-stat">
+                <span class="fn-tripiana-stat__v">6+</span>
+                <span class="fn-tripiana-stat__l">Municipios con página</span>
+              </div>
+              <div class="fn-tripiana-stat">
+                <span class="fn-tripiana-stat__v">24h</span>
+                <span class="fn-tripiana-stat__l">Presupuesto</span>
+              </div>
+            </div>
+
+            <a href="https://excavacionestripiana.com/" target="_blank" rel="noopener" class="fn-btn fn-btn--primary" style="margin-top:1rem;">
+              <span>Ver web de Tripiana →</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          {/* SVG decorativo — excavadora / engranajes */}
+          <div class="fn-tripiana__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="fn-tripiana-svg">
+              <defs>
+                <radialGradient id="fn-trip-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#D97A3A" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#D97A3A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#fn-trip-glow)"/>
+
+              {/* Círculo exterior graduado */}
+              <circle cx="170" cy="170" r="130" fill="none" stroke="#D97A3A" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+              <circle cx="170" cy="170" r="120" fill="none" stroke="#3A5A7A" stroke-width="1" stroke-dasharray="2 4" opacity="0.2"/>
+
+              {/* EXCAVADORA silueta */}
+              <g transform="translate(60, 170)">
+                {/* Oruga */}
+                <path d="M 0 40 L 80 40 L 80 50 L 0 50 Z" fill="#1A1816"/>
+                <circle cx="12" cy="45" r="6" fill="#8A7A6A" stroke="#1A1816" stroke-width="1"/>
+                <circle cx="32" cy="45" r="6" fill="#8A7A6A" stroke="#1A1816" stroke-width="1"/>
+                <circle cx="52" cy="45" r="6" fill="#8A7A6A" stroke="#1A1816" stroke-width="1"/>
+                <circle cx="72" cy="45" r="6" fill="#8A7A6A" stroke="#1A1816" stroke-width="1"/>
+                {/* Cabina */}
+                <rect x="38" y="8" width="42" height="20" rx="3" fill="#D97A3A" stroke="#1A1816" stroke-width="2"/>
+                <rect x="42" y="12" width="12" height="8" fill="#3A5A7A" stroke="#1A1816" stroke-width="1"/>
+                {/* Pluma/brazo */}
+                <line x1="38" y1="18" x2="10" y2="-30" stroke="#D97A3A" stroke-width="5" stroke-linecap="round"/>
+                <line x1="10" y1="-30" x2="-20" y2="-10" stroke="#D97A3A" stroke-width="4" stroke-linecap="round"/>
+                {/* Cazo */}
+                <path d="M -20 -10 L -30 10 L -10 10 Z" fill="#B89850" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Tierra / movimientos */}
+              <g transform="translate(130, 240)">
+                <path d="M 0 0 Q 20 -10 40 0 T 80 0" fill="none" stroke="#B89850" stroke-width="2" opacity="0.4"/>
+                <path d="M 10 5 Q 30 -3 50 5 T 90 5" fill="none" stroke="#B89850" stroke-width="1.5" opacity="0.3"/>
+                <path d="M 0 10 Q 30 2 60 10 T 100 10" fill="none" stroke="#B89850" stroke-width="1" opacity="0.2"/>
+              </g>
+
+              {/* Partículas volando */}
+              <circle cx="140" cy="190" r="3" fill="#D97A3A" opacity="0.4"/>
+              <circle cx="180" cy="180" r="2" fill="#D97A3A" opacity="0.3"/>
+              <circle cx="200" cy="200" r="2.5" fill="#D97A3A" opacity="0.25"/>
+              <circle cx="160" cy="210" r="2" fill="#D97A3A" opacity="0.35"/>
+
+              {/* Estrella / sello calidad */}
+              <g transform="translate(250, 100)">
+                <polygon points="0,-20 6,-6 20,-6 10,4 14,20 0,10 -14,20 -10,4 -20,-6 -6,-6" fill="#B89850" stroke="#1A1816" stroke-width="1.5" stroke-linejoin="round"/>
+                <circle cx="0" cy="4" r="3" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+              </g>
+
+              {/* Logo simplificado T */}
+              <text x="170" y="310" text-anchor="middle" fill="#F5F0E8" opacity="0.15" font-family="monospace" font-size="14" font-weight="800" letter-spacing="4">TRIPIANA</text>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-sec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta fn-sec-chapter">Cap. 05 / Oportunidades</span>
+        <h2 class="fn-sec-title heading-display">
+          Seis sectores para
+          <em class="heading-editorial">construir</em>
+          <span class="heading-display-block">tu presencia digital.</span>
+        </h2>
+
+        <ul class="fn-sec">
+          {sectores.map((s, i) => (
+            <li class={`fn-sec__card fn-sec__card--${['stone','accent','blue','terrazo','ink','marble'][i]}`}>
+              <div class="fn-sec__head">
+                <span class="fn-sec__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                <div class="fn-sec__stat-box">
+                  <span class="fn-sec__stat-v">{s.stat}</span>
+                  <span class="fn-sec__stat-l">{s.statLabel}</span>
+                </div>
+              </div>
+              <h3 class="fn-sec__title">{s.nombre}</h3>
+              <p class="fn-sec__desc">{s.desc}</p>
+              <ul class="fn-sec__tags">
+                {s.tags.map(tag => (
+                  <li class="fn-sec__tag"><span>▸</span> {tag}</li>
+                ))}
+              </ul>
+              <div class="fn-sec__foot">
+                <a href="/contacto" class="fn-sec__cta">Solicitar información →</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-map-section">
+      <div class="container-brutal">
+        <div class="fn-map-head">
+          <div class="fn-map-head__inner">
+            <div>
+              <span class="text-meta fn-map-chapter">Cap. 06 / Cartografía</span>
+              <h2 class="fn-map-title heading-display">
+                Fines en el
+                <em class="heading-editorial">mapa.</em>
+              </h2>
+            </div>
+            <div class="fn-map-coords">
+              <span class="text-mono">37.356° N · 1.843° W</span>
+              <span class="text-mono">04869 · Fines · Valle del Almanzora</span>
+              <span class="text-mono">Altitud: 560 m · Industria: Mármol · Excavación</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fn-map-frame">
+        <div class="fn-map-icon fn-map-icon--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <rect x="14" y="18" width="32" height="28" rx="2" fill="var(--fn-accent)" stroke="var(--fn-ink)" stroke-width="2"/>
+            <rect x="18" y="22" width="10" height="10" fill="var(--fn-blue)" stroke="var(--fn-ink)" stroke-width="1.5"/>
+            <rect x="32" y="22" width="10" height="18" fill="var(--fn-blue)" stroke="var(--fn-ink)" stroke-width="1.5"/>
+            <rect x="14" y="16" width="32" height="4" fill="var(--fn-stone)" stroke="var(--fn-ink)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="fn-map-icon fn-map-icon--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <circle cx="30" cy="30" r="20" fill="var(--fn-terrazo)" stroke="var(--fn-ink)" stroke-width="2"/>
+            <rect x="18" y="26" width="24" height="8" rx="2" fill="var(--fn-ink)"/>
+            <path d="M 12 30 L 18 30 M 42 30 L 48 30" stroke="var(--fn-ink)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="22" cy="30" r="2" fill="var(--fn-accent)"/>
+            <circle cx="30" cy="30" r="2" fill="var(--fn-accent)"/>
+            <circle cx="38" cy="30" r="2" fill="var(--fn-accent)"/>
+          </svg>
+        </div>
+        <div class="fn-map-wrap">
+          <InteractiveMap
+            center={[-1.8433, 37.3558]}
+            zoom={11}
+            pueblos={[
+              { slug: "fines", nombre: "Fines", poblacion: 2500, descripcion: "Centro de la industria del mármol", destacado: true, coords: [-1.8433, 37.3558] },
+              { slug: "albox", nombre: "Albox", poblacion: 12000, descripcion: "Capital comercial del Almanzora", coords: [-2.1433, 37.3833] },
+              { slug: "olula-del-rio", nombre: "Olula del Río", poblacion: 7000, descripcion: "Capital mundial del mármol", coords: [-1.8633, 37.3867] },
+              { slug: "tijola", nombre: "Tíjola", poblacion: 4500, descripcion: "Pueblo agrícola del Almanzora", coords: [-2.4433, 37.3517] },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                           */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta fn-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="fn-dif-title heading-display">
+          Por qué Fines
+          <em class="heading-editorial">marca la diferencia</em>
+          <span class="heading-display-block">en el Almanzora.</span>
+        </h2>
+
+        <ol class="fn-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`fn-dif__item fn-dif__item--${i}`}>
+              <span class="fn-dif__num text-mono">{String(i+1).padStart(2,'0')}</span>
+              <h3 class="fn-dif__t">{d.title}</h3>
+              <p class="fn-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-proc-section">
+      <div class="container-brutal">
+
+        <span class="text-meta fn-proc-chapter">Cap. 08 / Método</span>
+        <h2 class="fn-proc-title heading-display">
+          Así trabajamos
+          <em class="heading-editorial">en</em>
+          <span class="heading-display-block">el taller digital.</span>
+        </h2>
+
+        <ol class="fn-proc">
+          {proceso.map(p => (
+            <li class="fn-proc__step">
+              <div class="fn-proc__head">
+                <span class="fn-proc__num">{p.num}</span>
+                <span class="fn-proc__eta">{p.eta}</span>
+              </div>
+              <h3 class="fn-proc__t">{p.title}</h3>
+              <p class="fn-proc__body">{p.body}</p>
+              <div class="fn-proc__foot">{p.deliverable}</div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS — 3                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-quote-section">
+      <div class="container-brutal">
+
+        <span class="text-meta fn-quote-chapter">Cap. 09 / Resultados</span>
+        <h2 class="fn-quote-title heading-display">
+          Lo que dicen
+          <em class="heading-editorial">los que</em>
+          <span class="heading-display-block">ya construyen su futuro digital.</span>
+        </h2>
+
+        {testimonios.length > 0 && (
+          <figure class="fn-pull">
+            <div class="fn-pull__seal" aria-hidden="true">
+              <svg viewBox="0 0 90 90" width="100%" height="100%" class="fn-pull__spin">
+                <circle cx="45" cy="45" r="43" fill="#D97A3A" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="45" cy="45" r="38" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2.5 2"/>
+                <g transform="translate(45,45)">
+                  <rect x="-16" y="-2" width="32" height="4" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <rect x="-2" y="-16" width="4" height="32" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <rect x="-14" y="-14" width="6" height="6" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1" transform="rotate(45)"/>
+                  <rect x="8" y="-14" width="6" height="6" rx="1" fill="#F5F0E8" stroke="#1A1816" stroke-width="1" transform="rotate(45)"/>
+                  <circle cx="0" cy="0" r="5" fill="#D97A3A" stroke="#1A1816" stroke-width="1.5"/>
+                </g>
+                <text x="45" y="72" text-anchor="middle" fill="#F5F0E8" font-size="7" font-weight="800" font-family="monospace" letter-spacing="1">FINEST</text>
+              </svg>
+            </div>
+            <blockquote class="fn-pull__q">
+              "{testimonios[0].texto}"
+            </blockquote>
+            <figcaption class="fn-pull__cap">
+              <div class="fn-pull__avatar">
+                {testimonios[0].nombre.charAt(0)}
+              </div>
+              <div>
+                <span class="fn-pull__name">{testimonios[0].nombre}</span>
+                <span class="fn-pull__role">{testimonios[0].negocio}</span>
+              </div>
+            </figcaption>
+          </figure>
+        )}
+
+        {testimonios.length > 1 && (
+          <ul class="fn-quotes">
+            {testimonios.slice(1).map((t, i) => (
+              <li class={`fn-quote fn-quote--${i}`}>
+                <span class="fn-quote__mark" aria-hidden="true">&ldquo;</span>
+                <p>{t.texto}</p>
+                <footer>
+                  <div class="fn-quote__avatar">{t.nombre.charAt(0)}</div>
+                  <div>
+                    <span class="fn-quote__name">{t.nombre}</span>
+                    <span class="fn-quote__role">{t.negocio}</span>
+                  </div>
+                </footer>
+              </li>
+            ))}
+          </ul>
+        )}
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-faq-section">
+      <div class="container-brutal">
+
+        <span class="text-meta fn-faq-chapter">Cap. 10 / FAQ</span>
+        <h2 class="fn-faq-title heading-display">
+          Respuestas para
+          <em class="heading-editorial">la obra</em>
+          <span class="heading-display-block">de tus dudas.</span>
+        </h2>
+
+        <dl class="fn-faq">
+          {faq.map((f, i) => (
+            <div class="fn-faq__item">
+              <details class="fn-faq__det" open={i === 0}>
+                <summary>
+                  <div class="fn-faq__sum">
+                    <span class="fn-faq__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                    <span class="fn-faq__q">{f.q}</span>
+                    <span class="fn-faq__toggle" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </summary>
+                <div class="fn-faq__ans">
+                  {f.a}
+                </div>
+              </details>
+            </div>
+          ))}
+        </dl>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosAlmanzora.length > 0 && (
+      <section class="fn-vecinos-section">
+        <div class="container-brutal">
+
+          <span class="text-meta fn-vecinos-chapter">Cap. 11 / Comarca</span>
+          <h2 class="fn-vecinos-title heading-display">
+            Valle del Almanzora
+            <em class="heading-editorial">al completo.</em>
+          </h2>
+
+          <ul class="fn-vecinos">
+            {pueblosAlmanzora.slice(0, 8).map((p, i) => (
+              <a href={`/diseno-web/${p.slug}/`} class={`fn-vecino fn-vecino--${i}`} key={p.slug}>
+                <span class="fn-vecino__n">{String(i+1).padStart(2,'0')}</span>
+                <span class="fn-vecino__name">{p.nombre}</span>
+                <span class="fn-vecino__sub">{p.descripcion}</span>
+                <span class="fn-vecino__arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </ul>
+
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="fn-final">
+      <div class="container-brutal">
+        <div class="fn-final__grid">
+
+          <div>
+            <span class="text-meta fn-final-chapter">Cap. 12 / Acción</span>
+            <h2 class="fn-final__title heading-display">
+              Tu web
+              <em>en obras.</em>
+            </h2>
+            <p class="fn-final__lead">
+              <strong>Fines</strong> es industria, oficio y tradición.
+              Tu negocio merece una web que transmita esa solidez.
+              Como la de <strong>Excavaciones Tripiana.</strong>
+              <strong>Sin plantillas. Con resultados. Con maquinaria propia.</strong>
+            </p>
+
+            <div class="fn-final__cta">
+              <a href="/contacto" class="fn-final__btn fn-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="fn-final__btn fn-final__btn--ghost">
+                ☎ 657 085 019
+              </a>
+            </div>
+
+            <div class="fn-final__trust">
+              <span><span class="fn-pulse"></span> ACEPTANDO PROYECTOS 2026</span>
+              <span>★ DISEÑO + SEO + HOSTING</span>
+              <span>★ 4.9 ★ 50 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* SVG — engranaje / compás */}
+          <div class="fn-final__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="fn-final-svg">
+              <defs>
+                <radialGradient id="fn-final-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#B89850" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#B89850" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#fn-final-glow)"/>
+
+              {/* Engranaje grande central */}
+              <g transform="translate(170, 170)" class="fn-final-gear">
+                <circle cx="0" cy="0" r="70" fill="none" stroke="#B89850" stroke-width="2" stroke-dasharray="8 6"/>
+                <circle cx="0" cy="0" r="60" fill="none" stroke="#D97A3A" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#3A5A7A" stroke-width="3" stroke-dasharray="12 6"/>
+                <circle cx="0" cy="0" r="32" fill="none" stroke="#B89850" stroke-width="2"/>
+                <circle cx="0" cy="0" r="18" fill="#D97A3A" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="7" fill="#F5F0E8" stroke="#1A1816" stroke-width="2"/>
+                {/* Dientes */}
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-4" y="-76" width="8" height="12" rx="1" fill="#B89850" stroke="#1A1816" stroke-width="1.5" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Bloques de construcción */}
+              <g transform="translate(80, 250)">
+                <rect x="0" y="0" width="20" height="14" fill="#A09888" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="22" y="0" width="20" height="14" fill="#B8A898" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="10" y="-8" width="20" height="10" fill="#C8BFA8" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              <g transform="translate(220, 250)">
+                <rect x="0" y="0" width="18" height="12" fill="#B8A898" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="20" y="0" width="18" height="12" fill="#A09888" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="8" y="-6" width="18" height="8" fill="#C8BFA8" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Partículas */}
+              <circle cx="100" cy="120" r="2" fill="#D97A3A" opacity="0.3"/>
+              <circle cx="230" cy="100" r="2.5" fill="#B89850" opacity="0.25"/>
+              <circle cx="80" cy="200" r="1.5" fill="#D97A3A" opacity="0.2"/>
+
+              <text x="170" y="320" text-anchor="middle" fill="#F5F0E8" opacity="0.12" font-family="monospace" font-size="12" font-weight="800" letter-spacing="4">FINEST</text>
+            </svg>
+          </div>
+
+        </div>
+
+        <div class="fn-final__marquee">
+          <div class="fn-final__marquee-track">
+            <span>★ FINES · DISEÑO WEB PARA LA INDUSTRIA ★ MÁRMOL · EXCAVACIONES · CONSTRUCCIÓN ★ EXCAVACIONES TRIPIANA · CASO DE ÉXITO ★ HABLAMOS?</span>
+            <span>★ FINES · DISEÑO WEB PARA LA INDUSTRIA ★ MÁRMOL · EXCAVACIONES · CONSTRUCCIÓN ★ EXCAVACIONES TRIPIANA · CASO DE ÉXITO ★ HABLAMOS?</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* FINES DESIGN SYSTEM                              */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --fn-paper:    #F5F0E8;
+    --fn-paper-2:  #E8E0D0;
+    --fn-stone:    #D1C9B8;
+    --fn-ink:      #1A1816;
+    --fn-marble:   #A09888;
+    --fn-terrazo:  #B89850;
+    --fn-accent:   #D97A3A;
+    --fn-blue:     #3A5A7A;
+    --fn-shadow:   8px 8px 0 var(--fn-ink);
+  }
+
+  .fn-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--fn-accent);
+    box-shadow: 0 0 0 0 rgba(217,122,58,0.55);
+    animation: fn-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes fn-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(217,122,58,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(217,122,58,0); }
+    100% { box-shadow: 0 0 0 0 rgba(217,122,58,0); }
+  }
+  .fn-pull__spin { transform-origin: 50% 50%; animation: fn-spin 24s linear infinite; }
+  @keyframes fn-spin { to { transform: rotate(360deg); } }
+  .fn-final-gear { transform-origin: 50% 50%; animation: fn-gear-spin 20s linear infinite; }
+  @keyframes fn-gear-spin { to { transform: rotate(360deg); } }
+  .fn-tripiana-svg .fn-tripiana-gear { transform-origin: 50% 50%; animation: fn-gear-spin 18s linear infinite; }
+
+  /* HERO */
+  .fn-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 65% 30%, rgba(217,122,58,0.08), transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(58,90,122,0.08), transparent 50%),
+      var(--fn-paper);
+    border-bottom: 3px solid var(--fn-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .fn-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 0 22px, rgba(217,122,58,0.05) 22px 23px, transparent 23px 44px),
+      linear-gradient(-45deg, transparent 0 22px, rgba(217,122,58,0.05) 22px 23px, transparent 23px 44px);
+    pointer-events: none;
+  }
+  .fn-hero > * { position: relative; }
+  .fn-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .fn-hero__status { color: var(--fn-accent); font-weight: 700; }
+  .fn-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .fn-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .fn-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .fn-hero__chapter { color: var(--fn-blue); }
+  .fn-hero__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .92; letter-spacing: -.04em; margin: .25rem 0; }
+  .fn-hero__title em { color: var(--fn-blue); font-style: italic; }
+  .fn-hero__title-stamp { display: inline-block; color: var(--fn-paper); background: var(--fn-accent); padding: 0 .2em; transform: rotate(-1deg); }
+  .fn-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .fn-hero__lead strong { color: var(--fn-ink); font-weight: 700; }
+  .fn-hero__lead em { color: var(--fn-accent); font-style: italic; font-weight: 600; }
+  .fn-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .fn-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--fn-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .fn-btn--primary { background: var(--fn-accent); color: var(--fn-paper); box-shadow: 6px 6px 0 var(--fn-ink); }
+  .fn-btn--primary:hover { background: var(--fn-blue); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--fn-ink); }
+  .fn-btn--ghost { background: transparent; color: var(--fn-ink); box-shadow: 6px 6px 0 var(--fn-terrazo); }
+  .fn-btn--ghost:hover { background: var(--fn-ink); color: var(--fn-terrazo); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--fn-terrazo); }
+
+  /* KPIs */
+  .fn-kpis { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 1.5rem; border: 2.5px solid var(--fn-ink); background: var(--fn-ink); }
+  @media (min-width: 768px) { .fn-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .fn-kpi { background: var(--fn-paper); padding: 1.25rem; display: flex; flex-direction: column; gap: .35rem; border-right: 2px solid var(--fn-ink); border-bottom: 2px solid var(--fn-ink); }
+  .fn-kpi:nth-child(2n) { border-right: none; }
+  .fn-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .fn-kpi:nth-child(2n)       { border-right: 2px solid var(--fn-ink); }
+    .fn-kpi:nth-child(4n)       { border-right: none; }
+    .fn-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--fn-ink); }
+    .fn-kpi:nth-last-child(-n+4)  { border-bottom: none; }
+  }
+  .fn-kpi--stone  { background: var(--fn-stone); color: var(--fn-ink); }
+  .fn-kpi--accent { background: var(--fn-accent); color: var(--fn-paper); }
+  .fn-kpi--blue   { background: var(--fn-blue); color: var(--fn-paper); }
+  .fn-kpi--ink    { background: var(--fn-ink); color: var(--fn-paper); }
+  .fn-kpi--ink .fn-kpi__v { color: var(--fn-terrazo); }
+  .fn-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .fn-kpi__v small { font-size: .55em; opacity: .8; }
+  .fn-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .fn-hero__postcard { width: 100%; max-width: 540px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(26,24,22,0.18)); }
+  .fn-postcard { background: var(--fn-paper); border: 3px solid var(--fn-ink); box-shadow: var(--fn-shadow); overflow: hidden; transform: rotate(-1deg); transition: transform .35s; }
+  .fn-postcard:hover { transform: rotate(0); }
+  .fn-postcard__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .65rem 1rem; background: var(--fn-ink); color: var(--fn-paper); font-size: .58rem; letter-spacing: .15em; border-bottom: 2px solid var(--fn-ink); }
+  .fn-postcard__profile { width: 100%; aspect-ratio: 540 / 220; border-bottom: 2px solid var(--fn-ink); overflow: hidden; }
+  .fn-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--fn-ink); }
+  .fn-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.1); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .fn-postcard:hover .fn-postcard__img { transform: scale(1.05); }
+  .fn-postcard__gear { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(10deg); filter: drop-shadow(0 4px 10px rgba(217,122,58,0.5)); }
+  .fn-postcard__tag { position: absolute; bottom: 12px; left: 12px; background: var(--fn-paper); color: var(--fn-ink); padding: .4rem .75rem; font-size: .65rem; font-weight: 800; letter-spacing: .2em; border: 2px solid var(--fn-ink); box-shadow: 3px 3px 0 var(--fn-accent); transform: rotate(-2deg); }
+  .fn-postcard__data { padding: 1rem 1.25rem; background: var(--fn-paper-2); display: grid; gap: .35rem; }
+  .fn-postcard__data-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 1px dashed rgba(26,24,22,0.15); font-size: .68rem; }
+  .fn-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .fn-postcard__data-row > span:first-child { color: var(--fn-blue); letter-spacing: .2em; font-weight: 800; }
+  .fn-postcard__data-v { color: var(--fn-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .fn-marquee { background: var(--fn-ink); color: var(--fn-terrazo); overflow: hidden; padding: .9rem 0; border-top: 3px solid var(--fn-ink); }
+  .fn-marquee__track { display: flex; gap: 3rem; width: max-content; animation: fn-marquee 42s linear infinite; font-family: var(--font-mono); font-size: .82rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+  @keyframes fn-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ICONOS */
+  .fn-iconos-section { background: var(--fn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); position: relative; overflow: hidden; }
+  .fn-iconos-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(217,122,58,0.04) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .fn-iconos-section > * { position: relative; }
+  .fn-iconos-chapter { color: var(--fn-blue); }
+  .fn-iconos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-iconos-title em { color: var(--fn-accent); }
+  .fn-iconos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 640px)  { .fn-iconos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .fn-iconos { grid-template-columns: repeat(4, 1fr); } }
+  .fn-icono { display: flex; flex-direction: column; gap: .5rem; padding: 2rem 1.5rem; background: var(--fn-paper); border: 2.5px solid var(--fn-ink); box-shadow: var(--fn-shadow); align-items: center; text-align: center; transition: transform .25s, box-shadow .25s; }
+  .fn-icono:hover { transform: translate(-4px, -4px); }
+  .fn-icono--stone:hover  { box-shadow: 12px 12px 0 var(--fn-stone); }
+  .fn-icono--accent:hover { box-shadow: 12px 12px 0 var(--fn-accent); }
+  .fn-icono--blue:hover   { box-shadow: 12px 12px 0 var(--fn-blue); }
+  .fn-icono--ink:hover    { box-shadow: 12px 12px 0 var(--fn-ink); }
+  .fn-icono__code { width: 80px; height: 80px; flex-shrink: 0; }
+  .fn-icono__letter { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--fn-accent); }
+  .fn-icono--stone .fn-icono__letter  { color: var(--fn-stone); }
+  .fn-icono--blue .fn-icono__letter   { color: var(--fn-blue); }
+  .fn-icono--ink .fn-icono__letter    { color: var(--fn-ink); }
+  .fn-icono__name { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1; letter-spacing: -.025em; color: var(--fn-ink); margin: 0; }
+  .fn-icono__sub { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .2em; color: var(--fn-accent); font-weight: 800; }
+  .fn-icono--stone .fn-icono__sub { color: var(--fn-stone); }
+  .fn-icono--blue .fn-icono__sub   { color: var(--fn-blue); }
+  .fn-icono--ink .fn-icono__sub    { color: var(--fn-ink); }
+  .fn-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
+  .fn-icono__dato { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--fn-ink); border-top: 2px dashed var(--fn-ink); padding-top: .5rem; width: 100%; }
+
+  /* MÁRMOL SECTION */
+  .fn-marble-section { background: var(--fn-stone); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); position: relative; overflow: hidden; }
+  .fn-marble-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(58,90,122,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .fn-marble-section > * { position: relative; }
+  .fn-marble-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .fn-marble-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .fn-marble-chapter { color: var(--fn-blue); }
+  .fn-marble-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-marble-title em { color: var(--fn-blue); }
+  .fn-marble-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .fn-marble-lead strong { color: var(--fn-accent); font-weight: 800; }
+  .fn-marble-lead em { color: var(--fn-blue); font-style: italic; }
+  .fn-marble-facts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--fn-ink); background: var(--fn-paper); }
+  @media (min-width: 640px) { .fn-marble-facts { grid-template-columns: 1fr 1fr; } }
+  .fn-marble-facts li { padding: .75rem 1rem; border-bottom: 1px solid var(--fn-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) { .fn-marble-facts li:nth-child(odd) { border-right: 1px solid var(--fn-ink); } .fn-marble-facts li:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 639px) { .fn-marble-facts li:last-child { border-bottom: none; } }
+  .fn-marble-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--fn-blue); font-weight: 800; }
+  .fn-marble-facts__v { font-size: .9rem; color: var(--fn-ink); font-weight: 600; line-height: 1.35; }
+  .fn-marble__r { width: 100%; max-width: 360px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3)); }
+
+  /* TRIPIANA SECTION */
+  .fn-tripiana-section { background: var(--fn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); position: relative; overflow: hidden; }
+  .fn-tripiana-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(184,152,80,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .fn-tripiana-section > * { position: relative; }
+  .fn-tripiana-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .fn-tripiana-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .fn-tripiana-chapter { color: var(--fn-accent); }
+  .fn-tripiana-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-tripiana-title em { color: var(--fn-accent); }
+  .fn-tripiana-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .fn-tripiana-lead strong { color: var(--fn-ink); font-weight: 700; }
+  .fn-tripiana-lead em { color: var(--fn-accent); font-style: italic; font-weight: 600; }
+  .fn-tripiana-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.5rem; }
+  .fn-tripiana-stat { background: var(--fn-paper-2); border: 2px solid var(--fn-ink); padding: 1rem; display: flex; flex-direction: column; gap: .25rem; text-align: center; }
+  .fn-tripiana-stat__v { font-size: 1.65rem; font-weight: 800; color: var(--fn-accent); line-height: 1; }
+  .fn-tripiana-stat__l { font-family: var(--font-mono); font-size: .55rem; text-transform: uppercase; letter-spacing: .12em; opacity: .75; }
+  .fn-tripiana__r { max-width: 340px; margin: 0 auto; }
+  .fn-tripiana-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(217,122,58,0.18)); }
+
+  /* SECTORES */
+  .fn-sec-section { background: var(--fn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); }
+  .fn-sec-chapter { color: var(--fn-blue); }
+  .fn-sec-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-sec-title em { color: var(--fn-accent); }
+  .fn-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .fn-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .fn-sec { grid-template-columns: repeat(3, 1fr); } }
+  .fn-sec__card { background: var(--fn-paper); border: 2.5px solid var(--fn-ink); box-shadow: var(--fn-shadow); padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; transition: transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
+  .fn-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .fn-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .fn-sec__card--stone  { color: var(--fn-marble); }
+  .fn-sec__card--accent { color: var(--fn-accent); }
+  .fn-sec__card--blue   { color: var(--fn-blue); }
+  .fn-sec__card--terrazo{ color: var(--fn-terrazo); }
+  .fn-sec__card--ink    { color: var(--fn-ink); }
+  .fn-sec__card--marble { color: var(--fn-marble); }
+  .fn-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .fn-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .fn-sec__stat-box { background: var(--fn-ink); color: var(--fn-paper); padding: .35rem .65rem; display: flex; flex-direction: column; border: 1.5px solid currentColor; text-align: right; }
+  .fn-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .fn-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .fn-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--fn-ink); margin: 0; }
+  .fn-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .fn-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .fn-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--fn-ink); }
+  .fn-sec__tag span { color: currentColor; font-weight: 800; }
+  .fn-sec__foot { padding-top: .65rem; border-top: 2px solid var(--fn-ink); }
+  .fn-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .fn-map-section { background: var(--fn-stone); border-bottom: 3px solid var(--fn-ink); }
+  .fn-map-head { padding: 4rem 0 2rem; }
+  .fn-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .fn-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .fn-map-chapter { color: var(--fn-blue); }
+  .fn-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .fn-map-title em { color: var(--fn-blue); }
+  .fn-map-coords { background: var(--fn-accent); color: var(--fn-paper); padding: 1rem 1.25rem; border: 2px solid var(--fn-ink); box-shadow: 5px 5px 0 var(--fn-terrazo); display: flex; flex-direction: column; gap: .35rem; font-size: .7rem; letter-spacing: .15em; }
+  .fn-map-frame { position: relative; border-top: 3px solid var(--fn-ink); border-bottom: 3px solid var(--fn-ink); background: var(--fn-ink); }
+  .fn-map-icon { position: absolute; width: 60px; height: 60px; z-index: 5; pointer-events: none; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); opacity: 0.85; }
+  .fn-map-icon--tl { top: 16px; left: 16px; }
+  .fn-map-icon--br { bottom: 16px; right: 16px; }
+  .fn-map-wrap { width: 100%; height: clamp(420px, 60vh, 600px); overflow: hidden; }
+  .fn-map-wrap > * { width: 100%; height: 100%; }
+
+  /* DIFERENCIALES */
+  .fn-dif-section { background: var(--fn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); }
+  .fn-dif-chapter { color: var(--fn-terrazo); }
+  .fn-dif-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-dif-title em { color: var(--fn-accent); }
+  .fn-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--fn-ink); }
+  @media (min-width: 768px) { .fn-dif { grid-template-columns: 1fr 1fr; } }
+  .fn-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--fn-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) { .fn-dif__item:nth-child(odd) { border-right: 1px solid var(--fn-ink); } .fn-dif__item:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 767px) { .fn-dif__item:last-child { border-bottom: none; } }
+  .fn-dif__item--0 { background: var(--fn-paper-2); }
+  .fn-dif__item--1 { background: var(--fn-paper); }
+  .fn-dif__item--2 { background: var(--fn-stone); }
+  .fn-dif__item--3 { background: var(--fn-paper); }
+  .fn-dif__item:hover { background: var(--fn-terrazo); }
+  .fn-dif__num { font-size: .85rem; color: var(--fn-accent); font-weight: 800; letter-spacing: .15em; }
+  .fn-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--fn-ink); margin: 0; }
+  .fn-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .fn-proc-section { background: var(--fn-ink); color: var(--fn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); position: relative; overflow: hidden; }
+  .fn-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(217,122,58,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .fn-proc-section > * { position: relative; }
+  .fn-proc-chapter { color: var(--fn-terrazo); }
+  .fn-proc-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-proc-title em { color: var(--fn-accent); }
+  .fn-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .fn-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .fn-proc { grid-template-columns: repeat(4, 1fr); } }
+  .fn-proc__step { background: rgba(245,240,232,0.05); border: 2px solid var(--fn-paper); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; transition: background .25s, transform .25s; }
+  .fn-proc__step:hover { background: rgba(217,122,58,0.12); transform: translateY(-3px); }
+  .fn-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(245,240,232,0.25); }
+  .fn-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--fn-terrazo); line-height: 1; }
+  .fn-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--fn-accent); }
+  .fn-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--fn-paper); margin: .25rem 0 0; }
+  .fn-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(245,240,232,0.75); flex: 1; }
+  .fn-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--fn-terrazo); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(245,240,232,0.25); }
+
+  /* TESTIMONIOS */
+  .fn-quote-section { background: var(--fn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); }
+  .fn-quote-chapter { color: var(--fn-blue); }
+  .fn-quote-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-quote-title em { color: var(--fn-accent); }
+  .fn-pull { position: relative; background: var(--fn-stone); border: 3px solid var(--fn-ink); box-shadow: var(--fn-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .fn-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-10deg); filter: drop-shadow(0 4px 8px rgba(217,122,58,0.4)); }
+  .fn-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--fn-ink); max-width: 56ch; }
+  .fn-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--fn-ink); }
+  .fn-pull__avatar { width: 48px; height: 48px; background: var(--fn-accent); color: var(--fn-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .fn-pull__cap div { display: flex; flex-direction: column; }
+  .fn-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--fn-ink); }
+  .fn-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .fn-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .fn-quotes { grid-template-columns: repeat(2, 1fr); } }
+  .fn-quote { position: relative; background: var(--fn-paper); border: 2px solid var(--fn-ink); box-shadow: 5px 5px 0 var(--fn-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .fn-quote:hover { transform: translateY(-3px); }
+  .fn-quote--0 { background: var(--fn-paper); }
+  .fn-quote--1 { background: var(--fn-stone); }
+  .fn-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--fn-accent); opacity: .45; }
+  .fn-quote p { font-size: .92rem; line-height: 1.5; color: var(--fn-ink); flex: 1; margin: 0; }
+  .fn-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--fn-ink); }
+  .fn-quote__avatar { width: 36px; height: 36px; background: var(--fn-blue); color: var(--fn-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .fn-quote footer div { display: flex; flex-direction: column; }
+  .fn-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .fn-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .fn-faq-section { background: var(--fn-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); }
+  .fn-faq-chapter { color: var(--fn-blue); }
+  .fn-faq-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-faq-title em { color: var(--fn-accent); }
+  .fn-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--fn-ink); }
+  .fn-faq__item { border-bottom: 2px solid var(--fn-ink); }
+  .fn-faq__det summary { list-style: none; cursor: pointer; }
+  .fn-faq__det summary::-webkit-details-marker { display: none; }
+  .fn-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .fn-faq__sum:hover { padding-inline: 1rem; background: var(--fn-paper-2); }
+  .fn-faq__num { font-size: 1rem; font-weight: 800; color: var(--fn-blue); letter-spacing: .1em; }
+  .fn-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--fn-ink); font-weight: 700; }
+  .fn-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--fn-ink); background: var(--fn-paper); color: var(--fn-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .fn-faq__det[open] .fn-faq__toggle { transform: rotate(180deg); background: var(--fn-accent); color: var(--fn-paper); }
+  .fn-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .fn-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .fn-faq__ans { padding-left: 48px; } }
+
+  /* PUEBLOS VECINOS */
+  .fn-vecinos-section { background: var(--fn-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--fn-ink); }
+  .fn-vecinos-chapter { color: var(--fn-blue); }
+  .fn-vecinos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .fn-vecinos-title em { color: var(--fn-accent); }
+  .fn-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--fn-ink); background: var(--fn-ink); }
+  @media (min-width: 640px)  { .fn-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .fn-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .fn-vecino { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: .35rem; padding: 1.5rem; background: var(--fn-paper); color: var(--fn-ink); text-decoration: none; min-height: 160px; transition: background .25s, color .25s; grid-template-areas: 'n arrow' 'name name' 'sub sub'; }
+  .fn-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .fn-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .fn-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .fn-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--fn-accent); font-size: 1.3rem; transition: transform .25s; }
+  .fn-vecino:hover { background: var(--fn-accent); color: var(--fn-paper); }
+  .fn-vecino:hover .fn-vecino__sub, .fn-vecino:hover .fn-vecino__n { opacity: .85; }
+  .fn-vecino:hover .fn-vecino__arrow { color: var(--fn-paper); transform: translateX(4px); }
+  .fn-vecino--1:hover { background: var(--fn-blue); color: var(--fn-paper); }
+  .fn-vecino--2:hover { background: var(--fn-terrazo); color: var(--fn-ink); }
+  .fn-vecino--3:hover { background: var(--fn-stone); color: var(--fn-ink); }
+
+  /* CTA FINAL */
+  .fn-final { background: #1C1A16; color: var(--fn-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .fn-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(184,152,80,0.06) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .fn-final > * { position: relative; }
+  .fn-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .fn-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .fn-final-chapter { color: var(--fn-terrazo); }
+  .fn-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--fn-paper); margin: 1rem 0; }
+  .fn-final__title em { color: var(--fn-accent); font-style: italic; display: block; }
+  .fn-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(245,240,232,0.75); max-width: 52ch; }
+  .fn-final__lead strong { color: var(--fn-terrazo); }
+  .fn-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .fn-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .fn-final__btn--primary { background: var(--fn-accent); color: var(--fn-paper); border-color: var(--fn-accent); box-shadow: 6px 6px 0 var(--fn-terrazo); }
+  .fn-final__btn--primary:hover { background: var(--fn-terrazo); color: var(--fn-ink); border-color: var(--fn-terrazo); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--fn-accent); }
+  .fn-final__btn--ghost { background: transparent; color: var(--fn-paper); border-color: var(--fn-paper); box-shadow: 6px 6px 0 var(--fn-paper); }
+  .fn-final__btn--ghost:hover { background: var(--fn-paper); color: var(--fn-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--fn-paper); }
+  .fn-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(245,240,232,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .fn-final__trust .fn-pulse { background: var(--fn-terrazo); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(184,152,80,0.55); }
+  .fn-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .fn-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(184,152,80,0.25)); }
+  .fn-final__marquee { background: var(--fn-accent); color: var(--fn-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--fn-ink); margin: 0 -1.5rem; }
+  .fn-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: fn-marquee 34s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
