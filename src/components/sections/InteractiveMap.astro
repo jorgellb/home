@@ -390,7 +390,25 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
     cursor: pointer;
   }
 
+  /* Resplandor temático en el suelo bajo el pin */
+  :global(.iMap-marker__glow) {
+    position: absolute;
+    bottom: 1px; left: 50%;
+    width: 74px; height: 22px;
+    transform: translateX(-50%);
+    opacity: .55;
+    filter: blur(3px);
+    pointer-events: none;
+    z-index: 0;
+    animation: iMap-marker-glow 3s ease-in-out infinite;
+  }
+  @keyframes iMap-marker-glow {
+    0%, 100% { opacity: .35; transform: translateX(-50%) scale(.9); }
+    50%       { opacity: .6;  transform: translateX(-50%) scale(1.05); }
+  }
+
   :global(.iMap-marker__pin) {
+    z-index: 2;
     position: relative;
     width: 54px; height: 70px;
     filter: drop-shadow(0 6px 14px rgba(14,13,11,0.45));
@@ -466,14 +484,29 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" is:inline></script>
 
 <script is:inline>
+  /* Polígono de círculo geodésico para el anillo de cobertura */
+  function iMapCircle(center, radiusKm, points) {
+    var coords = [];
+    var latRad = center[1] * Math.PI / 180;
+    var dLat = radiusKm / 110.574;
+    var dLng = radiusKm / (111.320 * Math.cos(latRad));
+    for (var i = 0; i <= points; i++) {
+      var a = (i / points) * 2 * Math.PI;
+      coords.push([center[0] + dLng * Math.cos(a), center[1] + dLat * Math.sin(a)]);
+    }
+    return { type: 'Feature', properties: {}, geometry: { type: 'Polygon', coordinates: [coords] } };
+  }
+
   function initIMaps() {
     if (typeof maplibregl === 'undefined') {
       setTimeout(initIMaps, 150);
       return;
     }
 
-    document.querySelectorAll('.iMap__canvas:not(.initialized)').forEach(function(container) {
-      container.classList.add('initialized');
+    document.querySelectorAll('.iMap__canvas').forEach(function(container) {
+      /* Idempotente: un mapa por contenedor, pase lo que pase (evita pines duplicados) */
+      if (container.dataset.iMapDone === '1') return;
+      container.dataset.iMapDone = '1';
 
       var center  = JSON.parse(container.dataset.center  || '[0,0]');
       var zoom    = parseFloat(container.dataset.zoom    || '13');
@@ -508,22 +541,41 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
             paint: { 'raster-opacity': 1 }
           }]
         },
+        /* Arranca un poco más lejos y plano para el intro cinematográfico */
         center: center,
-        zoom: zoom,
-        pitch: pitch,
-        bearing: bearing,
+        zoom: Math.max(zoom - 1.8, 4),
+        pitch: pitch * 0.35,
+        bearing: bearing * 0.4,
         attributionControl: false,
-        logoPosition: 'bottom-right'
+        logoPosition: 'bottom-right',
+        maxZoom: 17,
+        minZoom: 8
       });
 
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
 
       map.on('load', function() {
-        /* ── Marcador brutal ── */
+        /* ── Anillo de cobertura temático (capa cartográfica con estilo) ── */
+        try {
+          map.addSource('iMap-ring', { type: 'geojson', data: iMapCircle(center, 1.6, 96) });
+          map.addLayer({
+            id: 'iMap-ring-fill', type: 'fill', source: 'iMap-ring',
+            paint: { 'fill-color': theme, 'fill-opacity': 0.07 }
+          });
+          map.addLayer({
+            id: 'iMap-ring-line', type: 'line', source: 'iMap-ring',
+            paint: { 'line-color': theme, 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.6 }
+          });
+        } catch (e) {}
+
+        /* ── Marcador brutal (idempotente: borra cualquier marcador previo) ── */
+        if (container._iMapMarker) { container._iMapMarker.remove(); }
+
         var el = document.createElement('div');
         el.className = 'iMap-marker';
 
         var pinHTML = ''
+          + '<div class="iMap-marker__glow" style="background:radial-gradient(ellipse at center,' + theme + ' 0%,transparent 70%)"></div>'
           + '<div class="iMap-marker__rings">'
           +   '<div class="iMap-marker__ring iMap-marker__ring--1" style="border-color:' + theme + '"></div>'
           +   '<div class="iMap-marker__ring iMap-marker__ring--2" style="border-color:' + theme + '"></div>'
@@ -551,12 +603,20 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
 
         el.innerHTML = pinHTML;
 
-        new maplibregl.Marker({ element: el, anchor: 'bottom' })
+        var marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
           .setLngLat(center)
           .addTo(map);
+        container._iMapMarker = marker;
+
+        /* ── Intro cinematográfico: vuela suave hasta el encuadre final ── */
+        map.easeTo({
+          center: center, zoom: zoom, pitch: pitch, bearing: bearing,
+          duration: 2400,
+          easing: function(t) { return 1 - Math.pow(1 - t, 3); }
+        });
 
         /* Resize tras render */
-        setTimeout(function() { map.resize(); }, 400);
+        setTimeout(function() { map.resize(); }, 500);
       });
     });
   }
