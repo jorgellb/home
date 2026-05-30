@@ -1,0 +1,1672 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosPoniente = getPueblosByComarca('Poniente Almeriense').filter(p => p.slug !== 'el-ejido');
+
+const title = 'Diseño Web en El Ejido | Webs para Agricultura, Cooperativas, Alhóndigas y Exportación';
+const description = 'Agencia de diseño web en El Ejido, capital europea de la agricultura bajo plástico. Webs B2B para cooperativas, alhóndigas, empresas agro, exportadoras y agro-tech. Multiidioma EN/DE/FR/NL, catálogos técnicos, SEO internacional. También Almerimar: golf y náutica.';
+const canonical = 'https://platanitorico.com/diseno-web/el-ejido/';
+
+// 3 ICONOS El Ejido
+const iconos = [
+  { code: 'A', name: 'El invernadero',   sub: 'LA FÁBRICA VERDE',        desc: 'Bajo el plástico se cultiva los 365 días: tomate, pimiento, pepino, calabacín y sandía. Tecnología de riego, control climático y producción que abastece a media Europa en invierno.',     dato: '30.000+ ha', color: 'green' },
+  { code: 'B', name: 'La alhóndiga',     sub: 'SUBASTA Y COMERCIO',      desc: 'El corazón del negocio: subastas donde la hortaliza cambia de manos cada tarde y sale rumbo a Alemania, Francia o Países Bajos. Logística que no perdona un minuto.',                          dato: 'B2B diario', color: 'red' },
+  { code: 'C', name: 'Almerimar',        sub: 'GOLF · NÁUTICA · PLAYA',  desc: 'El otro El Ejido: puerto deportivo con cientos de amarres, campo de golf y playas de bandera azul. El destino residencial y turístico del Poniente, con mercado europeo propio.',               dato: '1.000+ amarres', color: 'sky' },
+];
+
+// La huerta de Europa — hortalizas + mercados
+const hortalizas = [
+  { name: 'Tomate',    color: 'red' },
+  { name: 'Pimiento',  color: 'green' },
+  { name: 'Pepino',    color: 'cuke' },
+  { name: 'Calabacín', color: 'zuke' },
+  { name: 'Berenjena', color: 'auber' },
+  { name: 'Sandía',    color: 'melon' },
+];
+
+const mercados = [
+  { lang: 'DE', name: 'Alemania',        pct: '28%', flag: 'de' },
+  { lang: 'FR', name: 'Francia',         pct: '18%', flag: 'fr' },
+  { lang: 'NL', name: 'Países Bajos',    pct: '14%', flag: 'nl' },
+  { lang: 'EN', name: 'Reino Unido',     pct: '12%', flag: 'gb' },
+];
+
+// Sectores El Ejido
+const sectores = [
+  { nombre: 'Cooperativas y alhóndigas',          stat: 'B2B',  statLabel: 'comercialización',    desc: 'El motor de El Ejido. Cooperativas, SAT y alhóndigas necesitan webs corporativas serias: trazabilidad, certificaciones (GlobalG.A.P., GRASP), catálogo de productos por campaña y un portal para socios y compradores internacionales.', tags: ['Portal de socios','Catálogo por campaña','Certificaciones','Área compradores B2B'] },
+  { nombre: 'Empresas agro y suministros',        stat: '365',  statLabel: 'días de campaña',     desc: 'Semilleros, fertilizantes, plásticos, sistemas de riego, construcción de invernaderos y maquinaria. Empresas auxiliares que venden a miles de agricultores y necesitan catálogo técnico, fichas de producto y captación de leads.',     tags: ['Catálogo técnico','Fichas de producto','Captación de leads','Distribuidores'] },
+  { nombre: 'Exportación e internacional',         stat: '40+',  statLabel: 'países destino',      desc: 'La hortaliza de El Ejido se come en toda Europa. Exportadoras y comercializadoras que necesitan web multiidioma (EN/DE/FR/NL), con fichas de calibre y producto, logística y un canal directo para el comprador extranjero.',          tags: ['Multiidioma EN/DE/FR/NL','Fichas de calibre','SEO internacional','Contacto comprador'] },
+  { nombre: 'Agro-tech y control biológico',       stat: 'I+D',  statLabel: 'innovación verde',    desc: 'El Ejido lidera el control biológico de plagas y la agricultura de precisión. Empresas de biocontrol, sensórica, hidroponía y software agro con un producto innovador que necesita una web a la altura para vender dentro y fuera.',  tags: ['Web de producto SaaS','Demos y casos','Captación B2B','Inglés técnico'] },
+  { nombre: 'Almerimar: golf, náutica y turismo',  stat: '€€€',  statLabel: 'mercado europeo',     desc: 'El frente costero de El Ejido. Hoteles, apartamentos, restaurantes del puerto, golf y náutica con cliente residencial europeo. Reservas directas, multiidioma y SEO turístico para "Almerimar golf" y "puerto deportivo".',          tags: ['Motor de reservas','Multiidioma','SEO "Almerimar"','Sin comisiones OTA'] },
+  { nombre: 'Comercio, hostelería y servicios',    stat: '85k',  statLabel: 'habitantes',          desc: 'Con 85.000 habitantes, El Ejido es una ciudad con vida comercial propia. Tiendas, clínicas, talleres, restaurantes y servicios que necesitan web rápida + Google Business para captar al vecino y a la población flotante.',         tags: ['Google Business','SEO local','Web rápida','E-commerce'] },
+];
+
+// Hitos El Ejido
+const hitos = [
+  { k: 'POBLACIÓN',     v: '85.000 hab · 1ª del Poniente' },
+  { k: 'INVERNADEROS',  v: '30.000+ ha bajo plástico' },
+  { k: 'DESDE EL ESPACIO', v: 'El "Mar de Plástico" se ve por satélite' },
+  { k: 'EXPORTACIÓN',   v: 'Hortaliza a 40+ países de Europa' },
+  { k: 'CAMPAÑA',       v: 'Producción los 365 días del año' },
+  { k: 'ALMERIMAR',     v: 'Puerto deportivo · golf · bandera azul' },
+];
+
+// Diferenciales
+const diferenciales = [
+  { title: 'El motor económico de Almería',       desc: 'El Ejido no es un pueblo más: es la capital europea de la agricultura intensiva y genera miles de millones al año. Detrás de cada invernadero hay un negocio que necesita presencia digital profesional — y muy pocos la tienen bien hecha.' },
+  { title: 'Exportar exige multiidioma de verdad', desc: 'Si vendes a Alemania, Francia, Países Bajos o Reino Unido, una web solo en español te cierra la puerta. Webs ES/EN/DE/FR/NL con SEO real por idioma y fichas técnicas de producto son la diferencia entre el comprador que te encuentra y el que se va a la competencia.' },
+  { title: 'B2B serio necesita web seria',         desc: 'Cooperativas, alhóndigas y empresas agro mueven contratos grandes. Una web amateur transmite desconfianza. Catálogo por campaña, certificaciones visibles, portal de socios y área de compradores proyectan la solvencia que tu cliente internacional espera.' },
+  { title: 'Almerimar: el El Ejido turístico',     desc: 'Junto a la agro-industria, El Ejido tiene en Almerimar un destino de golf, náutica y residencial europeo. Dos mundos, dos estrategias digitales — y nosotros dominamos las dos: B2B agro y reservas turísticas multiidioma.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Auditoría del negocio',        eta: '1–2 días',  body: 'Analizamos tu empresa agro, cooperativa o negocio costero, tu mercado y tus compradores. Definimos arquitectura, idiomas necesarios y keywords B2B o turísticas según el caso.', deliverable: 'Briefing + roadmap' },
+  { num: '02', title: 'Diseño profesional',           eta: '3–5 días',  body: 'Diseño serio y solvente para B2B agro, o fresco y vendedor para Almerimar. Fotografía de producto, instalaciones o costa. Apruebas antes de programar.', deliverable: 'Prototipo Figma · approved' },
+  { num: '03', title: 'Desarrollo + idiomas',          eta: '5–12 días', body: 'Astro ultrarrápido + catálogo técnico, portal de socios o motor de reservas según el proyecto. Multiidioma con hreflang, Schema y Core Web Vitals en verde.', deliverable: 'Web staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + SEO',             eta: '1–2 días',  body: 'Publicamos, configuramos Google Business y Search Console, indexamos y posicionamos para tus búsquedas (B2B agro o turísticas). Te formamos para gestionarla.', deliverable: 'Sitio en producción + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Francisco Maldonado', negocio: 'Cooperativa hortofrutícola',     texto: 'Necesitábamos una web seria para presentarnos ante compradores de Alemania y Francia. Platanito Rico nos hizo un portal multiidioma con nuestro catálogo por campaña y las certificaciones bien visibles. Ahora los compradores nos toman en serio antes de la primera llamada.' },
+  { nombre: 'Heinrich Vogel',      negocio: 'Importador alemán de hortaliza',  texto: 'I work with several Almería exporters and most have terrible websites. This one finally built a proper German-language site with calibres, packaging and logistics info. It makes my job so much easier — I can check everything before I order.' },
+  { nombre: 'Rosa Martín',         negocio: 'Empresa de riego y plásticos',    texto: 'Vendemos suministros a cientos de agricultores. La web con catálogo técnico y fichas de producto nos ha quitado muchísimas llamadas repetitivas y nos llegan presupuestos por la web cada semana. Una inversión que se pagó sola.' },
+  { nombre: 'James Cooper',        negocio: 'Apartamentos · Almerimar',         texto: 'My apartments in Almerimar are rented mostly by British and German golfers. The new multilingual site with direct booking cut my Booking.com commissions massively. Brilliant work and very fast loading.' },
+];
+
+const faqs = [
+  { q: '¿Hacéis webs B2B para cooperativas y alhóndigas de El Ejido?',                                   a: 'Sí, es una de nuestras especialidades. Creamos portales corporativos serios con catálogo de producto por campaña, certificaciones visibles (GlobalG.A.P., GRASP, IFS), área privada de socios, sección para compradores internacionales y multiidioma. Proyectamos la solvencia que tu cliente europeo espera.' },
+  { q: '¿Podéis hacer la web en alemán, francés, inglés y neerlandés para exportar?',                    a: 'Exactamente. Para empresas exportadoras hacemos webs multiidioma (ES/EN/DE/FR/NL) con hreflang, contenido localizado por idioma (no traducción automática) y SEO técnico en cada mercado. Cada versión posiciona en el Google del país del comprador.' },
+  { q: '¿Cuánto cuesta una web para una empresa agro o exportadora en El Ejido?',                        a: 'Web corporativa agro desde 600€. Portal B2B con catálogo por campaña y multiidioma: 1.200€–3.000€ según funcionalidades e idiomas. Web de producto agro-tech con demos y captación de leads: desde 1.500€. Presupuesto cerrado, sin sorpresas.' },
+  { q: '¿Trabajáis con empresas auxiliares: riego, plásticos, semilleros, fertilizantes?',              a: 'Sí. Hacemos webs con catálogo técnico, fichas de producto detalladas, zona de descargas (fichas, certificados), captación de presupuestos y SEO para que los agricultores te encuentren cuando buscan suministros y maquinaria.' },
+  { q: '¿Hacéis también webs turísticas para Almerimar (golf, apartamentos, restaurantes)?',            a: 'Por supuesto. Almerimar tiene un mercado europeo de golf y náutica. Hacemos webs con motor de reservas directas, multiidioma (EN/DE para el cliente británico y alemán), galería y SEO para "Almerimar golf", "apartamentos Almerimar" y "puerto deportivo".' },
+  { q: '¿Hacéis webs de producto para empresas de agro-tech y control biológico?',                      a: 'Sí. El Ejido es referente en biocontrol y agricultura de precisión. Para empresas de producto o software agro hacemos webs tipo SaaS/producto: explicación clara de la tecnología, casos de éxito, demos, captación B2B e inglés técnico para vender fuera.' },
+  { q: '¿En cuánto tiempo está lista mi web?',                                                          a: 'Web corporativa: 1–2 semanas. Portal B2B con catálogo y multiidioma: 3–5 semanas según volumen e idiomas. Web turística de Almerimar con reservas: 2–3 semanas. Trabajamos en sprints y ves avances cada semana.' },
+  { q: '¿Trabajáis en todo el Poniente: Adra, Berja, Dalías, La Mojonera, Vícar?',                       a: 'Sí, cubrimos todo el Poniente almeriense y el cinturón agrícola: El Ejido, Adra, Berja, Dalías, La Mojonera, Vícar y los núcleos del mar de plástico. Trabajamos online y nos desplazamos para reuniones o sesiones de fotos cuando el proyecto lo requiere.' },
+];
+
+// Filas de tejados de invernadero del hero (precomputadas: el for/let no va en el template)
+const greenhouseRows = [124, 134, 146, 160, 178, 200, 226].map((y, row) => {
+  const amp = 3 + row * 0.8;
+  const step = 30 + row * 6;
+  let d = `M 0 ${y}`;
+  for (let x = 0; x <= 540; x += step) {
+    d += ` L ${x + step / 2} ${y - amp} L ${x + step} ${y}`;
+  }
+  return { d, sw: 1 + row * 0.3, op: 0.85 - row * 0.05 };
+});
+
+// Retícula de invernaderos vista satélite (precomputada)
+const satShades = ['#E8EDE6', '#DCE3DA', '#EFF3EE', '#D2DBCF', '#E3E9E1', '#CAD4C7'];
+const satCells = [];
+for (let row = 0; row < 12; row++) {
+  for (let col = 0; col < 12; col++) {
+    satCells.push({
+      x: 12 + col * 23,
+      y: 12 + row * 23,
+      w: 19 - ((row + col) % 3),
+      h: 19 - ((row * 2 + col) % 3),
+      fill: satShades[(row * 7 + col * 3) % satShades.length],
+    });
+  }
+}
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"El Ejido","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web El Ejido","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":"https://platanitorico.com/imagenes/hero.jpg","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"El Ejido","addressRegion":"Almería","postalCode":"04700","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":36.7766,"longitude":-2.8156},"areaServed":["El Ejido","Almerimar","Balerma","Las Norias","Santa María del Águila","Poniente Almeriense"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"51","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en El Ejido","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/hero.jpg"
+  imageAlt="Diseño web en El Ejido - capital europea de la agricultura bajo plástico"
+  type="service"
+  keywords="diseño web el ejido, web cooperativa agrícola, web exportadora hortaliza, web b2b agro almería, multiidioma exportación, web almerimar golf, agro-tech el ejido"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="ej">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — EL MAR DE PLÁSTICO                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-hero">
+      <div class="container-brutal">
+
+        <header class="ej-hero__top">
+          <span class="text-meta">N.º 033 — Poniente · Capital agrícola de Europa</span>
+          <span class="text-meta ej-hero__status">
+            <span class="ej-pulse"></span>
+            ★ 85.000 HAB · LA HUERTA DE EUROPA ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="ej-hero__grid">
+
+          <div class="ej-hero__intro">
+            <span class="text-meta ej-hero__chapter">Cap. 01 / El Ejido · Poniente Almeriense</span>
+            <h1 class="ej-hero__title heading-display">
+              Diseño web para
+              <em class="heading-editorial">El Ejido,</em>
+              <span class="ej-hero__title-stamp">la huerta de Europa.</span>
+            </h1>
+
+            <p class="ej-hero__lead">
+              <strong>Capital europea de la agricultura bajo plástico</strong>:
+              30.000 hectáreas de invernaderos que <em>se ven desde el espacio</em>
+              y alimentan a media Europa. Webs <strong>B2B multiidioma</strong> para
+              cooperativas, alhóndigas, exportadoras y agro-tech — y para Almerimar.
+            </p>
+
+            <div class="ej-hero__cta">
+              <a href="/contacto" class="ej-btn ej-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#huerta" class="ej-btn ej-btn--ghost">
+                La huerta de Europa ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="ej-kpis">
+              <li class="ej-kpi ej-kpi--green">
+                <span class="ej-kpi__v text-mono">30<small>k ha</small></span>
+                <span class="ej-kpi__l">Invernaderos</span>
+              </li>
+              <li class="ej-kpi ej-kpi--red">
+                <span class="ej-kpi__v text-mono">40<small>+</small></span>
+                <span class="ej-kpi__l">Países destino</span>
+              </li>
+              <li class="ej-kpi ej-kpi--yellow">
+                <span class="ej-kpi__v text-mono">365</span>
+                <span class="ej-kpi__l">Días campaña</span>
+              </li>
+              <li class="ej-kpi ej-kpi--ink">
+                <span class="ej-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="ej-kpi__l">51 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — mar de plástico SVG */}
+          <aside class="ej-hero__postcard" aria-hidden="true">
+            <div class="ej-postcard">
+
+              <header class="ej-postcard__head">
+                <span class="text-mono">EL EJIDO · 04700 · PONIENTE</span>
+                <span class="text-mono">36.777° N · 2.816° W</span>
+              </header>
+
+              {/* Mar de plástico hacia la Sierra de Gádor SVG */}
+              <div class="ej-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 240" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="ej-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#8FC5E8"/>
+                      <stop offset="100%" stop-color="#D6EAF2"/>
+                    </linearGradient>
+                    <linearGradient id="ej-plastic" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#F0F3EE"/>
+                      <stop offset="100%" stop-color="#CDD7CB"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo */}
+                  <rect width="540" height="120" fill="url(#ej-sky)"/>
+
+                  {/* Sol */}
+                  <circle cx="450" cy="48" r="26" fill="#F2B233" opacity="0.9"/>
+                  <circle cx="450" cy="48" r="17" fill="#FFF1CC"/>
+                  {Array.from({length: 10}).map((_, i) => (
+                    <line x1="450" y1="14" x2="450" y2="22" stroke="#F2B233" stroke-width="2.5" stroke-linecap="round" transform={`rotate(${i*36} 450 48)`}/>
+                  ))}
+
+                  {/* Satélite (visible desde el espacio) */}
+                  <g transform="translate(90, 40)">
+                    <rect x="-7" y="-5" width="14" height="10" fill="#5B3A6B" stroke="#14160F" stroke-width="1.5"/>
+                    <rect x="-22" y="-4" width="12" height="8" fill="#4E9CD4" stroke="#14160F" stroke-width="1.2"/>
+                    <rect x="10" y="-4" width="12" height="8" fill="#4E9CD4" stroke="#14160F" stroke-width="1.2"/>
+                    <line x1="0" y1="5" x2="0" y2="12" stroke="#14160F" stroke-width="1.5"/>
+                    {/* Señal */}
+                    <path d="M 0 14 Q 10 20 6 30" fill="none" stroke="#D6312B" stroke-width="1.3" opacity="0.6"/>
+                  </g>
+
+                  {/* Sierra de Gádor al fondo */}
+                  <path d="M 0 120 L 70 78 L 140 104 L 210 72 L 290 100 L 360 74 L 440 102 L 540 80 L 540 120 Z" fill="#9AA68C" opacity="0.6"/>
+                  <path d="M 0 120 L 90 92 L 180 112 L 280 88 L 380 110 L 480 90 L 540 106 L 540 120 Z" fill="#7E8B70" opacity="0.7"/>
+
+                  {/* MAR DE PLÁSTICO — filas de invernaderos en perspectiva */}
+                  <rect x="0" y="118" width="540" height="122" fill="url(#ej-plastic)" stroke="#14160F" stroke-width="2"/>
+                  {/* Filas de tejados de invernadero (zigzag plástico) */}
+                  {greenhouseRows.map((r) => (
+                    <path d={r.d} fill="none" stroke="#B7C2B3" stroke-width={r.sw} opacity={r.op}/>
+                  ))}
+                  {/* Líneas horizontales (caminos entre fincas) */}
+                  {[140, 158, 180, 208].map((y) => (
+                    <line x1="0" y1={y} x2="540" y2={y} stroke="#A3AE9E" stroke-width="0.8" opacity="0.5"/>
+                  ))}
+                  {/* Reflejos del sol en el plástico */}
+                  <g fill="#FFFFFF" opacity="0.5">
+                    <ellipse cx="160" cy="150" rx="14" ry="2"/><ellipse cx="320" cy="172" rx="18" ry="2.5"/>
+                    <ellipse cx="240" cy="138" rx="10" ry="1.5"/><ellipse cx="420" cy="190" rx="16" ry="2"/>
+                  </g>
+
+                  {/* Hortalizas en primer plano */}
+                  {/* Tomate */}
+                  <g transform="translate(60, 214)">
+                    <circle cx="0" cy="0" r="16" fill="#D6312B" stroke="#14160F" stroke-width="2"/>
+                    <path d="M 0 -16 L -4 -22 M 0 -16 L 0 -23 M 0 -16 L 4 -22" stroke="#3F9B3A" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="-5" cy="-5" rx="4" ry="6" fill="#FFFFFF" opacity="0.3"/>
+                  </g>
+                  {/* Pimiento */}
+                  <g transform="translate(120, 218)">
+                    <path d="M -10 -6 Q -12 12 0 14 Q 12 12 10 -6 Q 6 -2 0 -4 Q -6 -2 -10 -6 Z" fill="#3F9B3A" stroke="#14160F" stroke-width="2"/>
+                    <path d="M 0 -4 L 0 -12 L 3 -14" stroke="#256B23" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                  </g>
+                  {/* Pepino */}
+                  <g transform="translate(470, 220) rotate(-20)">
+                    <rect x="-22" y="-7" width="44" height="14" rx="7" fill="#4CA832" stroke="#14160F" stroke-width="2"/>
+                    <g fill="#256B23"><circle cx="-12" cy="0" r="1.2"/><circle cx="-2" cy="-2" r="1.2"/><circle cx="8" cy="1" r="1.2"/><circle cx="16" cy="-1" r="1.2"/></g>
+                  </g>
+                  {/* Berenjena */}
+                  <g transform="translate(415, 222)">
+                    <ellipse cx="0" cy="2" rx="11" ry="15" fill="#5B3A6B" stroke="#14160F" stroke-width="2"/>
+                    <path d="M 0 -12 L -3 -18 L 3 -18 Z" fill="#3F9B3A" stroke="#14160F" stroke-width="1.2"/>
+                    <ellipse cx="-4" cy="-2" rx="3" ry="6" fill="#FFFFFF" opacity="0.25"/>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="ej-postcard__img-wrap">
+                <img
+                  src="/imagenes/hero.jpg"
+                  alt="El Ejido - mar de plástico y agricultura del Poniente almeriense"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="ej-postcard__img"
+                />
+                {/* Sello huerta de Europa */}
+                <div class="ej-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="ej-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#3F9B3A"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F0F3EE" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="ej-spin">
+                      <text font-family="monospace" font-size="6.5" font-weight="bold" fill="#F0F3EE" letter-spacing="2.2">
+                        <textPath href="#ej-seal-arc" startOffset="0%">★ LA HUERTA DE EUROPA · 365 ★</textPath>
+                      </text>
+                    </g>
+                    {/* Brote dentro */}
+                    <g transform="translate(40, 44)">
+                      <path d="M 0 12 L 0 -6" stroke="#F0F3EE" stroke-width="2.5"/>
+                      <path d="M 0 -2 Q -12 -4 -12 -14 Q -2 -14 0 -2 Z" fill="#F0F3EE"/>
+                      <path d="M 0 -6 Q 12 -8 12 -18 Q 2 -18 0 -6 Z" fill="#F0F3EE"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="ej-postcard__tag">
+                  <span class="text-mono">★ VISIBLE DESDE EL ESPACIO ★</span>
+                </div>
+              </div>
+
+              {/* Datos */}
+              <div class="ej-postcard__data">
+                <div class="ej-postcard__data-row">
+                  <span class="text-mono">ALTITUD</span>
+                  <span class="text-mono ej-postcard__data-v">152 m s.n.m.</span>
+                </div>
+                <div class="ej-postcard__data-row">
+                  <span class="text-mono">SUPERFICIE</span>
+                  <span class="text-mono ej-postcard__data-v">227 km² · Poniente</span>
+                </div>
+                <div class="ej-postcard__data-row">
+                  <span class="text-mono">ECONOMÍA</span>
+                  <span class="text-mono ej-postcard__data-v">Agro-industria · exportación</span>
+                </div>
+                <div class="ej-postcard__data-row">
+                  <span class="text-mono">DIST. SEDE</span>
+                  <span class="text-mono ej-postcard__data-v">1h 30min · Vera</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="ej-marquee">
+        <div class="ej-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ MAR DE PLÁSTICO ★ EXPORTACIÓN B2B ★ MULTIIDIOMA EN · DE · FR · NL ★ AGRO-TECH ★ ALMERIMAR ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* EL MAR DE PLÁSTICO — flagship                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-plastic-section">
+      <div class="container-brutal">
+        <div class="ej-plastic-grid">
+
+          <div class="ej-plastic-l">
+            <span class="text-meta ej-plastic-chapter">Cap. 02 / El milagro económico</span>
+            <h2 class="ej-plastic-title heading-display">
+              El Mar de
+              <em class="heading-editorial">Plástico.</em>
+            </h2>
+            <p class="ej-plastic-lead">
+              <strong>30.000 hectáreas de invernaderos</strong> que forman una
+              mancha blanca <em>visible desde el espacio</em>. En medio siglo,
+              El Ejido pasó de tierra árida a ser la <strong>mayor concentración
+              de agricultura intensiva de Europa</strong>. Cada nave de plástico
+              es un negocio que vende a medio continente.
+            </p>
+
+            <div class="ej-plastic-facts">
+              {[
+                { k: 'SUPERFICIE', v: '30.000+ ha bajo plástico' },
+                { k: 'SATÉLITE', v: 'La única obra humana de Almería visible desde el espacio' },
+                { k: 'CAMPAÑA', v: 'Producción los 365 días del año' },
+                { k: 'PRODUCTOS', v: 'Tomate, pimiento, pepino, calabacín, berenjena, sandía' },
+                { k: 'DESTINO', v: 'Alemania, Francia, Países Bajos, Reino Unido…' },
+                { k: 'INNOVACIÓN', v: 'Líder en control biológico de plagas' },
+              ].map(f => (
+                <div class="ej-plastic-fact">
+                  <span class="text-mono ej-plastic-fact__k">{f.k}</span>
+                  <span class="ej-plastic-fact__v">{f.v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Vista satélite del mar de plástico SVG */}
+          <aside class="ej-plastic-r" aria-hidden="true">
+            <div class="ej-sat">
+              <div class="ej-sat__bar">
+                <span class="text-mono">◉ VISTA SATÉLITE · EL EJIDO</span>
+                <span class="text-mono">36.78°N 2.82°W</span>
+              </div>
+              <svg viewBox="0 0 300 300" width="100%" height="100%" class="ej-sat__svg">
+                <rect width="300" height="300" fill="#2B3326"/>
+                {/* Retícula de invernaderos vista desde arriba */}
+                {satCells.map((c) => (
+                  <rect x={c.x} y={c.y} width={c.w} height={c.h} fill={c.fill} stroke="#9AA68C" stroke-width="0.7"/>
+                ))}
+                {/* Caminos principales */}
+                <line x1="0" y1="150" x2="300" y2="150" stroke="#6E7A62" stroke-width="3"/>
+                <line x1="150" y1="0" x2="150" y2="300" stroke="#6E7A62" stroke-width="2.5"/>
+                <line x1="0" y1="70" x2="300" y2="82" stroke="#6E7A62" stroke-width="1.5" opacity="0.7"/>
+                <line x1="70" y1="0" x2="60" y2="300" stroke="#6E7A62" stroke-width="1.5" opacity="0.7"/>
+                {/* Rambla diagonal */}
+                <path d="M 0 230 Q 120 210 300 250" fill="none" stroke="#8A7A5E" stroke-width="4" opacity="0.6"/>
+                {/* Retícula de coordenadas */}
+                <g stroke="#4CA832" stroke-width="0.6" opacity="0.3">
+                  <line x1="0" y1="100" x2="300" y2="100"/><line x1="0" y1="200" x2="300" y2="200"/>
+                  <line x1="100" y1="0" x2="100" y2="300"/><line x1="200" y1="0" x2="200" y2="300"/>
+                </g>
+                {/* Marcador de posición */}
+                <g transform="translate(150, 150)">
+                  <circle cx="0" cy="0" r="10" fill="none" stroke="#D6312B" stroke-width="2.5" class="ej-sat-ping"/>
+                  <circle cx="0" cy="0" r="3" fill="#D6312B"/>
+                </g>
+                {/* Esquinas HUD */}
+                <g stroke="#4CA832" stroke-width="2" fill="none">
+                  <path d="M 8 22 L 8 8 L 22 8"/><path d="M 292 22 L 292 8 L 278 8"/>
+                  <path d="M 8 278 L 8 292 L 22 292"/><path d="M 292 278 L 292 292 L 278 292"/>
+                </g>
+              </svg>
+              <div class="ej-sat__foot text-mono">★ 30.000+ HA · LA HUERTA DE EUROPA</div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* 3 ICONOS                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-iconos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--ej-red)">Cap. 03 / Tres mundos</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que mueve
+              <em class="heading-editorial">a El Ejido.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            El invernadero que produce, la alhóndiga que comercia y Almerimar
+            que recibe a Europa. <strong>Tres economías</strong> en un mismo
+            municipio — y tres estrategias digitales.
+          </p>
+        </header>
+
+        <ol class="ej-iconos">
+          {iconos.map((i) => (
+            <li class={`ej-icono ej-icono--${i.color}`}>
+              <div class="ej-icono__code">{i.code}</div>
+
+              <div class="ej-icono__svg" aria-hidden="true">
+                {i.color === 'green' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Invernadero (raspa y amagado) */}
+                    <path d="M 8 78 L 8 44 L 50 28 L 92 44 L 92 78 Z" fill="currentColor" stroke="#14160F" stroke-width="2.5" opacity="0.25"/>
+                    {/* Estructura plástico dentada */}
+                    <path d="M 8 44 L 22 38 L 22 44 L 36 38 L 36 44 L 50 38 L 50 44 L 64 38 L 64 44 L 78 38 L 78 44 L 92 44" fill="none" stroke="#14160F" stroke-width="2"/>
+                    <path d="M 8 44 L 50 28 L 92 44" fill="none" stroke="#14160F" stroke-width="2.5"/>
+                    {/* Postes */}
+                    <line x1="8" y1="44" x2="8" y2="78" stroke="#14160F" stroke-width="2.5"/>
+                    <line x1="92" y1="44" x2="92" y2="78" stroke="#14160F" stroke-width="2.5"/>
+                    <line x1="50" y1="38" x2="50" y2="78" stroke="#14160F" stroke-width="1.5" opacity="0.4"/>
+                    {/* Plantas en hileras */}
+                    {[22, 36, 50, 64, 78].map(x => (
+                      <g>
+                        <line x1={x} y1="78" x2={x} y2="62" stroke="#256B23" stroke-width="2"/>
+                        <circle cx={x} cy="60" r="4" fill="#3F9B3A" stroke="#14160F" stroke-width="1.2"/>
+                        <circle cx={x-3} cy="66" r="2.5" fill="#D6312B"/>
+                        <circle cx={x+3} cy="68" r="2.5" fill="#D6312B"/>
+                      </g>
+                    ))}
+                    <line x1="6" y1="78" x2="94" y2="78" stroke="#14160F" stroke-width="2.5"/>
+                  </svg>
+                )}
+                {i.color === 'red' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Alhóndiga: nave + cajas + cartel subasta */}
+                    <path d="M 10 44 L 50 26 L 90 44 L 90 50 L 10 50 Z" fill="currentColor" stroke="#14160F" stroke-width="2.5"/>
+                    <rect x="14" y="50" width="72" height="34" fill="#F0F3EE" stroke="#14160F" stroke-width="2.5"/>
+                    {/* Portón */}
+                    <rect x="38" y="58" width="24" height="26" fill="#14160F" opacity="0.15" stroke="#14160F" stroke-width="1.5"/>
+                    {/* Pantalla de precios */}
+                    <rect x="20" y="56" width="14" height="9" fill="#14160F"/>
+                    <text x="27" y="63" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#4CA832">0.90</text>
+                    {/* Cajas de hortaliza */}
+                    <g stroke="#14160F" stroke-width="1.5">
+                      <rect x="66" y="68" width="16" height="16" fill="#D6312B"/>
+                      <circle cx="70" cy="72" r="2" fill="#F0F3EE"/><circle cx="76" cy="74" r="2" fill="#F0F3EE"/><circle cx="72" cy="78" r="2" fill="#F0F3EE"/>
+                    </g>
+                    {/* Camión saliendo */}
+                    <g transform="translate(6, 74)" stroke="#14160F" stroke-width="1.5">
+                      <rect x="0" y="0" width="14" height="9" fill="#4E9CD4"/>
+                      <rect x="-8" y="3" width="8" height="6" fill="#4E9CD4"/>
+                      <circle cx="-4" cy="10" r="2.5" fill="#14160F"/><circle cx="9" cy="10" r="2.5" fill="#14160F"/>
+                    </g>
+                  </svg>
+                )}
+                {i.color === 'sky' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Almerimar: velero + golf + sol */}
+                    {/* Mar */}
+                    <path d="M 0 70 Q 25 64 50 70 T 100 70 L 100 100 L 0 100 Z" fill="currentColor" stroke="#14160F" stroke-width="2"/>
+                    <path d="M 0 78 Q 25 73 50 78 T 100 78" fill="none" stroke="#F0F3EE" stroke-width="1.2" opacity="0.6"/>
+                    {/* Velero */}
+                    <g transform="translate(34, 52)">
+                      <path d="M -14 18 L 14 18 L 9 26 L -9 26 Z" fill="#F0F3EE" stroke="#14160F" stroke-width="2"/>
+                      <line x1="0" y1="18" x2="0" y2="-12" stroke="#14160F" stroke-width="2"/>
+                      <path d="M 0 -12 L 0 14 L 16 14 Z" fill="#D6312B" stroke="#14160F" stroke-width="1.5"/>
+                      <path d="M 0 -10 L -12 12 L 0 12 Z" fill="#F0F3EE" stroke="#14160F" stroke-width="1.5"/>
+                    </g>
+                    {/* Bandera de golf */}
+                    <g transform="translate(74, 56)">
+                      <line x1="0" y1="0" x2="0" y2="-26" stroke="#14160F" stroke-width="2"/>
+                      <path d="M 0 -26 L 14 -22 L 0 -18 Z" fill="#F2B233" stroke="#14160F" stroke-width="1.5"/>
+                      <circle cx="0" cy="2" r="3" fill="#F0F3EE" stroke="#14160F" stroke-width="1.2"/>
+                    </g>
+                    {/* Sol */}
+                    <circle cx="78" cy="22" r="10" fill="#F2B233" stroke="#14160F" stroke-width="2"/>
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="ej-icono__name heading-display">{i.name}</h3>
+              <span class="text-mono ej-icono__sub">{i.sub}</span>
+              <p class="ej-icono__desc">{i.desc}</p>
+              <footer class="ej-icono__foot">
+                <span class="text-mono ej-icono__dato">★ {i.dato}</span>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* LA HUERTA DE EUROPA — flagship                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-huerta-section" id="huerta">
+      <div class="container-brutal">
+        <header class="ej-huerta-head">
+          <span class="text-meta ej-huerta-chapter">Cap. 04 / Exportación</span>
+          <h2 class="ej-huerta-title heading-display">
+            Tu hortaliza ya viaja a Europa.
+            <em class="heading-editorial">Que tu web también.</em>
+          </h2>
+          <p class="ej-huerta-lead">
+            El tomate, el pimiento y el pepino de El Ejido se comen en
+            Berlín, París y Ámsterdam. Pero si tu web está <strong>solo en
+            español</strong>, el comprador extranjero no te encuentra. La
+            <em>multiidioma no es un lujo: es tu canal de venta</em>.
+          </p>
+        </header>
+
+        {/* Caja de hortalizas */}
+        <div class="ej-crate">
+          <div class="ej-crate__label text-mono">★ PRODUCTO DE EL EJIDO · CAT. EXTRA</div>
+          <ul class="ej-veg">
+            {hortalizas.map((h) => (
+              <li class={`ej-veg__item ej-veg__item--${h.color}`}>
+                <div class="ej-veg__svg" aria-hidden="true">
+                  {h.color === 'red' && (
+                    <svg viewBox="0 0 60 60" width="100%" height="100%">
+                      <circle cx="30" cy="34" r="20" fill="#D6312B" stroke="#14160F" stroke-width="2.5"/>
+                      <path d="M 30 14 L 24 6 M 30 14 L 30 5 M 30 14 L 36 6" stroke="#3F9B3A" stroke-width="2.5" stroke-linecap="round"/>
+                      <path d="M 24 8 L 30 12 L 36 8" fill="#3F9B3A" stroke="#14160F" stroke-width="1.2"/>
+                      <ellipse cx="22" cy="28" rx="5" ry="8" fill="#FFFFFF" opacity="0.3"/>
+                    </svg>
+                  )}
+                  {h.color === 'green' && (
+                    <svg viewBox="0 0 60 60" width="100%" height="100%">
+                      <path d="M 16 18 Q 12 46 30 50 Q 48 46 44 18 Q 38 24 30 21 Q 22 24 16 18 Z" fill="#3F9B3A" stroke="#14160F" stroke-width="2.5"/>
+                      <path d="M 30 21 L 30 8 L 35 4" stroke="#256B23" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <path d="M 22 30 Q 26 44 30 46" fill="none" stroke="#256B23" stroke-width="1.5" opacity="0.6"/>
+                    </svg>
+                  )}
+                  {h.color === 'cuke' && (
+                    <svg viewBox="0 0 60 60" width="100%" height="100%">
+                      <rect x="10" y="22" width="40" height="16" rx="8" fill="#4CA832" stroke="#14160F" stroke-width="2.5" transform="rotate(-12 30 30)"/>
+                      <g fill="#256B23" transform="rotate(-12 30 30)"><circle cx="20" cy="30" r="1.4"/><circle cx="28" cy="27" r="1.4"/><circle cx="36" cy="31" r="1.4"/><circle cx="42" cy="28" r="1.4"/></g>
+                    </svg>
+                  )}
+                  {h.color === 'zuke' && (
+                    <svg viewBox="0 0 60 60" width="100%" height="100%">
+                      <rect x="8" y="24" width="44" height="14" rx="7" fill="#2E7D32" stroke="#14160F" stroke-width="2.5" transform="rotate(8 30 31)"/>
+                      <path d="M 12 22 L 8 16 L 14 18" fill="#3F9B3A" stroke="#14160F" stroke-width="1.5" transform="rotate(8 30 31)"/>
+                      <g stroke="#1B5E20" stroke-width="1" opacity="0.5" transform="rotate(8 30 31)"><line x1="18" y1="26" x2="20" y2="36"/><line x1="30" y1="25" x2="32" y2="37"/><line x1="42" y1="26" x2="44" y2="35"/></g>
+                    </svg>
+                  )}
+                  {h.color === 'auber' && (
+                    <svg viewBox="0 0 60 60" width="100%" height="100%">
+                      <ellipse cx="30" cy="36" rx="15" ry="20" fill="#5B3A6B" stroke="#14160F" stroke-width="2.5"/>
+                      <path d="M 30 16 L 26 8 L 34 8 Z" fill="#3F9B3A" stroke="#14160F" stroke-width="1.5"/>
+                      <path d="M 30 16 L 30 9" stroke="#256B23" stroke-width="2.5" stroke-linecap="round"/>
+                      <ellipse cx="24" cy="30" rx="4" ry="8" fill="#FFFFFF" opacity="0.22"/>
+                    </svg>
+                  )}
+                  {h.color === 'melon' && (
+                    <svg viewBox="0 0 60 60" width="100%" height="100%">
+                      <circle cx="30" cy="32" r="22" fill="#2E7D32" stroke="#14160F" stroke-width="2.5"/>
+                      <path d="M 14 22 Q 30 30 18 50" fill="none" stroke="#1B5E20" stroke-width="2" opacity="0.6"/>
+                      <path d="M 30 11 Q 40 30 34 52" fill="none" stroke="#1B5E20" stroke-width="2" opacity="0.6"/>
+                      <path d="M 46 22 Q 32 32 44 49" fill="none" stroke="#1B5E20" stroke-width="2" opacity="0.6"/>
+                    </svg>
+                  )}
+                </div>
+                <span class="ej-veg__name">{h.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Mercados export */}
+        <div class="ej-export">
+          <h3 class="ej-export__title heading-display">A dónde viaja — y en qué idioma vende</h3>
+          <ul class="ej-mercados">
+            {mercados.map((m) => (
+              <li class="ej-mercado">
+                <span class="ej-mercado__flag" aria-hidden="true">
+                  {m.flag === 'de' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="60" height="13.33" fill="#000000"/>
+                      <rect y="13.33" width="60" height="13.33" fill="#DD0000"/>
+                      <rect y="26.66" width="60" height="13.33" fill="#FFCE00"/>
+                    </svg>
+                  )}
+                  {m.flag === 'fr' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="20" height="40" fill="#002395"/>
+                      <rect x="20" width="20" height="40" fill="#FFFFFF"/>
+                      <rect x="40" width="20" height="40" fill="#ED2939"/>
+                    </svg>
+                  )}
+                  {m.flag === 'nl' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="60" height="13.33" fill="#AE1C28"/>
+                      <rect y="13.33" width="60" height="13.33" fill="#FFFFFF"/>
+                      <rect y="26.66" width="60" height="13.33" fill="#21468B"/>
+                    </svg>
+                  )}
+                  {m.flag === 'gb' && (
+                    <svg viewBox="0 0 60 40" width="100%" height="100%">
+                      <rect width="60" height="40" fill="#012169"/>
+                      <path d="M0 0L60 40M60 0L0 40" stroke="#FFFFFF" stroke-width="6"/>
+                      <path d="M0 0L60 40M60 0L0 40" stroke="#C8102E" stroke-width="3"/>
+                      <path d="M30 0V40M0 20H60" stroke="#FFFFFF" stroke-width="10"/>
+                      <path d="M30 0V40M0 20H60" stroke="#C8102E" stroke-width="5"/>
+                    </svg>
+                  )}
+                </span>
+                <div class="ej-mercado__info">
+                  <span class="ej-mercado__lang text-mono">{m.lang}</span>
+                  <span class="ej-mercado__name">{m.name}</span>
+                </div>
+                <span class="ej-mercado__pct">{m.pct}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="ej-export__note">
+            <strong>★ Multiidioma real:</strong> hreflang + contenido localizado
+            por idioma + fichas técnicas de producto (calibre, packaging,
+            certificaciones). Tu comprador alemán busca en alemán — y ahí debes estar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--ej-yellow)">Cap. 05 / Cifras</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--ej-paper)">
+              El milagro
+              <em class="heading-editorial" style="color:var(--ej-yellow)">del Poniente.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(240,243,238,0.75)">
+            Datos que explican por qué El Ejido es el <strong>motor económico
+            de Almería</strong> y uno de los mercados B2B más potentes — y peor
+            atendidos digitalmente — de toda Andalucía.
+          </p>
+        </header>
+
+        <ul class="ej-hitos">
+          {hitos.map((h, i) => (
+            <li class={`ej-hito ej-hito--${i}`}>
+              <span class="text-mono ej-hito__k">{h.k}</span>
+              <span class="ej-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Sectores El Ejido</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">alimentan a Europa.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con estrategia digital propia. Del portal B2B de una
+            cooperativa al motor de reservas de Almerimar — dominamos el agro
+            y el turismo.
+          </p>
+        </header>
+
+        <ol class="ej-sec">
+          {sectores.map((s, i) => {
+            const colors = ['green', 'red', 'yellow', 'auber', 'sky', 'slate'];
+            return (
+              <li class={`ej-sec__card ej-sec__card--${colors[i]}`}>
+                <header class="ej-sec__head">
+                  <span class="text-mono ej-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="ej-sec__stat-box">
+                    <span class="ej-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="ej-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="ej-sec__title heading-display">{s.nombre}</h3>
+                <p class="ej-sec__desc">{s.desc}</p>
+                <ul class="ej-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="ej-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="ej-sec__foot">
+                  <a href="/contacto" class="ej-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-map-section">
+      <header class="ej-map-head">
+        <div class="container-brutal ej-map-head__inner">
+          <div>
+            <span class="text-meta ej-map-chapter">Cap. 07 / Cartografía</span>
+            <h2 class="heading-display ej-map-title">
+              La ciudad
+              <em class="heading-editorial">y su mar de plástico.</em>
+            </h2>
+          </div>
+          <div class="ej-map-coords">
+            <span class="text-mono">36.777° N · 2.816° W</span>
+            <span class="text-mono">152m · 227 km² · PONIENTE ALMERIENSE</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="ej-map-frame">
+        <div class="ej-map-wrap">
+          <InteractiveMap
+            center={[-2.8156, 36.7766]}
+            zoom={13}
+            pitch={48}
+            bearing={10}
+            label="El Ejido"
+            themeColor="#3F9B3A"
+            themeColorDark="#256B23"
+            townInitial="E"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Por qué El Ejido</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para invertir en tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Motor económico + exportación + B2B exigente + Almerimar turístico.
+            El Ejido es el mercado con más potencial digital sin explotar de
+            Almería.
+          </p>
+        </header>
+
+        <ol class="ej-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`ej-dif__item ej-dif__item--${i}`}>
+              <span class="text-mono ej-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display ej-dif__t">{d.title}</h3>
+              <p class="ej-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--ej-yellow)">Cap. 09 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--ej-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--ej-green-l)">a tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(240,243,238,0.75)">
+            Auditoría del negocio. Diseño profesional B2B o turístico. Desarrollo
+            con catálogo o reservas, multiidioma. SEO que te encuentra.
+          </p>
+        </header>
+
+        <ol class="ej-proc">
+          {proceso.map((s) => (
+            <li class="ej-proc__step">
+              <header class="ej-proc__head">
+                <span class="text-mono ej-proc__num">{s.num}</span>
+                <span class="text-mono ej-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display ej-proc__t">{s.title}</h3>
+              <p class="ej-proc__body">{s.body}</p>
+              <footer class="ej-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Voces del campo</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de El Ejido
+              <em class="heading-editorial">que venden a Europa.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="ej-pull">
+          <div class="ej-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="ej-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#3F9B3A" stroke="#14160F" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#F0F3EE" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="ej-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#F0F3EE" letter-spacing="2.5"><textPath href="#ej-pull-c" startOffset="0%">★ EL EJIDO · 2026 · AGRO ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#F0F3EE">"</text>
+            </svg>
+          </div>
+          <blockquote class="ej-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="ej-pull__cap">
+            <span class="ej-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="ej-pull__name">{testimonios[0].nombre}</span>
+              <span class="ej-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="ej-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`ej-quote ej-quote--${i}`}>
+              <span class="ej-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="ej-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="ej-quote__name">{t.nombre}</span>
+                  <span class="ej-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">preguntan en el campo.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Webs B2B agro, multiidioma, catálogos técnicos, Almerimar, agro-tech,
+            plazos y precios. Si no está aquí, escríbenos.
+          </p>
+        </header>
+
+        <ol class="ej-faq">
+          {faqs.map((f, i) => (
+            <li class="ej-faq__item">
+              <details class="ej-faq__det" open={i === 0}>
+                <summary class="ej-faq__sum">
+                  <span class="text-mono ej-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="ej-faq__q">{f.q}</span>
+                  <span class="ej-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="ej-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosPoniente.length > 0 && (
+      <section class="ej-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 12 / Poniente Almeriense</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en todo
+                <em class="heading-editorial">el Poniente.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del Poniente almeriense donde trabajamos. Del
+              mar de plástico a la costa, cobertura completa.
+            </p>
+          </header>
+
+          <ul class="ej-vecinos">
+            {pueblosPoniente.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`ej-vecino ej-vecino--${i % 4}`}>
+                  <span class="text-mono ej-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="ej-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono ej-vecino__sub">{p.comarca}</span>
+                  <span class="ej-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ej-final">
+      <div class="container-brutal">
+        <div class="ej-final__grid">
+
+          <div class="ej-final__l">
+            <span class="text-meta ej-final__chapter">★ Cap. 13 · Próximo paso</span>
+            <h2 class="heading-display ej-final__title">
+              ¿Llevamos tu negocio
+              <em class="heading-editorial">a toda Europa?</em>
+            </h2>
+            <p class="ej-final__lead">
+              Tu cooperativa, alhóndiga, empresa agro, exportadora o negocio
+              de Almerimar con <strong>web B2B multiidioma</strong>, catálogo
+              técnico o motor de reservas, fichas de producto y
+              <strong>SEO internacional</strong>. Que el comprador europeo te
+              encuentre en su idioma.
+            </p>
+            <div class="ej-final__cta">
+              <a href="/contacto" class="ej-final__btn ej-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="ej-final__btn ej-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="ej-final__trust">
+              <span><span class="ej-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ B2B MULTIIDIOMA</span>
+              <span>★ CATÁLOGO TÉCNICO</span>
+              <span>4.9★ · 51 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* Invernadero + camión export animados */}
+          <div class="ej-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="ej-final-svg">
+              <defs>
+                <radialGradient id="ej-final-glow" cx="50%" cy="40%" r="55%">
+                  <stop offset="0%" stop-color="#3F9B3A" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#3F9B3A" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="160" cy="130" r="140" fill="url(#ej-final-glow)"/>
+
+              {/* SOL */}
+              <circle cx="246" cy="74" r="30" fill="#F2B233" stroke="#F0F3EE" stroke-width="3"/>
+              {Array.from({length: 12}).map((_, i) => (
+                <line x1="246" y1="34" x2="246" y2="42" stroke="#F2B233" stroke-width="3.5" stroke-linecap="round" transform={`rotate(${i*30} 246 74)`}/>
+              ))}
+
+              {/* Sierra al fondo */}
+              <path d="M 0 150 L 70 118 L 150 144 L 230 112 L 320 142 L 320 170 L 0 170 Z" fill="#5C6650" stroke="#F0F3EE" stroke-width="2"/>
+
+              {/* INVERNADERO grande */}
+              <g>
+                <path d="M 40 220 L 40 150 L 160 120 L 280 150 L 280 220 Z" fill="#E8EDE6" stroke="#14160F" stroke-width="3" opacity="0.92"/>
+                {/* Tejado dentado */}
+                <path d="M 40 150 L 70 142 L 70 150 L 100 142 L 100 150 L 130 134 L 130 142 L 160 120 L 190 142 L 190 134 L 220 150 L 220 142 L 250 150 L 250 142 L 280 150" fill="none" stroke="#14160F" stroke-width="2.5"/>
+                {/* Postes */}
+                {[40, 100, 160, 220, 280].map(x => (
+                  <line x1={x} y1="150" x2={x} y2="220" stroke="#14160F" stroke-width="2" opacity="0.5"/>
+                ))}
+                {/* Plantas dentro */}
+                {[64, 100, 136, 172, 208, 244].map(x => (
+                  <g class="ej-final-plant" style={`transform-origin:${x}px 220px`}>
+                    <line x1={x} y1="220" x2={x} y2="188" stroke="#256B23" stroke-width="2.5"/>
+                    <circle cx={x} cy="184" r="7" fill="#3F9B3A" stroke="#14160F" stroke-width="1.5"/>
+                    <circle cx={x-5} cy="194" r="3.5" fill="#D6312B"/>
+                    <circle cx={x+5} cy="196" r="3.5" fill="#D6312B"/>
+                  </g>
+                ))}
+                <line x1="38" y1="220" x2="282" y2="220" stroke="#14160F" stroke-width="3"/>
+              </g>
+
+              {/* Camión de exportación */}
+              <g transform="translate(40, 250)" class="ej-final-truck">
+                <rect x="0" y="-22" width="60" height="26" fill="#F0F3EE" stroke="#14160F" stroke-width="2.5"/>
+                <text x="30" y="-5" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#3F9B3A">EXPORT</text>
+                <rect x="60" y="-14" width="22" height="18" fill="#D6312B" stroke="#14160F" stroke-width="2.5"/>
+                <rect x="64" y="-10" width="10" height="8" fill="#8FC5E8" stroke="#14160F" stroke-width="1.2"/>
+                <circle cx="16" cy="8" r="6" fill="#14160F"/><circle cx="16" cy="8" r="2.5" fill="#F0F3EE"/>
+                <circle cx="68" cy="8" r="6" fill="#14160F"/><circle cx="68" cy="8" r="2.5" fill="#F0F3EE"/>
+              </g>
+
+              {/* Texto */}
+              <text x="160" y="306" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#F0F3EE" letter-spacing="3">★ EL EJIDO · 04700 · PONIENTE ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="ej-final__marquee">
+        <div class="ej-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ MAR DE PLÁSTICO ★ EXPORTACIÓN ★ MULTIIDIOMA ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ══════════════════════════════════════════════════════
+     PALETA · EL EJIDO · MAR DE PLÁSTICO + AGRO-EXPORT
+     ══════════════════════════════════════════════════════ */
+  .ej {
+    --ej-paper:    #F0F3EE;       /* Plástico / plata invernadero */
+    --ej-paper-2:  #E4E9DF;
+    --ej-arena:    #D7DECF;
+    --ej-ink:      #14160F;       /* Verde-negro tierra */
+    --ej-green:    #3F9B3A;       /* Verde invernadero (PRIMARY) */
+    --ej-green-l:  #4CA832;
+    --ej-green-d:  #256B23;
+    --ej-red:      #D6312B;       /* Rojo tomate/pimiento */
+    --ej-yellow:   #F2B233;       /* Amarillo pimiento/sol */
+    --ej-auber:    #5B3A6B;       /* Berenjena */
+    --ej-sky:      #4E9CD4;       /* Azul industrial / Almerimar */
+    --ej-slate:    #6E7A62;       /* Sierra de Gádor */
+    --ej-shadow:   8px 8px 0 var(--ej-ink);
+  }
+  .ej-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ej-green);
+    box-shadow: 0 0 0 0 rgba(63,155,58,0.55);
+    animation: ej-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ej-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(63,155,58,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(63,155,58,0); }
+    100% { box-shadow: 0 0 0 0 rgba(63,155,58,0); }
+  }
+  .ej-spin { transform-origin: 50% 50%; animation: ej-spin 30s linear infinite; }
+  @keyframes ej-spin { to { transform: rotate(360deg); } }
+
+  /* HERO */
+  .ej-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 18%, rgba(78,156,212,0.12), transparent 50%),
+      radial-gradient(circle at 12% 82%, rgba(63,155,58,0.10), transparent 50%),
+      var(--ej-paper);
+    border-bottom: 3px solid var(--ej-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ej-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(115deg, transparent 0 36px, rgba(63,155,58,0.04) 36px 37px);
+    pointer-events: none;
+  }
+  .ej-hero > * { position: relative; }
+  .ej-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .ej-hero__status { color: var(--ej-green-d); font-weight: 700; }
+  .ej-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .ej-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .ej-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .ej-hero__chapter { color: var(--ej-green-d); }
+  .ej-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .ej-hero__title em { color: var(--ej-green); font-style: italic; }
+  .ej-hero__title-stamp {
+    display: inline-block;
+    color: var(--ej-paper);
+    background: var(--ej-red);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .ej-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .ej-hero__lead strong { color: var(--ej-ink); font-weight: 700; }
+  .ej-hero__lead em { color: var(--ej-red); font-style: italic; font-weight: 600; }
+  .ej-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .ej-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--ej-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .ej-btn--primary { background: var(--ej-green); color: var(--ej-paper); box-shadow: 6px 6px 0 var(--ej-ink); }
+  .ej-btn--primary:hover { background: var(--ej-red); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ej-ink); }
+  .ej-btn--ghost { background: transparent; color: var(--ej-ink); box-shadow: 6px 6px 0 var(--ej-green); }
+  .ej-btn--ghost:hover { background: var(--ej-ink); color: var(--ej-yellow); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ej-green); }
+
+  /* KPIs */
+  .ej-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--ej-ink);
+    background: var(--ej-ink);
+  }
+  @media (min-width: 768px) { .ej-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .ej-kpi {
+    background: var(--ej-paper); padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--ej-ink); border-bottom: 2px solid var(--ej-ink);
+  }
+  .ej-kpi:nth-child(2n) { border-right: none; }
+  .ej-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .ej-kpi:nth-child(2n)      { border-right: 2px solid var(--ej-ink); }
+    .ej-kpi:nth-child(4n)      { border-right: none; }
+    .ej-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--ej-ink); }
+    .ej-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .ej-kpi--green  { background: var(--ej-green); color: var(--ej-paper); }
+  .ej-kpi--red    { background: var(--ej-red); color: var(--ej-paper); }
+  .ej-kpi--yellow { background: var(--ej-yellow); color: var(--ej-ink); }
+  .ej-kpi--ink    { background: var(--ej-ink); color: var(--ej-paper); }
+  .ej-kpi--ink .ej-kpi__v { color: var(--ej-yellow); }
+  .ej-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .ej-kpi__v small { font-size: .55em; opacity: .8; }
+  .ej-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .ej-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(20,22,15,0.2));
+  }
+  .ej-postcard {
+    background: var(--ej-paper);
+    border: 3px solid var(--ej-ink);
+    box-shadow: var(--ej-shadow);
+    overflow: hidden;
+    transform: rotate(1deg);
+    transition: transform .35s;
+  }
+  .ej-postcard:hover { transform: rotate(0); }
+  .ej-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--ej-green);
+    color: var(--ej-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--ej-ink);
+  }
+  .ej-postcard__profile {
+    width: 100%; aspect-ratio: 540 / 240;
+    border-bottom: 2px solid var(--ej-ink);
+    overflow: hidden;
+  }
+  .ej-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--ej-ink); }
+  .ej-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.05); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .ej-postcard:hover .ej-postcard__img { transform: scale(1.05); }
+  .ej-postcard__seal { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(9deg); filter: drop-shadow(0 4px 10px rgba(63,155,58,0.5)); }
+  .ej-postcard__tag {
+    position: absolute; bottom: 12px; left: 12px;
+    background: var(--ej-yellow); color: var(--ej-ink);
+    padding: .4rem .75rem;
+    font-size: .62rem; font-weight: 800; letter-spacing: .15em;
+    border: 2px solid var(--ej-ink);
+    box-shadow: 3px 3px 0 var(--ej-green);
+    transform: rotate(-2deg);
+  }
+  .ej-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--ej-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .ej-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(20,22,15,0.18);
+    font-size: .68rem;
+  }
+  .ej-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .ej-postcard__data-row > span:first-child { color: var(--ej-green-d); letter-spacing: .2em; font-weight: 800; }
+  .ej-postcard__data-v { color: var(--ej-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .ej-marquee {
+    background: var(--ej-green); color: var(--ej-paper);
+    overflow: hidden; padding: .9rem 0;
+    border-top: 3px solid var(--ej-ink);
+  }
+  .ej-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: ej-marquee 40s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem; font-weight: 800;
+    letter-spacing: .15em; text-transform: uppercase;
+  }
+  @keyframes ej-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* MAR DE PLÁSTICO SECTION */
+  .ej-plastic-section {
+    background: var(--ej-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ej-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ej-plastic-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(63,155,58,0.06) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .ej-plastic-section > * { position: relative; }
+  .ej-plastic-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .ej-plastic-grid { grid-template-columns: 1.2fr 1fr; gap: 4rem; } }
+  .ej-plastic-chapter { color: var(--ej-green); }
+  .ej-plastic-title { font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: .92; letter-spacing: -.04em; margin: 1rem 0; }
+  .ej-plastic-title em { color: var(--ej-green); }
+  .ej-plastic-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1.75rem; max-width: 56ch; }
+  .ej-plastic-lead strong { color: var(--ej-ink); font-weight: 700; }
+  .ej-plastic-lead em { color: var(--ej-red); font-style: italic; }
+  .ej-plastic-facts { display: grid; grid-template-columns: 1fr; gap: 0; border: 2.5px solid var(--ej-ink); background: var(--ej-paper); box-shadow: 6px 6px 0 var(--ej-ink); }
+  @media (min-width: 640px) { .ej-plastic-facts { grid-template-columns: 1fr 1fr; } }
+  .ej-plastic-fact { padding: .85rem 1rem; border-bottom: 1px solid var(--ej-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) {
+    .ej-plastic-fact:nth-child(odd) { border-right: 1px solid var(--ej-ink); }
+    .ej-plastic-fact:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .ej-plastic-fact:last-child { border-bottom: none; } }
+  .ej-plastic-fact__k { font-size: .58rem; letter-spacing: .2em; color: var(--ej-red); font-weight: 800; }
+  .ej-plastic-fact__v { font-size: .88rem; color: var(--ej-ink); font-weight: 600; line-height: 1.35; }
+
+  /* Vista satélite */
+  .ej-plastic-r { max-width: 360px; margin: 0 auto; width: 100%; }
+  .ej-sat { border: 3px solid var(--ej-ink); box-shadow: var(--ej-shadow); background: #2B3326; }
+  .ej-sat__bar { display: flex; justify-content: space-between; gap: .5rem; padding: .5rem .75rem; background: var(--ej-ink); color: var(--ej-green-l); font-size: .56rem; letter-spacing: .12em; border-bottom: 2px solid var(--ej-green-d); }
+  .ej-sat__svg { display: block; width: 100%; aspect-ratio: 1; }
+  .ej-sat-ping { transform-origin: 0 0; animation: ej-ping 2s ease-out infinite; }
+  @keyframes ej-ping { 0% { opacity: 1; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.8); } }
+  .ej-sat__foot { padding: .55rem .75rem; background: var(--ej-ink); color: var(--ej-paper); font-size: .58rem; letter-spacing: .15em; font-weight: 800; border-top: 2px solid var(--ej-green-d); text-align: center; }
+
+  /* ICONOS */
+  .ej-iconos-section { background: var(--ej-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); }
+  .ej-iconos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 1024px) { .ej-iconos { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .ej-icono {
+    position: relative;
+    background: var(--ej-paper);
+    border: 3px solid var(--ej-ink);
+    box-shadow: var(--ej-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ej-icono:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .ej-icono--green { color: var(--ej-green); }
+  .ej-icono--red   { color: var(--ej-red); }
+  .ej-icono--sky   { color: var(--ej-sky); }
+  .ej-icono__code {
+    position: absolute; top: -16px; right: 20px;
+    background: var(--ej-ink); color: var(--ej-yellow);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.2rem;
+    border: 2.5px solid currentColor;
+    box-shadow: 3px 3px 0 currentColor;
+  }
+  .ej-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
+  .ej-icono__name { font-size: clamp(1.5rem, 2.8vw, 1.85rem); line-height: 1; letter-spacing: -.025em; color: var(--ej-ink); margin: .5rem 0 0; text-align: center; }
+  .ej-icono__sub { font-size: .62rem; letter-spacing: .25em; color: currentColor; font-weight: 800; text-align: center; }
+  .ej-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .ej-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
+  .ej-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+
+  /* HUERTA DE EUROPA */
+  .ej-huerta-section { background: var(--ej-green-d); color: var(--ej-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); position: relative; overflow: hidden; }
+  .ej-huerta-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(240,243,238,0.06) 1.3px, transparent 1.3px); background-size: 26px 26px; pointer-events: none; }
+  .ej-huerta-section > * { position: relative; }
+  .ej-huerta-head { max-width: 760px; margin-bottom: 2.5rem; }
+  .ej-huerta-chapter { color: var(--ej-yellow); }
+  .ej-huerta-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; color: var(--ej-paper); }
+  .ej-huerta-title em { color: var(--ej-yellow); }
+  .ej-huerta-lead { font-size: 1.1rem; line-height: 1.55; color: rgba(240,243,238,0.8); max-width: 60ch; }
+  .ej-huerta-lead strong { color: var(--ej-paper); font-weight: 700; }
+  .ej-huerta-lead em { color: var(--ej-yellow); font-style: italic; }
+
+  /* Caja de hortalizas */
+  .ej-crate { background: var(--ej-paper); border: 3px solid var(--ej-ink); box-shadow: var(--ej-shadow); margin-bottom: 2.5rem; overflow: hidden; }
+  .ej-crate__label { display: block; background: var(--ej-red); color: var(--ej-paper); padding: .65rem 1rem; font-size: .68rem; letter-spacing: .2em; font-weight: 800; border-bottom: 3px solid var(--ej-ink); }
+  .ej-veg { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 560px) { .ej-veg { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .ej-veg { grid-template-columns: repeat(6, 1fr); } }
+  .ej-veg__item { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 1.5rem 1rem; border-right: 1px solid var(--ej-ink); border-bottom: 1px solid var(--ej-ink); background: var(--ej-paper); transition: background .25s, transform .25s; }
+  .ej-veg__item:hover { transform: translateY(-4px); }
+  .ej-veg__item--red:hover   { background: rgba(214,49,43,0.12); }
+  .ej-veg__item--green:hover { background: rgba(63,155,58,0.12); }
+  .ej-veg__item--cuke:hover  { background: rgba(76,168,50,0.12); }
+  .ej-veg__item--zuke:hover  { background: rgba(46,125,50,0.12); }
+  .ej-veg__item--auber:hover { background: rgba(91,58,107,0.12); }
+  .ej-veg__item--melon:hover { background: rgba(46,125,50,0.12); }
+  @media (min-width: 900px) { .ej-veg__item:nth-child(6n) { border-right: none; } }
+  .ej-veg__svg { width: 70px; height: 70px; }
+  .ej-veg__name { font-family: var(--font-mono); font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ej-ink); }
+
+  /* Export */
+  .ej-export { background: rgba(240,243,238,0.06); border: 2.5px solid var(--ej-paper); padding: 1.75rem; }
+  .ej-export__title { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ej-paper); margin: 0 0 1.25rem; }
+  .ej-mercados { list-style: none; padding: 0; margin: 0 0 1.25rem; display: grid; grid-template-columns: 1fr; gap: .75rem; }
+  @media (min-width: 640px) { .ej-mercados { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ej-mercados { grid-template-columns: repeat(4, 1fr); } }
+  .ej-mercado { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: .75rem; background: var(--ej-paper); border: 2px solid var(--ej-ink); padding: .75rem; box-shadow: 4px 4px 0 var(--ej-ink); transition: transform .2s, box-shadow .2s; }
+  .ej-mercado:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ej-yellow); }
+  .ej-mercado__flag { width: 44px; border: 1.5px solid var(--ej-ink); line-height: 0; }
+  .ej-mercado__info { display: flex; flex-direction: column; }
+  .ej-mercado__lang { font-size: 1.1rem; font-weight: 800; color: var(--ej-red); line-height: 1; }
+  .ej-mercado__name { font-family: var(--font-display); font-size: .85rem; font-weight: 700; color: var(--ej-ink); }
+  .ej-mercado__pct { font-family: var(--font-mono); font-size: 1rem; font-weight: 800; color: var(--ej-green-d); background: var(--ej-arena); padding: .25rem .5rem; border: 1.5px solid var(--ej-ink); }
+  .ej-export__note { font-size: .92rem; line-height: 1.5; color: rgba(240,243,238,0.85); margin: 0; }
+  .ej-export__note strong { color: var(--ej-yellow); }
+
+  /* HITOS */
+  .ej-hitos-section {
+    background: var(--ej-ink); color: var(--ej-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--ej-ink);
+    position: relative; overflow: hidden;
+  }
+  .ej-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(63,155,58,0.09) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .ej-hitos-section > * { position: relative; }
+  .ej-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 2.5px solid var(--ej-paper);
+  }
+  @media (min-width: 640px)  { .ej-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ej-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .ej-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(240,243,238,0.22);
+    border-right: 1px solid rgba(240,243,238,0.22);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(240,243,238,0.03);
+    transition: background .25s;
+  }
+  .ej-hito:hover { background: rgba(63,155,58,0.2); }
+  @media (min-width: 1024px) {
+    .ej-hito:nth-child(3n) { border-right: none; }
+    .ej-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .ej-hito:nth-child(2n) { border-right: none; }
+    .ej-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .ej-hito { border-right: none; } .ej-hito:last-child { border-bottom: none; } }
+  .ej-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--ej-yellow); font-weight: 800; }
+  .ej-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--ej-paper); line-height: 1.35; }
+
+  /* SECTORES */
+  .ej-sec-section { background: var(--ej-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); }
+  .ej-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .ej-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ej-sec { grid-template-columns: repeat(3, 1fr); } }
+  .ej-sec__card {
+    background: var(--ej-paper);
+    border: 2.5px solid var(--ej-ink);
+    box-shadow: var(--ej-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .ej-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .ej-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .ej-sec__card--green  { color: var(--ej-green); }
+  .ej-sec__card--red    { color: var(--ej-red); }
+  .ej-sec__card--yellow { color: var(--ej-yellow); }
+  .ej-sec__card--auber  { color: var(--ej-auber); }
+  .ej-sec__card--sky    { color: var(--ej-sky); }
+  .ej-sec__card--slate  { color: var(--ej-slate); }
+  .ej-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .ej-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ej-sec__stat-box {
+    background: var(--ej-ink); color: var(--ej-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .ej-sec__stat-v { font-size: .9rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ej-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .ej-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--ej-ink); margin: 0; }
+  .ej-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .ej-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .ej-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--ej-ink); }
+  .ej-sec__tag span { color: currentColor; font-weight: 800; }
+  .ej-sec__foot { padding-top: .65rem; border-top: 2px solid var(--ej-ink); }
+  .ej-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .ej-map-section { background: var(--ej-arena); border-bottom: 3px solid var(--ej-ink); }
+  .ej-map-head { padding: 4rem 0 2rem; }
+  .ej-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .ej-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .ej-map-chapter { color: var(--ej-green-d); }
+  .ej-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .ej-map-title em { color: var(--ej-green-d); }
+  .ej-map-coords {
+    background: var(--ej-green); color: var(--ej-paper);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--ej-ink);
+    box-shadow: 5px 5px 0 var(--ej-yellow);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem; letter-spacing: .15em;
+  }
+  .ej-map-frame { border-top: 3px solid var(--ej-ink); border-bottom: 3px solid var(--ej-ink); background: var(--ej-ink); }
+  .ej-map-wrap > * { width: 100%; }
+
+  /* DIFERENCIALES */
+  .ej-dif-section { background: var(--ej-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); }
+  .ej-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--ej-ink); }
+  @media (min-width: 768px) { .ej-dif { grid-template-columns: 1fr 1fr; } }
+  .ej-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--ej-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) {
+    .ej-dif__item:nth-child(odd) { border-right: 1px solid var(--ej-ink); }
+    .ej-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) { .ej-dif__item:last-child { border-bottom: none; } }
+  .ej-dif__item--0 { background: var(--ej-paper-2); }
+  .ej-dif__item--1 { background: var(--ej-paper); }
+  .ej-dif__item--2 { background: var(--ej-arena); }
+  .ej-dif__item--3 { background: var(--ej-paper); }
+  .ej-dif__item:hover { background: var(--ej-yellow); }
+  .ej-dif__num { font-size: .85rem; color: var(--ej-red); font-weight: 800; letter-spacing: .15em; }
+  .ej-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--ej-ink); margin: 0; }
+  .ej-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .ej-proc-section { background: var(--ej-green-d); color: var(--ej-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); position: relative; overflow: hidden; }
+  .ej-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(242,178,51,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ej-proc-section > * { position: relative; }
+  .ej-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .ej-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ej-proc { grid-template-columns: repeat(4, 1fr); } }
+  .ej-proc__step {
+    background: rgba(240,243,238,0.06);
+    border: 2px solid var(--ej-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .ej-proc__step:hover { background: rgba(242,178,51,0.16); transform: translateY(-3px); }
+  .ej-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(240,243,238,0.25); }
+  .ej-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ej-yellow); line-height: 1; }
+  .ej-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ej-green-l); }
+  .ej-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ej-paper); margin: .25rem 0 0; }
+  .ej-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(240,243,238,0.75); flex: 1; }
+  .ej-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--ej-yellow); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(240,243,238,0.25); }
+
+  /* TESTIMONIOS */
+  .ej-quote-section { background: var(--ej-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); }
+  .ej-pull { position: relative; background: var(--ej-arena); border: 3px solid var(--ej-ink); box-shadow: var(--ej-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .ej-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(9deg); filter: drop-shadow(0 4px 8px rgba(63,155,58,0.4)); }
+  .ej-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--ej-ink); max-width: 56ch; }
+  .ej-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--ej-ink); }
+  .ej-pull__avatar { width: 48px; height: 48px; background: var(--ej-green); color: var(--ej-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .ej-pull__cap div { display: flex; flex-direction: column; }
+  .ej-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ej-ink); }
+  .ej-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .ej-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .ej-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .ej-quote { position: relative; background: var(--ej-paper); border: 2px solid var(--ej-ink); box-shadow: 5px 5px 0 var(--ej-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .ej-quote:hover { transform: translateY(-3px); }
+  .ej-quote--0 { background: var(--ej-paper); }
+  .ej-quote--1 { background: var(--ej-arena); }
+  .ej-quote--2 { background: var(--ej-paper-2); }
+  .ej-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--ej-green); opacity: .4; }
+  .ej-quote p { font-size: .92rem; line-height: 1.5; color: var(--ej-ink); flex: 1; margin: 0; }
+  .ej-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--ej-ink); }
+  .ej-quote__avatar { width: 36px; height: 36px; background: var(--ej-red); color: var(--ej-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .ej-quote footer div { display: flex; flex-direction: column; }
+  .ej-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .ej-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .ej-faq-section { background: var(--ej-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); }
+  .ej-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--ej-ink); }
+  .ej-faq__item { border-bottom: 2px solid var(--ej-ink); }
+  .ej-faq__det summary { list-style: none; cursor: pointer; }
+  .ej-faq__det summary::-webkit-details-marker { display: none; }
+  .ej-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .ej-faq__sum:hover { padding-inline: 1rem; background: var(--ej-paper-2); }
+  .ej-faq__num { font-size: 1rem; font-weight: 800; color: var(--ej-green); letter-spacing: .1em; }
+  .ej-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--ej-ink); font-weight: 700; }
+  .ej-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--ej-ink); background: var(--ej-paper); color: var(--ej-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .ej-faq__det[open] .ej-faq__toggle { transform: rotate(180deg); background: var(--ej-green); color: var(--ej-paper); }
+  .ej-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .ej-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .ej-faq__ans { padding-left: 48px; } }
+
+  /* VECINOS */
+  .ej-vecinos-section { background: var(--ej-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ej-ink); }
+  .ej-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--ej-ink); background: var(--ej-ink); }
+  @media (min-width: 640px)  { .ej-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .ej-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .ej-vecino {
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto;
+    gap: .35rem; padding: 1.5rem;
+    background: var(--ej-paper); color: var(--ej-ink);
+    text-decoration: none; min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .ej-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .ej-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .ej-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .ej-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ej-green); font-size: 1.3rem; transition: transform .25s; }
+  .ej-vecino:hover { background: var(--ej-green); color: var(--ej-paper); }
+  .ej-vecino:hover .ej-vecino__sub, .ej-vecino:hover .ej-vecino__n { opacity: .85; }
+  .ej-vecino:hover .ej-vecino__arrow { color: var(--ej-paper); transform: translateX(4px); }
+  .ej-vecino--1:hover { background: var(--ej-red); color: var(--ej-paper); }
+  .ej-vecino--2:hover { background: var(--ej-sky); color: var(--ej-paper); }
+  .ej-vecino--3:hover { background: var(--ej-ink); color: var(--ej-yellow); }
+  .ej-vecino--3:hover .ej-vecino__arrow { color: var(--ej-yellow); }
+
+  /* CTA FINAL */
+  .ej-final { background: var(--ej-ink); color: var(--ej-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .ej-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(63,155,58,0.09) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .ej-final > * { position: relative; }
+  .ej-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .ej-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ej-final__chapter { color: var(--ej-yellow); }
+  .ej-final__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .9; letter-spacing: -.045em; color: var(--ej-paper); margin: 1rem 0; }
+  .ej-final__title em { color: var(--ej-yellow); font-style: italic; display: block; }
+  .ej-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(240,243,238,0.75); max-width: 52ch; }
+  .ej-final__lead strong { color: var(--ej-yellow); }
+  .ej-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .ej-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .ej-final__btn--primary { background: var(--ej-green); color: var(--ej-paper); border-color: var(--ej-green); box-shadow: 6px 6px 0 var(--ej-red); }
+  .ej-final__btn--primary:hover { background: var(--ej-red); color: var(--ej-paper); border-color: var(--ej-red); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ej-green); }
+  .ej-final__btn--ghost { background: transparent; color: var(--ej-paper); border-color: var(--ej-paper); box-shadow: 6px 6px 0 var(--ej-paper); }
+  .ej-final__btn--ghost:hover { background: var(--ej-paper); color: var(--ej-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ej-paper); }
+  .ej-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(240,243,238,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .ej-final__trust .ej-pulse { background: var(--ej-yellow); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(242,178,51,0.55); }
+  .ej-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .ej-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(63,155,58,0.3)); }
+  .ej-final-plant { animation: ej-plant 4s ease-in-out infinite; }
+  .ej-final-plant:nth-child(odd) { animation-delay: -2s; }
+  @keyframes ej-plant { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+  .ej-final-truck { animation: ej-truck 6s ease-in-out infinite; }
+  @keyframes ej-truck { 0% { transform: translate(40px, 250px); } 50% { transform: translate(48px, 250px); } 100% { transform: translate(40px, 250px); } }
+  .ej-final__marquee { background: var(--ej-green); color: var(--ej-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--ej-ink); margin: 0 -1.5rem; }
+  .ej-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: ej-marquee 30s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
