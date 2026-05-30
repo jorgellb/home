@@ -11,6 +11,12 @@ const FROM_NAME   = 'Platanito Rico · Web';
 // Honeypot field name (debe estar oculto en el HTML)
 const HONEYPOT_FIELD = 'bot-field';
 
+const RAW = Symbol('html-raw');
+
+function raw(s: string): { __html: string; [RAW]: true } {
+  return { __html: s, [RAW]: true as const };
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')
@@ -21,7 +27,13 @@ function escapeHtml(s: string): string {
 }
 
 function html(strings: TemplateStringsArray, ...values: unknown[]): string {
-  return strings.reduce((acc, s, i) => acc + s + (i < values.length ? escapeHtml(String(values[i] ?? '')) : ''), '');
+  return strings.reduce((acc, s, i) => {
+    const v = i < values.length ? values[i] : '';
+    if (typeof v === 'object' && v !== null && RAW in v) {
+      return acc + s + (v as { __html: string }).__html;
+    }
+    return acc + s + escapeHtml(String(v ?? ''));
+  }, '');
 }
 
 export const POST: APIRoute = async ({ request, redirect }) => {
@@ -67,29 +79,35 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
   const subject = `[Web] Briefing de ${name}${company ? ` · ${company}` : ''}`;
 
-  const bodyHtml = html`
-    <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 640px; margin: 0 auto; padding: 24px; color: #0E0D0B;">
-      <h1 style="font-size: 20px; margin: 0 0 12px; border-bottom: 2px solid #FF6B35; padding-bottom: 8px;">Nuevo briefing desde la web</h1>
-      <p style="font-size: 13px; color: #555; margin: 0 0 24px;">Recibido a través de platanitorico.com/contacto</p>
+  const bodyHtml = raw(html`
+    <!DOCTYPE html>
+    <html lang="es">
+    <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+    <body style="margin:0;padding:0;background:#F5F0E6">
+      <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 640px; margin: 24px auto; padding: 24px; background:#fff; border-radius:8px; color: #0E0D0B;">
+        <h1 style="font-size: 20px; margin: 0 0 12px; border-bottom: 2px solid #FF6B35; padding-bottom: 8px;">Nuevo briefing desde la web</h1>
+        <p style="font-size: 13px; color: #555; margin: 0 0 24px;">Recibido a través de platanitorico.com/contacto</p>
 
-      <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-        <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 110px; font-weight: 700;">Nombre</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${name}</td></tr>
-        <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Email</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="mailto:${email}" style="color: #FF6B35;">${email}</a></td></tr>
-        ${phone   ? html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Teléfono</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="tel:${phone}" style="color: #FF6B35;">${phone}</a></td></tr>` : ''}
-        ${company ? html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Empresa</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${company}</td></tr>` : ''}
-        ${service ? html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Servicio</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${service}</td></tr>` : ''}
-        ${budget  ? html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Presupuesto</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${budget}</td></tr>` : ''}
-        ${timing  ? html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Plazo</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${timing}</td></tr>` : ''}
-      </table>
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; width: 110px; font-weight: 700;">Nombre</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${name}</td></tr>
+          <tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Email</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="mailto:${email}" style="color: #FF6B35;">${email}</a></td></tr>
+          ${phone   ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Teléfono</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;"><a href="tel:${phone}" style="color: #FF6B35;">${phone}</a></td></tr>`) : ''}
+          ${company ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Empresa</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${company}</td></tr>`) : ''}
+          ${service ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Servicio</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${service}</td></tr>`) : ''}
+          ${budget  ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Presupuesto</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${budget}</td></tr>`) : ''}
+          ${timing  ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Plazo</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${timing}</td></tr>`) : ''}
+        </table>
 
-      <h2 style="font-size: 16px; margin: 24px 0 8px;">Mensaje</h2>
-      <div style="background: #FAF5E6; border-left: 4px solid #FF6B35; padding: 14px 18px; white-space: pre-wrap; font-size: 14px; line-height: 1.5;">${message}</div>
+        <h2 style="font-size: 16px; margin: 24px 0 8px;">Mensaje</h2>
+        <div style="background: #FAF5E6; border-left: 4px solid #FF6B35; padding: 14px 18px; white-space: pre-wrap; font-size: 14px; line-height: 1.5;">${message}</div>
 
-      <p style="margin-top: 32px; font-size: 11px; color: #888; text-align: center;">
-        ★ Platanito Rico · Ctra. de Ronda 82, Vera · Almería ★
-      </p>
-    </div>
-  `;
+        <p style="margin-top: 32px; font-size: 11px; color: #888; text-align: center;">
+          ★ Platanito Rico · Ctra. de Ronda 82, Vera · Almería ★
+        </p>
+      </div>
+    </body>
+    </html>
+  `);
 
   try {
     await resend.emails.send({
