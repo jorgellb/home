@@ -1,0 +1,1670 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'cuevas-del-almanzora');
+
+const title = 'Diseño Web en Cuevas del Almanzora | Webs para Comercio, Turismo del Castillo y Villaricos';
+const description = 'Agencia de diseño web en Cuevas del Almanzora (Levante). Comercio y servicios del Levante interior, turismo de patrimonio (Castillo del Marqués de los Vélez), Sierra Almagrera, alojamientos y restaurantes de Villaricos. SEO local de comarca, webs para autónomos y micropymes.';
+const canonical = 'https://platanitorico.com/diseno-web/cuevas-del-almanzora/';
+
+// 3 ICONOS Cuevas
+const iconos = [
+  { code: 'A', name: 'Castillo del Marqués', sub: 'FORTALEZA RENACENTISTA', desc: 'La fortaleza-palacio del Marqués de los Vélez (siglo XVI) corona el pueblo. Alberga el museo arqueológico y de pintura — el corazón del turismo cultural de Cuevas.',              dato: 'Siglo XVI', color: 'gold' },
+  { code: 'B', name: 'Sierra Almagrera',     sub: 'LA SIERRA DE LA PLATA',   desc: 'Las montañas de almagre rojo que dieron la mayor fiebre de la plata del XIX en España. Castilletes y chimeneas de fundición coronan aún un paisaje minero único.',              dato: '1838', color: 'almagra' },
+  { code: 'C', name: 'Villaricos',           sub: 'MAR + NECRÓPOLIS FENICIA', desc: 'La costa de Cuevas: playas tranquilas sobre la antigua Baria fenicia, con su necrópolis púnica. Sol, historia milenaria y un mar sin masificar.',                              dato: 'Baria', color: 'blue' },
+];
+
+// Minería — vestigios de la Sierra Almagrera
+const vestigios = [
+  { k: 'CASTILLETES', v: 'Torres de extracción sobre los pozos mineros' },
+  { k: 'CHIMENEAS',   v: 'Las chimeneas de fundición que coronan la sierra' },
+  { k: 'GALERÍAS',    v: 'Kilómetros de túneles bajo el Barranco del Jaroso' },
+  { k: 'EL ARTEAL',   v: 'El gran complejo de desagüe y bombeo minero' },
+];
+
+const mineriaTimeline = [
+  { y: '1838', t: 'El Jaroso',     d: 'Se descubre el gran filón de plata en el Barranco del Jaroso. Estalla la fiebre minera.' },
+  { y: 's.XIX', t: 'La fiebre',    d: 'Cientos de minas y fundiciones, miles de mineros. Cuevas llega a ser una de las localidades más ricas de España.' },
+  { y: 'Hoy',  t: 'Patrimonio',   d: 'Castilletes, chimeneas y galerías sobreviven como paisaje minero protegido y atractivo turístico.' },
+];
+
+// Sectores Cuevas
+const sectores = [
+  { nombre: 'Comercio y servicios del Levante',  stat: '15k',  statLabel: 'hab · centro comarcal', desc: 'Con 15.000 habitantes, Cuevas es un centro de servicios del Levante interior. Clínicas, abogados, talleres y comercios compiten por atraer clientes de Pulpí, Zurgena, Arboleas y los municipios vecinos. SEO de comarca para captarlos a todos.', tags: ['SEO local comarca','Google Business','Captación vecinos','Web rápida'] },
+  { nombre: 'Turismo y patrimonio histórico',     stat: 'XVI',  statLabel: 'castillo · museo',      desc: 'El castillo, el museo arqueológico y las playas de Villaricos atraen un turismo cultural y de sol combinado. Guías, empresas de turismo y alojamientos pueden posicionarse para "qué ver en Cuevas del Almanzora" con contenido bien estructurado.', tags: ['SEO "qué ver Cuevas"','Turismo cultural','Visitas castillo','Rutas mineras'] },
+  { nombre: 'Hostelería y restauración',          stat: 'QR',   statLabel: 'carta digital',        desc: 'La gastronomía de Cuevas combina tradición minera con productos del mar de Villaricos. Bares, restaurantes y cafeterías pueden captar comensales de toda la comarca y turistas del castillo con presencia digital actualizada.',           tags: ['Carta digital QR','SEO gastronomía','Menú del día','Reservas online'] },
+  { nombre: 'Alojamiento y turismo costero',       stat: '★',    statLabel: 'Villaricos · Palomares', desc: 'Villaricos y Palomares concentran la vida playera de Cuevas: una costa tranquila, alternativa al turismo masificado. Apartamentos, casas de alquiler y campings con reservas directas y multiidioma para el visitante europeo.',           tags: ['Reservas directas','Galería de playas','Multiidioma','Sin comisiones OTA'] },
+  { nombre: 'Agricultura del valle del Almanzora', stat: 'km0',  statLabel: 'cítricos y huerta',    desc: 'El valle del Almanzora es tierra de cítricos, hortaliza y almendro. Cooperativas, fincas y productores que quieran vender producto, contar su historia o exportar necesitan web con catálogo y SEO de producto.',                          tags: ['E-commerce producto','Marca territorial','Catálogo campaña','Storytelling'] },
+  { nombre: 'Autónomos y micropymes',              stat: '90%',  statLabel: 'de nuestros clientes', desc: 'La mayoría del tejido de Cuevas son autónomos y pequeñas empresas. Webs sencillas, rápidas y económicas con todo lo necesario para captar clientes en Google sin gastar de más. Opciones para cada presupuesto.',                          tags: ['Web desde 400€','Hosting gratis','Google Business','Diseño responsive'] },
+];
+
+// Hitos Cuevas
+const hitos = [
+  { k: 'POBLACIÓN',    v: '15.000 hab · centro del Levante interior' },
+  { k: 'CASTILLO',     v: 'Marqués de los Vélez · siglo XVI' },
+  { k: 'SIERRA',       v: 'Almagrera · fiebre de la plata del s. XIX' },
+  { k: 'VILLARICOS',   v: 'Yacimiento fenicio-púnico · Baria' },
+  { k: 'GEOGRAFÍA',    v: 'Castillo, minas, mar y valle en un municipio' },
+  { k: 'CASAS-CUEVA',  v: 'Arquitectura tradicional excavada' },
+];
+
+// Diferenciales
+const diferenciales = [
+  { title: 'Tres atractivos en un municipio',     desc: 'Pocos pueblos ofrecen castillo renacentista, paisaje minero del siglo XIX y playas con historia fenicia. Cuevas tiene un relato turístico potentísimo — y casi nadie lo cuenta bien online. Ahí hay una oportunidad enorme de posicionamiento.' },
+  { title: 'El centro de servicios de la comarca', desc: 'Cuevas capta clientes de Pulpí, Zurgena, Arboleas y todo el Levante interior. Una web con SEO por área geográfica hace que tu clínica, despacho o comercio aparezca el primero cuando buscan en cualquiera de esos pueblos, no solo en Cuevas.' },
+  { title: 'Patrimonio sin explotar digitalmente', desc: 'El castillo, el museo y las rutas mineras de la Sierra Almagrera son un imán de turismo cultural que apenas tiene presencia digital seria. Guías, alojamientos y hostelería pueden adelantarse a la competencia y quedarse con ese tráfico.' },
+  { title: 'Hechos para autónomos y micropymes',   desc: 'El 90% de nuestros clientes son autónomos y pequeñas empresas. Sabemos hacer webs serias y efectivas con presupuestos ajustados — desde 400€ con hosting gratuito. Sin letra pequeña y sin pagar por lo que no necesitas.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Conocemos tu negocio',       eta: '1–2 días',  body: 'Analizamos tu comercio, alojamiento o proyecto turístico, tu comarca y tu competencia. Definimos las keywords (locales o turísticas) y la arquitectura de la web.', deliverable: 'Briefing + roadmap' },
+  { num: '02', title: 'Diseño con carácter',        eta: '2–4 días',  body: 'Diseño que respira piedra, mineral y mar según tu sector. Fotografía de tu negocio, del castillo o de Villaricos. Apruebas antes de programar nada.', deliverable: 'Prototipo Figma · approved' },
+  { num: '03', title: 'Desarrollo + SEO local',      eta: '4–8 días',  body: 'Astro ultrarrápido, responsive y optimizado. Carta digital, reservas o catálogo según el caso. SEO técnico y de comarca, Schema y Core Web Vitals en verde.', deliverable: 'Web staging + auditoría' },
+  { num: '04', title: 'Lanzamiento + Google',        eta: '1–2 días',  body: 'Publicamos, configuramos Google Business para toda la comarca, indexamos y te formamos. Apareces en las búsquedas de Cuevas y de los pueblos vecinos.', deliverable: 'Sitio en producción + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Andrés Molina',   negocio: 'Deportes y alquiler de bicis · Villaricos', texto: 'Alquilo bicis en Villaricos y nadie me encontraba en internet. Ahora aparezco cuando buscan "alquiler bici Villaricos" o "actividades Cuevas del Almanzora". El verano fue el mejor en años.' },
+  { nombre: 'Esperanza Ríos',  negocio: 'Farmacia · Cuevas del Almanzora',          texto: 'La farmacia la tenía mi familia desde hace décadas. Pedimos una web básica y optimización de Google Maps. Ahora nos llegan clientes de Pulpí y Zurgena porque salimos primero en la búsqueda.' },
+  { nombre: 'Manuel Cano',     negocio: 'Restaurante · centro histórico',           texto: 'Estamos al lado del castillo y vivíamos solo del cliente local. Con la web, la carta digital y las fotos, ahora reservan turistas que vienen a ver el museo. Llenamos los fines de semana todo el año.' },
+  { nombre: 'Lucía Hernández', negocio: 'Casa rural · valle del Almanzora',         texto: 'Tenía la casa solo en un portal que se llevaba comisión de todo. Platanito Rico me hizo una web con reservas directas y galería. Ahora la mitad de mis reservas son directas y conozco a mis clientes.' },
+];
+
+const faqs = [
+  { q: '¿Cuánto cuesta una web para un comercio en Cuevas del Almanzora?',                          a: 'Una web sencilla para comercio local parte desde 400€ con hosting gratuito, ficha de Google optimizada y diseño responsive. Tiendas online desde 800€. Webs de turismo o alojamiento con reservas, según funcionalidades. Presupuesto cerrado, sin sorpresas.' },
+  { q: '¿Podéis hacer SEO para que aparezca mi negocio en Cuevas y los pueblos vecinos?',           a: 'Sí, hacemos SEO por área geográfica para que tu negocio aparezca en búsquedas de Cuevas del Almanzora, Pulpí, Zurgena, Arboleas y todo el Levante interior. Optimizamos Google Business para cubrir varios municipios y captar al cliente de toda la comarca.' },
+  { q: '¿Trabajáis también con autónomos y no solo con empresas?',                                  a: 'Claro. La mayoría de nuestros clientes son autónomos y micropymes. Tenemos opciones adaptadas a cada presupuesto y tamaño de negocio, con webs serias y efectivas desde 400€. Nunca te cobramos por funciones que no necesitas.' },
+  { q: '¿Hacéis webs de turismo para el castillo, el museo o las rutas mineras?',                   a: 'Sí. Creamos webs de turismo cultural con SEO para "qué ver en Cuevas del Almanzora", "Castillo del Marqués de los Vélez" y "Sierra Almagrera". Para guías, empresas de visitas y alojamientos que quieren captar al turista de patrimonio, que apenas tiene competencia digital seria en la zona.' },
+  { q: '¿Hacéis webs para alojamientos y restaurantes de Villaricos?',                              a: 'Por supuesto. Villaricos y Palomares tienen un turismo de costa tranquila con mucho potencial. Hacemos webs con motor de reservas directas (sin comisiones), galería de playas, carta digital para restaurantes y multiidioma para el visitante europeo.' },
+  { q: '¿En cuánto tiempo está lista mi web?',                                                      a: 'Una web de comercio o autónomo: 1 semana. Web de turismo o alojamiento con reservas: 2–3 semanas. Tienda online: 2–4 semanas según catálogo. Trabajamos rápido y te enseñamos avances durante el proceso.' },
+  { q: '¿Trabajáis con productores y cooperativas del valle del Almanzora?',                         a: 'Sí. El valle es tierra de cítricos, hortaliza y almendro. Hacemos webs con catálogo de producto, fichas, marca territorial y, si exportáis, multiidioma y SEO internacional. Convertimos un productor local en una marca que vende fuera.' },
+  { q: '¿Mi negocio está en una pedanía o cerca de Cuevas, también trabajáis allí?',                a: 'Sí, cubrimos todo el municipio y la comarca: Cuevas del Almanzora, Villaricos, Palomares, Guazamara, Los Lobos y el Levante interior. Trabajamos online y nos desplazamos para reuniones o sesiones de fotos cuando hace falta.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Cuevas del Almanzora","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web Cuevas del Almanzora","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":"https://platanitorico.com/imagenes/hero.jpg","priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"Cuevas del Almanzora","addressRegion":"Almería","postalCode":"04610","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.2978,"longitude":-1.8711},"areaServed":["Cuevas del Almanzora","Villaricos","Palomares","Levante Almeriense","Pulpí","Zurgena"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"42","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Cuevas del Almanzora","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/hero.jpg"
+  imageAlt="Diseño web en Cuevas del Almanzora - castillo, Sierra Almagrera y Villaricos"
+  type="service"
+  keywords="diseño web cuevas del almanzora, web comercio levante, turismo castillo marqués vélez, web villaricos, seo comarca almanzora, web autónomos almería, sierra almagrera"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="cv">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — CASTILLO, PLATA Y MAR                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-hero">
+      <div class="container-brutal">
+
+        <header class="cv-hero__top">
+          <span class="text-meta">N.º 034 — Levante interior · Almanzora · Almería</span>
+          <span class="text-meta cv-hero__status">
+            <span class="cv-pulse"></span>
+            ★ CASTILLO · SIERRA DE LA PLATA · MAR ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="cv-hero__grid">
+
+          <div class="cv-hero__intro">
+            <span class="text-meta cv-hero__chapter">Cap. 01 / Cuevas del Almanzora · Levante</span>
+            <h1 class="cv-hero__title heading-display">
+              Diseño web para
+              <em class="heading-editorial">Cuevas,</em>
+              <span class="cv-hero__title-stamp">castillo, plata y mar.</span>
+            </h1>
+
+            <p class="cv-hero__lead">
+              <strong>Una fortaleza renacentista, la sierra de la plata y la
+              costa de Villaricos</strong> en un mismo municipio. Webs para el
+              <em>comercio del Levante interior</em>, el turismo de patrimonio
+              y los <strong>autónomos</strong> que mueven la comarca.
+            </p>
+
+            <div class="cv-hero__cta">
+              <a href="/contacto" class="cv-btn cv-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#plata" class="cv-btn cv-btn--ghost">
+                La fiebre de la plata ↓
+              </a>
+            </div>
+
+            {/* KPIs */}
+            <ul class="cv-kpis">
+              <li class="cv-kpi cv-kpi--gold">
+                <span class="cv-kpi__v text-mono">XVI</span>
+                <span class="cv-kpi__l">Castillo s.</span>
+              </li>
+              <li class="cv-kpi cv-kpi--almagra">
+                <span class="cv-kpi__v text-mono">1838</span>
+                <span class="cv-kpi__l">Fiebre plata</span>
+              </li>
+              <li class="cv-kpi cv-kpi--blue">
+                <span class="cv-kpi__v text-mono">15<small>k</small></span>
+                <span class="cv-kpi__l">Habitantes</span>
+              </li>
+              <li class="cv-kpi cv-kpi--ink">
+                <span class="cv-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="cv-kpi__l">42 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — castillo + sierra minera + mar SVG */}
+          <aside class="cv-hero__postcard" aria-hidden="true">
+            <div class="cv-postcard">
+
+              <header class="cv-postcard__head">
+                <span class="text-mono">CUEVAS DEL ALMANZORA · 04610</span>
+                <span class="text-mono">37.298° N · 1.871° W</span>
+              </header>
+
+              {/* Castillo renacentista + Sierra Almagrera + mar SVG */}
+              <div class="cv-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 240" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="cv-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#E9C56A"/>
+                      <stop offset="55%" stop-color="#D99A55"/>
+                      <stop offset="100%" stop-color="#C57A57"/>
+                    </linearGradient>
+                    <linearGradient id="cv-almagra" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#B5472E"/>
+                      <stop offset="100%" stop-color="#7E2E1C"/>
+                    </linearGradient>
+                    <linearGradient id="cv-stone" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#D8B86A"/>
+                      <stop offset="100%" stop-color="#B8923E"/>
+                    </linearGradient>
+                    <linearGradient id="cv-sea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%"  stop-color="#2E8FB0"/>
+                      <stop offset="100%" stop-color="#1B6480"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo */}
+                  <rect width="540" height="130" fill="url(#cv-sky)"/>
+
+                  {/* Sol */}
+                  <circle cx="100" cy="50" r="26" fill="#F6E3A8" opacity="0.85"/>
+                  <circle cx="100" cy="50" r="17" fill="#FBF3D8"/>
+
+                  {/* Sierra Almagrera al fondo (montañas rojas) con vestigios mineros */}
+                  <path d="M 250 130 L 300 70 L 350 100 L 400 60 L 460 96 L 540 64 L 540 130 Z" fill="url(#cv-almagra)" stroke="#3A1810" stroke-width="2"/>
+                  {/* Estrías de almagre */}
+                  <g stroke="#5E2113" stroke-width="1" opacity="0.5">
+                    <path d="M 300 70 L 310 120" fill="none"/><path d="M 400 60 L 408 120" fill="none"/>
+                  </g>
+                  {/* Castillete minero (headframe) en la sierra */}
+                  <g transform="translate(360, 70)">
+                    <path d="M -10 30 L -4 0 L 4 0 L 10 30" fill="none" stroke="#2A1208" stroke-width="2.5"/>
+                    <line x1="-7" y1="15" x2="7" y2="15" stroke="#2A1208" stroke-width="2"/>
+                    <line x1="-9" y1="22" x2="9" y2="22" stroke="#2A1208" stroke-width="2"/>
+                    <circle cx="0" cy="-2" r="5" fill="none" stroke="#2A1208" stroke-width="2.5"/>
+                  </g>
+                  {/* Chimenea de fundición */}
+                  <g transform="translate(430, 62)">
+                    <path d="M -4 38 L -3 0 L 3 0 L 4 38 Z" fill="#7E2E1C" stroke="#2A1208" stroke-width="2"/>
+                    <rect x="-5" y="-3" width="10" height="5" fill="#7E2E1C" stroke="#2A1208" stroke-width="1.5"/>
+                    {/* Humo */}
+                    <path d="M 0 -4 Q 8 -12 2 -20 Q -6 -28 4 -36" fill="none" stroke="#D8C8B0" stroke-width="2.5" opacity="0.55" stroke-linecap="round"/>
+                  </g>
+
+                  {/* Colina del pueblo */}
+                  <path d="M 0 130 Q 90 96 200 116 L 250 130 Z" fill="#C99A5E" stroke="#3A1810" stroke-width="2"/>
+
+                  {/* CASTILLO del Marqués de los Vélez — fortaleza renacentista */}
+                  <g transform="translate(70, 56)">
+                    {/* Cuerpo principal */}
+                    <rect x="0" y="20" width="96" height="54" fill="url(#cv-stone)" stroke="#3A1810" stroke-width="2.5"/>
+                    {/* Almenas */}
+                    <path d="M 0 20 L 0 12 L 10 12 L 10 17 L 22 17 L 22 12 L 34 12 L 34 17 L 46 17 L 46 12 L 58 12 L 58 17 L 70 17 L 70 12 L 82 12 L 82 17 L 96 17 L 96 20" fill="url(#cv-stone)" stroke="#3A1810" stroke-width="2"/>
+                    {/* Torre cilíndrica izquierda */}
+                    <rect x="-10" y="6" width="20" height="68" rx="2" fill="url(#cv-stone)" stroke="#3A1810" stroke-width="2.5"/>
+                    <path d="M -10 6 L -10 0 L -5 0 L -5 4 L 0 4 L 0 0 L 5 0 L 5 4 L 10 4 L 10 6" fill="url(#cv-stone)" stroke="#3A1810" stroke-width="1.5"/>
+                    {/* Torre cilíndrica derecha */}
+                    <rect x="86" y="6" width="20" height="68" rx="2" fill="url(#cv-stone)" stroke="#3A1810" stroke-width="2.5"/>
+                    <path d="M 86 6 L 86 0 L 91 0 L 91 4 L 96 4 L 96 0 L 101 0 L 101 4 L 106 4 L 106 6" fill="url(#cv-stone)" stroke="#3A1810" stroke-width="1.5"/>
+                    {/* Bandera */}
+                    <line x1="48" y1="12" x2="48" y2="-2" stroke="#3A1810" stroke-width="1.5"/>
+                    <path d="M 48 -2 L 62 1 L 60 4 L 62 7 L 48 4 Z" fill="#B5472E" stroke="#3A1810" stroke-width="1"/>
+                    {/* Puerta */}
+                    <path d="M 40 74 L 40 56 Q 40 48 48 48 Q 56 48 56 56 L 56 74 Z" fill="#3A1810"/>
+                    {/* Ventanas renacentistas */}
+                    <rect x="22" y="34" width="9" height="14" fill="#3A1810"/>
+                    <rect x="65" y="34" width="9" height="14" fill="#3A1810"/>
+                    {/* Saeteras torres */}
+                    <rect x="-3" y="24" width="6" height="12" fill="#3A1810"/>
+                    <rect x="93" y="24" width="6" height="12" fill="#3A1810"/>
+                  </g>
+
+                  {/* Mar de Villaricos */}
+                  <rect x="0" y="130" width="540" height="60" fill="url(#cv-sea)" stroke="#3A1810" stroke-width="2"/>
+                  <path d="M 0 144 Q 45 139 90 144 T 180 144 T 270 144 T 360 144 T 450 144 T 540 144" fill="none" stroke="#CFE9F0" stroke-width="1.3" opacity="0.6"/>
+                  <path d="M 0 158 Q 45 153 90 158 T 180 158 T 270 158 T 360 158 T 450 158 T 540 158" fill="none" stroke="#CFE9F0" stroke-width="1" opacity="0.4"/>
+                  {/* Barca */}
+                  <g transform="translate(420, 150)">
+                    <path d="M -16 0 L 16 0 L 11 7 L -11 7 Z" fill="#C49A3F" stroke="#3A1810" stroke-width="1.8"/>
+                    <line x1="0" y1="0" x2="0" y2="-12" stroke="#3A1810" stroke-width="1.5"/>
+                    <path d="M 0 -12 L 11 -5 L 0 -2 Z" fill="#FBF3D8" stroke="#3A1810" stroke-width="1"/>
+                  </g>
+
+                  {/* Playa / orilla */}
+                  <rect x="0" y="190" width="540" height="50" fill="#E4D2A6" stroke="#3A1810" stroke-width="2"/>
+                  {/* Ánfora fenicia en la arena (Villaricos / Baria) */}
+                  <g transform="translate(90, 214)">
+                    <path d="M 0 -18 Q -9 -16 -8 -4 Q -8 8 0 12 Q 8 8 8 -4 Q 9 -16 0 -18 Z" fill="#9C5B3A" stroke="#3A1810" stroke-width="2"/>
+                    <path d="M -6 -14 Q -12 -10 -9 -4 M 6 -14 Q 12 -10 9 -4" fill="none" stroke="#3A1810" stroke-width="1.5"/>
+                    <rect x="-3" y="-22" width="6" height="5" fill="#9C5B3A" stroke="#3A1810" stroke-width="1.5"/>
+                    <g stroke="#3A1810" stroke-width="0.8" opacity="0.5"><path d="M -7 -2 L 7 -2 M -6 3 L 6 3"/></g>
+                  </g>
+                  {/* Lingotes de plata */}
+                  <g transform="translate(460, 220)">
+                    <path d="M -14 0 L 14 0 L 10 -7 L -10 -7 Z" fill="#C9C9D2" stroke="#3A1810" stroke-width="1.5"/>
+                    <path d="M -9 -7 L 9 -7 L 6 -13 L -6 -13 Z" fill="#DEDEE6" stroke="#3A1810" stroke-width="1.5"/>
+                  </g>
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="cv-postcard__img-wrap">
+                <img
+                  src="/imagenes/hero.jpg"
+                  alt="Cuevas del Almanzora - castillo, Sierra Almagrera y Villaricos"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="cv-postcard__img"
+                />
+                {/* Sello patrimonio */}
+                <div class="cv-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <defs>
+                      <path id="cv-seal-arc" d="M40,40 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0"/>
+                    </defs>
+                    <circle cx="40" cy="40" r="38" fill="#B5472E"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F1EBDF" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g class="cv-spin">
+                      <text font-family="monospace" font-size="6" font-weight="bold" fill="#F1EBDF" letter-spacing="2.2">
+                        <textPath href="#cv-seal-arc" startOffset="0%">★ CASTILLO · SIERRA · MAR · 04610 ★</textPath>
+                      </text>
+                    </g>
+                    {/* Pico y martillo minero dentro */}
+                    <g transform="translate(40, 41)" stroke="#F1EBDF" stroke-width="2.5" stroke-linecap="round">
+                      <path d="M -12 12 L 10 -10"/>
+                      <path d="M 4 -14 Q 12 -14 14 -6"/>
+                      <path d="M 12 12 L -10 -10"/>
+                      <path d="M -14 -6 Q -12 -14 -4 -14"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="cv-postcard__tag">
+                  <span class="text-mono">★ PATRIMONIO DEL LEVANTE ★</span>
+                </div>
+              </div>
+
+              {/* Datos */}
+              <div class="cv-postcard__data">
+                <div class="cv-postcard__data-row">
+                  <span class="text-mono">ALTITUD</span>
+                  <span class="text-mono cv-postcard__data-v">82 m s.n.m.</span>
+                </div>
+                <div class="cv-postcard__data-row">
+                  <span class="text-mono">SUPERFICIE</span>
+                  <span class="text-mono cv-postcard__data-v">262 km² · Almanzora</span>
+                </div>
+                <div class="cv-postcard__data-row">
+                  <span class="text-mono">COSTA</span>
+                  <span class="text-mono cv-postcard__data-v">Villaricos · Palomares</span>
+                </div>
+                <div class="cv-postcard__data-row">
+                  <span class="text-mono">DIST. SEDE</span>
+                  <span class="text-mono cv-postcard__data-v">25 min · Vera</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      {/* Marquee */}
+      <div class="cv-marquee">
+        <div class="cv-marquee__track">
+          {Array.from({length: 5}).map(() => (
+            <span>★ CASTILLO DEL MARQUÉS ★ SIERRA ALMAGRERA · LA PLATA ★ VILLARICOS · BARIA FENICIA ★ COMERCIO DEL LEVANTE ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* EL CASTILLO — flagship                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-castle-section">
+      <div class="container-brutal">
+        <div class="cv-castle-grid">
+
+          <div class="cv-castle-l">
+            <span class="text-meta cv-castle-chapter">Cap. 02 / El emblema</span>
+            <h2 class="cv-castle-title heading-display">
+              El Castillo del
+              <em class="heading-editorial">Marqués de los Vélez.</em>
+            </h2>
+            <p class="cv-castle-lead">
+              La <strong>fortaleza-palacio del siglo XVI</strong> que corona
+              el pueblo y guarda su memoria: hoy alberga el <em>museo
+              arqueológico y la pinacoteca</em>. Es el imán del turismo cultural
+              de Cuevas — y la imagen perfecta para una web con carácter.
+            </p>
+
+            <div class="cv-castle-facts">
+              {[
+                { k: 'ÉPOCA', v: 'Renacimiento · siglo XVI' },
+                { k: 'PROMOTOR', v: 'Marqués de los Vélez' },
+                { k: 'ALBERGA', v: 'Museo arqueológico + pinacoteca' },
+                { k: 'TORRE', v: 'Torre del homenaje medieval previa' },
+                { k: 'USO HOY', v: 'Cultura, exposiciones y eventos' },
+                { k: 'TURISMO', v: 'Principal reclamo patrimonial' },
+              ].map(f => (
+                <div class="cv-castle-fact">
+                  <span class="text-mono cv-castle-fact__k">{f.k}</span>
+                  <span class="cv-castle-fact__v">{f.v}</span>
+                </div>
+              ))}
+            </div>
+
+            <p class="cv-castle-note">
+              <strong>★ El turismo cultural casi no tiene competencia digital aquí.</strong>
+              Guías, alojamientos y hostelería que se posicionen para el visitante
+              del castillo se quedan con ese tráfico. Te ayudamos a ser el primero.
+            </p>
+          </div>
+
+          {/* Castillo renacentista grande SVG */}
+          <aside class="cv-castle-r" aria-hidden="true">
+            <svg viewBox="0 0 300 320" width="100%" height="100%">
+              <defs>
+                <linearGradient id="cv-castle-stone" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#DEC176"/>
+                  <stop offset="100%" stop-color="#B08A38"/>
+                </linearGradient>
+              </defs>
+              {/* Cielo radial */}
+              <rect width="300" height="320" fill="#EFD9A0"/>
+              <circle cx="240" cy="60" r="34" fill="#F8EDC8" opacity="0.7"/>
+
+              {/* Peña / base */}
+              <path d="M 0 300 Q 70 270 150 280 Q 230 270 300 300 L 300 320 L 0 320 Z" fill="#A87B4A" stroke="#3A1810" stroke-width="2.5"/>
+
+              {/* Cuerpo del castillo */}
+              <rect x="50" y="120" width="200" height="160" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="3"/>
+              {/* Sillería (líneas de piedra) */}
+              <g stroke="#3A1810" stroke-width="0.6" opacity="0.25">
+                <line x1="50" y1="150" x2="250" y2="150"/><line x1="50" y1="180" x2="250" y2="180"/>
+                <line x1="50" y1="210" x2="250" y2="210"/><line x1="50" y1="240" x2="250" y2="240"/>
+                <line x1="116" y1="120" x2="116" y2="280"/><line x1="183" y1="120" x2="183" y2="280"/>
+              </g>
+              {/* Almenas cuerpo */}
+              <path d="M 50 120 L 50 104 L 66 104 L 66 114 L 84 114 L 84 104 L 102 104 L 102 114 L 120 114 L 120 104 L 138 104 L 138 114 L 162 114 L 162 104 L 180 104 L 180 114 L 198 114 L 198 104 L 216 104 L 216 114 L 234 114 L 234 104 L 250 104 L 250 120" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="2.5"/>
+
+              {/* Torre cilíndrica izquierda */}
+              <rect x="26" y="80" width="44" height="200" rx="4" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="3"/>
+              <path d="M 26 80 L 26 64 L 38 64 L 38 74 L 48 74 L 48 64 L 60 64 L 60 74 L 70 74 L 70 80" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="2.5"/>
+              {/* Torre cilíndrica derecha */}
+              <rect x="230" y="80" width="44" height="200" rx="4" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="3"/>
+              <path d="M 230 80 L 230 64 L 242 64 L 242 74 L 252 74 L 252 64 L 264 64 L 264 74 L 274 74 L 274 80" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="2.5"/>
+
+              {/* Torre del homenaje central más alta */}
+              <rect x="128" y="60" width="44" height="60" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="3"/>
+              <path d="M 128 60 L 128 46 L 140 46 L 140 55 L 150 55 L 150 46 L 162 46 L 162 55 L 172 55 L 172 60" fill="url(#cv-castle-stone)" stroke="#3A1810" stroke-width="2.5"/>
+              {/* Bandera */}
+              <line x1="150" y1="46" x2="150" y2="26" stroke="#3A1810" stroke-width="2"/>
+              <path d="M 150 26 L 176 31 L 172 36 L 176 41 L 150 36 Z" fill="#B5472E" stroke="#3A1810" stroke-width="1.5"/>
+
+              {/* Saeteras y ventanas */}
+              <rect x="44" y="120" width="8" height="20" fill="#3A1810"/>
+              <rect x="248" y="120" width="8" height="20" fill="#3A1810"/>
+              <rect x="44" y="180" width="8" height="20" fill="#3A1810"/>
+              <rect x="248" y="180" width="8" height="20" fill="#3A1810"/>
+              <rect x="142" y="78" width="9" height="18" fill="#3A1810"/>
+              {/* Ventanas renacentistas cuerpo */}
+              <g fill="#3A1810">
+                <rect x="84" y="160" width="14" height="22"/><rect x="143" y="160" width="14" height="22"/><rect x="202" y="160" width="14" height="22"/>
+              </g>
+              {/* Portón */}
+              <path d="M 124 280 L 124 232 Q 124 214 150 214 Q 176 214 176 232 L 176 280 Z" fill="#3A1810"/>
+              <path d="M 150 214 L 150 280 M 124 232 Q 150 226 176 232" fill="none" stroke="#5E4528" stroke-width="1.5"/>
+
+              {/* Escudo sobre la puerta */}
+              <g transform="translate(150, 205)">
+                <path d="M -10 -8 L 10 -8 L 10 4 Q 10 12 0 16 Q -10 12 -10 4 Z" fill="#B5472E" stroke="#3A1810" stroke-width="2"/>
+                <line x1="0" y1="-8" x2="0" y2="16" stroke="#F1EBDF" stroke-width="1.2"/>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* 3 ICONOS                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-iconos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--cv-almagra)">Cap. 03 / Tres tesoros</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que hace única
+              <em class="heading-editorial">a Cuevas.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Fortaleza renacentista, sierra de la plata y costa con historia
+            fenicia. <strong>Tres relatos</strong> que pocos municipios pueden
+            contar — y que tu web debe saber aprovechar.
+          </p>
+        </header>
+
+        <ol class="cv-iconos">
+          {iconos.map((i) => (
+            <li class={`cv-icono cv-icono--${i.color}`}>
+              <div class="cv-icono__code">{i.code}</div>
+
+              <div class="cv-icono__svg" aria-hidden="true">
+                {i.color === 'gold' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Castillo */}
+                    <rect x="20" y="44" width="60" height="40" fill="currentColor" stroke="#1A1410" stroke-width="2.5"/>
+                    <path d="M 20 44 L 20 36 L 30 36 L 30 41 L 42 41 L 42 36 L 54 36 L 54 41 L 66 41 L 66 36 L 76 36 L 76 41 L 80 41 L 80 44" fill="currentColor" stroke="#1A1410" stroke-width="2.5"/>
+                    {/* Torres */}
+                    <rect x="10" y="34" width="16" height="50" fill="currentColor" stroke="#1A1410" stroke-width="2.5"/>
+                    <path d="M 10 34 L 10 28 L 15 28 L 15 32 L 21 32 L 21 28 L 26 28 L 26 34" fill="currentColor" stroke="#1A1410" stroke-width="2"/>
+                    <rect x="74" y="34" width="16" height="50" fill="currentColor" stroke="#1A1410" stroke-width="2.5"/>
+                    <path d="M 74 34 L 74 28 L 79 28 L 79 32 L 85 32 L 85 28 L 90 28 L 90 34" fill="currentColor" stroke="#1A1410" stroke-width="2"/>
+                    {/* Bandera */}
+                    <line x1="50" y1="36" x2="50" y2="22" stroke="#1A1410" stroke-width="1.5"/>
+                    <path d="M 50 22 L 64 25 L 50 29 Z" fill="#B5472E" stroke="#1A1410" stroke-width="1.2"/>
+                    {/* Puerta */}
+                    <path d="M 44 84 L 44 64 Q 44 56 50 56 Q 56 56 56 64 L 56 84 Z" fill="#1A1410"/>
+                  </svg>
+                )}
+                {i.color === 'almagra' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Sierra + castillete + chimenea */}
+                    <path d="M 4 84 L 30 44 L 50 64 L 72 40 L 96 70 L 96 84 Z" fill="currentColor" stroke="#1A1410" stroke-width="2.5"/>
+                    <g stroke="#5E2113" stroke-width="1" opacity="0.5"><path d="M 30 44 L 34 80"/><path d="M 72 40 L 76 80"/></g>
+                    {/* Castillete minero */}
+                    <g transform="translate(44, 44)">
+                      <path d="M -12 36 L -5 0 L 5 0 L 12 36" fill="none" stroke="#1A1410" stroke-width="2.5"/>
+                      <line x1="-8" y1="16" x2="8" y2="16" stroke="#1A1410" stroke-width="2"/>
+                      <line x1="-10" y1="26" x2="10" y2="26" stroke="#1A1410" stroke-width="2"/>
+                      <circle cx="0" cy="-3" r="6" fill="#F1EBDF" stroke="#1A1410" stroke-width="2.5"/>
+                    </g>
+                    {/* Chimenea */}
+                    <g transform="translate(76, 34)">
+                      <path d="M -4 46 L -3 0 L 3 0 L 4 46 Z" fill="#7E2E1C" stroke="#1A1410" stroke-width="2"/>
+                      <rect x="-5" y="-3" width="10" height="5" fill="#7E2E1C" stroke="#1A1410" stroke-width="1.5"/>
+                      <path d="M 0 -4 Q 8 -12 2 -22 Q -6 -30 4 -38" fill="none" stroke="#C9BBA4" stroke-width="2.5" opacity="0.6" stroke-linecap="round"/>
+                    </g>
+                  </svg>
+                )}
+                {i.color === 'blue' && (
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    {/* Villaricos: mar + ánfora */}
+                    <path d="M 0 64 Q 25 58 50 64 T 100 64 L 100 100 L 0 100 Z" fill="currentColor" stroke="#1A1410" stroke-width="2"/>
+                    <path d="M 0 74 Q 25 69 50 74 T 100 74" fill="none" stroke="#F1EBDF" stroke-width="1.3" opacity="0.6"/>
+                    {/* Playa */}
+                    <path d="M 0 64 Q 30 60 60 64 L 60 84 L 0 84 Z" fill="#E4D2A6" stroke="#1A1410" stroke-width="2"/>
+                    {/* Ánfora fenicia */}
+                    <g transform="translate(34, 56)">
+                      <path d="M 0 -22 Q -11 -19 -10 -4 Q -10 11 0 16 Q 10 11 10 -4 Q 11 -19 0 -22 Z" fill="#9C5B3A" stroke="#1A1410" stroke-width="2.5"/>
+                      <path d="M -7 -17 Q -15 -12 -11 -4 M 7 -17 Q 15 -12 11 -4" fill="none" stroke="#1A1410" stroke-width="2"/>
+                      <rect x="-4" y="-27" width="8" height="6" fill="#9C5B3A" stroke="#1A1410" stroke-width="2"/>
+                      <g stroke="#1A1410" stroke-width="1" opacity="0.5"><path d="M -8 -2 L 8 -2 M -7 4 L 7 4"/></g>
+                    </g>
+                    {/* Sol */}
+                    <circle cx="80" cy="24" r="10" fill="#C49A3F" stroke="#1A1410" stroke-width="2"/>
+                  </svg>
+                )}
+              </div>
+
+              <h3 class="cv-icono__name heading-display">{i.name}</h3>
+              <span class="text-mono cv-icono__sub">{i.sub}</span>
+              <p class="cv-icono__desc">{i.desc}</p>
+              <footer class="cv-icono__foot">
+                <span class="text-mono cv-icono__dato">★ {i.dato}</span>
+              </footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* LA FIEBRE DE LA PLATA — flagship                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-plata-section" id="plata">
+      <div class="container-brutal">
+        <div class="cv-plata-grid">
+
+          <div class="cv-plata-l">
+            <span class="text-meta cv-plata-chapter">Cap. 04 / Sierra Almagrera</span>
+            <h2 class="cv-plata-title heading-display">
+              La fiebre
+              <em class="heading-editorial">de la plata.</em>
+            </h2>
+            <p class="cv-plata-lead">
+              En <strong>1838</strong>, el hallazgo de un filón de plata en el
+              Barranco del Jaroso convirtió la Sierra Almagrera en el
+              <em>"far west" almeriense</em>. Cientos de minas, fundiciones y
+              miles de mineros hicieron de Cuevas <strong>una de las
+              localidades más ricas de España</strong>.
+            </p>
+
+            {/* Timeline minería */}
+            <ol class="cv-plata-time">
+              {mineriaTimeline.map((s, idx) => (
+                <li class={`cv-plata-step cv-plata-step--${idx}`}>
+                  <span class="cv-plata-step__y text-mono">{s.y}</span>
+                  <div class="cv-plata-step__body">
+                    <span class="cv-plata-step__t">{s.t}</span>
+                    <span class="cv-plata-step__d">{s.d}</span>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            {/* Vestigios */}
+            <div class="cv-plata-vestigios">
+              <span class="text-mono cv-plata-vestigios__label">★ LO QUE AÚN SE VE</span>
+              <ul>
+                {vestigios.map(v => (
+                  <li>
+                    <span class="text-mono cv-plata-vestigios__k">{v.k}</span>
+                    <span class="cv-plata-vestigios__v">{v.v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Castillete + chimenea grande SVG */}
+          <aside class="cv-plata-r" aria-hidden="true">
+            <svg viewBox="0 0 280 340" width="100%" height="100%">
+              <defs>
+                <linearGradient id="cv-mine-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3A2A30"/>
+                  <stop offset="100%" stop-color="#5E3A34"/>
+                </linearGradient>
+              </defs>
+              <rect width="280" height="340" fill="url(#cv-mine-sky)"/>
+              {/* Luna */}
+              <circle cx="226" cy="50" r="22" fill="#E9D8B0" opacity="0.5"/>
+
+              {/* Sierra roja */}
+              <path d="M 0 300 L 60 210 L 120 260 L 180 200 L 280 250 L 280 340 L 0 340 Z" fill="#7E2E1C" stroke="#1A1410" stroke-width="2.5"/>
+              <path d="M 0 320 L 80 270 L 160 300 L 240 268 L 280 290 L 280 340 L 0 340 Z" fill="#5E2113" stroke="#1A1410" stroke-width="2"/>
+
+              {/* Chimenea de fundición (derecha) */}
+              <g transform="translate(210, 110)">
+                <path d="M -12 190 L -7 0 L 7 0 L 12 190 Z" fill="#9C4530" stroke="#1A1410" stroke-width="3"/>
+                <rect x="-14" y="-8" width="28" height="10" fill="#9C4530" stroke="#1A1410" stroke-width="2.5"/>
+                {/* Anillos de ladrillo */}
+                <g stroke="#1A1410" stroke-width="1" opacity="0.4">
+                  <line x1="-8" y1="40" x2="8" y2="40"/><line x1="-9" y1="90" x2="9" y2="90"/><line x1="-10" y1="140" x2="10" y2="140"/>
+                </g>
+                {/* Humo */}
+                <path d="M 0 -10 Q 16 -30 4 -52 Q -12 -72 8 -94 Q 22 -110 6 -128" fill="none" stroke="#C9BBA4" stroke-width="4" opacity="0.45" stroke-linecap="round" class="cv-smoke"/>
+              </g>
+
+              {/* CASTILLETE minero (headframe) izquierda */}
+              <g transform="translate(95, 120)">
+                {/* Estructura A-frame */}
+                <path d="M -45 180 L -16 0 L 16 0 L 45 180" fill="none" stroke="#2A1208" stroke-width="5"/>
+                <path d="M -38 180 L -14 30 M 38 180 L 14 30" fill="none" stroke="#2A1208" stroke-width="3"/>
+                {/* Travesaños */}
+                {[40, 75, 110, 150].map(y => (
+                  <line x1={-16 - y*0.16} y1={y} x2={16 + y*0.16} y2={y} stroke="#2A1208" stroke-width="2.5"/>
+                ))}
+                {/* Aspas / cruces */}
+                {[55, 92, 130].map(y => (
+                  <g stroke="#2A1208" stroke-width="1.5" opacity="0.7">
+                    <line x1={-16 - y*0.16} y1={y} x2={16 + (y+35)*0.16} y2={y+35}/>
+                    <line x1={16 + y*0.16} y1={y} x2={-16 - (y+35)*0.16} y2={y+35}/>
+                  </g>
+                ))}
+                {/* Polea / rueda de extracción arriba */}
+                <circle cx="0" cy="-6" r="16" fill="none" stroke="#2A1208" stroke-width="4"/>
+                <circle cx="0" cy="-6" r="3" fill="#2A1208"/>
+                {Array.from({length: 6}).map((_, i) => (
+                  <line x1="0" y1="-6" x2={Math.cos(i*Math.PI/3)*16} y2={-6 + Math.sin(i*Math.PI/3)*16} stroke="#2A1208" stroke-width="1.5"/>
+                ))}
+                {/* Cable bajando al pozo */}
+                <line x1="6" y1="-6" x2="6" y2="180" stroke="#2A1208" stroke-width="1.5" opacity="0.6"/>
+                {/* Caseta motor */}
+                <rect x="-46" y="150" width="34" height="30" fill="#9C4530" stroke="#1A1410" stroke-width="2.5"/>
+                <rect x="-40" y="158" width="9" height="9" fill="#1A1410"/>
+              </g>
+
+              {/* Bocamina (entrada) */}
+              <g transform="translate(150, 290)">
+                <path d="M -16 24 L -16 4 Q -16 -10 0 -10 Q 16 -10 16 4 L 16 24 Z" fill="#1A1410" stroke="#2A1208" stroke-width="2.5"/>
+                <path d="M -16 4 Q -16 -6 0 -6 Q 16 -6 16 4" fill="none" stroke="#9C4530" stroke-width="3"/>
+                {/* Raíles saliendo */}
+                <line x1="-8" y1="24" x2="-14" y2="40" stroke="#2A1208" stroke-width="2"/>
+                <line x1="8" y1="24" x2="14" y2="40" stroke="#2A1208" stroke-width="2"/>
+              </g>
+
+              {/* Vagoneta con mineral */}
+              <g transform="translate(150, 322)">
+                <rect x="-14" y="-10" width="28" height="14" fill="#5E3A34" stroke="#1A1410" stroke-width="2"/>
+                {/* Mineral plateado */}
+                <g fill="#C9C9D2" stroke="#1A1410" stroke-width="0.8"><circle cx="-6" cy="-9" r="3"/><circle cx="2" cy="-10" r="3.5"/><circle cx="9" cy="-9" r="2.5"/></g>
+                <circle cx="-8" cy="6" r="4" fill="#1A1410"/><circle cx="8" cy="6" r="4" fill="#1A1410"/>
+              </g>
+
+              {/* Etiqueta plata */}
+              <g transform="translate(56, 70)">
+                <rect x="-30" y="-13" width="60" height="26" fill="#C9C9D2" stroke="#1A1410" stroke-width="2.5" transform="rotate(-5)"/>
+                <text x="0" y="5" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#1A1410" transform="rotate(-5)">★ Ag ★</text>
+              </g>
+            </svg>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-hitos-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--cv-gold)">Cap. 05 / Cifras</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--cv-paper)">
+              Por qué Cuevas
+              <em class="heading-editorial" style="color:var(--cv-gold)">es especial.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(241,235,223,0.75)">
+            Datos que explican por qué Cuevas es un <strong>centro de servicios
+            de comarca con un patrimonio único</strong> — castillo, minas y mar
+            — apenas explotado digitalmente.
+          </p>
+        </header>
+
+        <ul class="cv-hitos">
+          {hitos.map((h, i) => (
+            <li class={`cv-hito cv-hito--${i}`}>
+              <span class="text-mono cv-hito__k">{h.k}</span>
+              <span class="cv-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-sec-section" id="sectores">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 06 / Sectores Cuevas</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios que
+              <em class="heading-editorial">mueven la comarca.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Seis sectores con estrategia digital propia. Del comercio del
+            Levante interior al alojamiento de Villaricos — y siempre con
+            opciones para autónomos.
+          </p>
+        </header>
+
+        <ol class="cv-sec">
+          {sectores.map((s, i) => {
+            const colors = ['almagra', 'gold', 'verdigris', 'blue', 'olive', 'silver'];
+            return (
+              <li class={`cv-sec__card cv-sec__card--${colors[i]}`}>
+                <header class="cv-sec__head">
+                  <span class="text-mono cv-sec__num">{String(i+1).padStart(2,'0')}</span>
+                  <div class="cv-sec__stat-box">
+                    <span class="cv-sec__stat-v text-mono">{s.stat}</span>
+                    <span class="cv-sec__stat-l">{s.statLabel}</span>
+                  </div>
+                </header>
+                <h3 class="cv-sec__title heading-display">{s.nombre}</h3>
+                <p class="cv-sec__desc">{s.desc}</p>
+                <ul class="cv-sec__tags">
+                  {s.tags.map((t) => (
+                    <li class="cv-sec__tag"><span>+</span>{t}</li>
+                  ))}
+                </ul>
+                <footer class="cv-sec__foot">
+                  <a href="/contacto" class="cv-sec__cta">Hablemos →</a>
+                </footer>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-map-section">
+      <header class="cv-map-head">
+        <div class="container-brutal cv-map-head__inner">
+          <div>
+            <span class="text-meta cv-map-chapter">Cap. 07 / Cartografía</span>
+            <h2 class="heading-display cv-map-title">
+              El pueblo
+              <em class="heading-editorial">y su valle.</em>
+            </h2>
+          </div>
+          <div class="cv-map-coords">
+            <span class="text-mono">37.298° N · 1.871° W</span>
+            <span class="text-mono">82m · 262 km² · VALLE DEL ALMANZORA</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="cv-map-frame">
+        <div class="cv-map-wrap">
+          <InteractiveMap
+            center={[-1.8711, 37.2978]}
+            zoom={13}
+            pitch={50}
+            bearing={16}
+            label="Cuevas del Almanzora"
+            themeColor="#B5472E"
+            themeColorDark="#7E2E1C"
+            townInitial="C"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-dif-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 08 / Por qué Cuevas</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Cuatro razones
+              <em class="heading-editorial">para invertir en tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Triple atractivo + centro de comarca + patrimonio sin explotar +
+            opciones para autónomos. Cuevas tiene un potencial digital que
+            casi nadie aprovecha todavía.
+          </p>
+        </header>
+
+        <ol class="cv-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`cv-dif__item cv-dif__item--${i}`}>
+              <span class="text-mono cv-dif__num">★ {String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display cv-dif__t">{d.title}</h3>
+              <p class="cv-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-proc-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta" style="color:var(--cv-gold)">Cap. 09 / Método</span>
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--cv-paper)">
+              Cuatro pasos
+              <em class="heading-editorial" style="color:var(--cv-verdigris)">a tu web.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead" style="color:rgba(241,235,223,0.75)">
+            Conocemos tu negocio. Diseño con carácter. Desarrollo con SEO local
+            de comarca. Lanzamiento y Google para todo el Levante interior.
+          </p>
+        </header>
+
+        <ol class="cv-proc">
+          {proceso.map((s) => (
+            <li class="cv-proc__step">
+              <header class="cv-proc__head">
+                <span class="text-mono cv-proc__num">{s.num}</span>
+                <span class="text-mono cv-proc__eta">{s.eta}</span>
+              </header>
+              <h3 class="heading-display cv-proc__t">{s.title}</h3>
+              <p class="cv-proc__body">{s.body}</p>
+              <footer class="cv-proc__foot text-mono">★ {s.deliverable}</footer>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-quote-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 10 / Voces de la comarca</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Negocios de Cuevas
+              <em class="heading-editorial">que ya están en Google.</em>
+            </h2>
+          </div>
+        </header>
+
+        <figure class="cv-pull">
+          <div class="cv-pull__seal" aria-hidden="true">
+            <svg viewBox="0 0 90 90" width="100%" height="100%">
+              <defs><path id="cv-pull-c" d="M45,45 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+              <circle cx="45" cy="45" r="42" fill="#B5472E" stroke="#1A1410" stroke-width="2.5"/>
+              <circle cx="45" cy="45" r="36" fill="none" stroke="#F1EBDF" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+              <g class="cv-spin">
+                <text font-family="monospace" font-size="8" font-weight="bold" fill="#F1EBDF" letter-spacing="2.5"><textPath href="#cv-pull-c" startOffset="0%">★ CUEVAS · 2026 · LEVANTE ★</textPath></text>
+              </g>
+              <text x="45" y="52" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="#F1EBDF">"</text>
+            </svg>
+          </div>
+          <blockquote class="cv-pull__q">{testimonios[0].texto}</blockquote>
+          <figcaption class="cv-pull__cap">
+            <span class="cv-pull__avatar">{testimonios[0].nombre[0]}</span>
+            <div>
+              <span class="cv-pull__name">{testimonios[0].nombre}</span>
+              <span class="cv-pull__role">{testimonios[0].negocio}</span>
+            </div>
+          </figcaption>
+        </figure>
+
+        <ul class="cv-quotes">
+          {testimonios.slice(1).map((t, i) => (
+            <li class={`cv-quote cv-quote--${i}`}>
+              <span class="cv-quote__mark" aria-hidden="true">"</span>
+              <p>{t.texto}</p>
+              <footer>
+                <span class="cv-quote__avatar">{t.nombre[0]}</span>
+                <div>
+                  <span class="cv-quote__name">{t.nombre}</span>
+                  <span class="cv-quote__role">{t.negocio}</span>
+                </div>
+              </footer>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-faq-section">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
+            <h2 class="heading-display brutal-section-head__title">
+              Lo que más
+              <em class="heading-editorial">preguntan en la comarca.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Precios, SEO de comarca, autónomos, turismo del castillo, Villaricos,
+            plazos y pedanías. Si no está aquí, escríbenos.
+          </p>
+        </header>
+
+        <ol class="cv-faq">
+          {faqs.map((f, i) => (
+            <li class="cv-faq__item">
+              <details class="cv-faq__det" open={i === 0}>
+                <summary class="cv-faq__sum">
+                  <span class="text-mono cv-faq__num">{String(i+1).padStart(2,'0')}</span>
+                  <span class="cv-faq__q">{f.q}</span>
+                  <span class="cv-faq__toggle" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 6 9 L 12 15 L 18 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                </summary>
+                <div class="cv-faq__ans"><p>{f.a}</p></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                  */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosLevante.length > 0 && (
+      <section class="cv-vecinos-section">
+        <div class="container-brutal">
+          <header class="brutal-section-head">
+            <div class="brutal-section-head__col">
+              <span class="text-meta">Cap. 12 / Levante Almeriense</span>
+              <h2 class="heading-display brutal-section-head__title">
+                Y en todo
+                <em class="heading-editorial">el Levante.</em>
+              </h2>
+            </div>
+            <p class="brutal-section-head__lead">
+              Otros municipios del Levante almeriense donde trabajamos. Del
+              valle del Almanzora a la costa, cobertura completa.
+            </p>
+          </header>
+
+          <ul class="cv-vecinos">
+            {pueblosLevante.slice(0, 8).map((p, i) => (
+              <li>
+                <a href={`/diseno-web/${p.slug}/`} class={`cv-vecino cv-vecino--${i % 4}`}>
+                  <span class="text-mono cv-vecino__n">N.º {String(i + 1).padStart(2, '0')}</span>
+                  <span class="cv-vecino__name heading-display">{p.nombre}</span>
+                  <span class="text-mono cv-vecino__sub">{p.comarca}</span>
+                  <span class="cv-vecino__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                        */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="cv-final">
+      <div class="container-brutal">
+        <div class="cv-final__grid">
+
+          <div class="cv-final__l">
+            <span class="text-meta cv-final__chapter">★ Cap. 13 · Próximo paso</span>
+            <h2 class="heading-display cv-final__title">
+              ¿Ponemos tu negocio
+              <em class="heading-editorial">en el mapa?</em>
+            </h2>
+            <p class="cv-final__lead">
+              Tu comercio, alojamiento, restaurante o proyecto turístico de
+              Cuevas con <strong>web rápida</strong>, SEO de comarca, carta
+              digital o reservas, y todo el <strong>peso del castillo, la sierra
+              y Villaricos</strong> contado como se merece. Desde 400€.
+            </p>
+            <div class="cv-final__cta">
+              <a href="/contacto" class="cv-final__btn cv-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="tel:+34657085019" class="cv-final__btn cv-final__btn--ghost">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                <span>657 085 019</span>
+              </a>
+            </div>
+            <div class="cv-final__trust">
+              <span><span class="cv-pulse"></span> ACEPTANDO PROYECTOS · 2026</span>
+              <span>★ DESDE 400€</span>
+              <span>★ SEO DE COMARCA</span>
+              <span>4.9★ · 42 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* Castillo + sierra minera animados */}
+          <div class="cv-final__r" aria-hidden="true">
+            <svg viewBox="0 0 320 320" class="cv-final-svg">
+              <defs>
+                <radialGradient id="cv-final-glow" cx="50%" cy="42%" r="55%">
+                  <stop offset="0%" stop-color="#C49A3F" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#C49A3F" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="cv-final-stone" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#DEC176"/>
+                  <stop offset="100%" stop-color="#B08A38"/>
+                </linearGradient>
+              </defs>
+              <circle cx="160" cy="140" r="140" fill="url(#cv-final-glow)"/>
+
+              {/* Luna */}
+              <circle cx="250" cy="64" r="26" fill="#E9D8B0" stroke="#F1EBDF" stroke-width="2"/>
+
+              {/* Sierra Almagrera roja al fondo con castillete + chimenea */}
+              <path d="M 0 210 L 60 150 L 120 188 L 200 140 L 280 184 L 320 158 L 320 230 L 0 230 Z" fill="#7E2E1C" stroke="#F1EBDF" stroke-width="2.5"/>
+              {/* Castillete pequeño */}
+              <g transform="translate(70, 150)">
+                <path d="M -10 38 L -4 0 L 4 0 L 10 38" fill="none" stroke="#1A1410" stroke-width="3"/>
+                <line x1="-7" y1="18" x2="7" y2="18" stroke="#1A1410" stroke-width="2"/>
+                <circle cx="0" cy="-3" r="6" fill="#F1EBDF" stroke="#1A1410" stroke-width="2.5" class="cv-final-wheel"/>
+              </g>
+              {/* Chimenea humeante */}
+              <g transform="translate(250, 130)">
+                <path d="M -5 54 L -3 0 L 3 0 L 5 54 Z" fill="#9C4530" stroke="#1A1410" stroke-width="2.5"/>
+                <rect x="-6" y="-4" width="12" height="6" fill="#9C4530" stroke="#1A1410" stroke-width="2"/>
+                <path d="M 0 -6 Q 12 -22 4 -40 Q -8 -56 8 -74" fill="none" stroke="#D8C8B0" stroke-width="3.5" opacity="0.5" stroke-linecap="round" class="cv-smoke"/>
+              </g>
+
+              {/* CASTILLO grande en primer plano */}
+              <g>
+                <rect x="86" y="180" width="148" height="78" fill="url(#cv-final-stone)" stroke="#1A1410" stroke-width="3"/>
+                {/* Almenas */}
+                <path d="M 86 180 L 86 166 L 100 166 L 100 175 L 118 175 L 118 166 L 136 166 L 136 175 L 154 175 L 154 166 L 166 166 L 166 175 L 184 175 L 184 166 L 202 166 L 202 175 L 220 175 L 220 166 L 234 166 L 234 180" fill="url(#cv-final-stone)" stroke="#1A1410" stroke-width="2.5"/>
+                {/* Torres */}
+                <rect x="62" y="150" width="34" height="108" rx="3" fill="url(#cv-final-stone)" stroke="#1A1410" stroke-width="3"/>
+                <path d="M 62 150 L 62 138 L 72 138 L 72 146 L 86 146 L 86 138 L 96 138 L 96 150" fill="url(#cv-final-stone)" stroke="#1A1410" stroke-width="2.5"/>
+                <rect x="224" y="150" width="34" height="108" rx="3" fill="url(#cv-final-stone)" stroke="#1A1410" stroke-width="3"/>
+                <path d="M 224 150 L 224 138 L 234 138 L 234 146 L 248 146 L 248 138 L 258 138 L 258 150" fill="url(#cv-final-stone)" stroke="#1A1410" stroke-width="2.5"/>
+                {/* Bandera ondeando */}
+                <line x1="160" y1="166" x2="160" y2="142" stroke="#1A1410" stroke-width="2.5"/>
+                <path d="M 160 142 L 192 148 L 186 154 L 192 160 L 160 154 Z" fill="#B5472E" stroke="#1A1410" stroke-width="1.5" class="cv-final-flag"/>
+                {/* Ventanas */}
+                <g fill="#1A1410">
+                  <rect x="74" y="190" width="10" height="20"/><rect x="236" y="190" width="10" height="20"/>
+                  <rect x="120" y="200" width="14" height="22"/><rect x="186" y="200" width="14" height="22"/>
+                </g>
+                {/* Portón */}
+                <path d="M 144 258 L 144 218 Q 144 202 160 202 Q 176 202 176 218 L 176 258 Z" fill="#1A1410"/>
+                {/* Peña */}
+                <path d="M 40 258 Q 120 240 160 246 Q 220 240 280 258 L 280 268 L 40 268 Z" fill="#A87B4A" stroke="#1A1410" stroke-width="2.5"/>
+              </g>
+
+              {/* Texto */}
+              <text x="160" y="300" text-anchor="middle" font-family="monospace" font-size="10" font-weight="bold" fill="#F1EBDF" letter-spacing="3">★ CUEVAS DEL ALMANZORA ★</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="cv-final__marquee">
+        <div class="cv-final__marquee-track">
+          {Array.from({length: 6}).map(() => (
+            <span>★ CASTILLO ★ SIERRA DE LA PLATA ★ VILLARICOS ★ SEO DE COMARCA ★ HABLEMOS ★ </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ══════════════════════════════════════════════════════
+     PALETA · CUEVAS DEL ALMANZORA · PATRIMONIO + MINERÍA
+     ══════════════════════════════════════════════════════ */
+  .cv {
+    --cv-paper:     #F1EBDF;       /* Piedra cálida */
+    --cv-paper-2:   #E7DECB;
+    --cv-arena:     #E0D2AE;
+    --cv-ink:       #1A1410;       /* Tierra oscura */
+    --cv-almagra:   #B5472E;       /* Almagre rojo Sierra (PRIMARY) */
+    --cv-almagra-d: #7E2E1C;
+    --cv-gold:      #C49A3F;       /* Oro sillería castillo */
+    --cv-gold-d:    #8E6E26;
+    --cv-silver:    #6E6E78;       /* Plata-peltre mineral */
+    --cv-verdigris: #2E8071;       /* Verdín mineral oxidado */
+    --cv-blue:      #1E6E8C;       /* Mar Villaricos */
+    --cv-olive:     #7A7340;       /* Valle del Almanzora */
+    --cv-shadow:    8px 8px 0 var(--cv-ink);
+  }
+  .cv-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--cv-almagra);
+    box-shadow: 0 0 0 0 rgba(181,71,46,0.55);
+    animation: cv-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes cv-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(181,71,46,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(181,71,46,0); }
+    100% { box-shadow: 0 0 0 0 rgba(181,71,46,0); }
+  }
+  .cv-spin { transform-origin: 50% 50%; animation: cv-spin 30s linear infinite; }
+  @keyframes cv-spin { to { transform: rotate(360deg); } }
+  .cv-smoke { stroke-dasharray: 4 6; animation: cv-smoke 3s linear infinite; }
+  @keyframes cv-smoke { to { stroke-dashoffset: -40; } }
+
+  /* HERO */
+  .cv-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 80% 18%, rgba(196,154,63,0.14), transparent 50%),
+      radial-gradient(circle at 12% 82%, rgba(181,71,46,0.10), transparent 50%),
+      var(--cv-paper);
+    border-bottom: 3px solid var(--cv-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .cv-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(125deg, transparent 0 38px, rgba(181,71,46,0.04) 38px 39px);
+    pointer-events: none;
+  }
+  .cv-hero > * { position: relative; }
+  .cv-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .cv-hero__status { color: var(--cv-almagra); font-weight: 700; }
+  .cv-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .cv-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .cv-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .cv-hero__chapter { color: var(--cv-almagra); }
+  .cv-hero__title {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: .92;
+    letter-spacing: -.04em;
+    margin: .25rem 0;
+  }
+  .cv-hero__title em { color: var(--cv-almagra); font-style: italic; }
+  .cv-hero__title-stamp {
+    display: inline-block;
+    color: var(--cv-paper);
+    background: var(--cv-verdigris);
+    padding: 0 .2em;
+    transform: rotate(-1deg);
+  }
+  .cv-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .cv-hero__lead strong { color: var(--cv-ink); font-weight: 700; }
+  .cv-hero__lead em { color: var(--cv-almagra); font-style: italic; font-weight: 600; }
+  .cv-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .cv-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--cv-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .cv-btn--primary { background: var(--cv-almagra); color: var(--cv-paper); box-shadow: 6px 6px 0 var(--cv-ink); }
+  .cv-btn--primary:hover { background: var(--cv-verdigris); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--cv-ink); }
+  .cv-btn--ghost { background: transparent; color: var(--cv-ink); box-shadow: 6px 6px 0 var(--cv-gold); }
+  .cv-btn--ghost:hover { background: var(--cv-ink); color: var(--cv-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--cv-gold); }
+
+  /* KPIs */
+  .cv-kpis {
+    list-style: none; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border: 2.5px solid var(--cv-ink);
+    background: var(--cv-ink);
+  }
+  @media (min-width: 768px) { .cv-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .cv-kpi {
+    background: var(--cv-paper); padding: 1.25rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    border-right: 2px solid var(--cv-ink); border-bottom: 2px solid var(--cv-ink);
+  }
+  .cv-kpi:nth-child(2n) { border-right: none; }
+  .cv-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .cv-kpi:nth-child(2n)      { border-right: 2px solid var(--cv-ink); }
+    .cv-kpi:nth-child(4n)      { border-right: none; }
+    .cv-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--cv-ink); }
+    .cv-kpi:nth-last-child(-n+4) { border-bottom: none; }
+  }
+  .cv-kpi--gold    { background: var(--cv-gold); color: var(--cv-ink); }
+  .cv-kpi--almagra { background: var(--cv-almagra); color: var(--cv-paper); }
+  .cv-kpi--blue    { background: var(--cv-blue); color: var(--cv-paper); }
+  .cv-kpi--ink     { background: var(--cv-ink); color: var(--cv-paper); }
+  .cv-kpi--ink .cv-kpi__v { color: var(--cv-gold); }
+  .cv-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .cv-kpi__v small { font-size: .55em; opacity: .8; }
+  .cv-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .cv-hero__postcard {
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    filter: drop-shadow(0 14px 30px rgba(26,20,16,0.22));
+  }
+  .cv-postcard {
+    background: var(--cv-paper);
+    border: 3px solid var(--cv-ink);
+    box-shadow: var(--cv-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .35s;
+  }
+  .cv-postcard:hover { transform: rotate(0); }
+  .cv-postcard__head {
+    display: flex; justify-content: space-between; flex-wrap: wrap;
+    gap: .5rem;
+    padding: .65rem 1rem;
+    background: var(--cv-almagra);
+    color: var(--cv-paper);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    border-bottom: 2px solid var(--cv-ink);
+  }
+  .cv-postcard__profile {
+    width: 100%; aspect-ratio: 540 / 240;
+    border-bottom: 2px solid var(--cv-ink);
+    overflow: hidden;
+  }
+  .cv-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--cv-ink); }
+  .cv-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.05) sepia(0.06); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .cv-postcard:hover .cv-postcard__img { transform: scale(1.05); }
+  .cv-postcard__seal { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(-9deg); filter: drop-shadow(0 4px 10px rgba(181,71,46,0.5)); }
+  .cv-postcard__tag {
+    position: absolute; bottom: 12px; left: 12px;
+    background: var(--cv-gold); color: var(--cv-ink);
+    padding: .4rem .75rem;
+    font-size: .62rem; font-weight: 800; letter-spacing: .15em;
+    border: 2px solid var(--cv-ink);
+    box-shadow: 3px 3px 0 var(--cv-almagra);
+    transform: rotate(-2deg);
+  }
+  .cv-postcard__data {
+    padding: 1rem 1.25rem;
+    background: var(--cv-paper-2);
+    display: grid; gap: .35rem;
+  }
+  .cv-postcard__data-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: .35rem;
+    border-bottom: 1px dashed rgba(26,20,16,0.18);
+    font-size: .68rem;
+  }
+  .cv-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .cv-postcard__data-row > span:first-child { color: var(--cv-almagra-d); letter-spacing: .2em; font-weight: 800; }
+  .cv-postcard__data-v { color: var(--cv-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .cv-marquee {
+    background: var(--cv-almagra); color: var(--cv-paper);
+    overflow: hidden; padding: .9rem 0;
+    border-top: 3px solid var(--cv-ink);
+  }
+  .cv-marquee__track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: cv-marquee 42s linear infinite;
+    font-family: var(--font-mono);
+    font-size: .85rem; font-weight: 800;
+    letter-spacing: .15em; text-transform: uppercase;
+  }
+  @keyframes cv-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* CASTILLO SECTION */
+  .cv-castle-section {
+    background: var(--cv-paper-2);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--cv-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .cv-castle-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(196,154,63,0.07) 1.2px, transparent 1.2px);
+    background-size: 24px 24px;
+    pointer-events: none;
+  }
+  .cv-castle-section > * { position: relative; }
+  .cv-castle-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .cv-castle-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .cv-castle-chapter { color: var(--cv-gold-d); }
+  .cv-castle-title { font-size: clamp(2.25rem, 5vw, 3.6rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .cv-castle-title em { color: var(--cv-gold-d); }
+  .cv-castle-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1.75rem; max-width: 56ch; }
+  .cv-castle-lead strong { color: var(--cv-ink); font-weight: 700; }
+  .cv-castle-lead em { color: var(--cv-almagra); font-style: italic; }
+  .cv-castle-facts { display: grid; grid-template-columns: 1fr; gap: 0; border: 2.5px solid var(--cv-ink); background: var(--cv-paper); box-shadow: 6px 6px 0 var(--cv-ink); margin-bottom: 1.5rem; }
+  @media (min-width: 640px) { .cv-castle-facts { grid-template-columns: 1fr 1fr; } }
+  .cv-castle-fact { padding: .85rem 1rem; border-bottom: 1px solid var(--cv-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) {
+    .cv-castle-fact:nth-child(odd) { border-right: 1px solid var(--cv-ink); }
+    .cv-castle-fact:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .cv-castle-fact:last-child { border-bottom: none; } }
+  .cv-castle-fact__k { font-size: .58rem; letter-spacing: .2em; color: var(--cv-almagra); font-weight: 800; }
+  .cv-castle-fact__v { font-size: .88rem; color: var(--cv-ink); font-weight: 600; line-height: 1.35; }
+  .cv-castle-note { padding: 1rem 1.25rem; background: var(--cv-gold); color: var(--cv-ink); border: 2px solid var(--cv-ink); font-size: .92rem; line-height: 1.5; }
+  .cv-castle-note strong { color: var(--cv-almagra-d); }
+  .cv-castle-r { max-width: 320px; margin: 0 auto; border: 3px solid var(--cv-ink); box-shadow: var(--cv-shadow); line-height: 0; background: #EFD9A0; }
+
+  /* ICONOS */
+  .cv-iconos-section { background: var(--cv-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); }
+  .cv-iconos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 1024px) { .cv-iconos { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
+  .cv-icono {
+    position: relative;
+    background: var(--cv-paper);
+    border: 3px solid var(--cv-ink);
+    box-shadow: var(--cv-shadow);
+    padding: 1.75rem 1.5rem;
+    display: flex; flex-direction: column; gap: .85rem;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .cv-icono:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
+  .cv-icono--gold    { color: var(--cv-gold); }
+  .cv-icono--almagra { color: var(--cv-almagra); }
+  .cv-icono--blue    { color: var(--cv-blue); }
+  .cv-icono__code {
+    position: absolute; top: -16px; right: 20px;
+    background: var(--cv-ink); color: var(--cv-gold);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 1.2rem;
+    border: 2.5px solid currentColor;
+    box-shadow: 3px 3px 0 currentColor;
+  }
+  .cv-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
+  .cv-icono__name { font-size: clamp(1.4rem, 2.8vw, 1.8rem); line-height: 1; letter-spacing: -.025em; color: var(--cv-ink); margin: .5rem 0 0; text-align: center; }
+  .cv-icono__sub { font-size: .6rem; letter-spacing: .22em; color: currentColor; font-weight: 800; text-align: center; }
+  .cv-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .cv-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
+  .cv-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
+
+  /* FIEBRE DE LA PLATA */
+  .cv-plata-section { background: var(--cv-ink); color: var(--cv-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); position: relative; overflow: hidden; }
+  .cv-plata-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(181,71,46,0.1) 1.3px, transparent 1.3px); background-size: 26px 26px; pointer-events: none; }
+  .cv-plata-section > * { position: relative; }
+  .cv-plata-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .cv-plata-grid { grid-template-columns: 1.25fr 1fr; gap: 4rem; } }
+  .cv-plata-chapter { color: var(--cv-almagra); }
+  .cv-plata-title { font-size: clamp(2.5rem, 6vw, 4.25rem); line-height: .92; letter-spacing: -.04em; margin: 1rem 0; color: var(--cv-paper); }
+  .cv-plata-title em { color: var(--cv-silver); color: #C9C9D2; }
+  .cv-plata-lead { font-size: 1.05rem; line-height: 1.55; color: rgba(241,235,223,0.8); margin-bottom: 1.75rem; max-width: 56ch; }
+  .cv-plata-lead strong { color: var(--cv-paper); font-weight: 700; }
+  .cv-plata-lead em { color: var(--cv-almagra); font-style: italic; }
+  .cv-plata-time { list-style: none; padding: 0; margin: 0 0 1.5rem; display: grid; gap: 0; border: 2px solid var(--cv-paper); }
+  .cv-plata-step { display: grid; grid-template-columns: 70px 1fr; gap: 1rem; padding: 1rem; border-bottom: 1px dashed rgba(241,235,223,0.25); align-items: start; }
+  .cv-plata-step:last-child { border-bottom: none; }
+  .cv-plata-step__y { font-size: 1rem; font-weight: 800; color: var(--cv-ink); background: var(--cv-almagra); padding: .35rem .4rem; text-align: center; border: 1.5px solid var(--cv-paper); align-self: start; }
+  .cv-plata-step--1 .cv-plata-step__y { background: var(--cv-gold); }
+  .cv-plata-step--2 .cv-plata-step__y { background: #C9C9D2; }
+  .cv-plata-step__body { display: flex; flex-direction: column; gap: 2px; }
+  .cv-plata-step__t { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--cv-paper); }
+  .cv-plata-step__d { font-size: .85rem; line-height: 1.45; color: rgba(241,235,223,0.7); }
+  .cv-plata-vestigios { border: 2px solid var(--cv-paper); background: rgba(241,235,223,0.04); }
+  .cv-plata-vestigios__label { display: block; background: var(--cv-almagra); color: var(--cv-paper); padding: .55rem 1rem; font-size: .62rem; letter-spacing: .2em; font-weight: 800; }
+  .cv-plata-vestigios ul { list-style: none; margin: 0; padding: 0; }
+  .cv-plata-vestigios li { display: grid; grid-template-columns: 110px 1fr; gap: .75rem; padding: .6rem 1rem; border-bottom: 1px dashed rgba(241,235,223,0.2); align-items: baseline; }
+  .cv-plata-vestigios li:last-child { border-bottom: none; }
+  .cv-plata-vestigios__k { font-size: .58rem; letter-spacing: .15em; color: var(--cv-gold); font-weight: 800; }
+  .cv-plata-vestigios__v { font-size: .82rem; color: rgba(241,235,223,0.8); line-height: 1.35; }
+  .cv-plata-r { max-width: 300px; margin: 0 auto; border: 3px solid var(--cv-paper); box-shadow: 8px 8px 0 var(--cv-almagra); line-height: 0; }
+
+  /* HITOS */
+  .cv-hitos-section {
+    background: var(--cv-almagra-d); color: var(--cv-paper);
+    padding: 5rem 1.5rem;
+    border-bottom: 3px solid var(--cv-ink);
+    position: relative; overflow: hidden;
+  }
+  .cv-hitos-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(196,154,63,0.1) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+    pointer-events: none;
+  }
+  .cv-hitos-section > * { position: relative; }
+  .cv-hitos {
+    list-style: none; padding: 0; margin: 2rem 0 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border: 2.5px solid var(--cv-paper);
+  }
+  @media (min-width: 640px)  { .cv-hitos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cv-hitos { grid-template-columns: repeat(3, 1fr); } }
+  .cv-hito {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(241,235,223,0.22);
+    border-right: 1px solid rgba(241,235,223,0.22);
+    display: flex; flex-direction: column; gap: .35rem;
+    background: rgba(241,235,223,0.04);
+    transition: background .25s;
+  }
+  .cv-hito:hover { background: rgba(196,154,63,0.2); }
+  @media (min-width: 1024px) {
+    .cv-hito:nth-child(3n) { border-right: none; }
+    .cv-hito:nth-last-child(-n+3) { border-bottom: none; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .cv-hito:nth-child(2n) { border-right: none; }
+    .cv-hito:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 639px) { .cv-hito { border-right: none; } .cv-hito:last-child { border-bottom: none; } }
+  .cv-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--cv-gold); font-weight: 800; }
+  .cv-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--cv-paper); line-height: 1.35; }
+
+  /* SECTORES */
+  .cv-sec-section { background: var(--cv-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); }
+  .cv-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .cv-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cv-sec { grid-template-columns: repeat(3, 1fr); } }
+  .cv-sec__card {
+    background: var(--cv-paper);
+    border: 2.5px solid var(--cv-ink);
+    box-shadow: var(--cv-shadow);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: .75rem;
+    transition: transform .25s, box-shadow .25s;
+    position: relative; overflow: hidden;
+  }
+  .cv-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .cv-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .cv-sec__card--almagra   { color: var(--cv-almagra); }
+  .cv-sec__card--gold      { color: var(--cv-gold-d); }
+  .cv-sec__card--verdigris { color: var(--cv-verdigris); }
+  .cv-sec__card--blue      { color: var(--cv-blue); }
+  .cv-sec__card--olive     { color: var(--cv-olive); }
+  .cv-sec__card--silver    { color: var(--cv-silver); }
+  .cv-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .cv-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .cv-sec__stat-box {
+    background: var(--cv-ink); color: var(--cv-paper);
+    padding: .35rem .65rem;
+    display: flex; flex-direction: column;
+    border: 1.5px solid currentColor;
+    text-align: right;
+  }
+  .cv-sec__stat-v { font-size: .9rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .cv-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .cv-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--cv-ink); margin: 0; }
+  .cv-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .cv-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .cv-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--cv-ink); }
+  .cv-sec__tag span { color: currentColor; font-weight: 800; }
+  .cv-sec__foot { padding-top: .65rem; border-top: 2px solid var(--cv-ink); }
+  .cv-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .cv-map-section { background: var(--cv-arena); border-bottom: 3px solid var(--cv-ink); }
+  .cv-map-head { padding: 4rem 0 2rem; }
+  .cv-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .cv-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .cv-map-chapter { color: var(--cv-almagra); }
+  .cv-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .cv-map-title em { color: var(--cv-almagra); }
+  .cv-map-coords {
+    background: var(--cv-almagra); color: var(--cv-paper);
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--cv-ink);
+    box-shadow: 5px 5px 0 var(--cv-gold);
+    display: flex; flex-direction: column; gap: .35rem;
+    font-size: .7rem; letter-spacing: .15em;
+  }
+  .cv-map-frame { border-top: 3px solid var(--cv-ink); border-bottom: 3px solid var(--cv-ink); background: var(--cv-ink); }
+  .cv-map-wrap > * { width: 100%; }
+
+  /* DIFERENCIALES */
+  .cv-dif-section { background: var(--cv-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); }
+  .cv-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--cv-ink); }
+  @media (min-width: 768px) { .cv-dif { grid-template-columns: 1fr 1fr; } }
+  .cv-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--cv-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) {
+    .cv-dif__item:nth-child(odd) { border-right: 1px solid var(--cv-ink); }
+    .cv-dif__item:nth-last-child(-n+2) { border-bottom: none; }
+  }
+  @media (max-width: 767px) { .cv-dif__item:last-child { border-bottom: none; } }
+  .cv-dif__item--0 { background: var(--cv-paper-2); }
+  .cv-dif__item--1 { background: var(--cv-paper); }
+  .cv-dif__item--2 { background: var(--cv-arena); }
+  .cv-dif__item--3 { background: var(--cv-paper); }
+  .cv-dif__item:hover { background: var(--cv-gold); }
+  .cv-dif__num { font-size: .85rem; color: var(--cv-almagra); font-weight: 800; letter-spacing: .15em; }
+  .cv-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--cv-ink); margin: 0; }
+  .cv-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .cv-proc-section { background: var(--cv-almagra-d); color: var(--cv-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); position: relative; overflow: hidden; }
+  .cv-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(46,128,113,0.12) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .cv-proc-section > * { position: relative; }
+  .cv-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .cv-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .cv-proc { grid-template-columns: repeat(4, 1fr); } }
+  .cv-proc__step {
+    background: rgba(241,235,223,0.05);
+    border: 2px solid var(--cv-paper);
+    padding: 1.5rem 1.25rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    transition: background .25s, transform .25s;
+  }
+  .cv-proc__step:hover { background: rgba(196,154,63,0.16); transform: translateY(-3px); }
+  .cv-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(241,235,223,0.25); }
+  .cv-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--cv-gold); line-height: 1; }
+  .cv-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--cv-verdigris); }
+  .cv-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--cv-paper); margin: .25rem 0 0; }
+  .cv-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(241,235,223,0.75); flex: 1; }
+  .cv-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--cv-gold); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(241,235,223,0.25); }
+
+  /* TESTIMONIOS */
+  .cv-quote-section { background: var(--cv-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); }
+  .cv-pull { position: relative; background: var(--cv-arena); border: 3px solid var(--cv-ink); box-shadow: var(--cv-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .cv-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-9deg); filter: drop-shadow(0 4px 8px rgba(181,71,46,0.4)); }
+  .cv-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--cv-ink); max-width: 56ch; }
+  .cv-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--cv-ink); }
+  .cv-pull__avatar { width: 48px; height: 48px; background: var(--cv-almagra); color: var(--cv-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .cv-pull__cap div { display: flex; flex-direction: column; }
+  .cv-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--cv-ink); }
+  .cv-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .cv-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .cv-quotes { grid-template-columns: repeat(3, 1fr); } }
+  .cv-quote { position: relative; background: var(--cv-paper); border: 2px solid var(--cv-ink); box-shadow: 5px 5px 0 var(--cv-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .cv-quote:hover { transform: translateY(-3px); }
+  .cv-quote--0 { background: var(--cv-paper); }
+  .cv-quote--1 { background: var(--cv-arena); }
+  .cv-quote--2 { background: var(--cv-paper-2); }
+  .cv-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--cv-almagra); opacity: .4; }
+  .cv-quote p { font-size: .92rem; line-height: 1.5; color: var(--cv-ink); flex: 1; margin: 0; }
+  .cv-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--cv-ink); }
+  .cv-quote__avatar { width: 36px; height: 36px; background: var(--cv-verdigris); color: var(--cv-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .cv-quote footer div { display: flex; flex-direction: column; }
+  .cv-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .cv-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .cv-faq-section { background: var(--cv-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); }
+  .cv-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--cv-ink); }
+  .cv-faq__item { border-bottom: 2px solid var(--cv-ink); }
+  .cv-faq__det summary { list-style: none; cursor: pointer; }
+  .cv-faq__det summary::-webkit-details-marker { display: none; }
+  .cv-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .cv-faq__sum:hover { padding-inline: 1rem; background: var(--cv-paper-2); }
+  .cv-faq__num { font-size: 1rem; font-weight: 800; color: var(--cv-almagra); letter-spacing: .1em; }
+  .cv-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--cv-ink); font-weight: 700; }
+  .cv-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--cv-ink); background: var(--cv-paper); color: var(--cv-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .cv-faq__det[open] .cv-faq__toggle { transform: rotate(180deg); background: var(--cv-almagra); color: var(--cv-paper); }
+  .cv-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .cv-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .cv-faq__ans { padding-left: 48px; } }
+
+  /* VECINOS */
+  .cv-vecinos-section { background: var(--cv-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--cv-ink); }
+  .cv-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--cv-ink); background: var(--cv-ink); }
+  @media (min-width: 640px)  { .cv-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .cv-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .cv-vecino {
+    display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto;
+    gap: .35rem; padding: 1.5rem;
+    background: var(--cv-paper); color: var(--cv-ink);
+    text-decoration: none; min-height: 160px;
+    transition: background .25s, color .25s;
+    grid-template-areas: 'n arrow' 'name name' 'sub sub';
+  }
+  .cv-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .cv-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .cv-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .cv-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--cv-almagra); font-size: 1.3rem; transition: transform .25s; }
+  .cv-vecino:hover { background: var(--cv-almagra); color: var(--cv-paper); }
+  .cv-vecino:hover .cv-vecino__sub, .cv-vecino:hover .cv-vecino__n { opacity: .85; }
+  .cv-vecino:hover .cv-vecino__arrow { color: var(--cv-paper); transform: translateX(4px); }
+  .cv-vecino--1:hover { background: var(--cv-gold-d); color: var(--cv-paper); }
+  .cv-vecino--2:hover { background: var(--cv-verdigris); color: var(--cv-paper); }
+  .cv-vecino--3:hover { background: var(--cv-ink); color: var(--cv-gold); }
+  .cv-vecino--3:hover .cv-vecino__arrow { color: var(--cv-gold); }
+
+  /* CTA FINAL */
+  .cv-final { background: var(--cv-ink); color: var(--cv-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .cv-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(196,154,63,0.1) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .cv-final > * { position: relative; }
+  .cv-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .cv-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .cv-final__chapter { color: var(--cv-gold); }
+  .cv-final__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .9; letter-spacing: -.045em; color: var(--cv-paper); margin: 1rem 0; }
+  .cv-final__title em { color: var(--cv-gold); font-style: italic; display: block; }
+  .cv-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(241,235,223,0.75); max-width: 52ch; }
+  .cv-final__lead strong { color: var(--cv-gold); }
+  .cv-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .cv-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .cv-final__btn--primary { background: var(--cv-almagra); color: var(--cv-paper); border-color: var(--cv-almagra); box-shadow: 6px 6px 0 var(--cv-gold); }
+  .cv-final__btn--primary:hover { background: var(--cv-gold); color: var(--cv-ink); border-color: var(--cv-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--cv-almagra); }
+  .cv-final__btn--ghost { background: transparent; color: var(--cv-paper); border-color: var(--cv-paper); box-shadow: 6px 6px 0 var(--cv-paper); }
+  .cv-final__btn--ghost:hover { background: var(--cv-paper); color: var(--cv-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--cv-paper); }
+  .cv-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(241,235,223,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .cv-final__trust .cv-pulse { background: var(--cv-gold); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(196,154,63,0.55); }
+  .cv-final__r { display: flex; align-items: center; justify-content: center; max-width: 380px; margin: 0 auto; }
+  .cv-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(196,154,63,0.3)); }
+  .cv-final-flag { transform-origin: 160px 150px; animation: cv-flag 3s ease-in-out infinite; }
+  @keyframes cv-flag { 0%,100% { transform: skewX(0deg); } 50% { transform: skewX(-4deg); } }
+  .cv-final-wheel { animation: cv-spin 8s linear infinite; transform-origin: 0px -3px; transform-box: fill-box; }
+  .cv-final__marquee { background: var(--cv-almagra); color: var(--cv-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--cv-ink); margin: 0 -1.5rem; }
+  .cv-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: cv-marquee 32s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
