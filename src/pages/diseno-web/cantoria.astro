@@ -1,0 +1,1361 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'cantoria');
+
+const title = 'Diseño Web en Cantoria | Mármol, Canteras y Exportación Internacional · Almería';
+const description = 'Agencia de diseño web en Cantoria, capital extractora del mármol almeriense. Webs para canteras, empresas marmolistas, construcción, interiorismo y exportación de piedra natural a Europa. Catálogo B2B, multiidioma, SEO internacional y presencia digital para la industria del mármol.';
+const canonical = 'https://platanitorico.com/diseno-web/cantoria/';
+
+const sectores = [
+  { nombre: 'Canteras y Extracción de Mármol', stat: '#1',  statLabel: 'exportación Europa',    desc: 'Cantoria es la puerta de extracción del mármol almeriense. Sus canteras alimentan la transformación en Fines y Macael y exportan bloques a Italia, Polonia y Alemania. Una web B2B con catálogo de piedras y fichas técnicas en inglés abre mercados internacionales.', tags: ['Catálogo B2B','Multiidioma','Fichas técnicas piedra','Exportación Europa'] },
+  { nombre: 'Transformación y Talleres',        stat: '+15', statLabel: 'talleres activos',      desc: 'Los talleres de Cantoria cortan, pulen y transforman bloques en piezas acabadas para construcción e interiorismo. Web con galería de proyectos, acabados y formulario de presupuesto atrae a arquitectos y decoradores de toda España.', tags: ['Galería proyectos','Acabados piedra','Presupuesto online','SEO construcción'] },
+  { nombre: 'Exportación y Comercio B2B',        stat: '🌍',  statLabel: 'venta internacional',   desc: 'Cantoria exporta mármol a más de 15 países. Una web multiidioma (inglés, alemán, italiano) con catálogo de productos, fichas técnicas descargables y sistema de pedidos B2B convierte visitantes internacionales en compradores.', tags: ['Multiidioma','Catálogo exportación','Pedidos B2B','Logística internacional'] },
+  { nombre: 'Construcción e Interiorismo',       stat: '+40', statLabel: 'años de tradición',     desc: 'El mármol de Cantoria es la materia prima de instaladores, soladores y arquitectos de toda la comarca. Una web con portfolio de obras, testimoniales y SEO local los posiciona como referentes en su especialidad.', tags: ['Portfolio obras','SEO local','Testimoniales','Presupuesto online'] },
+  { nombre: 'Maquinaria y Suministros Industriales', stat: 'B2B', statLabel: 'sector marmolista',  desc: 'El ecosistema del mármol en Cantoria incluye proveedores de herramientas, maquinaria de corte y consumibles. Empresas que aparezcan en Google para búsquedas del sector pueden multiplicar su clientela industrial.', tags: ['Maquinaria mármol','Proveedores marmolistas','Herramientas corte','Catálogo técnico'] },
+  { nombre: 'Comercio Local y Servicios',        stat: '4.000', statLabel: 'habitantes · Valle',  desc: 'Cantoria tiene 4.000 habitantes y una actividad industrial que atrae profesionales de toda la comarca. Comercios, clínicas y servicios que aparezcan en Google Maps captan tanto a vecinos como a trabajadores del mármol.', tags: ['Google Maps','SEO local','Ficha de negocio','Comercio Almanzora'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Canteras de Cantoria',    sub: 'EXTRACCIÓN ★ EXPORTACIÓN', desc: 'Cantoria es el primer eslabón de la cadena del mármol almeriense. De sus canteras sale la piedra que se transforma en los talleres de la comarca y se exporta a mercados de toda Europa con calidad reconocida internacionalmente.', dato: '#1 extracción', color: 'quarry' },
+  { code: 'B', name: 'Exportación a Europa',     sub: 'MERCADO INTERNACIONAL',   desc: 'El mármol de Cantoria viaja a Italia, Polonia, Alemania, Francia y Reino Unido. Las empresas con web multiidioma y catálogo digital pueden captar compradores internacionales que buscan mármol almeriense de calidad contrastada.', dato: '15+ países', color: 'blue' },
+  { code: 'C', name: 'Valle del Almanzora',      sub: 'CUNA DEL MÁRMOL',         desc: 'Cantoria se asienta en el corazón del Valle del Almanzora, la comarca que concentra la mayor industria del mármol de España. Su posición estratégica la convierte en nodo extractivo y logístico de primer orden.', dato: 'Eje marmolista', color: 'accent' },
+  { code: 'D', name: 'Oficio y Tradición',       sub: 'SABER HACER HEREDADO',    desc: 'El oficio de la piedra se ha transmitido durante generaciones en Cantoria. Canteros, cortadores y pulidores que combinan técnicas artesanales con tecnología de corte de última generación para competir en el mercado global.', dato: 'Tradición + tecnología', color: 'ink' },
+];
+
+const processData = [
+  { k: 'POBLACIÓN',     v: '4.000 hab · Valle del Almanzora' },
+  { k: 'INDUSTRIA',     v: 'Canteras · Mármol · Exportación' },
+  { k: 'EXPORTACIÓN',   v: 'Italia · Polonia · Alemania · +15 países' },
+  { k: 'UBICACIÓN',     v: 'Corazón del Valle del Almanzora' },
+  { k: 'ICONO',         v: 'Canteras de mármol · tradición centenaria' },
+  { k: 'COBERTURA',     v: 'B2B nacional e internacional · multiidioma' },
+];
+
+const diferenciales = [
+  { title: 'Primer eslabón del mármol almeriense', desc: 'Cantoria no es taller ni cantera decorativa — es el origen. Aquí se extrae la piedra que luego viaja a talleres de Fines, Macael y Olula. Ese valor de materia prima de calidad es lo que hay que comunicar en cada web del sector.' },
+  { title: 'Exportación a 15+ países',              desc: 'El mármol de Cantoria cruza fronteras. Italia, el mayor mercado del mármol del mundo, compra piedra de Cantoria. Una web multiidioma con catálogo técnico y fichas de producto es la llave para abrir mercados internacionales.' },
+  { title: 'Eje logístico del Almanzora',           desc: 'En el centro del valle, conectado con la A-334 y a 30 minutos de la autovía del Mediterráneo. Cualquier empresa de Cantoria con web bien posicionada capta clientes industriales de toda la comarca y del corredor hacia el puerto de Almería.' },
+  { title: 'Industria con proyección global',       desc: 'El sector del mármol tiene una oportunidad digital enorme en los mercados internacionales. La mayoría de canteras aún no tienen web profesional en inglés. Quien se posiciona primero, capta la exportación.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Inmersión en la cantera', eta: '1–2 días',  body: 'Visitamos tu cantera, taller o negocio en Cantoria. Vemos el proceso de extracción, la maquinaria, los acabados y tu mercado objetivo. Entendemos el negocio en su contexto real del mármol y la exportación.', deliverable: 'Briefing + análisis' },
+  { num: '02', title: 'Diseño internacional',     eta: '3–5 días',  body: 'Diseño que transmite solidez, calidad de piedra y proyección global. Tipografía robusta, paleta de cantera y océano, fotografía profesional de tus piedras y trabajos reales.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Catálogo + multiidioma',   eta: '5–10 días', body: 'Astro ultrarrápido, catálogo técnico de piedras con fichas descargables, sistema de pedidos B2B, versión en inglés y alemán, Core Web Vitals verdes.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + SEO global', eta: '1–2 días',  body: 'Publicamos y configuramos SEO para términos locales e internacionales. Google Business Profile, Search Console multiidioma y estrategia de keywords para mercados exteriores.', deliverable: 'Sitio LIVE + manual' },
+];
+
+const testimonios = [
+  { nombre: 'Antonio Ruiz',      negocio: 'Empresa marmolista · Exportación',  texto: 'Exportamos mármol a Italia y Polonia pero nuestra web estaba en castellano básico. Platanito Rico nos hizo un catálogo online profesional con fichas técnicas en inglés. Los arquitectos europeos nos contactan directamente.' },
+  { nombre: 'Isabel García',     negocio: 'Instaladora de suelos y revestimientos', texto: 'Trabajamos en toda la comarca instalando mármol. Antes solo me llegaba trabajo por contactos. La web con portfolio de mis obras me trae presupuestos de Almería ciudad y de la provincia. Calidad de cliente mucho mejor.' },
+  { nombre: 'Francisco Martínez', negocio: 'Suministros industriales para mármol', texto: 'Vendemos maquinaria de corte a talleres de toda España. La web B2B con catálogo técnico nos ha abierto clientes en Andalucía, Valencia y Madrid que antes no llegaban por el boca-oreja.' },
+];
+
+const faq = [
+  { q: '¿Cómo puede una empresa de mármol de Cantoria captar clientes internacionales con su web?', a: 'Con web en inglés (y opcionalmente alemán o italiano), catálogo de piedras con fichas técnicas, formulario de solicitud de muestras y SEO para términos como "marble supplier Spain" o "Almeria marble". Es un nicho con demanda internacional real.' },
+  { q: '¿Cuánto cuesta una web con catálogo de productos para empresa de mármol?', a: 'Una web con catálogo de piedras, fichas técnicas y formulario B2B desde 800€. Con versión en inglés añadida, desde 1.100€. Hosting gratuito incluido siempre.' },
+  { q: '¿Podéis hacer SEO para posicionar una marmolista de Cantoria en Google?', a: 'Sí, hacemos SEO específico para el sector del mármol: términos locales ("marmolista Cantoria", "mármol Almanzora") y términos de exportación en inglés. Resultados en 3-6 meses.' },
+  { q: '¿Tenéis experiencia con empresas extractoras y canteras?', a: 'Sí, trabajamos con empresas del sector del mármol en toda la comarca del Almanzora. Entendemos el lenguaje técnico, los procesos de extracción y las necesidades B2B del sector. No somos una agencia genérica.' },
+  { q: '¿Hacéis webs multiidioma para exportación?', a: 'Sí, es una de nuestras especialidades. Creamos webs en español + inglés + alemán/italiano con estructura SEO separada por idioma, URLs amigables y configuración de hreflang para que Google indexe correctamente cada versión.' },
+  { q: '¿En cuánto tiempo tengo mi web de Cantoria lista?', a: 'Web corporativa con catálogo: 2–3 semanas. Con multiidioma y sistema B2B: 3–4 semanas. Siempre con entregas parciales para que veas el progreso.' },
+  { q: '¿Ayudáis con fotografía de producto para piedra natural?', a: 'Sí, ofrecemos sesión de fotografía profesional para tus piedras y acabados. Una imagen de calidad multiplica el interés del comprador. También hacemos vídeo para mostrar vetas y texturas.' },
+  { q: '¿Hacéis reuniones presenciales en Cantoria?', a: 'Sí, estamos en Vera a 25 minutos de Cantoria. Podemos vernos en tu cantera, taller u oficina para entender mejor tu negocio. La primera consulta es gratuita.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Cantoria","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Cantoria","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seo-cantoria.jpg","address":{"@type":"PostalAddress","addressLocality":"Cantoria","addressRegion":"Almería","postalCode":"04810","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.3667,"longitude":-1.8700},"areaServed":["Cantoria","Albox","Fines","Macael","Olula del Río","Valle del Almanzora"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"50","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Cantoria","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seo-cantoria.jpg"
+  imageAlt="Diseño web en Cantoria - Canteras de Mármol, Exportación y Valle del Almanzora"
+  type="service"
+  keywords="diseño web cantoria, mármol almería, canteras cantoria, exportación mármol, piedra natural, seo internacional, web multiidioma"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="ct">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — CANTERA · MÁRMOL · EXPORTACIÓN                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-hero">
+      <div class="container-brutal">
+
+        <header class="ct-hero__top">
+          <span class="text-meta">N.º 033 — Valle del Almanzora · Mármol · Exportación</span>
+          <span class="text-meta ct-hero__status">
+            <span class="ct-pulse"></span>
+            ★ CAPITAL EXTRACTORA DEL MÁRMOL · CANTORIA ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="ct-hero__grid">
+
+          <div class="ct-hero__intro">
+            <span class="text-meta ct-hero__chapter">Cap. 01 / Cantoria · Almería</span>
+            <h1 class="ct-hero__title heading-display">
+              Diseño web para la
+              <em class="heading-editorial">cantera</em>
+              <span class="ct-hero__title-stamp">del mármol internacional.</span>
+            </h1>
+
+            <p class="ct-hero__lead">
+              <strong>Cantoria</strong> es el origen del mármol almeriense.
+              De sus <em>canteras</em> sale la piedra que se exporta a
+              <strong>15+ países</strong>. Empresas extractoras, talleres de
+              transformación y proveedores que necesitan una presencia
+              digital a la altura de su proyección global.
+            </p>
+
+            <div class="ct-hero__cta">
+              <a href="/contacto" class="ct-btn ct-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="/contacto" class="ct-btn ct-btn--ghost">
+                Consulta B2B →
+              </a>
+            </div>
+
+            <ul class="ct-kpis">
+              <li class="ct-kpi ct-kpi--quarry">
+                <span class="ct-kpi__v text-mono">#1</span>
+                <span class="ct-kpi__l">Extracción mármol</span>
+              </li>
+              <li class="ct-kpi ct-kpi--blue">
+                <span class="ct-kpi__v text-mono">15<small>+</small></span>
+                <span class="ct-kpi__l">Países exportación</span>
+              </li>
+              <li class="ct-kpi ct-kpi--accent">
+                <span class="ct-kpi__v text-mono">B2B</span>
+                <span class="ct-kpi__l">Venta internacional</span>
+              </li>
+              <li class="ct-kpi ct-kpi--ink">
+                <span class="ct-kpi__v text-mono">4.9<small>★</small></span>
+                <span class="ct-kpi__l">50 reseñas</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — paisaje cantera + exportación */}
+          <aside class="ct-hero__postcard" aria-hidden="true">
+            <div class="ct-postcard">
+
+              <header class="ct-postcard__head">
+                <span class="text-mono">CANTORIA · 04810 · ALMERÍA</span>
+                <span class="text-mono">37.367° N · 1.870° W</span>
+              </header>
+
+              {/* Perfil cantera SVG */}
+              <div class="ct-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="ct-sky" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#4A5A6A"/>
+                      <stop offset="100%" stop-color="#A09888"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo industrial */}
+                  <rect width="540" height="220" fill="url(#ct-sky)"/>
+
+                  {/* Montañas cantera */}
+                  <path d="M 0 120 L 60 70 L 100 80 L 140 60 L 200 100 L 260 70 L 320 110 L 380 80 L 440 120 L 540 100 L 540 220 L 0 220 Z" fill="#8A7A6A" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 140 L 40 90 L 100 100 L 160 80 L 220 110 L 280 90 L 340 120 L 400 100 L 460 130 L 540 110 L 540 220 L 0 220 Z" fill="#A09888" stroke="#1A1816" stroke-width="1"/>
+
+                  {/* CANTERA — corte en la montaña */}
+                  <g transform="translate(180, 70)">
+                    <polygon points="0,60 40,0 80,10 120,60" fill="#B8A898" stroke="#1A1816" stroke-width="2"/>
+                    <line x1="20" y1="40" x2="100" y2="15" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/>
+                    <line x1="10" y1="50" x2="110" y2="30" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/>
+                    {/* Bloques extraídos */}
+                    <rect x="30" y="20" width="12" height="10" fill="#D1C9B8" stroke="#1A1816" stroke-width="1.5" transform="rotate(10, 36, 25)"/>
+                    <rect x="60" y="10" width="14" height="8" fill="#C8BFA8" stroke="#1A1816" stroke-width="1.5" transform="rotate(-5, 67, 14)"/>
+                    <rect x="80" y="25" width="10" height="8" fill="#D1C9B8" stroke="#1A1816" stroke-width="1.5"/>
+                  </g>
+
+                  {/* Grúa de cantera */}
+                  <g transform="translate(340, 90)">
+                    <rect x="0" y="30" width="4" height="40" fill="#8A7A6A" stroke="#1A1816" stroke-width="1.5"/>
+                    <line x1="2" y1="30" x2="40" y2="10" stroke="#D4A843" stroke-width="3"/>
+                    <line x1="40" y1="10" x2="40" y2="35" stroke="#D4A843" stroke-width="2"/>
+                    <line x1="38" y1="35" x2="42" y2="38" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="2" cy="70" r="3" fill="#1A1816"/>
+                    {/* Bloque colgando */}
+                    <rect x="36" y="35" width="8" height="6" fill="#D1C9B8" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Bloque de mármol grande */}
+                  <g transform="translate(60, 150)">
+                    <rect x="0" y="0" width="30" height="20" fill="#E8E0D0" stroke="#1A1816" stroke-width="2"/>
+                    <line x1="6" y1="0" x2="6" y2="20" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="14" y1="0" x2="14" y2="20" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="22" y1="0" x2="22" y2="20" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="6" x2="30" y2="6" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                    <line x1="0" y1="14" x2="30" y2="14" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                  </g>
+
+                  {/* Contenedor exportación */}
+                  <g transform="translate(420, 150)">
+                    <rect x="0" y="0" width="50" height="24" fill="#1E4A6B" stroke="#1A1816" stroke-width="2"/>
+                    <line x1="0" y1="12" x2="50" y2="12" stroke="#1A1816" stroke-width="0.8" opacity="0.5"/>
+                    <rect x="8" y="4" width="10" height="6" fill="#D4A843" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="30" y="4" width="12" height="6" fill="#D4A843" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Camión */}
+                  <g transform="translate(120, 170)">
+                    <rect x="0" y="6" width="30" height="14" rx="2" fill="#8A7A6A" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="30" y="2" width="16" height="18" rx="2" fill="#D4A843" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="8" cy="22" r="4" fill="#1A1816"/>
+                    <circle cx="36" cy="22" r="4" fill="#1A1816"/>
+                  </g>
+
+                  {/* Ruta / carretera */}
+                  <path d="M 0 200 Q 100 190 260 195 Q 420 200 540 190" fill="none" stroke="#4A3A2A" stroke-width="3" opacity="0.4"/>
+
+                </svg>
+              </div>
+
+              {/* Imagen real Cantoria */}
+              <div class="ct-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-seo-cantoria.jpg"
+                  alt="Cantoria — canteras de mármol y Valle del Almanzora"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="ct-postcard__img"
+                />
+                {/* Icono exportación */}
+                <div class="ct-postcard__gear" aria-hidden="true">
+                  <svg viewBox="0 0 80 80" width="100%" height="100%">
+                    <circle cx="40" cy="40" r="38" fill="#D4A843" stroke="#1A1816" stroke-width="2"/>
+                    <circle cx="40" cy="40" r="33" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <g transform="translate(40,40)" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5">
+                      <circle cx="0" cy="0" r="10"/>
+                      <path d="M -5 -12 Q 0 -20 5 -12" fill="none" stroke="#F5F0E8" stroke-width="2"/>
+                      <path d="M -5 12 Q 0 20 5 12" fill="none" stroke="#F5F0E8" stroke-width="2"/>
+                      <path d="M -12 -5 Q -20 0 -12 5" fill="none" stroke="#F5F0E8" stroke-width="2"/>
+                      <path d="M 12 -5 Q 20 0 12 5" fill="none" stroke="#F5F0E8" stroke-width="2"/>
+                      <circle cx="0" cy="0" r="5" fill="#D4A843" stroke="#1A1816" stroke-width="1.5"/>
+                    </g>
+                  </svg>
+                </div>
+                <div class="ct-postcard__tag">
+                  <span class="text-mono">★ MÁRMOL · CANTERA · EXPORTACIÓN ★</span>
+                </div>
+              </div>
+
+              {/* Datos Cantoria */}
+              <div class="ct-postcard__data">
+                <div class="ct-postcard__data-row">
+                  <span class="text-mono">POBLACIÓN</span>
+                  <span class="text-mono ct-postcard__data-v">4.000 hab</span>
+                </div>
+                <div class="ct-postcard__data-row">
+                  <span class="text-mono">INDUSTRIA</span>
+                  <span class="text-mono ct-postcard__data-v">Canteras · Mármol · Exportación</span>
+                </div>
+                <div class="ct-postcard__data-row">
+                  <span class="text-mono">EXPORTACIÓN</span>
+                  <span class="text-mono ct-postcard__data-v">15+ países · Europa · Mundo</span>
+                </div>
+                <div class="ct-postcard__data-row">
+                  <span class="text-mono">POSICIÓN</span>
+                  <span class="text-mono ct-postcard__data-v">Corazón del Valle del Almanzora</span>
+                </div>
+              </div>
+
+            </div>
+          </aside>
+
+        </div>
+
+        {/* Marquee */}
+        <div class="ct-marquee">
+          <div class="ct-marquee__track">
+            <span>★ CANTORIA · CAPITAL EXTRACTORA DEL MÁRMOL ★ EXPORTACIÓN A 15+ PAÍSES ★ CANTERAS · TALLERES · TRANSFORMACIÓN ★ VALLE DEL ALMANZORA ★ TU WEB, TU PUERTA AL MUNDO ★</span>
+            <span>★ CANTORIA · CAPITAL EXTRACTORA DEL MÁRMOL ★ EXPORTACIÓN A 15+ PAÍSES ★ CANTERAS · TALLERES · TRANSFORMACIÓN ★ VALLE DEL ALMANZORA ★ TU WEB, TU PUERTA AL MUNDO ★</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-iconos-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ct-iconos-chapter">Cap. 02 / Prontuario</span>
+        <h2 class="ct-iconos-title heading-display">
+          Cuatro sellos de
+          <em class="heading-editorial">identidad</em>
+          <span class="heading-display-block">de Cantoria.</span>
+        </h2>
+
+        <ol class="ct-iconos" style="counter-reset: iconos">
+          {iconos.map((ico, i) => (
+            <li class={`ct-icono ct-icono--${ico.color}`}>
+              <div class="ct-icono__code">
+                <svg viewBox="0 0 80 80" width="100%" height="100%">
+                  <circle cx="40" cy="40" r="38" fill="var(--ct-ink)" stroke="var(--ct-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="var(--ct-paper)" stroke="var(--ct-ink)" stroke-width="2"/>
+                  {i === 0 && (
+                    <>
+                      <polygon points="20,48 40,16 60,48" fill="var(--ct-quarry)" stroke="var(--ct-ink)" stroke-width="1.5"/>
+                      <rect x="24" y="38" width="32" height="10" fill="var(--ct-accent)" stroke="var(--ct-ink)" stroke-width="1.5"/>
+                      <line x1="30" y1="38" x2="30" y2="48" stroke="var(--ct-ink)" stroke-width="0.8"/>
+                      <line x1="40" y1="38" x2="40" y2="48" stroke="var(--ct-ink)" stroke-width="0.8"/>
+                      <line x1="50" y1="38" x2="50" y2="48" stroke="var(--ct-ink)" stroke-width="0.8"/>
+                    </>
+                  )}
+                  {i === 1 && (
+                    <>
+                      <circle cx="40" cy="36" r="14" fill="var(--ct-blue)" stroke="var(--ct-ink)" stroke-width="1.5"/>
+                      <path d="M 22 50 Q 40 64 58 50" fill="none" stroke="var(--ct-accent)" stroke-width="2"/>
+                      <path d="M 32 30 L 48 30 M 28 36 L 52 36 M 30 42 L 50 42" stroke="var(--ct-paper)" stroke-width="1.5" opacity="0.5"/>
+                      <circle cx="40" cy="36" r="4" fill="var(--ct-accent)" stroke="var(--ct-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                  {i === 2 && (
+                    <>
+                      <circle cx="32" cy="30" r="5" fill="var(--ct-quarry)" stroke="var(--ct-ink)" stroke-width="1"/>
+                      <circle cx="50" cy="28" r="4" fill="var(--ct-accent)" stroke="var(--ct-ink)" stroke-width="1"/>
+                      <circle cx="44" cy="44" r="5" fill="var(--ct-blue)" stroke="var(--ct-ink)" stroke-width="1"/>
+                      <circle cx="36" cy="50" r="3" fill="var(--ct-quarry)" stroke="var(--ct-ink)" stroke-width="1"/>
+                      <path d="M 20 52 L 32 30 L 50 28 L 62 52 Z" fill="none" stroke="var(--ct-ink)" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.3"/>
+                    </>
+                  )}
+                  {i === 3 && (
+                    <>
+                      <circle cx="40" cy="30" r="12" fill="var(--ct-quarry)" stroke="var(--ct-ink)" stroke-width="1.5"/>
+                      <path d="M 26 44 Q 40 54 54 44" fill="none" stroke="var(--ct-ink)" stroke-width="2"/>
+                      <path d="M 34 38 L 34 48 M 40 36 L 40 50 M 46 38 L 46 48" stroke="var(--ct-ink)" stroke-width="1.5"/>
+                      <circle cx="40" cy="30" r="4" fill="var(--ct-accent)" stroke="var(--ct-ink)" stroke-width="1"/>
+                    </>
+                  )}
+                </svg>
+              </div>
+              <span class="ct-icono__letter">{ico.code}</span>
+              <h3 class="ct-icono__name">{ico.name}</h3>
+              <span class="ct-icono__sub">{ico.sub}</span>
+              <p class="ct-icono__desc">{ico.desc}</p>
+              <span class="ct-icono__dato">{ico.dato}</span>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CANTORIA — FLAGSHIP SECTION                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-flagship-section">
+      <div class="container-brutal">
+        <div class="ct-flagship-grid">
+
+          <div class="ct-flagship__content">
+            <span class="text-meta ct-flagship-chapter">Cap. 03 / Industria</span>
+            <h2 class="ct-flagship-title heading-display">
+              El mármol que mueve
+              <em class="heading-editorial">el mundo</em>
+              <span class="heading-display-block">nace en Cantoria.</span>
+            </h2>
+            <p class="ct-flagship-lead">
+              <strong>Cantoria</strong> no es un pueblo del mármol más.
+              Es el <em>origen</em>. Aquí están las canteras de las que
+              sale la piedra que luego se transforma en los talleres de
+              Fines, Macael y Olula del Río. El primer eslabón de la
+              cadena que termina en edificios de toda Europa.
+            </p>
+            <p class="ct-flagship-lead">
+              Pero Cantoria también es <strong>exportación</strong>.
+              Sus bloques de mármol viajan a Italia, Polonia, Alemania,
+              Francia y Reino Unido. Empresas familiares con décadas de
+              oficio que compiten en el mercado global con la calidad
+              de una piedra única en el mundo.
+            </p>
+
+            <ul class="ct-flagship-facts">
+              {processData.map(d => (
+                <li>
+                  <span class="ct-flagship-facts__k">{d.k}</span>
+                  <span class="ct-flagship-facts__v">{d.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* SVG decorativo — cantera / exportación */}
+          <div class="ct-flagship__r">
+            <svg viewBox="0 0 360 400" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
+              <defs>
+                <linearGradient id="ct-fs-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#1E4A6B"/>
+                  <stop offset="60%" stop-color="#4A5A6A"/>
+                  <stop offset="100%" stop-color="#A09888"/>
+                </linearGradient>
+                <linearGradient id="ct-marble-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#F5F0E8"/>
+                  <stop offset="30%" stop-color="#E8E0D0"/>
+                  <stop offset="60%" stop-color="#D1C9B8"/>
+                  <stop offset="100%" stop-color="#E8E0D0"/>
+                </linearGradient>
+              </defs>
+              <rect width="360" height="400" fill="url(#ct-fs-sky)" rx="8"/>
+
+              {/* Bloque de mármol principal tallado */}
+              <g transform="translate(60, 100)">
+                <rect x="0" y="0" width="240" height="180" rx="6" fill="url(#ct-marble-grad)" stroke="#1A1816" stroke-width="3"/>
+                {/* Vetas del mármol */}
+                <path d="M 20 20 Q 80 50 140 30 T 220 60" fill="none" stroke="#D1C9B8" stroke-width="2" opacity="0.6"/>
+                <path d="M 0 70 Q 60 90 120 80 T 240 100" fill="none" stroke="#C8BFA8" stroke-width="1.5" opacity="0.5"/>
+                <path d="M 30 120 Q 100 130 160 110 T 240 140" fill="none" stroke="#B8A898" stroke-width="1.2" opacity="0.4"/>
+                <path d="M 0 160 Q 60 170 100 160 T 200 175" fill="none" stroke="#C8BFA8" stroke-width="1" opacity="0.3"/>
+                {/* Brillos */}
+                <rect x="15" y="15" width="60" height="30" rx="2" fill="#FFF" opacity="0.08"/>
+              </g>
+
+              {/* Globo terráqueo exportación */}
+              <g transform="translate(280, 80)">
+                <circle cx="0" cy="0" r="22" fill="#1E4A6B" stroke="#1A1816" stroke-width="2"/>
+                <path d="M -12 -14 Q 0 0 12 -14" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.6"/>
+                <path d="M -14 0 Q 0 10 12 -6" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.6"/>
+                <path d="M -10 12 Q 2 4 14 10" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.6"/>
+                <line x1="0" y1="-22" x2="0" y2="22" stroke="#D4A843" stroke-width="1" opacity="0.4"/>
+                <line x1="-22" y1="0" x2="22" y2="0" stroke="#D4A843" stroke-width="1" opacity="0.4"/>
+              </g>
+
+              {/* Flecha exportación */}
+              <g transform="translate(300, 240)">
+                <line x1="0" y1="0" x2="50" y2="-30" stroke="#D4A843" stroke-width="2.5" stroke-linecap="round"/>
+                <polygon points="50,-30 42,-20 52,-18" fill="#D4A843" stroke="#1A1816" stroke-width="1"/>
+                <text x="55" y="-32" fill="#D4A843" font-size="7" font-weight="800" font-family="monospace">EXPORT</text>
+              </g>
+
+              {/* Herramientas cantera */}
+              <g transform="translate(70, 300)">
+                <rect x="0" y="0" width="50" height="4" rx="1" fill="#A09888" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M 0 -2 L 0 6 L -6 6 L -6 -2 Z" fill="#A09888" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Partículas polvo mármol */}
+              <circle cx="120" cy="290" r="2" fill="#F5F0E8" opacity="0.4"/>
+              <circle cx="160" cy="280" r="1.5" fill="#F5F0E8" opacity="0.3"/>
+              <circle cx="200" cy="295" r="2.5" fill="#F5F0E8" opacity="0.25"/>
+              <circle cx="240" cy="285" r="1.5" fill="#F5F0E8" opacity="0.35"/>
+
+              {/* Suelo cantera */}
+              <path d="M 0 340 Q 80 330 180 340 T 360 340 L 360 400 L 0 400 Z" fill="#8A7A6A" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Texto */}
+              <text x="180" y="385" text-anchor="middle" fill="#F5F0E8" opacity="0.25" font-family="monospace" font-size="9" letter-spacing="3">CANTORIA · MÁRMOL DE EXPORTACIÓN</text>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* EXPORTACIÓN — CASO DE ÉXITO B2B                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-export-section">
+      <div class="container-brutal">
+
+        <div class="ct-export-grid">
+
+          <div class="ct-export__content">
+            <span class="text-meta ct-export-chapter">Cap. 04 / Caso de éxito</span>
+            <h2 class="ct-export-title heading-display">
+              De la cantera
+              <em class="heading-editorial">al mercado</em>
+              <span class="heading-display-block">global.</span>
+            </h2>
+
+            <p class="ct-export-lead">
+              Las empresas de Cantoria que han dado el salto digital
+              están <strong>multiplicando su alcance</strong>. Desde
+              marmolistas que exportan a Italia con catálogo online
+              en inglés hasta instaladores que captan proyectos de
+              Almería capital con un portfolio profesional.
+            </p>
+
+            <p class="ct-export-lead">
+              El <em>secreto</em> no es complicado: una web que
+              muestre la piedra con calidad fotográfica, fichas
+              técnicas que cualquier arquitecto europeo entienda,
+              y un sistema de contacto que funcione en varios
+              idiomas. <strong>Eso convierte visitas en ventas.</strong>
+            </p>
+
+            <div class="ct-export-stats">
+              <div class="ct-export-stat">
+                <span class="ct-export-stat__v">15+</span>
+                <span class="ct-export-stat__l">Países con presencia</span>
+              </div>
+              <div class="ct-export-stat">
+                <span class="ct-export-stat__v">3</span>
+                <span class="ct-export-stat__l">Idiomas en web</span>
+              </div>
+              <div class="ct-export-stat">
+                <span class="ct-export-stat__v">B2B</span>
+                <span class="ct-export-stat__l">Venta internacional</span>
+              </div>
+              <div class="ct-export-stat">
+                <span class="ct-export-stat__v">24h</span>
+                <span class="ct-export-stat__l">Presupuesto</span>
+              </div>
+            </div>
+
+            <a href="/contacto" class="ct-btn ct-btn--primary" style="margin-top:1rem;">
+              <span>Tu web de exportación →</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          {/* SVG decorativo — exportación / mapamundi */}
+          <div class="ct-export__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="ct-export-svg">
+              <defs>
+                <radialGradient id="ct-export-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#D4A843" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#D4A843" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#ct-export-glow)"/>
+
+              {/* Círculos concéntricos */}
+              <circle cx="170" cy="170" r="130" fill="none" stroke="#D4A843" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.3"/>
+              <circle cx="170" cy="170" r="110" fill="none" stroke="#1E4A6B" stroke-width="1" stroke-dasharray="2 4" opacity="0.2"/>
+              <circle cx="170" cy="170" r="90" fill="none" stroke="#D4A843" stroke-width="0.8" stroke-dasharray="1 3" opacity="0.15"/>
+
+              {/* Mapa mundi simplificado */}
+              <g transform="translate(170, 160)" fill="none" stroke="#D4A843" stroke-width="1.2" opacity="0.5">
+                <ellipse cx="0" cy="0" rx="50" ry="30"/>
+                <ellipse cx="0" cy="0" rx="30" ry="50"/>
+                <path d="M 0 -30 Q 20 -20 40 0 Q 20 20 0 30"/>
+                <path d="M 0 -30 Q -20 -20 -40 0 Q -20 20 0 30"/>
+                <path d="M 0 -20 Q 10 -10 20 0 Q 10 10 0 20"/>
+              </g>
+
+              {/* Engranaje central */}
+              <g transform="translate(170, 200)" class="ct-export-gear">
+                <circle cx="0" cy="0" r="36" fill="none" stroke="#1E4A6B" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="18" fill="none" stroke="#D4A843" stroke-width="2"/>
+                <circle cx="0" cy="0" r="8" fill="#D4A843" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="0" cy="0" r="3" fill="#F5F0E8" stroke="#1A1816" stroke-width="1.5"/>
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-2.5" y="-40" width="5" height="8" rx="1" fill="#D4A843" stroke="#1A1816" stroke-width="1" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Puntos de conexión global */}
+              <circle cx="100" cy="120" r="4" fill="#D4A843" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+              <circle cx="230" cy="100" r="4" fill="#D4A843" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+              <circle cx="240" cy="200" r="3.5" fill="#D4A843" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+              <circle cx="90" cy="210" r="3" fill="#D4A843" stroke="#1A1816" stroke-width="1" opacity="0.6"/>
+
+              {/* Líneas de conexión */}
+              <line x1="170" y1="160" x2="100" y2="120" stroke="#D4A843" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+              <line x1="170" y1="160" x2="230" y2="100" stroke="#D4A843" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+              <line x1="170" y1="160" x2="240" y2="200" stroke="#D4A843" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+              <line x1="170" y1="160" x2="90" y2="210" stroke="#D4A843" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 3"/>
+
+              {/* Partículas */}
+              <circle cx="140" cy="240" r="2" fill="#D4A843" opacity="0.3"/>
+              <circle cx="200" cy="230" r="1.5" fill="#D4A843" opacity="0.25"/>
+
+              {/* Texto */}
+              <text x="170" y="315" text-anchor="middle" fill="#F5F0E8" opacity="0.15" font-family="monospace" font-size="12" font-weight="800" letter-spacing="4">CANTORIA</text>
+            </svg>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-sec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ct-sec-chapter">Cap. 05 / Oportunidades</span>
+        <h2 class="ct-sec-title heading-display">
+          Seis sectores para
+          <em class="heading-editorial">exportar</em>
+          <span class="heading-display-block">tu presencia digital.</span>
+        </h2>
+
+        <ul class="ct-sec">
+          {sectores.map((s, i) => (
+            <li class={`ct-sec__card ct-sec__card--${['quarry','stone','blue','accent','ink','slate'][i]}`}>
+              <div class="ct-sec__head">
+                <span class="ct-sec__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                <div class="ct-sec__stat-box">
+                  <span class="ct-sec__stat-v">{s.stat}</span>
+                  <span class="ct-sec__stat-l">{s.statLabel}</span>
+                </div>
+              </div>
+              <h3 class="ct-sec__title">{s.nombre}</h3>
+              <p class="ct-sec__desc">{s.desc}</p>
+              <ul class="ct-sec__tags">
+                {s.tags.map(tag => (
+                  <li class="ct-sec__tag"><span>▸</span> {tag}</li>
+                ))}
+              </ul>
+              <div class="ct-sec__foot">
+                <a href="/contacto" class="ct-sec__cta">Solicitar información →</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                                */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-map-section">
+      <div class="container-brutal">
+        <div class="ct-map-head">
+          <div class="ct-map-head__inner">
+            <div>
+              <span class="text-meta ct-map-chapter">Cap. 06 / Cartografía</span>
+              <h2 class="ct-map-title heading-display">
+                Cantoria en el
+                <em class="heading-editorial">mapa.</em>
+              </h2>
+            </div>
+            <div class="ct-map-coords">
+              <span class="text-mono">37.367° N · 1.870° W</span>
+              <span class="text-mono">04810 · Cantoria · Valle del Almanzora</span>
+              <span class="text-mono">Altitud: 560 m · Industria: Mármol · Exportación</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ct-map-frame">
+        <div class="ct-map-icon ct-map-icon--tl" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <polygon points="30,10 50,40 10,40" fill="var(--ct-quarry)" stroke="var(--ct-ink)" stroke-width="2"/>
+            <rect x="20" y="34" width="20" height="10" fill="var(--ct-accent)" stroke="var(--ct-ink)" stroke-width="1.5"/>
+            <rect x="26" y="20" width="8" height="8" fill="var(--ct-paper)" stroke="var(--ct-ink)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="ct-map-icon ct-map-icon--br" aria-hidden="true">
+          <svg viewBox="0 0 60 60" width="100%" height="100%">
+            <circle cx="30" cy="30" r="22" fill="var(--ct-blue)" stroke="var(--ct-ink)" stroke-width="2"/>
+            <path d="M 16 34 Q 30 48 44 34" fill="none" stroke="var(--ct-accent)" stroke-width="2"/>
+            <line x1="22" y1="26" x2="38" y2="26" stroke="var(--ct-paper)" stroke-width="1.5" opacity="0.6"/>
+            <line x1="20" y1="32" x2="40" y2="32" stroke="var(--ct-paper)" stroke-width="1.5" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="ct-map-wrap">
+          <InteractiveMap
+            center={[-1.8700, 37.3667]}
+            zoom={11}
+            pueblos={[
+              { slug: "cantoria", nombre: "Cantoria", poblacion: 4000, descripcion: "Capital extractora del mármol almeriense", destacado: true, coords: [-1.8700, 37.3667] },
+              { slug: "albox", nombre: "Albox", poblacion: 12000, descripcion: "Capital comercial del Almanzora", coords: [-2.1433, 37.3833] },
+              { slug: "fines", nombre: "Fines", poblacion: 2500, descripcion: "Centro de la industria del mármol", coords: [-1.8433, 37.3558] },
+              { slug: "macael", nombre: "Macael", poblacion: 5500, descripcion: "Capital mundial del mármol", coords: [-1.8633, 37.3867] },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                            */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ct-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="ct-dif-title heading-display">
+          Por qué Cantoria
+          <em class="heading-editorial">marca la diferencia</em>
+          <span class="heading-display-block">en el mármol global.</span>
+        </h2>
+
+        <ol class="ct-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`ct-dif__item ct-dif__item--${i}`}>
+              <span class="ct-dif__num text-mono">{String(i+1).padStart(2,'0')}</span>
+              <h3 class="ct-dif__t">{d.title}</h3>
+              <p class="ct-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-proc-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ct-proc-chapter">Cap. 08 / Método</span>
+        <h2 class="ct-proc-title heading-display">
+          Así trabajamos
+          <em class="heading-editorial">en</em>
+          <span class="heading-display-block">la cantera digital.</span>
+        </h2>
+
+        <ol class="ct-proc">
+          {proceso.map(p => (
+            <li class="ct-proc__step">
+              <div class="ct-proc__head">
+                <span class="ct-proc__num">{p.num}</span>
+                <span class="ct-proc__eta">{p.eta}</span>
+              </div>
+              <h3 class="ct-proc__t">{p.title}</h3>
+              <p class="ct-proc__body">{p.body}</p>
+              <div class="ct-proc__foot">{p.deliverable}</div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS — 3                                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-quote-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ct-quote-chapter">Cap. 09 / Resultados</span>
+        <h2 class="ct-quote-title heading-display">
+          Lo que dicen
+          <em class="heading-editorial">los que</em>
+          <span class="heading-display-block">ya exportan con su web.</span>
+        </h2>
+
+        {testimonios.length > 0 && (
+          <figure class="ct-pull">
+            <div class="ct-pull__seal" aria-hidden="true">
+              <svg viewBox="0 0 90 90" width="100%" height="100%" class="ct-pull__spin">
+                <circle cx="45" cy="45" r="43" fill="#D4A843" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="45" cy="45" r="38" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="2.5 2"/>
+                <g transform="translate(45,45)">
+                  <circle cx="0" cy="0" r="10" fill="#F5F0E8" stroke="#1A1816" stroke-width="1"/>
+                  <path d="M -4 -12 Q 0 -18 4 -12" fill="none" stroke="#F5F0E8" stroke-width="1.5"/>
+                  <path d="M -4 12 Q 0 18 4 12" fill="none" stroke="#F5F0E8" stroke-width="1.5"/>
+                  <path d="M -12 -4 Q -18 0 -12 4" fill="none" stroke="#F5F0E8" stroke-width="1.5"/>
+                  <path d="M 12 -4 Q 18 0 12 4" fill="none" stroke="#F5F0E8" stroke-width="1.5"/>
+                  <circle cx="0" cy="0" r="5" fill="#D4A843" stroke="#1A1816" stroke-width="1.5"/>
+                </g>
+                <text x="45" y="72" text-anchor="middle" fill="#F5F0E8" font-size="6.5" font-weight="800" font-family="monospace" letter-spacing="1">CANTORIA</text>
+              </svg>
+            </div>
+            <blockquote class="ct-pull__q">
+              "{testimonios[0].texto}"
+            </blockquote>
+            <figcaption class="ct-pull__cap">
+              <div class="ct-pull__avatar">
+                {testimonios[0].nombre.charAt(0)}
+              </div>
+              <div>
+                <span class="ct-pull__name">{testimonios[0].nombre}</span>
+                <span class="ct-pull__role">{testimonios[0].negocio}</span>
+              </div>
+            </figcaption>
+          </figure>
+        )}
+
+        {testimonios.length > 1 && (
+          <ul class="ct-quotes">
+            {testimonios.slice(1).map((t, i) => (
+              <li class={`ct-quote ct-quote--${i}`}>
+                <span class="ct-quote__mark" aria-hidden="true">&ldquo;</span>
+                <p>{t.texto}</p>
+                <footer>
+                  <div class="ct-quote__avatar">{t.nombre.charAt(0)}</div>
+                  <div>
+                    <span class="ct-quote__name">{t.nombre}</span>
+                    <span class="ct-quote__role">{t.negocio}</span>
+                  </div>
+                </footer>
+              </li>
+            ))}
+          </ul>
+        )}
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-faq-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ct-faq-chapter">Cap. 10 / FAQ</span>
+        <h2 class="ct-faq-title heading-display">
+          Respuestas para
+          <em class="heading-editorial">la cantera</em>
+          <span class="heading-display-block">de tus dudas.</span>
+        </h2>
+
+        <dl class="ct-faq">
+          {faq.map((f, i) => (
+            <div class="ct-faq__item">
+              <details class="ct-faq__det" open={i === 0}>
+                <summary>
+                  <div class="ct-faq__sum">
+                    <span class="ct-faq__num text-mono">{String(i+1).padStart(2,'0')}</span>
+                    <span class="ct-faq__q">{f.q}</span>
+                    <span class="ct-faq__toggle" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                </summary>
+                <div class="ct-faq__ans">
+                  {f.a}
+                </div>
+              </details>
+            </div>
+          ))}
+        </dl>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                    */}
+    {/* ════════════════════════════════════════════════ */}
+    {pueblosAlmanzora.length > 0 && (
+      <section class="ct-vecinos-section">
+        <div class="container-brutal">
+
+          <span class="text-meta ct-vecinos-chapter">Cap. 11 / Comarca</span>
+          <h2 class="ct-vecinos-title heading-display">
+            Valle del Almanzora
+            <em class="heading-editorial">al completo.</em>
+          </h2>
+
+          <ul class="ct-vecinos">
+            {pueblosAlmanzora.slice(0, 8).map((p, i) => (
+              <a href={`/diseno-web/${p.slug}/`} class={`ct-vecino ct-vecino--${i}`} key={p.slug}>
+                <span class="ct-vecino__n">{String(i+1).padStart(2,'0')}</span>
+                <span class="ct-vecino__name">{p.nombre}</span>
+                <span class="ct-vecino__sub">{p.descripcion}</span>
+                <span class="ct-vecino__arrow" aria-hidden="true">→</span>
+              </a>
+            ))}
+          </ul>
+
+        </div>
+      </section>
+    )}
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                          */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ct-final">
+      <div class="container-brutal">
+        <div class="ct-final__grid">
+
+          <div>
+            <span class="text-meta ct-final-chapter">Cap. 12 / Acción</span>
+            <h2 class="ct-final__title heading-display">
+              Tu web
+              <em>al mundo.</em>
+            </h2>
+            <p class="ct-final__lead">
+              <strong>Cantoria</strong> es cantera, oficio y exportación.
+              Tu empresa merece una web que abra mercados.
+              <strong>Sin plantillas. Con proyección global. Con mármol de verdad.</strong>
+            </p>
+
+            <div class="ct-final__cta">
+              <a href="/contacto" class="ct-final__btn ct-final__btn--primary">
+                <span>Pedir presupuesto</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="tel:+34657085019" class="ct-final__btn ct-final__btn--ghost">
+                ☎ 657 085 019
+              </a>
+            </div>
+
+            <div class="ct-final__trust">
+              <span><span class="ct-pulse"></span> ACEPTANDO PROYECTOS 2026</span>
+              <span>★ DISEÑO + SEO + HOSTING</span>
+              <span>★ 4.9 ★ 50 RESEÑAS</span>
+            </div>
+          </div>
+
+          {/* SVG — globo / mármol */}
+          <div class="ct-final__r" aria-hidden="true">
+            <svg viewBox="0 0 340 340" width="100%" height="100%" class="ct-final-svg">
+              <defs>
+                <radialGradient id="ct-final-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#1E4A6B" stop-opacity="0.2"/>
+                  <stop offset="100%" stop-color="#1E4A6B" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <circle cx="170" cy="170" r="150" fill="url(#ct-final-glow)"/>
+
+              {/* Engranaje grande central */}
+              <g transform="translate(170, 170)" class="ct-final-gear">
+                <circle cx="0" cy="0" r="70" fill="none" stroke="#1E4A6B" stroke-width="2" stroke-dasharray="8 6"/>
+                <circle cx="0" cy="0" r="60" fill="none" stroke="#D4A843" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"/>
+                <circle cx="0" cy="0" r="50" fill="none" stroke="#A09888" stroke-width="3" stroke-dasharray="12 6"/>
+                <circle cx="0" cy="0" r="32" fill="none" stroke="#1E4A6B" stroke-width="2"/>
+                <circle cx="0" cy="0" r="18" fill="#D4A843" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="0" cy="0" r="7" fill="#F5F0E8" stroke="#1A1816" stroke-width="2"/>
+                {[0,45,90,135,180,225,270,315].map(a => (
+                  <rect key={a} x="-4" y="-76" width="8" height="12" rx="1" fill="#1E4A6B" stroke="#1A1816" stroke-width="1.5" transform={`rotate(${a})`}/>
+                ))}
+              </g>
+
+              {/* Bloques mármol */}
+              <g transform="translate(80, 250)">
+                <rect x="0" y="0" width="22" height="14" fill="#E8E0D0" stroke="#1A1816" stroke-width="1.5"/>
+                <line x1="6" y1="0" x2="6" y2="14" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                <line x1="14" y1="0" x2="14" y2="14" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+              </g>
+              <g transform="translate(220, 250)">
+                <rect x="0" y="0" width="18" height="12" fill="#D1C9B8" stroke="#1A1816" stroke-width="1.5"/>
+                <line x1="6" y1="0" x2="6" y2="12" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+                <line x1="12" y1="0" x2="12" y2="12" stroke="#1A1816" stroke-width="0.5" opacity="0.3"/>
+              </g>
+
+              {/* Puntos exportación */}
+              <circle cx="100" cy="120" r="2" fill="#D4A843" opacity="0.3"/>
+              <circle cx="230" cy="100" r="2.5" fill="#D4A843" opacity="0.25"/>
+              <circle cx="80" cy="200" r="1.5" fill="#D4A843" opacity="0.2"/>
+
+              <text x="170" y="320" text-anchor="middle" fill="#F5F0E8" opacity="0.12" font-family="monospace" font-size="12" font-weight="800" letter-spacing="4">CANTORIA</text>
+            </svg>
+          </div>
+
+        </div>
+
+        <div class="ct-final__marquee">
+          <div class="ct-final__marquee-track">
+            <span>★ CANTORIA · DISEÑO WEB PARA LA EXPORTACIÓN ★ MÁRMOL · CANTERAS · B2B ★ TU WEB, TU PUERTA AL MUNDO ★ HABLAMOS?</span>
+            <span>★ CANTORIA · DISEÑO WEB PARA LA EXPORTACIÓN ★ MÁRMOL · CANTERAS · B2B ★ TU WEB, TU PUERTA AL MUNDO ★ HABLAMOS?</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* CANTORIA DESIGN SYSTEM                           */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --ct-paper:    #F5F0E8;
+    --ct-paper-2:  #E8E0D0;
+    --ct-stone:    #A09888;
+    --ct-quarry:   #B8A898;
+    --ct-ink:      #1A1816;
+    --ct-blue:     #1E4A6B;
+    --ct-accent:   #D4A843;
+    --ct-slate:    #4A5A6A;
+    --ct-shadow:   8px 8px 0 var(--ct-ink);
+  }
+
+  .ct-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ct-accent);
+    box-shadow: 0 0 0 0 rgba(212,168,67,0.55);
+    animation: ct-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ct-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(212,168,67,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(212,168,67,0); }
+    100% { box-shadow: 0 0 0 0 rgba(212,168,67,0); }
+  }
+  .ct-pull__spin { transform-origin: 50% 50%; animation: ct-spin 24s linear infinite; }
+  @keyframes ct-spin { to { transform: rotate(360deg); } }
+  .ct-final-gear { transform-origin: 50% 50%; animation: ct-gear-spin 20s linear infinite; }
+  @keyframes ct-gear-spin { to { transform: rotate(360deg); } }
+  .ct-export-svg .ct-export-gear { transform-origin: 50% 50%; animation: ct-gear-spin 18s linear infinite; }
+
+  /* HERO */
+  .ct-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 65% 30%, rgba(212,168,67,0.08), transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(30,74,107,0.08), transparent 50%),
+      var(--ct-paper);
+    border-bottom: 3px solid var(--ct-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ct-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(45deg, transparent 0 22px, rgba(212,168,67,0.05) 22px 23px, transparent 23px 44px),
+      linear-gradient(-45deg, transparent 0 22px, rgba(212,168,67,0.05) 22px 23px, transparent 23px 44px);
+    pointer-events: none;
+  }
+  .ct-hero > * { position: relative; }
+  .ct-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .ct-hero__status { color: var(--ct-accent); font-weight: 700; }
+  .ct-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding-block: 3rem 4rem; }
+  @media (min-width: 1024px) { .ct-hero__grid { grid-template-columns: 1fr 1fr; align-items: center; gap: 4rem; } }
+  .ct-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
+  .ct-hero__chapter { color: var(--ct-blue); }
+  .ct-hero__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .92; letter-spacing: -.04em; margin: .25rem 0; }
+  .ct-hero__title em { color: var(--ct-blue); font-style: italic; }
+  .ct-hero__title-stamp { display: inline-block; color: var(--ct-paper); background: var(--ct-accent); padding: 0 .2em; transform: rotate(-1deg); }
+  .ct-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
+  .ct-hero__lead strong { color: var(--ct-ink); font-weight: 700; }
+  .ct-hero__lead em { color: var(--ct-accent); font-style: italic; font-weight: 600; }
+  .ct-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+
+  .ct-btn {
+    display: inline-flex; align-items: center; gap: .75rem;
+    padding: 1.1rem 1.85rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    border: 2.5px solid var(--ct-ink);
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+    cursor: pointer;
+  }
+  .ct-btn--primary { background: var(--ct-accent); color: var(--ct-ink); box-shadow: 6px 6px 0 var(--ct-ink); }
+  .ct-btn--primary:hover { background: var(--ct-blue); color: var(--ct-paper); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ct-ink); }
+  .ct-btn--ghost { background: transparent; color: var(--ct-ink); box-shadow: 6px 6px 0 var(--ct-stone); }
+  .ct-btn--ghost:hover { background: var(--ct-ink); color: var(--ct-accent); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ct-stone); }
+
+  /* KPIs */
+  .ct-kpis { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 1.5rem; border: 2.5px solid var(--ct-ink); background: var(--ct-ink); }
+  @media (min-width: 768px) { .ct-kpis { grid-template-columns: repeat(4, 1fr); } }
+  .ct-kpi { background: var(--ct-paper); padding: 1.25rem; display: flex; flex-direction: column; gap: .35rem; border-right: 2px solid var(--ct-ink); border-bottom: 2px solid var(--ct-ink); }
+  .ct-kpi:nth-child(2n) { border-right: none; }
+  .ct-kpi:nth-last-child(-n+2) { border-bottom: none; }
+  @media (min-width: 768px) {
+    .ct-kpi:nth-child(2n)       { border-right: 2px solid var(--ct-ink); }
+    .ct-kpi:nth-child(4n)       { border-right: none; }
+    .ct-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--ct-ink); }
+    .ct-kpi:nth-last-child(-n+4)  { border-bottom: none; }
+  }
+  .ct-kpi--quarry { background: var(--ct-quarry); color: var(--ct-ink); }
+  .ct-kpi--blue   { background: var(--ct-blue); color: var(--ct-paper); }
+  .ct-kpi--accent { background: var(--ct-accent); color: var(--ct-ink); }
+  .ct-kpi--ink    { background: var(--ct-ink); color: var(--ct-paper); }
+  .ct-kpi--ink .ct-kpi__v { color: var(--ct-accent); }
+  .ct-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
+  .ct-kpi__v small { font-size: .55em; opacity: .8; }
+  .ct-kpi__l { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .15em; opacity: .85; }
+
+  /* POSTCARD */
+  .ct-hero__postcard { width: 100%; max-width: 540px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(26,24,22,0.18)); }
+  .ct-postcard { background: var(--ct-paper); border: 3px solid var(--ct-ink); box-shadow: var(--ct-shadow); overflow: hidden; transform: rotate(-1deg); transition: transform .35s; }
+  .ct-postcard:hover { transform: rotate(0); }
+  .ct-postcard__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .65rem 1rem; background: var(--ct-ink); color: var(--ct-paper); font-size: .58rem; letter-spacing: .15em; border-bottom: 2px solid var(--ct-ink); }
+  .ct-postcard__profile { width: 100%; aspect-ratio: 540 / 220; border-bottom: 2px solid var(--ct-ink); overflow: hidden; }
+  .ct-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--ct-ink); }
+  .ct-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.1); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .ct-postcard:hover .ct-postcard__img { transform: scale(1.05); }
+  .ct-postcard__gear { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(10deg); filter: drop-shadow(0 4px 10px rgba(212,168,67,0.5)); }
+  .ct-postcard__tag { position: absolute; bottom: 12px; left: 12px; background: var(--ct-paper); color: var(--ct-ink); padding: .4rem .75rem; font-size: .65rem; font-weight: 800; letter-spacing: .2em; border: 2px solid var(--ct-ink); box-shadow: 3px 3px 0 var(--ct-accent); transform: rotate(-2deg); }
+  .ct-postcard__data { padding: 1rem 1.25rem; background: var(--ct-paper-2); display: grid; gap: .35rem; }
+  .ct-postcard__data-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 1px dashed rgba(26,24,22,0.15); font-size: .68rem; }
+  .ct-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .ct-postcard__data-row > span:first-child { color: var(--ct-blue); letter-spacing: .2em; font-weight: 800; }
+  .ct-postcard__data-v { color: var(--ct-ink); font-weight: 700; letter-spacing: .05em; }
+
+  /* Marquee */
+  .ct-marquee { background: var(--ct-ink); color: var(--ct-accent); overflow: hidden; padding: .9rem 0; border-top: 3px solid var(--ct-ink); }
+  .ct-marquee__track { display: flex; gap: 3rem; width: max-content; animation: ct-marquee 42s linear infinite; font-family: var(--font-mono); font-size: .82rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+  @keyframes ct-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ICONOS */
+  .ct-iconos-section { background: var(--ct-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); position: relative; overflow: hidden; }
+  .ct-iconos-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(212,168,67,0.04) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .ct-iconos-section > * { position: relative; }
+  .ct-iconos-chapter { color: var(--ct-slate); }
+  .ct-iconos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-iconos-title em { color: var(--ct-accent); }
+  .ct-iconos { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 640px)  { .ct-iconos { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ct-iconos { grid-template-columns: repeat(4, 1fr); } }
+  .ct-icono { display: flex; flex-direction: column; gap: .5rem; padding: 2rem 1.5rem; background: var(--ct-paper); border: 2.5px solid var(--ct-ink); box-shadow: var(--ct-shadow); align-items: center; text-align: center; transition: transform .25s, box-shadow .25s; }
+  .ct-icono:hover { transform: translate(-4px, -4px); }
+  .ct-icono--quarry:hover  { box-shadow: 12px 12px 0 var(--ct-quarry); }
+  .ct-icono--blue:hover    { box-shadow: 12px 12px 0 var(--ct-blue); }
+  .ct-icono--accent:hover  { box-shadow: 12px 12px 0 var(--ct-accent); }
+  .ct-icono--ink:hover     { box-shadow: 12px 12px 0 var(--ct-ink); }
+  .ct-icono__code { width: 80px; height: 80px; flex-shrink: 0; }
+  .ct-icono__letter { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--ct-accent); }
+  .ct-icono--quarry .ct-icono__letter { color: var(--ct-quarry); }
+  .ct-icono--blue .ct-icono__letter   { color: var(--ct-blue); }
+  .ct-icono--ink .ct-icono__letter    { color: var(--ct-ink); }
+  .ct-icono__name { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1; letter-spacing: -.025em; color: var(--ct-ink); margin: 0; }
+  .ct-icono__sub { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .2em; color: var(--ct-accent); font-weight: 800; }
+  .ct-icono--quarry .ct-icono__sub { color: var(--ct-quarry); }
+  .ct-icono--blue .ct-icono__sub   { color: var(--ct-blue); }
+  .ct-icono--ink .ct-icono__sub    { color: var(--ct-ink); }
+  .ct-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
+  .ct-icono__dato { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--ct-ink); border-top: 2px dashed var(--ct-ink); padding-top: .5rem; width: 100%; }
+
+  /* FLAGSHIP */
+  .ct-flagship-section { background: var(--ct-stone); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); position: relative; overflow: hidden; }
+  .ct-flagship-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(30,74,107,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ct-flagship-section > * { position: relative; }
+  .ct-flagship-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .ct-flagship-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ct-flagship-chapter { color: var(--ct-blue); }
+  .ct-flagship-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-flagship-title em { color: var(--ct-blue); }
+  .ct-flagship-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .ct-flagship-lead strong { color: var(--ct-accent); font-weight: 800; }
+  .ct-flagship-lead em { color: var(--ct-ink); font-style: italic; }
+  .ct-flagship-facts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--ct-ink); background: var(--ct-paper); }
+  @media (min-width: 640px) { .ct-flagship-facts { grid-template-columns: 1fr 1fr; } }
+  .ct-flagship-facts li { padding: .75rem 1rem; border-bottom: 1px solid var(--ct-ink); display: flex; flex-direction: column; gap: 2px; }
+  @media (min-width: 640px) { .ct-flagship-facts li:nth-child(odd) { border-right: 1px solid var(--ct-ink); } .ct-flagship-facts li:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 639px) { .ct-flagship-facts li:last-child { border-bottom: none; } }
+  .ct-flagship-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--ct-blue); font-weight: 800; }
+  .ct-flagship-facts__v { font-size: .9rem; color: var(--ct-ink); font-weight: 600; line-height: 1.35; }
+  .ct-flagship__r { width: 100%; max-width: 360px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3)); }
+
+  /* EXPORT SECTION */
+  .ct-export-section { background: var(--ct-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); position: relative; overflow: hidden; }
+  .ct-export-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(212,168,67,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ct-export-section > * { position: relative; }
+  .ct-export-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .ct-export-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ct-export-chapter { color: var(--ct-blue); }
+  .ct-export-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-export-title em { color: var(--ct-blue); }
+  .ct-export-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .ct-export-lead strong { color: var(--ct-ink); font-weight: 700; }
+  .ct-export-lead em { color: var(--ct-accent); font-style: italic; font-weight: 600; }
+  .ct-export-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.5rem; }
+  .ct-export-stat { background: var(--ct-paper-2); border: 2px solid var(--ct-ink); padding: 1rem; display: flex; flex-direction: column; gap: .25rem; text-align: center; }
+  .ct-export-stat__v { font-size: 1.65rem; font-weight: 800; color: var(--ct-blue); line-height: 1; }
+  .ct-export-stat__l { font-family: var(--font-mono); font-size: .55rem; text-transform: uppercase; letter-spacing: .12em; opacity: .75; }
+  .ct-export__r { max-width: 340px; margin: 0 auto; }
+  .ct-export-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(212,168,67,0.18)); }
+
+  /* SECTORES */
+  .ct-sec-section { background: var(--ct-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); }
+  .ct-sec-chapter { color: var(--ct-slate); }
+  .ct-sec-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-sec-title em { color: var(--ct-accent); }
+  .ct-sec { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px)  { .ct-sec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ct-sec { grid-template-columns: repeat(3, 1fr); } }
+  .ct-sec__card { background: var(--ct-paper); border: 2.5px solid var(--ct-ink); box-shadow: var(--ct-shadow); padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; transition: transform .25s, box-shadow .25s; position: relative; overflow: hidden; }
+  .ct-sec__card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: currentColor; }
+  .ct-sec__card:hover { transform: translate(-3px, -3px); box-shadow: 12px 12px 0 currentColor; }
+  .ct-sec__card--quarry { color: var(--ct-quarry); }
+  .ct-sec__card--stone  { color: var(--ct-stone); }
+  .ct-sec__card--blue   { color: var(--ct-blue); }
+  .ct-sec__card--accent { color: var(--ct-accent); }
+  .ct-sec__card--ink    { color: var(--ct-ink); }
+  .ct-sec__card--slate  { color: var(--ct-slate); }
+  .ct-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
+  .ct-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ct-sec__stat-box { background: var(--ct-ink); color: var(--ct-paper); padding: .35rem .65rem; display: flex; flex-direction: column; border: 1.5px solid currentColor; text-align: right; }
+  .ct-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .ct-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
+  .ct-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--ct-ink); margin: 0; }
+  .ct-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .ct-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
+  .ct-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--ct-ink); }
+  .ct-sec__tag span { color: currentColor; font-weight: 800; }
+  .ct-sec__foot { padding-top: .65rem; border-top: 2px solid var(--ct-ink); }
+  .ct-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
+
+  /* MAPA */
+  .ct-map-section { background: var(--ct-quarry); border-bottom: 3px solid var(--ct-ink); }
+  .ct-map-head { padding: 4rem 0 2rem; }
+  .ct-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
+  @media (min-width: 768px) { .ct-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
+  .ct-map-chapter { color: var(--ct-blue); }
+  .ct-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
+  .ct-map-title em { color: var(--ct-blue); }
+  .ct-map-coords { background: var(--ct-accent); color: var(--ct-ink); padding: 1rem 1.25rem; border: 2px solid var(--ct-ink); box-shadow: 5px 5px 0 var(--ct-ink); display: flex; flex-direction: column; gap: .35rem; font-size: .7rem; letter-spacing: .15em; }
+  .ct-map-frame { position: relative; border-top: 3px solid var(--ct-ink); border-bottom: 3px solid var(--ct-ink); background: var(--ct-ink); }
+  .ct-map-icon { position: absolute; width: 60px; height: 60px; z-index: 5; pointer-events: none; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); opacity: 0.85; }
+  .ct-map-icon--tl { top: 16px; left: 16px; }
+  .ct-map-icon--br { bottom: 16px; right: 16px; }
+  .ct-map-wrap { width: 100%; height: clamp(420px, 60vh, 600px); overflow: hidden; }
+  .ct-map-wrap > * { width: 100%; height: 100%; }
+
+  /* DIFERENCIALES */
+  .ct-dif-section { background: var(--ct-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); }
+  .ct-dif-chapter { color: var(--ct-blue); }
+  .ct-dif-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-dif-title em { color: var(--ct-accent); }
+  .ct-dif { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--ct-ink); }
+  @media (min-width: 768px) { .ct-dif { grid-template-columns: 1fr 1fr; } }
+  .ct-dif__item { padding: 1.75rem 1.5rem; border-bottom: 1px solid var(--ct-ink); display: flex; flex-direction: column; gap: .65rem; transition: background .2s; }
+  @media (min-width: 768px) { .ct-dif__item:nth-child(odd) { border-right: 1px solid var(--ct-ink); } .ct-dif__item:nth-last-child(-n+2) { border-bottom: none; } }
+  @media (max-width: 767px) { .ct-dif__item:last-child { border-bottom: none; } }
+  .ct-dif__item--0 { background: var(--ct-paper-2); }
+  .ct-dif__item--1 { background: var(--ct-paper); }
+  .ct-dif__item--2 { background: var(--ct-stone); }
+  .ct-dif__item--3 { background: var(--ct-paper); }
+  .ct-dif__item:hover { background: var(--ct-accent); }
+  .ct-dif__num { font-size: .85rem; color: var(--ct-blue); font-weight: 800; letter-spacing: .15em; }
+  .ct-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--ct-ink); margin: 0; }
+  .ct-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+
+  /* PROCESO */
+  .ct-proc-section { background: var(--ct-ink); color: var(--ct-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); position: relative; overflow: hidden; }
+  .ct-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(212,168,67,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
+  .ct-proc-section > * { position: relative; }
+  .ct-proc-chapter { color: var(--ct-accent); }
+  .ct-proc-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-proc-title em { color: var(--ct-accent); }
+  .ct-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+  @media (min-width: 768px)  { .ct-proc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ct-proc { grid-template-columns: repeat(4, 1fr); } }
+  .ct-proc__step { background: rgba(245,240,232,0.05); border: 2px solid var(--ct-paper); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; transition: background .25s, transform .25s; }
+  .ct-proc__step:hover { background: rgba(212,168,67,0.12); transform: translateY(-3px); }
+  .ct-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(245,240,232,0.25); }
+  .ct-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ct-accent); line-height: 1; }
+  .ct-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ct-accent); }
+  .ct-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ct-paper); margin: .25rem 0 0; }
+  .ct-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(245,240,232,0.75); flex: 1; }
+  .ct-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--ct-accent); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(245,240,232,0.25); }
+
+  /* TESTIMONIOS */
+  .ct-quote-section { background: var(--ct-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); }
+  .ct-quote-chapter { color: var(--ct-slate); }
+  .ct-quote-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-quote-title em { color: var(--ct-accent); }
+  .ct-pull { position: relative; background: var(--ct-stone); border: 3px solid var(--ct-ink); box-shadow: var(--ct-shadow); padding: 3rem 2rem 2rem; margin: 2rem 0; }
+  .ct-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-10deg); filter: drop-shadow(0 4px 8px rgba(212,168,67,0.4)); }
+  .ct-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--ct-ink); max-width: 56ch; }
+  .ct-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--ct-ink); }
+  .ct-pull__avatar { width: 48px; height: 48px; background: var(--ct-blue); color: var(--ct-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .ct-pull__cap div { display: flex; flex-direction: column; }
+  .ct-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ct-ink); }
+  .ct-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
+  .ct-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 768px) { .ct-quotes { grid-template-columns: repeat(2, 1fr); } }
+  .ct-quote { position: relative; background: var(--ct-paper); border: 2px solid var(--ct-ink); box-shadow: 5px 5px 0 var(--ct-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
+  .ct-quote:hover { transform: translateY(-3px); }
+  .ct-quote--0 { background: var(--ct-paper); }
+  .ct-quote--1 { background: var(--ct-stone); }
+  .ct-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--ct-accent); opacity: .45; }
+  .ct-quote p { font-size: .92rem; line-height: 1.5; color: var(--ct-ink); flex: 1; margin: 0; }
+  .ct-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--ct-ink); }
+  .ct-quote__avatar { width: 36px; height: 36px; background: var(--ct-blue); color: var(--ct-paper); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .ct-quote footer div { display: flex; flex-direction: column; }
+  .ct-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
+  .ct-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
+
+  /* FAQ */
+  .ct-faq-section { background: var(--ct-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); }
+  .ct-faq-chapter { color: var(--ct-slate); }
+  .ct-faq-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-faq-title em { color: var(--ct-accent); }
+  .ct-faq { list-style: none; padding: 0; margin: 2rem 0 0; border-top: 2.5px solid var(--ct-ink); }
+  .ct-faq__item { border-bottom: 2px solid var(--ct-ink); }
+  .ct-faq__det summary { list-style: none; cursor: pointer; }
+  .ct-faq__det summary::-webkit-details-marker { display: none; }
+  .ct-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
+  .ct-faq__sum:hover { padding-inline: 1rem; background: var(--ct-paper-2); }
+  .ct-faq__num { font-size: 1rem; font-weight: 800; color: var(--ct-blue); letter-spacing: .1em; }
+  .ct-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--ct-ink); font-weight: 700; }
+  .ct-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--ct-ink); background: var(--ct-paper); color: var(--ct-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .ct-faq__det[open] .ct-faq__toggle { transform: rotate(180deg); background: var(--ct-blue); color: var(--ct-paper); }
+  .ct-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  @media (max-width: 640px) { .ct-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .ct-faq__ans { padding-left: 48px; } }
+
+  /* PUEBLOS VECINOS */
+  .ct-vecinos-section { background: var(--ct-paper-2); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ct-ink); }
+  .ct-vecinos-chapter { color: var(--ct-slate); }
+  .ct-vecinos-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
+  .ct-vecinos-title em { color: var(--ct-accent); }
+  .ct-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--ct-ink); background: var(--ct-ink); }
+  @media (min-width: 640px)  { .ct-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
+  @media (min-width: 1024px) { .ct-vecinos { grid-template-columns: repeat(4, 1fr); } }
+  .ct-vecino { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: .35rem; padding: 1.5rem; background: var(--ct-paper); color: var(--ct-ink); text-decoration: none; min-height: 160px; transition: background .25s, color .25s; grid-template-areas: 'n arrow' 'name name' 'sub sub'; }
+  .ct-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
+  .ct-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
+  .ct-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
+  .ct-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ct-accent); font-size: 1.3rem; transition: transform .25s; }
+  .ct-vecino:hover { background: var(--ct-accent); color: var(--ct-ink); }
+  .ct-vecino:hover .ct-vecino__sub, .ct-vecino:hover .ct-vecino__n { opacity: .85; }
+  .ct-vecino:hover .ct-vecino__arrow { color: var(--ct-ink); transform: translateX(4px); }
+  .ct-vecino--1:hover { background: var(--ct-blue); color: var(--ct-paper); }
+  .ct-vecino--2:hover { background: var(--ct-stone); color: var(--ct-ink); }
+  .ct-vecino--3:hover { background: var(--ct-quarry); color: var(--ct-ink); }
+
+  /* CTA FINAL */
+  .ct-final { background: #1C1A16; color: var(--ct-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .ct-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(30,74,107,0.06) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
+  .ct-final > * { position: relative; }
+  .ct-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
+  @media (min-width: 1024px) { .ct-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+  .ct-final-chapter { color: var(--ct-blue); }
+  .ct-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--ct-paper); margin: 1rem 0; }
+  .ct-final__title em { color: var(--ct-accent); font-style: italic; display: block; }
+  .ct-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(245,240,232,0.75); max-width: 52ch; }
+  .ct-final__lead strong { color: var(--ct-accent); }
+  .ct-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
+  .ct-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
+  .ct-final__btn--primary { background: var(--ct-accent); color: var(--ct-ink); border-color: var(--ct-accent); box-shadow: 6px 6px 0 var(--ct-blue); }
+  .ct-final__btn--primary:hover { background: var(--ct-blue); color: var(--ct-paper); border-color: var(--ct-blue); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ct-accent); }
+  .ct-final__btn--ghost { background: transparent; color: var(--ct-paper); border-color: var(--ct-paper); box-shadow: 6px 6px 0 var(--ct-paper); }
+  .ct-final__btn--ghost:hover { background: var(--ct-paper); color: var(--ct-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ct-paper); }
+  .ct-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(245,240,232,0.55); text-transform: uppercase; margin-top: 1.5rem; }
+  .ct-final__trust .ct-pulse { background: var(--ct-blue); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(30,74,107,0.55); }
+  .ct-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
+  .ct-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(30,74,107,0.25)); }
+  .ct-final__marquee { background: var(--ct-blue); color: var(--ct-paper); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--ct-ink); margin: 0 -1.5rem; }
+  .ct-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: ct-marquee 34s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+</style>
