@@ -238,7 +238,7 @@ Sin hype. Sin promesas imposibles. Solo soluciones que funcionan.
 <div class="mt-20 p-12 rounded-[3.5rem] bg-gradient-to-r from-yellow-50 via-white to-amber-50 border-4 border-white shadow-2xl text-center not-prose relative overflow-hidden">
 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400"></div>
 <p class="text-slate-800 text-xl font-bold mb-8 max-w-xl mx-auto leading-tight">¿Estás explorando cómo aplicar estas tecnologías en tu negocio sin perder el norte?</p>
-<a href="/contacto" class="inline-flex items-center gap-3 px-10 py-5 !bg-[#FFF055] !text-[#262626] rounded-2xl font-bold hover:!bg-[#262626] hover:!text-[#FFF055] transition-all hover:scale-105 hover:shadow-xl group no-underline border-2 border-[#262626]">
+<a href="/contacto/" class="inline-flex items-center gap-3 px-10 py-5 !bg-[#FFF055] !text-[#262626] rounded-2xl font-bold hover:!bg-[#262626] hover:!text-[#FFF055] transition-all hover:scale-105 hover:shadow-xl group no-underline border-2 border-[#262626]">
 Hablemos con honestidad
 <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
 </a>

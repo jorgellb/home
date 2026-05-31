@@ -233,7 +233,7 @@ Ese es el verdadero éxito de las experiencias inmersivas: dejar de hablar de po
 <div class="relative z-10">
 <h3 class="font-display text-5xl md:text-6xl mb-6 leading-tight text-slate-900">¿Quieres que tu marca pase a la 3ª dimensión?</h3>
 <p class="text-slate-600 text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-medium">En Platanito Rico dominamos el stack WebGPU/XR para crear herramientas que no solo impactan visualmente, sino que venden.</p>
-<a href="/contacto" class="inline-flex items-center gap-4 px-12 py-6 !bg-[#FFF055] !text-[#262626] rounded-2xl font-bold hover:!bg-[#262626] hover:!text-[#FFF055] transition-all hover:scale-105 hover:shadow-2xl group uppercase tracking-widest text-sm no-underline border-2 border-[#262626]">
+<a href="/contacto/" class="inline-flex items-center gap-4 px-12 py-6 !bg-[#FFF055] !text-[#262626] rounded-2xl font-bold hover:!bg-[#262626] hover:!text-[#FFF055] transition-all hover:scale-105 hover:shadow-2xl group uppercase tracking-widest text-sm no-underline border-2 border-[#262626]">
 Empieza el viaje inmersivo
 <svg class="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
 </a>

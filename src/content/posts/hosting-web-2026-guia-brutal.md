@@ -1011,7 +1011,7 @@ No es perfecto. La UI es confusa, el soporte es malo en free tier, y el lock-in 
 <div class="relative z-10">
 <p class="text-slate-900 font-display text-4xl md:text-6xl font-black leading-tight mb-6 uppercase">¿Hablamos de tu próximo proyecto?</p>
 <p class="text-slate-600 text-lg md:text-xl mb-10 leading-relaxed max-w-2xl italic">"En Platanito Rico no solo diseñamos webs. Elegimos la armadura técnica que tu negocio necesita para no desangrarse en facturas absurdas y picos de tráfico inesperados."</p>
-<a href="/contacto" class="inline-flex items-center gap-4 px-10 py-6 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-wider shadow-lg hover:scale-105 transition-all duration-300 no-underline text-lg">
+<a href="/contacto/" class="inline-flex items-center gap-4 px-10 py-6 bg-orange-500 text-white rounded-2xl font-black uppercase tracking-wider shadow-lg hover:scale-105 transition-all duration-300 no-underline text-lg">
 Escribir con honestidad radical
 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
 </a>
