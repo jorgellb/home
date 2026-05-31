@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
@@ -53,7 +54,7 @@ const faqs = [
 ];
 
 const jsonLdSchemas = [
-  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"speakable":{"@type":"SpeakableSpecification","cssSelector":["h1","h2",".speakable"]},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Vera","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"speakable":{"@type":"SpeakableSpecification","cssSelector":["h1","h2",".speakable"]} },
   { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web Vera","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/creacion-paginas-webs-vera.jpg","address":{"@type":"PostalAddress","streetAddress":"Ctra de Ronda, 82","addressLocality":"Vera","addressRegion":"Almería","postalCode":"04620","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.2471,"longitude":-1.8673},"areaServed":["Vera","Vera Playa","Puerto Rey","Garrucha","Mojácar","Levante Almeriense"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"78","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})),"offerCatalog":{"@type":"OfferCatalog","name":"Servicios de diseño web en Vera","itemListElement":sectores.map(s=>({"@type":"Offer","itemOffered":{"@type":"Service","name":s.nombre,"description":s.desc}}))} },
   { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
 ];
@@ -70,6 +71,8 @@ const jsonLdSchemas = [
   jsonLd={jsonLdSchemas}
 >
   <Header />
+
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Vera" }]} />
 
   <main id="main-content" class="vp">
 

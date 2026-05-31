@@ -386,7 +386,7 @@ Si después de leer esto tienes la sensación de que tu web está coja, no te pr
 
 Soy el primero que prefiere hablar de diseño web, de estrategia de contenidos o de cómo mejorar la velocidad de carga. Pero llevo más de diez años haciendo webs y he visto demasiados clientes sufrir por no tener esto en orden. Por eso, siempre que lanzo una web nueva o hago un mantenimiento, incluyo una revisión legal como parte del servicio. No porque quiera dar la lata, sino porque proteger a mi cliente también es parte de mi trabajo.
 
-Si tienes dudas sobre si tu web cumple o no, puedes [contactarme sin compromiso](/contacto). A veces basta con echar un vistazo rápido para saber si estás en zona de riesgo. Y si no tienes tiempo de ponerte al día con todo esto, nosotros podemos ayudarte a dejarlo todo listo para que te olvides y te centres en lo que realmente importa: hacer crecer tu negocio.
+Si tienes dudas sobre si tu web cumple o no, puedes [contactarme sin compromiso](/contacto/). A veces basta con echar un vistazo rápido para saber si estás en zona de riesgo. Y si no tienes tiempo de ponerte al día con todo esto, nosotros podemos ayudarte a dejarlo todo listo para que te olvides y te centres en lo que realmente importa: hacer crecer tu negocio.
 
 ---
 

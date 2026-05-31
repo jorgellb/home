@@ -214,4 +214,4 @@ La adaptación temprana evitará problemas de última hora y te permitirá aprov
 
 ---
 
-*¿Tienes dudas sobre cómo implementar VERIFACTU en tu empresa? En **Platanito Rico** te ayudamos a adaptar tus sistemas informáticos y procesos de facturación. [Contacta con nosotros](/contacto) para una consulta personalizada.*
+*¿Tienes dudas sobre cómo implementar VERIFACTU en tu empresa? En **Platanito Rico** te ayudamos a adaptar tus sistemas informáticos y procesos de facturación. [Contacta con nosotros](/contacto/) para una consulta personalizada.*

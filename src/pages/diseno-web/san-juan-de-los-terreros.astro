@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
@@ -83,7 +84,7 @@ const faqs = [
 ];
 
 const jsonLdSchemas = [
-  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"San Juan de los Terreros","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es" },
   { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web San Juan de los Terreros","url":canonical,"telephone":"+34657085019","email":"hola@platanitorico.com","image":`https://platanitorico.com${heroImg}`,"priceRange":"€€","address":{"@type":"PostalAddress","addressLocality":"San Juan de los Terreros","addressRegion":"Almería","postalCode":"04648","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.4008,"longitude":-1.6789},"areaServed":["San Juan de los Terreros","Pulpí","Villaricos","Águilas","Levante Almeriense"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"38","bestRating":"5"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
   { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en San Juan de los Terreros","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
   { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faqs.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
@@ -101,6 +102,8 @@ const jsonLdSchemas = [
   jsonLd={jsonLdSchemas}
 >
   <Header />
+
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "San Juan de los Terreros" }]} />
 
   <main id="main-content" class="sj">
 

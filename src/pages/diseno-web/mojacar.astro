@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
@@ -60,7 +61,7 @@ const faq = [
 ];
 
 const jsonLdSchemas = [
-  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Mojácar","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es" },
   { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Mojácar","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-mojacar.jpg","address":{"@type":"PostalAddress","addressLocality":"Mojácar","addressRegion":"Almería","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":37.140,"longitude":-1.852},"areaServed":["Mojácar Pueblo","Mojácar Playa","Garrucha","Vera","Levante Almeriense"],"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"62","bestRating":"5","worstRating":"1"},"review":testimonios.map(t=>({"@type":"Review","author":{"@type":"Person","name":t.nombre},"reviewRating":{"@type":"Rating","ratingValue":"5","bestRating":"5"},"reviewBody":t.texto})) },
   { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Mojácar","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
   { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
@@ -78,6 +79,8 @@ const jsonLdSchemas = [
   jsonLd={jsonLdSchemas}
 >
   <Header />
+
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Mojácar" }]} />
 
   <main id="main-content" class="mj">
 

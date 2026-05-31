@@ -97,4 +97,4 @@ Las empresas que consigan transformar estas obligaciones en un catalizador de ca
 
 ---
 
-*¿Necesitas ayuda para adaptar tu empresa a NIS2, DORA o CRA? En **Platanito Rico** te acompañamos en todo el proceso de cumplimiento normativo. [Contacta con nosotros](/contacto) para una consulta personalizada.*
+*¿Necesitas ayuda para adaptar tu empresa a NIS2, DORA o CRA? En **Platanito Rico** te acompañamos en todo el proceso de cumplimiento normativo. [Contacta con nosotros](/contacto/) para una consulta personalizada.*
