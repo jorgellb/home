@@ -313,6 +313,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5500, 36.8700],
     lugarIconico: "Vega del río Andarax",
     sectorPrincipal: "Agricultura y servicios rurales",
+    panorama: [
+      "Gádor vive de la vega: el río Andarax riega unos campos de naranjos, limoneros y hortaliza de calidad que son la base de su economía, a un paso de la capital. Es un pueblo agrícola de los de toda la vida, con el encanto de las ventas tradicionales y un mercado local que mira tanto al campo como a la cercana Almería.",
+      "Su doble cara —campo y proximidad a la capital— abre dos vías digitales. Los agricultores y cooperativas pueden saltarse al mayorista y vender producto de la vega directo a restaurantes y consumidor con una tienda online; y los talleres, comercios y ventas con gastronomía tradicional captan al vecino y al de la ciudad que busca 'comer típico fuera de Almería'. Poca competencia online, demanda cercana y real.",
+    ],
+    hitos: [
+      { k: "VEGA", v: "Del río Andarax · cítricos y huerta" },
+      { k: "ECONOMÍA", v: "Agricultura + servicios de proximidad" },
+      { k: "UBICACIÓN", v: "A un paso de la capital" },
+      { k: "POBLACIÓN", v: "3.200 habitantes" },
+    ],
     sectores: [
       { nombre: "Empresas y Cooperativas Agrícolas", descripcion: "La vega del Andarax produce naranjas, limones y hortalizas de alta calidad. Agricultores y cooperativas de Gádor pueden llegar a compradores directos y restaurantes con una web y tienda online básica.", icon: "leaf", keywords: ["Venta directa", "Productos ecológicos", "Pedidos online", "Contacto mayoristas"] },
       { nombre: "Servicios a la Comunidad", descripcion: "En Gádor, negocios como talleres mecánicos, fontaneros, electricistas y pequeñas tiendas compiten con la oferta de la capital. Estar en Google Maps con reseñas y horario actualizado es la única forma de no perder clientes.", icon: "briefcase", keywords: ["Google Maps", "Reseñas locales", "Horarios", "Teléfono de contacto"] },
@@ -363,6 +373,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.4667, 36.9000],
     lugarIconico: "Sierra de Gádor desde Benahadux",
     sectorPrincipal: "Servicios residenciales y comercio local",
+    panorama: [
+      "Benahadux es uno de esos municipios del cinturón de Almería que crecen sin hacer ruido: residencial, bien comunicado, con nuevas urbanizaciones y familias jóvenes que demandan servicios de proximidad entre la capital y el valle del Andarax. No tiene un gran reclamo turístico —y precisamente por eso su mercado es puramente local y muy aprovechable.",
+      "Aquí la batalla digital se gana en el 'cerca de mí'. El fontanero, el reformista, la clínica dental o la panadería que aparezca el primero en Google cuando un vecino de Benahadux busca un servicio se lleva el cliente; el que no aparece, no existe. Con poca competencia que trabaje el SEO local, posicionarse en Benahadux es rápido, barato y rentable: el escenario ideal para autónomos y comercios de barrio.",
+    ],
+    hitos: [
+      { k: "POBLACIÓN", v: "5.000 hab · en expansión" },
+      { k: "PERFIL", v: "Residencial · familias jóvenes" },
+      { k: "MERCADO", v: "Servicios de proximidad" },
+      { k: "UBICACIÓN", v: "Entre la capital y el Andarax" },
+    ],
     sectores: [
       { nombre: "Servicios del Hogar y Oficios", descripcion: "Benahadux crece con nuevas urbanizaciones y familias que necesitan fontaneros, pintores, electricistas y reformistas. Los vecinos buscan en Google — si tu negocio no aparece, existe otro que sí.", icon: "home", keywords: ["Reformas y construcción", "SEO local", "Presupuestos online", "Urgencias 24h"] },
       { nombre: "Salud y Bienestar", descripcion: "La población joven y familiar de Benahadux tiene demanda creciente de clínicas dentales, fisioterapeutas y centros de estética. Ser el primero que aparece en Google para tu especialidad en la zona es ya una ventaja competitiva decisiva.", icon: "health", keywords: ["Citas online", "SEO salud local", "Reseñas Google", "RGPD médico"] },
@@ -690,6 +710,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.7906, 37.3150],
     lugarIconico: "Ruinas fenicias de Villaricos",
     sectorPrincipal: "Turismo histórico y náutico",
+    panorama: [
+      "Villaricos tiene 2.500 años de historia mirando al mar: aquí estuvo la fenicia Baria, y sus ruinas y necrópolis conviven hoy con un puerto deportivo activo y playas tranquilas. Pocos pueblos de la costa almeriense combinan así arqueología milenaria, náutica y descanso sin masificación.",
+      "Ese triple atractivo abre tres mercados digitales. La náutica del puerto deportivo (alquiler de veleros, escuela de vela, amarres) capta a un cliente de alto poder adquisitivo que lo reserva todo online; el turismo arqueológico fenicio es un nicho cultural único en Almería; y los restaurantes de pescado y las casas vacacionales atraen a un visitante selecto que huye de las zonas llenas. Historia, mar y calma: una web que lo cuente vende solo.",
+    ],
+    hitos: [
+      { k: "HISTORIA", v: "Baria fenicia · 2.500 años" },
+      { k: "NÁUTICA", v: "Puerto deportivo activo" },
+      { k: "PLAYAS", v: "Tranquilas · sin masificación" },
+      { k: "POBLACIÓN", v: "1.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Náutico y Puerto Deportivo", descripcion: "El puerto deportivo de Villaricos atrae veleros y barcos de recreo del Mediterráneo. Empresas náuticas, escuelas de vela y alquileres de embarcaciones tienen un mercado de alto poder adquisitivo que busca todo online antes de zarpar.", icon: "sun", keywords: ["Puerto deportivo Villaricos", "Alquiler velero", "Escuela de vela", "Amarre"] },
       { nombre: "Turismo Arqueológico Fenicio", descripcion: "Las ruinas fenicias de Villaricos son únicas en Almería. Una web de turismo histórico con contenido riguroso puede posicionar a Villaricos como referente del turismo cultural en el Levante, atrayendo visitantes de museos y universidades.", icon: "star", keywords: ["Fenicios Villaricos", "Turismo arqueológico", "Historia mediterránea", "Rutas culturales"] },
@@ -717,6 +747,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.8450, 37.3758],
     lugarIconico: "Valle del Almanzora desde Zurgena",
     sectorPrincipal: "Servicios a residentes internacionales",
+    panorama: [
+      "Zurgena es, junto a Arboleas y Albox, uno de los corazones de la comunidad internacional del valle del Almanzora: miles de residentes británicos y alemanes que eligieron su clima, sus precios y su tranquilidad. Aquí la economía gira alrededor de atender a ese vecindario europeo —servicios, reformas, inmobiliaria— en su idioma.",
+      "El que trabaja en inglés gana. La inmobiliaria con portal bilingüe, el constructor que aparezca en 'builder Zurgena', la gestoría que resuelva el NIE y la residencia, el bar con 'English menu': todos captan a un cliente fiel, con poder adquisitivo y que lo busca todo online antes de llamar. La competencia local monolingüe ni lo intenta, así que una web ES/EN bien posicionada aquí es una mina.",
+    ],
+    hitos: [
+      { k: "COMUNIDAD", v: "Británica y alemana del Almanzora" },
+      { k: "IDIOMA", v: "Mercado bilingüe ES / EN / DE" },
+      { k: "ECONOMÍA", v: "Servicios a expats + agricultura" },
+      { k: "POBLACIÓN", v: "3.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Servicios a Residentes Europeos", descripcion: "Zurgena tiene una de las mayores proporciones de residentes británicos y alemanes del interior almeriense. Fontaneros, electricistas, gestorías y constructoras que ofrezcan web en inglés capturan un mercado que paga bien y recomienda en sus comunidades de expats.", icon: "briefcase", keywords: ["Servicios en inglés", "Tradesman Zurgena", "Expat community", "Reformas y construcción"] },
       { nombre: "Inmobiliarias y Alquileres", descripcion: "La demanda de propiedades en el Valle del Almanzora es constante entre jubilados europeos que buscan clima, precio y calidad de vida. Inmobiliarias con web bilingüe y portal de propiedades tienen ventaja total sobre las que solo operan en papel.", icon: "building", keywords: ["Property Zurgena", "Villa rural", "Compraventa bilingüe", "Portal inmobiliario"] },
@@ -902,6 +942,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.1500, 37.4000],
     lugarIconico: "Castillo de Oria",
     sectorPrincipal: "Agroalimentario y turismo de interior",
+    panorama: [
+      "Oria vigila el valle del Almanzora desde su castillo medieval, encaramado en el cerro. Es un pueblo de montaña con tradiciones bien conservadas y una despensa de primera: embutidos y quesos artesanos con fama en toda la comarca que, sin embargo, casi nunca salen de ella por falta de escaparate.",
+      "Ahí está la oportunidad. El productor de embutido o queso de Oria que monte una tienda online con la historia de su elaboración vende a toda España sin moverse del pueblo —'embutido artesano Almería' apenas tiene competencia. Y el castillo y el senderismo son un reclamo de turismo de interior infrautilizado que una web local puede poner en el mapa. Producto y patrimonio reales esperando quien los cuente.",
+    ],
+    hitos: [
+      { k: "CASTILLO", v: "Medieval sobre el cerro" },
+      { k: "DESPENSA", v: "Embutidos y quesos artesanos" },
+      { k: "ECONOMÍA", v: "Agroganadera + turismo de interior" },
+      { k: "POBLACIÓN", v: "2.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Productos Agroalimentarios de Oria", descripcion: "Los embutidos y quesos de Oria tienen una reputación en la comarca que merece llegar más lejos. Con tienda online básica y SEO para 'embutido artesano Almería', los productores de Oria pueden vender en toda España sin salir del pueblo.", icon: "leaf", keywords: ["Embutidos artesanos Oria", "Queso de cabra", "Venta directa online", "Envíos nacionales"] },
       { nombre: "Turismo de Castillo y Montaña", descripcion: "El castillo medieval de Oria domina el valle y es un atractivo turístico infrautilizado digitalmente. Una web de turismo local con ruta del castillo, senderismo y gastronomía puede posicionarse como destino de turismo activo de interior.", icon: "star", keywords: ["Castillo Oria visita", "Senderismo Almanzora", "Turismo interior", "Ruta cultural"] },
@@ -1301,6 +1351,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.1073, 37.0934],
     lugarIconico: "Cuevas de Sorbas",
     sectorPrincipal: "Turismo de cuevas y naturaleza extrema",
+    panorama: [
+      "Sorbas desafía a la gravedad: sus casas cuelgan sobre el barranco del río Aguas, y bajo ellas se esconde una de las maravillas geológicas de Europa, las Cuevas de Sorbas —mil cuevas catalogadas en el único gran karst en yeso del continente. A eso se suma una alfarería tradicional que aún cuece cántaros de barro rojo como hace siglos.",
+      "Geología espectacular más artesanía viva igual a un destino con identidad propia que vende solo… si está bien contado online. Las empresas de espeleología y turismo activo captan grupos de toda Europa que buscan 'cuevas de yeso España'; los alfares pueden vender sus piezas a coleccionistas de toda España con una tienda online; y las casas rurales con vistas al barranco llenan con ese visitante curioso. Contenido único de verdad: el oro del SEO.",
+    ],
+    hitos: [
+      { k: "GEOLOGÍA", v: "Karst en yeso único en Europa" },
+      { k: "PAISAJE", v: "Casas colgadas sobre el barranco" },
+      { k: "ARTESANÍA", v: "Alfarería tradicional de barro" },
+      { k: "POBLACIÓN", v: "3.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo de Espeleología y Cuevas", descripcion: "Las Cuevas de Sorbas son destino de espeleólogos de toda Europa. Empresas de turismo activo y guías de cuevas necesitan web en varios idiomas para captar grupos internacionales que buscan 'espeleología Almería' o 'cuevas yeso España'.", icon: "star", keywords: ["Espeleología Cuevas Sorbas", "Desierto de yeso", "Turismo activo Almería", "Rutas cuevas guiadas"] },
       { nombre: "Alfarería y Artesanía Sorbeña", descripcion: "Sorbas es uno de los últimos reductos de la alfarería tradicional almeriense. Sus cantaros y tinajas de barro rojo son piezas codiciadas por coleccionistas. Una tienda online con historia del alfar conecta con compradores de toda España.", icon: "shop", keywords: ["Alfarería Sorbas", "Cántaros de barro", "Artesanía almeriense", "Piezas únicas coleccionistas"] },
@@ -1626,6 +1686,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7780, 37.0850],
     lugarIconico: "Yacimiento Romano de Alba",
     sectorPrincipal: "Turismo arqueológico y montaña",
+    panorama: [
+      "Abla esconde bajo sus campos a la romana Alba, cuyos restos aún emergen entre los cultivos, y es una de las puertas menos conocidas a la cara norte de Sierra Nevada. Historia antigua y montaña: dos reclamos potentes en un municipio pequeño del corredor de los Filabres.",
+      "Esa combinación da contenido único, que es lo que mejor posiciona. El turismo arqueológico romano puede ponerse en el mapa con una web que cuente Alba; el montañero y el senderista que buscan la cara norte de Sierra Nevada necesitan alojamiento y servicios que aparezcan en Google; y los comercios de Abla sirven a toda un área rural amplia sin competencia digital. Poco conocido hoy significa fácil de posicionar mañana.",
+    ],
+    hitos: [
+      { k: "HISTORIA", v: "Ciudad romana de Alba" },
+      { k: "MONTAÑA", v: "Puerta norte de Sierra Nevada" },
+      { k: "SERVICIOS", v: "Centro de un área rural amplia" },
+      { k: "POBLACIÓN", v: "1.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Arqueológico Romano", descripcion: "Los restos de la ciudad romana de Alba bajo Abla son un activo arqueológico con potencial turístico real. Visitas guiadas al yacimiento, museo local y rutas arqueológicas posicionan a Abla como destino de turismo histórico almeriense.", icon: "star", keywords: ["Arqueología romana Almería", "Ciudad romana Alba", "Yacimiento Abla", "Turismo histórico"] },
       { nombre: "Puerta de Sierra Nevada Norte", descripcion: "Abla es uno de los accesos menos conocidos a Sierra Nevada almeriense. Senderistas, escaladores y esquiadores de fondo que buscan la cara norte de la sierra pasan por Abla. Alojamiento y servicios para montañeros con presencia online son esenciales.", icon: "leaf", keywords: ["Acceso Sierra Nevada almería norte", "Senderismo Sierra Nevada", "Escalada almeria sierra nevada", "Esquí nórdico Filabres"] },
@@ -1676,6 +1746,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8510, 37.1760],
     lugarIconico: "Castillo de Fiñana",
     sectorPrincipal: "Turismo histórico árabe y productos de secano",
+    panorama: [
+      "Fiñana guarda uno de los castillos medievales mejor conservados de Almería —Bien de Interés Cultural— como testigo de un pasado árabe intenso, en pleno corredor que une Almería con Granada por el interior. Sus campos de secano dan cereal y aceite de olivos tradicionales con sabor a otra época.",
+      "Esa mezcla de patrimonio, tránsito y producto de secano marca sus oportunidades. El turismo del castillo y la herencia árabe puede posicionar 'turismo medieval Almería' para el viajero del corredor Al-Ándalus; los restaurantes y hostales captan el tráfico constante de la A-92N con una buena ficha de Google; y los productores de aceite y harina artesanal venden online a quien valora el origen. Una web convierte el paso de coches en clientes.",
+    ],
+    hitos: [
+      { k: "CASTILLO", v: "De Fiñana · BIC · herencia árabe" },
+      { k: "SECANO", v: "Aceite y harinas artesanales" },
+      { k: "CORREDOR", v: "En la ruta Almería–Granada interior" },
+      { k: "POBLACIÓN", v: "2.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo del Castillo y Herencia Árabe", descripcion: "El Castillo de Fiñana, Bien de Interés Cultural, domina el municipio desde el siglo XIII. Visitas guiadas con recreación histórica y rutas de herencia árabe posicionan a Fiñana como destino cultural único en el corredor Almería-Granada.", icon: "star", keywords: ["Castillo Fiñana BIC", "Turismo árabe Almería", "Recreación histórica medieval", "Ruta Al-Ándalus"] },
       { nombre: "Aceite de Secano y Cereales Artesanales", descripcion: "Las harinas artesanales de cereal de secano y el aceite de olivos tradicionales de Fiñana tienen un perfil de sabor diferenciado. Productores que distribuyen en mercados artesanales locales pueden ampliar su mercado online.", icon: "leaf", keywords: ["Aceite secano almería", "Harina artesanal molino", "Cereal secano tradición", "Productos de molino"] },
@@ -1908,6 +1988,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8930, 36.7380],
     lugarIconico: "Playa de Balanegra",
     sectorPrincipal: "Turismo de playa auténtico y hostelería costera",
+    panorama: [
+      "Balanegra es la playa que los del Poniente se guardan para ellos: un tramo de arena fina entre El Ejido y Adra, al borde del mar de invernaderos, con algunos de los chiringuitos más auténticos de la costa almeriense y sin la masificación de Roquetas. Un destino de bajo perfil que es justo su mayor atractivo.",
+      "Vender 'playa tranquila' es vender exactamente lo que media España busca. El chiringuito con la carta visible en Google capta al que huye de las playas llenas; los apartamentos y casas de alquiler, a precio inferior a Roquetas con playa comparable, llenan el verano si posicionan 'playa familiar Almería'; y las escuelas náuticas aprovechan un mar tranquilo ideal. Poco conocido aún significa poca competencia para posicionar.",
+    ],
+    hitos: [
+      { k: "PLAYA", v: "Arena fina · sin masificación" },
+      { k: "GASTRONOMÍA", v: "Chiringuitos auténticos" },
+      { k: "VENTAJA", v: "Alternativa económica a Roquetas" },
+      { k: "POBLACIÓN", v: "3.000 hab · costa del Poniente" },
+    ],
     sectores: [
       { nombre: "Chiringuitos y Hostelería de Playa", descripcion: "Los chiringuitos de Balanegra tienen la ventaja de las playas tranquilas y la desventaja de estar fuera del radar turístico. Una ficha de Google bien optimizada y web con la carta visible atrae exactamente al turista que huye de las playas masificadas.", icon: "restaurant", keywords: ["Chiringuito playa auténtica Almería", "Restaurante frente al mar tranquilo", "Chiringuito sin masificación", "Comida playera auténtica"] },
       { nombre: "Alojamiento Turístico Vacacional", descripcion: "Balanegra tiene apartamentos y casas de alquiler vacacional a precios inferiores a Roquetas o El Ejido con playas comparables. Una web de alquiler vacacional bien posicionada para 'playa tranquila Almería' llena las plazas en verano.", icon: "home", keywords: ["Alquiler vacacional playa tranquila", "Apartamento playero Almería barato", "Vacaciones sin masificación", "Costa Almería económica"] },
@@ -1933,6 +2023,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8620, 36.7280],
     lugarIconico: "Lonja de Pescadores de Balerma",
     sectorPrincipal: "Gastronomía marinera y turismo pesquero",
+    panorama: [
+      "Balerma es el secreto marinero de El Ejido: un núcleo costero donde, entre el mar de plástico del Poniente, sobrevive una lonja en la que la pesca del día pasa directa de los barcos a los restaurantes. Gambas, salmonetes y boquerones que horas antes estaban en el agua —esa frescura es una marca gastronómica que el turista del Poniente busca y valora.",
+      "Para los negocios de Balerma, esa autenticidad es el mejor argumento de venta online. El restaurante que cuente bien su pescado del día y tenga la ficha de Google al punto capta al comensal que busca 'pescado fresco Almería' sin pasar por Roquetas; las pescaderías y la lonja pueden vender online con envío en 24h; y los apartamentos de playa llenan con familias que huyen de la masificación. Producto real, web que lo enseñe.",
+    ],
+    hitos: [
+      { k: "LONJA", v: "Pesca del día directa del barco" },
+      { k: "GASTRONOMÍA", v: "Marinera auténtica del Poniente" },
+      { k: "PLAYA", v: "Familiar · arena limpia" },
+      { k: "POBLACIÓN", v: "4.000 hab · núcleo de El Ejido" },
+    ],
     sectores: [
       { nombre: "Restaurantes de Pesca del Día", descripcion: "La lonja de Balerma es el corazón de una gastronomía marinera auténtica: gambas, salmonetes y boquerones que pocas horas antes estaban en el mar. Restaurantes con carta actualizada y Google Maps visible no pierden a ningún comensal que busque 'pescado fresco Almería'.", icon: "anchor", keywords: ["Pescado fresco lonja Almería", "Restaurante pesca del día", "Mariscos Poniente Almería", "Gastronomía marinera local"] },
       { nombre: "Turismo de Playa Familiar", descripcion: "Balerma tiene playas tranquilas con bandera azul, propias para el turismo familiar del Poniente. Alojamientos, apartamentos y campings cerca de la playa que posicionen para 'playa familiar Almería' tienen un mercado amplio en familias que buscan alternativas a Roquetas.", icon: "sun", keywords: ["Playa familiar Almería Poniente", "Vacaciones con niños costa", "Camping playa Balerma", "Alojamiento familiar cerca mar"] },
@@ -2520,6 +2620,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.0900, 37.6870],
     lugarIconico: "Castillo de Vélez-Blanco — joya renacentista de Almería",
     sectorPrincipal: "Turismo cultural premium, patrimonio UNESCO y naturaleza",
+    panorama: [
+      "Vélez-Blanco juega en otra liga patrimonial: su castillo renacentista del siglo XVI es uno de los más importantes de Andalucía oriental —su patio está hoy en el Metropolitan de Nueva York—, y en su término está la Cueva de los Letreros, arte rupestre Patrimonio de la Humanidad y cuna del Indalo, el símbolo de Almería. Todo ello al pie del Parque Natural Sierra de María, el más biodiverso de la provincia.",
+      "Castillo renacentista más arte rupestre UNESCO más parque natural igual a un destino de turismo cultural premium que atrae a un viajero que paga por la experiencia. La web que cuente bien esa historia posiciona para 'castillo Vélez-Blanco' y 'Cueva de los Letreros' ante un público nacional e internacional de alto valor; los cortijos y casas rurales de alta gama justifican precio premium; y los guías de prehistoria tienen un nicho con demanda real. Patrimonio de primera, contado como merece.",
+    ],
+    hitos: [
+      { k: "CASTILLO", v: "Renacentista s. XVI · Andalucía oriental" },
+      { k: "UNESCO", v: "Cueva de los Letreros · cuna del Indalo" },
+      { k: "NATURALEZA", v: "Parque Natural Sierra de María" },
+      { k: "POBLACIÓN", v: "2.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Cultural y Patrimonial Premium", descripcion: "El Castillo de Vélez-Blanco es uno de los monumentos renacentistas más importantes de España. El patio del castillo (hoy en el Metropolitan Museum de Nueva York) lo convierte en destino de viajeros culturales de alto poder adquisitivo. Una web que cuente esa historia posiciona para un turista dispuesto a gastar más.", icon: "star", keywords: ["Castillo Vélez-Blanco visita", "Renaissance castle Spain", "Turismo cultural premium Almería", "Patrimonio histórico Los Vélez"] },
       { nombre: "Alojamiento Rural de Alta Gama", descripcion: "El entorno del Castillo y el Parque Natural demanda alojamiento rural de calidad para los viajeros culturales que visitan Vélez-Blanco. Cortijos y casas rurales restauradas con arquitectura tradicional tienen un mercado dispuesto a pagar precio premium cuando la web lo justifica.", icon: "home", keywords: ["Casa rural Vélez-Blanco", "Alojamiento castillo Almería", "Cortijo turístico Los Vélez", "Hotel con encanto altiplano"] },
@@ -2570,6 +2680,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2740, 37.6550],
     lugarIconico: "Ganaderías Ovinas del Altiplano de Chirivel",
     sectorPrincipal: "Ganadería artesanal y productos cárnicos del altiplano",
+    panorama: [
+      "Chirivel es ganadería de altiplano en estado puro: las ovejas pastan el monte bajo mediterráneo y dan una leche con la que se hace un queso artesano con carácter, junto a embutidos de cerdo ibérico criado en la sierra. Productos gastronómicos de origen, de los que cada vez más consumidores buscan por su trazabilidad y su sabor diferenciado.",
+      "Para un pueblo de 2.000 habitantes, esos productos son su mejor activo digital. La quesería que cuente su rebaño y venda online llega a un mercado gourmet en toda España; la charcutería de ibérico de altiplano hace lo mismo con 'embutido artesano Almería'; y el agroturismo —visitas, ordeño, talleres— es una experiencia con demanda creciente. Cuando el producto es real y único, la web solo tiene que enseñarlo.",
+    ],
+    hitos: [
+      { k: "GANADERÍA", v: "Ovino extensivo de altiplano" },
+      { k: "PRODUCTO", v: "Queso artesano + ibérico de sierra" },
+      { k: "EXPERIENCIA", v: "Agroturismo gastronómico" },
+      { k: "POBLACIÓN", v: "2.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Queso Artesanal de Oveja y Lácteos", descripcion: "Las ovejas del altiplano de Chirivel producen leche con un perfil lipídico diferenciado gracias al pastoreo en monte bajo mediterráneo. Queserías artesanales con trazabilidad de rebaño y venta online tienen un mercado gourmet en crecimiento.", icon: "star", keywords: ["Queso oveja artesanal Almería", "Quesería altiplano Los Vélez", "Lácteos artesanales ganadería extensiva", "Queso gourmet almeriense"] },
       { nombre: "Embutidos y Carne Ibérica del Altiplano", descripcion: "Los productos cárnicos de Chirivel, elaborados con cerdo ibérico criado en el altiplano, tienen un sabor diferenciado por la alimentación en monte bajo mediterráneo. Longanizas, chorizos y morcillas de Chirivel tienen mercado online entre consumidores que valoran el origen.", icon: "restaurant", keywords: ["Embutidos ibéricos altiplano Almería", "Longaniza chorizo artesanal", "Charcutería Los Vélez", "Carne ibérica criada monte"] },
