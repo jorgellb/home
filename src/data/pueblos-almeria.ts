@@ -418,6 +418,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5083, 36.9300],
     lugarIconico: "Yacimiento arqueológico de Los Millares",
     sectorPrincipal: "Turismo arqueológico y cultural",
+    panorama: [
+      "Santa Fe de Mondújar guarda uno de los grandes yacimientos de la prehistoria europea: Los Millares, el poblado calcolítico que hace 4.500 años fue una de las civilizaciones más avanzadas del continente. A un paso de la capital, es historia de primer nivel mundial en un pueblo pequeño.",
+      "Ese patrimonio es un imán de turismo cultural y escolar apenas explotado online. Una web que posicione las visitas a Los Millares capta grupos escolares y viajeros culturales durante todo el año; las pocas casas rurales del entorno saturan su ocupación con visibilidad básica; y los productores locales venden directo a la cercana Almería. Cuando el contenido es Patrimonio de verdad, posicionar es contarlo bien.",
+    ],
+    hitos: [
+      { k: "ARQUEOLOGÍA", v: "Los Millares · poblado calcolítico" },
+      { k: "RELEVANCIA", v: "De los más importantes de Europa" },
+      { k: "TURISMO", v: "Arqueológico y escolar" },
+      { k: "UBICACIÓN", v: "Junto a la capital" },
+    ],
     sectores: [
       { nombre: "Turismo Arqueológico y Cultural", descripcion: "Los Millares es uno de los asentamientos calcolíticos más relevantes de Europa. Santa Fe de Mondújar puede convertirse en referente de turismo arqueológico con una web que posicione las visitas al yacimiento y capte grupos escolares y viajeros culturales.", icon: "star", keywords: ["Visitas guiadas", "Grupos escolares", "SEO 'Los Millares'", "Turismo cultural"] },
       { nombre: "Alojamiento Rural y Casas de Campo", descripcion: "La tranquilidad de Santa Fe y su entorno natural son un activo para el turismo rural. Las pocas casas de alquiler y alojamientos rurales pueden saturar su ocupación con visibilidad digital básica.", icon: "home", keywords: ["Casa rural", "Alquiler vacacional", "Naturaleza", "Reservas directas"] },
@@ -1044,6 +1054,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.1820, 37.3520],
     lugarIconico: "Castillo de Albánchez",
     sectorPrincipal: "Turismo rural y agricultura ecológica",
+    panorama: [
+      "Albánchez tiene un castillo árabe en perfecto estado y, cada febrero, un espectáculo que pocos pueblos pueden ofrecer: sus laderas de almendros se cubren de flor blanca como un tapiz. Agricultura ecológica, patrimonio y senderismo en plena sierra del Almanzora.",
+      "La floración del almendro y las rutas de senderismo son su gancho turístico estacional, y las casas rurales que lo posicionen llenan febrero y los fines de semana. Los productores de almendra, aceite y miel ecológicos venden directo a toda España con una tienda online y la historia del origen. Patrimonio, naturaleza y producto: tres bazas para una web.",
+    ],
+    hitos: [
+      { k: "CASTILLO", v: "Árabe en perfecto estado" },
+      { k: "FLORACIÓN", v: "Almendros en flor cada febrero" },
+      { k: "PRODUCTO", v: "Almendra, aceite y miel ecológicos" },
+      { k: "SIERRA", v: "Del Almanzora · senderismo" },
+    ],
     sectores: [
       { nombre: "Casas Rurales y Turismo de Sierra", descripcion: "Albánchez es punto de partida de rutas de senderismo hacia los Filabres. Casas rurales, posadas y negocios de turismo activo necesitan web con reservas directas para no perder reservas por falta de presencia online.", icon: "leaf", keywords: ["Reservas rurales directas", "Rutas de senderismo", "Almendros en flor", "Escapadas de fin de semana"] },
       { nombre: "Productos Ecológicos y Artesanía", descripcion: "Los almendros, el aceite y la miel de la sierra de Albánchez tienen calidad excepcional. Productores locales que venden directamente al consumidor necesitan tienda online sencilla para llegar a clientes urbanos de toda España.", icon: "shop", keywords: ["Venta online de almendras", "Miel artesanal", "Aceite de sierra", "Envío nacional"] },
@@ -1104,6 +1124,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2420, 37.3880],
     lugarIconico: "Sendero de la Sierra de los Filabres",
     sectorPrincipal: "Turismo de naturaleza",
+    panorama: [
+      "Somontín se asienta en las estribaciones de los Filabres, entre encinares y monte bajo, con casas de piedra y adobe que conservan la arquitectura popular almeriense. Silencio, cielos estrellados y naturaleza sin adulterar: justo lo que el turista urbano busca y no encuentra.",
+      "Vender calma y cielo es vender un producto cada vez más demandado. Las casas rurales que posicionen 'casa rural tranquila Almería sierra' llenan con quien huye del ruido; los agricultores de montaña venden almendra y aceite de sabor diferenciado directo al consumidor; y los autónomos locales, sin competencia digital, captan toda la zona. Poco volumen, pero también poca competencia online.",
+    ],
+    hitos: [
+      { k: "NATURALEZA", v: "Encinar y monte bajo de los Filabres" },
+      { k: "CIELOS", v: "Estrellados · turismo slow" },
+      { k: "ARQUITECTURA", v: "Piedra y adobe populares" },
+      { k: "PRODUCTO", v: "Almendra y aceite de montaña" },
+    ],
     sectores: [
       { nombre: "Alojamiento Rural y Naturaleza", descripcion: "Somontín ofrece silencio, cielos estrellados y naturaleza sin adulterar. Casas rurales y propietarios de apartamentos necesitan web para aparecer en buscadores cuando alguien escribe 'casa rural tranquila Almería sierra'.", icon: "leaf", keywords: ["Casa rural tranquila", "Cielos estrellados", "Naturaleza sin masificación", "Turismo slow"] },
       { nombre: "Agricultura de Montaña", descripcion: "Los pequeños agricultores de Somontín producen almendras, olivas y hortalizas de montaña con un sabor diferenciado. Vender directamente al consumidor final a través de una web sencilla multiplica el margen.", icon: "home", keywords: ["Almendras de montaña", "Aceite artesanal", "Venta directa productor", "Sin intermediarios"] },
@@ -1154,6 +1184,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2050, 37.3420],
     lugarIconico: "Ayuntamiento Histórico de Líjar",
     sectorPrincipal: "Turismo histórico y curiosidad cultural",
+    panorama: [
+      "Líjar es el pueblo que le declaró la guerra a Francia en 1883 —y firmó la paz 89 años después—. Esa historia, una de las curiosidades históricas más célebres de España, ha dado la vuelta al mundo en los medios y convierte a este pueblo del Almanzora en un imán de turismo curioso.",
+      "Pocos municipios tienen un gancho de marketing tan poderoso y tan poco explotado online. Una web que cuente la historia, ofrezca visitas al ayuntamiento y rutas temáticas convierte la fama en visitantes; los bares y casas rurales captan a esos curiosos que llegan; y los productos locales (almendra, aceite) se venden al tráfico que atrae la anécdota. La mejor historia ya la tiene Líjar: solo falta contarla en internet.",
+    ],
+    hitos: [
+      { k: "HISTORIA", v: "Declaró la guerra a Francia en 1883" },
+      { k: "CURIOSIDAD", v: "Paz firmada 89 años después" },
+      { k: "FAMA", v: "Historia en medios de todo el mundo" },
+      { k: "TURISMO", v: "Curioso y periodístico" },
+    ],
     sectores: [
       { nombre: "Turismo de Historia Curiosa", descripcion: "La declaración de guerra a Francia de 1883 es una historia que ha salido en medios de todo el mundo. Líjar puede capitalizar esa fama en un turismo experiencial: visitas al ayuntamiento, actas históricas y rutas temáticas.", icon: "star", keywords: ["Pueblo que declaró guerra a Francia", "Turismo histórico curioso", "Historia Líjar", "Anécdotas históricas España"] },
       { nombre: "Alojamiento y Restauración", descripcion: "Cada persona que descubre la historia de Líjar quiere visitarlo. Casas rurales y bares del pueblo pueden captar ese tráfico de curiosos con una web que mezcle la historia con la oferta de alojamiento y gastronomía local.", icon: "restaurant", keywords: ["Visitar Líjar", "Dónde dormir Líjar", "Gastronomía serrana", "Experiencia histórica"] },
@@ -1461,6 +1501,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2220, 37.1010],
     lugarIconico: "Torres Medievales de Lucainena",
     sectorPrincipal: "Cicloturismo y turismo de patrimonio",
+    panorama: [
+      "Lucainena de las Torres está en la lista de los pueblos más bonitos de España, con su perfil de torres medievales recortado contra el cielo. Y por su término pasa la Vía Verde del Hierro, sobre el antiguo trazado minero, una de las rutas cicloturistas más populares de Andalucía.",
+      "Dos imanes —belleza reconocida y cicloturismo— con tráfico real que se capta online. Posicionar un alojamiento o restaurante para 'pueblos más bonitos de España' o para la Vía Verde atrae a miles de visitantes culturales y ciclistas con gasto; el alquiler de bicis y los talleres viven de ese flujo; y la hostelería no pierde ni un comensal con una buena ficha de Google. Reclamo de primera, demanda asegurada.",
+    ],
+    hitos: [
+      { k: "RECONOCIMIENTO", v: "De los pueblos más bonitos de España" },
+      { k: "PERFIL", v: "Torres medievales contra el cielo" },
+      { k: "VÍA VERDE", v: "Del Hierro · cicloturismo" },
+      { k: "RUTA", v: "Cicloturista top de Andalucía" },
+    ],
     sectores: [
       { nombre: "Cicloturismo y Vía Verde", descripcion: "La Vía Verde del Hierro atrae miles de cicloturistas al año. Alquiler de bicicletas, talleres de reparación, alojamientos y restaurantes en Lucainena tienen un flujo de clientes constante que necesitan web para convertir visitas en reservas.", icon: "sun", keywords: ["Vía Verde Hierro Almería", "Cicloturismo Almería", "Alquiler bicicletas", "Rutas ciclistas andalucía"] },
       { nombre: "Alojamiento y Turismo Patrimonial", descripcion: "Lucainena está en el top de 'pueblos más bonitos de España', una búsqueda con millones de resultados. Posicionar un alojamiento o restaurante local para esa búsqueda atrae turistas de perfil cultural con alto gasto.", icon: "home", keywords: ["Pueblo bonito España Almería", "Alojamiento Lucainena", "Turismo patrimonial almeriense", "Escapada fin semana"] },
@@ -1696,6 +1746,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.6120, 37.0980],
     lugarIconico: "Fuente del Nacimiento del Río",
     sectorPrincipal: "Agricultura de regadío histórico y turismo de agua",
+    panorama: [
+      "Nacimiento lleva el agua en el nombre: del manantial que le da origen brota el río Nacimiento, y de él, una huerta de regadío histórico de productividad excepcional en plena sierra, con frutales y hortalizas de sabor singular. Agua pura y huerta ancestral, una combinación rara en la Almería seca.",
+      "Esa pureza es su diferenciador digital. La fruta de huerta histórica —ciruelas, membrillos, granadas— se vende a precio premium online a quien valora el origen; la agricultura ecológica certificada se apoya en la historia del agua; y el manantial es un recurso de turismo de agua y baños naturales con demanda real. Producto con relato, web que lo distribuye.",
+    ],
+    hitos: [
+      { k: "AGUA", v: "Manantial que da origen al río" },
+      { k: "HUERTA", v: "De regadío histórico · fruta singular" },
+      { k: "TURISMO", v: "De agua y manantiales" },
+      { k: "ECO", v: "Agricultura ecológica certificada" },
+    ],
     sectores: [
       { nombre: "Fruta y Hortalizas de Huerta Histórica", descripcion: "La huerta de Nacimiento, regada con agua del manantial desde tiempos árabes, produce fruta de una calidad que los consumidores urbanos pagan a precio premium. Ciruelas, membrillos y granadas de regadío histórico con venta directa online.", icon: "leaf", keywords: ["Fruta de huerta histórica", "Ciruelas membrillo Almería sierra", "Producción regadío ancestral", "Frutales de montaña"] },
       { nombre: "Turismo del Agua y Manantiales", descripcion: "El nacimiento del río, con su fuente natural, es un espacio de esparcimiento y turismo de agua único en la sierra almeriense. Rutas de agua, baños naturales y merenderos junto al río son atracciones con demanda real.", icon: "sun", keywords: ["Fuente natural Almería", "Nacimiento río", "Turismo de agua sierra", "Baños naturales Almería"] },
@@ -1721,6 +1781,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5540, 37.1450],
     lugarIconico: "Los Tres Núcleos Históricos del Municipio",
     sectorPrincipal: "Turismo rural y comunidad local",
+    panorama: [
+      "Las Tres Villas son, literalmente, tres pueblos en uno: Doña María, Ocaña y Escúchagranos, cada uno con su plaza, sus fiestas y sus tradiciones, unidos en un solo municipio. Esa triple identidad es un carácter único en el mosaico rural de los Filabres.",
+      "Y es, además, una historia turística diferenciadora que casi nadie cuenta. Rutas por los tres núcleos, fiestas en tres épocas distintas, un aceite de cooperativa que reúne tres tradiciones en una botella: contenido original para el viajero que busca lo inédito, y para el mercado gourmet. La singularidad, bien contada online, vale más que el tamaño.",
+    ],
+    hitos: [
+      { k: "SINGULAR", v: "Doña María, Ocaña y Escúchagranos" },
+      { k: "IDENTIDAD", v: "Triple tradición y fiestas" },
+      { k: "ACEITE", v: "De oliva en cooperativa" },
+      { k: "SIERRA", v: "De los Filabres" },
+    ],
     sectores: [
       { nombre: "Turismo de Cultura Local Única", descripcion: "Tres pueblos en uno es una historia turística diferenciadora. Rutas por los tres núcleos, fiestas en tres épocas distintas y una gastronomía que mezcla tres tradiciones son un producto cultural original para el viajero que busca experiencias inéditas.", icon: "star", keywords: ["Tres pueblos un municipio", "Cultura local única", "Ruta tres barrios", "Tradiciones distintas"] },
       { nombre: "Agricultura y Aceite de Oliva", descripcion: "Las tres villas producen aceite de oliva en cooperativa. Un aceite con la narrativa de tres tradiciones distintas converge en una botella tiene una historia de marketing excepcional para el mercado gourmet.", icon: "leaf", keywords: ["Aceite tres villas Almería", "Cooperativa olivarera", "Aceite identidad triple origen", "Gourmet almeriense"] },
@@ -2008,6 +2078,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7920, 36.8640],
     lugarIconico: "Mirador de Félix con Vistas al Mar",
     sectorPrincipal: "Turismo de mirador y calidad de vida",
+    panorama: [
+      "Félix tiene la mejor de las vistas: desde la ladera sur de la Sierra de Gádor domina a la vez el mar de Alborán y el mar de plástico del Poniente. Setecientos vecinos en calma con el Mediterráneo al alcance de los ojos y la actividad industrial a sus pies.",
+      "Ese mirador es un activo de oro para el turismo y el nuevo residente. Las casas rurales que vendan 'vistas al mar desde la sierra' ganan a cualquier alojamiento de costa con más ruido y más precio; la fibra y la calidad de vida atraen al teletrabajador urbano; y los aceites de ladera sur tienen un microclima premium. Un panorama así, en la web, vende solo.",
+    ],
+    hitos: [
+      { k: "MIRADOR", v: "Vistas al mar de Alborán desde la sierra" },
+      { k: "POSICIÓN", v: "Ladera sur de la Sierra de Gádor" },
+      { k: "CONTRASTE", v: "Sierra arriba, invernaderos y mar abajo" },
+      { k: "NUEVOS", v: "Destino de teletrabajo rural" },
+    ],
     sectores: [
       { nombre: "Turismo de Calidad de Vida y Mirador", descripcion: "Las vistas de Félix al Mediterráneo desde la sierra son un activo único. Casas rurales y alojamientos que ofrezcan ese panorama tienen un diferenciador brutal frente a cualquier alojamiento de la costa con más ruido y más precio.", icon: "sun", keywords: ["Vistas al mar desde sierra Almería", "Alojamiento tranquilo Poniente", "Retiro rural con mar", "Casa rural vistas Mediterráneo"] },
       { nombre: "Productos Agrícolas de Ladera", descripcion: "Los olivos y almendros de las laderas de Félix, con exposición sur y microclima privilegiado, producen fruta y aceite de calidad superior. La proximidad a las playas del Poniente facilita la venta directa en mercados turísticos.", icon: "leaf", keywords: ["Aceite ladera sur sierra Gádor", "Almendra Félix Almería", "Producto ladera sur mediterráneo", "Venta directa tourismo"] },
@@ -2033,6 +2113,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7650, 36.8900],
     lugarIconico: "Rutas de Ciclismo de Sierra de Gádor",
     sectorPrincipal: "Deporte de montaña y turismo activo",
+    panorama: [
+      "Enix es montaña a un paso de la costa: en la vertiente sur de la Sierra de Gádor, sus 500 vecinos conviven con un flujo creciente de ciclistas y senderistas que usan la sierra como gimnasio, con vistas simultáneas al mar de Alborán y al de invernaderos del Poniente.",
+      "Ese deporte de montaña es un mercado cautivo y fiel. Las tiendas de bikes, talleres y organizadores de rutas captan al ciclista de todo el Poniente que entrena en Gádor; un bar bien posicionado para 'parada ciclistas Sierra de Gádor' vive de ese tráfico; y la calidad de vida con vistas atrae al teletrabajador y al turismo activo de fin de semana. Deporte y paisaje, dos bazas para una web.",
+    ],
+    hitos: [
+      { k: "DEPORTE", v: "Circuito de ciclismo de Sierra de Gádor" },
+      { k: "VISTAS", v: "Sierra, invernaderos y mar a la vez" },
+      { k: "ACCESO", v: "Montaña a un paso de la costa" },
+      { k: "NUEVOS", v: "Teletrabajo y turismo activo" },
+    ],
     sectores: [
       { nombre: "Ciclismo y Deportes de Montaña", descripcion: "La Sierra de Gádor desde Enix es circuito de entrenamiento de ciclistas de todo el Poniente. Tiendas de bikes, talleres de reparación y organizadores de rutas cicloturistas tienen en Enix un mercado cautivo de deportistas.", icon: "sun", keywords: ["Ciclismo Sierra Gádor Almería", "Ruta bici montaña Poniente", "Taller bicicletas sierra", "Cicloturismo almeriense"] },
       { nombre: "Senderismo y Turismo Activo", descripcion: "Las rutas de senderismo desde Enix tienen vistas simultáneas al invernadero del Poniente y a la sierra. Organizadores de rutas y guías posicionan para búsquedas de turismo activo de fin de semana desde la costa almeriense.", icon: "leaf", keywords: ["Senderismo Sierra Gádor Poniente", "Rutas fin de semana costa almería", "Guías senderismo almeriense", "Turismo activo cerca costa"] },
@@ -2201,6 +2291,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8320, 36.9960],
     lugarIconico: "Pozas y Cascadas del Río Nacimiento",
     sectorPrincipal: "Turismo de agua y naturaleza de verano",
+    panorama: [
+      "Padules es un pueblo blanco de la Alpujarra con un secreto de verano: las pozas y cascadas del río Nacimiento, piscinas naturales de agua cristalina de montaña rodeadas de vegetación. El baño en agua dulce más especial de la sierra de Almería, conocido por el boca a boca.",
+      "Ese secreto es un imán turístico estacional con un potencial enorme si se posiciona. Una web que capte 'piscinas naturales Almería' multiplica el flujo de visitantes de toda la provincia; las casas rurales tienen doble temporada —pozas en verano, floración en primavera—; y los bares y restaurantes viven de los cientos de turistas semanales del verano. Un recurso natural único que solo necesita aparecer en Google.",
+    ],
+    hitos: [
+      { k: "AGUA", v: "Pozas y cascadas del río Nacimiento" },
+      { k: "VERANO", v: "Piscinas naturales · secreto de la sierra" },
+      { k: "TEMPORADA", v: "Pozas en verano, floración en primavera" },
+      { k: "ALPUJARRA", v: "Pueblo blanco" },
+    ],
     sectores: [
       { nombre: "Turismo de Baños y Piscinas Naturales", descripcion: "Las pozas de Padules son uno de los destinos de baño en agua dulce más especiales de Almería. En verano, el boca a boca trae visitantes de toda la provincia. Una web que los posicione para 'piscinas naturales Almería' multiplica ese flujo.", icon: "sun", keywords: ["Piscinas naturales Almería", "Pozas río sierra", "Baño en cascadas naturales", "Verano sierra Almería"] },
       { nombre: "Alojamiento de Temporada Estival", descripcion: "Las familias que descubren Padules quieren quedarse. Casas rurales y apartamentos con temporada alta en verano (por las pozas) y primavera (por la floración) tienen un producto turístico de doble temporada con buena demanda.", icon: "home", keywords: ["Casa rural cerca pozas naturales", "Alojamiento verano sierra", "Apartamento alpujarreño", "Turismo familiar sierra Almería"] },
@@ -2311,6 +2411,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7760, 37.0440],
     lugarIconico: "Viñedos Históricos de la Uva de Ohanes",
     sectorPrincipal: "Viticultura histórica y turismo de uva",
+    panorama: [
+      "Ohanes dio nombre a una leyenda agrícola: la Uva de Ohanes —la 'Uva de Almería'— que en el siglo XIX conquistó los mercados de Londres, Nueva York y París y fue el primer gran producto de exportación masiva de la provincia. Pocos pueblos del mundo pueden reclamar una marca histórica así.",
+      "Esa historia es un activo turístico y gastronómico irrepetible. El productor que recupere y venda la uva de Ohanes online, con su relato de exportación a medio mundo, tiene un producto sin competencia; el enoturismo de historia —rutas por los viñedos centenarios, museo de la uva— atrae a un visitante cultural nacional e internacional; y el turismo rural de montaña a 900 metros redondea la oferta. Patrimonio puro esperando una web.",
+    ],
+    hitos: [
+      { k: "UVA", v: "De Ohanes · la 'Uva de Almería'" },
+      { k: "HISTORIA", v: "Conquistó Londres, NY y París (s. XIX)" },
+      { k: "HITO", v: "1ª exportación agrícola masiva de Almería" },
+      { k: "MONTAÑA", v: "Viñedos a 900 m" },
+    ],
     sectores: [
       { nombre: "Uva de Ohanes y Viticultura Centenaria", descripcion: "La Uva de Ohanes conquistó los mercados de Londres y Nueva York en el siglo XIX. Una marca histórica así tiene un valor gastronómico y turístico enorme. Productores que la recuperen y la vendan online con esa historia tienen un producto sin competencia directa.", icon: "leaf", keywords: ["Uva de Ohanes histórica", "Uva Almería exportación", "Viticultura centenaria Alpujarra", "Gastronomía patrimonio almeriense"] },
       { nombre: "Enoturismo de Historia Exportadora", descripcion: "La historia de la exportación de uva de Ohanes a toda Europa es una narrativa turística irrepetible. Bodegas, museos del vino y rutas por los viñedos históricos son un producto de enoturismo cultural con mercado en España y en el extranjero.", icon: "star", keywords: ["Enoturismo historia exportación", "Ruta viñedos históricos Almería", "Uva exportación Londres siglo XIX", "Turismo gastronomía historia"] },
@@ -2446,6 +2556,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.6280, 36.9820],
     lugarIconico: "Castillo Árabe de Instinción",
     sectorPrincipal: "Turismo de castillo y naturaleza fluvial",
+    panorama: [
+      "Instinción vigila el bajo Andarax desde un castillo árabe del siglo IX, uno de los restos históricos más antiguos del valle, y se ha hecho un nombre en el turismo al aire libre gracias al arbolado de ribera y las pozas fluviales del río Andarax. Patrimonio milenario y naturaleza de agua en un mismo pueblo.",
+      "Dos flujos turísticos complementarios que una web sabe capturar. El turismo del castillo y la herencia árabe (visitas, rutas, recreaciones) pone a Instinción en el mapa cultural; el camping y las actividades fluviales —kayak, baño bajo la ribera— atraen al turismo activo de verano; y los alojamientos y bares captan a ambos colectivos a la vez. Castillo y río: dos imanes, una página.",
+    ],
+    hitos: [
+      { k: "CASTILLO", v: "Árabe del siglo IX sobre el cerro" },
+      { k: "RÍO", v: "Pozas y arbolado de ribera del Andarax" },
+      { k: "TURISMO", v: "Camping y actividades fluviales" },
+      { k: "VALLE", v: "Bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Turismo del Castillo y Patrimonio Árabe", descripcion: "El castillo árabe del siglo IX de Instinción es uno de los restos históricos más antiguos del bajo Andarax. Visitas guiadas, rutas de patrimonio árabe y recreaciones históricas posicionan a Instinción en el mapa cultural almeriense.", icon: "star", keywords: ["Castillo árabe Instinción", "Patrimonio siglo IX Almería", "Turismo Al-Ándalus Andarax", "Visita castillo medieval"] },
       { nombre: "Camping y Turismo Fluvial", descripcion: "El arbolado de ribera del Andarax en Instinción crea un microclima fresco y sombreado ideal para el camping. Instalaciones de camping y servicios de turismo fluvial (kayak, piragüismo) posicionan para búsquedas de actividades en el río.", icon: "sun", keywords: ["Camping Andarax Almería", "Turismo fluvial río Almería", "Kayak río Andarax", "Zona de baño árbol ribera"] },
@@ -2556,6 +2676,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5280, 36.9250],
     lugarIconico: "Viñedos de Uva de Mesa de Alhabia",
     sectorPrincipal: "Uva de mesa premium y viticultura de exportación",
+    panorama: [
+      "Alhabia vive de un racimo: su uva de mesa de embarque, heredera de la gran tradición exportadora almeriense del siglo XIX, produce calibres excepcionales que aún hoy viajan a los mercados nacionales y europeos. Parras de moscatel y mollar en el bajo Andarax que son su seña de identidad.",
+      "Esa calidad y esa historia son su mejor producto digital. El productor que dé el salto a la venta directa online —con su origen, sus certificaciones y la temporada de la uva— se diferencia de la venta a granel; y el turismo de cosecha y vendimia (visitas a las parras, catas de uva fresca, venta en caja) es un agroturismo de otoño único. Con producto y relato, la web los convierte en marca.",
+    ],
+    hitos: [
+      { k: "UVA", v: "De mesa de embarque · calibre premium" },
+      { k: "HISTORIA", v: "Tradición exportadora del s. XIX" },
+      { k: "MERCADO", v: "Nacional y europeo" },
+      { k: "VEGA", v: "Del bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Uva de Mesa de Calibre y Exportación", descripcion: "La uva de Alhabia tiene un calibre y una calidad reconocidos en los mercados de exportación europeos. Productores que quieran dar el salto a la venta directa B2C online con su historia de origen y sus certificaciones tienen un diferenciador poderoso.", icon: "leaf", keywords: ["Uva mesa moscatel Almería", "Exportación uva almeriense", "Calibre premium uva", "Venta directa uva temporada"] },
       { nombre: "Turismo de Cosecha y Vendimia", descripcion: "La cosecha de uva en septiembre es un espectáculo agrícola que atrae turistas gastronómicos. Visitas participativas a las parras, catas de uva directa de la parra y venta en caja son experiencias de agroturismo únicas de la temporada.", icon: "sun", keywords: ["Turismo cosecha uva Almería", "Vendimia participativa Andarax", "Cata uva fresca parra", "Agroturismo otoño Almería"] },
