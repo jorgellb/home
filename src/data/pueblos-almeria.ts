@@ -1159,6 +1159,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2290, 37.3750],
     lugarIconico: "Bodegas Rupestres de Urracal",
     sectorPrincipal: "Turismo de autenticidad",
+    panorama: [
+      "Urracal es de los pueblos más pequeños del Almanzora —apenas 400 vecinos— y eso es exactamente su tesoro: autenticidad sin filtros, con bodegas rupestres talladas en la roca y fiestas populares que son joyas del turismo almeriense aún sin descubrir.",
+      "Para un pueblo así, internet iguala el partido. Un alojamiento bien posicionado para 'turismo auténtico Almería' llena las pocas plazas disponibles; las bodegas rupestres son un relato único para vender vino o experiencias; y los bares que aparezcan en Google captan a los senderistas y ciclistas de paso. Poca población, pero también cero competencia online y un producto irrepetible.",
+    ],
+    hitos: [
+      { k: "SINGULAR", v: "Bodegas rupestres talladas en roca" },
+      { k: "TAMAÑO", v: "~400 habitantes" },
+      { k: "TURISMO", v: "De autenticidad · sin masificar" },
+      { k: "VALLE", v: "Del Almanzora" },
+    ],
     sectores: [
       { nombre: "Turismo de Autenticidad y Escapadas", descripcion: "Urracal atrae a viajeros que huyen del turismo masificado. Un blog de viajes o web de alojamiento bien posicionada para 'turismo auténtico Almería' puede llenar todas las plazas disponibles en el municipio.", icon: "star", keywords: ["Turismo auténtico", "Pueblos sin masificar", "Experiencias únicas", "Slow travel España"] },
       { nombre: "Productos de Bodega y Viticultura", descripcion: "Las bodegas rupestres de Urracal son un símbolo identitario. Productores de vino y derivados de uva locales pueden diferenciarse en el mercado gourmet contando la historia de sus bodegas talladas en roca.", icon: "flask", keywords: ["Vino de bodega rupestre", "Viticultura artesanal", "Turismo del vino", "Producto gourmet"] },
@@ -1219,6 +1229,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.1790, 37.3310],
     lugarIconico: "Taller de Alfarería Tradicional",
     sectorPrincipal: "Artesanía cerámica y turismo cultural",
+    panorama: [
+      "Chercos guarda un oficio que se cuece a mano desde hace siglos: su alfarería tradicional, una cerámica modelada a mano que produce piezas únicas codiciadas por coleccionistas y decoradores. Patrimonio inmaterial vivo en un pueblo del Almanzora.",
+      "Esa artesanía es su mejor producto digital. Una tienda online con fotografía profesional de cada pieza vende cerámica de Chercos a interioristas y coleccionistas de toda España; los talleres y clases de alfarería son experiencias turísticas de alto valor que posicionan 'experiencias artesanales Almería'; y las tiendas de arte amplían su mercado sin salir del pueblo. Oficio único, escaparate global.",
+    ],
+    hitos: [
+      { k: "OFICIO", v: "Alfarería tradicional a mano" },
+      { k: "PATRIMONIO", v: "Inmaterial · técnica ancestral" },
+      { k: "MERCADO", v: "Coleccionistas e interiorismo" },
+      { k: "VALLE", v: "Del Almanzora" },
+    ],
     sectores: [
       { nombre: "Alfareros y Ceramistas", descripcion: "La alfarería de Chercos es patrimonio inmaterial de la provincia. Artesanos que producen cerámica a mano tienen un mercado creciente en decoración e interiorismo. Una tienda online con fotos profesionales de cada pieza única multiplica las ventas.", icon: "star", keywords: ["Cerámica artesanal Chercos", "Alfarería a mano", "Piezas únicas", "Interiorismo artesanal"] },
       { nombre: "Turismo Artesanal y Talleres", descripcion: "Turistas y grupos culturales pagan por aprender cerámica en los talleres de Chercos. Clases, visitas y workshops de alfarería son productos turísticos de alto valor que se posicionan bien en Google para búsquedas de 'experiencias artesanales Almería'.", icon: "leaf", keywords: ["Clases alfarería Almería", "Taller cerámica tradicional", "Workshop artesanía", "Experiencias culturales"] },
@@ -1244,6 +1264,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.1650, 37.3200],
     lugarIconico: "Mirador del Valle del Almanzora",
     sectorPrincipal: "Turismo de autenticidad extrema",
+    panorama: [
+      "Cóbdar es casi un susurro: 200 vecinos encaramados en la sierra, con casas de piedra blanca y calles estrechas detenidas en el tiempo y unas vistas al valle del Almanzora que quitan el sentido. La autenticidad llevada al extremo.",
+      "Y esa exclusividad es, hoy, un producto turístico premium. El viajero de alto poder adquisitivo busca destinos genuinamente pequeños e inaccesibles al turismo de masas: cada casa rural de Cóbdar es única y se vende sola si la web muestra ese privilegio. Los retiros creativos y de fotografía encuentran aquí el escenario perfecto, y los productos caseros venden con personalidad. Lo pequeño, bien contado, vale oro.",
+    ],
+    hitos: [
+      { k: "TAMAÑO", v: "~200 hab · de los menores de Almería" },
+      { k: "PAISAJE", v: "Casas de piedra blanca · vistas al valle" },
+      { k: "TURISMO", v: "De exclusividad y silencio" },
+      { k: "VALLE", v: "Del Almanzora" },
+    ],
     sectores: [
       { nombre: "Alojamiento Exclusivo de Montaña", descripcion: "Con solo 200 habitantes, cada casa rural de Cóbdar es única y exclusiva. Turistas de alto poder adquisitivo buscan destinos genuinamente pequeños e inaccesibles al turismo de masas. Una web que muestre esa exclusividad lo vende solo.", icon: "home", keywords: ["Alojamiento exclusivo sierra", "Turismo sin masificar", "Destino secreto Almería", "Experiencia única España"] },
       { nombre: "Fotografía y Arte de Paisaje", descripcion: "Las vistas de Cóbdar son material de trabajo para fotógrafos y artistas visuales. Organizadores de retiros creativos y workshops de fotografía de paisaje encuentran en Cóbdar el escenario perfecto.", icon: "star", keywords: ["Retiro creativo Almería", "Fotografía de paisaje sierra", "Workshop artístico", "Silencio y naturaleza"] },
@@ -1319,6 +1349,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2180, 37.3400],
     lugarIconico: "Viñedos de Suflí",
     sectorPrincipal: "Viticultura y productos hortícolas de interior",
+    panorama: [
+      "Suflí cultiva sabor: en el alto Almanzora, su clima de interior —con noches frescas hasta en verano— da unos tomates y pimientos de una intensidad imposible en el cultivo intensivo, junto a una viticultura artesanal de carácter. Producto de sierra de los que ya casi no quedan.",
+      "Esa concentración de sabor es su diferenciador online. La huerta vende a grupos de consumo urbanos y restaurantes que buscan producto con identidad; las pequeñas bodegas conectan con el consumidor de vino natural y local; y el cielo sin contaminación lumínica es un reclamo de stargazing y desconexión. Cuando el producto es así de auténtico, una web lo pone en la mesa de la ciudad.",
+    ],
+    hitos: [
+      { k: "HUERTA", v: "Tomate y pimiento de sabor intenso" },
+      { k: "CLIMA", v: "De interior · noches frescas" },
+      { k: "VINO", v: "Viticultura artesanal de sierra" },
+      { k: "CIELO", v: "Sin contaminación lumínica" },
+    ],
     sectores: [
       { nombre: "Bodegas y Vino Artesanal", descripcion: "Las viñas de Suflí producen uvas con perfil aromático diferenciado gracias al clima de sierra. Pequeñas bodegas artesanales que quieran acceder al mercado de vinos naturales y locales necesitan web para conectar con ese consumidor urbano especializado.", icon: "flask", keywords: ["Vino artesanal Almería", "Bodega familiar sierra", "Uva de interior", "Vino natural almeriense"] },
       { nombre: "Huerta y Productos Frescos", descripcion: "Los tomates, pimientos y berenjenas de Suflí tienen una concentración de sabor imposible en cultivos intensivos. Grupos de consumo urbanos y restaurantes locales son el mercado natural de estos productos con identidad.", icon: "leaf", keywords: ["Tomates de sierra", "Huerta tradicional", "Venta directa productor", "Grupo de consumo"] },
@@ -1344,6 +1384,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2730, 37.3920],
     lugarIconico: "Bosque de Pinos de los Filabres",
     sectorPrincipal: "Turismo de montaña y naturaleza",
+    panorama: [
+      "Laroya respira pinos: un pueblo de montaña en la Sierra de los Filabres rodeado de un bosque de pinos y encinas que es paraíso de senderistas y montañeros. Tranquilidad extrema y paisajes dramáticos para una escapada premium de naturaleza.",
+      "Ese entorno es su mercado. Los guías y organizadores de rutas captan al senderista que busca 'rutas de montaña Almería'; las casas rurales con galería de los Filabres llenan con turismo activo de interior; y la miel de pino y encina es un producto gourmet con un relato de origen poderoso. Naturaleza de verdad que una web sabe vender.",
+    ],
+    hitos: [
+      { k: "BOSQUE", v: "De pinos y encinas de los Filabres" },
+      { k: "TURISMO", v: "Senderismo y montaña" },
+      { k: "PRODUCTO", v: "Miel de pino y encina" },
+      { k: "ENTORNO", v: "Tranquilidad extrema" },
+    ],
     sectores: [
       { nombre: "Senderismo y Turismo de Montaña", descripcion: "Laroya es base de partida para rutas de montaña en la Sierra de los Filabres. Guías de montaña y organizadores de rutas senderistas posicionan bien en Google para búsquedas de rutas de senderismo en Almería.", icon: "leaf", keywords: ["Senderismo Sierra Filabres", "Rutas montaña Almería", "Guías de montaña", "Trekking almeriense"] },
       { nombre: "Alojamiento de Montaña", descripcion: "Casas rurales en Laroya atraen a senderistas, ciclistas de montaña y fotógrafos de naturaleza. Una web con reservas directas y galería de los paisajes de los Filabres posiciona en el nicho de turismo activo de interior.", icon: "home", keywords: ["Casa rural Sierra Filabres", "Alojamiento senderistas", "Ciclismo de montaña", "Fotografía naturaleza"] },
@@ -1369,6 +1419,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.3050, 37.3980],
     lugarIconico: "Minas de Hierro de Bacares",
     sectorPrincipal: "Turismo industrial e histórico",
+    panorama: [
+      "Bacares lleva el hierro en la sangre: pueblo minero histórico de los Filabres donde las minas de hierro, hoy cerradas, son un patrimonio industrial que fascina a los amantes de la historia y a los fotógrafos de ruinas. Memoria obrera y paisaje forestal en plena sierra.",
+      "Ese patrimonio minero es un recurso turístico en alza. Las visitas guiadas, las rutas de turismo industrial y la fotografía de patrimonio tienen demanda creciente; las casas rurales captan al senderista y al aficionado a los cielos estrellados; y una web que documente la historia de las minas atrae al turista cultural y sirve de recurso educativo. Identidad fuerte que solo necesita contarse online.",
+    ],
+    hitos: [
+      { k: "HISTORIA", v: "Pueblo minero de hierro" },
+      { k: "PATRIMONIO", v: "Minas · turismo industrial" },
+      { k: "ENTORNO", v: "Bosque de los Filabres" },
+      { k: "TURISMO", v: "Cultural y fotográfico" },
+    ],
     sectores: [
       { nombre: "Turismo Industrial y Patrimonio Minero", descripcion: "Las minas de Bacares son un escenario fotográfico y un patrimonio histórico único. Visitas guiadas, rutas de turismo industrial y fotografía de patrimonio son productos turísticos de creciente demanda.", icon: "factory", keywords: ["Minas históricas Almería", "Turismo industrial", "Fotografía patrimonio", "Rutas mineras"] },
       { nombre: "Casas Rurales y Naturaleza", descripcion: "El entorno forestal de los Filabres rodea Bacares de naturaleza. Los aficionados al senderismo, a la fotografía de naturaleza y a los cielos estrellados encuentran aquí una base perfecta para explorar la sierra.", icon: "home", keywords: ["Casa rural Filabres", "Naturaleza sierra Almería", "Stargazing Bacares", "Escapada rural auténtica"] },
@@ -1394,6 +1454,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2390, 37.3660],
     lugarIconico: "Sistema de Acequias Árabes de Bayarque",
     sectorPrincipal: "Turismo de herencia árabe y agricultura",
+    panorama: [
+      "Bayarque riega su huerta con el agua de hace ocho siglos: sus acequias árabes, todavía en uso, son un vestigio vivo de la ingeniería hidráulica medieval que ha alimentado a sus vecinos generación tras generación. Patrimonio en funcionamiento, no en un museo.",
+      "Esa autenticidad radical es un activo turístico y de producto difícil de igualar. Las visitas sobre el patrimonio hidráulico atraen a profesores, arqueólogos y turistas culturales; las hortalizas regadas con acequia árabe se venden con un relato de origen único; y el alojamiento para quien busca 'lo que ya no existe en ningún sitio' tiene un nicho fiel. Mil años de historia viva que una web pone en valor.",
+    ],
+    hitos: [
+      { k: "PATRIMONIO", v: "Acequias árabes en uso" },
+      { k: "HUERTA", v: "De regadío histórico · origen único" },
+      { k: "HISTORIA", v: "Ingeniería hidráulica medieval" },
+      { k: "VALLE", v: "Del Almanzora" },
+    ],
     sectores: [
       { nombre: "Turismo de Patrimonio Hidráulico", descripcion: "Las acequias árabes de Bayarque son un patrimonio vivo y un recurso turístico diferenciador. Visitas guiadas sobre ingeniería hidráulica medieval atraen a profesores, arqueólogos y turistas culturales.", icon: "star", keywords: ["Acequias árabes Almería", "Patrimonio hidráulico", "Al-Ándalus Almería", "Turismo medieval"] },
       { nombre: "Productos de la Huerta Histórica", descripcion: "Los productos de la huerta de Bayarque, regados con acequias centenarias, tienen una historia de origen única. Venta directa de hortalizas con el relato de las acequias árabes es marketing de producto de primer nivel.", icon: "leaf", keywords: ["Huerta regadío histórico", "Verduras de acequia árabe", "Origen único", "Agricultura milenaria"] },
@@ -1536,6 +1606,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.3090, 37.2340],
     lugarIconico: "Mirador con Vistas al Mediterráneo",
     sectorPrincipal: "Agricultura de montaña y turismo de paisaje",
+    panorama: [
+      "Tahal mira al mar desde la sierra: encaramado en los Filabres, en los días claros divisa el Mediterráneo, y en febrero sus almendros en flor lo convierten en uno de los rincones más fotogénicos de la comarca. Altitud, vistas y producto de montaña.",
+      "Ese paisaje y esa altitud son su sello. El aceite picual de sierra, con matices herbáceos por la altura, y la almendra de calibre grande tienen mercado gourmet online; los miradores atraen a fotógrafos y senderistas; y a menos de una hora de Almería capital, las casas rurales captan la escapada urbana de fin de semana. Producto premium y vistas de postal: dos bazas para una web.",
+    ],
+    hitos: [
+      { k: "VISTAS", v: "Al Mediterráneo desde la sierra" },
+      { k: "PRODUCTO", v: "Aceite picual y almendra de altitud" },
+      { k: "FLORACIÓN", v: "Almendros en flor en febrero" },
+      { k: "ESCAPADA", v: "A menos de 1 h de la capital" },
+    ],
     sectores: [
       { nombre: "Aceite de Oliva de Sierra y Almendras", descripcion: "La altitud y el microclima de Tahal producen aceite picual con matices herbáceos únicos apreciados en los mercados gourmet. Los almendros producen una almendra de calibre grande valorada en los mercados internacionales.", icon: "leaf", keywords: ["Aceite picual de sierra", "Almendra de montaña", "Microclima sierra Filabres", "Producto gourmet altitude"] },
       { nombre: "Turismo de Mirador y Fotográfico", descripcion: "Las vistas de Tahal al Mediterráneo son material de postal. Fotógrafos, senderistas y amantes del paisaje hacen de Tahal un destino de visita rápida que se puede convertir en destino de pernoctación con la web adecuada.", icon: "sun", keywords: ["Mirador vistas Mediterráneo Almería", "Fotografía paisaje sierra", "Senderismo con vistas", "Turismo de mirador"] },
@@ -1561,6 +1641,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.3560, 37.2820],
     lugarIconico: "Casco Histórico de Alcudia de Monteagud",
     sectorPrincipal: "Turismo de autenticidad y fotografía",
+    panorama: [
+      "Alcudia de Monteagud es el tiempo detenido: 150 vecinos, calles de tierra y casas encaladas que conservan la agricultura de secano de montaña como hace generaciones. Uno de los pueblos más pequeños y auténticos de los Filabres, que fascina a fotógrafos y viajeros.",
+      "Esa autenticidad extrema es su producto. Los talleres de fotografía y los retiros creativos encuentran aquí un escenario sin igual; cada casa rehabilitada que se alquila es única para el turista que quiere 'dormir en un pueblo pequeño de verdad'; y los productos de subsistencia —aceite, miel, higos secos— venden online con el relato de un pueblo de 150 almas. Lo auténtico, contado, se convierte en valor.",
+    ],
+    hitos: [
+      { k: "TAMAÑO", v: "~150 habitantes" },
+      { k: "ARQUITECTURA", v: "Calles de tierra y casas encaladas" },
+      { k: "TURISMO", v: "De autenticidad y fotografía" },
+      { k: "SIERRA", v: "De los Filabres" },
+    ],
     sectores: [
       { nombre: "Fotografía y Retiros Creativos", descripcion: "Los pueblos de tan pocos habitantes con arquitectura popular intacta son el paraíso de los fotógrafos de paisaje y arquitectura rural. Talleres de fotografía y retiros creativos en Alcudia de Monteagud son un nicho de alto valor.", icon: "star", keywords: ["Fotografía arquitectura rural Almería", "Retiro creativo sierra", "Taller foto paisaje", "Pueblo sin turistas fotos"] },
       { nombre: "Alojamiento de Autenticidad Máxima", descripcion: "Con 150 habitantes, cada casa rehabilitada que se alquila es única. El turista de autenticidad extrema que busca 'dormir en un pueblo pequeño de verdad' está dispuesto a pagar más por la experiencia.", icon: "home", keywords: ["Alojamiento pueblo pequeño Almería", "Casa antigua rehabilitada", "Turismo auténtico extremo", "Slow travel España"] },
@@ -1586,6 +1676,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2990, 37.2180],
     lugarIconico: "Quesos de Cabra de Benizalón",
     sectorPrincipal: "Ganadería caprina y turismo rural",
+    panorama: [
+      "Benizalón sabe a queso de cabra: en el corredor entre los Filabres y el Desierto de Tabernas, su tradición ganadera pervive con rebaños que dan uno de los mejores quesos de la comarca, gracias al pastoreo en monte bajo mediterráneo. Producto con identidad geográfica real.",
+      "Ese queso es su mejor escaparate digital. Las tiendas gourmet y los restaurantes de toda España buscan quesos con origen; una web lo conecta con ese mercado. Las visitas a la quesería y las catas son turismo gastronómico en alza; y los servicios a la ganadería (veterinario, pienso, cooperativa) captan a los ganaderos de toda la comarca. Producto auténtico, mercado nacional.",
+    ],
+    hitos: [
+      { k: "PRODUCTO", v: "Queso de cabra de monte bajo" },
+      { k: "GANADERÍA", v: "Caprina · identidad geográfica" },
+      { k: "TURISMO", v: "Gastronómico · visitas a quesería" },
+      { k: "CORREDOR", v: "Entre Filabres y Tabernas" },
+    ],
     sectores: [
       { nombre: "Queso y Productos Lácteos de Cabra", descripcion: "El queso artesanal de cabra de Benizalón tiene un perfil de sabor único gracias al pastoreo en monte bajo mediterráneo. Tiendas gourmet y restaurantes de toda España buscan quesos con identidad geográfica. Una web lo conecta con ese mercado.", icon: "star", keywords: ["Queso cabra artesanal Almería", "Quesería artesanal sierra", "Queso con denominación origen", "Gourmet lácteos"] },
       { nombre: "Turismo Ganadero y Rural", descripcion: "Las queserías artesanales son destinos de turismo gastronómico creciente. Visitas a la quesería, catas de queso y estancias en granjas son experiencias de alto valor para el turista gastronómico que visita Almería.", icon: "leaf", keywords: ["Visita quesería Almería", "Turismo gastronómico rural", "Cata queso artesanal", "Granja experiencial"] },
@@ -1611,6 +1711,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.3200, 37.2580],
     lugarIconico: "Casco de Benitagla — el más pequeño de Almería",
     sectorPrincipal: "Turismo de curiosidad y patrimonio extremo",
+    panorama: [
+      "Benitagla es el municipio más pequeño de Almería —apenas 100 empadronados— y uno de los menores de toda España continental: calles estrechas, arquitectura de adobe y el silencio de la España vaciada convertido, paradójicamente, en su mayor reclamo.",
+      "Porque ser el más pequeño es un titular que abre puertas. Periodistas, documentalistas y youtubers vienen a contar Benitagla; una web que capitalice esa narrativa atrae visitas y posibles compradores de las muchas casas vacías; el mercado de rehabilitación y segunda residencia tiene recorrido; y las residencias de artistas y creadores que buscan desconexión radical generan ingresos para los pocos negocios. Lo extremo, bien contado, es una marca.",
+    ],
+    hitos: [
+      { k: "RÉCORD", v: "El municipio más pequeño de Almería" },
+      { k: "TAMAÑO", v: "~100 empadronados" },
+      { k: "NARRATIVA", v: "Símbolo de la España vaciada" },
+      { k: "OPORTUNIDAD", v: "Rehabilitación y creadores" },
+    ],
     sectores: [
       { nombre: "Turismo de Curiosidad y Media", descripcion: "Ser el municipio más pequeño de Almería es un titular. Periodistas, documentalistas y youtubers de viajes vienen a contar la historia de Benitagla. Una web que capitalice esa narrativa atrae flujos de visitas y posibles compradores de propiedades.", icon: "star", keywords: ["Municipio más pequeño Almería", "España vaciada", "Documental pueblo pequeño", "Curiosidad turística"] },
       { nombre: "Rehabilitación de Vivienda Rural", descripcion: "Con 100 vecinos, Benitagla tiene muchas casas vacías o semiabandonadas. El mercado de rehabilitación y compra de casas rurales para alquiler o residencia secundaria es un negocio con potencial que necesita visibilidad online.", icon: "home", keywords: ["Comprar casa rural Almería barata", "Rehabilitación adobe sierra", "Segunda residencia rural", "Inversión pueblo pequeño"] },
@@ -1636,6 +1746,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.3810, 37.3050],
     lugarIconico: "Campos de Almendros en Flor de Senés",
     sectorPrincipal: "Turismo estacional y gastronomía serrana",
+    panorama: [
+      "Senés florece en febrero: sus campos de almendros y olivos en los Filabres se convierten en el escenario más fotogénico de la sierra, y su Carnaval, declarado de Interés Turístico, congrega a visitantes de toda la provincia. Paisaje y fiesta como motor.",
+      "Dos picos de demanda que una web convierte en negocio todo el año. La floración del almendro atrae a senderistas y fotógrafos de toda Andalucía si se posiciona 'almendros en flor Almería'; el Carnaval llena alojamientos y bares con reservas anticipadas bien gestionadas online; y los productos de sierra y los dulces de Carnaval (almendra garrapiñada) tienen mercado entre quienes recuerdan la fiesta. Estacionalidad fuerte, oportunidad clara.",
+    ],
+    hitos: [
+      { k: "FLORACIÓN", v: "Almendros en flor · escenario de la sierra" },
+      { k: "FIESTA", v: "Carnaval de Interés Turístico" },
+      { k: "PRODUCTO", v: "Almendra, aceite y dulces de sierra" },
+      { k: "SIERRA", v: "De los Filabres" },
+    ],
     sectores: [
       { nombre: "Turismo de Almendros en Flor", descripcion: "La floración de almendros en Senés, en febrero-marzo, es un espectáculo fotográfico que atrae senderistas y fotógrafos de toda Andalucía. Alojamientos y restaurantes que posicionen para 'almendros en flor Almería' llenan en temporada.", icon: "leaf", keywords: ["Almendros en flor Almería", "Ruta almendros Filabres", "Fotografía floración", "Senderismo febrero Almería"] },
       { nombre: "Carnaval y Fiestas Populares", descripcion: "El Carnaval de Senés, declarado de Interés Turístico, atrae a cientos de visitantes. Negocios locales de hostelería y alojamiento tienen un pico de demanda extraordinario en Carnaval que bien gestionado online se convierte en reservas anticipadas.", icon: "star", keywords: ["Carnaval Senés Interés Turístico", "Fiestas populares Almería", "Turismo festivo sierra", "Reservas Carnaval"] },
@@ -1661,6 +1781,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.4220, 37.2880],
     lugarIconico: "Ruta al Observatorio de Calar Alto",
     sectorPrincipal: "Turismo astronómico y científico",
+    panorama: [
+      "Velefique mira al cielo: pueblo de ladera en los Filabres, en el camino al Observatorio de Calar Alto —el mayor de Europa continental—, con cielos oscuros garantizados y vistas al paisaje semiárido almeriense. La puerta del turismo astronómico de la provincia.",
+      "Ese cielo es su mercado. Velefique puede posicionarse como el pueblo de pernocta del turista astronómico: stargazing, visitas guiadas al observatorio y noches de astronomía; los alojamientos y pensiones captan a los visitantes del observatorio, senderistas y ciclistas que recorren la sierra; y los bares y tiendas viven del paso hacia Calar Alto. Un cielo único que una web pone al alcance del visitante.",
+    ],
+    hitos: [
+      { k: "ASTRONOMÍA", v: "Camino al Observatorio de Calar Alto" },
+      { k: "CIELO", v: "Oscuro garantizado · stargazing" },
+      { k: "OBSERVATORIO", v: "El mayor de Europa continental" },
+      { k: "SIERRA", v: "De los Filabres" },
+    ],
     sectores: [
       { nombre: "Turismo Astronómico y Científico", descripcion: "El Observatorio de Calar Alto, a pocos kilómetros, es el mayor de Europa continental. Velefique puede posicionarse como el pueblo de pernocta de los turistas astronómicos, con stargazing, visitas guiadas al observatorio y cielos oscuros garantizados.", icon: "star", keywords: ["Turismo astronómico Calar Alto", "Stargazing Almería", "Observatorio Europa", "Noches de astronomía"] },
       { nombre: "Alojamiento de Paso y Senderismo", descripcion: "Velefique está en rutas de senderismo entre los Filabres y la zona del observatorio. Alojamientos y pensiones en el pueblo captan a todos los visitantes del observatorio, senderistas y ciclistas que recorren la sierra.", icon: "home", keywords: ["Alojamiento cerca Calar Alto", "Pensión senderismo Filabres", "Turismo activo sierra", "Dormir junto observatorio"] },
