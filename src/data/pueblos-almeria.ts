@@ -348,6 +348,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5167, 36.9083],
     lugarIconico: "Iglesia parroquial de Rioja",
     sectorPrincipal: "Servicios locales y pequeño comercio",
+    panorama: [
+      "Rioja es uno de esos pueblos pequeños de la vega almeriense donde la vida gira en torno al comercio de proximidad y el trato de toda la vida, a pocos minutos de la capital. No tiene un gran reclamo turístico, pero sí un mercado local muy concreto que casi nadie disputa en internet.",
+      "Y ahí está la oportunidad: en un pueblo así, el fontanero, la peluquería o el bar que aparezca en Google Maps cuando un vecino busca se lleva el cliente sin competencia digital. Con una web sencilla y la ficha de Google bien hecha, un negocio de Rioja se posiciona el primero de la zona casi sin esfuerzo. Poca población, sí, pero también cero competencia online.",
+    ],
+    hitos: [
+      { k: "PERFIL", v: "Pueblo de la vega almeriense" },
+      { k: "MERCADO", v: "Comercio y servicios de proximidad" },
+      { k: "VENTAJA", v: "Cero competencia digital local" },
+      { k: "POBLACIÓN", v: "1.200 habitantes" },
+    ],
     sectores: [
       { nombre: "Pequeño Comercio y Oficios", descripcion: "En municipios como Rioja, el fontanero, el electricista o la peluquería local compiten con los servicios de la capital. Quien tiene web y aparece en Google Maps cuando alguien busca, gana el cliente automáticamente.", icon: "briefcase", keywords: ["Google Business", "SEO Rioja Almería", "Urgencias locales", "Reseñas"] },
       { nombre: "Hostelería de Proximidad", descripcion: "El bar del pueblo y la venta local son el corazón social de Rioja. Una carta digital, buenas fotos en Google Maps y horarios actualizados convierten al transeúnte en cliente habitual.", icon: "restaurant", keywords: ["Carta QR", "Fotos atractivas", "Horario actualizado", "Menú del día online"] },
@@ -600,6 +610,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.9706, 37.2025],
     lugarIconico: "Antiguas minas de hierro de Bédar",
     sectorPrincipal: "Turismo rural y comunidad artística",
+    panorama: [
+      "Bédar mira al mar y a la Sierra Cabrera desde sus 1.000 habitantes, con un pasado minero de hierro escrito en el paisaje y, hoy, una sorprendente comunidad de artistas y residentes europeos que le dan una vida cultural rara en un pueblo tan pequeño. Historia, naturaleza y arte en un mismo balcón sobre el Levante.",
+      "Esa mezcla atrae a un turismo cultural de calidad que huye de lo masificado —y que se capta online. Las casas rurales con vistas a mar y sierra tienen poca competencia local; las galerías y artistas pueden vender sus piezas únicas a coleccionistas de toda Europa con una tienda o portfolio digital; y el patrimonio minero es un reclamo de senderismo temático. Identidad propia que una web sabe contar.",
+    ],
+    hitos: [
+      { k: "PAISAJE", v: "Vistas a Sierra Cabrera y el mar" },
+      { k: "HISTORIA", v: "Pasado minero de hierro" },
+      { k: "COMUNIDAD", v: "Artistas y residentes europeos" },
+      { k: "POBLACIÓN", v: "1.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Rural y Cultural", descripcion: "Bédar combina historia minera, naturaleza y una comunidad artística única en el Levante. Casas rurales, galerías de arte y estudios de artistas pueden atraer un turismo cultural de calidad que busca experiencias auténticas fuera del turismo de masas.", icon: "star", keywords: ["Turismo alternativo", "Arte y naturaleza", "Casa rural Bédar", "Senderismo Sierra Cabrera"] },
       { nombre: "Artesanía y Venta Online", descripcion: "Los artistas y artesanos de Bédar tienen piezas únicas con valor real. Una tienda online o portfolio digital bien construido permite vender a coleccionistas y amantes del arte de toda Europa sin depender del turismo de paso.", icon: "shop", keywords: ["Tienda online arte", "Portfolio artístico", "Venta a Europa", "Piezas únicas"] },
@@ -817,6 +837,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.8867, 37.4083],
     lugarIconico: "Castillo de Partaloa",
     sectorPrincipal: "Servicios locales y turismo rural",
+    panorama: [
+      "Partaloa es el alto Almanzora más auténtico: un pueblo pequeño de tradición agrícola y ganadera, con su castillo y una tranquilidad que se ha vuelto un valor en sí mismo para quien quiere escapar de la ciudad. Poco volumen, mucho carácter.",
+      "Para un pueblo así, internet iguala el terreno de juego. Las casas rurales que vendan 'desconexión real' captan a viajeros de Almería y Murcia; los ganaderos y productores acceden a comprador directo con una tienda online de queso, embutido y producto del campo; y los autónomos que aparezcan en Google Maps para servicios básicos no tienen competencia digital. Cada búsqueda local se convierte en cliente.",
+    ],
+    hitos: [
+      { k: "ENTORNO", v: "Castillo y alto Almanzora" },
+      { k: "ECONOMÍA", v: "Agrícola y ganadera tradicional" },
+      { k: "VENTAJA", v: "Sin competencia digital local" },
+      { k: "POBLACIÓN", v: "800 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Rural y Alojamiento", descripcion: "Partaloa tiene el encanto de lo auténtico. Casas rurales y alojamientos de turismo interior pueden captar viajeros de Almería y Murcia que buscan desconexión real, con una web sencilla y presencia en los buscadores.", icon: "home", keywords: ["Casa rural Partaloa", "Turismo interior Almería", "Desconexión", "Alquiler rural"] },
       { nombre: "Ganadería y Productos del Campo", descripcion: "Los ganaderos y productores locales de Partaloa pueden acceder a compradores directos con una web o tienda online básica. Queso artesano, embutidos y productos del campo tienen demanda creciente de consumidores que buscan origen auténtico.", icon: "leaf", keywords: ["Queso artesano", "Embutido local", "Venta directa", "Productos rurales"] },
@@ -1039,6 +1069,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2810, 37.4140],
     lugarIconico: "Iglesia de la Encarnación",
     sectorPrincipal: "Artesanía y turismo rural",
+    panorama: [
+      "Lúcar se encarama en la ladera del alto Almanzora, con sus calles encaladas y una artesanía viva —esparto, cerámica, forja— que se sigue trabajando como hace generaciones. Es uno de esos pueblos blancos de interior que el viajero que huye de lo masificado busca cada vez más.",
+      "Su artesanía es su mejor producto digital: una tienda online con la historia de cada pieza vende esparto y cerámica auténticos a toda España, a un comprador que valora el origen. Y como parada de las rutas de pueblos blancos del Almanzora, los alojamientos y restaurantes con presencia online captan a ese turista 'slow'. Producto real y único: solo hay que enseñarlo.",
+    ],
+    hitos: [
+      { k: "ARTESANÍA", v: "Esparto · cerámica · forja tradicionales" },
+      { k: "PUEBLO", v: "Blanco en la ladera del Almanzora" },
+      { k: "TURISMO", v: "Slow travel · rutas de interior" },
+      { k: "POBLACIÓN", v: "1.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Artesanos y Talleres Locales", descripcion: "La artesanía de Lúcar (esparto, cerámica, forja) tiene mercado en toda España entre quienes buscan productos únicos y auténticos. Una tienda online con historia de cada pieza convierte compradores impulsivos en clientes fieles.", icon: "star", keywords: ["Artesanía española auténtica", "Esparto artesanal", "Cerámica de autor", "Envío nacional"] },
       { nombre: "Turismo Cultural y Rural", descripcion: "Lúcar forma parte de las rutas de pueblos blancos del Almanzora. Alojamientos rurales y guías de senderismo pueden captar turistas con escapadas temáticas de artesanía, gastronomía y naturaleza.", icon: "leaf", keywords: ["Rutas pueblos blancos", "Turismo slow travel", "Gastronomía local", "Escapadas auténticas"] },
@@ -1386,6 +1426,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2200, 37.1700],
     lugarIconico: "Molinos de Agua de Uleila",
     sectorPrincipal: "Agricultura y turismo de naturaleza",
+    panorama: [
+      "Uleila del Campo cultiva el tiempo: olivos centenarios entre campos de cereal en la falda de los Filabres, con un patrimonio rural de eras, molinos de agua y caminos de herradura que hoy son recurso de turismo activo. Un paisaje agrícola tradicional que el visitante urbano valora cada vez más.",
+      "De ahí salen dos vías digitales claras. El aceite de sus olivos centenarios, con un perfil diferenciado, tiene mercado gourmet online si se cuenta con ficha técnica e historia del árbol; y las rutas por los molinos y caminos de herradura son un nicho de senderismo patrimonial poco competido. Cuando el producto y el paisaje son auténticos, posicionar es contarlos bien.",
+    ],
+    hitos: [
+      { k: "OLIVAR", v: "Olivos centenarios · aceite diferenciado" },
+      { k: "PATRIMONIO", v: "Molinos de agua · caminos de herradura" },
+      { k: "SIERRA", v: "Falda de los Filabres" },
+      { k: "POBLACIÓN", v: "1.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Agricultura y Aceite de Calidad", descripcion: "Los olivos centenarios de Uleila producen aceite con características organolépticas diferenciadas. Productores que quieren vender su aceite premium online necesitan web con historia del olivo, ficha técnica y pasarela de pago.", icon: "leaf", keywords: ["Aceite oliva virgen extra Filabres", "Olivos centenarios Almería", "Aceite gourmet almeriense", "Venta directa productor"] },
       { nombre: "Turismo Rural y Patrimonio", descripcion: "Los caminos de herradura y los molinos de agua de Uleila son recursos únicos para rutas de senderismo patrimonial. Guías y organizadores de rutas culturales tienen un nicho poco competido online.", icon: "star", keywords: ["Ruta molinos Almería", "Senderismo patrimonio rural", "Caminos históricos Filabres", "Turismo patrimonio"] },
@@ -1611,6 +1661,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5170, 37.3120],
     lugarIconico: "Castillo de Gérgal",
     sectorPrincipal: "Turismo cultural, astronómico y servicios",
+    panorama: [
+      "Gérgal une historia y ciencia como pocos: su castillo renacentista de los siglos XV-XVI domina el paisaje mientras, a pocos kilómetros, el Observatorio de Calar Alto explora el universo desde uno de los cielos más limpios de Europa. Es la puerta de los Filabres y del turismo astronómico almeriense.",
+      "Esa narrativa —castillo medieval más astronomía— es irresistible para el turista cultural y científico, y casi nadie la cuenta bien online. Una web que integre visita al castillo y experiencias astronómicas posiciona un destino único; y como última localidad con servicios completos antes de la sierra, los restaurantes, alojamientos y gasolineras de Gérgal captan todo el flujo hacia Calar Alto. Dos imanes en un solo pueblo.",
+    ],
+    hitos: [
+      { k: "CASTILLO", v: "Renacentista s. XV-XVI" },
+      { k: "ASTRONOMÍA", v: "Junto al Observatorio de Calar Alto" },
+      { k: "PUERTA", v: "De la sierra de los Filabres" },
+      { k: "POBLACIÓN", v: "1.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Astronómico y Castillo", descripcion: "Gérgal combina dos atracciones únicas: el castillo renacentista y la proximidad al Observatorio de Calar Alto. Una oferta turística que integra historia medieval y astronomía moderna tiene una narrativa irresistible para el turista cultural y científico.", icon: "star", keywords: ["Castillo Gérgal renacimiento", "Turismo astronómico Calar Alto", "Historia y ciencia Almería", "Visita castillo observatorio"] },
       { nombre: "Servicios para Turistas de los Filabres", descripcion: "Gérgal es la última localidad con servicios completos antes de adentrarse en los Filabres. Gasolineras, supermercados, restaurantes y talleres mecánicos se benefician del flujo de turistas hacia Calar Alto y los pueblos de la sierra.", icon: "shop", keywords: ["Servicios antes Filabres", "Última gasolinera Gérgal", "Restaurante en camino sierra", "Taller mecánico Gérgal"] },
@@ -1721,6 +1781,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7330, 37.1280],
     lugarIconico: "Fuentes Naturales de Abrucena",
     sectorPrincipal: "Turismo de agua y montaña nevada",
+    panorama: [
+      "Abrucena es el pueblo del agua: tiene más fuentes naturales por kilómetro cuadrado que ningún otro municipio de Almería, en la vertiente norte de Sierra Nevada, a los pies del Calar del Gallinero. Agua de alta montaña y cumbres nevadas en un mismo término: un binomio turístico singular y poco conocido.",
+      "Esa singularidad da contenido único, justo lo que mejor posiciona. Las rutas de fuentes y el embotellado artesanal de agua de montaña no tienen competencia; el senderismo por la cara norte de Sierra Nevada —la menos masificada— capta al montañero que busca alta montaña almeriense; y los alojamientos de base camp llenan con ese turismo activo. Poco explotado significa fácil de liderar online.",
+    ],
+    hitos: [
+      { k: "AGUA", v: "Más fuentes naturales por km² de Almería" },
+      { k: "MONTAÑA", v: "Vertiente norte de Sierra Nevada" },
+      { k: "TURISMO", v: "De agua y alta montaña" },
+      { k: "POBLACIÓN", v: "1.300 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo de Agua y Fuentes Naturales", descripcion: "Abrucena tiene más fuentes naturales por kilómetro cuadrado que cualquier otro municipio de Almería. Rutas de fuentes, baños en manantiales y embotellado artesanal de agua de alta montaña son productos únicos sin competencia directa.", icon: "sun", keywords: ["Fuentes naturales Almería", "Agua mineral sierra nevada", "Rutas de fuentes", "Turismo de agua"] },
       { nombre: "Senderismo Sierra Nevada Norte", descripcion: "La vertiente norte de Sierra Nevada desde Abrucena es la ruta menos masificada hacia las cumbres almerienses. Guías de montaña y organizadores de expediciones posicionan bien para búsquedas de senderismo de alta montaña almeriense.", icon: "leaf", keywords: ["Senderismo vertiente norte Sierra Nevada", "Alta montaña almería", "Rutas cumbres almerienses", "Guías de montaña nevada"] },
@@ -2096,6 +2166,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.9150, 36.9830],
     lugarIconico: "Bodega Cooperativa de Fondón",
     sectorPrincipal: "Viticultura alpujarreña y enoturismo",
+    panorama: [
+      "Fondón es la Alpujarra almeriense de manual: calles de launa, fuente árabe, acequia, vistas a Sierra Nevada y una de las bodegas cooperativas más antiguas de Almería, que elabora vino con la indicación Vinos de la Tierra de Almería. Vino y paisaje alpujarreño en estado puro.",
+      "Ese binomio vino + Alpujarra es enoturismo de alta gama esperando una web. Las catas y estancias vinícolas con el telón de Sierra Nevada se venden solas si se posicionan para 'vino alpujarreño' y 'enoturismo Sierra Nevada'; las casas rurales aprovechan el tirón creciente de la Alpujarra almeriense frente a la granadina; y la huerta de acequia vende producto de proximidad. Autenticidad que el visitante paga.",
+    ],
+    hitos: [
+      { k: "VINO", v: "Bodega cooperativa histórica · IGP Almería" },
+      { k: "ALPUJARRA", v: "Launa, acequia y fuente árabe" },
+      { k: "SIERRA", v: "Horizonte de Sierra Nevada" },
+      { k: "POBLACIÓN", v: "1.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Vino y Enoturismo Alpujarreño", descripcion: "La bodega cooperativa de Fondón produce vinos de alta montaña con perfil único. Catas, visitas a bodegas y estancias vinícolas en Fondón combinan el vino alpujarreño con el paisaje de Sierra Nevada, un producto de enoturismo de alta gama.", icon: "flask", keywords: ["Vino alpujarreño IGP Almería", "Enoturismo Sierra Nevada", "Bodega cooperativa Fondón", "Cata vino alta montaña"] },
       { nombre: "Turismo Rural Alpujarreño", descripcion: "Fondón tiene todo lo que define la Alpujarra: calles de launa, fuente árabe, acequia y vistas a la sierra. Casas rurales y alojamientos que vendan 'la Alpujarra almeriense' tienen una demanda creciente frente a la Alpujarra granadina.", icon: "home", keywords: ["Alpujarra almeriense turismo", "Casa rural Sierra Nevada", "Turismo interior Almería", "Escapada Alpujarra"] },
@@ -2196,6 +2276,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7380, 37.0160],
     lugarIconico: "Bodegas de Vino Ecológico de Canjáyar",
     sectorPrincipal: "Enoturismo, festival de la vendimia y servicios",
+    panorama: [
+      "Canjáyar se ha hecho un nombre propio en la Alpujarra almeriense gracias al vino: sus bodegas de vino ecológico de alta montaña y, sobre todo, su Festival de la Vendimia de septiembre —el gran evento enológico de la comarca, que atrae visitantes de toda Andalucía— lo han convertido en el nuevo centro del enoturismo alpujarreño.",
+      "Para sus negocios, ese tirón es oro digital concentrado en pocas semanas… si se aprovecha todo el año. Las bodegas que vendan vino y catas online, y los alojamientos y restaurantes que posicionen para 'Festival Vendimia Canjáyar' y 'enoturismo Alpujarra', llenan en septiembre y atraen visitantes el resto del año. Una web convierte un festival anual en un flujo constante.",
+    ],
+    hitos: [
+      { k: "ENOTURISMO", v: "Vino ecológico de alta montaña" },
+      { k: "EVENTO", v: "Festival de la Vendimia · septiembre" },
+      { k: "COMARCA", v: "Centro de la Alpujarra media" },
+      { k: "POBLACIÓN", v: "1.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Bodegas y Festival de la Vendimia", descripcion: "El Festival de la Vendimia de Canjáyar en septiembre es el evento más importante de la Alpujarra almeriense. Bodegas, alojamientos y restaurantes que posicionen para 'Festival Vendimia Canjáyar' tienen un flujo de visitantes asegurado cada año.", icon: "flask", keywords: ["Festival Vendimia Canjáyar", "Enoturismo Alpujarra almeriense", "Bodega ecológica montaña", "Vino DO alta montaña"] },
       { nombre: "Servicios y Comercio Local", descripcion: "Canjáyar es el centro de servicios de la Alpujarra almeriense media: médico, farmacia, supermercado, talleres. Negocios visibles en Google Maps captan tanto a los 1.500 vecinos como a los turistas que visitan la comarca.", icon: "shop", keywords: ["Servicios Canjáyar", "Centro médico Alpujarra", "Comercio local Andarax", "Farmacia Alpujarra"] },
@@ -2296,6 +2386,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7060, 37.0330],
     lugarIconico: "Viñedos de Variedades Autóctonas de Alcolea",
     sectorPrincipal: "Viticultura y aceite de recuperación artesanal",
+    panorama: [
+      "Alcolea es Alpujarra con mirada joven: bodegueros de nueva generación están recuperando aquí variedades de uva autóctonas casi extintas, y sus olivos y almendros centenarios dan un aceite de calidad reconocida. Un pueblo del corredor alpujarreño donde la tradición se reinventa.",
+      "Esa narrativa de recuperación es exactamente lo que vende en la cultura del vino natural y de origen. El vino de variedades autóctonas y el aceite con trazabilidad de árbol centenario tienen un mercado premium nacional que se capta con una web que cuente la historia; y como parada de la ruta alpujarreña, los alojamientos posicionan para el viajero de la A-348. Patrimonio recuperado, contado online, se convierte en marca.",
+    ],
+    hitos: [
+      { k: "VINO", v: "Variedades autóctonas recuperadas" },
+      { k: "ACEITE", v: "Frutales centenarios · trazabilidad" },
+      { k: "RUTA", v: "En el corredor alpujarreño (A-348)" },
+      { k: "POBLACIÓN", v: "900 habitantes" },
+    ],
     sectores: [
       { nombre: "Vino de Variedades Autóctonas Recuperadas", descripcion: "Los bodegueros jóvenes de Alcolea están recuperando variedades de uva autóctonas de la Alpujarra casi extintas. Vinos con esa narrativa de recuperación genética y patrimonio vinícola tienen un mercado premium en la cultura del vino natural y de origen.", icon: "flask", keywords: ["Vino variedades autóctonas Alpujarra", "Bodega artesanal nueva generación", "Viticultura recuperación genética", "Vino natural Almería"] },
       { nombre: "Aceite de Frutales Centenarios", descripcion: "Los olivos y almendros centenarios de Alcolea producen aceite y frutos de perfil organoléptico diferenciado. El mercado gourmet paga premium por aceites con trazabilidad de árbol y una historia de 300 años de cultivo.", icon: "leaf", keywords: ["Aceite olivos centenarios Almería", "Trazabilidad árbol aceite", "Oleicultura artesanal alpujarra", "Aceite premium origen"] },
@@ -2655,6 +2755,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2390, 37.7050],
     lugarIconico: "Parque Natural Sierra de María",
     sectorPrincipal: "Ecoturismo y naturaleza en Parque Natural",
+    panorama: [
+      "María vive dentro de un tesoro: el Parque Natural Sierra de María-Los Vélez, el rincón con mayor biodiversidad vegetal por kilómetro cuadrado de Almería, con bosques de pinos y sabinas únicos en la provincia. Es el pulmón verde del altiplano y un destino de naturaleza que aún no ha explotado ni la mitad de su potencial.",
+      "Ese parque natural es un imán turístico premium para quien sepa posicionarlo. Los guías de senderismo y empresas de ecoturismo captan al visitante que busca 'senderismo Parque Natural Almería'; los alojamientos rurales dentro y junto al parque son referencia para miles de visitantes anuales; y la micología —setas y trufas del bosque— es un nicho gastronómico diferenciado. Naturaleza única que una web pone en el mapa.",
+    ],
+    hitos: [
+      { k: "PARQUE", v: "Natural Sierra de María-Los Vélez" },
+      { k: "BIODIVERSIDAD", v: "La mayor de Almería por km²" },
+      { k: "TURISMO", v: "Senderismo · micología · ecoturismo" },
+      { k: "POBLACIÓN", v: "1.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Ecoturismo y Senderismo en Parque Natural", descripcion: "El Parque Natural Sierra de María es el destino de senderismo y naturaleza más importante de Los Vélez. Guías de naturaleza, empresas de turismo activo y alojamientos rurales que posicionen para 'senderismo Parque Natural Almería' tienen un nicho premium con demanda real.", icon: "leaf", keywords: ["Senderismo Parque Natural Sierra María", "Ecoturismo Almería norte", "Naturaleza única almeriense", "Guía naturaleza Los Vélez"] },
       { nombre: "Alojamiento Rural en Parque Natural", descripcion: "Las casas rurales y hoteles dentro y junto al Parque Natural de María son el alojamiento de referencia para los miles de visitantes anuales del parque. Una web bien posicionada para 'alojamiento Parque Natural Almería' capta toda esa demanda.", icon: "home", keywords: ["Hotel Parque Natural Almería", "Casa rural Sierra María", "Alojamiento ecoturismo", "Dormir entre pinos Almería"] },
@@ -2715,6 +2825,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.0370, 37.5590],
     lugarIconico: "Olivares Centenarios de Taberno",
     sectorPrincipal: "Aceite de oliva, almendras y servicios de corredor",
+    panorama: [
+      "Taberno vive en la transición entre el altiplano de Los Vélez y el Levante, con su arquitectura encalada y un secano de almendros y olivos que da aceite y frutos de sabor concentrado. Un paisaje árido y dramático que es, a la vez, despensa de calidad y reclamo para un turismo distinto.",
+      "Su secano es su sello premium: el aceite y la almendra cultivados sin regadío tienen un perfil más intenso que los del Poniente, un diferenciador que el mercado gourmet paga si se cuenta online. Y como cruce de caminos, los bares, talleres y comercios captan el tráfico del corredor con una buena ficha de Google. Producto de secano más posición de paso: dos activos para una web.",
+    ],
+    hitos: [
+      { k: "SECANO", v: "Aceite y almendra de sabor intenso" },
+      { k: "POSICIÓN", v: "Corredor Los Vélez–Levante" },
+      { k: "PAISAJE", v: "Altiplano árido y dramático" },
+      { k: "POBLACIÓN", v: "1.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Aceite de Oliva y Almendras de Secano", descripcion: "Los olivos y almendros de Taberno, cultivados en secano en el altiplano de Los Vélez, producen aceite y frutos con un perfil de sabor más concentrado e intenso que los cultivos de regadío del Poniente. Un diferenciador premium para el mercado gourmet.", icon: "leaf", keywords: ["Aceite secano Los Vélez", "Almendra altiplano almeriense", "Aceite secano intenso", "Productos de secano Almería"] },
       { nombre: "Servicios del Corredor", descripcion: "Taberno está en el cruce de caminos entre Los Vélez y el Levante almeriense. Talleres mecánicos, gasolineras, bares y comercios que sirvan al tráfico del corredor tienen un mercado de paso constante que se puede captar con presencia en Google Maps.", icon: "shop", keywords: ["Servicios corredor Los Vélez Levante", "Taller mecánico Taberno", "Bar parada corredor", "Gasolinera Los Vélez"] },
