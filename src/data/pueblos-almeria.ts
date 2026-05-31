@@ -1816,6 +1816,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.4010, 37.3210],
     lugarIconico: "Observatorio de Calar Alto",
     sectorPrincipal: "Astronomía y turismo de cielos oscuros",
+    panorama: [
+      "Castro de Filabres vive bajo el cielo más oscuro de la Península: es el municipio más cercano al Observatorio de Calar Alto, con prácticamente cero contaminación lumínica y acceso directo a las pistas de la sierra. Un balcón al universo en pleno corazón de los Filabres.",
+      "Ese cielo es un producto turístico premium con mercado internacional. Los alojamientos y guías de astronomía pueden posicionarse como destino de stargazing para astrónomos profesionales y aficionados de toda Europa; el senderismo de alta montaña capta al turista activo; y un alojamiento que ofrezca 'dormir bajo el cielo más oscuro de España' tiene un nicho dispuesto a pagar premium. Un activo único que solo necesita aparecer en Google.",
+    ],
+    hitos: [
+      { k: "CIELO", v: "El más oscuro de la Península" },
+      { k: "OBSERVATORIO", v: "Calar Alto a un paso" },
+      { k: "TURISMO", v: "Stargazing · alta montaña" },
+      { k: "SIERRA", v: "De los Filabres" },
+    ],
     sectores: [
       { nombre: "Turismo de Cielos Oscuros y Stargazing", descripcion: "Castro de Filabres es el municipio más cercano al Observatorio de Calar Alto con prácticamente cero contaminación lumínica. Alojamientos y guías de astronomía pueden posicionarse como destino premium de stargazing para astrónomos profesionales y aficionados de toda Europa.", icon: "star", keywords: ["Cielos oscuros Almería", "Stargazing reserva sierra", "Turismo astronómico España", "Cero contaminación lumínica"] },
       { nombre: "Senderismo de Alta Montaña", descripcion: "Las pistas forestales de los Filabres desde Castro son la entrada a un paraíso de senderismo con fauna mediterránea y vistas de 360 grados. Guías de montaña y organizadores de rutas posicionan bien para búsquedas de senderismo en sierra de Almería.", icon: "leaf", keywords: ["Senderismo alta montaña Filabres", "Rutas forestales Almería", "Montaña virgen", "Fauna mediterránea"] },
@@ -2456,6 +2466,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8030, 37.0210],
     lugarIconico: "Instalaciones Solares de Almócita",
     sectorPrincipal: "Turismo de sostenibilidad y vida ecológica",
+    panorama: [
+      "Almócita fue noticia en el mundo entero cuando, en 2009, decidió convertirse en un municipio ecológico integral: genera su propia energía solar, gestiona sus residuos de forma sostenible y ha creado un modelo de convivencia rural verde que atrae a visitantes de todo el planeta. Un pueblo pequeño con una marca enorme.",
+      "Esa identidad sostenible es un activo digital con demanda internacional. Los cursos de permacultura, los retiros de ecología y las visitas de estudio (arquitectos, urbanistas, colegios) son productos turísticos únicos; las casas rurales eco-certificadas posicionan en el mercado del viajero consciente; y los productos ecológicos venden con el relato del pueblo más verde de Almería. Una marca de sostenibilidad que la web lleva al mundo.",
+    ],
+    hitos: [
+      { k: "PIONERO", v: "Municipio ecológico integral (2009)" },
+      { k: "ENERGÍA", v: "Solar propia · residuos sostenibles" },
+      { k: "FAMA", v: "Noticia en medios de todo el mundo" },
+      { k: "TURISMO", v: "De sostenibilidad y eco-educación" },
+    ],
     sectores: [
       { nombre: "Turismo de Sostenibilidad y Eco-educación", descripcion: "Almócita es destino de estudio para arquitectos, urbanistas y activistas de todo el mundo. Cursos de permacultura, retiros de ecología práctica y visitas escolares a las instalaciones sostenibles son productos turísticos con demanda internacional.", icon: "leaf", keywords: ["Turismo sostenibilidad Almería", "Municipio ecológico España", "Permacultura Alpujarra", "Educación ambiental rural"] },
       { nombre: "Alojamiento Eco-responsable", descripcion: "Los turistas que visitan Almócita buscan alojamiento coherente con sus valores: sin plásticos, energía renovable, compost y productos locales. Una casa rural ecológica certificada posiciona perfectamente en el mercado de viajeros conscientes.", icon: "home", keywords: ["Alojamiento ecológico Almería", "Casa rural sostenible", "Ecoturismo España", "Viaje responsable Andalucía"] },
@@ -2481,6 +2501,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8590, 37.0570],
     lugarIconico: "Casco Alpujarreño de Beires",
     sectorPrincipal: "Turismo de arquitectura alpujarreña y fotografía",
+    panorama: [
+      "Beires conserva la Alpujarra más pura: con apenas 150 vecinos, sus calles guardan launes, tinaos y galerías voladizas de madera, el estilo arquitectónico de la Alta Alpujarra mejor preservado de la provincia. Un museo vivo de la arquitectura popular almeriense.",
+      "Esa arquitectura es su producto turístico diferenciador. Los talleres de fotografía y dibujo arquitectónico, las visitas guiadas al casco y las casas de launa para dormir en arquitectura viva atraen al viajero cultural y al fotógrafo; y los artesanos que mantienen los oficios de tejido y forja venden piezas únicas. Autenticidad arquitectónica que una web pone en valor para el turismo de patrimonio.",
+    ],
+    hitos: [
+      { k: "ARQUITECTURA", v: "Alpujarreña más pura · launes y tinaos" },
+      { k: "TAMAÑO", v: "~150 habitantes" },
+      { k: "TURISMO", v: "Patrimonial y de fotografía" },
+      { k: "ALPUJARRA", v: "Alta almeriense" },
+    ],
     sectores: [
       { nombre: "Turismo Arquitectónico y Fotografía", descripcion: "La arquitectura alpujarreña de Beires es material de trabajo para arquitectos, fotógrafos y documentalistas. Talleres de dibujo arquitectónico, retiros de fotografía y visitas guiadas al casco histórico son un nicho turístico de alto valor.", icon: "star", keywords: ["Arquitectura alpujarreña Almería", "Fotografía arquitectura popular", "Launes y tinaos", "Turismo patrimonial Alpujarra"] },
       { nombre: "Alojamiento de Arquitectura Auténtica", descripcion: "Dormir en una casa de launa en Beires es dormir en arquitectura viva. Una casa rural que preserve la arquitectura alpujarreña y la cuente en su web atrae al viajero cultural y al fotógrafo de arquitectura que busca autenticidad absoluta.", icon: "home", keywords: ["Casa de launa alpujarreña", "Arquitectura viva Almería", "Alojamiento único Alpujarra", "Turismo arquitectura rural"] },
@@ -2576,6 +2606,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.9720, 37.0570],
     lugarIconico: "Calles en Ladera de Paterna del Río",
     sectorPrincipal: "Aromáticas, turismo nazarí y naturaleza",
+    panorama: [
+      "Paterna del Río huele a lavanda: pueblo de la Alta Alpujarra con la estructura urbanística nazarí intacta en sus calles en ladera, y unas laderas cubiertas de jara, lavanda y romero silvestres que son la base de una industria artesanal de aromáticas en crecimiento. Patrimonio árabe y aroma de sierra.",
+      "Esos dos activos —aromáticas y arquitectura nazarí— son nichos digitales sin apenas competencia. Los artesanos que destilan aceites esenciales y elaboran jabones y aromaterapia tienen un producto con identidad de origen poderosa para vender online; las rutas de arquitectura nazarí atraen al turista cultural especializado; y las casas rurales que ofrezcan «desconexión aromática» tocan el turismo de bienestar. Aroma e historia, dos relatos para una web.",
+    ],
+    hitos: [
+      { k: "AROMÁTICAS", v: "Lavanda, jara y romero silvestres" },
+      { k: "PATRIMONIO", v: "Urbanismo nazarí en ladera" },
+      { k: "PRODUCTO", v: "Aceites esenciales y aromaterapia" },
+      { k: "ALPUJARRA", v: "Alta almeriense" },
+    ],
     sectores: [
       { nombre: "Plantas Aromáticas y Esencias Naturales", descripcion: "Las laderas de Paterna del Río están cubiertas de lavanda, jara, romero y tomillo silvestres. Artesanos que destilan aceites esenciales y elaboran jabones, velas y aromaterapia tienen un producto con identidad de origen poderosa.", icon: "leaf", keywords: ["Aceites esenciales sierra Almería", "Lavanda silvestre Alpujarra", "Jabones aromáticos artesanales", "Destilación plantas medicinales"] },
       { nombre: "Turismo de Arquitectura Nazarí", descripcion: "Las calles de ladera de Paterna preservan la estructura urbanística de origen nazarí mejor que cualquier otro municipio de la Alpujarra almeriense. Rutas guiadas con arquitectos e historiadores posicionan para turismo cultural especializado.", icon: "star", keywords: ["Arquitectura nazarí Almería", "Urbanismo árabe sierra", "Turismo histórico Al-Ándalus", "Ruta nazarí Alpujarra"] },
@@ -2601,6 +2641,16 @@ export const pueblos: Pueblo[] = [
     coords: [-3.0040, 37.0210],
     lugarIconico: "Cumbres de Sierra Nevada desde Bayárcal",
     sectorPrincipal: "Montaña, nieve y turismo de altitud",
+    panorama: [
+      "Bayárcal es el techo de Almería: el pueblo más alto de la provincia, a más de 1.200 metros, con nieve en invierno y las cumbres de Sierra Nevada en la ventana. El fin del mundo de la Alpujarra almeriense, donde más arriba solo hay cumbres.",
+      "Esa altitud extrema es su producto turístico más puro. En invierno, el esquí de fondo, las raquetas de nieve y el alpinismo posicionan un turismo de montaña sin masificación; en verano, las ascensiones a las cumbres almerienses de Sierra Nevada; y un alojamiento que venda «dormir en el pueblo más alto de Almería con nieve en la ventana» se vende solo. Un destino de altitud que la web pone al alcance del montañero.",
+    ],
+    hitos: [
+      { k: "ALTITUD", v: "El pueblo más alto de Almería (>1.200 m)" },
+      { k: "NIEVE", v: "En invierno · esquí de fondo" },
+      { k: "MONTAÑA", v: "Cumbres de Sierra Nevada" },
+      { k: "TURISMO", v: "De altitud sin masificación" },
+    ],
     sectores: [
       { nombre: "Turismo de Nieve y Alta Montaña", descripcion: "Bayárcal tiene nieve en invierno y es el acceso más remoto a Sierra Nevada desde el sur. Esquí de fondo, raquetas de nieve y alpinismo de invierno posicionan a Bayárcal en el nicho de turismo de montaña de invierno sin masificación.", icon: "sun", keywords: ["Nieve Alpujarra almeriense", "Esquí de fondo Sierra Nevada", "Alta montaña sin turistas", "Raquetas de nieve Almería"] },
       { nombre: "Senderismo de Verano en Cumbres", descripcion: "En verano, Bayárcal es base para ascensiones a las cumbres almerienses de Sierra Nevada. Guías de alta montaña y alojamientos para montañeros tienen en Bayárcal el producto de altitud más puro de la provincia.", icon: "leaf", keywords: ["Ascensión cumbres almerienses", "Guía montaña Sierra Nevada sur", "Trekking alta montaña verano", "Cumbre Almería expedición"] },
@@ -2661,6 +2711,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.6640, 37.0060],
     lugarIconico: "Balneario Histórico de Rágol",
     sectorPrincipal: "Turismo hidrotermal e historia balnearia",
+    panorama: [
+      "Rágol tuvo balneario: sus aguas minero-medicinales ferruginosas convirtieron a este pueblo del Andarax, en el siglo XIX, en lugar de baños de la burguesía almeriense. Los restos de aquel balneario histórico son hoy un patrimonio industrial en pleno redescubrimiento.",
+      "Ese pasado termal es una oportunidad turística poco común. La recuperación del balneario —como spa natural o museo hidrotermal— tiene potencial para el turista cultural y de bienestar; un centro que use esas aguas ferruginosas como base tendría un diferenciador histórico y científico sin competencia en la provincia; y los alojamientos del valle del Andarax acompañan ese turismo de salud y naturaleza. Una historia balnearia que una web puede resucitar.",
+    ],
+    hitos: [
+      { k: "BALNEARIO", v: "Histórico · aguas ferruginosas" },
+      { k: "HISTORIA", v: "Baños de la burguesía del s. XIX" },
+      { k: "TURISMO", v: "Hidrotermal y de bienestar" },
+      { k: "VALLE", v: "Del Andarax" },
+    ],
     sectores: [
       { nombre: "Turismo Termal e Hidrotermal Histórico", descripcion: "El balneario histórico de Rágol es un patrimonio industrial único en el valle del Andarax. Su recuperación, aunque sea parcial, como spa natural o museo hidrotermal tiene potencial turístico real para el viajero cultural y de bienestar.", icon: "health", keywords: ["Balneario histórico Almería", "Aguas medicinales Andarax", "Turismo termal almeriense", "Patrimonio hidrotermal"] },
       { nombre: "Bienestar y Termalismo Natural", descripcion: "Las aguas ferruginosas de Rágol tienen propiedades reconocidas históricamente. Un spa o centro de bienestar que use esas aguas naturales como base tiene un diferenciador científico e histórico sin competencia directa en la provincia.", icon: "star", keywords: ["Spa aguas termales Almería", "Termalismo natural sierra", "Bienestar agua mineral hierro", "Centro salud natural Andarax"] },
@@ -2721,6 +2781,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.6120, 36.9710],
     lugarIconico: "Viñedos en Terrazas del Río Andarax",
     sectorPrincipal: "Viticultura en terrazas y enoturismo",
+    panorama: [
+      "Íllar cultiva el vino en terrazas: sus viñedos escalonados sobre el río Andarax, fruto de siglos de viticultura de irrigación, producen uno de los blancos más frescos de la Alpujarra almeriense y dibujan un paisaje cultural característico del valle.",
+      "Ese paisaje vitícola es un activo visual y enológico irresistible. Los vinos blancos con la narrativa de las terrazas y el río posicionan en el mercado de vinos de terroir; el turismo de paisaje vitícola atrae a fotógrafos, amantes del vino y senderistas; y los alojamientos y restaurantes del corredor del Andarax captan al turista gastronómico. Un paisaje de postal y un vino con relato: dos bazas para una web.",
+    ],
+    hitos: [
+      { k: "VIÑEDOS", v: "En terrazas sobre el río Andarax" },
+      { k: "VINO", v: "Blanco fresco de la Alpujarra" },
+      { k: "PAISAJE", v: "Cultural vitícola de irrigación" },
+      { k: "VALLE", v: "Del Andarax" },
+    ],
     sectores: [
       { nombre: "Viñedos en Terrazas y Vino de Andarax", descripcion: "Los viñedos en terrazas de Íllar son un paisaje cultural que la viticultura mediterránea ha creado durante siglos. Vinos blancos frescos con esa narrativa de terrazas y río posicionan en el mercado de vinos de terroir con una imagen visual irresistible.", icon: "flask", keywords: ["Vino blanco fresco Alpujarra", "Viñedos terrazas Andarax", "Enoturismo terroir almeriense", "Vino valle río sierra"] },
       { nombre: "Turismo de Paisaje Vitícola", descripcion: "Las terrazas de viñedos de Íllar son fotografía pura. El turismo de paisaje vitícola atrae a fotógrafos, amantes del vino y senderistas. Una web que muestre ese paisaje y las rutas entre las terrazas posiciona para búsquedas de turismo de viñedos en Andalucía.", icon: "sun", keywords: ["Viñedos terrazas Andalucía", "Fotografía paisaje vitícola", "Senderismo viñedos Almería", "Ruta del vino Andarax"] },
@@ -2746,6 +2816,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5830, 36.9540],
     lugarIconico: "Huerta de Granados y Higueras de Bentarique",
     sectorPrincipal: "Frutas mediterráneas artesanales y turismo rural",
+    panorama: [
+      "Bentarique es huerta mediterránea en estado puro: en el bajo Andarax, sus granados, naranjos e higueras crean un oasis de sabor concentrado que contrasta con la aridez del entorno. Encanto alpujarreño genuino, sin las multitudes de la Alpujarra granadina.",
+      "Ese microclima de huerta es su mejor producto digital. Las granadas y los higos de sabor concentrado se venden directos online con una historia de origen única; las visitas a la huerta, la cosecha participativa y los talleres de conservas son agroturismo de alto valor; y los alojamientos aprovechan una temporada larga (flor del granado en mayo, higos en septiembre, granada en otoño). Producto de huerta con relato, web que lo distribuye.",
+    ],
+    hitos: [
+      { k: "HUERTA", v: "Granados, naranjos e higueras" },
+      { k: "PRODUCTO", v: "Fruta de sabor concentrado" },
+      { k: "TEMPORADA", v: "Larga: de mayo a noviembre" },
+      { k: "VALLE", v: "Del bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Granadas, Higos y Frutas de Contraste", descripcion: "Las granadas y los higos de Bentarique, cultivados en el microclima del bajo Andarax, tienen un sabor concentrado único gracias a la combinación de calor y agua de acequia. Productores que los venden directamente online tienen un producto con historia de sabor irrepetible.", icon: "leaf", keywords: ["Granada artesanal Almería", "Higos secos Andarax", "Frutas mediterráneas concentradas", "Venta directa frutas sierra"] },
       { nombre: "Turismo de Huerta y Gastronomía", descripcion: "La huerta de Bentarique es un jardín comestible mediterráneo que los visitantes urbanos no tienen en ninguna ciudad. Visitas a la huerta, cosecha participativa y talleres de conservas son experiencias de agroturismo de alto valor.", icon: "sun", keywords: ["Agroturismo huerta mediterránea", "Cosecha participativa Almería", "Taller conservas frutas", "Turismo gastronómico rural"] },
@@ -2841,6 +2921,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5120, 36.9450],
     lugarIconico: "Cañones y Cortados de Alsodux",
     sectorPrincipal: "Turismo de desconexión y fotografía de paisaje",
+    panorama: [
+      "Alsodux vive entre cortados: 150 vecinos rodeados de una geografía dramática de cañones y barrancos en el bajo Andarax, con una vida rural pausada que cada vez atrae a más profesionales urbanos en busca de silencio y desconexión total.",
+      "Esa geografía extrema y esa calma son nichos turísticos sin explotar online. La fotografía de paisaje de los cortados tiene muy poca competencia en buscadores; los alojamientos que ofrezcan «retiro sin wifi garantizado» tocan el digital detox en auge; y el senderismo de barranco es un producto de aventura sin oferta digital actual. Naturaleza dramática y silencio real: dos reclamos que una web pone en el mapa.",
+    ],
+    hitos: [
+      { k: "PAISAJE", v: "Cañones y cortados del Andarax" },
+      { k: "TAMAÑO", v: "~150 habitantes" },
+      { k: "TURISMO", v: "Desconexión y fotografía" },
+      { k: "VALLE", v: "Del bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Fotografía de Paisaje y Naturaleza Dramática", descripcion: "Los cortados y cañones de Alsodux son material de fotografía de paisaje con muy poca competencia en buscadores. Guías fotográficos y organizadores de rutas de fotografía de naturaleza tienen en Alsodux un destino sin explotar digitalmente.", icon: "star", keywords: ["Fotografía cortados Almería", "Cañones sierra almeriense", "Paisaje dramático fotografiar", "Naturaleza extrema fotos"] },
       { nombre: "Desconexión y Retiro Radical", descripcion: "Con 150 habitantes y geografía de cortados, Alsodux es el destino perfecto para quienes buscan desconexión total y silencio real. Alojamientos que ofrezcan 'retiro sin wifi garantizado' son un nicho de mercado con demanda creciente.", icon: "home", keywords: ["Retiro sin wifi Almería", "Desconexión radical sierra", "Silencio real pueblo pequeño", "Digital detox Andalucía"] },
@@ -2866,6 +2956,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5480, 36.9180],
     lugarIconico: "Museo Paleontológico de Terque",
     sectorPrincipal: "Turismo paleontológico y científico",
+    panorama: [
+      "Terque guarda jirafas de hace ocho millones de años: su Museo Paleontológico alberga uno de los mejores registros de mamíferos del Mioceno de España, con restos de mastodontes, rinocerontes y jirafas primitivas que poblaron este valle del Andarax. Ciencia de primer nivel en un pueblo pequeño.",
+      "Ese patrimonio paleontológico es un imán turístico y educativo poco explotado online. Las visitas, los talleres de paleontología para familias y las expediciones a los yacimientos tienen demanda de colegios, universidades y turistas científicos; el posicionamiento para «excursión escolar Almería» o «museos para niños» capta a toda la provincia; y los alojamientos y bares captan a los grupos. Un museo único que una web llena de visitantes.",
+    ],
+    hitos: [
+      { k: "MUSEO", v: "Paleontológico · fósiles del Mioceno" },
+      { k: "HALLAZGOS", v: "Mastodontes, rinocerontes, jirafas" },
+      { k: "TURISMO", v: "Científico, escolar y familiar" },
+      { k: "VALLE", v: "Del bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Turismo Paleontológico y Museal", descripcion: "El Museo Paleontológico de Terque es uno de los más singulares de Andalucía. Visitas educativas, talleres de paleontología para familias y expediciones a los yacimientos son productos turísticos únicos con demanda de colegios, universidades y turistas científicos.", icon: "star", keywords: ["Museo paleontológico Almería", "Fósiles Mioceno España", "Turismo científico Andalucía", "Excursión escolares paleontología"] },
       { nombre: "Turismo Familiar y Educativo", descripcion: "Los fósiles de mastodontes y jirafas del pasado de Terque son un imán para familias con niños. Un posicionamiento para 'actividades educativas niños Almería' o 'excursión escolar Almería fósiles' tiene demanda real en toda la provincia.", icon: "briefcase", keywords: ["Actividades escolares Almería", "Museos niños Almería", "Turismo familiar educativo", "Excursión fósiles"] },
@@ -2891,6 +2991,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5150, 36.9060],
     lugarIconico: "Casco Histórico de Santa Cruz de Marchena",
     sectorPrincipal: "Aceite de oliva artesanal y turismo auténtico",
+    panorama: [
+      "Santa Cruz de Marchena es autenticidad de 200 almas: arquitectura popular almeriense intacta entre olivares y almendros del bajo Andarax, con la tranquilidad y el carácter genuino de los pueblos que el turismo masivo nunca llegó a descubrir.",
+      "Su pequeñez es su sello premium. El aceite de un pueblo de 200 vecinos, con nombre de productor, tiene la trazabilidad y la autenticidad máximas que el mercado gourmet paga; las almendras de calibre grande venden directo online; y los alojamientos que ofrezcan «escapada sin masificación» captan al viajero que ya conoce la Alpujarra granadina y busca algo distinto. Autenticidad radical que una web convierte en valor.",
+    ],
+    hitos: [
+      { k: "PRODUCTO", v: "Aceite y almendra artesanos" },
+      { k: "AUTENTICIDAD", v: "Pueblo de ~200 vecinos" },
+      { k: "ARQUITECTURA", v: "Popular almeriense intacta" },
+      { k: "VALLE", v: "Del bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Aceite de Oliva Artesanal", descripcion: "Los olivares de Santa Cruz de Marchena producen aceite con una identidad de origen genuina. Un aceite de 200 vecinos con nombre de productor tiene el diferenciador de autenticidad máxima frente a los aceites de grandes cooperativas.", icon: "leaf", keywords: ["Aceite artesanal 200 vecinos", "Olivar bajo Andarax", "Aceite origen pequeño productor", "Trazabilidad máxima aceite"] },
       { nombre: "Almendras y Frutos Secos de Calidad", descripcion: "Los almendros de Santa Cruz de Marchena producen almendras de calibre grande con un sabor dulce característico del microclima del bajo Andarax. Venta directa online a consumidores gourmet y a la hostelería almeriense.", icon: "shop", keywords: ["Almendras bajo Andarax", "Frutos secos artesanales Almería", "Almendra gourmet sierra", "Venta directa frutos secos"] },
@@ -2916,6 +3026,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5680, 36.9360],
     lugarIconico: "Viñedos de Parra Alta de Huécija",
     sectorPrincipal: "Viticultura de parra alta y productos del Andarax",
+    panorama: [
+      "Huécija cultiva bajo techo verde: sus viñedos de parra alta, un sistema de cultivo único en Almería, forman un emparrado bajo el que los racimos maduran con el calor reflejado del suelo, dando una uva de mesa de calibre y dulzor excepcionales. Un paisaje vitícola característico del Andarax.",
+      "Esa parra alta es una marca de origen única para el mercado gourmet. La uva de mesa y el vino de parra tradicional se venden con un relato y una imagen irresistibles; el paisaje de techos verdes de racimos en verano es fotogénico y atrae al turismo de viñedos; y los negocios del valle captan a residentes y visitantes de temporada. Un cultivo único que una web convierte en producto premium.",
+    ],
+    hitos: [
+      { k: "VIÑEDO", v: "De parra alta · único en Almería" },
+      { k: "UVA", v: "De mesa · calibre y dulzor excepcionales" },
+      { k: "PAISAJE", v: "Emparrados verdes del Andarax" },
+      { k: "VALLE", v: "Del bajo Andarax" },
+    ],
     sectores: [
       { nombre: "Uva de Mesa y Vino de Parra Alta", descripcion: "La parra alta de Huécija es un sistema de cultivo único en Almería que crea racimos de uva de mesa con calibre y dulzor excepcionales gracias al microclima que se genera bajo el emparrado. Una marca de origen única para el mercado gourmet.", icon: "leaf", keywords: ["Uva parra alta Almería", "Viñedo emparrado Andarax", "Uva mesa artesanal", "Vino parra tradicional"] },
       { nombre: "Turismo de Viñedos y Gastronomía", descripcion: "El paisaje de parras altas de Huécija en verano, con sus techos verdes de racimos, es fotogénico y único. Rutas gastronómicas entre los viñedos y catas de uva de parra son experiencias de agroturismo con mucho potencial.", icon: "flask", keywords: ["Ruta viñedos parra Almería", "Gastronomía uva artesanal", "Agroturismo Andarax", "Fotografía parras"] },
