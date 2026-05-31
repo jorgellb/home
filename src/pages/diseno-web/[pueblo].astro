@@ -885,6 +885,51 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
       </div>
     </section>
 
+    {/* Panorama digital local — contenido ÚNICO por pueblo (anti contenido fino) */}
+    <section class="section-brutal pueblo-panorama">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">★ Panorama digital · {pueblo.nombre}</span>
+            <h2 class="brutal-section-head__title">
+              El tejido de
+              <em>{pueblo.nombre}</em>
+              en internet.
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">{pueblo.descripcion}.</p>
+        </header>
+
+        <div class="pueblo-panorama__grid">
+          <div class="pueblo-panorama__text">
+            {pueblo.panorama && pueblo.panorama.length > 0
+              ? pueblo.panorama.map((p) => <p class="pueblo-panorama__p">{p}</p>)
+              : (
+                <p class="pueblo-panorama__p">
+                  {pueblo.nombre} ({pueblo.comarca}{pueblo.poblacion ? `, ${pueblo.poblacion.toLocaleString('es-ES')} habitantes` : ''}) es {pueblo.descripcion.charAt(0).toLowerCase() + pueblo.descripcion.slice(1)}.
+                  {pueblo.lugarIconico ? ` Con ${pueblo.lugarIconico} como referencia, sus` : ' Sus'} negocios —comercio, hostelería, servicios y turismo— compiten cada día en Google por aparecer cuando un cliente busca {pueblo.sectorPrincipal ? pueblo.sectorPrincipal.toLowerCase() : 'servicios'} en {pueblo.nombre}. Una web rápida, bien estructurada y posicionada en local es la diferencia entre captar a ese cliente o perderlo ante la competencia de la comarca.
+                </p>
+              )
+            }
+            <ul class="pueblo-panorama__keys">
+              {pueblo.caracteristicas.map((c) => <li class="tag-brutal">★ {c}</li>)}
+            </ul>
+          </div>
+
+          {pueblo.hitos && pueblo.hitos.length > 0 && (
+            <ul class="pueblo-panorama__hitos">
+              {pueblo.hitos.map((h) => (
+                <li class="pueblo-panorama__hito">
+                  <span class="pueblo-panorama__hk">{h.k}</span>
+                  <span class="pueblo-panorama__hv">{h.v}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </section>
+
     {/* Mapa interactivo si hay coords */}
     {pueblo.coords && (
       <section class="section-brutal" style="padding:0;background:var(--brutal-bg-alt);border-bottom:2px solid var(--brutal-ink);">
@@ -1236,4 +1281,23 @@ const almeriaExtraJsonLd = pueblo.slug === 'almeria' ? [
   .pueblo-sector-keys { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .75rem; }
   .pueblo-map-wrap { width: 100%; height: clamp(360px, 50vh, 520px); overflow: hidden; border-bottom: 2px solid var(--brutal-ink); }
   .pueblo-map-wrap > * { width: 100%; height: 100%; }
+
+  /* Panorama digital local — contenido único por pueblo */
+  .pueblo-panorama { background: var(--brutal-bg-alt); border-bottom: 2px solid var(--brutal-ink); }
+  .pueblo-panorama__grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 1.5rem; align-items: start; }
+  @media (min-width: 900px) { .pueblo-panorama__grid { grid-template-columns: 1.6fr 1fr; gap: 3rem; } }
+  .pueblo-panorama__p { font-size: 1.05rem; line-height: 1.65; color: var(--brutal-text-secondary); margin: 0 0 1.1rem; max-width: 64ch; }
+  .pueblo-panorama__p:first-child::first-letter {
+    font-family: var(--font-display); font-weight: 800; font-size: 3.2rem;
+    float: left; line-height: .8; margin: .1rem .5rem 0 0; color: var(--brutal-accent);
+  }
+  .pueblo-panorama__keys { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .pueblo-panorama__hitos {
+    list-style: none; padding: 0; margin: 0;
+    border: 2.5px solid var(--brutal-ink); background: var(--brutal-ink);
+    display: grid; grid-template-columns: 1fr; gap: 2px;
+  }
+  .pueblo-panorama__hito { background: var(--brutal-paper); padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: .25rem; }
+  .pueblo-panorama__hk { font-family: var(--font-mono); font-size: .62rem; font-weight: 800; letter-spacing: .2em; color: var(--brutal-accent); text-transform: uppercase; }
+  .pueblo-panorama__hv { font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; line-height: 1.3; color: var(--brutal-ink); }
 </style>

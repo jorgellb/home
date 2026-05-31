@@ -33,6 +33,10 @@ export interface Pueblo {
   sectores?: SectorLocal[];
   testimonios?: Testimonio[];
   faqs?: FAQ[];
+  /** Panorama digital local — 2-3 párrafos ÚNICOS por pueblo (contexto económico real). */
+  panorama?: string[];
+  /** Hitos/datos locales únicos (clave → valor) que se muestran como rejilla de cifras. */
+  hitos?: { k: string; v: string }[];
 }
 
 // Colores por comarca — clases Tailwind completas para que el compilador las incluya
@@ -1639,12 +1643,34 @@ export const pueblos: Pueblo[] = [
     comarca: "Poniente Almeriense",
     poblacion: 25000,
     destacado: true,
-    descripcion: "Ciudad fenicia con puerto pesquero y tradición conservera",
-    caracteristicas: [
-      "Puerto pesquero",
-      "Historia fenicia",
-      "Conservas",
-      "Playas",
+    descripcion: "Ciudad fenicia (la antigua Abdera) con puerto pesquero, industria conservera e invernaderos del Poniente — la segunda localidad de la comarca tras El Ejido",
+    caracteristicas: ["Puerto pesquero y lonja", "Abdera fenicia", "Conservas e invernaderos", "Playas y Albuferas"],
+    coords: [-3.0206, 36.7486],
+    lugarIconico: "Puerto pesquero de Adra",
+    sectorPrincipal: "Pesca, agricultura intensiva y turismo de costa",
+    panorama: [
+      "Adra es una de las ciudades con más historia de Almería: la fenicia Abdera, fundada hace casi 3.000 años, conserva hoy uno de los puertos pesqueros más activos del Mediterráneo andaluz. Con 25.000 habitantes es la segunda localidad del Poniente tras El Ejido, y su economía combina tres motores muy distintos —pesca, agricultura intensiva bajo plástico y turismo de costa— que conviven en pocos kilómetros.",
+      "Esa diversidad es una oportunidad digital enorme y poco aprovechada. La lonja y los restaurantes de pescado fresco compiten por el comensal que busca 'dónde comer en Adra'; las empresas hortofrutícolas exportan a Europa y necesitan webs B2B multiidioma; y los apartamentos y chiringuitos de las playas y las Albuferas captan al turista del Poniente. Cada uno juega un partido distinto en Google, y casi ninguno tiene una web a la altura de su negocio.",
+    ],
+    hitos: [
+      { k: "FUNDACIÓN", v: "Abdera fenicia · s. VIII a.C." },
+      { k: "POBLACIÓN", v: "25.000 hab · 2ª del Poniente" },
+      { k: "PUERTO", v: "Pesquero activo · lonja diaria" },
+      { k: "NATURALEZA", v: "Reserva de las Albuferas de Adra" },
+    ],
+    sectores: [
+      { nombre: "Pesca, lonja y restauración de pescado", descripcion: "El puerto de Adra descarga cada día pescado y marisco fresco que abastece a toda la comarca. Restaurantes, pescaderías y la propia lonja pueden posicionarse como destino gastronómico con carta digital, fotografía de producto y SEO para 'pescado fresco Adra' y 'restaurante puerto Adra'.", icon: "restaurant", keywords: ["SEO 'pescado fresco Adra'", "Carta digital", "Reservas de mesa", "Google Business"] },
+      { nombre: "Agricultura intensiva y manipulado", descripcion: "Adra forma parte del cinturón hortofrutícola del Poniente. Cooperativas, manipulados y empresas de suministro agrícola necesitan webs B2B con catálogo, certificaciones y multiidioma para vender a compradores europeos, igual que sus vecinos de El Ejido.", icon: "leaf", keywords: ["Web B2B agro", "Catálogo y certificaciones", "Multiidioma export", "SEO internacional"] },
+      { nombre: "Turismo de costa y alojamiento", descripcion: "Las playas de Adra y el paraje de las Albuferas atraen un turismo familiar tranquilo. Apartamentos, casas vacacionales y hostelería de playa que aparezcan bien en Google captan reservas directas sin depender de las plataformas.", icon: "sun", keywords: ["Reservas directas", "SEO 'playa Adra'", "Galería de fotos", "Apartamentos turísticos"] },
+    ],
+    testimonios: [
+      { nombre: "Salvador Martín", sector: "Restaurante de pescado del puerto", texto: "Vivíamos del cliente de toda la vida y poco más. Con la web, la carta y las fotos del pescado del día, ahora vienen a comer desde El Ejido y Berja. Aparecemos los primeros cuando buscan marisco en Adra." },
+      { nombre: "Inmaculada Ruiz", sector: "Apartamentos en primera línea", texto: "Tenía los apartamentos solo en un portal con comisión. La web con reservas directas me ha traído familias que repiten cada verano y reservan sin intermediarios. Adra tiene playas preciosas que poca gente conoce." },
+    ],
+    faqs: [
+      { q: "¿Hacéis webs para restaurantes y negocios de pescado en Adra?", a: "Sí. Creamos webs con carta digital, fotografía de producto, reservas de mesa y SEO para 'pescado fresco Adra', 'marisquería Adra' y 'restaurante puerto'. Contamos la frescura del producto de la lonja, que es vuestro mejor argumento de venta." },
+      { q: "¿Trabajáis con empresas agrícolas y de manipulado de Adra?", a: "Sí, igual que en El Ejido y el resto del Poniente. Hacemos webs B2B con catálogo de producto, certificaciones visibles y multiidioma (inglés, alemán, francés) para vender a compradores europeos. SEO internacional incluido." },
+      { q: "¿Cuánto cuesta una web para un negocio en Adra?", a: "Una web corporativa o de restaurante desde 450€ con hosting gratuito. Web de apartamentos con reservas directas o portal B2B agro, según funcionalidades. Presupuesto cerrado en 24h, sin sorpresas." },
     ],
   },
   {
@@ -1830,9 +1856,35 @@ export const pueblos: Pueblo[] = [
     comarca: "Alpujarra Almeriense",
     poblacion: 1800,
     destacado: true,
-    descripcion:
-      "Capital de la Alpujarra almeriense con nacimiento del Andarax",
-    caracteristicas: ["Alpujarra", "Río Andarax", "Vino", "Turismo rural"],
+    descripcion: "Capital de la Alpujarra almeriense, cuna del río Andarax y antigua corte morisca de Aben Humeya, con bodegas, fuentes y turismo rural al pie de Sierra Nevada",
+    caracteristicas: ["Capital de la Alpujarra", "Nacimiento del Andarax", "Vino de la tierra", "Turismo rural y Sierra Nevada"],
+    coords: [-2.8939, 36.9928],
+    lugarIconico: "Nacimiento del río Andarax",
+    sectorPrincipal: "Turismo rural, vino y agroalimentario artesano",
+    panorama: [
+      "Láujar de Andarax es la capital histórica de la Alpujarra almeriense: aquí nace el río Andarax, aquí instaló su corte Aben Humeya durante la rebelión morisca de 1568, y aquí empieza la subida a la cara sur de Sierra Nevada. Con apenas 1.800 habitantes, su valor no está en el volumen sino en la singularidad —agua, vino, historia y montaña— que atrae a un visitante que busca autenticidad y paga por ella.",
+      "Para los negocios de Láujar, internet es la diferencia entre llenar las casas rurales todo el año o solo en puentes. Bodegas con vino de la tierra, alojamientos rurales con encanto, restaurantes de cocina alpujarreña y productores de embutido, miel y aceite tienen un mercado regional y nacional que los busca por su nombre —'casa rural Alpujarra Almería', 'vino de Láujar', 'qué ver en Láujar'— y que casi nunca encuentra una web a la altura del producto.",
+    ],
+    hitos: [
+      { k: "ALTITUD", v: "918 m · puerta de Sierra Nevada" },
+      { k: "EL ANDARAX", v: "Nacimiento del río · fuentes y cascadas" },
+      { k: "HISTORIA", v: "Corte de Aben Humeya · 1568" },
+      { k: "PRODUCTO", v: "Vino de la tierra · embutido · miel" },
+    ],
+    sectores: [
+      { nombre: "Turismo rural y casas con encanto", descripcion: "Láujar es la base perfecta para descubrir la Alpujarra y Sierra Nevada. Casas rurales, cortijos y hoteles con encanto que transmitan la calma y la naturaleza del entorno —y que permitan reservar directo— llenan más allá de los puentes y fines de semana. La web con galería y reservas es la clave.", icon: "home", keywords: ["Casa rural Alpujarra", "Reservas directas", "Galería de naturaleza", "SEO 'turismo rural Almería'"] },
+      { nombre: "Bodegas y vino de la tierra", descripcion: "Láujar conserva una tradición vinícola única en Almería. Bodegas familiares con vino de la tierra tienen en el enoturismo —catas, visitas, venta online— un producto de alto valor para el visitante y para vender a tiendas gourmet de toda España.", icon: "flask", keywords: ["Enoturismo y catas", "Venta de vino online", "Marca de territorio", "Storytelling del producto"] },
+      { nombre: "Agroalimentario artesano", descripcion: "Embutidos de la sierra, miel, aceite y conservas artesanas son productos con demanda en toda España. Una tienda online bien hecha convierte a un productor de Láujar en una marca que vende fuera, con la historia de la Alpujarra como mejor reclamo.", icon: "shop", keywords: ["Tienda online gourmet", "Envíos a toda España", "Historia del producto", "Cajas y suscripción"] },
+    ],
+    testimonios: [
+      { nombre: "Encarna Fernández", sector: "Casa rural en Láujar", texto: "Dependía del boca a boca y de un par de webs de anuncios. Con mi propia web y el SEO de 'casa rural Alpujarra Almería' ahora recibo reservas directas de Granada, Madrid y hasta del extranjero. He alargado la temporada a casi todo el año." },
+      { nombre: "Diego Ramírez", sector: "Bodega familiar", texto: "Vendíamos el vino solo en la zona. Montamos la tienda online con la historia de la bodega y ahora mandamos cajas a toda España y recibimos grupos para catas. El vino de Láujar gusta fuera, solo había que enseñarlo." },
+    ],
+    faqs: [
+      { q: "¿Hacéis webs para casas rurales y alojamientos en la Alpujarra?", a: "Sí, es uno de nuestros perfiles favoritos. Creamos webs para casas rurales y hoteles con encanto en Láujar y la Alpujarra con galería inmersiva, motor de reservas directas (sin comisiones) y SEO para 'casa rural Alpujarra Almería' y 'turismo rural Láujar'. Llenas más allá de los puentes." },
+      { q: "¿Podéis montar una tienda online para vender vino o productos de Láujar?", a: "Por supuesto. Hacemos tiendas online para bodegas y productores artesanos (vino, embutido, miel, aceite) con fichas de producto, pasarela de pago, envíos a toda España y la historia de la Alpujarra como gancho. Convertimos tu producto local en una marca que vende fuera." },
+      { q: "¿Cuánto cuesta una web para un negocio en Láujar de Andarax?", a: "Una web de casa rural o negocio local desde 450€ con hosting gratuito. Tienda online de vino o producto artesano desde 900€ según catálogo. Presupuesto cerrado en 24h, pensado para negocios de temporada y de pueblo." },
+    ],
   },
   {
     slug: "fondon",
