@@ -278,6 +278,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.4642, 36.8953],
     lugarIconico: "Baños termales de Sierra Alhamilla",
     sectorPrincipal: "Turismo termal y servicios",
+    panorama: [
+      "Pechina guarda un secreto histórico enorme: la árabe Bayyana fue, antes que la propia Almería, la gran ciudad y puerto de la zona. Hoy es un municipio tranquilo de la vega del Andarax, a un paso de la capital, conocido por los baños termales de Sierra Alhamilla —un balneario histórico con siglos de fama por sus aguas.",
+      "Esa combinación de termalismo, historia y cercanía a Almería marca sus oportunidades digitales. El turismo de salud y bienestar (balneario, spa, fisioterapia) tiene una marca territorial potente con la que posicionar 'termas Pechina'; los negocios de la vega y los servicios de proximidad captan al vecino y al de la capital que busca alternativa; y el patrimonio de Bayyana es un nicho de turismo cultural sin explotar. Poca competencia, demanda real.",
+    ],
+    hitos: [
+      { k: "HISTORIA", v: "Bayyana árabe · antecesora de Almería" },
+      { k: "TERMALISMO", v: "Baños de Sierra Alhamilla" },
+      { k: "VEGA", v: "Del río Andarax" },
+      { k: "POBLACIÓN", v: "4.000 hab · junto a la capital" },
+    ],
     sectores: [
       { nombre: "Turismo Termal y Bienestar", descripcion: "Los baños termales de Pechina y la Sierra de Alhamilla atraen visitantes que buscan desconexión y salud. Balnearios, spas y centros de bienestar tienen aquí una marca territorial potente con la que posicionarse en Google.", icon: "health", keywords: ["SEO 'termas Pechina'", "Reservas spa", "Paquetes bienestar", "Turismo salud"] },
       { nombre: "Hostelería y Restauración Local", descripcion: "La carretera hacia el interior convierte a Pechina en parada habitual. Bares, restaurantes y ventas tradicionales pueden captar tráfico de paso con una ficha de Google Maps optimizada y carta digital.", icon: "restaurant", keywords: ["Carta digital", "Google Maps", "SEO local", "Pedidos takeaway"] },
@@ -535,6 +545,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.9050, 37.1883],
     lugarIconico: "Sierra Cabrera",
     sectorPrincipal: "Turismo rural y servicios a residentes",
+    panorama: [
+      "Turre es el reverso tranquilo de Mojácar: a pocos minutos del resort más famoso de Almería pero con los pies en el campo, bajo la Sierra Cabrera, con cortijos, naranjos y una comunidad mixta de vecinos de siempre y residentes europeos. Es el sitio donde se aloja —y se come, y se vive— quien quiere Mojácar sin la masificación de Mojácar.",
+      "Esa posición es una oportunidad doble. Por un lado, el turismo rural: casas y cortijos con vistas a la Sierra Cabrera que captan al viajero que huye del resort, si tienen web con galería y reservas directas. Por otro, los servicios a la comunidad internacional (reformas, jardinería, hogar) que, en inglés y bien posicionados, se llevan un mercado que la competencia no atiende. Turre vende calma y autenticidad —y eso se posiciona muy bien.",
+    ],
+    hitos: [
+      { k: "ENTORNO", v: "Bajo la Sierra Cabrera" },
+      { k: "VECINDAD", v: "A minutos de Mojácar" },
+      { k: "PERFIL", v: "Rural auténtico · comunidad mixta" },
+      { k: "POBLACIÓN", v: "4.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Alojamiento Rural y Casas de Campo", descripcion: "Turre tiene fincas y cortijos preciosos en un entorno natural extraordinario con vistas a la Sierra Cabrera. El turismo rural que busca alternativa a la masificación de Mojácar puede encontrar en Turre su destino ideal — con la web adecuada.", icon: "home", keywords: ["Casa rural Turre", "Finca cortijo alquiler", "Turismo rural Levante", "Reservas directas"] },
       { nombre: "Servicios a la Comunidad Internacional", descripcion: "Como municipio vecino de Mojácar, Turre alberga numerosos residentes europeos que demandan servicios en inglés: construcción, reformas, jardinería y servicios del hogar. Los negocios bilingües ganan por goleada.", icon: "briefcase", keywords: ["Servicios bilingüe", "Reformas y construcción", "Jardinería", "Web en inglés"] },
@@ -585,6 +605,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.9642, 37.3158],
     lugarIconico: "Yacimiento arqueológico de El Argar",
     sectorPrincipal: "Agricultura y turismo histórico",
+    panorama: [
+      "Antas tiene un tesoro que pocos pueblos del mundo pueden reclamar: El Argar, el yacimiento que da nombre a toda una cultura de la Edad del Bronce, una de las más importantes de la Europa de hace 4.000 años. Junto a ese legado arqueológico de primer orden, Antas vive de una agricultura de cítricos y de los servicios de su entorno en el Levante almeriense.",
+      "Ese patrimonio único es un imán turístico apenas aprovechado online. Una web bien hecha puede posicionar a Antas para 'turismo arqueológico Almería' y 'El Argar' y atraer a un visitante cultural nacional e internacional que hoy no sabe que existe; los alojamientos y la hostelería captan ese flujo; y los productores de cítricos pueden vender directo. Cuando el contenido es realmente único —y aquí lo es—, posicionar es cuestión de contarlo bien.",
+    ],
+    hitos: [
+      { k: "ARQUEOLOGÍA", v: "El Argar · cultura de la Edad del Bronce" },
+      { k: "LEGADO", v: "Yacimiento de referencia europea" },
+      { k: "CAMPO", v: "Cítricos del Levante" },
+      { k: "POBLACIÓN", v: "4.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Arqueológico", descripcion: "El Argar de Antas es uno de los yacimientos arqueológicos más importantes de la Edad del Bronce en Europa. Una web dedicada con información histórica rigurosa puede posicionar a Antas como destino de turismo arqueológico nacional e internacional.", icon: "star", keywords: ["El Argar Antas", "Turismo arqueológico", "Edad del Bronce", "Visitas culturales"] },
       { nombre: "Agricultura y Productos Locales", descripcion: "Los cítricos y hortalizas de Antas tienen calidad contrastada. Cooperativas y productores individuales pueden vender directamente a consumidores finales mediante tienda online o llegar a compradores mayoristas europeos con una web profesional en inglés.", icon: "leaf", keywords: ["Cítricos Levante", "Venta directa", "Cooperativa agrícola", "Exportación"] },
@@ -712,6 +742,16 @@ export const pueblos: Pueblo[] = [
     coords: [-1.9050, 37.3658],
     lugarIconico: "Mercado de Arboleas",
     sectorPrincipal: "Servicios internacionales y comercio",
+    panorama: [
+      "Arboleas es probablemente el municipio interior de Almería con más vida británica: miles de residentes europeos han hecho del valle del Almanzora su hogar, atraídos por los naranjos, el clima y la tranquilidad. Aquí se vive en dos idiomas, y eso define por completo su economía: una red de servicios profundamente internacionalizada que atiende a esa comunidad.",
+      "Para un negocio de Arboleas, no estar en inglés es renunciar a la mitad del mercado —y a la mitad que mejor paga. La gestoría, el abogado, el constructor, el restaurante o el dentista que aparezca en Google en inglés ('estate agents Arboleas', 'gestoría English', 'builder Almanzora') capta a un cliente fiel que lo busca todo online y que la competencia local, monolingüe, no sabe atender. Web bilingüe ES/EN: la diferencia entre existir o no para ese público.",
+    ],
+    hitos: [
+      { k: "COMUNIDAD", v: "De las mayores británicas del interior" },
+      { k: "IDIOMA", v: "Mercado bilingüe ES / EN" },
+      { k: "CAMPO", v: "Naranjos y limoneros del Almanzora" },
+      { k: "POBLACIÓN", v: "5.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Servicios Profesionales a Expats", descripcion: "Arboleas es quizás el municipio interior con más alta concentración de residentes británicos de Almería. Gestorías, abogados, traductores y asesores fiscales con web en inglés son los primeros que consiguen clientes en esta comunidad de varios miles de personas.", icon: "briefcase", keywords: ["Gestoría bilingüe", "Asesoría fiscal expats", "Legal services Arboleas", "NIE y residencia"] },
       { nombre: "Comercio y Mercado Local", descripcion: "El mercado de Arboleas es el punto de encuentro comercial del valle. Fruterías, carnicerías y tiendas locales que complementen su presencia física con una web y ficha de Google Maps bien optimizada amplían su radio de acción a toda la comarca.", icon: "shop", keywords: ["Mercado Arboleas", "Productos locales", "Cítricos del valle", "Compra local"] },
@@ -1114,6 +1154,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.2520, 37.3560],
     lugarIconico: "Baños Árabes de Tíjola",
     sectorPrincipal: "Servicios, comercio y turismo cultural",
+    panorama: [
+      "Tíjola es la capital de servicios del alto Almanzora: aquí vienen a comprar, al médico y a hacer gestiones los vecinos de los pueblos serranos del norte de Almería. A ese papel de centro comarcal se suma un patrimonio singular —unos baños árabes declarados Bien de Interés Cultural, un castillo medieval y unas fiestas de Moros y Cristianos con mucha tradición.",
+      "Para los negocios de Tíjola, ser el centro de la comarca es el gran activo digital: quien se posiciona bien capta a todos los municipios del alto Almanzora, no solo a sus 4.000 vecinos. La clínica, el taller, la tienda o el supermercado que aparezca primero en una búsqueda 'en el Almanzora' tiene un mercado comarcal cautivo. Y el patrimonio árabe y las fiestas son un gancho de turismo cultural sin apenas competencia online.",
+    ],
+    hitos: [
+      { k: "CENTRO", v: "Servicios del alto Almanzora" },
+      { k: "PATRIMONIO", v: "Baños árabes BIC · castillo medieval" },
+      { k: "TRADICIÓN", v: "Moros y Cristianos" },
+      { k: "POBLACIÓN", v: "4.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Comercio y Servicios del Valle", descripcion: "Tíjola es el centro de servicios del alto Almanzora. Clínicas, talleres mecánicos, tiendas de electrodomésticos y supermercados sirven a todos los municipios del entorno. Una web visible en Google les asegura clientes de toda la comarca.", icon: "shop", keywords: ["Comercios Tíjola", "Servicios alto Almanzora", "Talleres Tíjola", "Médicos y clínicas"] },
       { nombre: "Turismo Cultural e Histórico", descripcion: "Los baños árabes de Tíjola son de los mejor conservados de la provincia. Junto al castillo medieval y las fiestas de Moros y Cristianos, conforman una oferta cultural que atrae visitantes de toda Andalucía.", icon: "star", keywords: ["Baños árabes Tíjola", "Turismo cultural Almanzora", "Castillo medieval", "Fiestas Moros Cristianos"] },
@@ -2271,6 +2321,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.5600, 36.9440],
     lugarIconico: "Balneario de Sierra Alhamilla",
     sectorPrincipal: "Termalismo, salud y bienestar",
+    panorama: [
+      "Alhama de Almería lleva el termalismo en el nombre —'al-hamma', el baño caliente— y en la historia: sus aguas sulfurosas se aprovechan desde época romana y árabe, y su Balneario de Sierra Alhamilla sigue hoy en funcionamiento como uno de los destinos de turismo de salud más completos de la provincia. Aquí el agua no es un recurso más: es la marca del pueblo.",
+      "Esa identidad termal define un nicho digital muy claro y muy rentable. El balneario, los hoteles y los servicios de salud y bienestar (fisioterapia, nutrición, spa) que posicionen para 'turismo termal Almería' o 'balneario Sierra Alhamilla' captan a un visitante que viene buscando salud y paga por la experiencia completa. Es un turismo de marca territorial fuerte, poco estacional y con competencia online escasa: el escenario ideal para una web que venda.",
+    ],
+    hitos: [
+      { k: "TERMALISMO", v: "Balneario de Sierra Alhamilla en activo" },
+      { k: "AGUA", v: "Sulfurosa terapéutica · romana y árabe" },
+      { k: "TURISMO", v: "De salud y bienestar" },
+      { k: "POBLACIÓN", v: "4.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Turismo Termal y Salud", descripcion: "El Balneario de Sierra Alhamilla es el establecimiento termal más reconocido de Almería. Hoteles y servicios complementarios de salud (fisioterapia, nutrición, yoga) que posicionen para 'turismo termal Almería' captan el flujo de visitantes del balneario.", icon: "health", keywords: ["Turismo termal Almería", "Balneario Sierra Alhamilla", "Aguas sulfurosas medicinales", "Spa termal Almería"] },
       { nombre: "Hostelería de Bienestar", descripcion: "Alhama tiene hoteles, restaurantes y bares que sirven a los miles de turistas termales anuales. Negocios que ofrezcan experiencias de bienestar (menús saludables, masajes, meditación) complementarios al balneario tienen una demanda captiva constante.", icon: "star", keywords: ["Hotel bienestar Alhama Almería", "Restaurante saludable termal", "Retiro spa Almería", "Turismo wellness almeriense"] },
