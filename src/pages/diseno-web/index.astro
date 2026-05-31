@@ -5,9 +5,73 @@ import Footer from '../../components/layout/Footer.astro';
 import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import { pueblos, comarcas, getPueblosByComarca } from '../../data/pueblos-almeria';
 
-const title = 'Diseño Web en toda la Provincia de Almería | Agencia Local';
-const description = 'Páginas web profesionales para cualquier municipio de Almería. Tiendas online, SEO local y hosting gratuito. Presupuesto sin compromiso en 24h.';
+const title = 'Diseño Web en la Provincia de Almería';
+const description = 'Diseño web y SEO local para negocios de cualquier pueblo de Almería: 8 comarcas, +90 municipios. Tiendas online y hosting incluido. Presupuesto en 24h.';
 const canonical = 'https://platanitorico.com/diseno-web/';
+
+/* Contexto económico real + oportunidad digital por comarca (contenido único, anti-boilerplate) */
+const comarcaInfo: Record<string, { intro: string; sectores: string[] }> = {
+  "Almería Metropolitana": {
+    intro: "El motor económico de la provincia: la capital, su puerto y el gran polo turístico de Roquetas de Mar concentran el grueso del comercio, la hostelería y los servicios profesionales. Aquí la competencia digital es máxima, y una web rápida con SEO local bien trabajado marca la diferencia entre aparecer o desaparecer ante miles de clientes que buscan cada día.",
+    sectores: ["Turismo", "Comercio", "Servicios", "Puerto"],
+  },
+  "Levante Almeriense": {
+    intro: "La costa turística por excelencia: Mojácar, Vera, Garrucha y Pulpí viven del turismo, la hostelería y el residente extranjero, con una demanda multilingüe y muy estacional. Captar reservas, vender segunda residencia o llenar un restaurante aquí exige una web que posicione en varios idiomas y convierta al visitante en cliente antes de que llegue.",
+    sectores: ["Turismo costero", "Hostelería", "Residencial", "Náutica"],
+  },
+  "Valle del Almanzora": {
+    intro: "El gran corredor industrial del interior: Macael y Olula del Río exportan mármol blanco a más de 60 países, mientras Albox concentra el comercio que abastece a toda la comarca. Un tejido de pymes industriales y comerciales con clientes nacionales e internacionales, donde una web profesional y multilingüe es una herramienta de venta directa, no un simple escaparate.",
+    sectores: ["Mármol", "Industria", "Comercio", "Exportación"],
+  },
+  "Los Filabres-Tabernas": {
+    intro: "Tierra de cine y cielos infinitos: el desierto de Tabernas, único de Europa, atrae rodajes y turismo, mientras los Filabres guardan el Observatorio de Calar Alto y un naciente turismo de naturaleza y astronomía. Negocios singulares con un público de nicho —turismo activo, experiencias, productos de origen— que solo encuentran a su cliente si destacan online.",
+    sectores: ["Cine y turismo", "Astronomía", "Energía solar", "Naturaleza"],
+  },
+  "Poniente Almeriense": {
+    intro: "La huerta de Europa: El Ejido, Vícar y La Mojonera concentran el mayor mar de invernaderos del mundo, un sector hortofrutícola que mueve miles de millones y exporta a todo el continente. Conviven la agroindustria exportadora y un denso tejido comercial; ambos necesitan webs corporativas serias, multilingües y orientadas a captar distribuidores y clientes.",
+    sectores: ["Agricultura intensiva", "Exportación", "Agroindustria", "Comercio"],
+  },
+  "Alpujarra Almeriense": {
+    intro: "La Almería verde y auténtica: el valle del Andarax y las laderas de Sierra Nevada ofrecen vino, aceite, frutos secos y un turismo rural en alza que huye de la masificación. Pequeños productores y casas rurales con productos de identidad única que, bien contados en una web, alcanzan al consumidor gourmet y al viajero consciente de toda España.",
+    sectores: ["Turismo rural", "Vino y aceite", "Agroalimentario", "Naturaleza"],
+  },
+  "Alto Almanzora": {
+    intro: "El nacimiento del Almanzora, entre sierras: Serón y Tíjola lideran una comarca de gastronomía con sello —el jamón de Serón es marca reconocida—, naturaleza de montaña y patrimonio. Productos agroalimentarios de calidad y turismo de interior que encuentran su mejor mercado cuando una tienda online y un buen SEO los sacan de la comarca.",
+    sectores: ["Agroalimentario", "Jamón de Serón", "Turismo de interior", "Patrimonio"],
+  },
+  "Los Vélez": {
+    intro: "El norte monumental: Vélez-Blanco y Vélez-Rubio custodian castillos renacentistas, el Parque Natural de Sierra María y el arte rupestre que dio origen al Indalo, símbolo de Almería. Una comarca de turismo cultural, naturaleza y agroalimentario de altura cuyo gran reto es la visibilidad: estar en internet es estar en el mapa del viajero.",
+    sectores: ["Turismo cultural", "Naturaleza", "Patrimonio", "Agroalimentario"],
+  },
+};
+
+/* FAQ — contenido único + FAQPage schema (rich results) */
+const faqs = [
+  {
+    q: "¿Cuánto cuesta una página web para un negocio en Almería?",
+    a: "Una web profesional con Platanito Rico arranca desde 450 €, con diseño a medida, hosting el primer año, certificado SSL y optimización de SEO local incluida. El precio final depende del número de páginas, de si necesitas tienda online y de los idiomas. Te damos presupuesto cerrado y sin sorpresas en 24 horas.",
+  },
+  {
+    q: "¿Trabajáis con negocios de cualquier pueblo de la provincia?",
+    a: "Sí. Cubrimos las 8 comarcas y más de 90 municipios de Almería, desde la capital hasta Los Vélez. Trabajamos en remoto y presencialmente cuando hace falta: la distancia no es problema y el trato es siempre directo y cercano.",
+  },
+  {
+    q: "¿Qué es el SEO local y por qué lo necesito?",
+    a: "El SEO local hace que tu negocio aparezca cuando alguien busca tu servicio en tu pueblo o «cerca de mí» (por ejemplo, «fontanero en Vera» o «restaurante en Mojácar»). Optimizamos tu web y tu ficha de Google Business para que captures esas búsquedas, que son las que traen clientes reales de tu zona.",
+  },
+  {
+    q: "¿La web servirá para captar clientes extranjeros?",
+    a: "En comarcas como el Levante o el Almanzora el cliente internacional es clave. Creamos webs multilingües (inglés, francés, alemán…) y las posicionamos en cada idioma, de modo que captes tanto al residente extranjero como al turista o comprador que busca desde fuera de España.",
+  },
+  {
+    q: "¿Cuánto tarda en estar lista mi web?",
+    a: "Una web corporativa estándar está lista en 2-4 semanas desde que tenemos los contenidos; una tienda online, algo más. Trabajamos con plazos cerrados y te mantenemos informado en cada fase del proyecto.",
+  },
+  {
+    q: "¿Incluye mantenimiento y hosting?",
+    a: "El primer año de hosting y el certificado SSL van incluidos. Después puedes contratar nuestro mantenimiento —copias de seguridad, actualizaciones, seguridad y soporte— sin permanencia, o gestionarlo por tu cuenta. Tú decides.",
+  },
+];
 ---
 
 <BaseLayout
@@ -49,6 +113,15 @@ const canonical = 'https://platanitorico.com/diseno-web/';
         "postalCode": "04620",
         "addressCountry": "ES"
       }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map((f) => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": { "@type": "Answer", "text": f.a }
+      }))
     }
   ]}
 >
@@ -119,10 +192,59 @@ const canonical = 'https://platanitorico.com/diseno-web/';
       </div>
     </section>
 
+    {/* Propuesta de valor — por qué una web local */}
+    <section class="section-brutal svc-value">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">★ Por qué local</span>
+            <h2 class="brutal-section-head__title">
+              Una web pensada para
+              <em>vender en tu zona.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            No hacemos plantillas genéricas. Cada negocio de Almería compite por un
+            cliente concreto —el vecino que busca en Google, el turista que reserva
+            desde otro país, el distribuidor que busca proveedor— y cada web que
+            diseñamos está construida para ganar esa búsqueda.
+          </p>
+        </header>
+
+        <ul class="svc-value__grid">
+          <li class="svc-value__card">
+            <span class="svc-value__n text-mono">01</span>
+            <h3 class="svc-value__t">SEO local de verdad</h3>
+            <p class="svc-value__d">Optimizamos tu web y tu ficha de Google Business para las búsquedas de tu municipio y comarca. Apareces cuando tu cliente te busca, no en la página diez.</p>
+            <a href="/marketing/" class="svc-value__link">Ver SEO y marketing →</a>
+          </li>
+          <li class="svc-value__card">
+            <span class="svc-value__n text-mono">02</span>
+            <h3 class="svc-value__t">Velocidad y Core Web Vitals</h3>
+            <p class="svc-value__d">Webs ultrarrápidas que cargan en menos de un segundo. Google premia la velocidad y tus visitantes no se marchan esperando.</p>
+            <a href="/desarrollo-web/" class="svc-value__link">Ver desarrollo web →</a>
+          </li>
+          <li class="svc-value__card">
+            <span class="svc-value__n text-mono">03</span>
+            <h3 class="svc-value__t">Multilingüe donde importa</h3>
+            <p class="svc-value__d">En la costa y el Almanzora el cliente habla varios idiomas. Tu web también, y posicionada en cada uno para captar al comprador internacional.</p>
+            <a href="/soluciones/ecommerce/" class="svc-value__link">Ver tiendas online →</a>
+          </li>
+          <li class="svc-value__card">
+            <span class="svc-value__n text-mono">04</span>
+            <h3 class="svc-value__t">Trato directo y cercano</h3>
+            <p class="svc-value__d">Hablas siempre con quien hace tu web, no con un call center. Conocemos Almería porque trabajamos aquí, pueblo a pueblo.</p>
+            <a href="/contacto/" class="svc-value__link">Hablar con nosotros →</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     {/* Pueblos por comarca */}
     {comarcas.map((comarca, idx) => {
       const pueblosComarca = getPueblosByComarca(comarca);
       if (!pueblosComarca.length) return null;
+      const info = comarcaInfo[comarca];
       return (
         <section class={`section-brutal ${idx % 2 === 0 ? '' : 'svc-comarca-section--alt'}`}>
           <div class="container-brutal">
@@ -136,9 +258,13 @@ const canonical = 'https://platanitorico.com/diseno-web/';
                 </h2>
               </div>
               <p class="brutal-section-head__lead">
-                Municipios donde trabajamos en {comarca}. Cada pueblo tiene su
-                propia página con SEO local optimizado.
+                {info?.intro ?? `Municipios donde trabajamos en ${comarca}. Cada pueblo tiene su propia página con SEO local optimizado.`}
               </p>
+              {info?.sectores && (
+                <ul class="comarca-sectores">
+                  {info.sectores.map((s) => <li class="tag-brutal">★ {s}</li>)}
+                </ul>
+              )}
             </header>
 
             <ul class="atlas-grid">
@@ -162,6 +288,40 @@ const canonical = 'https://platanitorico.com/diseno-web/';
         </section>
       );
     })}
+
+    {/* FAQ — preguntas frecuentes con FAQPage schema */}
+    <section class="section-brutal svc-faq">
+      <div class="container-brutal">
+        <header class="brutal-section-head">
+          <div class="brutal-section-head__col">
+            <span class="text-meta">★ Preguntas frecuentes</span>
+            <h2 class="brutal-section-head__title">
+              Lo que todo negocio
+              <em>pregunta.</em>
+            </h2>
+          </div>
+          <p class="brutal-section-head__lead">
+            Resolvemos las dudas más habituales sobre diseño web, SEO local y
+            presupuestos para negocios de la provincia de Almería.
+          </p>
+        </header>
+
+        <ul class="svc-faq__list">
+          {faqs.map((f, i) => (
+            <li class="svc-faq__item">
+              <details open={i === 0}>
+                <summary class="svc-faq__q">
+                  <span class="svc-faq__qn text-mono">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="svc-faq__qt">{f.q}</span>
+                  <span class="svc-faq__icon" aria-hidden="true">+</span>
+                </summary>
+                <p class="svc-faq__a">{f.a}</p>
+              </details>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
 
     {/* CTA final */}
     <section class="svc-final">
@@ -245,4 +405,70 @@ const canonical = 'https://platanitorico.com/diseno-web/';
   .atlas-tile__arrow { grid-area: arrow; font-family: var(--font-mono); color: var(--brutal-text-muted); transition: transform .2s, color .2s; font-size: .9rem; }
   .atlas-tile__name { grid-area: name; font-size: 1.05rem; line-height: 1.05; letter-spacing: -.02em; }
   .atlas-tile__sub { grid-area: sub; font-size: .58rem; color: var(--brutal-text-muted); letter-spacing: .1em; text-transform: uppercase; line-height: 1.3; }
+
+  /* — Propuesta de valor — */
+  .svc-value__grid {
+    list-style: none; padding: 0; margin: 2.5rem 0 0;
+    display: grid; gap: 0;
+    grid-template-columns: 1fr;
+    border: 2px solid var(--brutal-ink);
+    background: var(--brutal-ink);
+  }
+  @media (min-width: 640px) { .svc-value__grid { grid-template-columns: 1fr 1fr; gap: 2px; } }
+  @media (min-width: 1024px) { .svc-value__grid { grid-template-columns: repeat(4, 1fr); } }
+  .svc-value__card {
+    background: var(--brutal-card);
+    padding: 1.6rem 1.4rem 1.5rem;
+    display: flex; flex-direction: column;
+    transition: background .2s;
+  }
+  .svc-value__card:hover { background: var(--brutal-bg-alt); }
+  .svc-value__n { font-size: .7rem; color: var(--brutal-accent); letter-spacing: .15em; }
+  .svc-value__t {
+    font-family: var(--font-display, sans-serif);
+    font-size: 1.15rem; line-height: 1.1; letter-spacing: -.02em;
+    margin: .6rem 0 .5rem; color: var(--brutal-ink);
+  }
+  .svc-value__d { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-muted); margin: 0 0 1rem; flex: 1; }
+  .svc-value__link {
+    font-family: var(--font-mono); font-size: .72rem; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--brutal-ink); text-decoration: none;
+    border-top: 1.5px solid var(--brutal-ink); padding-top: .7rem;
+    transition: color .2s;
+  }
+  .svc-value__link:hover { color: var(--brutal-accent); }
+
+  /* — Sectores clave por comarca — */
+  .comarca-sectores {
+    list-style: none; display: flex; flex-wrap: wrap; gap: .4rem;
+    padding: 0; margin: 1rem 0 0;
+  }
+
+  /* — FAQ acordeón — */
+  .svc-faq__list { list-style: none; padding: 0; margin: 2.5rem 0 0; border-top: 2px solid var(--brutal-ink); }
+  .svc-faq__item { border-bottom: 2px solid var(--brutal-ink); }
+  .svc-faq__q {
+    display: flex; align-items: center; gap: 1rem;
+    cursor: pointer; list-style: none;
+    padding: 1.3rem 0;
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    line-height: 1.15; letter-spacing: -.02em;
+    color: var(--brutal-ink);
+  }
+  .svc-faq__q::-webkit-details-marker { display: none; }
+  .svc-faq__qn { font-family: var(--font-mono); font-size: .8rem; color: var(--brutal-accent); flex: none; }
+  .svc-faq__qt { flex: 1; }
+  .svc-faq__icon {
+    font-family: var(--font-mono); font-size: 1.5rem; flex: none; line-height: 1;
+    transition: transform .25s; color: var(--brutal-accent);
+  }
+  details[open] .svc-faq__icon { transform: rotate(45deg); }
+  .svc-faq__a {
+    margin: 0; padding: 0 0 1.5rem 2.8rem;
+    max-width: 75ch;
+    font-size: .98rem; line-height: 1.65; color: var(--brutal-text-muted);
+  }
+  @media (max-width: 560px) { .svc-faq__a { padding-left: 0; } }
 </style>
