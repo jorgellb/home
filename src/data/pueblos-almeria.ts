@@ -182,6 +182,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.6250, 36.8420],
     lugarIconico: "Polígono La Redonda",
     sectorPrincipal: "Agricultura y comercio",
+    panorama: [
+      "Vícar es el municipio que mejor resume el Almería que crece: 26.000 habitantes, una de las mayores concentraciones de invernadero del Poniente y un cinturón comercial y residencial que se expande pegado a la capital. En pocos kilómetros conviven el agricultor que exporta tomate a Europa, las nuevas urbanizaciones de clase media y el polígono industrial de La Redonda.",
+      "Esa mezcla de campo, industria y residencia dispara la demanda de servicios digitales muy distintos. Las cooperativas y proveedores agrícolas necesitan webs B2B y multiidioma para vender fuera; los comercios, talleres y profesionales que sirven a las urbanizaciones nuevas se la juegan en las búsquedas 'cerca de mí' y en Google Maps; y las promotoras venden vivienda al comprador que sale de Almería capital. Casi ninguno aprovecha todavía ese tráfico — y ahí está la oportunidad.",
+    ],
+    hitos: [
+      { k: "POBLACIÓN", v: "26.000 hab · en plena expansión" },
+      { k: "ECONOMÍA", v: "Invernadero + comercio + residencial" },
+      { k: "INDUSTRIA", v: "Polígono La Redonda" },
+      { k: "UBICACIÓN", v: "Cinturón metropolitano de Almería" },
+    ],
     sectores: [
       { nombre: "Empresas Agrícolas e Invernaderos", descripcion: "Vícar es uno de los municipios del Poniente con mayor concentración de invernaderos. Cooperativas, distribuidoras y proveedores de insumos agrícolas necesitan web para exportar y captar distribuidores europeos.", icon: "leaf", keywords: ["Catálogo de productos", "Exportación Europa", "Certificaciones", "Formulario B2B"] },
       { nombre: "Comercio y Servicios Locales", descripcion: "El crecimiento residencial de Vícar ha generado una creciente demanda de servicios: talleres, fontaneros, electricistas y comercios que necesitan aparecer primero en Google Maps cuando los vecinos buscan.", icon: "shop", keywords: ["Google Maps optimizado", "SEO local Vícar", "Citas y presupuestos", "Reseñas online"] },
@@ -207,6 +217,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.4356, 36.8833],
     lugarIconico: "Parque El Palmeral",
     sectorPrincipal: "Servicios residenciales",
+    panorama: [
+      "Huércal de Almería es la ciudad-dormitorio que se ha convertido en mercado por derecho propio: 18.000 habitantes de perfil joven y clase media-alta, pegada a la capital por la A-7 y creciendo a base de nuevas promociones. Es el típico municipio donde la gente vive, consume y busca proveedores 'cerca de casa' sin querer entrar a Almería.",
+      "Para clínicas, comercios y profesionales, ese perfil es oro: poder adquisitivo y la costumbre de buscarlo todo en el móvil antes de decidir. El dentista, el fisioterapeuta, la gestoría o el restaurante que aparezca primero en una búsqueda 'en Huércal de Almería' se lleva un cliente que paga bien y repite. La competencia local apenas trabaja el SEO, así que posicionarse aquí es rápido y muy rentable.",
+    ],
+    hitos: [
+      { k: "POBLACIÓN", v: "18.000 hab · perfil joven" },
+      { k: "PERFIL", v: "Residencial premium · clase media-alta" },
+      { k: "CONEXIÓN", v: "A-7 · pegado a la capital" },
+      { k: "DEMANDA", v: "Servicios de proximidad y salud" },
+    ],
     sectores: [
       { nombre: "Clínicas y Salud", descripcion: "Huércal de Almería tiene una población joven y nivel adquisitivo medio-alto. Clínicas dentales, centros de fisioterapia, psicólogos y centros de estética tienen aquí un mercado perfecto — y el 80% busca proveedor en Google.", icon: "health", keywords: ["Reserva de cita online", "RGPD sanitario", "SEO 'dentista Huércal'", "Ficha Google Business"] },
       { nombre: "Comercio y Restauración", descripcion: "El crecimiento de Huércal ha atraído comercios y restaurantes que compiten por visibilidad local. Una web bien posicionada y una ficha de Google Maps optimizada son la diferencia entre estar lleno o vacío.", icon: "restaurant", keywords: ["Carta digital", "Pedidos online", "SEO local", "Reseñas Google"] },
@@ -1683,6 +1703,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.9490, 36.8590],
     lugarIconico: "Bodegas Tradicionales de Berja",
     sectorPrincipal: "Viticultura, uva moscatel y turismo enológico",
+    panorama: [
+      "Berja es la capital de la Sierra de Gádor y un nombre con denominación de origen propia: su uva moscatel de mesa y su vino dulce DO Málaga-Almería tienen reputación internacional. A eso se suma un patrimonio de primer orden —la romana Vergium, el casco histórico, las fuentes termales del entorno— que la convierte en un destino enológico y cultural del interior almeriense aún por descubrir.",
+      "Ese binomio vino + patrimonio es justo lo que el turista de interior busca y casi no encuentra bien contado online. Las bodegas familiares tienen en el enoturismo —catas, visitas a viñedos, venta de vino online— un producto de alto margen; los alojamientos y restaurantes captan al viajero cultural; y los productores de almendra y aceite de la sierra pueden vender directo al consumidor. Posicionar 'vino moscatel Berja' o 'enoturismo Almería' es una mina apenas tocada.",
+    ],
+    hitos: [
+      { k: "DENOMINACIÓN", v: "Uva moscatel · vino dulce DO Málaga-Almería" },
+      { k: "HISTORIA", v: "Vergium romana · casco histórico" },
+      { k: "SIERRA", v: "Capital de la Sierra de Gádor" },
+      { k: "POBLACIÓN", v: "15.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Bodegas y Enoturismo Moscatel", descripcion: "Berja produce la mejor uva moscatel de Almería, reconocida internacionalmente. Bodegas familiares y cooperativas vinícolas tienen en el enoturismo un producto de alto valor: catas, visitas a viñedos y maridajes con gastronomía local.", icon: "flask", keywords: ["Uva moscatel Berja", "Bodega enoturismo Almería", "Cata vino dulce", "Denominación origen moscatel"] },
       { nombre: "Turismo Cultural e Histórico", descripcion: "El patrimonio romano de Vergium, el casco histórico de Berja y las fuentes termales del entorno son activos turísticos de primer orden. Rutas históricas con guía y webs de turismo cultural posicionan a Berja en el mapa del turismo interior almeriense.", icon: "star", keywords: ["Patrimonio romano Almería", "Vergium romana", "Turismo histórico Berja", "Fuentes termales sierra"] },
@@ -1708,6 +1738,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.8440, 36.8110],
     lugarIconico: "Casco Histórico de Dalías",
     sectorPrincipal: "Gastronomía de sierra-mar y servicios locales",
+    panorama: [
+      "Dalías es la bisagra entre la Sierra de Gádor y el llano agrícola del Poniente: un pueblo de arquitectura andaluza conservada que tiene a un lado los productos de la sierra —almendra, aceite, embutido— y al otro el pescado fresco de Adra a un paso. De esa frontera nace una gastronomía 'sierra-mar' que no existe en ningún otro sitio de Almería.",
+      "Para un pueblo de 4.500 habitantes, esa singularidad es justo lo que vende online. El restaurante que cuenta bien su cocina de sierra y mar atrae al comensal de Almería capital que busca 'algo diferente'; las casas rurales y los organizadores de rutas explotan un senderismo con vistas simultáneas al mar y a la sierra único en la provincia; y el comercio local hace de nexo para toda la comarca. Identidad propia, no plantilla.",
+    ],
+    hitos: [
+      { k: "POSICIÓN", v: "Entre la Sierra de Gádor y el Poniente" },
+      { k: "GASTRONOMÍA", v: "Cocina única de sierra y mar" },
+      { k: "PATRIMONIO", v: "Casco histórico y arquitectura popular" },
+      { k: "POBLACIÓN", v: "4.500 habitantes" },
+    ],
     sectores: [
       { nombre: "Hostelería y Gastronomía de Sierra-Mar", descripcion: "Dalías tiene acceso tanto a los productos de la sierra (almendra, aceite, embutidos) como a la pesca fresca de Adra. Restaurantes que mezclan esos dos mundos ofrecen una gastronomía única que posiciona bien para 'restaurante típico almeriense'.", icon: "restaurant", keywords: ["Gastronomía sierra y mar Almería", "Restaurante típico almeriense", "Cocina de montaña y costa", "Menú local Dalías"] },
       { nombre: "Comercio y Servicios para el Poniente", descripcion: "Dalías sirve de nexo entre los municipios de la sierra de Gádor y el Poniente industrial. Talleres, comercios y profesionales de Dalías tienen acceso a un mercado comarcal amplio que necesita visibilidad online para ser explotado.", icon: "shop", keywords: ["Servicios Dalías", "Comercio Sierra Gádor Poniente", "Talleres mecánicos Dalías", "Profesionales locales"] },
@@ -1733,6 +1773,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.7120, 36.8050],
     lugarIconico: "Polígono Agrícola de La Mojonera",
     sectorPrincipal: "Servicios a la agricultura intensiva y comercio industrial",
+    panorama: [
+      "La Mojonera es el taller del Mar de Plástico: en el corazón del Poniente, concentra una de las redes de servicios al invernadero más densas de España. Aquí no solo se cultiva —se vende el fitosanitario, la semilla, el riego, la maquinaria y el embalaje, y se organiza la logística refrigerada que lleva la hortaliza de Almería a media Europa.",
+      "Es un mercado puramente B2B y técnico, y eso cambia las reglas del juego digital. El agricultor y el exportador buscan proveedor por especificación, no por marca: 'sistema de riego invernadero', 'transporte refrigerado Almería', 'plástico agrícola'. La empresa de La Mojonera con una web de catálogo técnico, fichas de producto y formulario de presupuesto capta contratos que hoy se pierden por puro desconocimiento. Pura ingeniería de captación industrial.",
+    ],
+    hitos: [
+      { k: "ECONOMÍA", v: "Polo de servicios al invernadero" },
+      { k: "B2B", v: "Fitosanitarios, riego, maquinaria, embalaje" },
+      { k: "LOGÍSTICA", v: "Exportación refrigerada a Europa" },
+      { k: "POBLACIÓN", v: "9.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Empresas de Servicios Agrícolas", descripcion: "La Mojonera concentra una densa red de proveedores para el invernadero: fitosanitarios, semillas, sistemas de riego, maquinaria y embalaje. Empresas B2B que quieren captar nuevos clientes agricultores necesitan web con catálogo técnico y formulario de solicitud.", icon: "factory", keywords: ["Fitosanitarios Poniente Almería", "Maquinaria invernadero", "Sistemas riego agrícola", "Semillas Almería"] },
       { nombre: "Logística y Transporte de Exportación", descripcion: "El Poniente exporta millones de toneladas de horticultura al año. Empresas de logística, transporte refrigerado y comercio exterior de La Mojonera necesitan webs profesionales para captar contratos con exportadores y productores.", icon: "briefcase", keywords: ["Transporte refrigerado Almería", "Logística exportación hortalizas", "Comercio exterior Poniente", "Empresa transporte agrícola"] },
@@ -2374,6 +2424,16 @@ export const pueblos: Pueblo[] = [
     coords: [-2.0760, 37.6490],
     lugarIconico: "Iglesia de la Encarnación — joya barroca del altiplano",
     sectorPrincipal: "Comercio, servicios sanitarios y turismo patrimonial",
+    panorama: [
+      "Vélez-Rubio es la capital de Los Vélez y el centro de gravedad de todo el altiplano norte de Almería. Su iglesia de la Encarnación —la 'catedral barroca' del altiplano, del siglo XVIII— es un monumento de primer nivel, y su comercio y sus servicios sanitarios y educativos atienden a toda la comarca: María, Chirivel, Vélez-Blanco y los cortijos del entorno.",
+      "Esa centralidad comarcal es su gran activo digital: quien se posiciona bien en Vélez-Rubio capta a toda la comarca de Los Vélez, no solo a sus 7.000 vecinos. El veterinario, la clínica, la ferretería o el despacho que aparezca primero en una búsqueda 'en Los Vélez' tiene un mercado cautivo de miles de personas sin alternativa cercana. Y el turismo patrimonial, el aceite y la almendra del altiplano son nichos premium casi sin competencia online.",
+    ],
+    hitos: [
+      { k: "CAPITAL", v: "De la comarca de Los Vélez" },
+      { k: "PATRIMONIO", v: "Iglesia de la Encarnación · barroco s. XVIII" },
+      { k: "ALCANCE", v: "Centro de servicios del altiplano" },
+      { k: "POBLACIÓN", v: "7.000 habitantes" },
+    ],
     sectores: [
       { nombre: "Comercio y Servicios de Proximidad", descripcion: "Vélez-Rubio es el centro comercial de toda la comarca de Los Vélez. Supermercados, ferreterías, clínicas, talleres y despachos profesionales que capten búsquedas del tipo 'fontanero Los Vélez' o 'médico Vélez-Rubio' tienen un mercado cautivo de toda la comarca.", icon: "shop", keywords: ["Comercio Los Vélez capital", "Servicios Vélez-Rubio", "Tiendas altiplano almeriense", "Mercado semanal Los Vélez"] },
       { nombre: "Turismo Patrimonial y Cultural", descripcion: "La iglesia de la Encarnación es uno de los edificios barrocos más impresionantes de la provincia de Almería. Guías turísticos, hoteles y restaurantes de Vélez-Rubio pueden posicionar para 'patrimonio barroco Almería' y captar viajeros que combinan naturaleza y cultura.", icon: "star", keywords: ["Iglesia Encarnación Vélez-Rubio", "Barroco almeriense", "Turismo patrimonio Los Vélez", "Ruta cultural altiplano"] },
