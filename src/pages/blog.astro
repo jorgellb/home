@@ -140,7 +140,7 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
         <div class="np-strip">
           <div class="np-strip__item">
             <span class="np-strip__lbl">FECHA</span>
-            <span class="np-strip__val">{dateLong}</span>
+            <span class="np-strip__val" id="np-today">{dateLong}</span>
           </div>
 
           <div class="np-strip__divider"></div>
@@ -165,8 +165,8 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
                 <line x1="16" y1="3" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" transform={`rotate(${i*30} 16 16)`}/>
               ))}
             </svg>
-            <span class="np-strip__val">{weatherTemp}°C · Sol</span>
-            <span class="np-strip__sub">Mar {seaTemp}°C</span>
+            <span class="np-strip__val" id="np-air-temp">{weatherTemp}°C · Sol</span>
+            <span class="np-strip__sub" id="np-sea-temp">Mar {seaTemp}°C</span>
           </div>
         </div>
 
@@ -640,6 +640,56 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
   </main>
 
   <Footer hideHero={true} />
+
+  <script>
+    // El sitio es estático: la fecha y la temperatura se pintan en el navegador
+    // para que sean reales en cada visita, sin necesidad de redesplegar.
+    (function () {
+      const dateEl = document.getElementById('np-today');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('es-ES', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+        });
+      }
+
+      // Temperatura real de Almería — Open-Meteo (gratis, sin API key, CORS abierto).
+      const LAT = 36.84, LON = -2.46;
+      const airEl = document.getElementById('np-air-temp');
+      const seaEl = document.getElementById('np-sea-temp');
+
+      const cond = (c) => {
+        if (c === 0) return 'Sol';
+        if (c <= 3) return 'Nubes';
+        if (c === 45 || c === 48) return 'Niebla';
+        if (c >= 51 && c <= 67) return 'Lluvia';
+        if (c >= 71 && c <= 77) return 'Nieve';
+        if (c >= 80 && c <= 82) return 'Chubascos';
+        if (c >= 95) return 'Tormenta';
+        return 'Sol';
+      };
+
+      if (airEl) {
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&timezone=Europe%2FMadrid`)
+          .then((r) => (r.ok ? r.json() : Promise.reject()))
+          .then((j) => {
+            const t = j && j.current && j.current.temperature_2m;
+            const w = j && j.current && j.current.weather_code;
+            if (typeof t === 'number') airEl.textContent = `${Math.round(t)}°C · ${cond(w)}`;
+          })
+          .catch(() => {});
+      }
+
+      if (seaEl) {
+        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${LAT}&longitude=${LON}&current=sea_surface_temperature&timezone=Europe%2FMadrid`)
+          .then((r) => (r.ok ? r.json() : Promise.reject()))
+          .then((j) => {
+            const t = j && j.current && j.current.sea_surface_temperature;
+            if (typeof t === 'number') seaEl.textContent = `Mar ${Math.round(t)}°C`;
+          })
+          .catch(() => {});
+      }
+    })();
+  </script>
 </BaseLayout>
 
 <style>
@@ -872,8 +922,12 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
     letter-spacing: .2em;
     white-space: nowrap;
     border-right: 2px solid var(--np-paper);
+    position: relative;
+    z-index: 2;
   }
   .np-ticker__track {
+    position: relative;
+    z-index: 1;
     display: flex; gap: 2.5rem;
     width: max-content;
     animation: np-ticker-scroll 50s linear infinite;
