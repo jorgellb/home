@@ -555,16 +555,14 @@ const diyHoursHigh = 130;
         <ol class="em-timeline">
           {timeline.map((t, i) => (
             <li class={`em-tl em-tl--${t.color}`} style={`--em-tl-i:${i}`}>
-              <div class="em-tl__day text-mono">{t.d}</div>
-              <div class="em-tl__bar" aria-hidden="true"></div>
-              <div class="em-tl__body">
-                <header class="em-tl__head">
-                  <span class="text-mono em-tl__phase">{t.phase}</span>
-                  <span class="text-mono em-tl__num">{String(i+1).padStart(2,'0')}/14</span>
-                </header>
-                <h3 class="em-tl__title">{t.title}</h3>
-                <p class="em-tl__desc">{t.desc}</p>
+              <span class="em-tl__bar" aria-hidden="true"></span>
+              <div class="em-tl__head">
+                <span class="em-tl__day text-mono">{t.d}</span>
+                <span class="em-tl__num text-mono">{String(i+1).padStart(2,'0')}/14</span>
               </div>
+              <span class="em-tl__phase text-mono"><i class="em-tl__dot" aria-hidden="true"></i>{t.phase}</span>
+              <h3 class="em-tl__title">{t.title}</h3>
+              <p class="em-tl__desc">{t.desc}</p>
             </li>
           ))}
         </ol>
@@ -1541,27 +1539,27 @@ const diyHoursHigh = 130;
   @media (min-width: 1280px) { .em-timeline { grid-template-columns: repeat(7, 1fr); gap: 0; } }
 
   .em-tl {
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: .75rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
     background: rgba(255,252,246,0.05);
-    border: 2px solid currentColor;
-    padding: 1rem 1.25rem;
-    transition: background .25s, transform .25s;
+    border: 2px solid rgba(255,252,246,0.16);
+    padding: 1.15rem 1.1rem 1.1rem;
+    overflow: hidden;
+    transition: background .25s, transform .25s, border-color .25s;
   }
   @media (min-width: 1280px) {
-    .em-tl {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 6px 1fr;
-      gap: 0;
-      padding: 1rem;
-      border-right: 0;
-    }
-    .em-tl:last-child { border-right: 2px solid currentColor; }
-    .em-tl:nth-child(odd)  { background: rgba(255,252,246,0.04); }
-    .em-tl:nth-child(even) { background: rgba(255,252,246,0.07); }
+    .em-tl { border-right: 0; }
+    .em-tl:last-child { border-right: 2px solid rgba(255,252,246,0.16); }
+    .em-tl:nth-child(odd)  { background: rgba(255,252,246,0.035); }
+    .em-tl:nth-child(even) { background: rgba(255,252,246,0.065); }
   }
-  .em-tl:hover { background: rgba(214,255,68,0.08); transform: translateY(-3px); }
+  .em-tl:hover {
+    background: rgba(255,252,246,0.10);
+    border-color: currentColor;
+    transform: translateY(-3px);
+  }
 
   .em-tl--orange { color: var(--em-orange); }
   .em-tl--yellow { color: var(--em-yellow); }
@@ -1570,50 +1568,45 @@ const diyHoursHigh = 130;
   .em-tl--mint   { color: var(--em-mint); }
   .em-tl--gold   { color: var(--em-gold); }
   .em-tl--red    { color: var(--em-red); }
-  .em-tl--red    { background: rgba(220,27,44,0.12) !important; }
 
-  .em-tl__day {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: currentColor;
-    line-height: 1;
-    align-self: center;
-  }
   .em-tl__bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 5px;
     background: currentColor;
-    height: 4px;
-    margin: .35rem 0;
-    display: none;
   }
-  @media (min-width: 1280px) { .em-tl__bar { display: block; } }
-
-  .em-tl__body { display: flex; flex-direction: column; gap: .35rem; }
-  .em-tl__head { display: flex; justify-content: space-between; align-items: baseline; }
+  .em-tl__head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: .35rem;
+  }
+  /* El día va en un chip del color de fase, con texto siempre legible */
+  .em-tl__day {
+    font-size: .9rem; font-weight: 800; letter-spacing: .02em; line-height: 1;
+    color: var(--em-ink);
+    background: currentColor;
+    padding: .2rem .5rem;
+  }
+  .em-tl--blue .em-tl__day,
+  .em-tl--red  .em-tl__day { color: var(--em-paper); }
+  .em-tl__num { font-size: .58rem; letter-spacing: .12em; color: rgba(255,252,246,0.5); }
   .em-tl__phase {
-    font-size: .55rem;
-    letter-spacing: .2em;
-    color: currentColor;
-    font-weight: 800;
+    display: inline-flex; align-items: center; gap: .35rem;
+    font-size: .56rem; font-weight: 800; letter-spacing: .18em;
+    color: rgba(255,252,246,0.9);
+    margin-top: .2rem;
   }
-  .em-tl__num {
-    font-size: .55rem;
-    letter-spacing: .15em;
-    opacity: .55;
-    color: var(--em-paper);
-  }
+  .em-tl__dot { width: 7px; height: 7px; flex: none; background: currentColor; }
   .em-tl__title {
     font-family: var(--font-display);
-    font-size: .95rem;
-    font-weight: 700;
-    letter-spacing: -.01em;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -.015em;
     color: var(--em-paper);
     line-height: 1.1;
-    margin: .15rem 0 0;
+    margin: .25rem 0 0;
   }
   .em-tl__desc {
     font-size: .8rem;
     line-height: 1.4;
-    color: rgba(255,252,246,0.7);
+    color: rgba(255,252,246,0.68);
     margin: 0;
   }
 
@@ -1847,6 +1840,7 @@ const diyHoursHigh = 130;
   }
   @media (min-width: 1024px) { .em-plan--popular { transform: scale(1.05); } }
   .em-plan--popular:hover { transform: scale(1.02) translateY(-4px); }
+  .em-plan--popular .text-meta { color: rgba(255,252,246,0.78); }
   @media (min-width: 1024px) { .em-plan--popular:hover { transform: scale(1.05) translateY(-4px); } }
 
   .em-plan__ribbon {
@@ -2038,10 +2032,10 @@ const diyHoursHigh = 130;
   .em-proc__step--orange { color: var(--em-orange); }
   .em-proc__step--yellow { color: var(--em-yellow); }
   .em-proc__step--blue   { color: var(--em-blue); }
-  .em-proc__step--mint   { color: var(--em-mint); background: var(--em-mint); }
+  .em-proc__step--mint   { color: var(--em-mint); }
   .em-proc__step--red    { color: var(--em-red); }
-  .em-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 2px dashed currentColor; }
-  .em-proc__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
+  .em-proc__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 2px dashed rgba(14,13,11,0.2); }
+  .em-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--em-ink); line-height: 1; }
   .em-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--em-ink); opacity: .65; }
   .em-proc__title {
     font-size: clamp(1.15rem, 2vw, 1.35rem);
