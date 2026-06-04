@@ -114,15 +114,6 @@ export default defineConfig({
     build: {
       cssCodeSplit: true,
       minify: 'esbuild',
-      rollupOptions: {
-        output: {
-          // Solo se aplica al bundle cliente; en SSR estas libs van externas.
-          manualChunks(id) {
-            if (id.includes('node_modules/gsap')) return 'gsap';
-            return undefined;
-          },
-        },
-      },
     },
     ssr: {
       noExternal: [],
