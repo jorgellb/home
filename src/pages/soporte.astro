@@ -56,12 +56,12 @@ const faq = [
 ];
 
 const certifications = [
-  { code: 'RGPD',  name: 'Cumplimiento RGPD',     desc: 'Tratamiento de datos conforme al Reglamento General de Protección de Datos.',     color: 'blue'   },
-  { code: 'SSL',   name: 'SSL Enterprise',        desc: 'Certificado SSL/TLS de validación extendida incluido en todos los planes.',       color: 'green'  },
-  { code: '24/7',  name: 'Monitor 24/7/365',      desc: 'Vigilancia continua del uptime y de las amenazas a tu infraestructura.',          color: 'gold'   },
-  { code: 'ISO',   name: 'Buenas prácticas',      desc: 'Procedimientos alineados con ISO/IEC 27001 (seguridad de la información).',       color: 'orange' },
-  { code: 'BAK',   name: 'Backup off-site',       desc: 'Copias de seguridad en servidor externo independiente con retención 30 días.',    color: 'green'  },
-  { code: 'AESA',  name: 'Operador certificado',  desc: 'Equipo con certificación AESA para operaciones audiovisuales (cuando aplica).',   color: 'blue'   },
+  { code: 'RGPD',  name: 'Cumplimiento RGPD',  meta: 'UE 2016/679',        desc: 'Tratamiento de datos conforme al Reglamento General de Protección de Datos.',    color: 'blue'   },
+  { code: 'SSL',   name: 'Cifrado SSL/TLS',    meta: 'HTTPS · TLS 1.3',    desc: 'Certificado SSL con renovación automática, incluido en todos los planes.',       color: 'green'  },
+  { code: '24/7',  name: 'Monitor 24/7/365',   meta: 'Uptime 99,9 %',      desc: 'Vigilancia continua del uptime y de las amenazas a tu infraestructura.',         color: 'gold'   },
+  { code: 'ISO',   name: 'Buenas prácticas',   meta: 'ISO/IEC 27001',      desc: 'Procedimientos alineados con la norma de seguridad de la información.',           color: 'orange' },
+  { code: 'BAK',   name: 'Backup off-site',    meta: 'Retención 30 días',  desc: 'Copias en servidor externo independiente, con restauración garantizada.',         color: 'green'  },
+  { code: 'AESA',  name: 'Operador de dron',   meta: 'Habilitación AESA',  desc: 'Equipo habilitado por AESA para operaciones audiovisuales aéreas (cuando aplica).', color: 'blue'   },
 ];
 
 const noc = [
@@ -731,20 +731,32 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
         <ul class="sp-certs">
           {certifications.map((c) => (
             <li class={`sp-cert sp-cert--${c.color}`}>
-              <div class="sp-cert__seal" aria-hidden="true">
-                <svg viewBox="0 0 100 100" width="100%" height="100%">
-                  <defs><path id={`sp-c-${c.code}`} d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs>
-                  <circle cx="50" cy="50" r="46" fill="currentColor"/>
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
-                  <text font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6" letter-spacing="2"><textPath href={`#sp-c-${c.code}`} startOffset="0%">★ CERTIFICADO ★ PLATANITO RICO ★</textPath></text>
-                  <text x="50" y="56" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#FFFCF6" letter-spacing="1">{c.code}</text>
-                </svg>
+              <div class="sp-cert__top">
+                <div class="sp-cert__seal" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <defs><path id={`sp-c-${c.code}`} d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs>
+                    <circle cx="50" cy="50" r="46" fill="currentColor"/>
+                    <circle cx="50" cy="50" r="46" fill="none" stroke="#FFFCF6" stroke-width="1" stroke-opacity="0.5"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#FFFCF6" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+                    <text font-family="monospace" font-size="7" font-weight="bold" fill="#FFFCF6" letter-spacing="2"><textPath href={`#sp-c-${c.code}`} startOffset="0%">★ CERTIFICADO ★ PLATANITO RICO ★</textPath></text>
+                    <text x="50" y="55" text-anchor="middle" font-family="monospace" font-size="15" font-weight="bold" fill="#FFFCF6" letter-spacing="1">{c.code}</text>
+                  </svg>
+                </div>
+                <span class="sp-cert__check">
+                  <svg viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><path d="M2 8.5l3.5 3.5L14 4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Verificado
+                </span>
               </div>
+              <span class="sp-cert__meta">{c.meta}</span>
               <h3 class="sp-cert__name">{c.name}</h3>
               <p class="sp-cert__desc">{c.desc}</p>
             </li>
           ))}
         </ul>
+
+        <p class="sp-cert__foot">
+          <span aria-hidden="true">✻</span> Algunas certificaciones y habilitaciones aplican según el servicio o el plan contratado.
+        </p>
       </div>
     </section>
 
@@ -1885,52 +1897,97 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-cert-section > * { position: relative; }
 
   .sp-certs {
-    list-style: none; padding: 0; margin: 2rem 0 0;
+    list-style: none; padding: 0; margin: 2.5rem 0 0;
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  @media (min-width: 640px)  { .sp-certs { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .sp-certs { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 560px)  { .sp-certs { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px)  { .sp-certs { grid-template-columns: repeat(3, 1fr); } }
 
   .sp-cert {
+    position: relative;
     background: var(--sp-paper);
-    color: var(--sp-ink);
+    color: var(--sp-blue);
     border: 2.5px solid var(--sp-ink);
     box-shadow: 6px 6px 0 var(--sp-ink);
-    padding: 1.5rem;
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 1.25rem;
-    align-items: center;
+    padding: 1.6rem 1.4rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     transition: transform .25s, box-shadow .25s;
+  }
+  .sp-cert::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: currentColor;
   }
   .sp-cert:hover {
     transform: translate(-3px, -3px);
     box-shadow: 10px 10px 0 var(--sp-lime);
   }
-  .sp-cert__seal {
-    width: 80px; height: 80px;
-    transform: rotate(-6deg);
-  }
   .sp-cert--blue   { color: var(--sp-blue); }
-  .sp-cert--green  { color: var(--sp-green); }
+  .sp-cert--green  { color: var(--sp-green-d); }
   .sp-cert--gold   { color: var(--sp-gold); }
   .sp-cert--orange { color: var(--sp-orange); }
+
+  .sp-cert__top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+  .sp-cert__seal {
+    width: 88px; height: 88px;
+    flex: none;
+    transform: rotate(-7deg);
+    transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+    filter: drop-shadow(2px 2px 0 rgba(14, 13, 11, 0.22));
+  }
+  .sp-cert:hover .sp-cert__seal { transform: rotate(0); }
+
+  .sp-cert__check {
+    display: inline-flex; align-items: center; gap: .32rem;
+    margin-top: .2rem;
+    font-family: var(--font-mono);
+    font-size: .56rem; font-weight: 800;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--sp-green-d);
+    border: 1.5px solid var(--sp-green-d);
+    padding: .28rem .5rem;
+    white-space: nowrap;
+  }
+  .sp-cert__check svg { stroke: var(--sp-green-d); flex: none; }
+
+  .sp-cert__meta {
+    font-family: var(--font-mono);
+    font-size: .62rem; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: currentColor;
+    margin-bottom: .4rem;
+  }
   .sp-cert__name {
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: -.015em;
-    margin: 0 0 .35rem;
+    font-size: 1.22rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.05;
+    margin: 0 0 .45rem;
     color: var(--sp-ink);
   }
   .sp-cert__desc {
-    font-size: .82rem;
-    line-height: 1.45;
+    font-size: .85rem;
+    line-height: 1.5;
     color: var(--brutal-text-secondary);
     margin: 0;
   }
+  .sp-cert__foot {
+    margin: 1.75rem 0 0;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .04em;
+    color: rgba(255, 252, 246, 0.6);
+  }
+  .sp-cert__foot span { color: var(--sp-lime); margin-right: .35rem; font-weight: 700; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* PROCESO                                                 */
