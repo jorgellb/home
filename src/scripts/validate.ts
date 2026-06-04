@@ -14,7 +14,6 @@ import {
   categorySchema,
   serviceSchema,
   testimonialSchema,
-  pricingPlanSchema,
   validate,
   formatErrors
 } from '../schemas/index'
@@ -22,7 +21,7 @@ import type { z } from 'zod'
 
 interface ContentFile {
   path: string
-  type: 'page' | 'post' | 'product' | 'category' | 'service' | 'testimonial' | 'pricing'
+  type: 'page' | 'post' | 'product' | 'category' | 'service' | 'testimonial'
   data: unknown
 }
 
@@ -39,7 +38,6 @@ const SCHEMAS: Record<string, z.ZodSchema> = {
   services: serviceSchema,
   testimonial: testimonialSchema,
   testimonials: testimonialSchema,
-  pricing: pricingPlanSchema
 }
 
 import grayMatter from 'gray-matter';

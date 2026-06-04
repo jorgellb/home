@@ -8,7 +8,6 @@ export { productSchema, type Product } from './product'
 export { categorySchema, type Category } from './category'
 export { serviceSchema, type Service } from './service'
 export { testimonialSchema, type Testimonial } from './testimonial'
-export { pricingPlanSchema, type PricingPlan } from './pricing'
 
 export type ValidationResult<T> =
   | { success: true; data: T }
