@@ -556,6 +556,7 @@ const diyHoursHigh = 130;
           {timeline.map((t, i) => (
             <li class={`em-tl em-tl--${t.color}`} style={`--em-tl-i:${i}`}>
               <span class="em-tl__bar" aria-hidden="true"></span>
+              <span class="em-tl__ghost" aria-hidden="true">{String(i+1).padStart(2,'0')}</span>
               <div class="em-tl__head">
                 <span class="em-tl__day text-mono">{t.d}</span>
                 <span class="em-tl__num text-mono">{String(i+1).padStart(2,'0')}/14</span>
@@ -1539,61 +1540,84 @@ const diyHoursHigh = 130;
   @media (min-width: 1280px) { .em-timeline { grid-template-columns: repeat(7, 1fr); gap: 0; } }
 
   .em-tl {
+    --cat: var(--em-orange);
     position: relative;
     display: flex;
     flex-direction: column;
     gap: .3rem;
     background: rgba(255,252,246,0.05);
-    border: 2px solid rgba(255,252,246,0.16);
+    border: 2px solid rgba(255,252,246,0.14);
     padding: 1.15rem 1.1rem 1.1rem;
     overflow: hidden;
-    transition: background .25s, transform .25s, border-color .25s;
+    isolation: isolate;
+    transition: background .25s, transform .3s cubic-bezier(.34,1.4,.5,1), border-color .25s, box-shadow .3s;
   }
   @media (min-width: 1280px) {
     .em-tl { border-right: 0; }
-    .em-tl:last-child { border-right: 2px solid rgba(255,252,246,0.16); }
+    .em-tl:last-child { border-right: 2px solid rgba(255,252,246,0.14); }
     .em-tl:nth-child(odd)  { background: rgba(255,252,246,0.035); }
     .em-tl:nth-child(even) { background: rgba(255,252,246,0.065); }
   }
   .em-tl:hover {
     background: rgba(255,252,246,0.10);
-    border-color: currentColor;
-    transform: translateY(-3px);
+    border-color: var(--cat);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px -12px var(--cat);
   }
 
-  .em-tl--orange { color: var(--em-orange); }
-  .em-tl--yellow { color: var(--em-yellow); }
-  .em-tl--lime   { color: var(--em-lime); }
-  .em-tl--blue   { color: var(--em-blue); }
-  .em-tl--mint   { color: var(--em-mint); }
-  .em-tl--gold   { color: var(--em-gold); }
-  .em-tl--red    { color: var(--em-red); }
+  .em-tl--orange { --cat: var(--em-orange); }
+  .em-tl--yellow { --cat: var(--em-yellow); }
+  .em-tl--lime   { --cat: var(--em-lime); }
+  .em-tl--blue   { --cat: var(--em-blue); }
+  .em-tl--mint   { --cat: var(--em-mint); }
+  .em-tl--gold   { --cat: var(--em-gold); }
+  .em-tl--red    { --cat: var(--em-red); border-color: rgba(220,27,44,0.45); }
 
+  /* Barra superior con resplandor */
   .em-tl__bar {
     position: absolute; top: 0; left: 0; right: 0; height: 5px;
-    background: currentColor;
+    background: var(--cat);
+    box-shadow: 0 0 14px -1px var(--cat);
   }
+  /* Número fantasma gigante de fondo */
+  .em-tl__ghost {
+    position: absolute; right: -.5rem; bottom: -1.6rem;
+    z-index: -1;
+    font-family: var(--font-mono);
+    font-size: 5.6rem; font-weight: 800; line-height: 1;
+    color: var(--cat);
+    opacity: .13;
+    pointer-events: none;
+    transition: opacity .3s, transform .3s;
+  }
+  .em-tl:hover .em-tl__ghost { opacity: .24; transform: scale(1.08) rotate(-4deg); }
+
   .em-tl__head {
     display: flex; align-items: center; justify-content: space-between;
     margin-top: .35rem;
   }
-  /* El día va en un chip del color de fase, con texto siempre legible */
+  /* Chip del día: fondo = color de fase (--cat), texto auto-contrastado */
   .em-tl__day {
-    font-size: .9rem; font-weight: 800; letter-spacing: .02em; line-height: 1;
+    font-size: .92rem; font-weight: 800; letter-spacing: .03em; line-height: 1;
     color: var(--em-ink);
-    background: currentColor;
-    padding: .2rem .5rem;
+    background: var(--cat);
+    padding: .24rem .55rem;
+    box-shadow: 0 0 12px -3px var(--cat);
   }
   .em-tl--blue .em-tl__day,
   .em-tl--red  .em-tl__day { color: var(--em-paper); }
-  .em-tl__num { font-size: .58rem; letter-spacing: .12em; color: rgba(255,252,246,0.5); }
+  .em-tl__num { font-size: .6rem; letter-spacing: .12em; color: rgba(255,252,246,0.65); }
   .em-tl__phase {
-    display: inline-flex; align-items: center; gap: .35rem;
+    display: inline-flex; align-items: center; gap: .4rem;
     font-size: .56rem; font-weight: 800; letter-spacing: .18em;
-    color: rgba(255,252,246,0.9);
-    margin-top: .2rem;
+    color: rgba(255,252,246,0.92);
+    margin-top: .25rem;
   }
-  .em-tl__dot { width: 7px; height: 7px; flex: none; background: currentColor; }
+  .em-tl__dot {
+    width: 8px; height: 8px; flex: none; border-radius: 50%;
+    background: var(--cat);
+    box-shadow: 0 0 8px 0 var(--cat);
+  }
   .em-tl__title {
     font-family: var(--font-display);
     font-size: 1rem;
@@ -1601,7 +1625,7 @@ const diyHoursHigh = 130;
     letter-spacing: -.015em;
     color: var(--em-paper);
     line-height: 1.1;
-    margin: .25rem 0 0;
+    margin: .3rem 0 0;
   }
   .em-tl__desc {
     font-size: .8rem;
