@@ -50,8 +50,8 @@ const PITCH_GAIN = 1.3, PITCH_MAX = 0.55, PITCH_NEUTRAL = 0.46;
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-/* Throttle: detectar rostro a ~20fps, renderizar a 60fps */
-const DETECT_INTERVAL = 3;
+/* Throttle: detectar rostro cada N frames, renderizar a 60fps */
+const DETECT_INTERVAL = 2;
 
 /* Correcta orientación de los GLB a la convención de la escena */
 const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
