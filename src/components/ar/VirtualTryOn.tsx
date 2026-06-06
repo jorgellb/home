@@ -55,7 +55,7 @@ const DETECT_INTERVAL = 1;
 
 /* Correcta orientación de los GLB a la convención de la escena */
 const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
-  hat: [-Math.PI / 2, 0, 0],
+  hat: [0, 0, 0],
   glasses: [0, 0, 0],
   cap: [0, 0, 0],
   earrings: [0, 0, 0],
@@ -462,7 +462,7 @@ export default function VirtualTryOn() {
       g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(s.w * 1.1 * adj.scale);
     } else if (e.kind === 'hat') {
-      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.15 + adj.dy, 0);
+      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.35 + adj.dy, 0);
       g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(faceW * 1.4 * adj.scale);
     } else if (e.kind === 'cap') {
