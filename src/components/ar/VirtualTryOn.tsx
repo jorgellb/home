@@ -211,14 +211,29 @@ function buildCap(): THREE.Object3D {
 }
 
 function normalizeModel(obj: THREE.Object3D): THREE.Object3D {
+  const meshes: THREE.Mesh[] = [];
+  const seen = new Set<string>();
   obj.traverse((o) => {
     const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh) return;
     if (!mesh.material) return;
     const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
     mats.forEach((mat) => {
       const m = mat as THREE.MeshStandardMaterial;
       if ('envMapIntensity' in m) m.envMapIntensity = 1.25;
     });
+    const geo = mesh.geometry;
+    if (!geo.boundingBox) geo.computeBoundingBox();
+    const box = geo.boundingBox!;
+    const key = `${geo.attributes.position.count}_${box.min.toArray()}_${box.max.toArray()}`;
+    if (seen.has(key)) {
+      mesh.parent?.remove(mesh);
+      geo.dispose();
+      mats.forEach((m) => m.dispose());
+      return;
+    }
+    seen.add(key);
+    meshes.push(mesh);
   });
   const box = new THREE.Box3().setFromObject(obj);
   const size = new THREE.Vector3();
