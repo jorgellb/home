@@ -14,7 +14,7 @@ import styles from './VirtualTryOn.module.css';
    Sin WebXR. Pensado para móvil. Assets autoalojados en /public.
    ════════════════════════════════════════════════════════════════ */
 
-type ProductId = 'glasses' | 'earrings' | 'necklace';
+type ProductId = 'glasses' | 'earrings' | 'hat' | 'cap';
 type Status = 'idle' | 'starting' | 'running' | 'error' | 'unsupported';
 
 interface Product {
@@ -27,7 +27,8 @@ interface Product {
 const PRODUCTS: Product[] = [
   { id: 'glasses', label: 'Gafas', tag: 'Eyewear', model: '/models/glasses.glb' },
   { id: 'earrings', label: 'Pendientes', tag: 'Jewelry', model: '/models/earrings.glb' },
-  { id: 'necklace', label: 'Colgante', tag: 'Necklace', model: '/models/necklace.glb' },
+  { id: 'hat', label: 'Sombrero', tag: 'Headwear', model: '/models/hat.glb' },
+  { id: 'cap', label: 'Gorra', tag: 'Headwear', model: '/models/cap.glb' },
 ];
 
 /* Índices del mesh facial de 468 puntos de MediaPipe */
@@ -36,6 +37,7 @@ const LM = {
   eyeR: 263, // esquina externa del ojo (lado imagen-derecha)
   earL: 234, // lateral del rostro izq. (zona oreja)
   earR: 454, // lateral del rostro der. (zona oreja)
+  brow: 10, // centro de la frente (línea del pelo) — para sombreros/gorras
   chin: 152, // mentón
 };
 
@@ -66,9 +68,10 @@ interface Engine {
 
 interface Smooth {
   init: boolean;
-  cx: number; cy: number; w: number; roll: number; // glasses/necklace
-  elx: number; ely: number; erx: number; ery: number; // earrings
-  chx: number; chy: number; // chin
+  cx: number; cy: number; w: number; roll: number; // ojos (gafas)
+  elx: number; ely: number; erx: number; ery: number; // orejas (pendientes)
+  fx: number; fy: number; // frente (sombrero/gorra)
+  chx: number; chy: number; // mentón
 }
 
 /* ───────────────────── Fallbacks geométricos ───────────────────── */
@@ -76,9 +79,10 @@ function frameMat() {
   return new THREE.MeshStandardMaterial({ color: 0x14151a, metalness: 0.6, roughness: 0.35 });
 }
 function lensMat() {
+  // lente de sol realista: oscura, ligeramente reflectante
   return new THREE.MeshStandardMaterial({
-    color: 0x18e0ff, metalness: 0.1, roughness: 0.1,
-    transparent: true, opacity: 0.32, emissive: 0x0a5566, emissiveIntensity: 0.4,
+    color: 0x0b1622, metalness: 0.55, roughness: 0.07,
+    transparent: true, opacity: 0.74, emissive: 0x13243a, emissiveIntensity: 0.25,
   });
 }
 function goldMat() {
@@ -122,21 +126,50 @@ function buildEarring(): THREE.Group {
   return g;
 }
 
-/** Colgante: cadena en U + medallón. Ancho ≈ 1 unidad. */
-function buildNecklace(): THREE.Object3D {
+/** Sombrero de ala (fedora). Ancho del ala ≈ 1.2 unidades. */
+function buildHat(): THREE.Object3D {
   const g = new THREE.Group();
-  const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-0.5, 0.18, 0),
-    new THREE.Vector3(-0.32, -0.12, 0.04),
-    new THREE.Vector3(0, -0.34, 0.06),
-    new THREE.Vector3(0.32, -0.12, 0.04),
-    new THREE.Vector3(0.5, 0.18, 0),
-  ]);
-  const chain = new THREE.Mesh(new THREE.TubeGeometry(curve, 64, 0.022, 8, false), goldMat());
-  g.add(chain);
-  const medallion = new THREE.Mesh(new THREE.SphereGeometry(0.11, 24, 24), goldMat());
-  medallion.position.set(0, -0.42, 0.06);
-  g.add(medallion);
+  const felt = new THREE.MeshStandardMaterial({ color: 0x4a3526, roughness: 0.92, metalness: 0.03 });
+  const band = new THREE.MeshStandardMaterial({ color: 0x241812, roughness: 0.7 });
+  // ala: disco plano ligeramente inclinado hacia la cámara
+  const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.045, 56), felt);
+  brim.rotation.x = -0.34;
+  brim.position.set(0, -0.05, 0);
+  g.add(brim);
+  // copa: cilindro tronco-cónico (más estrecho arriba)
+  const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.37, 0.46, 44), felt);
+  crown.position.set(0, 0.2, 0);
+  g.add(crown);
+  // banda
+  const bandM = new THREE.Mesh(new THREE.CylinderGeometry(0.375, 0.375, 0.1, 44), band);
+  bandM.position.set(0, 0.02, 0);
+  g.add(bandM);
+  return g;
+}
+
+/** Gorra de béisbol: cúpula + visera. Ancho ≈ 0.85 unidades. */
+function buildCap(): THREE.Object3D {
+  const g = new THREE.Group();
+  const main = new THREE.MeshStandardMaterial({ color: 0x1c2c52, roughness: 0.78, metalness: 0.04 });
+  const accent = new THREE.MeshStandardMaterial({ color: 0xc6ff3a, roughness: 0.6 });
+  // cúpula (media esfera achatada)
+  const crown = new THREE.Mesh(
+    new THREE.SphereGeometry(0.42, 36, 22, 0, Math.PI * 2, 0, Math.PI * 0.52),
+    main,
+  );
+  crown.scale.set(1, 0.94, 0.86);
+  crown.position.set(0, 0.04, 0);
+  g.add(crown);
+  // visera (media elipse inclinada hacia abajo-adelante)
+  const visor = new THREE.Mesh(new THREE.CircleGeometry(0.44, 36, Math.PI, Math.PI), main);
+  visor.scale.set(1.05, 0.6, 1);
+  visor.rotation.x = -0.95;
+  visor.position.set(0, -0.05, 0.17);
+  g.add(visor);
+  // botón superior
+  const btn = new THREE.Mesh(new THREE.SphereGeometry(0.04, 14, 14), accent);
+  btn.position.set(0, 0.4, 0);
+  g.add(btn);
   return g;
 }
 
@@ -206,7 +239,11 @@ async function buildAccessory(engine: Engine, product: ProductId): Promise<strin
     right.name = 'earR';
     content = [left, right];
   } else {
-    const m = loaded ?? (product === 'glasses' ? buildGlasses() : buildNecklace());
+    let m: THREE.Object3D;
+    if (loaded) m = loaded;
+    else if (product === 'glasses') m = buildGlasses();
+    else if (product === 'hat') m = buildHat();
+    else m = buildCap();
     content = [m];
   }
   content.forEach((c) => engine.accessory.add(c));
@@ -303,13 +340,13 @@ export default function VirtualTryOn() {
     const eyeR = toCard(lm[LM.eyeR], vw, vh, e.cw, e.ch);
     const earL = toCard(lm[LM.earL], vw, vh, e.cw, e.ch);
     const earR = toCard(lm[LM.earR], vw, vh, e.cw, e.ch);
+    const brow = toCard(lm[LM.brow], vw, vh, e.cw, e.ch);
     const chin = toCard(lm[LM.chin], vw, vh, e.cw, e.ch);
 
     const cx = (eyeL.x + eyeR.x) / 2;
     const cy = (eyeL.y + eyeR.y) / 2;
     const w = Math.hypot(eyeR.x - eyeL.x, eyeR.y - eyeL.y);
     const roll = Math.atan2(eyeR.y - eyeL.y, eyeR.x - eyeL.x);
-    const faceW = Math.hypot(earR.x - earL.x, earR.y - earL.y);
 
     const s = e.smooth;
     const t = s.init ? 0.4 : 1; // primer frame sin lerp
@@ -317,18 +354,28 @@ export default function VirtualTryOn() {
     s.w = lerp(s.w, w, t); s.roll = lerp(s.roll, roll, t);
     s.elx = lerp(s.elx, earL.x, t); s.ely = lerp(s.ely, earL.y, t);
     s.erx = lerp(s.erx, earR.x, t); s.ery = lerp(s.ery, earR.y, t);
+    s.fx = lerp(s.fx, brow.x, t); s.fy = lerp(s.fy, brow.y, t);
     s.chx = lerp(s.chx, chin.x, t); s.chy = lerp(s.chy, chin.y, t);
     s.init = true;
+
+    const faceW = Math.hypot(s.erx - s.elx, s.ery - s.ely);
+    const faceH = Math.abs(s.chy - s.fy);
 
     const g = e.accessory;
     if (e.kind === 'glasses') {
       g.position.set(s.cx + adj.dx, s.cy + adj.dy, 0);
       g.rotation.z = s.roll;
       g.scale.setScalar(s.w * 1.1 * adj.scale);
-    } else if (e.kind === 'necklace') {
-      g.position.set(s.cx + adj.dx, s.chy + faceW * 0.55 + adj.dy, 0);
-      g.rotation.z = s.roll * 0.6;
-      g.scale.setScalar(faceW * 1.15 * adj.scale);
+    } else if (e.kind === 'hat') {
+      // sombrero: por encima de la frente (sobre la coronilla)
+      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.52 + adj.dy, 0);
+      g.rotation.z = s.roll;
+      g.scale.setScalar(faceW * 1.55 * adj.scale);
+    } else if (e.kind === 'cap') {
+      // gorra: apoyada en la frente
+      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.24 + adj.dy, 0);
+      g.rotation.z = s.roll;
+      g.scale.setScalar(faceW * 1.75 * adj.scale);
     } else {
       // pendientes: cada uno en su oreja, colgando hacia abajo
       const size = faceW * 0.5 * adj.scale;
@@ -407,7 +454,7 @@ export default function VirtualTryOn() {
       const engine: Engine = {
         renderer, scene, camera, accessory, kind: productRef.current,
         faceLandmarker, stream, raf: 0, ro: null, cw: 1, ch: 1, lastVideoTime: -1,
-        smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, chx: 0, chy: 0 },
+        smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, fx: 0, fy: 0, chx: 0, chy: 0 },
       };
       engineRef.current = engine;
       resize(engine);
@@ -495,7 +542,7 @@ export default function VirtualTryOn() {
               <div className={styles.scan} aria-hidden="true">{faceSvg()}</div>
               <p className={styles.overlayLead}>Probador virtual AR</p>
               <p className={styles.overlaySub}>
-                Pruébate <strong>gafas, pendientes o un colgante</strong> desde la cámara de tu móvil — sin instalar nada.
+                Pruébate <strong>gafas, pendientes, sombreros o gorras</strong> desde la cámara de tu móvil — sin instalar nada.
               </p>
               <button className={styles.cta} onClick={start}>Activar probador virtual</button>
               <span className={styles.priv}>🔒 El vídeo se procesa en tu dispositivo. No se sube nada.</span>
@@ -567,8 +614,12 @@ function productIcon(id: ProductId) {
   if (id === 'earrings') return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M8 4a3 3 0 016 0" /><circle cx="8" cy="16" r="2.5" /><circle cx="16" cy="16" r="2.5" /><path d="M8 7v6M16 7v6" /></svg>
   );
+  if (id === 'hat') return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 17.5c2.5 1 6 1.5 9 1.5s6.5-.5 9-1.5" /><path d="M6.5 16.5C7 11 8.5 7 12 7s5 4 5.5 9.5" /></svg>
+  );
+  // gorra
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M4 4c0 6 3.5 9 8 9s8-3 8-9" /><circle cx="12" cy="16.5" r="2.5" /></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14a8 8 0 0116 0" /><path d="M4 14h12a5 5 0 005-2.5" /></svg>
   );
 }
 
