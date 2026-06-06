@@ -1,0 +1,247 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import VirtualTryOn from '../components/ar/VirtualTryOn.tsx';
+
+const title = 'Probador Virtual AR para Ecommerce · Demo en vivo';
+const description =
+  'Demo de probador virtual con realidad aumentada para tiendas online: prueba gafas, pendientes o colgantes desde la cámara del móvil. Tecnología AR para ecommerce por Platanito Rico.';
+const canonical = 'https://platanitorico.com/probador-virtual-ar/';
+
+const benefits = [
+  { k: '+40%', v: 'Confianza de compra', d: 'El cliente ve el producto sobre sí mismo antes de pagar.' },
+  { k: '−25%', v: 'Devoluciones', d: 'Menos sorpresas al recibir = menos logística inversa.' },
+  { k: '0', v: 'Apps que instalar', d: 'Funciona desde un enlace, en el navegador del móvil.' },
+  { k: '3D', v: 'Producto real', d: 'Modelos GLB que rotan y se ajustan al rostro en vivo.' },
+];
+
+const steps = [
+  { n: '01', t: 'Conectar con tus productos', d: 'Cada referencia de tu catálogo (WooCommerce, Shopify o a medida) se enlaza con su modelo 3D. El probador lee el producto activo de la ficha.' },
+  { n: '02', t: 'Cambiar modelo por producto', d: 'Sustituimos las geometrías de demo por los GLB reales de tus gafas, pendientes o colgantes. Un archivo por SKU, optimizado para móvil.' },
+  { n: '03', t: 'Botón de compra integrado', d: 'Añadimos "Añadir al carrito" sobre la propia experiencia AR, con el precio y las variantes sincronizados con tu tienda.' },
+  { n: '04', t: 'Captura y compartir (opcional)', d: 'El usuario guarda una foto con el accesorio puesto y la comparte en redes — marketing orgánico gratis para tu marca.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: canonical,
+    inLanguage: 'es',
+    isPartOf: { '@type': 'WebSite', name: 'Platanito Rico', url: 'https://platanitorico.com' },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://platanitorico.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Tiendas online', item: 'https://platanitorico.com/soluciones/ecommerce/' },
+        { '@type': 'ListItem', position: 3, name: 'Probador Virtual AR', item: canonical },
+      ],
+    },
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
+  imageAlt="Probador virtual AR para ecommerce — Platanito Rico"
+  keywords="probador virtual AR, realidad aumentada ecommerce, try-on virtual, AR tienda online, probador gafas online, MediaPipe Three.js"
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Tiendas online', href: '/soluciones/ecommerce/' },
+    { label: 'Probador Virtual AR' },
+  ]} />
+
+  <main id="main-content" class="pv">
+    {/* HERO */}
+    <section class="pv-hero">
+      <div class="container-brutal pv-hero__inner">
+        <span class="pv-eyebrow">★ Demo en vivo · Realidad aumentada</span>
+        <h1 class="pv-hero__title">
+          Probador virtual <em>AR</em> para ecommerce
+        </h1>
+        <p class="pv-hero__lead">
+          Permite que tus clientes prueben <strong>gafas, pendientes o colgantes</strong>
+          desde la cámara del móvil antes de comprar. Más confianza, menos devoluciones
+          y una experiencia que tu competencia no tiene.
+        </p>
+        <div class="pv-hero__chips">
+          <span>📷 Cámara del navegador</span>
+          <span>🧠 IA facial en el dispositivo</span>
+          <span>🛒 Listo para tu tienda</span>
+        </div>
+      </div>
+    </section>
+
+    {/* DEMO (island React solo en cliente) */}
+    <section class="pv-demo">
+      <div class="container-brutal">
+        <VirtualTryOn client:only="react" />
+        <noscript>
+          <p class="pv-noscript">Activa JavaScript para usar el probador virtual AR.</p>
+        </noscript>
+      </div>
+    </section>
+
+    {/* BENEFICIOS */}
+    <section class="pv-benefits">
+      <div class="container-brutal">
+        <header class="pv-sec-head">
+          <span class="pv-eyebrow pv-eyebrow--dark">★ Por qué vende</span>
+          <h2 class="pv-h2">La prueba virtual convierte mejor.</h2>
+        </header>
+        <ul class="pv-benefits__grid">
+          {benefits.map((b) => (
+            <li class="pv-benefit">
+              <b>{b.k}</b>
+              <span class="pv-benefit__v">{b.v}</span>
+              <p>{b.d}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* INTEGRACIÓN */}
+    <section class="pv-steps">
+      <div class="container-brutal">
+        <header class="pv-sec-head">
+          <span class="pv-eyebrow">★ Cómo lo integramos</span>
+          <h2 class="pv-h2 pv-h2--light">De la demo a tu tienda real.</h2>
+          <p class="pv-steps__lead">
+            Esta página es una <strong>demostración</strong>. En un proyecto real lo conectamos con tu
+            catálogo y tu pasarela de pago. Así pasamos de prototipo a producto:
+          </p>
+        </header>
+        <ol class="pv-steps__list">
+          {steps.map((s) => (
+            <li class="pv-step">
+              <span class="pv-step__n">{s.n}</span>
+              <div>
+                <h3 class="pv-step__t">{s.t}</h3>
+                <p class="pv-step__d">{s.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <div class="pv-stack-note">
+          <span class="pv-eyebrow">★ Bajo el capó</span>
+          <p>
+            Astro 6 · React (island) · TypeScript · Three.js · MediaPipe Face Landmarker ·
+            <code>getUserMedia</code> · modelos GLB/GLTF. Sin WebXR, compatible con la mayoría de móviles.
+            El procesamiento de la imagen ocurre <strong>en el dispositivo</strong>: ni el vídeo ni los datos faciales salen del navegador.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* CTA */}
+    <section class="pv-cta">
+      <div class="container-brutal pv-cta__inner">
+        <span class="pv-eyebrow">★ ¿Lo quieres en tu tienda?</span>
+        <h2 class="pv-cta__title">Vende como en 2026, no como en 2010.</h2>
+        <p class="pv-cta__text">
+          Integramos probadores virtuales AR, configuradores 3D y experiencias inmersivas
+          en WooCommerce, Shopify o tu ecommerce a medida. Te montamos una demo con tus productos.
+        </p>
+        <div class="pv-cta__btns">
+          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero una demo con mis productos →</a>
+          <a href="/soluciones/ecommerce/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver tiendas online</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .pv { background: #05070b; color: #e8edf5; }
+  .pv-eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono, monospace);
+    font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase;
+    color: #c6ff3a;
+  }
+  .pv-eyebrow--dark { color: #FF6B35; }
+
+  /* HERO */
+  .pv-hero {
+    padding: 4rem 0 2.5rem;
+    background:
+      radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.16) 0%, transparent 60%),
+      linear-gradient(180deg, #0a0f18, #05070b);
+    border-bottom: 1px solid #1a2233;
+    position: relative; overflow: hidden;
+  }
+  .pv-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(#18e0ff14 1px, transparent 1px), linear-gradient(90deg, #18e0ff14 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
+  }
+  .pv-hero__inner { position: relative; }
+  .pv-hero__title {
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em;
+    margin: 1rem 0 1rem; color: #fff;
+  }
+  .pv-hero__title em { font-style: normal; color: #18e0ff; }
+  .pv-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.35rem); line-height: 1.5; color: #b9c4d4; max-width: 58ch; margin: 0 0 1.5rem; }
+  .pv-hero__lead strong { color: #fff; }
+  .pv-hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .pv-hero__chips span {
+    font-family: var(--font-mono, monospace); font-size: .72rem; letter-spacing: .04em;
+    padding: .45rem .8rem; border: 1px solid #232a38; border-radius: 999px; color: #cdd7e6; background: #0c111b;
+  }
+
+  /* DEMO */
+  .pv-demo { padding: 3rem 0 3.5rem; background: linear-gradient(180deg, #05070b, #080c14); }
+  .pv-noscript { text-align: center; color: #9aa7ba; margin-top: 1.5rem; }
+
+  /* BENEFICIOS (claro) */
+  .pv-benefits { padding: 4rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .pv-sec-head { margin-bottom: 2rem; max-width: 60ch; }
+  .pv-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
+  .pv-h2--light { color: #fff; }
+  .pv-benefits__grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 560px) { .pv-benefits__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 980px) { .pv-benefits__grid { grid-template-columns: repeat(4, 1fr); } }
+  .pv-benefit { background: #fff; border: 2.5px solid var(--brutal-ink, #0E0D0B); box-shadow: 5px 5px 0 var(--brutal-ink, #0E0D0B); padding: 1.4rem 1.25rem; }
+  .pv-benefit b { display: block; font-family: var(--font-display, sans-serif); font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 800; line-height: 1; letter-spacing: -.03em; color: #FF6B35; }
+  .pv-benefit__v { display: block; font-weight: 800; margin: .5rem 0 .35rem; }
+  .pv-benefit p { margin: 0; font-size: .85rem; line-height: 1.45; color: #4a453f; }
+
+  /* INTEGRACIÓN (oscuro) */
+  .pv-steps { padding: 4rem 0; background: #080c14; }
+  .pv-steps__lead { font-size: 1.02rem; line-height: 1.55; color: #b9c4d4; margin: 1rem 0 0; }
+  .pv-steps__lead strong { color: #fff; }
+  .pv-steps__list { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 768px) { .pv-steps__list { grid-template-columns: 1fr 1fr; } }
+  .pv-step { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 1.4rem 1.3rem; background: #0c111b; border: 1.5px solid #1f2735; border-radius: 16px; }
+  .pv-step__n { font-family: var(--font-mono, monospace); font-weight: 800; font-size: 1rem; color: #18e0ff; }
+  .pv-step__t { margin: 0 0 .4rem; font-family: var(--font-display, sans-serif); font-size: 1.1rem; font-weight: 800; color: #fff; }
+  .pv-step__d { margin: 0; font-size: .9rem; line-height: 1.5; color: #aeb9c9; }
+  .pv-stack-note { margin-top: 2rem; padding: 1.3rem 1.4rem; border: 1px dashed #2a3445; border-radius: 14px; background: #0a0f18; }
+  .pv-stack-note p { margin: .5rem 0 0; font-size: .9rem; line-height: 1.6; color: #aeb9c9; }
+  .pv-stack-note code { font-family: var(--font-mono, monospace); color: #c6ff3a; background: #11161f; padding: .05rem .35rem; border-radius: 5px; font-size: .85em; }
+  .pv-stack-note strong { color: #fff; }
+
+  /* CTA */
+  .pv-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(198,255,58,0.12) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .pv-cta__inner { max-width: 720px; }
+  .pv-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
+  .pv-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .pv-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .pv-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
+</style>
