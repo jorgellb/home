@@ -51,7 +51,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 /* Throttle: detectar rostro cada N frames, renderizar a 60fps */
-const DETECT_INTERVAL = 2;
+const DETECT_INTERVAL = 1;
 
 /* Correcta orientación de los GLB a la convención de la escena */
 const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
