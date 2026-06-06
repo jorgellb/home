@@ -40,7 +40,13 @@ const LM = {
   earR: 454, // lateral del rostro der. (zona oreja)
   brow: 10, // centro de la frente (línea del pelo) — para sombreros/gorras
   chin: 152, // mentón
+  nose: 1, // punta de la nariz — para estimar giro de cabeza
 };
+
+/* Estimación del giro 3D de la cabeza desde landmarks 2D (ganancias ajustables) */
+const YAW_GAIN = 1.4, YAW_MAX = 0.95;
+const PITCH_GAIN = 1.3, PITCH_MAX = 0.55, PITCH_NEUTRAL = 0.46;
+const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
@@ -81,6 +87,7 @@ interface Smooth {
   elx: number; ely: number; erx: number; ery: number; // orejas (pendientes)
   fx: number; fy: number; // frente (sombrero/gorra)
   chx: number; chy: number; // mentón
+  yaw: number; pitch: number; // giro 3D de la cabeza
 }
 
 /* ───────────────────── Fallbacks geométricos ───────────────────── */
@@ -368,11 +375,18 @@ export default function VirtualTryOn() {
     const earR = toCard(lm[LM.earR], vw, vh, e.cw, e.ch);
     const brow = toCard(lm[LM.brow], vw, vh, e.cw, e.ch);
     const chin = toCard(lm[LM.chin], vw, vh, e.cw, e.ch);
+    const nose = toCard(lm[LM.nose], vw, vh, e.cw, e.ch);
 
     const cx = (eyeL.x + eyeR.x) / 2;
     const cy = (eyeL.y + eyeR.y) / 2;
     const w = Math.hypot(eyeR.x - eyeL.x, eyeR.y - eyeL.y);
     const roll = Math.atan2(eyeR.y - eyeL.y, eyeR.x - eyeL.x);
+    // Giro horizontal (yaw): asimetría nariz↔orejas
+    const dL = nose.x - earL.x, dR = earR.x - nose.x;
+    const yaw = clamp(((dR - dL) / Math.max(Math.abs(dR) + Math.abs(dL), 1)) * YAW_GAIN, -YAW_MAX, YAW_MAX);
+    // Giro vertical (pitch): posición de la nariz entre ojos y mentón
+    const pratio = (nose.y - cy) / Math.max(chin.y - cy, 1);
+    const pitch = clamp((pratio - PITCH_NEUTRAL) * PITCH_GAIN, -PITCH_MAX, PITCH_MAX);
 
     const s = e.smooth;
     // Suavizado adaptativo: muy estable en reposo (anti-tembleque), ágil al moverse
@@ -384,6 +398,7 @@ export default function VirtualTryOn() {
     s.erx = lerp(s.erx, earR.x, t); s.ery = lerp(s.ery, earR.y, t);
     s.fx = lerp(s.fx, brow.x, t); s.fy = lerp(s.fy, brow.y, t);
     s.chx = lerp(s.chx, chin.x, t); s.chy = lerp(s.chy, chin.y, t);
+    s.yaw = lerp(s.yaw, yaw, t); s.pitch = lerp(s.pitch, pitch, t);
     s.init = true;
 
     const faceW = Math.hypot(s.erx - s.elx, s.ery - s.ely);
@@ -392,17 +407,17 @@ export default function VirtualTryOn() {
     const g = e.accessory;
     if (e.kind === 'glasses') {
       g.position.set(s.cx + adj.dx, s.cy + adj.dy, 0);
-      g.rotation.z = s.roll;
+      g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(s.w * 1.1 * adj.scale);
     } else if (e.kind === 'hat') {
       // sombrero: ala algo por encima de la frente, copa hacia arriba
       g.position.set(s.fx + adj.dx, s.fy - faceH * 0.15 + adj.dy, 0);
-      g.rotation.z = s.roll;
+      g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(faceW * 1.4 * adj.scale);
     } else if (e.kind === 'cap') {
       // gorra: cúpula sobre la cabeza
       g.position.set(s.fx + adj.dx, s.fy - faceH * 0.3 + adj.dy, 0);
-      g.rotation.z = s.roll;
+      g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(faceW * 1.25 * adj.scale);
     } else {
       // pendientes: cada uno en su oreja, colgando hacia abajo
@@ -491,7 +506,7 @@ export default function VirtualTryOn() {
       const engine: Engine = {
         renderer, scene, camera, accessory, kind: productRef.current,
         faceLandmarker, stream, raf: 0, ro: null, cw: 1, ch: 1, lastVideoTime: -1,
-        smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, fx: 0, fy: 0, chx: 0, chy: 0 },
+        smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, fx: 0, fy: 0, chx: 0, chy: 0, yaw: 0, pitch: 0 },
       };
       engineRef.current = engine;
       resize(engine);
