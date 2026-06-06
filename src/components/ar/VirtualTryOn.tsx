@@ -41,6 +41,13 @@ const LM = {
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+/** Navegadores embebidos en apps (Instagram, Facebook…) que bloquean la cámara. */
+function isInAppBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return /FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter|TikTok|musical_ly|LinkedInApp|Snapchat|Pinterest|GSA\//i.test(ua);
+}
+
 interface Engine {
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
@@ -221,6 +228,7 @@ export default function VirtualTryOn() {
   const [status, setStatus] = useState<Status>('idle');
   const [product, setProduct] = useState<ProductId>('glasses');
   const [errorMsg, setErrorMsg] = useState('');
+  const [errorHint, setErrorHint] = useState('');
   const [loadingMsg, setLoadingMsg] = useState('');
   const [modelInfo, setModelInfo] = useState('');
 
@@ -349,6 +357,7 @@ export default function VirtualTryOn() {
   /* —— iniciar cámara + IA + escena —— */
   const start = useCallback(async () => {
     setErrorMsg('');
+    setErrorHint('');
     if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) {
       setStatus('unsupported');
       return;
@@ -414,16 +423,24 @@ export default function VirtualTryOn() {
       engine.raf = requestAnimationFrame(renderLoop);
     } catch (err) {
       teardown();
-      const e = err as DOMException;
+      const name = (err as DOMException)?.name || '';
       let msg = 'No se pudo iniciar el probador. Inténtalo de nuevo.';
-      if (e?.name === 'NotAllowedError' || e?.name === 'SecurityError') {
-        msg = 'Permiso de cámara denegado. Habilítalo en los ajustes del navegador para probar la demo.';
-      } else if (e?.name === 'NotFoundError' || e?.name === 'OverconstrainedError') {
+      let hint = '';
+      if (name === 'NotAllowedError' || name === 'SecurityError') {
+        if (isInAppBrowser()) {
+          msg = 'Este navegador no permite la cámara.';
+          hint = 'Estás viendo la página dentro de una app (Instagram, Facebook, TikTok…). Ábrela en Safari o Chrome y vuelve a intentarlo.';
+        } else {
+          msg = 'No hemos podido acceder a la cámara.';
+          hint = 'Toca el candado 🔒 junto a la dirección → Cámara → Permitir (o «Restablecer permisos»), recarga la página y acepta el aviso del navegador.';
+        }
+      } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {
         msg = 'No se ha encontrado ninguna cámara compatible en este dispositivo.';
-      } else if (e?.name === 'NotReadableError') {
-        msg = 'La cámara está siendo usada por otra aplicación.';
+      } else if (name === 'NotReadableError') {
+        msg = 'La cámara está siendo usada por otra aplicación. Ciérrala e inténtalo de nuevo.';
       }
       setErrorMsg(msg);
+      setErrorHint(hint);
       setStatus('error');
     }
   }, [renderLoop, teardown]);
@@ -496,6 +513,7 @@ export default function VirtualTryOn() {
             <div className={styles.overlay}>
               <div className={styles.errIco} aria-hidden="true">!</div>
               <p className={styles.overlaySub}>{errorMsg}</p>
+              {errorHint && <p className={styles.priv}>{errorHint}</p>}
               <button className={styles.cta} onClick={start}>Reintentar</button>
             </div>
           )}
