@@ -44,6 +44,14 @@ const LM = {
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+/* Corrección de orientación de los GLB reales a la convención de la escena
+   (Y hacia abajo en pantalla). Derivado de los bounding box de cada modelo. */
+const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
+  glasses: [0, 0, Math.PI], // Y-up → voltear
+  hat: [Math.PI / 2, 0, 0], // copa en +Z → ponerlo de pie
+  cap: [0, 0, Math.PI], // Y-up → voltear
+};
+
 /** Navegadores embebidos en apps (Instagram, Facebook…) que bloquean la cámara. */
 function isInAppBrowser(): boolean {
   if (typeof navigator === 'undefined') return false;
@@ -258,6 +266,11 @@ async function buildAccessory(engine: Engine, product: ProductId): Promise<strin
     else m = buildCap();
     content = [m];
   }
+  // los modelos reales necesitan corregir su orientación a la escena
+  if (loaded) {
+    const o = MODEL_ORIENT[product];
+    if (o) content.forEach((c) => c.rotation.set(o[0], o[1], o[2]));
+  }
   content.forEach((c) => engine.accessory.add(c));
   return info;
 }
@@ -382,15 +395,15 @@ export default function VirtualTryOn() {
       g.rotation.z = s.roll;
       g.scale.setScalar(s.w * 1.1 * adj.scale);
     } else if (e.kind === 'hat') {
-      // sombrero: ala apoyada algo por encima de la frente, copa hacia arriba
-      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.1 + adj.dy, 0);
+      // sombrero: ala algo por encima de la frente, copa hacia arriba
+      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.15 + adj.dy, 0);
       g.rotation.z = s.roll;
       g.scale.setScalar(faceW * 1.4 * adj.scale);
     } else if (e.kind === 'cap') {
-      // gorra: apoyada en la frente
-      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.24 + adj.dy, 0);
+      // gorra: cúpula sobre la cabeza
+      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.3 + adj.dy, 0);
       g.rotation.z = s.roll;
-      g.scale.setScalar(faceW * 1.75 * adj.scale);
+      g.scale.setScalar(faceW * 1.25 * adj.scale);
     } else {
       // pendientes: cada uno en su oreja, colgando hacia abajo
       const size = faceW * 0.5 * adj.scale;
