@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {
   FaceLandmarker,
   FilesetResolver,
@@ -76,17 +77,19 @@ interface Smooth {
 
 /* ───────────────────── Fallbacks geométricos ───────────────────── */
 function frameMat() {
-  return new THREE.MeshStandardMaterial({ color: 0x14151a, metalness: 0.6, roughness: 0.35 });
+  return new THREE.MeshStandardMaterial({ color: 0x16181d, metalness: 0.9, roughness: 0.28, envMapIntensity: 1.3 });
 }
 function lensMat() {
-  // lente de sol realista: oscura, ligeramente reflectante
-  return new THREE.MeshStandardMaterial({
-    color: 0x0b1622, metalness: 0.55, roughness: 0.07,
-    transparent: true, opacity: 0.74, emissive: 0x13243a, emissiveIntensity: 0.25,
+  // lente de sol realista: cristal oscuro con clearcoat reflectante (usa el envMap)
+  return new THREE.MeshPhysicalMaterial({
+    color: 0x0a1018, metalness: 0.15, roughness: 0.06,
+    clearcoat: 1, clearcoatRoughness: 0.04,
+    transparent: true, opacity: 0.82, ior: 1.5, envMapIntensity: 1.8,
   });
 }
 function goldMat() {
-  return new THREE.MeshStandardMaterial({ color: 0xe6c15a, metalness: 0.9, roughness: 0.25, emissive: 0x3a2e07, emissiveIntensity: 0.3 });
+  // oro pulido: metalness 1 + envMap → refleja el entorno como joya real
+  return new THREE.MeshStandardMaterial({ color: 0xe8c25c, metalness: 1, roughness: 0.17, envMapIntensity: 1.5 });
 }
 
 /** Gafas: dos aros + lentes tintadas + puente + patillas. Ancho ≈ 1 unidad. */
@@ -129,8 +132,8 @@ function buildEarring(): THREE.Group {
 /** Sombrero de ala (fedora). Ancho del ala ≈ 1.2 unidades. */
 function buildHat(): THREE.Object3D {
   const g = new THREE.Group();
-  const felt = new THREE.MeshStandardMaterial({ color: 0x4a3526, roughness: 0.92, metalness: 0.03 });
-  const band = new THREE.MeshStandardMaterial({ color: 0x241812, roughness: 0.7 });
+  const felt = new THREE.MeshPhysicalMaterial({ color: 0x4a3526, roughness: 0.95, metalness: 0, sheen: 0.6, sheenRoughness: 0.8, sheenColor: new THREE.Color(0x6b4f3a), envMapIntensity: 0.55 });
+  const band = new THREE.MeshStandardMaterial({ color: 0x241812, roughness: 0.6, metalness: 0.1, envMapIntensity: 0.6 });
   // ala: disco plano ligeramente inclinado hacia la cámara
   const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.045, 56), felt);
   brim.rotation.x = -0.34;
@@ -150,8 +153,8 @@ function buildHat(): THREE.Object3D {
 /** Gorra de béisbol: cúpula + visera. Ancho ≈ 0.85 unidades. */
 function buildCap(): THREE.Object3D {
   const g = new THREE.Group();
-  const main = new THREE.MeshStandardMaterial({ color: 0x1c2c52, roughness: 0.78, metalness: 0.04 });
-  const accent = new THREE.MeshStandardMaterial({ color: 0xc6ff3a, roughness: 0.6 });
+  const main = new THREE.MeshStandardMaterial({ color: 0x1c2c52, roughness: 0.68, metalness: 0.06, envMapIntensity: 0.7 });
+  const accent = new THREE.MeshStandardMaterial({ color: 0xc6ff3a, roughness: 0.5, metalness: 0.1, envMapIntensity: 0.8 });
   // cúpula (media esfera achatada)
   const crown = new THREE.Mesh(
     new THREE.SphereGeometry(0.42, 36, 22, 0, Math.PI * 2, 0, Math.PI * 0.52),
@@ -175,6 +178,16 @@ function buildCap(): THREE.Object3D {
 
 /** Normaliza un modelo GLB cargado: centrado en origen y ancho ≈ 1 unidad. */
 function normalizeModel(obj: THREE.Object3D): THREE.Object3D {
+  // los materiales PBR del modelo captan la luz/entorno de la escena
+  obj.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.material) return;
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    mats.forEach((mat) => {
+      const m = mat as THREE.MeshStandardMaterial;
+      if ('envMapIntensity' in m) m.envMapIntensity = 1.25;
+    });
+  });
   const box = new THREE.Box3().setFromObject(obj);
   const size = new THREE.Vector3();
   const center = new THREE.Vector3();
@@ -286,6 +299,7 @@ export default function VirtualTryOn() {
     e.stream?.getTracks().forEach((t) => t.stop());
     if (videoRef.current) videoRef.current.srcObject = null;
     try { e.faceLandmarker?.close(); } catch { /* noop */ }
+    e.scene.environment?.dispose();
     disposeObject(e.scene);
     e.renderer.dispose();
     engineRef.current = null;
@@ -440,11 +454,20 @@ export default function VirtualTryOn() {
       setLoadingMsg('Preparando escena 3D…');
       const canvas = canvasRef.current!;
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
       const scene = new THREE.Scene();
-      scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-      const dir = new THREE.DirectionalLight(0xffffff, 1.1);
-      dir.position.set(0.4, -0.6, 1);
-      scene.add(dir);
+      // Entorno para reflejos PBR realistas (metal, lentes…) sin ficheros externos
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      pmrem.dispose();
+      scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+      const key = new THREE.DirectionalLight(0xffffff, 0.85);
+      key.position.set(0.4, -0.6, 1);
+      scene.add(key);
+      const rim = new THREE.DirectionalLight(0xbfe0ff, 0.4);
+      rim.position.set(-0.6, 0.2, -0.5);
+      scene.add(rim);
       const camera = new THREE.OrthographicCamera(0, 1, 0, 1, -2000, 2000);
       camera.position.z = 800;
       const accessory = new THREE.Group();
