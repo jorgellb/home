@@ -132,20 +132,19 @@ function buildEarring(): THREE.Group {
 /** Sombrero de ala (fedora). Ancho del ala ≈ 1.2 unidades. */
 function buildHat(): THREE.Object3D {
   const g = new THREE.Group();
-  const felt = new THREE.MeshPhysicalMaterial({ color: 0x4a3526, roughness: 0.95, metalness: 0, sheen: 0.6, sheenRoughness: 0.8, sheenColor: new THREE.Color(0x6b4f3a), envMapIntensity: 0.55 });
-  const band = new THREE.MeshStandardMaterial({ color: 0x241812, roughness: 0.6, metalness: 0.1, envMapIntensity: 0.6 });
-  // ala: disco plano ligeramente inclinado hacia la cámara
-  const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.045, 56), felt);
-  brim.rotation.x = -0.34;
-  brim.position.set(0, -0.05, 0);
-  g.add(brim);
-  // copa: cilindro tronco-cónico (más estrecho arriba)
-  const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.37, 0.46, 44), felt);
-  crown.position.set(0, 0.2, 0);
-  g.add(crown);
-  // banda
-  const bandM = new THREE.Mesh(new THREE.CylinderGeometry(0.375, 0.375, 0.1, 44), band);
-  bandM.position.set(0, 0.02, 0);
+  const felt = new THREE.MeshPhysicalMaterial({ color: 0x4a3526, roughness: 0.95, metalness: 0, sheen: 0.6, sheenRoughness: 0.8, sheenColor: new THREE.Color(0x6b4f3a), envMapIntensity: 0.55, side: THREE.DoubleSide });
+  const band = new THREE.MeshStandardMaterial({ color: 0x241812, roughness: 0.55, metalness: 0.15, envMapIntensity: 0.7 });
+  // perfil (radio, altura) girado → copa + ala curvadas y suaves (fedora)
+  const profile = [
+    [0.001, 0.50], [0.23, 0.49], [0.30, 0.40], [0.315, 0.10], [0.33, 0.02],
+    [0.40, 0.0], [0.58, -0.05], [0.57, -0.09], [0.34, -0.05], [0.30, -0.02], [0.0, -0.02],
+  ].map(([r, y]) => new THREE.Vector2(r, y));
+  const body = new THREE.Mesh(new THREE.LatheGeometry(profile, 64), felt);
+  g.add(body);
+  // cinta
+  const bandM = new THREE.Mesh(new THREE.TorusGeometry(0.315, 0.045, 14, 56), band);
+  bandM.rotation.x = Math.PI / 2;
+  bandM.position.y = 0.07;
   g.add(bandM);
   return g;
 }
@@ -363,7 +362,9 @@ export default function VirtualTryOn() {
     const roll = Math.atan2(eyeR.y - eyeL.y, eyeR.x - eyeL.x);
 
     const s = e.smooth;
-    const t = s.init ? 0.4 : 1; // primer frame sin lerp
+    // Suavizado adaptativo: muy estable en reposo (anti-tembleque), ágil al moverse
+    const speed = Math.hypot(cx - s.cx, cy - s.cy) + Math.abs(w - s.w) * 0.5;
+    const t = s.init ? Math.min(0.18 + speed * 0.024, 0.55) : 1;
     s.cx = lerp(s.cx, cx, t); s.cy = lerp(s.cy, cy, t);
     s.w = lerp(s.w, w, t); s.roll = lerp(s.roll, roll, t);
     s.elx = lerp(s.elx, earL.x, t); s.ely = lerp(s.ely, earL.y, t);
@@ -381,10 +382,10 @@ export default function VirtualTryOn() {
       g.rotation.z = s.roll;
       g.scale.setScalar(s.w * 1.1 * adj.scale);
     } else if (e.kind === 'hat') {
-      // sombrero: por encima de la frente (sobre la coronilla)
-      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.52 + adj.dy, 0);
+      // sombrero: ala apoyada algo por encima de la frente, copa hacia arriba
+      g.position.set(s.fx + adj.dx, s.fy - faceH * 0.1 + adj.dy, 0);
       g.rotation.z = s.roll;
-      g.scale.setScalar(faceW * 1.55 * adj.scale);
+      g.scale.setScalar(faceW * 1.4 * adj.scale);
     } else if (e.kind === 'cap') {
       // gorra: apoyada en la frente
       g.position.set(s.fx + adj.dx, s.fy - faceH * 0.24 + adj.dy, 0);
