@@ -47,9 +47,9 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 /* Corrección de orientación de los GLB reales a la convención de la escena
    (Y hacia abajo en pantalla). Derivado de los bounding box de cada modelo. */
 const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
-  glasses: [0, 0, Math.PI], // Y-up → voltear
-  hat: [Math.PI / 2, 0, 0], // copa en +Z → ponerlo de pie
-  cap: [0, 0, Math.PI], // Y-up → voltear
+  // gafas y gorra (Y-up) se renderizan bien sin rotación.
+  // sombrero: el modelo viene tumbado (copa en +Z) → ponerlo de pie con la copa arriba.
+  hat: [-Math.PI / 2, 0, 0],
 };
 
 /** Navegadores embebidos en apps (Instagram, Facebook…) que bloquean la cámara. */
