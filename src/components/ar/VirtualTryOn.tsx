@@ -73,6 +73,7 @@ interface Engine {
   scene: THREE.Scene;
   camera: THREE.OrthographicCamera;
   accessory: THREE.Group;
+  shadow: THREE.Mesh;
   kind: ProductId;
   faceLandmarker: FaceLandmarker | null;
   stream: MediaStream | null;
@@ -134,6 +135,39 @@ function lensMat() {
 }
 function goldMat() {
   return new THREE.MeshStandardMaterial({ color: 0xe8c25c, metalness: 1, roughness: 0.17, envMapIntensity: 1.5 });
+}
+
+/* ───── Sombra de contacto suave ───── */
+let _shadowTex: THREE.CanvasTexture | null = null;
+function getShadowTex(): THREE.CanvasTexture {
+  if (!_shadowTex) {
+    const size = 64;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d')!;
+    const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    g.addColorStop(0, 'rgba(0,0,0,0.50)');
+    g.addColorStop(0.35, 'rgba(0,0,0,0.20)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    _shadowTex = new THREE.CanvasTexture(canvas);
+  }
+  return _shadowTex;
+}
+
+function buildShadow(): THREE.Mesh {
+  const mat = new THREE.MeshBasicMaterial({
+    map: getShadowTex(),
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.MultiplyBlending,
+    opacity: 0.5,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
+  mesh.name = 'shadow';
+  return mesh;
 }
 
 function buildGlasses(): THREE.Object3D {
@@ -350,6 +384,8 @@ export default function VirtualTryOn() {
     e.stream?.getTracks().forEach((t) => t.stop());
     if (videoRef.current) videoRef.current.srcObject = null;
     try { e.faceLandmarker?.close(); } catch { /* noop */ }
+    e.shadow.material.dispose();
+    e.shadow.geometry.dispose();
     e.scene.environment?.dispose();
     disposeObject(e.scene);
     e.renderer.dispose();
@@ -477,6 +513,20 @@ export default function VirtualTryOn() {
       if (l) { l.position.set(s.elx + adj.dx, s.ely + drop + adj.dy, 0); l.scale.setScalar(size); l.rotation.z = s.roll; }
       if (r) { r.position.set(s.erx + adj.dx, s.ery + drop + adj.dy, 0); r.scale.setScalar(size); r.rotation.z = s.roll; }
     }
+
+    /* ───── Sombra de contacto sobre la piel ───── */
+    const sh = e.shadow;
+    if (e.kind === 'hat' || e.kind === 'cap') {
+      sh.position.set(s.fx, s.fy, 0);
+      sh.scale.setScalar(faceW * 0.9);
+      sh.visible = true;
+    } else if (e.kind === 'glasses') {
+      sh.position.set(s.cx, s.cy + faceH * 0.05, 0);
+      sh.scale.setScalar(s.w * 0.45);
+      sh.visible = true;
+    } else {
+      sh.visible = false;
+    }
   }
 
   function resize(e: Engine) {
@@ -573,11 +623,14 @@ export default function VirtualTryOn() {
       const pmrem = new THREE.PMREMGenerator(renderer);
       scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
       pmrem.dispose();
-      scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-      const key = new THREE.DirectionalLight(0xffffff, 0.85);
-      key.position.set(0.4, -0.6, 1);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+      const key = new THREE.DirectionalLight(0xffeedd, 0.7);
+      key.position.set(0.5, -0.7, 1);
       scene.add(key);
-      const rim = new THREE.DirectionalLight(0xbfe0ff, 0.4);
+      const fill = new THREE.DirectionalLight(0xddeeff, 0.35);
+      fill.position.set(-0.5, 0.3, -0.3);
+      scene.add(fill);
+      const rim = new THREE.DirectionalLight(0xbfe0ff, 0.3);
       rim.position.set(-0.6, 0.2, -0.5);
       scene.add(rim);
       const camera = new THREE.OrthographicCamera(0, 1, 0, 1, -2000, 2000);
@@ -586,8 +639,12 @@ export default function VirtualTryOn() {
       accessory.visible = false;
       scene.add(accessory);
 
+      const shadow = buildShadow();
+      shadow.visible = false;
+      scene.add(shadow);
+
       const engine: Engine = {
-        renderer, scene, camera, accessory, kind: productRef.current,
+        renderer, scene, camera, accessory, shadow, kind: productRef.current,
         faceLandmarker, stream, raf: 0, ro: null, cw: 1, ch: 1, lastVideoTime: -1,
         frameCount: 0, lastLm: null, lastMatrix: null,
         smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, fx: 0, fy: 0, chx: 0, chy: 0, yaw: 0, pitch: 0 },
