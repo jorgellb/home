@@ -6,6 +6,7 @@ import {
   FaceLandmarker,
   FilesetResolver,
   type NormalizedLandmark,
+  type Matrix,
 } from '@mediapipe/tasks-vision';
 import styles from './VirtualTryOn.module.css';
 
@@ -22,7 +23,7 @@ interface Product {
   id: ProductId;
   label: string;
   tag: string;
-  model: string; // GLB que se usará en una tienda real
+  model: string;
 }
 
 const PRODUCTS: Product[] = [
@@ -34,28 +35,30 @@ const PRODUCTS: Product[] = [
 
 /* Índices del mesh facial de 468 puntos de MediaPipe */
 const LM = {
-  eyeL: 33, // esquina externa del ojo (lado imagen-izquierda)
-  eyeR: 263, // esquina externa del ojo (lado imagen-derecha)
-  earL: 234, // lateral del rostro izq. (zona oreja)
-  earR: 454, // lateral del rostro der. (zona oreja)
-  brow: 10, // centro de la frente (línea del pelo) — para sombreros/gorras
-  chin: 152, // mentón
-  nose: 1, // punta de la nariz — para estimar giro de cabeza
+  eyeL: 33,
+  eyeR: 263,
+  earL: 234,
+  earR: 454,
+  brow: 10,
+  chin: 152,
+  nose: 1,
 };
 
 /* Estimación del giro 3D de la cabeza desde landmarks 2D (ganancias ajustables) */
 const YAW_GAIN = 1.4, YAW_MAX = 0.95;
 const PITCH_GAIN = 1.3, PITCH_MAX = 0.55, PITCH_NEUTRAL = 0.46;
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
-
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-/* Corrección de orientación de los GLB reales a la convención de la escena
-   (Y hacia abajo en pantalla). Derivado de los bounding box de cada modelo. */
+/* Throttle: detectar rostro a ~20fps, renderizar a 60fps */
+const DETECT_INTERVAL = 3;
+
+/* Correcta orientación de los GLB a la convención de la escena */
 const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
-  // gafas y gorra (Y-up) se renderizan bien sin rotación.
-  // sombrero: el modelo viene tumbado (copa en +Z) → ponerlo de pie con la copa arriba.
   hat: [-Math.PI / 2, 0, 0],
+  glasses: [0, 0, 0],
+  cap: [0, 0, 0],
+  earrings: [0, 0, 0],
 };
 
 /** Navegadores embebidos en apps (Instagram, Facebook…) que bloquean la cámara. */
@@ -69,7 +72,7 @@ interface Engine {
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   camera: THREE.OrthographicCamera;
-  accessory: THREE.Group; // raíz que se posiciona cada frame
+  accessory: THREE.Group;
   kind: ProductId;
   faceLandmarker: FaceLandmarker | null;
   stream: MediaStream | null;
@@ -79,15 +82,43 @@ interface Engine {
   ch: number;
   lastVideoTime: number;
   smooth: Smooth;
+  frameCount: number;
+  lastLm: NormalizedLandmark[] | null;
+  lastMatrix: Matrix | null;
 }
 
 interface Smooth {
   init: boolean;
-  cx: number; cy: number; w: number; roll: number; // ojos (gafas)
-  elx: number; ely: number; erx: number; ery: number; // orejas (pendientes)
-  fx: number; fy: number; // frente (sombrero/gorra)
-  chx: number; chy: number; // mentón
-  yaw: number; pitch: number; // giro 3D de la cabeza
+  cx: number; cy: number; w: number; roll: number;
+  elx: number; ely: number; erx: number; ery: number;
+  fx: number; fy: number;
+  chx: number; chy: number;
+  yaw: number; pitch: number;
+}
+
+/* Cache de objetos reutilizados para evitar GC en el hot path */
+const _mat4 = new THREE.Matrix4();
+const _pos = new THREE.Vector3();
+const _quat = new THREE.Quaternion();
+const _sca = new THREE.Vector3();
+const _euler = new THREE.Euler();
+
+/** Extraer yaw/pitch de la matrix de transformación facial de MediaPipe.
+ *  La matrix 4x4 row-major mapea de rostro canonico a detectado.
+ *  En selfie (espejo), yaw y pitch se niegan para que el accesorio siga
+ *  el movimiento en pantalla. */
+function headRotationFromMatrix(m: Matrix): { yaw: number; pitch: number } | null {
+  const d = m.data;
+  if (d.length < 16) return null;
+  _mat4.set(
+    d[0], d[1], d[2], d[3],
+    d[4], d[5], d[6], d[7],
+    d[8], d[9], d[10], d[11],
+    d[12], d[13], d[14], d[15],
+  );
+  _mat4.decompose(_pos, _quat, _sca);
+  _euler.setFromQuaternion(_quat, 'YXZ');
+  return { yaw: -_euler.y, pitch: -_euler.x };
 }
 
 /* ───────────────────── Fallbacks geométricos ───────────────────── */
@@ -95,7 +126,6 @@ function frameMat() {
   return new THREE.MeshStandardMaterial({ color: 0x16181d, metalness: 0.9, roughness: 0.28, envMapIntensity: 1.3 });
 }
 function lensMat() {
-  // lente de sol realista: cristal oscuro con clearcoat reflectante (usa el envMap)
   return new THREE.MeshPhysicalMaterial({
     color: 0x0a1018, metalness: 0.15, roughness: 0.06,
     clearcoat: 1, clearcoatRoughness: 0.04,
@@ -103,11 +133,9 @@ function lensMat() {
   });
 }
 function goldMat() {
-  // oro pulido: metalness 1 + envMap → refleja el entorno como joya real
   return new THREE.MeshStandardMaterial({ color: 0xe8c25c, metalness: 1, roughness: 0.17, envMapIntensity: 1.5 });
 }
 
-/** Gafas: dos aros + lentes tintadas + puente + patillas. Ancho ≈ 1 unidad. */
 function buildGlasses(): THREE.Object3D {
   const g = new THREE.Group();
   const ring = new THREE.TorusGeometry(0.24, 0.035, 12, 32);
@@ -130,7 +158,6 @@ function buildGlasses(): THREE.Object3D {
   return g;
 }
 
-/** Un pendiente: tija + esfera/lágrima colgante. */
 function buildEarring(): THREE.Group {
   const g = new THREE.Group();
   const stud = new THREE.Mesh(new THREE.SphereGeometry(0.07, 20, 20), goldMat());
@@ -144,19 +171,16 @@ function buildEarring(): THREE.Group {
   return g;
 }
 
-/** Sombrero de ala (fedora). Ancho del ala ≈ 1.2 unidades. */
 function buildHat(): THREE.Object3D {
   const g = new THREE.Group();
   const felt = new THREE.MeshPhysicalMaterial({ color: 0x4a3526, roughness: 0.95, metalness: 0, sheen: 0.6, sheenRoughness: 0.8, sheenColor: new THREE.Color(0x6b4f3a), envMapIntensity: 0.55, side: THREE.DoubleSide });
   const band = new THREE.MeshStandardMaterial({ color: 0x241812, roughness: 0.55, metalness: 0.15, envMapIntensity: 0.7 });
-  // perfil (radio, altura) girado → copa + ala curvadas y suaves (fedora)
   const profile = [
     [0.001, 0.50], [0.23, 0.49], [0.30, 0.40], [0.315, 0.10], [0.33, 0.02],
     [0.40, 0.0], [0.58, -0.05], [0.57, -0.09], [0.34, -0.05], [0.30, -0.02], [0.0, -0.02],
   ].map(([r, y]) => new THREE.Vector2(r, y));
   const body = new THREE.Mesh(new THREE.LatheGeometry(profile, 64), felt);
   g.add(body);
-  // cinta
   const bandM = new THREE.Mesh(new THREE.TorusGeometry(0.315, 0.045, 14, 56), band);
   bandM.rotation.x = Math.PI / 2;
   bandM.position.y = 0.07;
@@ -164,12 +188,10 @@ function buildHat(): THREE.Object3D {
   return g;
 }
 
-/** Gorra de béisbol: cúpula + visera. Ancho ≈ 0.85 unidades. */
 function buildCap(): THREE.Object3D {
   const g = new THREE.Group();
   const main = new THREE.MeshStandardMaterial({ color: 0x1c2c52, roughness: 0.68, metalness: 0.06, envMapIntensity: 0.7 });
   const accent = new THREE.MeshStandardMaterial({ color: 0xc6ff3a, roughness: 0.5, metalness: 0.1, envMapIntensity: 0.8 });
-  // cúpula (media esfera achatada)
   const crown = new THREE.Mesh(
     new THREE.SphereGeometry(0.42, 36, 22, 0, Math.PI * 2, 0, Math.PI * 0.52),
     main,
@@ -177,22 +199,18 @@ function buildCap(): THREE.Object3D {
   crown.scale.set(1, 0.94, 0.86);
   crown.position.set(0, 0.04, 0);
   g.add(crown);
-  // visera (media elipse inclinada hacia abajo-adelante)
   const visor = new THREE.Mesh(new THREE.CircleGeometry(0.44, 36, Math.PI, Math.PI), main);
   visor.scale.set(1.05, 0.6, 1);
   visor.rotation.x = -0.95;
   visor.position.set(0, -0.05, 0.17);
   g.add(visor);
-  // botón superior
   const btn = new THREE.Mesh(new THREE.SphereGeometry(0.04, 14, 14), accent);
   btn.position.set(0, 0.4, 0);
   g.add(btn);
   return g;
 }
 
-/** Normaliza un modelo GLB cargado: centrado en origen y ancho ≈ 1 unidad. */
 function normalizeModel(obj: THREE.Object3D): THREE.Object3D {
-  // los materiales PBR del modelo captan la luz/entorno de la escena
   obj.traverse((o) => {
     const mesh = o as THREE.Mesh;
     if (!mesh.material) return;
@@ -233,9 +251,7 @@ function disposeObject(obj: THREE.Object3D) {
   });
 }
 
-/* ─────── construir el accesorio activo (modelo real o fallback) ─────── */
 async function buildAccessory(engine: Engine, product: ProductId): Promise<string> {
-  // limpiar lo anterior
   while (engine.accessory.children.length) {
     const c = engine.accessory.children[0];
     engine.accessory.remove(c);
@@ -250,7 +266,6 @@ async function buildAccessory(engine: Engine, product: ProductId): Promise<strin
   let info = 'modelo 3D real';
   let content: THREE.Object3D[] = [];
 
-  // intentar cargar el GLB; si no existe → fallback
   let loaded: THREE.Object3D | null = null;
   try {
     loaded = await loadModel(def.model);
@@ -273,7 +288,6 @@ async function buildAccessory(engine: Engine, product: ProductId): Promise<strin
     else m = buildCap();
     content = [m];
   }
-  // los modelos reales necesitan corregir su orientación a la escena
   if (loaded) {
     const o = MODEL_ORIENT[product];
     if (o) content.forEach((c) => c.rotation.set(o[0], o[1], o[2]));
@@ -282,16 +296,15 @@ async function buildAccessory(engine: Engine, product: ProductId): Promise<strin
   return info;
 }
 
-/* ───────────────────── mapeo de coordenadas ───────────────────── */
-/** Landmark normalizado (frame del vídeo) → píxel de la tarjeta (object-fit: cover), con espejo. */
 function toCard(p: NormalizedLandmark, vw: number, vh: number, cw: number, ch: number) {
   const scale = Math.max(cw / vw, ch / vh);
   const dw = vw * scale, dh = vh * scale;
   const ox = (cw - dw) / 2, oy = (ch - dh) / 2;
-  const x = cw - (ox + p.x * dw); // espejo horizontal (selfie)
+  const x = cw - (ox + p.x * dw);
   const y = oy + p.y * dh;
   return { x, y };
 }
+
 
 export default function VirtualTryOn() {
   const [status, setStatus] = useState<Status>('idle');
@@ -300,16 +313,19 @@ export default function VirtualTryOn() {
   const [errorHint, setErrorHint] = useState('');
   const [loadingMsg, setLoadingMsg] = useState('');
   const [modelInfo, setModelInfo] = useState('');
+  const [loadingModel, setLoadingModel] = useState(false);
+  const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
+  const [activeCameraLabel, setActiveCameraLabel] = useState('');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const liveRef = useRef<HTMLDivElement>(null);
 
   const productRef = useRef<ProductId>(product);
   const adjustRef = useRef({ scale: 1, dx: 0, dy: 0 });
   const engineRef = useRef<Engine | null>(null);
 
-  /* —— teardown completo —— */
   const teardown = useCallback(() => {
     const e = engineRef.current;
     if (!e) return;
@@ -324,20 +340,23 @@ export default function VirtualTryOn() {
     engineRef.current = null;
   }, []);
 
-  /* —— cambio de producto en caliente —— */
   useEffect(() => {
     productRef.current = product;
     const e = engineRef.current;
     if (e && status === 'running') {
       e.smooth.init = false;
-      buildAccessory(e, product).then(setModelInfo);
+      e.lastLm = null;
+      e.lastMatrix = null;
+      setLoadingModel(true);
+      buildAccessory(e, product).then((info) => {
+        setModelInfo(info);
+        setLoadingModel(false);
+      });
     }
   }, [product, status]);
 
-  /* —— limpiar al desmontar —— */
   useEffect(() => () => teardown(), [teardown]);
 
-  /* —— bucle de render + tracking —— */
   const renderLoop = useCallback(() => {
     const e = engineRef.current;
     if (!e) return;
@@ -346,11 +365,21 @@ export default function VirtualTryOn() {
     if (v && v.readyState >= 2 && v.videoWidth > 0 && e.faceLandmarker) {
       if (v.currentTime !== e.lastVideoTime) {
         e.lastVideoTime = v.currentTime;
-        let res;
-        try { res = e.faceLandmarker.detectForVideo(v, performance.now()); } catch { res = undefined; }
-        const lm = res?.faceLandmarks?.[0];
-        if (lm) {
-          updateAccessory(e, lm, v.videoWidth, v.videoHeight, adjustRef.current);
+        e.frameCount++;
+        if (e.frameCount % DETECT_INTERVAL === 0) {
+          let res;
+          try { res = e.faceLandmarker.detectForVideo(v, performance.now()); } catch { res = undefined; }
+          const lm = res?.faceLandmarks?.[0];
+          if (lm) {
+            e.lastLm = lm;
+            e.lastMatrix = res?.facialTransformationMatrixes?.[0] ?? null;
+          } else {
+            e.lastLm = null;
+            e.lastMatrix = null;
+          }
+        }
+        if (e.lastLm) {
+          updateAccessory(e, e.lastLm, e.lastMatrix, v.videoWidth, v.videoHeight, adjustRef.current);
           e.accessory.visible = true;
         } else {
           e.accessory.visible = false;
@@ -361,10 +390,10 @@ export default function VirtualTryOn() {
     e.raf = requestAnimationFrame(renderLoop);
   }, []);
 
-  /* —— posicionar el accesorio desde los landmarks (con suavizado) —— */
   function updateAccessory(
     e: Engine,
     lm: NormalizedLandmark[],
+    matrix: Matrix | null,
     vw: number,
     vh: number,
     adj: { scale: number; dx: number; dy: number },
@@ -381,15 +410,21 @@ export default function VirtualTryOn() {
     const cy = (eyeL.y + eyeR.y) / 2;
     const w = Math.hypot(eyeR.x - eyeL.x, eyeR.y - eyeL.y);
     const roll = Math.atan2(eyeR.y - eyeL.y, eyeR.x - eyeL.x);
-    // Giro horizontal (yaw): asimetría nariz↔orejas
-    const dL = nose.x - earL.x, dR = earR.x - nose.x;
-    const yaw = clamp(((dR - dL) / Math.max(Math.abs(dR) + Math.abs(dL), 1)) * YAW_GAIN, -YAW_MAX, YAW_MAX);
-    // Giro vertical (pitch): posición de la nariz entre ojos y mentón
-    const pratio = (nose.y - cy) / Math.max(chin.y - cy, 1);
-    const pitch = clamp((pratio - PITCH_NEUTRAL) * PITCH_GAIN, -PITCH_MAX, PITCH_MAX);
+
+    /* Rotacion: priorizar matrix 3D de MediaPipe, fallback a estimacion 2D */
+    let yaw: number, pitch: number;
+    const mr = matrix ? headRotationFromMatrix(matrix) : null;
+    if (mr) {
+      yaw = mr.yaw;
+      pitch = mr.pitch;
+    } else {
+      const dL = nose.x - earL.x, dR = earR.x - nose.x;
+      yaw = -clamp(((dR - dL) / Math.max(Math.abs(dR) + Math.abs(dL), 1)) * YAW_GAIN, -YAW_MAX, YAW_MAX);
+      const pratio = (nose.y - cy) / Math.max(chin.y - cy, 1);
+      pitch = -clamp((pratio - PITCH_NEUTRAL) * PITCH_GAIN, -PITCH_MAX, PITCH_MAX);
+    }
 
     const s = e.smooth;
-    // Suavizado adaptativo: muy estable en reposo (anti-tembleque), ágil al moverse
     const speed = Math.hypot(cx - s.cx, cy - s.cy) + Math.abs(w - s.w) * 0.5;
     const t = s.init ? Math.min(0.18 + speed * 0.024, 0.55) : 1;
     s.cx = lerp(s.cx, cx, t); s.cy = lerp(s.cy, cy, t);
@@ -410,17 +445,14 @@ export default function VirtualTryOn() {
       g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(s.w * 1.1 * adj.scale);
     } else if (e.kind === 'hat') {
-      // sombrero: ala algo por encima de la frente, copa hacia arriba
       g.position.set(s.fx + adj.dx, s.fy - faceH * 0.15 + adj.dy, 0);
       g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(faceW * 1.4 * adj.scale);
     } else if (e.kind === 'cap') {
-      // gorra: cúpula sobre la cabeza
       g.position.set(s.fx + adj.dx, s.fy - faceH * 0.3 + adj.dy, 0);
       g.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
       g.scale.setScalar(faceW * 1.25 * adj.scale);
     } else {
-      // pendientes: cada uno en su oreja, colgando hacia abajo
       const size = faceW * 0.5 * adj.scale;
       const drop = faceW * 0.14;
       const l = g.getObjectByName('earL');
@@ -430,7 +462,6 @@ export default function VirtualTryOn() {
     }
   }
 
-  /* —— ajustar tamaño del renderer al contenedor —— */
   function resize(e: Engine) {
     const el = containerRef.current;
     if (!el) return;
@@ -439,12 +470,42 @@ export default function VirtualTryOn() {
     e.cw = cw; e.ch = ch;
     e.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     e.renderer.setSize(cw, ch, false);
-    // cámara ortográfica en espacio-píxel (origen arriba-izquierda)
     e.camera.left = 0; e.camera.right = cw; e.camera.top = 0; e.camera.bottom = ch;
     e.camera.updateProjectionMatrix();
   }
 
-  /* —— iniciar cámara + IA + escena —— */
+  async function enumerateCameras() {
+    try {
+      const all = await navigator.mediaDevices.enumerateDevices();
+      const videoCams = all.filter((d) => d.kind === 'videoinput');
+      setCameras(videoCams);
+      if (videoCams.length > 0) setActiveCameraLabel(videoCams[0].label || 'Cámara frontal');
+    } catch {
+      /* silencioso */
+    }
+  }
+
+  async function switchCamera(deviceId: string) {
+    const e = engineRef.current;
+    if (!e) return;
+    e.stream?.getTracks().forEach((t) => t.stop());
+    if (videoRef.current) videoRef.current.srcObject = null;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { deviceId: { exact: deviceId }, width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
+      });
+      e.stream = stream;
+      const video = videoRef.current!;
+      video.srcObject = stream;
+      await video.play();
+      const cam = cameras.find((c) => c.deviceId === deviceId);
+      if (cam) setActiveCameraLabel(cam.label || 'Cámara');
+    } catch {
+      /* Si falla el cambio, reintentar con la cámara por defecto */
+    }
+  }
+
   const start = useCallback(async () => {
     setErrorMsg('');
     setErrorHint('');
@@ -459,6 +520,8 @@ export default function VirtualTryOn() {
         video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false,
       });
+      await enumerateCameras();
+
       const video = videoRef.current!;
       video.srcObject = stream;
       await video.play();
@@ -471,12 +534,16 @@ export default function VirtualTryOn() {
           baseOptions: { modelAssetPath: '/models/face_landmarker.task', delegate: 'GPU' },
           runningMode: 'VIDEO',
           numFaces: 1,
+          outputFaceBlendshapes: false,
+          outputFacialTransformationMatrixes: true,
         });
       } catch {
         faceLandmarker = await FaceLandmarker.createFromOptions(fileset, {
           baseOptions: { modelAssetPath: '/models/face_landmarker.task', delegate: 'CPU' },
           runningMode: 'VIDEO',
           numFaces: 1,
+          outputFaceBlendshapes: false,
+          outputFacialTransformationMatrixes: true,
         });
       }
 
@@ -486,7 +553,6 @@ export default function VirtualTryOn() {
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.05;
       const scene = new THREE.Scene();
-      // Entorno para reflejos PBR realistas (metal, lentes…) sin ficheros externos
       const pmrem = new THREE.PMREMGenerator(renderer);
       scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
       pmrem.dispose();
@@ -506,6 +572,7 @@ export default function VirtualTryOn() {
       const engine: Engine = {
         renderer, scene, camera, accessory, kind: productRef.current,
         faceLandmarker, stream, raf: 0, ro: null, cw: 1, ch: 1, lastVideoTime: -1,
+        frameCount: 0, lastLm: null, lastMatrix: null,
         smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, fx: 0, fy: 0, chx: 0, chy: 0, yaw: 0, pitch: 0 },
       };
       engineRef.current = engine;
@@ -515,8 +582,10 @@ export default function VirtualTryOn() {
       ro.observe(containerRef.current!);
       engine.ro = ro;
 
+      setLoadingModel(true);
       const info = await buildAccessory(engine, productRef.current);
       setModelInfo(info);
+      setLoadingModel(false);
 
       setStatus('running');
       engine.raf = requestAnimationFrame(renderLoop);
@@ -547,16 +616,18 @@ export default function VirtualTryOn() {
   const stop = useCallback(() => {
     teardown();
     setStatus('idle');
+    setCameras([]);
+    setActiveCameraLabel('');
     adjustRef.current = { scale: 1, dx: 0, dy: 0 };
   }, [teardown]);
 
-  /* —— controles manuales —— */
   const adjust = (kind: 'in' | 'out' | 'up' | 'down' | 'center') => {
     const a = adjustRef.current;
+    const step = engineRef.current ? Math.max(engineRef.current.cw * 0.005, 4) : 8;
     if (kind === 'in') a.scale = Math.min(a.scale + 0.08, 3);
     else if (kind === 'out') a.scale = Math.max(a.scale - 0.08, 0.3);
-    else if (kind === 'up') a.dy -= 8;
-    else if (kind === 'down') a.dy += 8;
+    else if (kind === 'up') a.dy -= step;
+    else if (kind === 'down') a.dy += step;
     else { a.scale = 1; a.dx = 0; a.dy = 0; }
   };
 
@@ -564,7 +635,17 @@ export default function VirtualTryOn() {
 
   return (
     <section className={styles.wrap} aria-label="Probador virtual AR">
-      {/* selector de producto */}
+      <div
+        ref={liveRef}
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className={styles.srOnly}
+      >
+        {status === 'running' ? 'Probador activo. Cámara encendida.' : ''}
+        {status === 'error' ? `Error: ${errorMsg}` : ''}
+      </div>
+
       <div className={styles.products} role="tablist" aria-label="Elige un accesorio">
         {PRODUCTS.map((p) => (
           <button
@@ -581,14 +662,12 @@ export default function VirtualTryOn() {
         ))}
       </div>
 
-      {/* mockup tipo smartphone */}
       <div className={styles.phone}>
         <div className={styles.notch} aria-hidden="true" />
         <div className={styles.screen} ref={containerRef}>
           <video ref={videoRef} className={styles.video} playsInline muted />
           <canvas ref={canvasRef} className={styles.canvas} />
 
-          {/* overlays por estado */}
           {status === 'idle' && (
             <div className={styles.overlay}>
               <div className={styles.scan} aria-hidden="true">{faceSvg()}</div>
@@ -628,14 +707,16 @@ export default function VirtualTryOn() {
 
           {running && (
             <>
-              <span className={styles.liveTag}><i className={styles.liveDot} /> EN VIVO · {PRODUCTS.find((p) => p.id === product)?.label}</span>
-              <span className={styles.modelTag}>{modelInfo}</span>
+              <span className={styles.liveTag}>
+                <i className={styles.liveDot} /> EN VIVO · {PRODUCTS.find((p) => p.id === product)?.label}
+              </span>
+              {loadingModel && <span className={styles.modelTag}>Cargando modelo…</span>}
+              {!loadingModel && <span className={styles.modelTag}>{modelInfo}</span>}
             </>
           )}
         </div>
       </div>
 
-      {/* controles */}
       {running && (
         <div className={styles.controls}>
           <div className={styles.ctrlRow}>
@@ -645,6 +726,20 @@ export default function VirtualTryOn() {
             <button className={styles.ctrl} onClick={() => adjust('down')} aria-label="Bajar">↓</button>
             <button className={styles.ctrl} onClick={() => adjust('center')} aria-label="Centrar">Centrar</button>
           </div>
+          {cameras.length > 1 && (
+            <div className={styles.ctrlRow}>
+              {cameras.map((cam) => (
+                <button
+                  key={cam.deviceId}
+                  className={`${styles.ctrl} ${activeCameraLabel === cam.label ? styles.ctrlOn : ''}`}
+                  onClick={() => switchCamera(cam.deviceId)}
+                  aria-label={`Cambiar a ${cam.label || 'cámara'}`}
+                >
+                  {cam.label?.replace(/\s*\(.*?\)/g, '').trim() || 'Cámara'}
+                </button>
+              ))}
+            </div>
+          )}
           <button className={styles.close} onClick={stop}>Cerrar probador</button>
         </div>
       )}
@@ -669,7 +764,6 @@ function productIcon(id: ProductId) {
   if (id === 'hat') return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 17.5c2.5 1 6 1.5 9 1.5s6.5-.5 9-1.5" /><path d="M6.5 16.5C7 11 8.5 7 12 7s5 4 5.5 9.5" /></svg>
   );
-  // gorra
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14a8 8 0 0116 0" /><path d="M4 14h12a5 5 0 005-2.5" /></svg>
   );
