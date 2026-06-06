@@ -105,8 +105,8 @@ const _euler = new THREE.Euler();
 
 /** Extraer yaw/pitch de la matrix de transformación facial de MediaPipe.
  *  La matrix 4x4 row-major mapea de rostro canonico a detectado.
- *  En selfie (espejo), yaw y pitch se niegan para que el accesorio siga
- *  el movimiento en pantalla. */
+ *  La matrix ya viene en coordenadas de pantalla (selfie invertida),
+ *  por lo que yaw y pitch NO se niegan. */
 function headRotationFromMatrix(m: Matrix): { yaw: number; pitch: number } | null {
   const d = m.data;
   if (d.length < 16) return null;
@@ -118,7 +118,7 @@ function headRotationFromMatrix(m: Matrix): { yaw: number; pitch: number } | nul
   );
   _mat4.decompose(_pos, _quat, _sca);
   _euler.setFromQuaternion(_quat, 'YXZ');
-  return { yaw: -_euler.y, pitch: -_euler.x };
+  return { yaw: _euler.y, pitch: _euler.x };
 }
 
 /* ───────────────────── Fallbacks geométricos ───────────────────── */
@@ -325,6 +325,7 @@ export default function VirtualTryOn() {
   const productRef = useRef<ProductId>(product);
   const adjustRef = useRef({ scale: 1, dx: 0, dy: 0 });
   const engineRef = useRef<Engine | null>(null);
+  const initialBuildDone = useRef(false);
 
   const teardown = useCallback(() => {
     const e = engineRef.current;
@@ -344,6 +345,7 @@ export default function VirtualTryOn() {
     productRef.current = product;
     const e = engineRef.current;
     if (e && status === 'running') {
+      if (!initialBuildDone.current) return;
       e.smooth.init = false;
       e.lastLm = null;
       e.lastMatrix = null;
@@ -587,6 +589,7 @@ export default function VirtualTryOn() {
       setModelInfo(info);
       setLoadingModel(false);
 
+      initialBuildDone.current = true;
       setStatus('running');
       engine.raf = requestAnimationFrame(renderLoop);
     } catch (err) {
@@ -619,6 +622,7 @@ export default function VirtualTryOn() {
     setCameras([]);
     setActiveCameraLabel('');
     adjustRef.current = { scale: 1, dx: 0, dy: 0 };
+    initialBuildDone.current = false;
   }, [teardown]);
 
   const adjust = (kind: 'in' | 'out' | 'up' | 'down' | 'center') => {
