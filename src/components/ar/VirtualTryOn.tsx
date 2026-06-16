@@ -53,6 +53,22 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 /* Throttle: detectar rostro cada N frames, renderizar a 60fps */
 const DETECT_INTERVAL = 1;
 
+/* ───────────────────── Oclusión de cabeza ─────────────────────
+   Una "cabeza" invisible (escribe profundidad, no color) oculta las partes
+   del accesorio que quedan por detrás de la cabeza: patillas de las gafas que
+   se van hacia las orejas y la trasera del gorro/gorra. Es lo que hace que el
+   accesorio se vea "puesto" y no pegado encima.
+
+   El accesorio se empuja hacia delante en Z (OCC_FORWARD) para que su parte
+   frontal quede por delante del oclusor y solo se recorte lo que va por detrás.
+   Como la cámara es ortográfica, mover en Z NO cambia la posición en pantalla,
+   solo el orden de profundidad. Valores ajustables (× tamaño de cara). */
+const OCCLUSION = true;
+const OCC_W = 0.62;       // semieje horizontal del oclusor (× ancho de cara)
+const OCC_H = 0.92;       // semieje vertical (× alto de cara)
+const OCC_DEPTH = 0.55;   // semieje de profundidad (× ancho de cara)
+const OCC_FORWARD = 1.06; // cuánto se adelanta el accesorio respecto al oclusor
+
 /* Correcta orientación de los GLB a la convención de la escena */
 const MODEL_ORIENT: Partial<Record<ProductId, [number, number, number]>> = {
   hat: [0, 0, 0],
@@ -74,6 +90,7 @@ interface Engine {
   camera: THREE.OrthographicCamera;
   accessory: THREE.Group;
   shadow: THREE.Mesh;
+  occluder: THREE.Mesh;
   kind: ProductId;
   faceLandmarker: FaceLandmarker | null;
   stream: MediaStream | null;
@@ -162,11 +179,23 @@ function buildShadow(): THREE.Mesh {
     map: getShadowTex(),
     transparent: true,
     depthWrite: false,
+    depthTest: false, // siempre visible: el oclusor de cabeza no debe borrar la sombra
     blending: THREE.MultiplyBlending,
     opacity: 0.5,
   });
   const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
   mesh.name = 'shadow';
+  mesh.renderOrder = 2; // tras el accesorio
+  return mesh;
+}
+
+/* Cabeza invisible que solo escribe profundidad, para ocluir lo que va detrás. */
+function buildOccluder(): THREE.Mesh {
+  const mat = new THREE.MeshBasicMaterial({ colorWrite: false });
+  // depthWrite/depthTest por defecto true: escribe Z sin pintar color.
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 28, 20), mat);
+  mesh.name = 'occluder';
+  mesh.renderOrder = -1; // dibujar antes que el accesorio para tener Z listo
   return mesh;
 }
 
@@ -386,6 +415,8 @@ export default function VirtualTryOn() {
     try { e.faceLandmarker?.close(); } catch { /* noop */ }
     e.shadow.material.dispose();
     e.shadow.geometry.dispose();
+    e.occluder.material.dispose();
+    e.occluder.geometry.dispose();
     e.scene.environment?.dispose();
     disposeObject(e.scene);
     e.renderer.dispose();
@@ -512,6 +543,25 @@ export default function VirtualTryOn() {
       const r = g.getObjectByName('earR');
       if (l) { l.position.set(s.elx + adj.dx, s.ely + drop + adj.dy, 0); l.scale.setScalar(size); l.rotation.z = s.roll; }
       if (r) { r.position.set(s.erx + adj.dx, s.ery + drop + adj.dy, 0); r.scale.setScalar(size); r.rotation.z = s.roll; }
+    }
+
+    /* ───── Oclusión: cabeza invisible + accesorio adelantado en Z ─────
+       Empuja el accesorio justo por delante del oclusor: su frente se ve y lo
+       que va por detrás de la cabeza (patillas, trasera del gorro) se recorta.
+       En pendientes no se usa (van pegados a la oreja, sin parte trasera). */
+    const oc = e.occluder;
+    if (OCCLUSION && e.kind !== 'earrings') {
+      const headCx = (s.elx + s.erx) / 2;
+      const headCy = (s.fy + s.chy) / 2;
+      const depth = faceW * OCC_DEPTH;
+      oc.position.set(headCx, headCy, 0);
+      oc.scale.set(faceW * OCC_W, faceH * OCC_H, depth);
+      oc.rotation.set(s.pitch, s.yaw, s.roll, 'YXZ');
+      oc.visible = true;
+      g.position.z = depth * OCC_FORWARD;
+    } else {
+      oc.visible = false;
+      g.position.z = 0;
     }
 
     /* ───── Sombra de contacto sobre la piel ───── */
@@ -643,8 +693,12 @@ export default function VirtualTryOn() {
       shadow.visible = false;
       scene.add(shadow);
 
+      const occluder = buildOccluder();
+      occluder.visible = false;
+      scene.add(occluder);
+
       const engine: Engine = {
-        renderer, scene, camera, accessory, shadow, kind: productRef.current,
+        renderer, scene, camera, accessory, shadow, occluder, kind: productRef.current,
         faceLandmarker, stream, raf: 0, ro: null, cw: 1, ch: 1, lastVideoTime: -1,
         frameCount: 0, lastLm: null, lastMatrix: null,
         smooth: { init: false, cx: 0, cy: 0, w: 0, roll: 0, elx: 0, ely: 0, erx: 0, ery: 0, fx: 0, fy: 0, chx: 0, chy: 0, yaw: 0, pitch: 0 },
