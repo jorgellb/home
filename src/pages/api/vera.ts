@@ -111,11 +111,44 @@ function buildUserPrompt(input: VeraInput): string {
 Genera la propuesta en markdown para este negocio.`;
 }
 
-function jsonError(message: string, status: number): Response {
+function jsonError(message: string, status: number, headers?: Record<string, string>): Response {
   return new Response(JSON.stringify({ error: message }), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...headers },
   });
+}
+
+/* ───────────────────── Rate limiting (best-effort) ─────────────────────
+   Protege el endpoint (que llama a un modelo de pago) de abuso/coste. Es
+   en memoria: funciona dentro de una instancia "caliente" de la función, no
+   es un límite global duro entre instancias. Para algo robusto en producción,
+   migrar a Vercel KV / Upstash Redis (mismo patrón, store compartido). */
+const WINDOW_MS = 5 * 60 * 1000; // ventana de 5 min
+const MAX_PER_IP = 6;            // peticiones por IP y ventana
+const MAX_GLOBAL = 200;          // cortafuegos por instancia y ventana
+const ipHits = new Map<string, number[]>();
+let globalHits: number[] = [];
+
+function clientIp(request: Request): string {
+  const xff = request.headers.get('x-forwarded-for');
+  if (xff) return xff.split(',')[0].trim();
+  return request.headers.get('x-real-ip') || 'unknown';
+}
+
+function rateLimit(ip: string): { ok: boolean; retryAfter: number } {
+  const now = Date.now();
+  globalHits = globalHits.filter((t) => now - t < WINDOW_MS);
+  if (globalHits.length >= MAX_GLOBAL) return { ok: false, retryAfter: 300 };
+
+  const arr = (ipHits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
+  if (arr.length >= MAX_PER_IP) {
+    return { ok: false, retryAfter: Math.ceil((WINDOW_MS - (now - arr[0])) / 1000) };
+  }
+  arr.push(now);
+  ipHits.set(ip, arr);
+  globalHits.push(now);
+  if (ipHits.size > 5000) ipHits.clear(); // evitar crecer sin límite
+  return { ok: true, retryAfter: 0 };
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -131,6 +164,16 @@ export const POST: APIRoute = async ({ request }) => {
   if (!sector) return jsonError('Selecciona un sector válido.', 400);
   if (!input.problema || !String(input.problema).trim()) {
     return jsonError('Cuéntanos cuál es el problema principal.', 400);
+  }
+
+  // Rate limiting: evita que se abuse del endpoint (coste del modelo).
+  const limit = rateLimit(clientIp(request));
+  if (!limit.ok) {
+    return jsonError(
+      'Has hecho muchas peticiones seguidas. Espera un momento y vuelve a probar (o mira un ejemplo mientras tanto).',
+      429,
+      { 'Retry-After': String(limit.retryAfter) },
+    );
   }
 
   const apiKey = import.meta.env.OPENROUTER_API_KEY;
