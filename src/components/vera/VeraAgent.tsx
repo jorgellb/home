@@ -1,8 +1,9 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './VeraAgent.module.css';
 
-/* Vera AI Business Agent — wizard de 5 pasos que llama a /api/vera y muestra
-   una propuesta de consultoría estructurada. La IA corre en el servidor. */
+/* Vera AI Business Agent — wizard de 5 pasos. Llama a /api/vera en streaming y
+   escribe la propuesta (markdown) en vivo. Incluye "Ver un ejemplo" instantáneo,
+   exportar a PDF y compartir. La IA corre en el servidor. */
 
 type SectorId = 'alquiler' | 'inmobiliaria' | 'restaurante' | 'clinica' | 'facturacion';
 
@@ -49,23 +50,103 @@ const SECTORES: Sector[] = [
 ];
 
 const PRESUPUESTOS = ['Bajo', 'Medio', 'Alto'];
-
-interface Proposal {
-  diagnostico?: string;
-  oportunidad?: string;
-  solucion?: { nombre?: string; descripcion?: string };
-  comoFunciona?: string[];
-  funciones?: string[];
-  beneficio?: string;
-  precio?: { basico?: string; completo?: string; mantenimiento?: string };
-  demoPortfolio?: string;
-  mensajeComercial?: string;
-  limites?: string[];
-}
-
-type Phase = 'form' | 'loading' | 'result' | 'error';
-
 const STEPS = ['Sector', 'Tu negocio', 'Problema', 'Objetivo', 'Presupuesto'];
+
+const EXAMPLE_MD = `# GuestPilot AI
+
+## 1. Diagnóstico del negocio
+Una agencia con 20 apartamentos turísticos dedica muchas horas a responder por WhatsApp las mismas preguntas (horarios de entrada, wifi, parking, normas). Esa lentitud hace perder reservas y satura al equipo en temporada alta.
+
+## 2. Oportunidad detectada
+La mayor oportunidad es automatizar la atención inicial al huésped: responder al instante las dudas frecuentes, captar los datos de la reserva y pasar a una persona solo los casos importantes.
+
+## 3. App o sistema recomendado
+GuestPilot AI, un asistente para apartamentos turísticos que atiende a los huéspedes por WhatsApp y web, envía las instrucciones de llegada y ayuda a conseguir más reservas directas, con menos comisiones de Booking o Airbnb.
+
+## 4. Cómo funcionaría
+- El huésped escribe por WhatsApp o desde la web del apartamento.
+- El asistente pregunta fechas, número de personas y dudas principales.
+- Responde al instante con información útil y disponibilidad.
+- Si hay interés, guarda los datos y avisa al gestor.
+- Tras la reserva, envía instrucciones de llegada y recordatorios.
+- Al final de la estancia, pide una reseña automáticamente.
+
+## 5. Funciones principales
+- Respuestas automáticas 24/7.
+- Atención en varios idiomas.
+- Captación de datos del huésped.
+- Envío de instrucciones de check-in.
+- Recordatorios automáticos.
+- Solicitud de reseñas.
+- Upselling de servicios locales.
+- Aviso al gestor en casos importantes.
+
+## 6. Beneficio para el negocio
+Puede ahorrar varias horas a la semana, mejorar la rapidez de respuesta y aumentar las posibilidades de cerrar reservas directas con menos comisiones.
+
+## 7. Precio orientativo
+- Versión básica: entre 600 € y 1.500 €.
+- Versión completa: entre 2.000 € y 5.000 €.
+- Mantenimiento opcional: entre 80 € y 300 € al mes.
+
+## 8. Demo para portfolio
+Se mostraría una pantalla donde el visitante elige su sector, describe su problema y recibe una propuesta personalizada generada por IA, demostrando soluciones prácticas para negocios reales.
+
+## 9. Mensaje comercial
+Hola, he preparado una demo de IA para alojamientos como el tuyo: responde sola a los huéspedes por WhatsApp, ahorra tiempo y ayuda a conseguir más reservas directas. ¿Quieres que te enseñe cómo funcionaría con tus apartamentos?
+
+## 10. Límites y riesgos
+- La IA no sustituye decisiones importantes.
+- Hay que revisar las respuestas sensibles.
+- No debe inventar precios, condiciones ni información legal.
+- Debe proteger los datos del huésped.
+- Una persona puede tomar el control cuando haga falta.`;
+
+type Phase = 'form' | 'streaming' | 'result' | 'error';
+
+/* ─── Markdown → HTML (subconjunto seguro: escapamos antes de formatear) ─── */
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function inlineHtml(s: string): string {
+  return esc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+function mdToHtml(md: string): string {
+  const lines = md.split('\n');
+  let html = '';
+  let list: 'ul' | 'ol' | null = null;
+  const closeList = () => { if (list) { html += `</${list}>`; list = null; } };
+  for (const raw of lines) {
+    const t = raw.trim();
+    if (!t) { closeList(); continue; }
+    if (t.startsWith('## ')) { closeList(); html += `<h4>${inlineHtml(t.slice(3))}</h4>`; continue; }
+    if (t.startsWith('### ')) { closeList(); html += `<h5>${inlineHtml(t.slice(4))}</h5>`; continue; }
+    if (t.startsWith('# ')) continue; // el título (H1) se muestra aparte
+    const um = t.match(/^[-*]\s+(.*)$/);
+    const om = t.match(/^\d+\.\s+(.*)$/);
+    if (um) { if (list !== 'ul') { closeList(); html += '<ul>'; list = 'ul'; } html += `<li>${inlineHtml(um[1])}</li>`; continue; }
+    if (om) { if (list !== 'ol') { closeList(); html += '<ol>'; list = 'ol'; } html += `<li>${inlineHtml(om[1])}</li>`; continue; }
+    closeList();
+    html += `<p>${inlineHtml(t)}</p>`;
+  }
+  closeList();
+  return html;
+}
+function extractTitle(md: string): string {
+  const line = md.split('\n').find((l) => /^#\s+/.test(l.trim()) && !l.trim().startsWith('## '));
+  return line ? line.trim().replace(/^#\s+/, '') : '';
+}
+function extractSection(md: string, needle: string): string {
+  const lines = md.split('\n');
+  let cap = false;
+  const buf: string[] = [];
+  for (const l of lines) {
+    const t = l.trim();
+    if (t.startsWith('## ')) { if (cap) break; cap = t.toLowerCase().includes(needle); continue; }
+    if (cap && t) buf.push(t.replace(/^[-*]\s+/, ''));
+  }
+  return buf.join('\n').trim();
+}
 
 export default function VeraAgent() {
   const [phase, setPhase] = useState<Phase>('form');
@@ -75,12 +156,15 @@ export default function VeraAgent() {
   const [problema, setProblema] = useState('');
   const [objetivo, setObjetivo] = useState('');
   const [presupuesto, setPresupuesto] = useState('');
-  const [result, setResult] = useState<{ sector: string; proposal: Proposal } | null>(null);
+  const [md, setMd] = useState('');
+  const [isExample, setIsExample] = useState(false);
   const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState('');
+  const exampleTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => () => { if (exampleTimer.current) clearInterval(exampleTimer.current); }, []);
 
   const activeSector = SECTORES.find((s) => s.id === sector);
-
   const canNext =
     (step === 0 && !!sector) ||
     (step === 1 && tipoNegocio.trim().length > 0) ||
@@ -89,7 +173,9 @@ export default function VeraAgent() {
     (step === 4 && presupuesto.trim().length > 0);
 
   async function submit() {
-    setPhase('loading');
+    setIsExample(false);
+    setPhase('streaming');
+    setMd('');
     setError('');
     try {
       const res = await fetch('/api/vera', {
@@ -97,9 +183,20 @@ export default function VeraAgent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sector, tipoNegocio, problema, objetivo, presupuesto }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || 'No se pudo generar la propuesta.');
-      setResult({ sector: data.sector, proposal: data.proposal || {} });
+      if (!res.ok || !res.body) {
+        let msg = 'No se pudo generar la propuesta.';
+        try { const j = await res.json(); msg = j?.error || msg; } catch { /* noop */ }
+        throw new Error(msg);
+      }
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let acc = '';
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value, { stream: true });
+        setMd(acc);
+      }
       setPhase('result');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error inesperado.');
@@ -107,7 +204,27 @@ export default function VeraAgent() {
     }
   }
 
+  function showExample() {
+    if (exampleTimer.current) clearInterval(exampleTimer.current);
+    setIsExample(true);
+    setPhase('streaming');
+    setMd('');
+    const full = EXAMPLE_MD;
+    const stepSize = Math.max(3, Math.round(full.length / 90));
+    let i = 0;
+    exampleTimer.current = setInterval(() => {
+      i += stepSize;
+      setMd(full.slice(0, i));
+      if (i >= full.length) {
+        if (exampleTimer.current) clearInterval(exampleTimer.current);
+        setMd(full);
+        setPhase('result');
+      }
+    }, 20);
+  }
+
   function reset() {
+    if (exampleTimer.current) clearInterval(exampleTimer.current);
     setPhase('form');
     setStep(0);
     setSector(null);
@@ -115,111 +232,89 @@ export default function VeraAgent() {
     setProblema('');
     setObjetivo('');
     setPresupuesto('');
-    setResult(null);
+    setMd('');
+    setIsExample(false);
     setError('');
-    setCopied(false);
+    setCopied('');
   }
 
-  function copyMensaje(text: string) {
-    navigator.clipboard?.writeText(text).then(
-      () => { setCopied(true); setTimeout(() => setCopied(false), 2000); },
-      () => { /* noop */ },
-    );
+  function flash(what: string) {
+    setCopied(what);
+    setTimeout(() => setCopied(''), 2000);
   }
 
-  /* ─────────────── Resultado ─────────────── */
-  if (phase === 'result' && result) {
-    const p = result.proposal;
+  function copyMensaje() {
+    const msg = extractSection(md, 'mensaje comercial') || md;
+    navigator.clipboard?.writeText(msg).then(() => flash('mensaje'), () => { /* noop */ });
+  }
+
+  async function share() {
+    const title = extractTitle(md) || 'Propuesta Vera AI';
+    const text = md.replace(/[#*]/g, '');
+    const nav = navigator as Navigator & { share?: (d: { title: string; text: string }) => Promise<void> };
+    if (nav.share) {
+      try { await nav.share({ title, text }); return; } catch { /* cancelado */ }
+    }
+    navigator.clipboard?.writeText(text).then(() => flash('compartir'), () => { /* noop */ });
+  }
+
+  function exportPDF() {
+    const title = extractTitle(md) || 'Propuesta Vera AI';
+    const w = window.open('', '_blank');
+    if (!w) return;
+    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>${esc(title)} · Vera AI</title>
+<style>
+  body{font-family:-apple-system,system-ui,Segoe UI,Roboto,sans-serif;color:#1a1714;max-width:720px;margin:40px auto;padding:0 24px;line-height:1.55}
+  .brand{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#FF6B35;font-weight:800}
+  h1{font-size:30px;margin:.2rem 0 1.5rem;letter-spacing:-.02em}
+  h4{font-size:16px;margin:1.4rem 0 .4rem;color:#FF6B35}
+  ul,ol{margin:.3rem 0 .3rem 1.1rem;padding:0}
+  li{margin:.2rem 0}
+  p{margin:.4rem 0}
+  .foot{margin-top:2.5rem;border-top:1px solid #e5ddcf;padding-top:1rem;font-size:11px;color:#8a8175}
+</style></head><body>
+  <div class="brand">✦ Vera AI Business Agent · platanitorico.com</div>
+  <h1>${esc(title)}</h1>
+  ${mdToHtml(md)}
+  <div class="foot">Propuesta generada por IA con fines de demostración. Los precios son orientativos y no constituyen una oferta vinculante.</div>
+</body></html>`);
+    w.document.close();
+    w.focus();
+    setTimeout(() => w.print(), 350);
+  }
+
+  /* ─────────────── Propuesta (streaming / resultado) ─────────────── */
+  if (phase === 'streaming' || phase === 'result') {
+    const title = extractTitle(md);
+    const streaming = phase === 'streaming';
     return (
       <div className={styles.wrap}>
         <div className={styles.resultHead}>
-          <span className={styles.badge}>✦ Propuesta generada · {result.sector}</span>
-          <h3 className={styles.resultTitle}>{p.solucion?.nombre || 'Tu solución a medida'}</h3>
-          {p.solucion?.descripcion && <p className={styles.resultLead}>{p.solucion.descripcion}</p>}
+          <span className={styles.badge}>{isExample ? '✦ Ejemplo de muestra' : '✦ Propuesta generada por IA'}</span>
+          {title && <h3 className={styles.resultTitle}>{title}</h3>}
         </div>
 
-        <div className={styles.cards}>
-          <Block n="01" t="Diagnóstico del negocio">{p.diagnostico}</Block>
-          <Block n="02" t="Oportunidad detectada">{p.oportunidad}</Block>
-
-          {!!p.comoFunciona?.length && (
-            <article className={styles.card}>
-              <span className={styles.cardN}>03</span>
-              <h4 className={styles.cardT}>Cómo funcionaría</h4>
-              <ol className={styles.flow}>
-                {p.comoFunciona.map((s, i) => <li key={i}>{s}</li>)}
-              </ol>
-            </article>
-          )}
-
-          {!!p.funciones?.length && (
-            <article className={styles.card}>
-              <span className={styles.cardN}>04</span>
-              <h4 className={styles.cardT}>Funciones principales</h4>
-              <ul className={styles.feats}>
-                {p.funciones.map((f, i) => <li key={i}>{f}</li>)}
-              </ul>
-            </article>
-          )}
-
-          <Block n="05" t="Beneficio para el negocio">{p.beneficio}</Block>
-
-          {p.precio && (
-            <article className={styles.card}>
-              <span className={styles.cardN}>06</span>
-              <h4 className={styles.cardT}>Precio orientativo</h4>
-              <div className={styles.precio}>
-                {p.precio.basico && <div><b>Básico</b><span>{p.precio.basico}</span></div>}
-                {p.precio.completo && <div><b>Completo</b><span>{p.precio.completo}</span></div>}
-                {p.precio.mantenimiento && <div><b>Mantenimiento</b><span>{p.precio.mantenimiento}</span></div>}
-              </div>
-            </article>
-          )}
-
-          {p.mensajeComercial && (
-            <article className={`${styles.card} ${styles.cardAccent}`}>
-              <span className={styles.cardN}>07</span>
-              <h4 className={styles.cardT}>Mensaje comercial listo para usar</h4>
-              <p className={styles.mensaje}>{p.mensajeComercial}</p>
-              <button className={styles.copyBtn} onClick={() => copyMensaje(p.mensajeComercial!)}>
-                {copied ? '✓ Copiado' : 'Copiar mensaje'}
-              </button>
-            </article>
-          )}
-
-          {p.demoPortfolio && <Block n="08" t="Cómo se vería en portfolio">{p.demoPortfolio}</Block>}
-
-          {!!p.limites?.length && (
-            <article className={`${styles.card} ${styles.cardMuted}`}>
-              <span className={styles.cardN}>09</span>
-              <h4 className={styles.cardT}>Límites y riesgos</h4>
-              <ul className={styles.limits}>
-                {p.limites.map((l, i) => <li key={i}>{l}</li>)}
-              </ul>
-            </article>
-          )}
+        <div className={styles.proposal}>
+          <div className={styles.md} dangerouslySetInnerHTML={{ __html: mdToHtml(md) }} />
+          {streaming && <span className={styles.cursor} aria-hidden="true" />}
         </div>
 
-        <div className={styles.resultActions}>
-          <button className={styles.secondary} onClick={reset}>↻ Probar otro negocio</button>
-          <a className={styles.primary} href="/contacto/">Quiero algo así para mi negocio →</a>
-        </div>
-        <p className={styles.disclaimer}>
-          Propuesta generada por IA con fines de demostración. Los precios son orientativos y no constituyen una oferta.
-        </p>
-      </div>
-    );
-  }
-
-  /* ─────────────── Cargando ─────────────── */
-  if (phase === 'loading') {
-    return (
-      <div className={styles.wrap}>
-        <div className={styles.loading}>
-          <div className={styles.spinner} aria-hidden="true" />
-          <p>Vera está analizando tu negocio…</p>
-          <span>Detectando el dolor principal y diseñando una solución a medida.</span>
-        </div>
+        {!streaming && (
+          <>
+            <div className={styles.exportBar}>
+              <button className={styles.toolBtn} onClick={exportPDF}>⬇ Descargar PDF</button>
+              <button className={styles.toolBtn} onClick={share}>{copied === 'compartir' ? '✓ Copiado' : '↗ Compartir'}</button>
+              <button className={styles.toolBtn} onClick={copyMensaje}>{copied === 'mensaje' ? '✓ Copiado' : '📋 Copiar mensaje comercial'}</button>
+            </div>
+            <div className={styles.resultActions}>
+              <button className={styles.secondary} onClick={reset}>↻ Probar otro negocio</button>
+              <a className={styles.primary} href="/contacto/">Quiero algo así para mi negocio →</a>
+            </div>
+            <p className={styles.disclaimer}>
+              Propuesta {isExample ? 'de ejemplo ' : ''}generada por IA con fines de demostración. Los precios son orientativos y no constituyen una oferta.
+            </p>
+          </>
+        )}
       </div>
     );
   }
@@ -231,7 +326,10 @@ export default function VeraAgent() {
         <div className={styles.loading}>
           <div className={styles.errIco} aria-hidden="true">!</div>
           <p>{error}</p>
-          <button className={styles.primary} onClick={() => setPhase('form')}>Volver a intentarlo</button>
+          <div className={styles.resultActions}>
+            <button className={styles.secondary} onClick={showExample}>Ver un ejemplo</button>
+            <button className={styles.primary} onClick={() => setPhase('form')}>Volver a intentarlo</button>
+          </div>
         </div>
       </div>
     );
@@ -240,12 +338,15 @@ export default function VeraAgent() {
   /* ─────────────── Formulario (wizard) ─────────────── */
   return (
     <div className={styles.wrap}>
-      <div className={styles.progress}>
-        {STEPS.map((label, i) => (
-          <div key={label} className={`${styles.progStep} ${i === step ? styles.progOn : ''} ${i < step ? styles.progDone : ''}`}>
-            <span>{i + 1}</span>{label}
-          </div>
-        ))}
+      <div className={styles.topbar}>
+        <div className={styles.progress}>
+          {STEPS.map((label, i) => (
+            <div key={label} className={`${styles.progStep} ${i === step ? styles.progOn : ''} ${i < step ? styles.progDone : ''}`}>
+              <span>{i + 1}</span>{label}
+            </div>
+          ))}
+        </div>
+        <button className={styles.exampleLink} onClick={showExample}>⚡ Ver un ejemplo al instante</button>
       </div>
 
       <div className={styles.panel}>
@@ -268,115 +369,55 @@ export default function VeraAgent() {
         )}
 
         {step === 1 && (
-          <StepText
-            q="¿Qué tipo de negocio tienes?"
-            value={tipoNegocio}
-            onChange={setTipoNegocio}
-            placeholder="Ej.: agencia con 20 apartamentos turísticos…"
-            chips={activeSector?.ejTipo || []}
-          />
+          <StepText q="¿Qué tipo de negocio tienes?" value={tipoNegocio} onChange={setTipoNegocio}
+            placeholder="Ej.: agencia con 20 apartamentos turísticos…" chips={activeSector?.ejTipo || []} />
         )}
         {step === 2 && (
-          <StepText
-            q="¿Cuál es tu problema principal?"
-            value={problema}
-            onChange={setProblema}
-            placeholder="Ej.: recibo muchos mensajes repetidos y pierdo reservas…"
-            chips={activeSector?.ejProblema || []}
-          />
+          <StepText q="¿Cuál es tu problema principal?" value={problema} onChange={setProblema}
+            placeholder="Ej.: recibo muchos mensajes repetidos y pierdo reservas…" chips={activeSector?.ejProblema || []} />
         )}
         {step === 3 && (
-          <StepText
-            q="¿Qué objetivo quieres conseguir?"
-            value={objetivo}
-            onChange={setObjetivo}
-            placeholder="Ej.: ahorrar tiempo y conseguir más reservas directas…"
-            chips={activeSector?.ejObjetivo || []}
-          />
+          <StepText q="¿Qué objetivo quieres conseguir?" value={objetivo} onChange={setObjetivo}
+            placeholder="Ej.: ahorrar tiempo y conseguir más reservas directas…" chips={activeSector?.ejObjetivo || []} />
         )}
         {step === 4 && (
           <>
             <h3 className={styles.q}>¿Qué presupuesto aproximado tienes?</h3>
             <div className={styles.chips}>
               {PRESUPUESTOS.map((b) => (
-                <button
-                  key={b}
-                  className={`${styles.chip} ${presupuesto === b ? styles.chipOn : ''}`}
-                  onClick={() => setPresupuesto(b)}
-                >
-                  {b}
-                </button>
+                <button key={b} className={`${styles.chip} ${presupuesto === b ? styles.chipOn : ''}`} onClick={() => setPresupuesto(b)}>{b}</button>
               ))}
             </div>
-            <input
-              className={styles.input}
-              value={PRESUPUESTOS.includes(presupuesto) ? '' : presupuesto}
-              onChange={(e) => setPresupuesto(e.target.value)}
-              placeholder="…o una cantidad aproximada (ej.: 1.500 €)"
-            />
+            <input className={styles.input} value={PRESUPUESTOS.includes(presupuesto) ? '' : presupuesto}
+              onChange={(e) => setPresupuesto(e.target.value)} placeholder="…o una cantidad aproximada (ej.: 1.500 €)" />
           </>
         )}
       </div>
 
       <div className={styles.nav}>
-        <button
-          className={styles.secondary}
-          onClick={() => setStep((s) => Math.max(0, s - 1))}
-          disabled={step === 0}
-        >
-          ← Atrás
-        </button>
+        <button className={styles.secondary} onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>← Atrás</button>
         {step < 4 ? (
-          <button className={styles.primary} onClick={() => setStep((s) => s + 1)} disabled={!canNext}>
-            Siguiente →
-          </button>
+          <button className={styles.primary} onClick={() => setStep((s) => s + 1)} disabled={!canNext}>Siguiente →</button>
         ) : (
-          <button className={styles.primary} onClick={submit} disabled={!canNext}>
-            ✦ Generar propuesta
-          </button>
+          <button className={styles.primary} onClick={submit} disabled={!canNext}>✦ Generar propuesta</button>
         )}
       </div>
     </div>
   );
 }
 
-function StepText(props: {
-  q: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder: string;
-  chips: string[];
-}) {
+function StepText(props: { q: string; value: string; onChange: (v: string) => void; placeholder: string; chips: string[] }) {
   return (
     <>
       <h3 className={styles.q}>{props.q}</h3>
-      <textarea
-        className={styles.textarea}
-        value={props.value}
-        onChange={(e) => props.onChange(e.target.value)}
-        placeholder={props.placeholder}
-        rows={3}
-      />
+      <textarea className={styles.textarea} value={props.value} onChange={(e) => props.onChange(e.target.value)} placeholder={props.placeholder} rows={3} />
       {props.chips.length > 0 && (
         <div className={styles.chips}>
           {props.chips.map((c) => (
-            <button key={c} className={styles.chipGhost} onClick={() => props.onChange(c)}>
-              {c}
-            </button>
+            <button key={c} className={styles.chipGhost} onClick={() => props.onChange(c)}>{c}</button>
           ))}
         </div>
       )}
     </>
-  );
-}
-
-function Block({ n, t, children }: { n: string; t: string; children?: ReactNode }) {
-  if (!children) return null;
-  return (
-    <article className={styles.card}>
-      <span className={styles.cardN}>{n}</span>
-      <h4 className={styles.cardT}>{t}</h4>
-      <p>{children}</p>
-    </article>
   );
 }
