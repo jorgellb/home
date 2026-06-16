@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import Breadcrumb from '../../components/common/Breadcrumb.astro';
-import { pueblos, comarcas, getPueblosByComarca } from '../../data/pueblos-almeria';
+import { pueblos, comarcas, getPueblosByComarca, comarcaSlug } from '../../data/pueblos-almeria';
 
 const title = 'Diseño Web en la Provincia de Almería';
 const description = 'Diseño web y SEO local para negocios de cualquier pueblo de Almería: 8 comarcas, +90 municipios. Tiendas online y hosting incluido. Presupuesto en 24h.';
@@ -246,7 +246,7 @@ const faqs = [
       if (!pueblosComarca.length) return null;
       const info = comarcaInfo[comarca];
       return (
-        <section class={`section-brutal ${idx % 2 === 0 ? '' : 'svc-comarca-section--alt'}`}>
+        <section id={comarcaSlug(comarca)} class={`section-brutal svc-comarca-anchor ${idx % 2 === 0 ? '' : 'svc-comarca-section--alt'}`}>
           <div class="container-brutal">
             <header class="brutal-section-head">
               <div class="brutal-section-head__col">
@@ -351,6 +351,8 @@ const faqs = [
 
 <style>
   .svc-comarca-section--alt { background: var(--brutal-bg-alt); border-block: 2px solid var(--brutal-ink); }
+  /* Offset para que el deep-link #comarca desde la home no quede bajo el header */
+  .svc-comarca-anchor { scroll-margin-top: 90px; }
   .comarca-count { font-style: normal; color: var(--brutal-accent); }
 
   .atlas-grid {

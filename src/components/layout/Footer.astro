@@ -1,5 +1,6 @@
 ---
 import { pueblos, comarcas, getPueblosByComarca, getPueblosDestacados } from '../../data/pueblos-almeria';
+import { esPuebloIndexable } from '../../data/pueblos-indexables';
 
 interface Props {
   hideHero?: boolean;
@@ -7,7 +8,9 @@ interface Props {
 const { hideHero = false } = Astro.props;
 
 const currentYear = new Date().getFullYear();
-const pueblosDestacados = getPueblosDestacados();
+// El buscador del footer enlaza solo a los pueblos indexables (Tier 1): evita
+// volcar ~90 enlaces (muchos noindex) en cada página y concentra el link equity.
+const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable(p.slug));
 ---
 
 <footer class="brutal-footer">
@@ -164,22 +167,26 @@ const pueblosDestacados = getPueblosDestacados();
                 ))}
               </div>
 
-              {comarcas.map((comarca) => (
-                <div class="brutal-footer__panel-group comarca-section" data-comarca={comarca.toLowerCase()}>
-                  <span class="text-meta">{comarca}</span>
-                  {getPueblosByComarca(comarca).filter(p => !p.destacado).map((pueblo) => (
-                    <a
-                      href={`/diseno-web/${pueblo.slug}/`}
-                      class="pueblo-item brutal-footer__panel-item"
-                      data-nombre={pueblo.nombre.toLowerCase()}
-                      data-comarca={pueblo.comarca.toLowerCase()}
-                    >
-                      <span class="brutal-footer__panel-item-name">{pueblo.nombre}</span>
-                      <span class="brutal-footer__panel-item-meta">→</span>
-                    </a>
-                  ))}
-                </div>
-              ))}
+              {comarcas.map((comarca) => {
+                const items = getPueblosByComarca(comarca).filter(p => !p.destacado && esPuebloIndexable(p.slug));
+                if (!items.length) return null;
+                return (
+                  <div class="brutal-footer__panel-group comarca-section" data-comarca={comarca.toLowerCase()}>
+                    <span class="text-meta">{comarca}</span>
+                    {items.map((pueblo) => (
+                      <a
+                        href={`/diseno-web/${pueblo.slug}/`}
+                        class="pueblo-item brutal-footer__panel-item"
+                        data-nombre={pueblo.nombre.toLowerCase()}
+                        data-comarca={pueblo.comarca.toLowerCase()}
+                      >
+                        <span class="brutal-footer__panel-item-name">{pueblo.nombre}</span>
+                        <span class="brutal-footer__panel-item-meta">→</span>
+                      </a>
+                    ))}
+                  </div>
+                );
+              })}
 
               <div id="no-results" class="brutal-footer__panel-empty">
                 <p class="text-mono">∅ Sin resultados</p>
