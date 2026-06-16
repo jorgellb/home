@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
 
-/* Vera AI Business Agent — endpoint server (Vercel Function).
+/* Vera AI Business Agent — endpoint server (Vercel Function), con streaming.
    La API key de OpenRouter vive SOLO aquí (entorno), nunca en el navegador.
-   El cliente envía las respuestas del wizard; aquí se construye el prompt con
-   la base de conocimiento por sector y se devuelve una propuesta estructurada. */
+   Devuelve la propuesta en markdown, en streaming (token a token) para que el
+   cliente la escriba en vivo. */
 export const prerender = false;
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -20,8 +20,7 @@ interface VeraInput {
   presupuesto: string;
 }
 
-/* Base de conocimiento por sector: problemas frecuentes + soluciones posibles.
-   Se inyecta en el prompt para que el modelo proponga algo aterrizado y vendible. */
+/* Base de conocimiento por sector: problemas frecuentes + soluciones posibles. */
 const SECTORES: Record<SectorId, { nombre: string; problemas: string[]; soluciones: string[] }> = {
   alquiler: {
     nombre: 'Alquiler vacacional y apartamentos turísticos',
@@ -54,34 +53,52 @@ function buildSystemPrompt(sector: { nombre: string; problemas: string[]; soluci
   return `Eres "Vera AI Business Agent", un consultor de IA experto en automatización para negocios locales (provincia de Almería, España). No eres un chatbot: analizas un problema real de negocio y propones una solución concreta y vendible.
 
 SECTOR DEL CLIENTE: ${sector.nombre}
-Problemas frecuentes de este sector: ${sector.problemas.join('; ')}.
-Soluciones típicas para este sector: ${sector.soluciones.join('; ')}.
-
-CÓMO RAZONAS (en este orden):
-1. Identifica el sector. 2. Detecta el dolor principal. 3. Relaciónalo con una oportunidad de automatización. 4. Propón una app o sistema concreto (con nombre atractivo y comercial, p. ej. "GuestPilot AI"). 5. Explica cómo funcionaría de forma sencilla. 6. Di el beneficio para el negocio. 7. Sugiere un precio orientativo prudente. 8. Redacta un mensaje comercial reutilizable.
+Problemas frecuentes del sector: ${sector.problemas.join('; ')}.
+Soluciones típicas del sector: ${sector.soluciones.join('; ')}.
 
 TONO: claro, comercial, profesional, fácil de entender, orientado a negocio, sin tecnicismos innecesarios.
 
-REGLAS IMPORTANTES:
+REGLAS:
 - No prometas resultados garantizados (usa "puede", "podría", "ayuda a").
-- No inventes precios cerrados, condiciones ni información legal.
-- Precios siempre como rangos orientativos en euros, prudentes.
-- 5 a 8 funciones principales.
+- No inventes precios cerrados, condiciones ni información legal. Los precios son rangos orientativos en euros.
 - Responde en español de España.
+- Sé concreto y conciso. Sin relleno.
 
-Devuelve EXCLUSIVAMENTE un objeto JSON válido (sin markdown, sin texto fuera del JSON) con esta forma exacta:
-{
-  "diagnostico": "string — qué problema parece tener el negocio",
-  "oportunidad": "string — qué oportunidad de automatización hay",
-  "solucion": { "nombre": "string — nombre atractivo del producto", "descripcion": "string — 1-2 frases" },
-  "comoFunciona": ["string — pasos del flujo, 4 a 6 pasos"],
-  "funciones": ["string — entre 5 y 8 funciones"],
-  "beneficio": "string — valor comercial, sin garantizar resultados",
-  "precio": { "basico": "string — rango €", "completo": "string — rango €", "mantenimiento": "string — cuota mensual € o 'opcional'" },
-  "demoPortfolio": "string — cómo se vería esta solución en un portfolio",
-  "mensajeComercial": "string — mensaje corto y directo para vender la solución",
-  "limites": ["string — 4 a 6 límites y riesgos profesionales"]
-}`;
+FORMATO DE SALIDA (markdown, exactamente esta estructura):
+
+# <Nombre atractivo y comercial del producto, ej.: GuestPilot AI>
+
+## 1. Diagnóstico del negocio
+<2-3 frases sobre el problema que parece tener>
+
+## 2. Oportunidad detectada
+<2-3 frases sobre la oportunidad de automatización>
+
+## 3. App o sistema recomendado
+<qué es la solución, 2-3 frases>
+
+## 4. Cómo funcionaría
+<lista de 4 a 6 pasos del flujo, con guiones>
+
+## 5. Funciones principales
+<lista de 5 a 8 funciones, con guiones>
+
+## 6. Beneficio para el negocio
+<2-3 frases de valor comercial, sin garantizar resultados>
+
+## 7. Precio orientativo
+<rangos: versión básica, versión completa y cuota de mantenimiento opcional, en euros>
+
+## 8. Demo para portfolio
+<1-2 frases sobre cómo se mostraría en un portfolio>
+
+## 9. Mensaje comercial
+<un mensaje corto y directo, listo para enviar por WhatsApp/email>
+
+## 10. Límites y riesgos
+<lista de 4 a 6 límites profesionales, con guiones>
+
+Devuelve SOLO el markdown, sin texto antes ni después.`;
 }
 
 function buildUserPrompt(input: VeraInput): string {
@@ -91,11 +108,11 @@ function buildUserPrompt(input: VeraInput): string {
 - Objetivo que quiere conseguir: ${input.objetivo || '(no especificado)'}
 - Presupuesto aproximado: ${input.presupuesto || '(no especificado)'}
 
-Genera la propuesta JSON para este negocio.`;
+Genera la propuesta en markdown para este negocio.`;
 }
 
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
+function jsonError(message: string, status: number): Response {
+  return new Response(JSON.stringify({ error: message }), {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
@@ -106,26 +123,23 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     input = await request.json();
   } catch {
-    return json({ error: 'Cuerpo de la petición inválido.' }, 400);
+    return jsonError('Cuerpo de la petición inválido.', 400);
   }
 
   const sectorId = input.sector as SectorId;
   const sector = sectorId && SECTORES[sectorId];
-  if (!sector) {
-    return json({ error: 'Selecciona un sector válido.' }, 400);
-  }
+  if (!sector) return jsonError('Selecciona un sector válido.', 400);
   if (!input.problema || !String(input.problema).trim()) {
-    return json({ error: 'Cuéntanos cuál es el problema principal.' }, 400);
+    return jsonError('Cuéntanos cuál es el problema principal.', 400);
   }
 
   const apiKey = import.meta.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     console.error('[vera] OPENROUTER_API_KEY no configurada en el entorno');
-    return json({ error: 'El asistente no está configurado todavía. Inténtalo más tarde.' }, 503);
+    return jsonError('El asistente no está configurado todavía. Mira un ejemplo mientras tanto.', 503);
   }
 
   const model = import.meta.env.OPENROUTER_MODEL || 'openai/gpt-4o';
-
   const payload: VeraInput = {
     sector: sectorId,
     tipoNegocio: String(input.tipoNegocio || '').slice(0, 500),
@@ -148,7 +162,7 @@ export const POST: APIRoute = async ({ request }) => {
         model,
         temperature: 0.6,
         max_tokens: 1500,
-        response_format: { type: 'json_object' },
+        stream: true,
         messages: [
           { role: 'system', content: buildSystemPrompt(sector) },
           { role: 'user', content: buildUserPrompt(payload) },
@@ -157,24 +171,58 @@ export const POST: APIRoute = async ({ request }) => {
     });
   } catch (err) {
     console.error('[vera] Error de red llamando a OpenRouter:', err);
-    return json({ error: 'No se pudo contactar con el asistente. Inténtalo en unos minutos.' }, 502);
+    return jsonError('No se pudo contactar con el asistente. Inténtalo en unos minutos.', 502);
   }
 
-  if (!upstream.ok) {
+  if (!upstream.ok || !upstream.body) {
     const detail = await upstream.text().catch(() => '');
-    console.error('[vera] OpenRouter respondió', upstream.status, detail.slice(0, 500));
-    return json({ error: 'El asistente no pudo generar la propuesta. Inténtalo de nuevo.' }, 502);
+    console.error('[vera] OpenRouter respondió', upstream.status, detail.slice(0, 300));
+    return jsonError('El asistente no pudo generar la propuesta. Inténtalo de nuevo.', 502);
   }
 
-  let proposal: unknown;
-  try {
-    const data = await upstream.json();
-    const content = data?.choices?.[0]?.message?.content;
-    proposal = typeof content === 'string' ? JSON.parse(content) : content;
-  } catch (err) {
-    console.error('[vera] No se pudo parsear la respuesta del modelo:', err);
-    return json({ error: 'La respuesta del asistente no tuvo el formato esperado. Inténtalo de nuevo.' }, 502);
-  }
+  /* Parsear el SSE de OpenRouter en el servidor y reenviar solo el texto. */
+  const reader = upstream.body.getReader();
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let buffer = '';
 
-  return json({ sector: sector.nombre, proposal });
+  const stream = new ReadableStream<Uint8Array>({
+    async pull(controller) {
+      const { done, value } = await reader.read();
+      if (done) {
+        controller.close();
+        return;
+      }
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        const t = line.trim();
+        if (!t.startsWith('data:')) continue;
+        const data = t.slice(5).trim();
+        if (data === '[DONE]') {
+          controller.close();
+          return;
+        }
+        try {
+          const json = JSON.parse(data);
+          const delta = json?.choices?.[0]?.delta?.content;
+          if (delta) controller.enqueue(encoder.encode(delta));
+        } catch {
+          /* línea de keep-alive o fragmento parcial: ignorar */
+        }
+      }
+    },
+    cancel() {
+      reader.cancel().catch(() => { /* noop */ });
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'no-store',
+      'X-Accel-Buffering': 'no',
+    },
+  });
 };
