@@ -5,6 +5,7 @@ import Footer from '../../components/layout/Footer.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
 import { pueblos, getPueblosByComarca, type Pueblo } from '../../data/pueblos-almeria';
+import { esPuebloIndexable } from '../../data/pueblos-indexables';
 
 export async function getStaticPaths() {
   return pueblos
@@ -85,11 +86,17 @@ const description = pueblo.sectorPrincipal
   ? `Diseño web en ${pueblo.nombre} para ${pueblo.sectorPrincipal.slice(0, 45)}. Desde 500€ con hosting gratis de por vida. Presupuesto en 24h.`
   : `Diseño web en ${pueblo.nombre}, ${pueblo.comarca}. Desde 500€ con hosting gratis. SEO local incluido. Presupuesto gratis en 24h.`;
 
+// Indexación selectiva: solo los pueblos del Tier 1 (lista blanca) se indexan.
+// El resto se sirve con noindex para evitar el estado "Descubierta: actualmente
+// sin indexar" provocado por el exceso de landings locales casi idénticas.
+const noindex = !esPuebloIndexable(pueblo.slug);
+
 ---
 
 <BaseLayout
   title={title}
   description={description}
+  noindex={noindex}
   canonical={`https://platanitorico.com/diseno-web/${pueblo.slug}/`}
   image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
   imageAlt={`Diseño web en ${pueblo.nombre} - Platanito Rico`}

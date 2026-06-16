@@ -6,6 +6,8 @@ import vercel from '@astrojs/vercel';
 
 import react from '@astrojs/react';
 
+import { PUEBLOS_INDEXABLES } from './src/data/pueblos-indexables.ts';
+
 /** @typedef {import('@astrojs/sitemap').SitemapItem} SitemapItem */
 
 // Fecha de build para el lastmod del sitemap (refleja el último despliegue
@@ -49,7 +51,12 @@ export default defineConfig({
       ];
       if (excludedPaths.some(ep => path.startsWith(ep.replace(/\/$/, '')))) return false;
 
-      // Todas las páginas /diseno-web/ se indexan (contenido único por pueblo)
+      // Landings de pueblos: solo el Tier 1 (lista blanca) entra al sitemap.
+      // El resto se genera con noindex, así que tampoco debe aparecer aquí.
+      // El hub /diseno-web/ (sin slug) no coincide y se mantiene.
+      const puebloMatch = path.match(/^\/diseno-web\/([^/]+)\/?$/);
+      if (puebloMatch) return PUEBLOS_INDEXABLES.has(puebloMatch[1]);
+
       return true;
     },
     /**

@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Contact from '../components/sections/Contact.astro';
-import { comarcas, getPueblosByComarca } from '../data/pueblos-almeria';
+import { comarcas, getPueblosByComarca, comarcaSlug } from '../data/pueblos-almeria';
 
 type Post = CollectionEntry<'posts'>;
 
@@ -774,26 +774,20 @@ const faqHome = [
           ))}
         </ul>
 
-        {/* Comarcas */}
+        {/* Comarcas — enlazado en cascada: cada comarca lleva al hub /diseno-web/
+            (a su sección), en lugar de volcar las ~90 localidades aquí. Concentra
+            el link equity en el hub y evita enlazar páginas noindex desde la home. */}
         <h3 class="text-meta ho-cover-h3">★ Por comarcas</h3>
         <div class="ho-comarcas">
           {comarcas.map(comarca => {
             const list = getPueblosByComarca(comarca);
+            if (!list.length) return null;
             return (
-              <details class="ho-comarca" name="comarca">
-                <summary class="ho-comarca__sum">
-                  <span class="ho-comarca__name heading-display">{comarca}</span>
-                  <span class="ho-comarca__count text-mono">{list.length} localidades</span>
-                  <span class="ho-comarca__toggle" aria-hidden="true">+</span>
-                </summary>
-                <div class="ho-comarca__items">
-                  {list.map(p => (
-                    <a href={`/diseno-web/${p.slug}/`} class="tag-brutal ho-comarca__chip">
-                      {p.nombre}
-                    </a>
-                  ))}
-                </div>
-              </details>
+              <a class="ho-comarca ho-comarca-link" href={`/diseno-web/#${comarcaSlug(comarca)}`}>
+                <span class="ho-comarca__name heading-display">{comarca}</span>
+                <span class="ho-comarca__count text-mono">{list.length} localidades</span>
+                <span class="ho-comarca__toggle" aria-hidden="true">→</span>
+              </a>
             );
           })}
         </div>
@@ -1859,13 +1853,13 @@ const faqHome = [
   @media (min-width: 768px) { .ho-comarcas { grid-template-columns: 1fr 1fr; } }
   .ho-comarca { background: var(--ho-paper); border-bottom: 1px solid var(--ho-ink); }
   @media (min-width: 768px) { .ho-comarca:nth-child(odd) { border-right: 1px solid var(--ho-ink); } }
-  .ho-comarca[open] { background: var(--ho-paper-2); }
-  .ho-comarca__sum {
+  .ho-comarca-link {
     display: grid; grid-template-columns: 1fr auto auto;
     align-items: center; gap: 1rem;
-    padding: 1.25rem 1.5rem; cursor: pointer; list-style: none;
+    padding: 1.25rem 1.5rem; text-decoration: none; color: inherit;
+    transition: background .15s;
   }
-  .ho-comarca__sum::-webkit-details-marker { display: none; }
+  .ho-comarca-link:hover { background: var(--ho-paper-2); }
   .ho-comarca__name { font-size: 1.4rem; line-height: 1; letter-spacing: -.025em; }
   .ho-comarca__count { font-size: .65rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
   .ho-comarca__toggle {
@@ -1875,9 +1869,7 @@ const faqHome = [
     font-family: var(--font-mono); font-weight: 700;
     transition: transform .25s, background .15s, color .15s;
   }
-  .ho-comarca[open] .ho-comarca__toggle { background: var(--ho-accent); color: var(--ho-paper); transform: rotate(45deg); }
-  .ho-comarca__items { padding: 0 1.5rem 1.5rem; display: flex; flex-wrap: wrap; gap: .35rem; }
-  .ho-comarca__chip:hover { background: var(--ho-ink); color: var(--ho-lime); }
+  .ho-comarca-link:hover .ho-comarca__toggle { background: var(--ho-accent); color: var(--ho-paper); transform: translateX(2px); }
   .ho-cover-cta { margin-top: 3rem; text-align: center; }
 
   /* ═══════════════════════════════════════════════════════ */

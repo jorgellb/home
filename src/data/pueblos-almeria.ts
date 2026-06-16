@@ -3237,6 +3237,17 @@ export function getPueblosByComarca(comarca: string): Pueblo[] {
   return pueblos.filter((p) => p.comarca === comarca);
 }
 
+// Slug estable para anclas/enlaces de comarca
+// (ej. "Valle del Almanzora" -> "valle-del-almanzora")
+export function comarcaSlug(comarca: string): string {
+  return comarca
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '') // quitar diacríticos
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 // Obtener pueblos destacados
 export function getPueblosDestacados(): Pueblo[] {
   return pueblos.filter((p) => p.destacado);
