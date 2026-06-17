@@ -63,7 +63,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('[mapa-neuronal] OPENROUTER_API_KEY no configurada');
     return jsonError('El generador no está disponible ahora mismo.', 503);
   }
-  const model = import.meta.env.OPENROUTER_MODEL || 'openai/gpt-4o';
+  const model = import.meta.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
 
   const userPrompt = `Sector del negocio: ${sector}.${tipoNegocio ? ` Detalle: ${tipoNegocio}.` : ''}\nGenera la propuesta del Mapa Neuronal adaptada a este negocio.`;
 

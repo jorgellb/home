@@ -81,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('[asistente] OPENROUTER_API_KEY no configurada');
     return jsonError('El asistente no está disponible ahora mismo. Escríbenos a hola@platanitorico.com.', 503);
   }
-  const model = import.meta.env.OPENROUTER_MODEL || 'openai/gpt-4o';
+  const model = import.meta.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
 
   let upstream: Response;
   try {
