@@ -138,7 +138,7 @@ export default function VozAsistente() {
     };
     rec.onerror = (e: any) => {
       if (e?.error === 'not-allowed' || e?.error === 'service-not-allowed') {
-        setError('No tengo permiso para usar el micrófono. Actívalo en el candado 🔒 de la barra de direcciones.');
+        setError('No tengo permiso para el micrófono. Pulsa el icono a la izquierda de la dirección (controles del sitio) → Micrófono → Permitir, recarga y vuelve a intentarlo. Funciona mejor en Chrome.');
       } else if (e?.error === 'no-speech') {
         setError('No te he oído. Toca el micro y habla.');
       } else if (e?.error !== 'aborted') {
