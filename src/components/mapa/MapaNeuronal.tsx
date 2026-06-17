@@ -2,13 +2,34 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './MapaNeuronal.module.css';
 
 /* "Mapa Neuronal de la Empresa" — visualización animada (cerebro empresarial)
-   + agente que genera la propuesta del producto adaptada al sector. */
+   que CAMBIA según el sector y según los nodos que detecta la IA, + agente
+   que genera la propuesta del producto. */
 
 const SECTORES = [
   'Inmobiliaria', 'Clínica / Estética', 'Despacho profesional', 'Agencia',
   'Ecommerce', 'Reformas / Construcción', 'Hotel', 'Restaurante',
   'Consultoría', 'Logística', 'Educación', 'Otro',
 ];
+
+const DEFAULT_NODES = ['Clientes', 'Ventas', 'Oportunidades', 'Tareas', 'Documentos', 'Equipos', 'Procesos', 'Campañas', 'Facturas', 'Alertas', 'Métricas', 'Riesgos'];
+
+const SECTOR_NODES: Record<string, string[]> = {
+  'Inmobiliaria': ['Inmuebles', 'Propietarios', 'Compradores', 'Visitas', 'Contratos', 'Captación', 'Valoraciones', 'Leads', 'Agentes', 'Hipotecas', 'Cobros', 'Riesgos'],
+  'Clínica / Estética': ['Pacientes', 'Citas', 'Tratamientos', 'Historiales', 'Recordatorios', 'Consentimientos', 'Reseñas', 'Reactivación', 'Profesionales', 'Stock', 'Cobros', 'Ausencias'],
+  'Despacho profesional': ['Clientes', 'Expedientes', 'Plazos', 'Documentos', 'Facturación', 'Citas', 'Cobros', 'Cumplimiento', 'Tareas', 'Equipo', 'Honorarios', 'Riesgos'],
+  'Agencia': ['Clientes', 'Campañas', 'Leads', 'Creatividades', 'Tareas', 'Métricas', 'Presupuestos', 'Equipos', 'Entregables', 'Reuniones', 'Facturas', 'Retrasos'],
+  'Ecommerce': ['Clientes', 'Pedidos', 'Productos', 'Stock', 'Carritos', 'Devoluciones', 'Campañas', 'Envíos', 'Reseñas', 'Pagos', 'Métricas', 'Incidencias'],
+  'Reformas / Construcción': ['Proyectos', 'Clientes', 'Presupuestos', 'Materiales', 'Equipos', 'Tareas', 'Plazos', 'Proveedores', 'Facturas', 'Visitas', 'Cobros', 'Retrasos'],
+  'Hotel': ['Reservas', 'Huéspedes', 'Habitaciones', 'Limpieza', 'Reseñas', 'Ingresos', 'Ocupación', 'Canales', 'Incidencias', 'Personal', 'Upselling', 'Cancelaciones'],
+  'Restaurante': ['Reservas', 'Clientes', 'Mesas', 'Pedidos', 'Turnos', 'Reseñas', 'Stock', 'Proveedores', 'Ingresos', 'No-shows', 'Menú', 'Incidencias'],
+  'Consultoría': ['Clientes', 'Proyectos', 'Propuestas', 'Tareas', 'Hitos', 'Documentos', 'Facturación', 'Equipo', 'Reuniones', 'Cobros', 'Oportunidades', 'Riesgos'],
+  'Logística': ['Pedidos', 'Rutas', 'Vehículos', 'Almacén', 'Stock', 'Entregas', 'Incidencias', 'Clientes', 'Costes', 'Proveedores', 'Tiempos', 'Retrasos'],
+  'Educación': ['Alumnos', 'Cursos', 'Matrículas', 'Profesores', 'Pagos', 'Asistencia', 'Tareas', 'Resultados', 'Leads', 'Reseñas', 'Bajas', 'Calendario'],
+  'Otro': DEFAULT_NODES,
+};
+
+const PALETTE = ['#4fe3ff', '#8ad753', '#9b7bff', '#ffd24a', '#ff9b3a', '#c6ff3a', '#18e0ff', '#5eead4'];
+const isAlert = (s: string) => /riesg|alert|incidenc|bloque|retras|moros|impag|ausenc|cancela|no-show|baja|devoluc/i.test(s);
 
 /* ---- markdown → HTML (subconjunto seguro) ---- */
 function esc(s: string) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -28,18 +49,52 @@ function mdToHtml(md: string): string {
   close(); return html;
 }
 function title(md: string) { const l = md.split('\n').find((x) => /^#\s+/.test(x.trim()) && !x.trim().startsWith('## ')); return l ? l.trim().replace(/^#\s+/, '') : ''; }
+/* extrae los nodos de la sección "## Los nodos..." de la propuesta */
+function parseNodes(md: string): string[] {
+  const lines = md.split('\n'); let cap = false; const out: string[] = [];
+  for (const l of lines) {
+    const t = l.trim();
+    if (t.startsWith('## ')) { if (cap) break; cap = /nodos/i.test(t); continue; }
+    if (cap) {
+      const m = t.match(/^[-*]\s+(.*)$/);
+      if (m) { const b = m[1].match(/\*\*([^*]+)\*\*/); const s = (b ? b[1] : m[1].split(/[–\-:(]/)[0]).trim(); if (s) out.push(s.slice(0, 16)); }
+    }
+  }
+  return out;
+}
 
 type Phase = 'idle' | 'streaming' | 'result' | 'error';
 
 export default function MapaNeuronal() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const nodesRef = useRef<{ l: string; c: string; alert: boolean; ang: number; rr: number; ph: number }[]>([]);
+  const pairsRef = useRef<[number, number][]>([]);
+
   const [sector, setSector] = useState<string | null>(null);
   const [tipo, setTipo] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [md, setMd] = useState('');
   const [error, setError] = useState('');
 
-  /* ───────── Visualización del cerebro empresarial ───────── */
+  function setGraph(labels: string[]) {
+    const ls = labels.filter(Boolean).slice(0, 12);
+    nodesRef.current = ls.map((l, i, a) => ({
+      l: l.toUpperCase(),
+      alert: isAlert(l),
+      c: isAlert(l) ? '#ff6b6b' : PALETTE[i % PALETTE.length],
+      ang: (i / a.length) * Math.PI * 2,
+      rr: 0.74 + 0.16 * (i % 3),
+      ph: Math.random() * Math.PI * 2,
+    }));
+    const n = ls.length;
+    const pairs: [number, number][] = [];
+    for (let i = 0; i < n; i++) { const j = (i + 2 + (i % 3)) % n; if (i !== j) pairs.push([i, j]); }
+    pairsRef.current = pairs.slice(0, Math.min(10, n));
+  }
+  // grafo inicial
+  if (!nodesRef.current.length) setGraph(DEFAULT_NODES);
+
+  /* ───────── Visualización ───────── */
   useEffect(() => {
     const canvas = canvasRef.current;
     const parent = canvas?.parentElement;
@@ -49,21 +104,13 @@ export default function MapaNeuronal() {
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     let W = 0, H = 0;
     const resize = () => {
-      W = parent.clientWidth; H = parent.clientHeight;
+      W = parent.clientWidth || 320; H = parent.clientHeight || 360;
       canvas.width = W * DPR; canvas.height = H * DPR;
       canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     };
     resize();
     const ro = new ResizeObserver(resize); ro.observe(parent);
-
-    const NODES = [
-      { l: 'CLIENTES', c: '#4fe3ff' }, { l: 'VENTAS', c: '#8ad753' }, { l: 'OPORTUNIDADES', c: '#8ad753' },
-      { l: 'TAREAS', c: '#ffd24a' }, { l: 'DOCUMENTOS', c: '#9b7bff' }, { l: 'EQUIPOS', c: '#4fe3ff' },
-      { l: 'PROCESOS', c: '#9b7bff' }, { l: 'CAMPAÑAS', c: '#ff9b3a' }, { l: 'FACTURAS', c: '#c6ff3a' },
-      { l: 'ALERTAS', c: '#ff6b6b' }, { l: 'MÉTRICAS', c: '#18e0ff' }, { l: 'RIESGOS', c: '#ff6b6b' },
-    ].map((n, i, a) => ({ ...n, ang: (i / a.length) * Math.PI * 2, rr: 0.74 + 0.16 * (i % 3), ph: Math.random() * Math.PI * 2 }));
-    const PAIRS = [[0, 1], [1, 2], [0, 4], [3, 6], [4, 9], [7, 2], [5, 3], [10, 1], [8, 1], [9, 3]];
 
     let t = 0, raf = 0;
     const dot = (x: number, y: number, r: number, color: string, blur: number) => {
@@ -76,13 +123,14 @@ export default function MapaNeuronal() {
       ctx.clearRect(0, 0, W, H);
       const cx = W * 0.5, cy = H * 0.5;
       const ringR = Math.min(W, H) * 0.42;
+      const NODES = nodesRef.current;
+      const PAIRS = pairsRef.current;
       const pts = NODES.map((n) => {
         const ang = n.ang + 0.08 * Math.sin(t * 0.25 + n.ph);
         const rad = ringR * n.rr + 6 * Math.sin(t * 0.8 + n.ph);
-        return { x: cx + Math.cos(ang) * rad, y: cy + Math.sin(ang) * rad * 0.82, c: n.c, l: n.l };
+        return { x: cx + Math.cos(ang) * rad, y: cy + Math.sin(ang) * rad * 0.82, c: n.c, l: n.l, alert: n.alert };
       });
 
-      // conexiones núcleo→nodo + pulsos
       pts.forEach((p, i) => {
         const grad = ctx.createLinearGradient(cx, cy, p.x, p.y);
         grad.addColorStop(0, 'rgba(120,200,255,0.05)');
@@ -92,9 +140,8 @@ export default function MapaNeuronal() {
         const f = ((t * 0.28 + i * 0.16) % 1);
         dot(cx + (p.x - cx) * f, cy + (p.y - cy) * f, 2, p.c, 8);
       });
-      // conexiones nodo↔nodo
       PAIRS.forEach(([a, b], i) => {
-        const pa = pts[a], pb = pts[b];
+        const pa = pts[a], pb = pts[b]; if (!pa || !pb) return;
         ctx.strokeStyle = 'rgba(150,180,230,0.07)'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
         const f = ((t * 0.22 + i * 0.27) % 1);
@@ -111,15 +158,12 @@ export default function MapaNeuronal() {
       ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(cx, cy, coreR * 2.4, 0, Math.PI * 2); ctx.fill();
       dot(cx, cy, coreR, '#bff0ff', 26);
 
-      // nodos + etiquetas
-      ctx.font = '600 10px ui-monospace, monospace';
-      ctx.textAlign = 'center';
+      ctx.font = '600 10px ui-monospace, monospace'; ctx.textAlign = 'center';
       pts.forEach((p) => {
-        const alert = p.c === '#ff6b6b';
-        const r = alert ? 5 + Math.abs(Math.sin(t * 3)) * 2 : 4.5;
+        const r = p.alert ? 5 + Math.abs(Math.sin(t * 3)) * 2 : 4.5;
         dot(p.x, p.y, r, p.c, 14);
-        if (alert) { ctx.strokeStyle = p.c + '88'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(p.x, p.y, r + 4 + Math.sin(t * 3) * 2, 0, Math.PI * 2); ctx.stroke(); }
-        ctx.fillStyle = 'rgba(220,235,250,0.78)';
+        if (p.alert) { ctx.strokeStyle = p.c + '88'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(p.x, p.y, r + 4 + Math.sin(t * 3) * 2, 0, Math.PI * 2); ctx.stroke(); }
+        ctx.fillStyle = 'rgba(220,235,250,0.82)';
         ctx.fillText(p.l, p.x, p.y - 11);
       });
 
@@ -132,9 +176,10 @@ export default function MapaNeuronal() {
   /* ───────── Agente ───────── */
   async function generate(sec: string) {
     setSector(sec);
+    setGraph(SECTOR_NODES[sec] || DEFAULT_NODES); // el grafo cambia al instante
     setPhase('streaming'); setMd(''); setError('');
     const ctrl = new AbortController();
-    const wd = setTimeout(() => ctrl.abort(), 30000);
+    const wd = setTimeout(() => ctrl.abort(), 45000);
     try {
       const res = await fetch('/api/mapa-neuronal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -145,14 +190,18 @@ export default function MapaNeuronal() {
         throw new Error(m);
       }
       const reader = res.body.getReader(); const dec = new TextDecoder(); let acc = '';
-      for (;;) { const { done, value } = await reader.read(); if (done) break; acc += dec.decode(value, { stream: true }); setMd(acc); }
+      for (;;) {
+        const { done, value } = await reader.read(); if (done) break;
+        acc += dec.decode(value, { stream: true }); setMd(acc);
+      }
+      const n = parseNodes(acc); if (n.length >= 4) setGraph(n); // el grafo se afina con los nodos reales de la IA
       setPhase('result');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error inesperado.'); setPhase('error');
     } finally { clearTimeout(wd); }
   }
 
-  function reset() { setPhase('idle'); setMd(''); setError(''); setSector(null); }
+  function reset() { setPhase('idle'); setMd(''); setError(''); setSector(null); setGraph(DEFAULT_NODES); }
 
   const streaming = phase === 'streaming';
 
@@ -161,7 +210,7 @@ export default function MapaNeuronal() {
       <div className={styles.stage}>
         <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
         <span className={styles.coreTag}>NÚCLEO · IA</span>
-        <span className={styles.liveTag}><i /> sistema vivo</span>
+        <span className={styles.liveTag}><i /> {sector ? sector : 'sistema vivo'}</span>
       </div>
 
       <div className={styles.panel}>
@@ -169,7 +218,7 @@ export default function MapaNeuronal() {
           <>
             <span className={styles.kicker}>✦ Demo · Inteligencia de negocio</span>
             <h3 className={styles.h3}>Genera el mapa neuronal de tu empresa</h3>
-            <p className={styles.lead}>Elige tu sector y la IA diseña, en vivo, cómo se vería tu negocio como un cerebro conectado: qué nodos, qué conexiones y qué detectaría.</p>
+            <p className={styles.lead}>Elige tu sector: el cerebro de la izquierda se reconfigura con tus nodos y la IA diseña, en vivo, qué conexiones, riesgos y oportunidades vería.</p>
             <div className={styles.chips}>
               {SECTORES.map((s) => (
                 <button key={s} className={styles.chip} onClick={() => generate(s)}>{s}</button>
