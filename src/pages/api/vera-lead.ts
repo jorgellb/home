@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
+import { rateLimit, clientIp } from '../../lib/rate-limit';
 
 /* Captura de leads del demo Vera AI. Recibe los datos de contacto + el contexto
    del negocio + la propuesta generada, y se lo envía al negocio por email
@@ -18,25 +19,6 @@ const SECTOR_NOMBRE: Record<string, string> = {
   clinica: 'Clínicas, estética y servicios locales',
   facturacion: 'Facturación digital e integraciones para pymes',
 };
-
-/* Rate limiting best-effort (en memoria) para evitar spam del endpoint. */
-const WINDOW_MS = 15 * 60 * 1000;
-const MAX_PER_IP = 8;
-const ipHits = new Map<string, number[]>();
-function clientIp(request: Request): string {
-  const xff = request.headers.get('x-forwarded-for');
-  if (xff) return xff.split(',')[0].trim();
-  return request.headers.get('x-real-ip') || 'unknown';
-}
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const arr = (ipHits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
-  if (arr.length >= MAX_PER_IP) return true;
-  arr.push(now);
-  ipHits.set(ip, arr);
-  if (ipHits.size > 5000) ipHits.clear();
-  return false;
-}
 
 function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -74,7 +56,8 @@ export const POST: APIRoute = async ({ request }) => {
   // Honeypot: si está relleno es un bot → OK silencioso.
   if (body[HONEYPOT_FIELD]) return json({ ok: true });
 
-  if (rateLimited(clientIp(request))) {
+  const rl = await rateLimit(`lead:${clientIp(request)}`, 8, 900);
+  if (!rl.ok) {
     return json({ error: 'Demasiados envíos. Inténtalo dentro de un rato.' }, 429);
   }
 
