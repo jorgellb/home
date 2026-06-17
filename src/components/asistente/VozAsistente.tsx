@@ -125,38 +125,15 @@ export default function VozAsistente() {
     speak(acc);
   }
 
-  async function startListening() {
+  function startListening() {
     setError('');
-    const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
-    try { synth?.cancel(); } catch { /* noop */ }
+    try { window.speechSynthesis?.cancel(); } catch { /* noop */ }
     const SR = getSR();
     if (!SR) { setSupported(false); return; }
 
-    // Preflight: pedir el micro y mantenerlo abierto para visualizar tu voz en el orbe.
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      micStreamRef.current = stream;
-      try {
-        const AC: any = (window as any).AudioContext || (window as any).webkitAudioContext;
-        const ctx = new AC();
-        audioCtxRef.current = ctx;
-        const src = ctx.createMediaStreamSource(stream);
-        const an = ctx.createAnalyser();
-        an.fftSize = 256;
-        src.connect(an);
-        analyserRef.current = an;
-      } catch { /* sin visualización; el orbe sigue animando */ }
-    } catch (err: any) {
-      const n = err?.name || 'Error';
-      if (n === 'NotAllowedError' || n === 'SecurityError') setError('El micrófono está bloqueado para esta web. Permítelo en los ajustes del sitio (icono a la izquierda de la dirección) y recarga.');
-      else if (n === 'NotFoundError') setError('No se ha encontrado ningún micrófono en este dispositivo.');
-      else if (n === 'NotReadableError') setError('El micrófono lo está usando otra aplicación. Ciérrala e inténtalo de nuevo.');
-      else setError(`No se pudo acceder al micrófono (${n}).`);
-      stopMic();
-      setPhase('idle');
-      return;
-    }
-
+    // Arrancamos el reconocimiento DIRECTAMENTE dentro del toque del usuario
+    // (requisito en móvil) y dejamos que él gestione el micrófono. Sin preflight
+    // de getUserMedia: en móvil el micro es exclusivo y bloquearía la escucha.
     const rec = new SR();
     recRef.current = rec;
     rec.lang = 'es-ES';
