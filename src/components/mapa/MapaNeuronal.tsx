@@ -174,7 +174,7 @@ export default function MapaNeuronal() {
   }, []);
 
   /* ───────── Agente ───────── */
-  async function generate(sec: string) {
+  async function generate(sec: string, detail = '') {
     setSector(sec);
     setGraph(SECTOR_NODES[sec] || DEFAULT_NODES); // el grafo cambia al instante
     setPhase('streaming'); setMd(''); setError('');
@@ -183,7 +183,7 @@ export default function MapaNeuronal() {
     try {
       const res = await fetch('/api/mapa-neuronal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sector: sec, tipoNegocio: tipo }), signal: ctrl.signal,
+        body: JSON.stringify({ sector: sec, tipoNegocio: detail }), signal: ctrl.signal,
       });
       if (!res.ok || !res.body) {
         let m = 'No se pudo generar el mapa.'; try { const j = await res.json(); if (j?.error) m = j.error; } catch { /* noop */ }
@@ -218,13 +218,23 @@ export default function MapaNeuronal() {
           <>
             <span className={styles.kicker}>✦ Demo · Inteligencia de negocio</span>
             <h3 className={styles.h3}>Genera el mapa neuronal de tu empresa</h3>
-            <p className={styles.lead}>Elige tu sector: el cerebro de la izquierda se reconfigura con tus nodos y la IA diseña, en vivo, qué conexiones, riesgos y oportunidades vería.</p>
+            <p className={styles.lead}>Escribe a qué se dedica tu empresa: el cerebro de la izquierda se reconfigura con tus nodos y la IA diseña, en vivo, sus conexiones, riesgos y oportunidades.</p>
+            <div className={styles.genrow}>
+              <input
+                className={styles.input}
+                value={tipo}
+                onChange={(e) => setTipo(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter' && tipo.trim()) generate(tipo.trim()); }}
+                placeholder="Ej.: agencia inmobiliaria en Vera, clínica dental…"
+              />
+              <button className={styles.gen} onClick={() => tipo.trim() && generate(tipo.trim())} disabled={!tipo.trim()}>✦ Generar</button>
+            </div>
+            <span className={styles.orline}>o elige un sector</span>
             <div className={styles.chips}>
               {SECTORES.map((s) => (
-                <button key={s} className={styles.chip} onClick={() => generate(s)}>{s}</button>
+                <button key={s} className={styles.chip} onClick={() => generate(s, tipo.trim())}>{s}</button>
               ))}
             </div>
-            <input className={styles.input} value={tipo} onChange={(e) => setTipo(e.target.value)} placeholder="Opcional: describe tu negocio en una frase…" />
           </>
         )}
 
