@@ -96,7 +96,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (!upstream.ok || !upstream.body) {
     const detail = await upstream.text().catch(() => '');
     console.error('[mapa-neuronal] OpenRouter', upstream.status, detail.slice(0, 300));
-    return jsonError('No se pudo generar la propuesta. Inténtalo de nuevo.', 502);
+    return jsonError(`OpenRouter ${upstream.status}: ${detail.slice(0, 280)}`, 502);
   }
 
   return new Response(sseToText(upstream.body), {
