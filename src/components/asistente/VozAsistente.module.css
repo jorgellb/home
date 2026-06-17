@@ -31,38 +31,33 @@
 .dots i:nth-child(3) { animation-delay: .3s; }
 @keyframes vbounce { 0%,60%,100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
 
-/* ─── Escenario del micro ─── */
-.stage { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem 0; }
-.mic {
+/* ─── Escenario: orbe 3D + micro ─── */
+.stage { display: flex; flex-direction: column; align-items: center; gap: .9rem; padding: 1rem 0 1.5rem; }
+.orb {
   position: relative;
-  width: 116px; height: 116px;
+  width: min(280px, 72vw); height: min(280px, 72vw);
+  display: flex; align-items: center; justify-content: center;
   border-radius: 50%;
-  border: 3px solid #fff;
-  background: #FF6B35;
-  cursor: pointer;
+  transition: background .4s;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.22), transparent 68%);
+}
+.orb > div { width: 100%; height: 100%; }
+.orb_listening { background: radial-gradient(circle at 50% 50%, rgba(24, 224, 255, 0.30), transparent 68%); }
+.orb_thinking { background: radial-gradient(circle at 50% 50%, rgba(139, 147, 167, 0.22), transparent 68%); }
+.orb_speaking { background: radial-gradient(circle at 50% 50%, rgba(138, 215, 83, 0.30), transparent 68%); }
+
+.mic {
+  width: 64px; height: 64px; border-radius: 50%; border: 2.5px solid #fff;
+  background: #FF6B35; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: transform .15s, background .2s, box-shadow .2s;
-  box-shadow: 0 10px 30px -8px rgba(255, 107, 53, 0.6);
+  box-shadow: 0 8px 20px -6px rgba(255, 107, 53, 0.6);
 }
-.mic:hover { transform: scale(1.04); }
-.micIco { font-size: 2.6rem; line-height: 1; position: relative; z-index: 2; }
-.micGlow {
-  position: absolute; inset: -3px; border-radius: 50%; z-index: 1;
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
-}
-
-/* Estados */
-.mic_listening { background: #18e0ff; box-shadow: 0 10px 30px -8px rgba(24, 224, 255, 0.7); }
-.mic_listening .micGlow { animation: ring 1.3s infinite; }
+.mic:hover { transform: scale(1.06); }
+.micIco { font-size: 1.5rem; line-height: 1; }
+.mic_listening { background: #18e0ff; box-shadow: 0 8px 20px -6px rgba(24, 224, 255, 0.7); }
 .mic_thinking { background: #6b7280; box-shadow: none; }
-.mic_thinking .micGlow { animation: ring 2s infinite; }
-.mic_speaking { background: #8AD753; box-shadow: 0 10px 30px -8px rgba(138, 215, 83, 0.7); }
-.mic_speaking .micGlow { animation: ring 1s infinite; }
-@keyframes ring {
-  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45); }
-  70% { box-shadow: 0 0 0 26px rgba(255, 255, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-}
+.mic_speaking { background: #8AD753; box-shadow: 0 8px 20px -6px rgba(138, 215, 83, 0.7); }
 
 .label { font-family: var(--font-display, sans-serif); font-size: 1.15rem; font-weight: 800; color: #fff; margin: 0; }
 .interimLine { font-size: .95rem; color: #9fb4ff; font-style: italic; margin: -.3rem 0 0; max-width: 40ch; }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './VozAsistente.module.css';
+import VeraOrb from './VeraOrb';
 
 /* Asistente de VOZ de Platanito Rico. Hablas por el micro (Web Speech API STT),
    la pregunta va a /api/asistente (mismo cerebro que el chat) y la respuesta se
@@ -30,6 +31,20 @@ export default function VozAsistente() {
   const messagesRef = useRef<ChatMessage[]>([]);
   const logRef = useRef<HTMLDivElement>(null);
 
+  // Audio reactivo para el orbe
+  const micStreamRef = useRef<MediaStream | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const levelRef = useRef(0);
+
+  function stopMic() {
+    analyserRef.current = null;
+    try { audioCtxRef.current?.close(); } catch { /* noop */ }
+    audioCtxRef.current = null;
+    micStreamRef.current?.getTracks().forEach((tk) => tk.stop());
+    micStreamRef.current = null;
+  }
+
   useEffect(() => { phaseRef.current = phase; }, [phase]);
   useEffect(() => { mutedRef.current = muted; }, [muted]);
   useEffect(() => { messagesRef.current = messages; }, [messages]);
@@ -46,6 +61,7 @@ export default function VozAsistente() {
       synth?.removeEventListener?.('voiceschanged', load);
       try { synth?.cancel(); } catch { /* noop */ }
       try { recRef.current?.abort?.(); } catch { /* noop */ }
+      stopMic();
     };
   }, []);
 
@@ -59,6 +75,7 @@ export default function VozAsistente() {
     if (v) u.voice = v;
     u.rate = 1.03;
     u.onstart = () => setPhase('speaking');
+    u.onboundary = () => { levelRef.current = 1; }; // pico por palabra → el orbe "habla"
     u.onend = () => setPhase('idle');
     u.onerror = () => setPhase('idle');
     synth.speak(u);
@@ -115,16 +132,27 @@ export default function VozAsistente() {
     const SR = getSR();
     if (!SR) { setSupported(false); return; }
 
-    // Preflight: pedir el micro explícitamente (prompt claro + confirma dispositivo).
+    // Preflight: pedir el micro y mantenerlo abierto para visualizar tu voz en el orbe.
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach((tk) => tk.stop());
+      micStreamRef.current = stream;
+      try {
+        const AC: any = (window as any).AudioContext || (window as any).webkitAudioContext;
+        const ctx = new AC();
+        audioCtxRef.current = ctx;
+        const src = ctx.createMediaStreamSource(stream);
+        const an = ctx.createAnalyser();
+        an.fftSize = 256;
+        src.connect(an);
+        analyserRef.current = an;
+      } catch { /* sin visualización; el orbe sigue animando */ }
     } catch (err: any) {
       const n = err?.name || 'Error';
       if (n === 'NotAllowedError' || n === 'SecurityError') setError('El micrófono está bloqueado para esta web. Permítelo en los ajustes del sitio (icono a la izquierda de la dirección) y recarga.');
       else if (n === 'NotFoundError') setError('No se ha encontrado ningún micrófono en este dispositivo.');
       else if (n === 'NotReadableError') setError('El micrófono lo está usando otra aplicación. Ciérrala e inténtalo de nuevo.');
       else setError(`No se pudo acceder al micrófono (${n}).`);
+      stopMic();
       setPhase('idle');
       return;
     }
@@ -147,6 +175,7 @@ export default function VozAsistente() {
       if (fin.trim()) {
         setInterim('');
         try { rec.stop(); } catch { /* noop */ }
+        stopMic();
         ask(fin.trim());
       }
     };
@@ -163,9 +192,10 @@ export default function VozAsistente() {
       } else if (code !== 'aborted') {
         setError(`Reconocimiento de voz no disponible (error: ${code}). Funciona mejor en Chrome de escritorio.`);
       }
+      stopMic();
       if (phaseRef.current === 'listening') setPhase('idle');
     };
-    rec.onend = () => { if (phaseRef.current === 'listening') setPhase('idle'); };
+    rec.onend = () => { stopMic(); if (phaseRef.current === 'listening') setPhase('idle'); };
 
     try { rec.start(); setPhase('listening'); setInterim(''); }
     catch (err: any) { setError(`No se pudo iniciar el micrófono (${err?.name || 'error'}).`); setPhase('idle'); }
@@ -174,6 +204,7 @@ export default function VozAsistente() {
   function stopAll() {
     try { recRef.current?.stop?.(); } catch { /* noop */ }
     try { window.speechSynthesis?.cancel(); } catch { /* noop */ }
+    stopMic();
     setPhase('idle');
     setInterim('');
   }
@@ -227,12 +258,14 @@ export default function VozAsistente() {
       )}
 
       <div className={styles.stage}>
+        <div className={`${styles.orb} ${styles['orb_' + phase]}`}>
+          <VeraOrb phase={phase} analyserRef={analyserRef} levelRef={levelRef} />
+        </div>
         <button
           className={`${styles.mic} ${styles['mic_' + phase]}`}
           onClick={onMic}
           aria-label={phase === 'idle' ? 'Empezar a hablar' : 'Parar'}
         >
-          <span className={styles.micGlow} aria-hidden="true" />
           <span className={styles.micIco} aria-hidden="true">
             {phase === 'listening' ? '■' : phase === 'speaking' ? '🔊' : '🎙️'}
           </span>
