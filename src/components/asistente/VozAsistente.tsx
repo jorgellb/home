@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './VozAsistente.module.css';
-import VeraAvatar from './VeraAvatar';
+import VeraOrb from './VeraOrb';
 
 /* Asistente de VOZ de Platanito Rico. Hablas por el micro (Web Speech API STT),
    la pregunta va a /api/asistente (mismo cerebro que el chat) y la respuesta se
@@ -252,7 +252,7 @@ export default function VozAsistente() {
 
       <div className={styles.stage}>
         <div className={`${styles.orb} ${styles['orb_' + phase]}`}>
-          <VeraAvatar phase={phase} analyserRef={analyserRef} levelRef={levelRef} />
+          <VeraOrb phase={phase} analyserRef={analyserRef} levelRef={levelRef} />
         </div>
         <button
           className={`${styles.mic} ${styles['mic_' + phase]}`}
