@@ -35,18 +35,19 @@ export default function VeraAvatar({ phase, analyserRef, levelRef }: Props) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(w, h);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 0.78;
     mount.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
     const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.45).texture;
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    (scene as unknown as { environmentIntensity: number }).environmentIntensity = 0.5;
 
     const fov = 22;
     const camera = new THREE.PerspectiveCamera(fov, w / h, 0.1, 100);
 
-    const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(1, 1.5, 2); scene.add(key);
-    const fill = new THREE.DirectionalLight(0xbcd4ff, 0.5); fill.position.set(-2, 0, 1); scene.add(fill);
+    // Un único foco suave para dar volumen (el resto, el entorno).
+    const key = new THREE.DirectionalLight(0xffffff, 0.45); key.position.set(0.8, 1.2, 2.5); scene.add(key);
 
     const audioData = new Uint8Array(128);
     function micLevel(): number {
