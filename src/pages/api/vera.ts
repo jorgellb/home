@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
+import { sseToText } from '../../lib/sse-stream';
 
 /* Vera AI Business Agent — endpoint server (Vercel Function), con streaming.
    La API key de OpenRouter vive SOLO aquí (entorno), nunca en el navegador.
@@ -213,35 +214,7 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('El asistente no pudo generar la propuesta. Inténtalo de nuevo.', 502);
   }
 
-  /* Parsear el SSE de OpenRouter en el servidor y reenviar solo el texto. */
-  const reader = upstream.body.getReader();
-  const decoder = new TextDecoder();
-  const encoder = new TextEncoder();
-  let buffer = '';
-
-  const stream = new ReadableStream<Uint8Array>({
-    async pull(controller) {
-      const { done, value } = await reader.read();
-      if (done) { controller.close(); return; }
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop() || '';
-      for (const line of lines) {
-        const t = line.trim();
-        if (!t.startsWith('data:')) continue;
-        const data = t.slice(5).trim();
-        if (data === '[DONE]') { controller.close(); return; }
-        try {
-          const jsonChunk = JSON.parse(data);
-          const delta = jsonChunk?.choices?.[0]?.delta?.content;
-          if (delta) controller.enqueue(encoder.encode(delta));
-        } catch { /* keep-alive o fragmento parcial */ }
-      }
-    },
-    cancel() { reader.cancel().catch(() => { /* noop */ }); },
-  });
-
-  return new Response(stream, {
+  return new Response(sseToText(upstream.body), {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'no-store',
