@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import styles from './VeraAgent.module.css';
 
 /* Vera AI Business Agent — wizard de 5 pasos. Llama a /api/vera en streaming y
@@ -162,6 +162,14 @@ export default function VeraAgent() {
   const [copied, setCopied] = useState('');
   const exampleTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Captura de lead
+  const [leadPhase, setLeadPhase] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [leadName, setLeadName] = useState('');
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadContacto, setLeadContacto] = useState('');
+  const [leadHoneypot, setLeadHoneypot] = useState('');
+  const [leadError, setLeadError] = useState('');
+
   useEffect(() => () => { if (exampleTimer.current) clearInterval(exampleTimer.current); }, []);
 
   const activeSector = SECTORES.find((s) => s.id === sector);
@@ -236,6 +244,37 @@ export default function VeraAgent() {
     setIsExample(false);
     setError('');
     setCopied('');
+    setLeadPhase('idle');
+    setLeadName('');
+    setLeadEmail('');
+    setLeadContacto('');
+    setLeadError('');
+  }
+
+  async function submitLead(e: FormEvent) {
+    e.preventDefault();
+    if (!leadEmail.trim() && !leadContacto.trim()) {
+      setLeadError('Déjanos un email o un teléfono/WhatsApp.');
+      return;
+    }
+    setLeadPhase('sending');
+    setLeadError('');
+    try {
+      const res = await fetch('/api/vera-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: leadName, email: leadEmail, contacto: leadContacto, company_url: leadHoneypot,
+          sector, tipoNegocio, problema, objetivo, presupuesto, proposal: md, isExample,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string })?.error || 'No se pudo enviar.');
+      setLeadPhase('sent');
+    } catch (err) {
+      setLeadError(err instanceof Error ? err.message : 'Error al enviar.');
+      setLeadPhase('error');
+    }
   }
 
   function flash(what: string) {
@@ -306,9 +345,38 @@ export default function VeraAgent() {
               <button className={styles.toolBtn} onClick={share}>{copied === 'compartir' ? '✓ Copiado' : '↗ Compartir'}</button>
               <button className={styles.toolBtn} onClick={copyMensaje}>{copied === 'mensaje' ? '✓ Copiado' : '📋 Copiar mensaje comercial'}</button>
             </div>
+
+            {leadPhase === 'sent' ? (
+              <div className={styles.leadDone}>
+                <span className={styles.leadDoneIco} aria-hidden="true">✓</span>
+                <div>
+                  <b>¡Recibido!</b>
+                  <p>Te contactaremos pronto para preparar una demo real con tu caso.</p>
+                </div>
+              </div>
+            ) : (
+              <form className={styles.lead} onSubmit={submitLead}>
+                <h4 className={styles.leadTitle}>📩 ¿Lo quieres aplicado a tu negocio?</h4>
+                <p className={styles.leadSub}>Déjanos tus datos y te preparamos una demo real con tu caso, sin compromiso.</p>
+                <div className={styles.leadRow}>
+                  <input className={styles.leadInput} placeholder="Tu nombre (opcional)" value={leadName} onChange={(e) => setLeadName(e.target.value)} />
+                  <input className={styles.leadInput} type="email" placeholder="Tu email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} />
+                  <input className={styles.leadInput} placeholder="WhatsApp / teléfono" value={leadContacto} onChange={(e) => setLeadContacto(e.target.value)} />
+                </div>
+                <input
+                  className={styles.hp} tabIndex={-1} autoComplete="off" aria-hidden="true"
+                  value={leadHoneypot} onChange={(e) => setLeadHoneypot(e.target.value)}
+                />
+                {leadError && <p className={styles.leadErr}>{leadError}</p>}
+                <button className={styles.leadBtn} type="submit" disabled={leadPhase === 'sending'}>
+                  {leadPhase === 'sending' ? 'Enviando…' : 'Enviar y recibir mi demo →'}
+                </button>
+                <small className={styles.leadPriv}>Usaremos tus datos solo para contactarte sobre esta solución.</small>
+              </form>
+            )}
+
             <div className={styles.resultActions}>
               <button className={styles.secondary} onClick={reset}>↻ Probar otro negocio</button>
-              <a className={styles.primary} href="/contacto/">Quiero algo así para mi negocio →</a>
             </div>
             <p className={styles.disclaimer}>
               Propuesta {isExample ? 'de ejemplo ' : ''}generada por IA con fines de demostración. Los precios son orientativos y no constituyen una oferta.
