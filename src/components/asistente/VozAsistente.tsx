@@ -108,12 +108,26 @@ export default function VozAsistente() {
     speak(acc);
   }
 
-  function startListening() {
+  async function startListening() {
     setError('');
     const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
     try { synth?.cancel(); } catch { /* noop */ }
     const SR = getSR();
     if (!SR) { setSupported(false); return; }
+
+    // Preflight: pedir el micro explícitamente (prompt claro + confirma dispositivo).
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((tk) => tk.stop());
+    } catch (err: any) {
+      const n = err?.name || 'Error';
+      if (n === 'NotAllowedError' || n === 'SecurityError') setError('El micrófono está bloqueado para esta web. Permítelo en los ajustes del sitio (icono a la izquierda de la dirección) y recarga.');
+      else if (n === 'NotFoundError') setError('No se ha encontrado ningún micrófono en este dispositivo.');
+      else if (n === 'NotReadableError') setError('El micrófono lo está usando otra aplicación. Ciérrala e inténtalo de nuevo.');
+      else setError(`No se pudo acceder al micrófono (${n}).`);
+      setPhase('idle');
+      return;
+    }
 
     const rec = new SR();
     recRef.current = rec;
@@ -137,18 +151,24 @@ export default function VozAsistente() {
       }
     };
     rec.onerror = (e: any) => {
-      if (e?.error === 'not-allowed' || e?.error === 'service-not-allowed') {
-        setError('No tengo permiso para el micrófono. Pulsa el icono a la izquierda de la dirección (controles del sitio) → Micrófono → Permitir, recarga y vuelve a intentarlo. Funciona mejor en Chrome.');
-      } else if (e?.error === 'no-speech') {
+      const code = e?.error || 'desconocido';
+      if (code === 'not-allowed' || code === 'service-not-allowed') {
+        setError('Permiso de micrófono denegado. Actívalo en los ajustes del sitio y recarga (mejor en Chrome).');
+      } else if (code === 'network') {
+        setError('Chrome no pudo conectar con el servicio de voz (error de red). Suele ser por VPN o red restringida — prueba en otra red, o usa el chat.');
+      } else if (code === 'audio-capture') {
+        setError('No se pudo capturar audio. Revisa que el micrófono funcione y no lo use otra app.');
+      } else if (code === 'no-speech') {
         setError('No te he oído. Toca el micro y habla.');
-      } else if (e?.error !== 'aborted') {
-        setError('No se pudo escuchar. Inténtalo de nuevo.');
+      } else if (code !== 'aborted') {
+        setError(`Reconocimiento de voz no disponible (error: ${code}). Funciona mejor en Chrome de escritorio.`);
       }
       if (phaseRef.current === 'listening') setPhase('idle');
     };
     rec.onend = () => { if (phaseRef.current === 'listening') setPhase('idle'); };
 
-    try { rec.start(); setPhase('listening'); setInterim(''); } catch { /* ya iniciado */ }
+    try { rec.start(); setPhase('listening'); setInterim(''); }
+    catch (err: any) { setError(`No se pudo iniciar el micrófono (${err?.name || 'error'}).`); setPhase('idle'); }
   }
 
   function stopAll() {
