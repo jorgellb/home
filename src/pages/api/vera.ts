@@ -1,14 +1,12 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
-import { sseToText } from '../../lib/sse-stream';
+import { streamChatResponse } from '../../lib/openrouter';
 
 /* Vera AI Business Agent — endpoint server (Vercel Function), con streaming.
    La API key de OpenRouter vive SOLO aquí (entorno), nunca en el navegador.
    Devuelve la propuesta en markdown, en streaming, en español o inglés. */
 export const prerender = false;
 
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const SITE_URL = 'https://platanitorico.com';
 const APP_TITLE = 'Vera AI Business Agent';
 
 type SectorId = 'alquiler' | 'inmobiliaria' | 'restaurante' | 'clinica' | 'facturacion';
@@ -171,7 +169,6 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('El asistente no está configurado todavía. Mira un ejemplo mientras tanto.', 503);
   }
 
-  const model = import.meta.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
   const lang: Lang = input.lang === 'en' ? 'en' : 'es';
   const payload: VeraInput = {
     sector: sectorId,
@@ -182,43 +179,11 @@ export const POST: APIRoute = async ({ request }) => {
     lang,
   };
 
-  let upstream: Response;
-  try {
-    upstream = await fetch(OPENROUTER_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'HTTP-Referer': SITE_URL,
-        'X-Title': APP_TITLE,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.6,
-        max_tokens: 1500,
-        stream: true,
-        messages: [
-          { role: 'system', content: buildSystemPrompt(sector, lang) },
-          { role: 'user', content: buildUserPrompt(payload) },
-        ],
-      }),
-    });
-  } catch (err) {
-    console.error('[vera] Error de red llamando a OpenRouter:', err);
-    return jsonError('No se pudo contactar con el asistente. Inténtalo en unos minutos.', 502);
-  }
-
-  if (!upstream.ok || !upstream.body) {
-    const detail = await upstream.text().catch(() => '');
-    console.error('[vera] OpenRouter respondió', upstream.status, detail.slice(0, 300));
-    return jsonError('El asistente no pudo generar la propuesta. Inténtalo de nuevo.', 502);
-  }
-
-  return new Response(sseToText(upstream.body), {
-    headers: {
-      'Content-Type': 'text/plain; charset=utf-8',
-      'Cache-Control': 'no-store',
-      'X-Accel-Buffering': 'no',
-    },
+  return streamChatResponse({
+    apiKey, title: APP_TITLE, temperature: 0.6, maxTokens: 1500,
+    messages: [
+      { role: 'system', content: buildSystemPrompt(sector, lang) },
+      { role: 'user', content: buildUserPrompt(payload) },
+    ],
   });
 };

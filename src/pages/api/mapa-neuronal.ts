@@ -1,13 +1,11 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
-import { sseToText } from '../../lib/sse-stream';
+import { streamChatResponse } from '../../lib/openrouter';
 
 /* "Mapa Neuronal de la Empresa" — agente que diseña la propuesta del producto
    adaptada al sector del visitante. Streaming desde OpenRouter; key en servidor. */
 export const prerender = false;
 
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const SITE_URL = 'https://platanitorico.com';
 const APP_TITLE = 'Mapa Neuronal · Platanito Rico';
 
 const SYSTEM_PROMPT = `Eres un experto senior en diseño de producto digital, experiencia de usuario, visualización de datos, inteligencia de negocio e interfaces futuristas. Diseñas el concepto comercial de una solución llamada "Mapa Neuronal de la Empresa".
@@ -63,43 +61,13 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('[mapa-neuronal] OPENROUTER_API_KEY no configurada');
     return jsonError('El generador no está disponible ahora mismo.', 503);
   }
-  const model = import.meta.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
-
   const userPrompt = `Sector del negocio: ${sector}.${tipoNegocio ? ` Detalle: ${tipoNegocio}.` : ''}\nGenera la propuesta del Mapa Neuronal adaptada a este negocio.`;
 
-  let upstream: Response;
-  try {
-    upstream = await fetch(OPENROUTER_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'HTTP-Referer': SITE_URL,
-        'X-Title': APP_TITLE,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.7,
-        max_tokens: 1600,
-        stream: true,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: userPrompt },
-        ],
-      }),
-    });
-  } catch (err) {
-    console.error('[mapa-neuronal] red:', err);
-    return jsonError('No se pudo contactar con el generador. Inténtalo en un momento.', 502);
-  }
-
-  if (!upstream.ok || !upstream.body) {
-    const detail = await upstream.text().catch(() => '');
-    console.error('[mapa-neuronal] OpenRouter', upstream.status, detail.slice(0, 300));
-    return jsonError(`OpenRouter ${upstream.status}: ${detail.slice(0, 280)}`, 502);
-  }
-
-  return new Response(sseToText(upstream.body), {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Accel-Buffering': 'no' },
+  return streamChatResponse({
+    apiKey, title: APP_TITLE, temperature: 0.7, maxTokens: 1600,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'user', content: userPrompt },
+    ],
   });
 };
