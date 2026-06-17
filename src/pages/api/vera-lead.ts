@@ -42,6 +42,7 @@ interface LeadBody {
   presupuesto?: string;
   proposal?: string;
   isExample?: boolean;
+  source?: string;
   [HONEYPOT_FIELD]?: string;
 }
 
@@ -88,24 +89,30 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const resend = new Resend(apiKey);
-  const subject = `[Vera AI] Lead · ${sectorNombre}${name ? ` · ${name}` : ''}${body.isExample ? ' (ejemplo)' : ''}`;
+  const isChat = body.source === 'chat';
+  const subject = isChat
+    ? `[Asistente] Lead${name ? ` · ${name}` : ''}`
+    : `[Vera AI] Lead · ${sectorNombre}${name ? ` · ${name}` : ''}${body.isExample ? ' (ejemplo)' : ''}`;
+  const origen = isChat
+    ? 'Origen: asistente web (chat) · platanitorico.com/asistente-ia/'
+    : `Demo: platanitorico.com/vera-ai/${body.isExample ? ' · (rellenó tras ver un ejemplo)' : ''}`;
 
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"></head>
 <body style="margin:0;background:#F5F0E6">
   <div style="font-family:system-ui,-apple-system,sans-serif;max-width:680px;margin:24px auto;padding:24px;background:#fff;border-radius:8px;color:#0E0D0B">
-    <h1 style="font-size:20px;margin:0 0 4px;border-bottom:2px solid #FF6B35;padding-bottom:8px">Nuevo lead desde Vera AI</h1>
-    <p style="font-size:12px;color:#666;margin:8px 0 20px">Demo: platanitorico.com/vera-ai/${body.isExample ? ' · (rellenó tras ver un ejemplo)' : ''}</p>
+    <h1 style="font-size:20px;margin:0 0 4px;border-bottom:2px solid #FF6B35;padding-bottom:8px">Nuevo lead desde ${isChat ? 'el asistente web' : 'Vera AI'}</h1>
+    <p style="font-size:12px;color:#666;margin:8px 0 20px">${escapeHtml(origen)}</p>
     <table style="width:100%;border-collapse:collapse;font-size:14px">
       ${row('Nombre', name)}
       ${email ? `<tr><td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:700">Email</td><td style="padding:8px 0;border-bottom:1px solid #eee"><a href="mailto:${escapeHtml(email)}" style="color:#FF6B35">${escapeHtml(email)}</a></td></tr>` : ''}
       ${row('Teléfono/WhatsApp', contacto)}
-      ${row('Sector', sectorNombre)}
+      ${row('Sector', isChat ? '' : sectorNombre)}
       ${row('Tipo de negocio', tipoNegocio)}
       ${row('Problema', problema)}
       ${row('Objetivo', objetivo)}
       ${row('Presupuesto', presupuesto)}
     </table>
-    ${proposal ? `<h2 style="font-size:15px;margin:24px 0 8px">Propuesta que recibió</h2>
+    ${proposal ? `<h2 style="font-size:15px;margin:24px 0 8px">${isChat ? 'Conversación' : 'Propuesta que recibió'}</h2>
     <div style="background:#FAF5E6;border-left:4px solid #FF6B35;padding:14px 18px;white-space:pre-wrap;font-size:13px;line-height:1.5">${escapeHtml(proposal)}</div>` : ''}
     <p style="margin-top:28px;font-size:11px;color:#888;text-align:center">★ Vera AI Business Agent · Platanito Rico ★</p>
   </div>

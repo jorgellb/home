@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import styles from './AsistenteChat.module.css';
 
 /* Asistente IA de Platanito Rico — chat conversacional sobre los servicios.
@@ -28,6 +28,15 @@ export default function AsistenteChat() {
   const [streaming, setStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Captura de lead
+  const [leadOpen, setLeadOpen] = useState(false);
+  const [leadPhase, setLeadPhase] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [leadName, setLeadName] = useState('');
+  const [leadEmail, setLeadEmail] = useState('');
+  const [leadContacto, setLeadContacto] = useState('');
+  const [leadHoneypot, setLeadHoneypot] = useState('');
+  const [leadError, setLeadError] = useState('');
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -95,6 +104,38 @@ export default function AsistenteChat() {
     setMessages([{ role: 'assistant', content: GREETING }]);
     setInput('');
     setStreaming(false);
+    setLeadOpen(false);
+    setLeadPhase('idle');
+    setLeadName(''); setLeadEmail(''); setLeadContacto(''); setLeadError('');
+  }
+
+  async function submitLead(e: FormEvent) {
+    e.preventDefault();
+    if (!leadEmail.trim() && !leadContacto.trim()) { setLeadError('Déjanos un email o un teléfono/WhatsApp.'); return; }
+    setLeadPhase('sending');
+    setLeadError('');
+    const transcript = messages
+      .filter((m) => m.content.trim())
+      .map((m) => `${m.role === 'user' ? 'Cliente' : 'Vera'}: ${m.content}`)
+      .join('\n');
+    try {
+      const res = await fetch('/api/vera-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: leadName, email: leadEmail, contacto: leadContacto,
+          company_url: leadHoneypot, source: 'chat', proposal: transcript,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string })?.error || 'No se pudo enviar.');
+      setLeadPhase('sent');
+      setLeadOpen(false);
+      setMessages((p) => [...p, { role: 'assistant', content: '¡Genial! 🙌 He pasado tus datos al equipo, te contactarán muy pronto. ¿Algo más mientras tanto?' }]);
+    } catch (err) {
+      setLeadError(err instanceof Error ? err.message : 'No se pudo enviar.');
+      setLeadPhase('error');
+    }
   }
 
   return (
@@ -139,6 +180,29 @@ export default function AsistenteChat() {
             <button key={s} className={styles.chip} onClick={() => send(s)} disabled={streaming}>{s}</button>
           ))}
         </div>
+      )}
+
+      {leadOpen ? (
+        <form className={styles.leadPanel} onSubmit={submitLead}>
+          <div className={styles.leadHead}>
+            <b>📩 Déjanos tus datos y te contactamos</b>
+            <button type="button" className={styles.leadX} onClick={() => setLeadOpen(false)} aria-label="Cerrar">✕</button>
+          </div>
+          <div className={styles.leadFields}>
+            <input className={styles.leadInput} placeholder="Tu nombre (opcional)" value={leadName} onChange={(e) => setLeadName(e.target.value)} />
+            <input className={styles.leadInput} type="email" placeholder="Tu email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} />
+            <input className={styles.leadInput} placeholder="WhatsApp / teléfono" value={leadContacto} onChange={(e) => setLeadContacto(e.target.value)} />
+          </div>
+          <input className={styles.hp} tabIndex={-1} autoComplete="off" aria-hidden="true" value={leadHoneypot} onChange={(e) => setLeadHoneypot(e.target.value)} />
+          {leadError && <p className={styles.leadErr}>{leadError}</p>}
+          <button className={styles.leadSubmit} type="submit" disabled={leadPhase === 'sending'}>
+            {leadPhase === 'sending' ? 'Enviando…' : 'Enviar mis datos →'}
+          </button>
+        </form>
+      ) : leadPhase === 'sent' ? (
+        <div className={styles.leadSent}>✓ ¡Datos enviados! Te contactaremos pronto.</div>
+      ) : (
+        <button className={styles.leadCta} onClick={() => setLeadOpen(true)}>📩 ¿Quieres que te contactemos? Deja tus datos</button>
       )}
 
       <div className={styles.composer}>
