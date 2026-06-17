@@ -171,7 +171,7 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('El asistente no está configurado todavía. Mira un ejemplo mientras tanto.', 503);
   }
 
-  const model = import.meta.env.OPENROUTER_MODEL || 'openai/gpt-4o';
+  const model = import.meta.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
   const lang: Lang = input.lang === 'en' ? 'en' : 'es';
   const payload: VeraInput = {
     sector: sectorId,
