@@ -1,0 +1,83 @@
+.chat {
+  --ink: var(--brutal-ink, #0E0D0B);
+  --bg: var(--brutal-bg, #F5F1EA);
+  --accent: var(--brutal-accent, #FF6B35);
+  --lime: #c6ff3a;
+  max-width: 680px;
+  margin: 0 auto;
+  background: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: 9px 9px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ─── Cabecera ─── */
+.head { display: flex; align-items: center; gap: .8rem; padding: .9rem 1.1rem; background: var(--ink); color: #fff; }
+.avatar {
+  flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-family: var(--font-display, sans-serif); font-weight: 800; font-size: 1.2rem;
+}
+.headInfo { display: flex; flex-direction: column; line-height: 1.2; flex: 1; }
+.headInfo b { font-family: var(--font-display, sans-serif); font-size: 1.05rem; }
+.status { font-size: .72rem; color: #c9c9c9; display: flex; align-items: center; gap: .35rem; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 0 rgba(198,255,58,.6); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(198,255,58,.6); } 70% { box-shadow: 0 0 0 6px rgba(198,255,58,0); } 100% { box-shadow: 0 0 0 0 rgba(198,255,58,0); } }
+.reset { background: transparent; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; opacity: .7; padding: .2rem .4rem; }
+.reset:hover { opacity: 1; }
+
+/* ─── Log ─── */
+.log {
+  background: var(--bg);
+  padding: 1.2rem 1.1rem;
+  height: 440px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+.row { display: flex; align-items: flex-end; gap: .5rem; max-width: 88%; }
+.rowUser { align-self: flex-end; flex-direction: row-reverse; }
+.bubbleAvatar {
+  flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--lime);
+  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .72rem;
+}
+.bubble { padding: .7rem .95rem; border: 2px solid var(--ink); font-size: .94rem; line-height: 1.5; }
+.bubbleBot { background: #fff; border-bottom-left-radius: 0; }
+.bubbleUser { background: var(--accent); color: #fff; border-bottom-right-radius: 0; }
+.text { white-space: pre-wrap; word-break: break-word; }
+.caret { display: inline-block; width: 7px; height: .95em; background: var(--accent); margin-left: 2px; vertical-align: text-bottom; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+
+.typing { display: inline-flex; gap: 4px; padding: .1rem 0; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: #9a9a9a; animation: bounce 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; }
+.typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+/* ─── Sugerencias ─── */
+.suggestions { display: flex; flex-wrap: wrap; gap: .45rem; padding: .8rem 1.1rem 0; background: var(--bg); }
+.chip {
+  font-family: var(--font-mono, monospace); font-size: .78rem; font-weight: 700;
+  padding: .5rem .8rem; border: 2px solid var(--ink); background: #fff; color: var(--ink); cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.chip:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.chip:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ─── Composer ─── */
+.composer { display: flex; gap: .6rem; padding: .9rem 1.1rem; background: var(--bg); border-top: 2px solid var(--ink); }
+.field {
+  flex: 1; font: inherit; font-size: .95rem; padding: .75rem .9rem;
+  border: 2.5px solid var(--ink); background: #fff; color: var(--ink);
+}
+.field:focus { outline: none; box-shadow: 3px 3px 0 var(--accent); }
+.sendBtn {
+  flex: none; width: 48px; border: 2.5px solid var(--ink); background: var(--accent); color: #fff;
+  font-size: 1.1rem; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); transition: transform .1s, box-shadow .1s;
+}
+.sendBtn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.sendBtn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+
+.disclaimer { text-align: center; font-size: .72rem; color: #8a8175; margin: 0; padding: .6rem 1rem .9rem; background: var(--bg); }
