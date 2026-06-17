@@ -1,13 +1,11 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
-import { sseToText } from '../../lib/sse-stream';
+import { streamChatResponse } from '../../lib/openrouter';
 
 /* Asistente IA de Platanito Rico — chat conversacional sobre los servicios.
    Streaming desde OpenRouter; la API key vive solo en el servidor. */
 export const prerender = false;
 
-const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const SITE_URL = 'https://platanitorico.com';
 const APP_TITLE = 'Asistente IA · Platanito Rico';
 
 const MAX_MESSAGES = 14;     // últimos N mensajes que se mandan al modelo
@@ -81,38 +79,8 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('[asistente] OPENROUTER_API_KEY no configurada');
     return jsonError('El asistente no está disponible ahora mismo. Escríbenos a hola@platanitorico.com.', 503);
   }
-  const model = import.meta.env.OPENROUTER_MODEL || 'meta-llama/llama-3.3-70b-instruct:free';
-
-  let upstream: Response;
-  try {
-    upstream = await fetch(OPENROUTER_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'HTTP-Referer': SITE_URL,
-        'X-Title': APP_TITLE,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.7,
-        max_tokens: 600,
-        stream: true,
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
-      }),
-    });
-  } catch (err) {
-    console.error('[asistente] Error de red:', err);
-    return jsonError('No se pudo contactar con el asistente. Inténtalo en un momento.', 502);
-  }
-
-  if (!upstream.ok || !upstream.body) {
-    const detail = await upstream.text().catch(() => '');
-    console.error('[asistente] OpenRouter', upstream.status, detail.slice(0, 300));
-    return jsonError('El asistente no pudo responder. Inténtalo de nuevo.', 502);
-  }
-
-  return new Response(sseToText(upstream.body), {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Accel-Buffering': 'no' },
+  return streamChatResponse({
+    apiKey, title: APP_TITLE, temperature: 0.7, maxTokens: 600,
+    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
   });
 };
