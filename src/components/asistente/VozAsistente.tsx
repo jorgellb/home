@@ -16,6 +16,22 @@ function getSR(): any {
   return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
 }
 
+/* La Web Speech API no expone el género: elegimos voz masculina por nombre.
+   Nombres típicos de voces masculinas en español por sistema:
+   Apple (Jorge/Diego/Carlos/Juan), Windows (Pablo/Raúl/Álvaro), etc. */
+const MALE_ES = /jorge|diego|pablo|ra[uú]l|carlos|juan|[aá]lvaro|enrique|miguel|antonio|fernando|gabriel|male|hombre|masculin/i;
+function pickMaleVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | null {
+  if (!voices.length) return null;
+  const es = voices.filter((v) => (v.lang || '').toLowerCase().startsWith('es'));
+  const pool = es.length ? es : voices;
+  const esES = pool.filter((v) => /es[-_]es/i.test(v.lang));
+  return (
+    esES.find((v) => MALE_ES.test(v.name)) ||   // español de España, masculina
+    pool.find((v) => MALE_ES.test(v.name)) ||    // cualquier español, masculina
+    esES[0] || pool[0] || null                   // sin garantía de género
+  );
+}
+
 export default function VozAsistente() {
   const [supported, setSupported] = useState(true);
   const [phase, setPhase] = useState<Phase>('idle');
@@ -71,7 +87,7 @@ export default function VozAsistente() {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'es-ES';
-    const v = voicesRef.current.find((x) => /es[-_]ES/i.test(x.lang)) || voicesRef.current.find((x) => x.lang?.startsWith('es'));
+    const v = pickMaleVoice(voicesRef.current);
     if (v) u.voice = v;
     u.rate = 1.03;
     u.onstart = () => setPhase('speaking');
