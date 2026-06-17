@@ -43,11 +43,19 @@ export default function AsistenteChat() {
     setMessages([...history, { role: 'assistant', content: '' }]);
     setInput('');
     setStreaming(true);
+
+    // Watchdog: si no llegan datos en 30s, abortamos y desbloqueamos la UI.
+    const ctrl = new AbortController();
+    let watchdog: ReturnType<typeof setTimeout> | undefined;
+    const arm = () => { if (watchdog) clearTimeout(watchdog); watchdog = setTimeout(() => ctrl.abort(), 30000); };
+
     try {
+      arm();
       const res = await fetch('/api/asistente', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history }),
+        signal: ctrl.signal,
       });
       if (!res.ok || !res.body) {
         let msg = 'Ahora mismo no puedo responder. Escríbenos a hola@platanitorico.com 🙏';
@@ -61,12 +69,19 @@ export default function AsistenteChat() {
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
+        arm();
         acc += dec.decode(value, { stream: true });
         setMessages((p) => setLast(p, acc));
       }
+      if (!acc.trim()) setMessages((p) => setLast(p, 'Perdona, no me ha llegado respuesta. ¿Lo intentamos de nuevo?'));
     } catch {
-      setMessages((p) => setLast(p, 'Uy, ha fallado la conexión. Inténtalo de nuevo en un momento.'));
+      setMessages((p) => {
+        const last = p[p.length - 1];
+        if (last && last.role === 'assistant' && last.content.trim()) return p; // ya hay texto útil
+        return setLast(p, 'Uy, se ha cortado la conexión. Inténtalo de nuevo en un momento.');
+      });
     } finally {
+      if (watchdog) clearTimeout(watchdog);
       setStreaming(false);
       inputRef.current?.focus();
     }
