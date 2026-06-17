@@ -1,0 +1,165 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import VozAsistente from '../components/asistente/VozAsistente.tsx';
+
+const title = 'Asistente de Voz IA · Habla con la IA | Platanito Rico';
+const description =
+  'Demo de un asistente de voz con IA: habla por el micrófono y te responde con voz, en tiempo real. Atención por voz 24/7 para tu negocio. Pruébalo en vivo.';
+const canonical = 'https://platanitorico.com/asistente-voz/';
+
+const features = [
+  { ico: '🎙️', t: 'Habla, no escribas', d: 'Pregunta en voz alta como a una persona. La IA te entiende y te contesta hablando.' },
+  { ico: '⚡', t: 'En tiempo real', d: 'Reconoce tu voz, piensa y responde al momento, sin apps ni instalaciones.' },
+  { ico: '♿', t: 'Accesible', d: 'Ideal para quien prefiere la voz: manos libres, personas mayores o con poca visión.' },
+  { ico: '🔌', t: 'Conectable', d: 'En un proyecto real se integra con tu web, centralita o WhatsApp.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Asistente de Voz IA · Platanito Rico',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    url: canonical,
+    description,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://platanitorico.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Diseño Web', item: 'https://platanitorico.com/desarrollo-web/' },
+      { '@type': 'ListItem', position: 3, name: 'Asistente de Voz', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-desarrollo-web-calidad.jpg"
+  imageAlt="Asistente de voz con IA - Platanito Rico"
+  type="website"
+  lang="es"
+  keywords="asistente de voz IA, hablar con IA, voicebot, atención por voz, IA conversacional voz, asistente virtual voz"
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Diseño Web', href: '/desarrollo-web/' },
+    { label: 'Asistente de Voz' },
+  ]} />
+
+  <main id="main-content" class="av">
+    {/* HERO */}
+    <section class="av-hero">
+      <div class="container-brutal av-hero__inner">
+        <span class="av-eyebrow">✦ Demo en vivo · Voz a voz</span>
+        <h1 class="av-hero__title">Habla con la <em>IA</em></h1>
+        <p class="av-hero__lead">
+          Toca el micrófono y <strong>pregunta en voz alta</strong> lo que quieras sobre Platanito Rico.
+          La IA te escucha, entiende y te responde <strong>hablando</strong>, en tiempo real.
+        </p>
+      </div>
+    </section>
+
+    {/* DEMO DE VOZ (island React) */}
+    <section class="av-demo" id="demo">
+      <div class="container-brutal">
+        <VozAsistente client:load />
+        <noscript>
+          <p class="av-noscript">Activa JavaScript para hablar con el asistente.</p>
+        </noscript>
+      </div>
+    </section>
+
+    {/* FEATURES */}
+    <section class="av-features">
+      <div class="container-brutal">
+        <header class="av-sec-head">
+          <span class="av-eyebrow av-eyebrow--dark">✦ Por qué la voz</span>
+          <h2 class="av-h2">La forma más natural de atender.</h2>
+        </header>
+        <ul class="av-features__grid">
+          {features.map((f) => (
+            <li class="av-feature">
+              <span class="av-feature__ico" aria-hidden="true">{f.ico}</span>
+              <b>{f.t}</b>
+              <p>{f.d}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* CTA */}
+    <section class="av-cta">
+      <div class="container-brutal av-cta__inner">
+        <span class="av-eyebrow">✦ ¿Lo quieres en tu negocio?</span>
+        <h2 class="av-cta__title">Asistentes de voz a medida.</h2>
+        <p class="av-cta__text">
+          Creamos agentes de voz y de chat entrenados con tu negocio, conectados a tu web o WhatsApp.
+          Atienden, resuelven y captan clientes por ti.
+        </p>
+        <div class="av-cta__btns">
+          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero un agente de voz →</a>
+          <a href="/asistente-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Probar el chat</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .av { background: #05070b; color: #e8edf5; }
+  .av-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #18e0ff; }
+  .av-eyebrow--dark { color: #FF6B35; }
+
+  .av-hero {
+    padding: 4rem 0 2rem;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.18) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
+    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden; text-align: center;
+  }
+  .av-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(#18e0ff14 1px, transparent 1px), linear-gradient(90deg, #18e0ff14 1px, transparent 1px);
+    background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
+  }
+  .av-hero__inner { position: relative; }
+  .av-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .av-hero__title em { font-style: normal; color: #18e0ff; }
+  .av-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 56ch; margin: 0 auto; }
+  .av-hero__lead strong { color: #fff; }
+
+  .av-demo { padding: 3rem 0 3.5rem; background: linear-gradient(180deg, #05070b, #080c14); }
+  .av-noscript { text-align: center; color: #9aa7ba; margin-top: 1.5rem; }
+
+  .av-features { padding: 4rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .av-sec-head { max-width: 60ch; margin-bottom: 2rem; }
+  .av-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
+  .av-features__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 560px) { .av-features__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 980px) { .av-features__grid { grid-template-columns: repeat(4, 1fr); } }
+  .av-feature { background: #fff; border: 2.5px solid var(--brutal-ink, #0E0D0B); box-shadow: 5px 5px 0 var(--brutal-ink, #0E0D0B); padding: 1.4rem 1.25rem; }
+  .av-feature__ico { font-size: 1.7rem; }
+  .av-feature b { display: block; font-family: var(--font-display, sans-serif); font-size: 1.05rem; margin: .5rem 0 .35rem; }
+  .av-feature p { margin: 0; font-size: .85rem; line-height: 1.45; color: #4a453f; }
+
+  .av-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(24,224,255,0.12) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .av-cta__inner { max-width: 720px; }
+  .av-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
+  .av-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .av-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .av-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
+</style>
