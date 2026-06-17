@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
+import { rateLimit, clientIp } from '../../lib/rate-limit';
 
 /* Vera AI Business Agent — endpoint server (Vercel Function), con streaming.
    La API key de OpenRouter vive SOLO aquí (entorno), nunca en el navegador.
-   Devuelve la propuesta en markdown, en streaming (token a token) para que el
-   cliente la escriba en vivo. */
+   Devuelve la propuesta en markdown, en streaming, en español o inglés. */
 export const prerender = false;
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -11,6 +11,7 @@ const SITE_URL = 'https://platanitorico.com';
 const APP_TITLE = 'Vera AI Business Agent';
 
 type SectorId = 'alquiler' | 'inmobiliaria' | 'restaurante' | 'clinica' | 'facturacion';
+type Lang = 'es' | 'en';
 
 interface VeraInput {
   sector: SectorId;
@@ -18,90 +19,110 @@ interface VeraInput {
   problema: string;
   objetivo: string;
   presupuesto: string;
+  lang: Lang;
 }
 
-/* Base de conocimiento por sector: problemas frecuentes + soluciones posibles. */
-const SECTORES: Record<SectorId, { nombre: string; problemas: string[]; soluciones: string[] }> = {
+/* Base de conocimiento por sector + ejemplos de estilo para nombrar el producto. */
+const SECTORES: Record<SectorId, { nombre: string; problemas: string[]; soluciones: string[]; nombres: string[] }> = {
   alquiler: {
     nombre: 'Alquiler vacacional y apartamentos turísticos',
     problemas: ['Muchas preguntas repetidas', 'Check-in manual', 'Coordinación de limpieza', 'Incidencias', 'Dependencia de Booking o Airbnb', 'Pocas reservas directas'],
     soluciones: ['Asistente de huéspedes', 'Guía digital', 'Sistema de reservas directas', 'Coordinador de limpieza', 'Gestor de reseñas', 'Sistema de upselling local'],
+    nombres: ['StayConcierge', 'DirectStay', 'GuestPilot', 'RentalFlow'],
   },
   inmobiliaria: {
     nombre: 'Inmobiliarias',
     problemas: ['Leads sin seguimiento', 'Respuesta lenta', 'Fichas de propiedades pobres', 'Poca captación de propietarios', 'Visitas mal organizadas'],
     soluciones: ['CRM inteligente', 'Clasificador de compradores', 'Generador de anuncios', 'Calculadora de rentabilidad', 'Agenda de visitas', 'Sistema de captación de propietarios'],
+    nombres: ['LeadNest', 'PropMatch', 'RealtyPilot', 'CasaLead'],
   },
   restaurante: {
     nombre: 'Restaurantes y hostelería',
     problemas: ['Muchas llamadas', 'Reservas desordenadas', 'Menús mal traducidos', 'Reseñas sin responder', 'Clientes que no aparecen', 'Mala gestión de turnos'],
     soluciones: ['Bot de reservas', 'Menú inteligente', 'Gestor de reseñas', 'Recordatorios de reserva', 'Recomendador de platos', 'Asistente para camareros'],
+    nombres: ['TableMate', 'MesaFlow', 'ReservaBot', 'DineDesk'],
   },
   clinica: {
     nombre: 'Clínicas, estética y servicios locales',
     problemas: ['Citas perdidas', 'Agenda manual', 'Clientes que no vuelven', 'Formularios en papel', 'Pocas reseñas', 'Mala comunicación con clientes'],
     soluciones: ['Agenda inteligente', 'Recordatorios automáticos', 'Reactivación de clientes', 'Formularios digitales', 'Sistema de consentimiento', 'Gestor de reseñas'],
+    nombres: ['CitaCare', 'AgendaPro', 'ClinicFlow', 'BeautyDesk'],
   },
   facturacion: {
     nombre: 'Facturación digital e integraciones para pymes',
     problemas: ['Facturas desordenadas', 'Mucho Excel', 'Doble trabajo', 'Documentos repartidos por email, WhatsApp y carpetas', 'Falta de control de cobros', 'Mala previsión de caja'],
     soluciones: ['Lector inteligente de facturas', 'Organizador de documentos', 'Conector con asesoría', 'Generador de presupuestos', 'Panel de cobros y pagos', 'Sistema de alertas'],
+    nombres: ['FacturaFlow', 'BillSense', 'CashPilot', 'InvoiceIQ'],
   },
 };
 
-function buildSystemPrompt(sector: { nombre: string; problemas: string[]; soluciones: string[] }): string {
-  return `Eres "Vera AI Business Agent", un consultor de IA experto en automatización para negocios locales (provincia de Almería, España). No eres un chatbot: analizas un problema real de negocio y propones una solución concreta y vendible.
+const SECCIONES: Record<Lang, string[]> = {
+  es: ['Diagnóstico del negocio', 'Oportunidad detectada', 'App o sistema recomendado', 'Cómo funcionaría', 'Funciones principales', 'Beneficio para el negocio', 'Precio orientativo', 'Demo para portfolio', 'Mensaje comercial', 'Límites y riesgos'],
+  en: ['Business diagnosis', 'Opportunity detected', 'Recommended app or system', 'How it would work', 'Main features', 'Business benefit', 'Indicative pricing', 'Portfolio demo', 'Sales message', 'Limits and risks'],
+};
 
-SECTOR DEL CLIENTE: ${sector.nombre}
-Problemas frecuentes del sector: ${sector.problemas.join('; ')}.
-Soluciones típicas del sector: ${sector.soluciones.join('; ')}.
-
-TONO: claro, comercial, profesional, fácil de entender, orientado a negocio, sin tecnicismos innecesarios.
-
-REGLAS:
+function buildSystemPrompt(sector: typeof SECTORES[SectorId], lang: Lang): string {
+  const s = SECCIONES[lang];
+  const langLine = lang === 'en'
+    ? 'Respond ENTIRELY in English (UK/EU business English). The input data may be in Spanish; translate concepts as needed.'
+    : 'Responde en español de España.';
+  const intro = lang === 'en'
+    ? `You are "Vera AI Business Agent", an AI consultant specialised in automation for local businesses (Almería, Spain). You are not a chatbot: you analyse a real business problem and propose a concrete, sellable solution.`
+    : `Eres "Vera AI Business Agent", un consultor de IA experto en automatización para negocios locales (provincia de Almería, España). No eres un chatbot: analizas un problema real de negocio y propones una solución concreta y vendible.`;
+  const rules = lang === 'en'
+    ? `RULES:
+- Never promise guaranteed results (use "can", "could", "helps to").
+- Do not invent fixed prices, terms or legal info. Prices are indicative ranges in euros.
+- Be concrete and concise. No filler.
+- The product name must FIT THIS SECTOR, be original and brandable. Style examples (do NOT copy them, invent a new one): ${sector.nombres.join(', ')}.`
+    : `REGLAS:
 - No prometas resultados garantizados (usa "puede", "podría", "ayuda a").
 - No inventes precios cerrados, condiciones ni información legal. Los precios son rangos orientativos en euros.
-- Responde en español de España.
 - Sé concreto y conciso. Sin relleno.
+- El nombre del producto debe ENCAJAR CON ESTE SECTOR, ser original y comercial. Ejemplos de estilo (NO los copies, inventa uno nuevo): ${sector.nombres.join(', ')}.`;
 
-FORMATO DE SALIDA (markdown, exactamente esta estructura):
+  return `${intro}
 
-# <Nombre atractivo y comercial del producto, ej.: GuestPilot AI>
+SECTOR: ${sector.nombre}
+${lang === 'en' ? 'Common problems' : 'Problemas frecuentes'}: ${sector.problemas.join('; ')}.
+${lang === 'en' ? 'Typical solutions' : 'Soluciones típicas'}: ${sector.soluciones.join('; ')}.
 
-## 1. Diagnóstico del negocio
-<2-3 frases sobre el problema que parece tener>
+${langLine}
+${rules}
 
-## 2. Oportunidad detectada
-<2-3 frases sobre la oportunidad de automatización>
+${lang === 'en' ? 'OUTPUT FORMAT (markdown, exactly this structure):' : 'FORMATO DE SALIDA (markdown, exactamente esta estructura):'}
 
-## 3. App o sistema recomendado
-<qué es la solución, 2-3 frases>
+# <${lang === 'en' ? 'Attractive, brandable product name that fits the sector' : 'Nombre atractivo y comercial del producto, acorde al sector'}>
 
-## 4. Cómo funcionaría
-<lista de 4 a 6 pasos del flujo, con guiones>
+## 1. ${s[0]}
+## 2. ${s[1]}
+## 3. ${s[2]}
+## 4. ${s[3]}
+${lang === 'en' ? '<list of 4-6 flow steps, with dashes>' : '<lista de 4 a 6 pasos del flujo, con guiones>'}
+## 5. ${s[4]}
+${lang === 'en' ? '<list of 5-8 features, with dashes>' : '<lista de 5 a 8 funciones, con guiones>'}
+## 6. ${s[5]}
+## 7. ${s[6]}
+${lang === 'en' ? '<basic range, full range and optional monthly maintenance, in euros>' : '<rangos: versión básica, versión completa y cuota de mantenimiento opcional, en euros>'}
+## 8. ${s[7]}
+## 9. ${s[8]}
+${lang === 'en' ? '<a short, direct message ready to send by WhatsApp/email>' : '<un mensaje corto y directo, listo para enviar por WhatsApp/email>'}
+## 10. ${s[9]}
+${lang === 'en' ? '<list of 4-6 professional limits, with dashes>' : '<lista de 4 a 6 límites profesionales, con guiones>'}
 
-## 5. Funciones principales
-<lista de 5 a 8 funciones, con guiones>
-
-## 6. Beneficio para el negocio
-<2-3 frases de valor comercial, sin garantizar resultados>
-
-## 7. Precio orientativo
-<rangos: versión básica, versión completa y cuota de mantenimiento opcional, en euros>
-
-## 8. Demo para portfolio
-<1-2 frases sobre cómo se mostraría en un portfolio>
-
-## 9. Mensaje comercial
-<un mensaje corto y directo, listo para enviar por WhatsApp/email>
-
-## 10. Límites y riesgos
-<lista de 4 a 6 límites profesionales, con guiones>
-
-Devuelve SOLO el markdown, sin texto antes ni después.`;
+${lang === 'en' ? 'Each "##" section that is not a list must have 2-3 sentences. Return ONLY the markdown.' : 'Cada sección "##" que no sea lista debe tener 2-3 frases. Devuelve SOLO el markdown.'}`;
 }
 
 function buildUserPrompt(input: VeraInput): string {
+  if (input.lang === 'en') {
+    return `Business data:
+- Business type: ${input.tipoNegocio || '(not specified)'}
+- Main problem: ${input.problema || '(not specified)'}
+- Goal: ${input.objetivo || '(not specified)'}
+- Approx. budget: ${input.presupuesto || '(not specified)'}
+
+Generate the markdown proposal for this business.`;
+  }
   return `Datos del negocio:
 - Tipo de negocio: ${input.tipoNegocio || '(no especificado)'}
 - Problema principal: ${input.problema || '(no especificado)'}
@@ -116,39 +137,6 @@ function jsonError(message: string, status: number, headers?: Record<string, str
     status,
     headers: { 'Content-Type': 'application/json', ...headers },
   });
-}
-
-/* ───────────────────── Rate limiting (best-effort) ─────────────────────
-   Protege el endpoint (que llama a un modelo de pago) de abuso/coste. Es
-   en memoria: funciona dentro de una instancia "caliente" de la función, no
-   es un límite global duro entre instancias. Para algo robusto en producción,
-   migrar a Vercel KV / Upstash Redis (mismo patrón, store compartido). */
-const WINDOW_MS = 5 * 60 * 1000; // ventana de 5 min
-const MAX_PER_IP = 6;            // peticiones por IP y ventana
-const MAX_GLOBAL = 200;          // cortafuegos por instancia y ventana
-const ipHits = new Map<string, number[]>();
-let globalHits: number[] = [];
-
-function clientIp(request: Request): string {
-  const xff = request.headers.get('x-forwarded-for');
-  if (xff) return xff.split(',')[0].trim();
-  return request.headers.get('x-real-ip') || 'unknown';
-}
-
-function rateLimit(ip: string): { ok: boolean; retryAfter: number } {
-  const now = Date.now();
-  globalHits = globalHits.filter((t) => now - t < WINDOW_MS);
-  if (globalHits.length >= MAX_GLOBAL) return { ok: false, retryAfter: 300 };
-
-  const arr = (ipHits.get(ip) || []).filter((t) => now - t < WINDOW_MS);
-  if (arr.length >= MAX_PER_IP) {
-    return { ok: false, retryAfter: Math.ceil((WINDOW_MS - (now - arr[0])) / 1000) };
-  }
-  arr.push(now);
-  ipHits.set(ip, arr);
-  globalHits.push(now);
-  if (ipHits.size > 5000) ipHits.clear(); // evitar crecer sin límite
-  return { ok: true, retryAfter: 0 };
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -166,8 +154,8 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('Cuéntanos cuál es el problema principal.', 400);
   }
 
-  // Rate limiting: evita que se abuse del endpoint (coste del modelo).
-  const limit = rateLimit(clientIp(request));
+  // Rate limiting: evita abuso del endpoint (coste del modelo).
+  const limit = await rateLimit(clientIp(request), 6, 300);
   if (!limit.ok) {
     return jsonError(
       'Has hecho muchas peticiones seguidas. Espera un momento y vuelve a probar (o mira un ejemplo mientras tanto).',
@@ -183,12 +171,14 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const model = import.meta.env.OPENROUTER_MODEL || 'openai/gpt-4o';
+  const lang: Lang = input.lang === 'en' ? 'en' : 'es';
   const payload: VeraInput = {
     sector: sectorId,
     tipoNegocio: String(input.tipoNegocio || '').slice(0, 500),
     problema: String(input.problema || '').slice(0, 1000),
     objetivo: String(input.objetivo || '').slice(0, 500),
     presupuesto: String(input.presupuesto || '').slice(0, 200),
+    lang,
   };
 
   let upstream: Response;
@@ -207,7 +197,7 @@ export const POST: APIRoute = async ({ request }) => {
         max_tokens: 1500,
         stream: true,
         messages: [
-          { role: 'system', content: buildSystemPrompt(sector) },
+          { role: 'system', content: buildSystemPrompt(sector, lang) },
           { role: 'user', content: buildUserPrompt(payload) },
         ],
       }),
@@ -232,10 +222,7 @@ export const POST: APIRoute = async ({ request }) => {
   const stream = new ReadableStream<Uint8Array>({
     async pull(controller) {
       const { done, value } = await reader.read();
-      if (done) {
-        controller.close();
-        return;
-      }
+      if (done) { controller.close(); return; }
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
       buffer = lines.pop() || '';
@@ -243,22 +230,15 @@ export const POST: APIRoute = async ({ request }) => {
         const t = line.trim();
         if (!t.startsWith('data:')) continue;
         const data = t.slice(5).trim();
-        if (data === '[DONE]') {
-          controller.close();
-          return;
-        }
+        if (data === '[DONE]') { controller.close(); return; }
         try {
-          const json = JSON.parse(data);
-          const delta = json?.choices?.[0]?.delta?.content;
+          const jsonChunk = JSON.parse(data);
+          const delta = jsonChunk?.choices?.[0]?.delta?.content;
           if (delta) controller.enqueue(encoder.encode(delta));
-        } catch {
-          /* línea de keep-alive o fragmento parcial: ignorar */
-        }
+        } catch { /* keep-alive o fragmento parcial */ }
       }
     },
-    cancel() {
-      reader.cancel().catch(() => { /* noop */ });
-    },
+    cancel() { reader.cancel().catch(() => { /* noop */ }); },
   });
 
   return new Response(stream, {
