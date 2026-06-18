@@ -17,7 +17,15 @@ export const FREE_MODELS = [
   'nvidia/nemotron-3-super-120b-a12b:free',
 ];
 
-interface ChatMsg { role: 'system' | 'user' | 'assistant'; content: string }
+/* Modelos gratuitos con VISIÓN (aceptan imágenes), para análisis multimodal. */
+export const VISION_MODELS = [
+  'google/gemma-4-31b-it:free',
+  'google/gemma-4-26b-a4b-it:free',
+  'nvidia/nemotron-nano-12b-v2-vl:free',
+  'nex-agi/nex-n2-pro:free',
+];
+
+interface ChatMsg { role: 'system' | 'user' | 'assistant'; content: string | unknown[] }
 interface Opts {
   apiKey: string;
   title: string;
@@ -76,4 +84,47 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
     JSON.stringify({ error: 'El asistente está muy solicitado ahora mismo. Inténtalo de nuevo en unos segundos.' }),
     { status: 502, headers: { 'Content-Type': 'application/json' } },
   );
+}
+
+/** Llamada NO-streaming con cadena de modelos: devuelve el texto completo
+ *  (útil cuando se espera JSON). Pasa VISION_MODELS para análisis de imagen. */
+export async function chatText(
+  opts: Opts,
+  models: string[] = FREE_MODELS,
+): Promise<{ ok: true; text: string } | { ok: false; status: number; detail: string }> {
+  let lastStatus = 0;
+  let lastDetail = '';
+  for (const model of models) {
+    let res: Response;
+    try {
+      res = await fetch(OPENROUTER_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${opts.apiKey}`,
+          'HTTP-Referer': SITE_URL,
+          'X-Title': opts.title,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          temperature: opts.temperature ?? 0.5,
+          max_tokens: opts.maxTokens ?? 1500,
+          messages: opts.messages,
+        }),
+      });
+    } catch (err) { lastDetail = String(err); continue; }
+
+    if (res.ok) {
+      const data = await res.json().catch(() => null);
+      const text = data?.choices?.[0]?.message?.content;
+      if (typeof text === 'string' && text.trim()) return { ok: true, text };
+      lastStatus = res.status; lastDetail = 'respuesta sin contenido';
+      continue;
+    }
+    lastStatus = res.status;
+    lastDetail = (await res.text().catch(() => '')).slice(0, 200);
+    console.warn(`[openrouter] (json) ${model} → ${res.status}, siguiente…`);
+  }
+  console.error('[openrouter] (json) todos los modelos fallaron', lastStatus, lastDetail);
+  return { ok: false, status: lastStatus, detail: lastDetail };
 }
