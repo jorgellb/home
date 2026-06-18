@@ -51,6 +51,30 @@ function jsonError(message: string, status: number, headers?: Record<string, str
   return new Response(JSON.stringify({ error: message }), { status, headers: { 'Content-Type': 'application/json', ...headers } });
 }
 
+function slugify(s: string): string {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+}
+function priceNum(p: unknown): number {
+  const m = String(p ?? '').replace(',', '.').match(/[\d.]+/);
+  return m ? Math.round(parseFloat(m[0]) * 100) / 100 || 0 : 0;
+}
+/* Garantiza que la sección de backend esté completa aunque la IA la omita. */
+function completarBackend(ficha: Record<string, any>) {
+  const es = ficha.ficha_ecommerce_es || {};
+  const v = ficha.analisis_visual_ia || {};
+  const name = String(es.h1_title || v.producto_detectado || 'Producto').trim();
+  const be = (ficha.automatizacion_backend = ficha.automatizacion_backend || {});
+  if (!be.slug_url) be.slug_url = slugify(name) || 'producto';
+  if (!be.sku_sugerido) {
+    const code = (name.normalize('NFD').replace(/[̀-ͯ]/g, '').match(/[A-Za-z]/g) || []).join('').slice(0, 3).toUpperCase() || 'ESP';
+    be.sku_sugerido = `PROD-${code}-001`;
+  }
+  if (!be.categoria_sugerida) be.categoria_sugerida = 'General';
+  if (!be.query_sql_insert) {
+    be.query_sql_insert = `INSERT INTO products (sku, name, price, stock) VALUES ('${be.sku_sugerido}', '${name.replace(/'/g, "''")}', ${priceNum(es.precio_sugerido_eur)}, 50);`;
+  }
+}
+
 export const POST: APIRoute = async ({ request }) => {
   let body: { image?: string };
   try { body = await request.json(); } catch { return jsonError('Petición inválida.', 400); }
@@ -98,6 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (start !== -1 && end !== -1) raw = raw.slice(start, end + 1);
   try {
     const ficha = JSON.parse(raw);
+    completarBackend(ficha);
     return new Response(JSON.stringify({ ficha }), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
   } catch {
     console.error('[ecommerce-ficha] JSON no parseable:', result.text.slice(0, 200));
