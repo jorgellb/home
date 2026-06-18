@@ -1,0 +1,164 @@
+---
+/* Banner de consentimiento de cookies (RGPD/LSSI).
+   Tres opciones con el mismo peso para Aceptar y Rechazar (sin patrones oscuros)
+   + Configurar con categorías granulares. Guarda el consentimiento en
+   localStorage y emite un evento para que futuros scripts (analítica, píxeles)
+   se activen solo con consentimiento. */
+---
+
+<div id="cookie-consent" class="cc" role="dialog" aria-modal="false" aria-label="Aviso de cookies" hidden>
+  <div class="cc__card">
+    <div class="cc__body">
+      <p class="cc__title">🍪 Tu privacidad</p>
+      <p class="cc__text">
+        Usamos cookies propias necesarias para que la web funcione y, con tu permiso, de analítica y
+        marketing para mejorar. Puedes aceptar, rechazar o configurar. Más info en nuestra
+        <a href="/cookies/">Política de cookies</a>.
+      </p>
+
+      <div class="cc__config" id="cc-config" hidden>
+        <label class="cc__opt">
+          <input type="checkbox" checked disabled />
+          <span><b>Necesarias</b> — imprescindibles para el funcionamiento. Siempre activas.</span>
+        </label>
+        <label class="cc__opt">
+          <input type="checkbox" id="cc-analytics" />
+          <span><b>Analítica</b> — nos ayudan a entender el uso de la web (anónimo).</span>
+        </label>
+        <label class="cc__opt">
+          <input type="checkbox" id="cc-marketing" />
+          <span><b>Marketing</b> — para mostrarte contenido y anuncios relevantes.</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="cc__actions">
+      <button type="button" class="cc__btn cc__btn--ghost" data-cc="config" id="cc-config-btn">Configurar</button>
+      <button type="button" class="cc__btn cc__btn--save" data-cc="save" id="cc-save-btn" hidden>Guardar selección</button>
+      <button type="button" class="cc__btn cc__btn--reject" data-cc="reject">Rechazar</button>
+      <button type="button" class="cc__btn cc__btn--accept" data-cc="accept">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<button type="button" id="cc-reopen" class="cc-reopen" aria-label="Configurar cookies" hidden>🍪</button>
+
+<style>
+  .cc {
+    position: fixed; z-index: 9999; left: 1rem; right: 1rem; bottom: 1rem;
+    display: flex; justify-content: center; pointer-events: none;
+  }
+  .cc__card {
+    pointer-events: auto;
+    width: 100%; max-width: 560px;
+    background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B);
+    border: 3px solid var(--brutal-ink, #0E0D0B); box-shadow: 8px 8px 0 var(--brutal-ink, #0E0D0B);
+    padding: 1.1rem 1.2rem;
+    animation: cc-up .35s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes cc-up { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .cc__title { font-family: var(--font-display, sans-serif); font-weight: 800; font-size: 1.05rem; margin: 0 0 .3rem; }
+  .cc__text { font-size: .86rem; line-height: 1.5; margin: 0; color: #3a352f; }
+  .cc__text a { color: var(--brutal-accent, #FF6B35); text-decoration: underline; text-underline-offset: 2px; }
+
+  .cc__config { display: grid; gap: .55rem; margin-top: .9rem; border-top: 1.5px solid rgba(0,0,0,.12); padding-top: .9rem; }
+  .cc__opt { display: grid; grid-template-columns: auto 1fr; gap: .6rem; align-items: start; font-size: .82rem; line-height: 1.4; cursor: pointer; }
+  .cc__opt input { margin-top: .15rem; width: 16px; height: 16px; accent-color: var(--brutal-accent, #FF6B35); }
+  .cc__opt b { font-weight: 800; }
+
+  .cc__actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .cc__btn {
+    font-family: var(--font-mono, monospace); font-size: .82rem; font-weight: 700; cursor: pointer;
+    padding: .6rem 1rem; border: 2px solid var(--brutal-ink, #0E0D0B); background: #fff; color: var(--brutal-ink, #0E0D0B);
+    transition: transform .1s, box-shadow .1s, background .12s, color .12s;
+  }
+  .cc__btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--brutal-ink, #0E0D0B); }
+  .cc__btn--ghost { border-style: dashed; }
+  /* Aceptar y Rechazar con el MISMO peso visual (RGPD: rechazar tan fácil como aceptar) */
+  .cc__btn--accept { background: var(--brutal-accent, #FF6B35); color: #fff; margin-left: auto; }
+  .cc__btn--reject { background: #fff; }
+  .cc__btn--save { background: #0E0D0B; color: #fff; }
+  @media (min-width: 560px) {
+    .cc__btn--accept, .cc__btn--reject { min-width: 120px; text-align: center; }
+  }
+  @media (max-width: 460px) {
+    .cc__btn { flex: 1 1 auto; text-align: center; }
+    .cc__btn--accept { margin-left: 0; }
+  }
+
+  .cc-reopen {
+    position: fixed; z-index: 9998; left: 14px; bottom: 14px;
+    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+    border: 2px solid var(--brutal-ink, #0E0D0B); background: var(--brutal-bg, #F5F1EA);
+    font-size: 1.1rem; line-height: 1; box-shadow: 3px 3px 0 var(--brutal-ink, #0E0D0B);
+    opacity: .75; transition: opacity .15s, transform .1s;
+  }
+  .cc-reopen:hover { opacity: 1; transform: translate(-1px,-1px); }
+
+  @media (prefers-reduced-motion: reduce) { .cc__card { animation: none; } }
+</style>
+
+<script>
+  const KEY = 'pr-consent-v1';
+
+  type Consent = { necessary: true; analytics: boolean; marketing: boolean; ts: number };
+
+  function read(): Consent | null {
+    try { const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+  }
+  function apply(c: Consent) {
+    (window as any).cookieConsent = c;
+    document.dispatchEvent(new CustomEvent('cookie-consent', { detail: c }));
+  }
+
+  const banner = document.getElementById('cookie-consent');
+  const reopen = document.getElementById('cc-reopen');
+  const config = document.getElementById('cc-config');
+  const saveBtn = document.getElementById('cc-save-btn');
+  const analytics = document.getElementById('cc-analytics') as HTMLInputElement | null;
+  const marketing = document.getElementById('cc-marketing') as HTMLInputElement | null;
+
+  function showBanner(openConfig = false) {
+    if (!banner) return;
+    banner.hidden = false;
+    if (openConfig) toggleConfig(true);
+  }
+  function hideBanner() { if (banner) banner.hidden = true; if (reopen) reopen.hidden = false; }
+  function toggleConfig(open: boolean) {
+    if (config) config.hidden = !open;
+    if (saveBtn) saveBtn.hidden = !open;
+  }
+
+  function save(c: Consent) {
+    try { localStorage.setItem(KEY, JSON.stringify(c)); } catch { /* noop */ }
+    apply(c);
+    hideBanner();
+  }
+
+  // Estado inicial
+  const existing = read();
+  if (existing) { apply(existing); if (reopen) reopen.hidden = false; }
+  else { showBanner(false); }
+
+  banner?.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest('[data-cc]') as HTMLElement | null;
+    if (!t) return;
+    const action = t.getAttribute('data-cc');
+    const now = Date.now();
+    if (action === 'accept') save({ necessary: true, analytics: true, marketing: true, ts: now });
+    else if (action === 'reject') save({ necessary: true, analytics: false, marketing: false, ts: now });
+    else if (action === 'config') toggleConfig(config ? config.hidden : true);
+    else if (action === 'save') save({ necessary: true, analytics: !!analytics?.checked, marketing: !!marketing?.checked, ts: now });
+  });
+
+  reopen?.addEventListener('click', () => {
+    const c = read();
+    if (analytics) analytics.checked = !!c?.analytics;
+    if (marketing) marketing.checked = !!c?.marketing;
+    if (reopen) reopen.hidden = true;
+    showBanner(true);
+  });
+
+  // API global para reabrir desde otros sitios (p. ej. la página de cookies)
+  (window as any).openCookieSettings = () => { if (reopen) reopen.hidden = true; if (analytics) { const c = read(); analytics.checked = !!c?.analytics; } if (marketing) { const c = read(); marketing.checked = !!c?.marketing; } showBanner(true); };
+</script>
