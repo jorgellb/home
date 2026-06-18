@@ -32,12 +32,21 @@ Devuelve EXCLUSIVAMENTE un objeto JSON válido. Sin texto antes ni después, sin
     "descripcion_corta": "Texto directo que resalta el beneficio principal",
     "storytelling_emocional": "Un párrafo potente que conecte el producto con la exclusividad, el mediterráneo, la artesanía o el lujo local",
     "caracteristicas_tecnicas": [ { "clave": "Material/Origen/Capacidad", "valor": "Valor deducido" } ],
-    "tags_seo": ["tag1", "tag2", "tag3"]
+    "tags_seo": ["tag1", "tag2", "tag3"],
+    "titulos_alternativos": ["Variante de título comercial 1", "Variante de título comercial 2"]
   },
   "ficha_ecommerce_en": {
     "h1_title_en": "Título traducido y adaptado al cliente británico/europeo",
     "descripcion_corta_en": "Descripción corta en inglés",
     "storytelling_en": "Storytelling adaptado al mercado anglosajón, resaltando 'Authentic Spanish / Mediterranean Luxury'"
+  },
+  "ficha_ecommerce_fr": {
+    "h1_title_fr": "Título comercial en francés",
+    "descripcion_corta_fr": "Descripción corta en francés"
+  },
+  "ficha_ecommerce_de": {
+    "h1_title_de": "Título comercial en alemán",
+    "descripcion_corta_de": "Descripción corta en alemán"
   },
   "automatizacion_backend": {
     "slug_url": "url-amigable-del-producto",
@@ -87,7 +96,7 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('La imagen es demasiado grande. Usa una más ligera.', 413);
   }
 
-  const limit = await rateLimit(`ecom:${clientIp(request)}`, 6, 300);
+  const limit = await rateLimit(`ecom:${clientIp(request)}`, 15, 300);
   if (!limit.ok) return jsonError('Has analizado varias imágenes seguidas. Espera un momento.', 429, { 'Retry-After': String(limit.retryAfter) });
 
   const apiKey = import.meta.env.OPENROUTER_API_KEY;
@@ -97,7 +106,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const result = await chatText({
-    apiKey, title: APP_TITLE, temperature: 0.5, maxTokens: 1500,
+    apiKey, title: APP_TITLE, temperature: 0.5, maxTokens: 2200,
     messages: [
       { role: 'system', content: SYSTEM_PROMPT },
       {
