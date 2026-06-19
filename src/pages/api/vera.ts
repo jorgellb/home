@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
+import { bump } from '../../lib/stats';
 
 /* Vera AI Business Agent — endpoint server (Vercel Function), con streaming.
    La API key de OpenRouter vive SOLO aquí (entorno), nunca en el navegador.
@@ -179,6 +180,7 @@ export const POST: APIRoute = async ({ request }) => {
     lang,
   };
 
+  void bump('demo:vera');
   return streamChatResponse({
     apiKey, title: APP_TITLE, temperature: 0.6, maxTokens: 1500,
     messages: [

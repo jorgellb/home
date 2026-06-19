@@ -1,0 +1,113 @@
+---
+export const prerender = false;
+import { readMany, statsEnabled } from '../lib/stats';
+
+const STATS_KEY = import.meta.env.STATS_KEY;
+const key = Astro.url.searchParams.get('k') || '';
+const authed = Boolean(STATS_KEY && key === STATS_KEY);
+const today = new Date().toISOString().slice(0, 10);
+
+const DEMOS: [string, string][] = [
+  ['demo:vera', 'Vera · Propuestas'],
+  ['demo:ecommerce', 'Commerce-AI · Visión'],
+  ['demo:mapa', 'Mapa Neuronal'],
+  ['demo:marketing', 'Estrategia Marketing'],
+  ['demo:asistente', 'Asistente · Chat'],
+];
+const LEADS: [string, string][] = [
+  ['lead:vera', 'Leads · Vera'],
+  ['lead:chat', 'Leads · Chat'],
+  ['lead:ecommerce', 'Leads · Ecommerce'],
+];
+const PAGES: [string, string][] = [
+  ['pv:/', 'Inicio'],
+  ['pv:/laboratorio-ia/', 'Laboratorio IA'],
+  ['pv:/vera-ai/', 'Vera AI'],
+  ['pv:/asistente-ia/', 'Asistente (chat)'],
+  ['pv:/asistente-voz/', 'Asistente voz'],
+  ['pv:/soluciones/empresa/', 'Empresa (Mapa)'],
+  ['pv:/marketing/', 'Marketing'],
+  ['pv:/soluciones/ecommerce/', 'Ecommerce'],
+  ['pv:/probador-virtual-ar/', 'Probador AR'],
+];
+
+let data: Record<string, number> = {};
+if (authed && statsEnabled) {
+  const all = [...DEMOS, ...LEADS, ...PAGES, ['pv:all', '']];
+  const keys: string[] = [];
+  for (const [ev] of all) { keys.push(`stat:${ev}:total`, `stat:${ev}:${today}`); }
+  data = await readMany(keys);
+}
+const g = (ev: string, span: 'total' | typeof today) => data[`stat:${ev}:${span}`] || 0;
+const sum = (rows: [string, string][], span: 'total' | typeof today) => rows.reduce((a, [ev]) => a + g(ev, span), 0);
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Stats · Platanito Rico</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: ui-monospace, SFMono-Regular, monospace; background: #05070d; color: #e8edf5; margin: 0; padding: 2rem 1rem; }
+    .box { max-width: 880px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+    .sub { color: #7c899c; font-size: .8rem; margin: 0 0 1.6rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; margin-bottom: 1.6rem; }
+    .kpi { background: #0e1420; border: 1px solid #1f2a3d; border-radius: 12px; padding: 1rem; }
+    .kpi b { display: block; font-size: 1.8rem; color: #18e0ff; }
+    .kpi small { color: #8fa0b6; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+    .kpi i { font-style: normal; color: #8ad753; font-size: .75rem; }
+    h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: .1em; color: #7fe9ff; margin: 1.6rem 0 .5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    td, th { text-align: left; padding: .5rem .4rem; border-bottom: 1px solid #182234; }
+    th { color: #8fa0b6; font-weight: 600; font-size: .72rem; text-transform: uppercase; }
+    td:last-child, td:nth-child(2), th:last-child, th:nth-child(2) { text-align: right; font-variant-numeric: tabular-nums; }
+    .lock { text-align: center; padding: 4rem 1rem; color: #aeb9c9; }
+    .lock code { color: #18e0ff; }
+    .warn { background: #2a1c10; border: 1px solid #5a4020; color: #ffce9e; padding: .8rem 1rem; border-radius: 10px; font-size: .82rem; margin-bottom: 1.4rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    {!authed ? (
+      <div class="lock">
+        <h1>🔒 Panel de estadísticas</h1>
+        <p>Acceso restringido. Entra con <code>/stats/?k=TU_CLAVE</code>.</p>
+        <p class="sub">Define <code>STATS_KEY</code> en las variables de entorno de Vercel.</p>
+      </div>
+    ) : (
+      <>
+        <h1>📊 Estadísticas · Platanito Rico</h1>
+        <p class="sub">Analítica propia y anónima · actualizado en vivo · hoy: {today}</p>
+
+        {!statsEnabled && <div class="warn">⚠️ Upstash no está configurado: no hay datos. Añade UPSTASH_REDIS_REST_URL/TOKEN (o KV_REST_API_*) en Vercel.</div>}
+
+        <div class="cards">
+          <div class="kpi"><small>Visitas</small><b>{g('pv:all', 'total')}</b><i>+{g('pv:all', today)} hoy</i></div>
+          <div class="kpi"><small>Usos de demos</small><b>{sum(DEMOS, 'total')}</b><i>+{sum(DEMOS, today)} hoy</i></div>
+          <div class="kpi"><small>Leads</small><b>{sum(LEADS, 'total')}</b><i>+{sum(LEADS, today)} hoy</i></div>
+          <div class="kpi"><small>Conversión demo→lead</small><b>{sum(DEMOS, 'total') ? Math.round((sum(LEADS, 'total') / sum(DEMOS, 'total')) * 100) : 0}%</b></div>
+        </div>
+
+        <h2>Uso de demos</h2>
+        <table><thead><tr><th>Demo</th><th>Hoy</th><th>Total</th></tr></thead><tbody>
+          {DEMOS.map(([ev, label]) => (<tr><td>{label}</td><td>{g(ev, today)}</td><td>{g(ev, 'total')}</td></tr>))}
+        </tbody></table>
+
+        <h2>Leads por origen</h2>
+        <table><thead><tr><th>Origen</th><th>Hoy</th><th>Total</th></tr></thead><tbody>
+          {LEADS.map(([ev, label]) => (<tr><td>{label}</td><td>{g(ev, today)}</td><td>{g(ev, 'total')}</td></tr>))}
+        </tbody></table>
+
+        <h2>Páginas más vistas (requiere consentimiento de analítica)</h2>
+        <table><thead><tr><th>Página</th><th>Hoy</th><th>Total</th></tr></thead><tbody>
+          {PAGES.map(([ev, label]) => (<tr><td>{label}</td><td>{g(ev, today)}</td><td>{g(ev, 'total')}</td></tr>))}
+        </tbody></table>
+      </>
+    )}
+  </div>
+</body>
+</html>

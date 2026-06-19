@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
+import { bump } from '../../lib/stats';
 
 /* Estratega de marketing — genera una estrategia adaptada al negocio/sector.
    Streaming desde OpenRouter (cadena de modelos gratis); key en servidor. */
@@ -65,6 +66,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const userPrompt = `Negocio / sector: ${sector}.${tipoNegocio ? ` Detalle: ${tipoNegocio}.` : ''}\nGenera la estrategia de marketing adaptada a este negocio.`;
 
+  void bump('demo:marketing');
   return streamChatResponse({
     apiKey, title: APP_TITLE, temperature: 0.7, maxTokens: 1600,
     messages: [

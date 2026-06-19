@@ -45,7 +45,7 @@ export default defineConfig({
 
       // Excluir páginas que no deben indexarse (noindex o redirecciones)
       const excludedPaths = [
-        '/robots.txt', '/404', '/404.html', '/success/',
+        '/robots.txt', '/404', '/404.html', '/success/', '/stats',
         '/soluciones/agencia',
         '/aviso-legal/', '/privacidad/', '/cookies/', '/terminos-condiciones/'
       ];

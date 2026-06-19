@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
+import { bump } from '../../lib/stats';
 
 /* Asistente IA de Platanito Rico — chat conversacional sobre los servicios.
    Streaming desde OpenRouter; la API key vive solo en el servidor. */
@@ -79,6 +80,7 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('[asistente] OPENROUTER_API_KEY no configurada');
     return jsonError('El asistente no está disponible ahora mismo. Escríbenos a hola@platanitorico.com.', 503);
   }
+  void bump('demo:asistente');
   return streamChatResponse({
     apiKey, title: APP_TITLE, temperature: 0.7, maxTokens: 600,
     messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],

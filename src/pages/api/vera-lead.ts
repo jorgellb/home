@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
+import { bump } from '../../lib/stats';
 
 /* Captura de leads del demo Vera AI. Recibe los datos de contacto + el contexto
    del negocio + la propuesta generada, y se lo envía al negocio por email
@@ -73,6 +74,8 @@ export const POST: APIRoute = async ({ request }) => {
   if (email && !emailOk) {
     return json({ error: 'El email no parece válido.' }, 400);
   }
+
+  void bump(`lead:${String(body.source || 'vera').replace(/[^a-z]/gi, '').slice(0, 14) || 'vera'}`);
 
   const sectorNombre = SECTOR_NOMBRE[String(body.sector || '')] || String(body.sector || '—');
   const tipoNegocio = String(body.tipoNegocio || '').trim().slice(0, 500);
