@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { chatText, VISION_MODELS } from '../../lib/openrouter';
+import { bump } from '../../lib/stats';
 
 /* "Almería Commerce-AI Engine" — agente de VISIÓN + copywriting: a partir de la
    foto de un producto genera una ficha de e-commerce (JSON) con análisis visual,
@@ -105,6 +106,7 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('El analizador no está disponible ahora mismo. Mira el ejemplo mientras tanto.', 503);
   }
 
+  void bump('demo:ecommerce');
   const result = await chatText({
     apiKey, title: APP_TITLE, temperature: 0.5, maxTokens: 2200,
     messages: [

@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
+import { bump } from '../../lib/stats';
 
 /* "Mapa Neuronal de la Empresa" — agente que diseña la propuesta del producto
    adaptada al sector del visitante. Streaming desde OpenRouter; key en servidor. */
@@ -63,6 +64,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
   const userPrompt = `Sector del negocio: ${sector}.${tipoNegocio ? ` Detalle: ${tipoNegocio}.` : ''}\nGenera la propuesta del Mapa Neuronal adaptada a este negocio.`;
 
+  void bump('demo:mapa');
   return streamChatResponse({
     apiKey, title: APP_TITLE, temperature: 0.7, maxTokens: 1600,
     messages: [
