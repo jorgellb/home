@@ -1,0 +1,173 @@
+---
+/* Widget flotante de chat con la IA (Vera) — site-wide, en vanilla JS (sin React,
+   no añade peso de framework a ninguna página). Usa el endpoint /api/asistente. */
+---
+
+<button id="cw-launch" class="cw-launch" type="button" aria-label="Hablar con la IA">
+  <span class="cw-launch__ico" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="7" width="18" height="13" rx="3" /><path d="M12 7V4" /><circle cx="12" cy="3" r="1.2" fill="currentColor" />
+      <circle cx="9" cy="13" r="1.2" fill="currentColor" stroke="none" /><circle cx="15" cy="13" r="1.2" fill="currentColor" stroke="none" />
+      <path d="M9.5 16.5c.8.6 1.6.9 2.5.9s1.7-.3 2.5-.9" />
+    </svg>
+  </span>
+  <span class="cw-launch__label">¿Hablamos con la IA?</span>
+  <span class="cw-launch__pulse" aria-hidden="true"></span>
+</button>
+
+<section id="cw-panel" class="cw-panel" hidden aria-label="Asistente IA de Platanito Rico">
+  <header class="cw-head">
+    <span class="cw-ava" aria-hidden="true">V</span>
+    <div class="cw-headinfo"><b>Vera</b><span class="cw-status"><i></i> Asistente · responde al instante</span></div>
+    <button id="cw-close" class="cw-close" type="button" aria-label="Cerrar">✕</button>
+  </header>
+  <div class="cw-log" id="cw-log"></div>
+  <div class="cw-sug" id="cw-sug">
+    <button type="button" data-q="¿Cuánto cuesta una web?">¿Cuánto cuesta una web?</button>
+    <button type="button" data-q="Quiero una tienda online">Quiero una tienda online</button>
+    <button type="button" data-q="¿Hacéis SEO y marketing?">¿SEO y marketing?</button>
+  </div>
+  <form class="cw-form" id="cw-form">
+    <input id="cw-input" type="text" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Escribe tu pregunta" />
+    <button type="submit" class="cw-send" aria-label="Enviar">➤</button>
+  </form>
+  <p class="cw-foot">IA · demo. Para temas concretos te atiende una persona.</p>
+</section>
+
+<style>
+  .cw-launch {
+    position: fixed; right: 18px; bottom: 18px; z-index: 9990;
+    display: flex; align-items: center; gap: .5rem; padding: 0 1rem 0 .55rem; height: 56px;
+    border: 2px solid #fff; border-radius: 999px; cursor: pointer;
+    background: linear-gradient(120deg, #FF6B35, #ff9b3a); color: #fff;
+    box-shadow: 0 10px 30px -8px rgba(255, 107, 53, 0.65); transition: transform .15s, box-shadow .15s;
+  }
+  .cw-launch:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -8px rgba(255, 107, 53, 0.8); }
+  .cw-launch__ico { width: 34px; height: 34px; flex: none; display: flex; align-items: center; justify-content: center; }
+  .cw-launch__ico svg { width: 26px; height: 26px; }
+  .cw-launch__label { font-family: var(--font-display, sans-serif); font-weight: 800; font-size: .9rem; white-space: nowrap; }
+  .cw-launch__pulse { position: absolute; inset: -2px; border-radius: 999px; box-shadow: 0 0 0 0 rgba(255,107,53,.5); animation: cw-pulse 2.4s infinite; pointer-events: none; }
+  @keyframes cw-pulse { 0% { box-shadow: 0 0 0 0 rgba(255,107,53,.5); } 70% { box-shadow: 0 0 0 16px rgba(255,107,53,0); } 100% { box-shadow: 0 0 0 0 rgba(255,107,53,0); } }
+  @media (max-width: 560px) { .cw-launch__label { display: none; } .cw-launch { padding: 0; width: 56px; justify-content: center; } }
+
+  .cw-panel {
+    position: fixed; right: 18px; bottom: 18px; z-index: 9991;
+    width: min(380px, calc(100vw - 24px)); height: min(580px, calc(100vh - 90px));
+    display: flex; flex-direction: column; overflow: hidden;
+    background: #05070d; color: #e8edf5; border: 1px solid #1f2a3d; border-radius: 18px;
+    box-shadow: 0 24px 60px -16px rgba(0,0,0,.7); animation: cw-up .25s ease;
+  }
+  @keyframes cw-up { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .cw-head { display: flex; align-items: center; gap: .7rem; padding: .8rem 1rem; background: #0e1420; border-bottom: 1px solid #1f2a3d; }
+  .cw-ava { flex: none; width: 36px; height: 36px; border-radius: 50%; background: #FF6B35; color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-display, sans-serif); font-weight: 800; }
+  .cw-headinfo { flex: 1; display: flex; flex-direction: column; line-height: 1.2; }
+  .cw-headinfo b { font-family: var(--font-display, sans-serif); font-size: 1rem; }
+  .cw-status { font-size: .7rem; color: #8fa0b6; display: flex; align-items: center; gap: .35rem; }
+  .cw-status i { width: 7px; height: 7px; border-radius: 50%; background: #8ad753; box-shadow: 0 0 6px #8ad753; }
+  .cw-close { background: transparent; border: none; color: #8fa0b6; font-size: 1.1rem; cursor: pointer; padding: .2rem .4rem; }
+  .cw-close:hover { color: #fff; }
+  .cw-log { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; background: #070b12; }
+  .cw-row { display: flex; max-width: 90%; }
+  .cw-row--user { align-self: flex-end; }
+  .cw-bubble { padding: .6rem .85rem; font-size: .9rem; line-height: 1.5; border-radius: 14px; white-space: pre-wrap; word-break: break-word; }
+  .cw-bubble--bot { background: #fff; color: #14171c; border-bottom-left-radius: 4px; }
+  .cw-bubble--user { background: #FF6B35; color: #fff; border-bottom-right-radius: 4px; }
+  .cw-dots i { display: inline-block; width: 6px; height: 6px; margin: 0 1px; border-radius: 50%; background: #888; animation: cw-b 1.2s infinite; }
+  .cw-dots i:nth-child(2) { animation-delay: .15s; } .cw-dots i:nth-child(3) { animation-delay: .3s; }
+  @keyframes cw-b { 0%,60%,100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-4px); opacity: 1; } }
+  .cw-sug { display: flex; flex-wrap: wrap; gap: .4rem; padding: .7rem 1rem 0; background: #070b12; }
+  .cw-sug button { font-family: var(--font-mono, monospace); font-size: .74rem; padding: .4rem .7rem; border: 1px solid #243047; border-radius: 999px; background: #0e1420; color: #cdd7e6; cursor: pointer; }
+  .cw-sug button:hover { border-color: #FF6B35; color: #fff; }
+  .cw-form { display: flex; gap: .5rem; padding: .8rem 1rem; background: #070b12; border-top: 1px solid #1f2a3d; }
+  .cw-form input { flex: 1; min-width: 0; font: inherit; font-size: .9rem; padding: .65rem .8rem; border: 1px solid #243047; border-radius: 10px; background: #0e1420; color: #e8edf5; }
+  .cw-form input:focus { outline: none; border-color: #FF6B35; }
+  .cw-send { flex: none; width: 44px; border: none; border-radius: 10px; background: #FF6B35; color: #fff; font-size: 1rem; cursor: pointer; }
+  .cw-send:hover { filter: brightness(1.08); }
+  .cw-send:disabled { opacity: .5; cursor: not-allowed; }
+  .cw-foot { margin: 0; padding: 0 1rem .7rem; background: #070b12; font-size: .66rem; color: #5b6b80; text-align: center; }
+</style>
+
+<script>
+  const path = location.pathname;
+  // En las páginas dedicadas del asistente no hace falta el widget.
+  if (!/^\/asistente-(ia|voz)\/?$/.test(path)) {
+    const launch = document.getElementById('cw-launch') as HTMLButtonElement | null;
+    const panel = document.getElementById('cw-panel');
+    const closeBtn = document.getElementById('cw-close');
+    const log = document.getElementById('cw-log');
+    const sug = document.getElementById('cw-sug');
+    const form = document.getElementById('cw-form') as HTMLFormElement | null;
+    const input = document.getElementById('cw-input') as HTMLInputElement | null;
+    const sendBtn = form?.querySelector('.cw-send') as HTMLButtonElement | null;
+
+    const GREETING = '¡Hola! 👋 Soy Vera, la asistente de Platanito Rico. ¿En qué te ayudo? Pregúntame por webs, tiendas, precios o plazos.';
+    type Msg = { role: 'user' | 'assistant'; content: string };
+    const messages: Msg[] = [];
+    let streaming = false;
+    let greeted = false;
+
+    function scroll() { if (log) log.scrollTop = log.scrollHeight; }
+    function bubble(role: 'user' | 'assistant', content: string) {
+      const row = document.createElement('div');
+      row.className = 'cw-row' + (role === 'user' ? ' cw-row--user' : '');
+      const b = document.createElement('div');
+      b.className = 'cw-bubble ' + (role === 'user' ? 'cw-bubble--user' : 'cw-bubble--bot');
+      b.textContent = content;
+      row.appendChild(b); log?.appendChild(row); scroll();
+      return b;
+    }
+
+    function open() {
+      if (!panel || !launch) return;
+      panel.hidden = false; launch.style.display = 'none';
+      if (!greeted) { bubble('assistant', GREETING); greeted = true; }
+      setTimeout(() => input?.focus(), 50);
+      try { (window as any).track?.('cta:chatwidget'); } catch { /* noop */ }
+    }
+    function close() { if (panel) panel.hidden = true; if (launch) launch.style.display = ''; }
+
+    async function send(text: string) {
+      const content = text.trim();
+      if (!content || streaming) return;
+      if (sug) sug.style.display = 'none';
+      messages.push({ role: 'user', content });
+      bubble('user', content);
+      if (input) input.value = '';
+      streaming = true; if (sendBtn) sendBtn.disabled = true;
+
+      const botEl = bubble('assistant', '');
+      botEl.innerHTML = '<span class="cw-dots"><i></i><i></i><i></i></span>';
+
+      try {
+        const res = await fetch('/api/asistente/', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages }),
+        });
+        if (!res.ok || !res.body) {
+          let m = 'Ahora mismo no puedo responder. Escríbenos a hola@platanitorico.com 🙏';
+          try { const j = await res.json(); if (j?.error) m = j.error; } catch { /* noop */ }
+          botEl.textContent = m; return;
+        }
+        const reader = res.body.getReader(); const dec = new TextDecoder(); let acc = '';
+        for (;;) {
+          const { done, value } = await reader.read(); if (done) break;
+          acc += dec.decode(value, { stream: true }); botEl.textContent = acc; scroll();
+        }
+        if (acc.trim()) messages.push({ role: 'assistant', content: acc });
+        else botEl.textContent = 'Perdona, no me ha llegado respuesta. ¿Lo repetimos?';
+      } catch {
+        botEl.textContent = 'Uy, se ha cortado la conexión. Inténtalo de nuevo.';
+      } finally {
+        streaming = false; if (sendBtn) sendBtn.disabled = false; input?.focus();
+      }
+    }
+
+    launch?.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    form?.addEventListener('submit', (e) => { e.preventDefault(); if (input) send(input.value); });
+    sug?.addEventListener('click', (e) => {
+      const q = (e.target as HTMLElement).getAttribute('data-q');
+      if (q) send(q);
+    });
+  }
+</script>
