@@ -1,0 +1,212 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import EstudioMarca from '../components/marca/EstudioMarca.tsx';
+
+const title = 'Estudio de Marca con IA · Crea tu identidad en vivo';
+const description =
+  'Demo de IA multi-agente: describe tu negocio y un equipo de agentes (estrategia, naming, diseño y copy) crea tu identidad de marca al instante — nombre, logo, paleta, tipografía, tono y copy.';
+const canonical = 'https://platanitorico.com/estudio-marca/';
+
+const agentes = [
+  { ico: '🧭', t: 'Estratega', d: 'Define posicionamiento, público y personalidad de marca.' },
+  { ico: '🏷️', t: 'Naming', d: 'Propone el nombre y alternativas, con su concepto.' },
+  { ico: '🎨', t: 'Diseñador', d: 'Elige paleta de color, tipografías y la forma del logo.' },
+  { ico: '✍️', t: 'Copywriter', d: 'Fija el tono de voz y escribe tagline y titulares.' },
+];
+
+const pasos = [
+  { n: '01', t: 'Describes tu negocio', d: 'A qué te dedicas y, si lo tienes, el nombre de tu marca.' },
+  { n: '02', t: 'El equipo se pone a trabajar', d: 'Cuatro agentes de IA colaboran en vivo, cada uno en su especialidad.' },
+  { n: '03', t: 'Se ensambla la identidad', d: 'Nombre, logo, paleta, tipografía, tono y copy, coherentes entre sí.' },
+  { n: '04', t: 'Te lo llevas', d: 'Descargas el manual en PDF y, si te encaja, lo hacemos de verdad.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication',
+    name: 'Estudio de Marca con IA', applicationCategory: 'DesignApplication', operatingSystem: 'Web',
+    url: canonical, description, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://platanitorico.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Laboratorio de IA', item: 'https://platanitorico.com/laboratorio-ia/' },
+      { '@type': 'ListItem', position: 3, name: 'Estudio de Marca con IA', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
+  imageAlt="Estudio de Marca con IA - Platanito Rico"
+  type="website"
+  lang="es"
+  keywords="branding con IA, crear marca, generador de logo IA, identidad de marca Almería, naming, manual de marca, diseño de marca inteligencia artificial"
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Laboratorio de IA', href: '/laboratorio-ia/' },
+    { label: 'Estudio de Marca con IA' },
+  ]} />
+
+  <main id="main-content" class="em">
+    {/* HERO */}
+    <section class="em-hero">
+      <div class="container-brutal em-hero__inner">
+        <span class="em-eyebrow">✦ Demo en vivo · IA multi-agente</span>
+        <h1 class="em-hero__title">Estudio de <em>Marca</em> con IA</h1>
+        <p class="em-hero__lead">
+          No es un chatbot: es un <strong>equipo de agentes</strong> trabajando juntos. Describe tu negocio
+          y mira cómo, en vivo, un estratega, un experto en naming, un diseñador y un copywriter crean tu
+          <strong> identidad de marca completa</strong> —nombre, logo, paleta, tipografía, tono y copy—.
+        </p>
+        <div class="em-hero__chips">
+          <span>🧭 Estrategia</span>
+          <span>🏷️ Naming</span>
+          <span>🎨 Diseño</span>
+          <span>✍️ Copy</span>
+        </div>
+      </div>
+    </section>
+
+    {/* AGENTES */}
+    <section class="em-agents">
+      <div class="container-brutal">
+        <ul class="em-agents__grid">
+          {agentes.map((s) => (
+            <li class="em-agent">
+              <span class="em-agent__ico" aria-hidden="true">{s.ico}</span>
+              <b>{s.t}</b>
+              <span>{s.d}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* DEMO (island React) */}
+    <section class="em-demo" id="demo">
+      <div class="container-brutal">
+        <header class="em-sec-head">
+          <span class="em-eyebrow em-eyebrow--dark">✦ Pruébalo ahora</span>
+          <h2 class="em-h2">Crea tu marca en 10 segundos.</h2>
+        </header>
+        <EstudioMarca client:load />
+        <noscript>
+          <p class="em-noscript">Activa JavaScript para usar el Estudio de Marca con IA.</p>
+        </noscript>
+      </div>
+    </section>
+
+    {/* CÓMO FUNCIONA */}
+    <section class="em-steps">
+      <div class="container-brutal">
+        <header class="em-sec-head">
+          <span class="em-eyebrow">✦ Cómo funciona</span>
+          <h2 class="em-h2 em-h2--light">De una idea a una marca coherente.</h2>
+        </header>
+        <ol class="em-steps__list">
+          {pasos.map((s) => (
+            <li class="em-step">
+              <span class="em-step__n">{s.n}</span>
+              <div>
+                <h3 class="em-step__t">{s.t}</h3>
+                <p class="em-step__d">{s.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="em-note">
+          Esta demo muestra cómo varios agentes de IA pueden <strong>colaborar como un estudio creativo</strong>.
+          Es un punto de partida potentísimo: el logo final, el manual y la aplicación de la marca a la web los
+          afinamos a mano. La IA no sustituye al criterio de diseño, lo acelera.
+        </p>
+      </div>
+    </section>
+
+    {/* CTA */}
+    <section class="em-cta">
+      <div class="container-brutal em-cta__inner">
+        <span class="em-eyebrow">✦ ¿Te gusta lo que ves?</span>
+        <h2 class="em-cta__title">Hacemos tu marca de verdad.</h2>
+        <p class="em-cta__text">
+          Identidad visual, logotipo en vectorial, manual de marca y la web donde brilla. Lo que la IA esboza
+          aquí, nuestro estudio lo lleva al mundo real, listo para vender.
+        </p>
+        <div class="em-cta__btns">
+          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero mi marca →</a>
+          <a href="/laboratorio-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver más demos de IA</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .em { background: #05070b; color: #e8edf5; }
+  .em-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #c08bff; }
+  .em-eyebrow--dark { color: #FF6B35; }
+
+  .em-hero {
+    padding: 4rem 0 2.5rem;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(192,139,255,0.18) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
+    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden;
+  }
+  .em-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(#c08bff12 1px, transparent 1px), linear-gradient(90deg, #c08bff12 1px, transparent 1px);
+    background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
+  }
+  .em-hero__inner { position: relative; }
+  .em-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .em-hero__title em { font-style: normal; color: #c08bff; }
+  .em-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 62ch; margin: 0 0 1.5rem; }
+  .em-hero__lead strong { color: #fff; }
+  .em-hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .em-hero__chips span { font-family: var(--font-mono, monospace); font-size: .72rem; padding: .45rem .8rem; border: 1px solid #232a38; border-radius: 999px; color: #cdd7e6; background: #0c111b; }
+
+  .em-agents { padding: 2.5rem 0; background: #080c14; border-bottom: 1px solid #1a2233; }
+  .em-agents__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: .8rem; }
+  @media (min-width: 560px) { .em-agents__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 980px) { .em-agents__grid { grid-template-columns: repeat(4, 1fr); } }
+  .em-agent { background: #0c111b; border: 1.5px solid #1f2735; border-radius: 14px; padding: 1.1rem 1rem; }
+  .em-agent__ico { font-size: 1.5rem; }
+  .em-agent b { display: block; margin: .5rem 0 .3rem; color: #fff; font-size: .98rem; }
+  .em-agent span { font-size: .8rem; line-height: 1.4; color: #aeb9c9; }
+
+  .em-demo { padding: 3.5rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .em-noscript { text-align: center; color: #6a6258; margin-top: 1.5rem; }
+  .em-sec-head { text-align: center; max-width: 60ch; margin: 0 auto 2rem; }
+  .em-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
+  .em-h2--light { color: #fff; }
+
+  .em-steps { padding: 4rem 0; background: #080c14; }
+  .em-steps__list { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 768px) { .em-steps__list { grid-template-columns: 1fr 1fr; } }
+  .em-step { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 1.4rem 1.3rem; background: #0c111b; border: 1.5px solid #1f2735; border-radius: 16px; }
+  .em-step__n { font-family: var(--font-mono, monospace); font-weight: 800; color: #c08bff; }
+  .em-step__t { margin: 0 0 .4rem; font-family: var(--font-display, sans-serif); font-size: 1.1rem; font-weight: 800; color: #fff; }
+  .em-step__d { margin: 0; font-size: .9rem; line-height: 1.5; color: #aeb9c9; }
+  .em-note { margin: 2rem 0 0; padding: 1.3rem 1.4rem; border: 1px dashed #2a3445; border-radius: 14px; background: #0a0f18; font-size: .9rem; line-height: 1.6; color: #aeb9c9; }
+  .em-note strong { color: #fff; }
+
+  .em-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(192,139,255,0.16) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .em-cta__inner { max-width: 720px; }
+  .em-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
+  .em-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .em-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .em-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
+</style>
