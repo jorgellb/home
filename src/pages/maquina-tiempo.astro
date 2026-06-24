@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import MaquinaTiempo from '../components/tiempo/MaquinaTiempo.tsx';
+
+const title = 'Máquina del Tiempo de Marca · Tu web en 1995, hoy y 2035';
+const description =
+  'Demo de IA: describe tu negocio y mira cómo habría sido (y será) su web en cuatro épocas —1995, 2010, hoy y 2035—, renderizadas con la estética real de cada era. Hecho en Almería.';
+const canonical = 'https://platanitorico.com/maquina-tiempo/';
+
+const eras = [
+  { ico: '🕹️', t: '1995', d: 'Web primitiva: contador de visitas, “en construcción” y Times New Roman.' },
+  { ico: '💿', t: '2010', d: 'Web 2.0: brillos, “¡síguenos en Facebook!” y botones glossy.' },
+  { ico: '✨', t: '2026', d: 'Web moderna: limpia, clara y orientada a convertir.' },
+  { ico: '🚀', t: '2035', d: 'Web futurista: IA, voz, realidad aumentada y personalización.' },
+];
+
+const pasos = [
+  { n: '01', t: 'Describes tu negocio', d: 'A qué te dedicas y, si quieres, el nombre de tu marca.' },
+  { n: '02', t: 'La IA viaja en el tiempo', d: 'Imagina el contenido y el tono de tu web en cada década.' },
+  { n: '03', t: 'Recreamos cada época', d: 'Renderizamos cada era con su estética real, navegable.' },
+  { n: '04', t: 'Aterrizas en el futuro', d: 'Y decides cuál quieres de verdad: la de hoy o la del 2035.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication',
+    name: 'Máquina del Tiempo de Marca', applicationCategory: 'DesignApplication', operatingSystem: 'Web',
+    url: canonical, description, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://platanitorico.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Laboratorio de IA', item: 'https://platanitorico.com/laboratorio-ia/' },
+      { '@type': 'ListItem', position: 3, name: 'Máquina del Tiempo de Marca', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
+  imageAlt="Máquina del Tiempo de Marca - Platanito Rico"
+  type="website"
+  lang="es"
+  keywords="diseño web retro, evolución web, web 1995 2035, máquina del tiempo marca, diseño web Almería, web futurista IA, rediseño web"
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Laboratorio de IA', href: '/laboratorio-ia/' },
+    { label: 'Máquina del Tiempo de Marca' },
+  ]} />
+
+  <main id="main-content" class="mt">
+    {/* HERO */}
+    <section class="mt-hero">
+      <div class="container-brutal mt-hero__inner">
+        <span class="mt-eyebrow">✦ Demo en vivo · Viaje en el tiempo</span>
+        <h1 class="mt-hero__title">Máquina del <em>Tiempo</em> de Marca</h1>
+        <p class="mt-hero__lead">
+          Describe tu negocio y viaja en el tiempo: la IA recrea <strong>cómo habría sido tu web en 1995</strong>,
+          en 2010, hoy y en <strong>2035</strong>, cada una con la estética real de su época. Ríete con el pasado…
+          y enamórate del futuro.
+        </p>
+        <div class="mt-hero__chips">
+          <span>🕹️ 1995</span><span>💿 2010</span><span>✨ Hoy</span><span>🚀 2035</span>
+        </div>
+      </div>
+    </section>
+
+    {/* ERAS */}
+    <section class="mt-eras">
+      <div class="container-brutal">
+        <ul class="mt-eras__grid">
+          {eras.map((s) => (
+            <li class="mt-era">
+              <span class="mt-era__ico" aria-hidden="true">{s.ico}</span>
+              <b>{s.t}</b>
+              <span>{s.d}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* DEMO */}
+    <section class="mt-demo" id="demo">
+      <div class="container-brutal">
+        <header class="mt-sec-head">
+          <span class="mt-eyebrow mt-eyebrow--dark">✦ Pruébalo ahora</span>
+          <h2 class="mt-h2">Sube a la máquina del tiempo.</h2>
+        </header>
+        <MaquinaTiempo client:load />
+        <noscript><p class="mt-noscript">Activa JavaScript para usar la Máquina del Tiempo de Marca.</p></noscript>
+      </div>
+    </section>
+
+    {/* CÓMO FUNCIONA */}
+    <section class="mt-steps">
+      <div class="container-brutal">
+        <header class="mt-sec-head">
+          <span class="mt-eyebrow">✦ Cómo funciona</span>
+          <h2 class="mt-h2 mt-h2--light">Del libro de visitas al asistente con IA.</h2>
+        </header>
+        <ol class="mt-steps__list">
+          {pasos.map((s) => (
+            <li class="mt-step">
+              <span class="mt-step__n">{s.n}</span>
+              <div>
+                <h3 class="mt-step__t">{s.t}</h3>
+                <p class="mt-step__d">{s.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="mt-note">
+          Es una recreación <strong>generada por IA</strong> con fines de demostración y, sobre todo, para
+          divertir. Pero detrás hay un mensaje serio: <strong>tu web envejece</strong>. Si la tuya se quedó en
+          2010, quizá sea el momento de saltar a la del 2026 (o más allá).
+        </p>
+      </div>
+    </section>
+
+    {/* CTA */}
+    <section class="mt-cta">
+      <div class="container-brutal mt-cta__inner">
+        <span class="mt-eyebrow">✦ ¿Tu web es de otra época?</span>
+        <h2 class="mt-cta__title">Te traemos al presente (y al futuro).</h2>
+        <p class="mt-cta__text">
+          Diseñamos webs modernas, rápidas y pensadas para vender. Y cuando quieras dar el salto al futuro —IA,
+          asistentes, voz— ya sabes quién te lo monta.
+        </p>
+        <div class="mt-cta__btns">
+          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero mi web de hoy →</a>
+          <a href="/laboratorio-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver más demos de IA</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .mt { background: #05070b; color: #e8edf5; }
+  .mt-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #f0a830; }
+  .mt-eyebrow--dark { color: #FF6B35; }
+
+  .mt-hero {
+    padding: 4rem 0 2.5rem;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(240,168,48,0.18) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
+    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden;
+  }
+  .mt-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(#f0a83012 1px, transparent 1px), linear-gradient(90deg, #f0a83012 1px, transparent 1px);
+    background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
+  }
+  .mt-hero__inner { position: relative; }
+  .mt-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .mt-hero__title em { font-style: normal; color: #f0a830; }
+  .mt-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 62ch; margin: 0 0 1.5rem; }
+  .mt-hero__lead strong { color: #fff; }
+  .mt-hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .mt-hero__chips span { font-family: var(--font-mono, monospace); font-size: .72rem; padding: .45rem .8rem; border: 1px solid #232a38; border-radius: 999px; color: #cdd7e6; background: #0c111b; }
+
+  .mt-eras { padding: 2.5rem 0; background: #080c14; border-bottom: 1px solid #1a2233; }
+  .mt-eras__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: .8rem; }
+  @media (min-width: 560px) { .mt-eras__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 980px) { .mt-eras__grid { grid-template-columns: repeat(4, 1fr); } }
+  .mt-era { background: #0c111b; border: 1.5px solid #1f2735; border-radius: 14px; padding: 1.1rem 1rem; }
+  .mt-era__ico { font-size: 1.5rem; }
+  .mt-era b { display: block; margin: .5rem 0 .3rem; color: #fff; font-size: 1.05rem; font-family: var(--font-mono, monospace); }
+  .mt-era span { font-size: .8rem; line-height: 1.4; color: #aeb9c9; }
+
+  .mt-demo { padding: 3.5rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .mt-noscript { text-align: center; color: #6a6258; margin-top: 1.5rem; }
+  .mt-sec-head { text-align: center; max-width: 60ch; margin: 0 auto 2rem; }
+  .mt-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
+  .mt-h2--light { color: #fff; }
+
+  .mt-steps { padding: 4rem 0; background: #080c14; }
+  .mt-steps__list { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 768px) { .mt-steps__list { grid-template-columns: 1fr 1fr; } }
+  .mt-step { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 1.4rem 1.3rem; background: #0c111b; border: 1.5px solid #1f2735; border-radius: 16px; }
+  .mt-step__n { font-family: var(--font-mono, monospace); font-weight: 800; color: #f0a830; }
+  .mt-step__t { margin: 0 0 .4rem; font-family: var(--font-display, sans-serif); font-size: 1.1rem; font-weight: 800; color: #fff; }
+  .mt-step__d { margin: 0; font-size: .9rem; line-height: 1.5; color: #aeb9c9; }
+  .mt-note { margin: 2rem 0 0; padding: 1.3rem 1.4rem; border: 1px dashed #2a3445; border-radius: 14px; background: #0a0f18; font-size: .9rem; line-height: 1.6; color: #aeb9c9; }
+  .mt-note strong { color: #fff; }
+
+  .mt-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(240,168,48,0.16) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .mt-cta__inner { max-width: 720px; }
+  .mt-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
+  .mt-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .mt-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .mt-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
+</style>
