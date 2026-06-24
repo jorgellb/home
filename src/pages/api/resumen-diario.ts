@@ -18,6 +18,7 @@ const DEMOS: [string, string][] = [
   ['demo:vera', 'Vera · Propuestas'],
   ['demo:marca', 'Estudio de Marca'],
   ['demo:rayosx', 'Rayos X · Atención'],
+  ['demo:tiempo', 'Máquina del Tiempo'],
   ['demo:ecommerce', 'Commerce-AI · Visión'],
   ['demo:mapa', 'Mapa Neuronal'],
   ['demo:marketing', 'Estrategia Marketing'],
@@ -28,7 +29,7 @@ const LEADS: [string, string][] = [
 ];
 const PAGES: [string, string][] = [
   ['pv:/', 'Inicio'], ['pv:/laboratorio-ia/', 'Laboratorio IA'], ['pv:/vera-ai/', 'Vera AI'],
-  ['pv:/estudio-marca/', 'Estudio de Marca'], ['pv:/rayos-x/', 'Rayos X'], ['pv:/asistente-ia/', 'Asistente'],
+  ['pv:/estudio-marca/', 'Estudio de Marca'], ['pv:/rayos-x/', 'Rayos X'], ['pv:/maquina-tiempo/', 'Máquina Tiempo'], ['pv:/asistente-ia/', 'Asistente'],
   ['pv:/soluciones/empresa/', 'Empresa'], ['pv:/marketing/', 'Marketing'],
   ['pv:/soluciones/ecommerce/', 'Ecommerce'], ['pv:/probador-virtual-ar/', 'Probador AR'],
 ];
