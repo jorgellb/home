@@ -28,6 +28,19 @@ export default function AsistenteChat() {
   const [streaming, setStreaming] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const cidRef = useRef('a' + Math.random().toString(36).slice(2, 12));
+
+  /* Guarda la conversación (fire-and-forget) para que el negocio pueda revisarla. */
+  function logChat(all: ChatMessage[]) {
+    const payload = all.filter((m) => m.content.trim()).map((m) => ({ role: m.role, content: m.content }));
+    if (!payload.some((m) => m.role === 'user')) return;
+    try {
+      fetch('/api/chat-log/', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+        body: JSON.stringify({ cid: cidRef.current, source: 'asistente', messages: payload }),
+      }).catch(() => { /* noop */ });
+    } catch { /* noop */ }
+  }
 
   // Captura de lead
   const [leadOpen, setLeadOpen] = useState(false);
@@ -83,6 +96,7 @@ export default function AsistenteChat() {
         setMessages((p) => setLast(p, acc));
       }
       if (!acc.trim()) setMessages((p) => setLast(p, 'Perdona, no me ha llegado respuesta. ¿Lo intentamos de nuevo?'));
+      else logChat([...history, { role: 'assistant', content: acc }]);
     } catch {
       setMessages((p) => {
         const last = p[p.length - 1];
@@ -101,6 +115,7 @@ export default function AsistenteChat() {
   }
 
   function reset() {
+    cidRef.current = 'a' + Math.random().toString(36).slice(2, 12);
     setMessages([{ role: 'assistant', content: GREETING }]);
     setInput('');
     setStreaming(false);
@@ -219,7 +234,7 @@ export default function AsistenteChat() {
           {streaming ? '…' : '➤'}
         </button>
       </div>
-      <p className={styles.disclaimer}>Asistente con IA · demo. Para temas concretos te atiende una persona en hola@platanitorico.com.</p>
+      <p className={styles.disclaimer}>Asistente con IA · demo. Podemos guardar la conversación para atenderte mejor. Para temas concretos te atiende una persona en hola@platanitorico.com.</p>
     </div>
   );
 }
