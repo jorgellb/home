@@ -34,7 +34,7 @@
     <input id="cw-input" type="text" placeholder="Escribe tu pregunta…" autocomplete="off" aria-label="Escribe tu pregunta" />
     <button type="submit" class="cw-send" aria-label="Enviar">➤</button>
   </form>
-  <p class="cw-foot">IA · demo. Para temas concretos te atiende una persona.</p>
+  <p class="cw-foot">IA · demo. Guardamos la conversación para poder atenderte; te atiende una persona si hace falta.</p>
 </section>
 
 <style>
@@ -109,6 +109,18 @@
     const messages: Msg[] = [];
     let streaming = false;
     let greeted = false;
+    const cid = 'w' + Math.random().toString(36).slice(2, 12);
+
+    /* Guarda la conversación para que el negocio pueda revisarla luego. */
+    function logChat() {
+      if (!messages.some((m) => m.role === 'user')) return;
+      try {
+        fetch('/api/chat-log/', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, keepalive: true,
+          body: JSON.stringify({ cid, source: 'widget', messages }),
+        }).catch(() => { /* noop */ });
+      } catch { /* noop */ }
+    }
 
     function scroll() { if (log) log.scrollTop = log.scrollHeight; }
     function bubble(role: 'user' | 'assistant', content: string) {
@@ -157,7 +169,7 @@
           const { done, value } = await reader.read(); if (done) break;
           acc += dec.decode(value, { stream: true }); botEl.textContent = acc; scroll();
         }
-        if (acc.trim()) messages.push({ role: 'assistant', content: acc });
+        if (acc.trim()) { messages.push({ role: 'assistant', content: acc }); logChat(); }
         else botEl.textContent = 'Perdona, no me ha llegado respuesta. ¿Lo repetimos?';
       } catch {
         botEl.textContent = 'Uy, se ha cortado la conexión. Inténtalo de nuevo.';

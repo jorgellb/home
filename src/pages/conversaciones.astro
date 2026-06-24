@@ -1,0 +1,144 @@
+---
+export const prerender = false;
+import { listConversations, chatlogEnabled } from '../lib/chatlog';
+
+const STATS_KEY = import.meta.env.STATS_KEY;
+const key = Astro.url.searchParams.get('k') || '';
+const authed = Boolean(STATS_KEY && key === STATS_KEY);
+
+const convos = authed && chatlogEnabled ? await listConversations(200) : [];
+const hotCount = convos.filter((c) => c.hot).length;
+const fmt = (ts: number) => new Date(ts).toLocaleString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+const sourceLabel = (s: string) => (s === 'widget' ? 'Widget' : s === 'asistente' ? 'Asistente' : s);
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Conversaciones · Platanito Rico</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: ui-monospace, SFMono-Regular, monospace; background: #05070d; color: #e8edf5; margin: 0; padding: 2rem 1rem; }
+    .box { max-width: 860px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+    .sub { color: #7c899c; font-size: .8rem; margin: 0 0 1.4rem; }
+    a { color: #18e0ff; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; margin-bottom: 1.2rem; }
+    .kpi { background: #0e1420; border: 1px solid #1f2a3d; border-radius: 12px; padding: .9rem 1rem; }
+    .kpi b { display: block; font-size: 1.7rem; color: #18e0ff; }
+    .kpi.hot b { color: #ffb24d; }
+    .kpi small { color: #8fa0b6; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+    .toolbar { display: flex; gap: .6rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+    #q { flex: 1; min-width: 180px; font: inherit; font-size: .9rem; padding: .55rem .8rem; border: 1px solid #243047; border-radius: 8px; background: #0e1420; color: #e8edf5; }
+    #q:focus { outline: none; border-color: #18e0ff; }
+    .filt { font: inherit; font-size: .78rem; padding: .5rem .8rem; border: 1px solid #243047; border-radius: 8px; background: #0e1420; color: #cdd7e6; cursor: pointer; }
+    .filt.on { border-color: #ffb24d; color: #ffb24d; }
+    .conv { background: #0b111c; border: 1px solid #1c2740; border-radius: 12px; margin-bottom: .7rem; overflow: hidden; }
+    .conv[data-hot="1"] { border-color: #6b4a1f; }
+    .conv summary { list-style: none; cursor: pointer; padding: .8rem 1rem; display: flex; align-items: center; gap: .6rem; }
+    .conv summary::-webkit-details-marker { display: none; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #45506680; flex: none; }
+    .conv[data-hot="1"] .dot { background: #ffb24d; box-shadow: 0 0 8px #ffb24d; }
+    .first { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #e8edf5; font-size: .9rem; }
+    .meta { color: #7c899c; font-size: .72rem; white-space: nowrap; }
+    .badge { font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; padding: .15rem .45rem; border-radius: 5px; background: #16202f; color: #8fa0b6; }
+    .badge.hot { background: #3a2a12; color: #ffb24d; }
+    .log { padding: .2rem 1rem 1rem; border-top: 1px solid #16202f; }
+    .msg { margin: .7rem 0; font-size: .86rem; line-height: 1.5; }
+    .msg b { display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .15rem; }
+    .msg.user b { color: #8fa0b6; }
+    .msg.bot b { color: #FF8a4d; }
+    .msg .t { color: #d7e0ec; white-space: pre-wrap; }
+    .msg.user .t { color: #fff; }
+    .lock { text-align: center; padding: 4rem 1rem; color: #aeb9c9; }
+    .lock code { color: #18e0ff; }
+    .warn { background: #2a1c10; border: 1px solid #5a4020; color: #ffce9e; padding: .8rem 1rem; border-radius: 10px; font-size: .82rem; margin-bottom: 1.2rem; }
+    .empty { text-align: center; color: #7c899c; padding: 3rem 1rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    {!authed ? (
+      <div class="lock">
+        <h1>🔒 Conversaciones del asistente</h1>
+        <p>Acceso restringido. Entra con <code>/conversaciones/?k=TU_CLAVE</code>.</p>
+        <p class="sub">Usa la misma <code>STATS_KEY</code> de las variables de entorno de Vercel.</p>
+      </div>
+    ) : (
+      <>
+        <h1>💬 Conversaciones del asistente</h1>
+        <p class="sub">Privado y con caducidad automática · <a href="/stats/?k={key}">ver estadísticas →</a></p>
+
+        {!chatlogEnabled && <div class="warn">⚠️ Upstash no está configurado: no se guardan conversaciones. Añade UPSTASH_REDIS_REST_URL/TOKEN (o KV_REST_API_*) en Vercel.</div>}
+
+        <div class="cards">
+          <div class="kpi"><small>Conversaciones</small><b>{convos.length}</b></div>
+          <div class="kpi hot"><small>Posibles clientes</small><b>{hotCount}</b></div>
+        </div>
+
+        {convos.length === 0 ? (
+          <div class="empty">Aún no hay conversaciones guardadas.<br />Aparecerán aquí en cuanto un cliente use el chat.</div>
+        ) : (
+          <>
+            <div class="toolbar">
+              <input id="q" type="search" placeholder="Buscar en las conversaciones…" autocomplete="off" />
+              <button class="filt" id="onlyhot" type="button">🟠 Solo posibles clientes</button>
+            </div>
+            <div id="list">
+              {convos.map((c) => {
+                const first = c.msgs.find((m) => m.role === 'user');
+                const text = c.msgs.map((m) => m.content).join(' \n ').toLowerCase();
+                return (
+                  <details class="conv" data-hot={c.hot ? '1' : '0'} data-text={text}>
+                    <summary>
+                      <span class="dot"></span>
+                      <span class="first">{first ? first.content : '(sin texto)'}</span>
+                      {c.hot && <span class="badge hot">cliente</span>}
+                      <span class="badge">{sourceLabel(c.source)}</span>
+                      <span class="meta">{c.msgs.length} msg · {fmt(c.updated || c.ts)}</span>
+                    </summary>
+                    <div class="log">
+                      {c.msgs.map((m) => (
+                        <div class={`msg ${m.role === 'user' ? 'user' : 'bot'}`}>
+                          <b>{m.role === 'user' ? 'Cliente' : 'Vera (IA)'}</b>
+                          <span class="t">{m.content}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </>
+    )}
+  </div>
+
+  <script is:inline>
+    (function () {
+      const q = document.getElementById('q');
+      const onlyhot = document.getElementById('onlyhot');
+      const items = Array.from(document.querySelectorAll('.conv'));
+      let hotOnly = false;
+      function apply() {
+        const term = (q && q.value || '').trim().toLowerCase();
+        items.forEach((el) => {
+          const okText = !term || (el.getAttribute('data-text') || '').includes(term);
+          const okHot = !hotOnly || el.getAttribute('data-hot') === '1';
+          el.style.display = okText && okHot ? '' : 'none';
+        });
+      }
+      q && q.addEventListener('input', apply);
+      onlyhot && onlyhot.addEventListener('click', function () {
+        hotOnly = !hotOnly;
+        onlyhot.classList.toggle('on', hotOnly);
+        apply();
+      });
+    })();
+  </script>
+</body>
+</html>
