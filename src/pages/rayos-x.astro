@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import RayosX from '../components/rayosx/RayosX.tsx';
+
+const title = 'Rayos X de Atención · Mapa de calor de tu web con IA';
+const description =
+  'Sube una captura de tu web y la IA predice el mapa de calor de atención: dónde miran los ojos en los primeros segundos, la primera impresión y qué falla. Neuromarketing instantáneo, hecho en Almería.';
+const canonical = 'https://platanitorico.com/rayos-x/';
+
+const mide = [
+  { ico: '🔥', t: 'Mapa de calor', d: 'Dónde se concentra la atención en los primeros segundos.' },
+  { ico: '👁️', t: 'Recorrido visual', d: 'El orden en que la mirada recorre la página.' },
+  { ico: '⭐', t: 'Primera impresión', d: 'Una nota y qué se entiende del negocio en 3 segundos.' },
+  { ico: '🛠️', t: 'Qué arreglar', d: 'Problemas de jerarquía y mejoras concretas para convertir más.' },
+];
+
+const pasos = [
+  { n: '01', t: 'Subes una captura', d: 'La tuya o la de tu competencia. No se publica en ningún sitio.' },
+  { n: '02', t: 'La IA la escanea', d: 'Analiza contraste, tamaño, posición, rostros y patrón de lectura.' },
+  { n: '03', t: 'Predice la atención', d: 'Genera el mapa de calor y el recorrido probable de la mirada.' },
+  { n: '04', t: 'Te dice qué mejorar', d: 'Primera impresión, aciertos, problemas y recomendaciones accionables.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication',
+    name: 'Rayos X de Atención', applicationCategory: 'DesignApplication', operatingSystem: 'Web',
+    url: canonical, description, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://platanitorico.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Laboratorio de IA', item: 'https://platanitorico.com/laboratorio-ia/' },
+      { '@type': 'ListItem', position: 3, name: 'Rayos X de Atención', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-desarrollo-web-calidad.jpg"
+  imageAlt="Rayos X de Atención - mapa de calor de web con IA"
+  type="website"
+  lang="es"
+  keywords="mapa de calor web, heatmap IA, atención web, neuromarketing Almería, primera impresión web, eye tracking IA, análisis UX inteligencia artificial, mejorar conversión web"
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Laboratorio de IA', href: '/laboratorio-ia/' },
+    { label: 'Rayos X de Atención' },
+  ]} />
+
+  <main id="main-content" class="rx">
+    {/* HERO */}
+    <section class="rx-hero">
+      <div class="container-brutal rx-hero__inner">
+        <span class="rx-eyebrow">✦ Demo en vivo · Visión IA</span>
+        <h1 class="rx-hero__title">Rayos X de <em>Atención</em></h1>
+        <p class="rx-hero__lead">
+          Mira tu web <strong>con los ojos de una IA</strong>. Sube una captura y predecimos el
+          <strong> mapa de calor de la atención</strong>: dónde se va la mirada en los primeros segundos,
+          qué se ve, qué pasa desapercibido y cómo mejorar la primera impresión.
+        </p>
+        <div class="rx-hero__chips">
+          <span>🔥 Mapa de calor</span>
+          <span>👁️ Recorrido de la mirada</span>
+          <span>⭐ Primera impresión</span>
+        </div>
+      </div>
+    </section>
+
+    {/* QUÉ MIDE */}
+    <section class="rx-mide">
+      <div class="container-brutal">
+        <ul class="rx-mide__grid">
+          {mide.map((s) => (
+            <li class="rx-mide__item">
+              <span class="rx-mide__ico" aria-hidden="true">{s.ico}</span>
+              <b>{s.t}</b>
+              <span>{s.d}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* DEMO */}
+    <section class="rx-demo" id="demo">
+      <div class="container-brutal">
+        <header class="rx-sec-head">
+          <span class="rx-eyebrow rx-eyebrow--dark">✦ Pruébalo ahora</span>
+          <h2 class="rx-h2">¿Dónde miran tus visitantes?</h2>
+        </header>
+        <RayosX client:load />
+        <noscript><p class="rx-noscript">Activa JavaScript para usar el Rayos X de Atención.</p></noscript>
+      </div>
+    </section>
+
+    {/* CÓMO FUNCIONA */}
+    <section class="rx-steps">
+      <div class="container-brutal">
+        <header class="rx-sec-head">
+          <span class="rx-eyebrow">✦ Cómo funciona</span>
+          <h2 class="rx-h2 rx-h2--light">Neuromarketing, sin esperar semanas.</h2>
+        </header>
+        <ol class="rx-steps__list">
+          {pasos.map((s) => (
+            <li class="rx-step">
+              <span class="rx-step__n">{s.n}</span>
+              <div>
+                <h3 class="rx-step__t">{s.t}</h3>
+                <p class="rx-step__d">{s.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="rx-note">
+          Es una <strong>predicción de la IA</strong> basada en principios de jerarquía visual, contraste y
+          saliencia — no es eye-tracking real con personas, pero acierta en lo importante: qué destaca y qué se
+          pierde. En un proyecto real lo combinamos con datos de tu web (mapas de calor reales y analítica).
+        </p>
+      </div>
+    </section>
+
+    {/* CTA */}
+    <section class="rx-cta">
+      <div class="container-brutal rx-cta__inner">
+        <span class="rx-eyebrow">✦ ¿Tu web no convierte?</span>
+        <h2 class="rx-cta__title">Hacemos que miren lo que importa.</h2>
+        <p class="rx-cta__text">
+          Rediseñamos tu web para guiar la atención hacia lo que vende: tu mensaje, tus productos y tu botón de
+          acción. Más claridad, más conversión.
+        </p>
+        <div class="rx-cta__btns">
+          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero mejorar mi web →</a>
+          <a href="/laboratorio-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver más demos de IA</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .rx { background: #05070b; color: #e8edf5; }
+  .rx-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #ff5c5c; }
+  .rx-eyebrow--dark { color: #ff5c5c; }
+
+  .rx-hero {
+    padding: 4rem 0 2.5rem;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(255,92,92,0.20) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
+    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden;
+  }
+  .rx-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(#ff5c5c12 1px, transparent 1px), linear-gradient(90deg, #ff5c5c12 1px, transparent 1px);
+    background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
+  }
+  .rx-hero__inner { position: relative; }
+  .rx-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .rx-hero__title em { font-style: normal; color: #ff5c5c; }
+  .rx-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 62ch; margin: 0 0 1.5rem; }
+  .rx-hero__lead strong { color: #fff; }
+  .rx-hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .rx-hero__chips span { font-family: var(--font-mono, monospace); font-size: .72rem; padding: .45rem .8rem; border: 1px solid #232a38; border-radius: 999px; color: #cdd7e6; background: #0c111b; }
+
+  .rx-mide { padding: 2.5rem 0; background: #080c14; border-bottom: 1px solid #1a2233; }
+  .rx-mide__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: .8rem; }
+  @media (min-width: 560px) { .rx-mide__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 980px) { .rx-mide__grid { grid-template-columns: repeat(4, 1fr); } }
+  .rx-mide__item { background: #0c111b; border: 1.5px solid #1f2735; border-radius: 14px; padding: 1.1rem 1rem; }
+  .rx-mide__ico { font-size: 1.5rem; }
+  .rx-mide__item b { display: block; margin: .5rem 0 .3rem; color: #fff; font-size: .98rem; }
+  .rx-mide__item span { font-size: .8rem; line-height: 1.4; color: #aeb9c9; }
+
+  .rx-demo { padding: 3.5rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .rx-noscript { text-align: center; color: #6a6258; margin-top: 1.5rem; }
+  .rx-sec-head { text-align: center; max-width: 60ch; margin: 0 auto 2rem; }
+  .rx-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
+  .rx-h2--light { color: #fff; }
+
+  .rx-steps { padding: 4rem 0; background: #080c14; }
+  .rx-steps__list { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 768px) { .rx-steps__list { grid-template-columns: 1fr 1fr; } }
+  .rx-step { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 1.4rem 1.3rem; background: #0c111b; border: 1.5px solid #1f2735; border-radius: 16px; }
+  .rx-step__n { font-family: var(--font-mono, monospace); font-weight: 800; color: #ff5c5c; }
+  .rx-step__t { margin: 0 0 .4rem; font-family: var(--font-display, sans-serif); font-size: 1.1rem; font-weight: 800; color: #fff; }
+  .rx-step__d { margin: 0; font-size: .9rem; line-height: 1.5; color: #aeb9c9; }
+  .rx-note { margin: 2rem 0 0; padding: 1.3rem 1.4rem; border: 1px dashed #2a3445; border-radius: 14px; background: #0a0f18; font-size: .9rem; line-height: 1.6; color: #aeb9c9; }
+  .rx-note strong { color: #fff; }
+
+  .rx-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(255,92,92,0.16) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .rx-cta__inner { max-width: 720px; }
+  .rx-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
+  .rx-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .rx-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .rx-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
+</style>
