@@ -1,0 +1,45 @@
+---
+export const prerender = false;
+import Radar from '../components/radar/Radar.tsx';
+
+const STATS_KEY = import.meta.env.STATS_KEY;
+const key = Astro.url.searchParams.get('k') || '';
+const authed = Boolean(STATS_KEY && key === STATS_KEY);
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Radar de clientes · Platanito Rico</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: ui-monospace, SFMono-Regular, monospace; background: #05070d; color: #e8edf5; margin: 0; padding: 2rem 1rem; }
+    .box { max-width: 880px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; margin: 0 0 .3rem; }
+    .sub { color: #7c899c; font-size: .8rem; margin: 0 0 1.6rem; }
+    .sub a { color: #18e0ff; }
+    .lock { text-align: center; padding: 4rem 1rem; color: #aeb9c9; }
+    .lock code { color: #18e0ff; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    {!authed ? (
+      <div class="lock">
+        <h1>🔒 Radar captador de clientes</h1>
+        <p>Herramienta interna. Entra con <code>/radar/?k=TU_CLAVE</code>.</p>
+        <p class="sub">Usa la misma <code>STATS_KEY</code> de las variables de entorno de Vercel.</p>
+      </div>
+    ) : (
+      <>
+        <h1>📡 Radar captador de clientes</h1>
+        <p class="sub">Negocios reales por sector y zona (datos públicos de OpenStreetMap), ordenados por oportunidad. · <a href={`/stats/?k=${key}`}>estadísticas</a> · <a href={`/conversaciones/?k=${key}`}>conversaciones</a></p>
+        <Radar client:load apiKey={key} />
+      </>
+    )}
+  </div>
+</body>
+</html>
