@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import Configurador3D from '../components/config3d/Configurador3D.tsx';
+
+const title = 'Configurador 3D + AR · Personaliza y prueba productos en tu espacio';
+const description =
+  'Demo de producto en 3D con materiales físicos realistas (PBR): gira la pieza, cambia color y acabado en vivo y colócala en tu salón con realidad aumentada. Hecho en Almería.';
+const canonical = 'https://platanitorico.com/configurador-3d/';
+
+const features = [
+  { ico: '🧊', t: '3D en tiempo real', d: 'Gira, acerca y explora el producto desde cualquier ángulo.' },
+  { ico: '🎨', t: 'Materiales PBR', d: 'Color y acabado (cerámica, metal, oro, cristal) con reflejos reales.' },
+  { ico: '👁️', t: 'Realidad aumentada', d: 'Coloca el producto a tamaño real en tu propio espacio.' },
+  { ico: '⚡', t: 'En el navegador', d: 'Sin instalar nada. Funciona directamente en la web.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'WebApplication',
+    name: 'Configurador 3D + AR', applicationCategory: 'DesignApplication', operatingSystem: 'Web',
+    url: canonical, description, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: 'https://platanitorico.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Laboratorio de IA', item: 'https://platanitorico.com/laboratorio-ia/' },
+      { '@type': 'ListItem', position: 3, name: 'Configurador 3D + AR', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-desarrollo-web-calidad.jpg"
+  imageAlt="Configurador 3D con realidad aumentada - Platanito Rico"
+  type="website"
+  lang="es"
+  keywords="configurador 3D, realidad aumentada producto, WebXR, ecommerce 3D, probar producto en casa, visualizador 3D Almería, AR producto web"
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Laboratorio de IA', href: '/laboratorio-ia/' },
+    { label: 'Configurador 3D + AR' },
+  ]} />
+
+  <main id="main-content" class="cf">
+    <section class="cf-hero">
+      <div class="container-brutal cf-hero__inner">
+        <span class="cf-eyebrow">✦ Demo en vivo · 3D y AR</span>
+        <h1 class="cf-hero__title">Configurador <em>3D</em> + AR</h1>
+        <p class="cf-hero__lead">
+          Personaliza un producto en <strong>3D con materiales físicos reales</strong> —gíralo, cambia su color
+          y acabado— y, si estás en el móvil, <strong>colócalo en tu propio espacio</strong> con realidad
+          aumentada. Todo en el navegador, sin instalar nada.
+        </p>
+        <div class="cf-hero__chips">
+          <span>🧊 3D en tiempo real</span><span>🎨 Materiales PBR</span><span>👁️ Realidad aumentada</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="cf-feats">
+      <div class="container-brutal">
+        <ul class="cf-feats__grid">
+          {features.map((s) => (
+            <li class="cf-feat">
+              <span class="cf-feat__ico" aria-hidden="true">{s.ico}</span>
+              <b>{s.t}</b>
+              <span>{s.d}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="cf-demo" id="demo">
+      <div class="container-brutal">
+        <header class="cf-sec-head">
+          <span class="cf-eyebrow cf-eyebrow--dark">✦ Pruébalo ahora</span>
+          <h2 class="cf-h2">Diséñalo a tu gusto.</h2>
+        </header>
+        <Configurador3D client:only="react" />
+        <noscript><p class="cf-noscript">Activa JavaScript para usar el configurador 3D.</p></noscript>
+      </div>
+    </section>
+
+    <section class="cf-cta">
+      <div class="container-brutal cf-cta__inner">
+        <span class="cf-eyebrow">✦ ¿Vendes productos?</span>
+        <h2 class="cf-cta__title">Que tus clientes los prueben antes de comprar.</h2>
+        <p class="cf-cta__text">
+          Integramos visores 3D y realidad aumentada en tu tienda online: menos dudas, menos devoluciones y una
+          experiencia que recuerda. Muebles, decoración, moda, joyería… lo llevamos a 3D.
+        </p>
+        <div class="cf-cta__btns">
+          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero 3D en mi tienda →</a>
+          <a href="/laboratorio-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver más demos</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .cf { background: #05070b; color: #e8edf5; }
+  .cf-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #18e0ff; }
+  .cf-eyebrow--dark { color: #FF6B35; }
+
+  .cf-hero {
+    padding: 4rem 0 2.5rem;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.18) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
+    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden;
+  }
+  .cf-hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(#18e0ff12 1px, transparent 1px), linear-gradient(90deg, #18e0ff12 1px, transparent 1px);
+    background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
+  }
+  .cf-hero__inner { position: relative; }
+  .cf-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .cf-hero__title em { font-style: normal; color: #18e0ff; }
+  .cf-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 62ch; margin: 0 0 1.5rem; }
+  .cf-hero__lead strong { color: #fff; }
+  .cf-hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .cf-hero__chips span { font-family: var(--font-mono, monospace); font-size: .72rem; padding: .45rem .8rem; border: 1px solid #232a38; border-radius: 999px; color: #cdd7e6; background: #0c111b; }
+
+  .cf-feats { padding: 2.5rem 0; background: #080c14; border-bottom: 1px solid #1a2233; }
+  .cf-feats__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: .8rem; }
+  @media (min-width: 560px) { .cf-feats__grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 980px) { .cf-feats__grid { grid-template-columns: repeat(4, 1fr); } }
+  .cf-feat { background: #0c111b; border: 1.5px solid #1f2735; border-radius: 14px; padding: 1.1rem 1rem; }
+  .cf-feat__ico { font-size: 1.5rem; }
+  .cf-feat b { display: block; margin: .5rem 0 .3rem; color: #fff; font-size: .98rem; }
+  .cf-feat span { font-size: .8rem; line-height: 1.4; color: #aeb9c9; }
+
+  .cf-demo { padding: 3.5rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .cf-noscript { text-align: center; color: #6a6258; margin-top: 1.5rem; }
+  .cf-sec-head { text-align: center; max-width: 60ch; margin: 0 auto 2rem; }
+  .cf-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
+
+  .cf-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(24,224,255,0.16) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .cf-cta__inner { max-width: 720px; }
+  .cf-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
+  .cf-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .cf-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .cf-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
+</style>
