@@ -86,21 +86,27 @@ export const POST: APIRoute = async ({ request }) => {
   const userPrompt = `Marca: "${nombre}".${sector ? ` Sector: ${sector}.` : ''} Carácter sonoro deseado: ${vibe || 'cálido y cercano'}.
 Compón su identidad sonora en JSON.`;
 
-  const result = await chatText({
-    apiKey, title: APP_TITLE, temperature: 0.8, maxTokens: 800,
-    messages: [{ role: 'system', content: SYSTEM_PROMPT }, { role: 'user', content: userPrompt }],
-  });
-  if (!result.ok) return jsonError('El compositor está saturado ahora mismo. Inténtalo de nuevo en unos segundos.', 502);
-
-  let raw = result.text.trim();
-  const fence = raw.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  if (fence) raw = fence[1].trim();
-  const s = raw.indexOf('{'); const e = raw.lastIndexOf('}');
-  if (s !== -1 && e !== -1) raw = raw.slice(s, e + 1);
-  try {
-    return new Response(JSON.stringify({ brief: sanitize(JSON.parse(raw)) }), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
-  } catch {
-    console.error('[sonido-marca] JSON no parseable:', result.text.slice(0, 200));
-    return jsonError('La IA no devolvió un formato válido. Prueba otra vez.', 502);
+  // Hasta 2 intentos: los modelos gratis a veces devuelven JSON mal envuelto.
+  let saturado = false;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const result = await chatText({
+      apiKey, title: APP_TITLE, temperature: attempt === 0 ? 0.8 : 0.5, maxTokens: 800,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: attempt === 0 ? userPrompt : `${userPrompt}\nIMPORTANTE: devuelve SOLO el objeto JSON, sin texto ni markdown.` },
+      ],
+    });
+    if (!result.ok) { saturado = true; continue; }
+    let raw = result.text.trim();
+    const fence = raw.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    if (fence) raw = fence[1].trim();
+    const s = raw.indexOf('{'); const e = raw.lastIndexOf('}');
+    if (s !== -1 && e !== -1) raw = raw.slice(s, e + 1);
+    try {
+      return new Response(JSON.stringify({ brief: sanitize(JSON.parse(raw)) }), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+    } catch {
+      console.warn(`[sonido-marca] JSON no parseable (intento ${attempt + 1}):`, result.text.slice(0, 120));
+    }
   }
+  return jsonError(saturado ? 'El compositor está saturado ahora mismo. Inténtalo de nuevo en unos segundos.' : 'La IA no devolvió un formato válido. Prueba otra vez.', 502);
 };
