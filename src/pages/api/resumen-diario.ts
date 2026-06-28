@@ -20,6 +20,7 @@ const DEMOS: [string, string][] = [
   ['demo:rayosx', 'Rayos X · Atención'],
   ['demo:tiempo', 'Máquina del Tiempo'],
   ['demo:config', 'Configurador 3D'],
+  ['demo:sonido', 'Sonido de Marca'],
   ['demo:ecommerce', 'Commerce-AI · Visión'],
   ['demo:mapa', 'Mapa Neuronal'],
   ['demo:marketing', 'Estrategia Marketing'],
