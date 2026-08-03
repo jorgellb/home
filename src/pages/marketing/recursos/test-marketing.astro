@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/layout/Header.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+import TestMadurez from '../../../components/marketing/TestMadurez.tsx';
+
+const title = 'Test de madurez digital | Diagnóstico de marketing gratis · Almería';
+const description = 'Diez preguntas para saber por dónde se te escapa el negocio: medición, captación, conversión, seguimiento comercial y reputación. Puntuación sobre 100 y fuga principal identificada. Gratis y sin registro.';
+const canonical = 'https://platanitorico.com/marketing/recursos/test-marketing/';
+
+const areas = [
+  { n: 'Medición',    d: 'Si no sabes qué campaña genera clientes, cualquier decisión de presupuesto es a ciegas. Se acaba cortando lo que funcionaba y manteniendo lo que no.', color: '#18e0ff' },
+  { n: 'Captación',   d: 'Demanda que ya existe y busca lo que vendes, pero que hoy encuentra a otro. Suele ser la fuga más fácil de tapar y la más rentable.', color: '#c6ff3a' },
+  { n: 'Conversión',  d: 'Visitas que llegan y se van sin contactar. Subir un punto la conversión es más barato que comprar el doble de tráfico.', color: '#ffb24d' },
+  { n: 'Seguimiento', d: 'Contactos que entran y se enfrían. En negocio local, la mayoría de ventas perdidas no se pierden por precio, sino por tardar en responder.', color: '#9b7bff' },
+  { n: 'Reputación',  d: 'Reseñas y prueba social. En decisiones locales pesan tanto como el precio, y son lo último que se trabaja.', color: '#5eead4' },
+];
+
+const preguntas = [
+  { q: '¿Cómo se calcula la puntuación?', a: 'Cada una de las diez preguntas vale 10 puntos: 10 si respondes "sí", 5 si "parcialmente" y 0 si "no". El total sale sobre 100. El desglose por área se calcula sobre las preguntas de esa área, y la fuga principal es simplemente el área con menor porcentaje.' },
+  { q: '¿Analizáis mi web o mis cuentas para dar el resultado?', a: 'No. Es una autoevaluación: la puntuación depende solo de lo que respondes tú. Para saber qué pasa de verdad hay que entrar en tu analítica, tus campañas y tu proceso comercial, y eso es justo lo que hacemos en la auditoría.' },
+  { q: '¿Tengo que dejar mis datos para ver el resultado?', a: 'No. El resultado aparece en cuanto respondes las diez preguntas. Solo pedimos nombre y email si quieres que te enviemos el diagnóstico ampliado por correo.' },
+  { q: '¿Qué pasa si saco una puntuación baja?', a: 'Que tienes recorrido barato por delante. Las puntuaciones bajas casi siempre vienen de medición y seguimiento, que son las dos áreas que menos cuestan de arreglar y las que más cambian los resultados de todo lo demás.' },
+  { q: '¿Sirve si todavía no hago publicidad?', a: 'Sí, y probablemente sea el mejor momento para hacerlo. Detecta qué tendrías que tener montado antes de empezar a invertir, para no pagar por tráfico que se cae en un formulario roto o que nadie llama.' },
+  { q: '¿Cada cuánto tiene sentido repetirlo?', a: 'Cada tres o seis meses. Es una forma rápida de comprobar si lo que has ido montando se traduce en una operativa más madura o si solo se han acumulado herramientas sin usar.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebApplication","name":"Test de madurez digital","url":canonical,"applicationCategory":"BusinessApplication","operatingSystem":"Web","description":description,"inLanguage":"es","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"} },
+  { "@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Marketing Digital","item":"https://platanitorico.com/marketing/"},{"@type":"ListItem","position":3,"name":"Recursos","item":"https://platanitorico.com/marketing/recursos/"},{"@type":"ListItem","position":4,"name":"Test de madurez digital","item":canonical}] },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":preguntas.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-marketing-web.jpg"
+  imageAlt="Test de madurez digital para negocios"
+  type="website"
+  keywords="test madurez digital, diagnostico marketing gratis, auditoria marketing digital, medir marketing, marketing digital almería"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Marketing Digital', href: '/marketing/' },
+    { label: 'Recursos', href: '/marketing/recursos/' },
+    { label: 'Test de madurez digital' },
+  ]} />
+
+  <main id="main-content" class="rc">
+
+    <section class="rc-hero">
+      <div class="container-brutal">
+        <span class="text-meta rc-kicker">Diagnóstico gratuito · 2 minutos</span>
+        <h1 class="rc-h1 heading-display">
+          Casi nadie pierde clientes
+          <em class="heading-editorial">donde cree.</em>
+        </h1>
+        <p class="rc-lead">
+          La mayoría de negocios piensa que su problema es «que no llega gente». Casi
+          siempre llega: se pierde midiendo mal, en una web que no convierte o en un
+          contacto que nadie devolvió. Diez preguntas para localizar la fuga.
+        </p>
+      </div>
+    </section>
+
+    <section class="rc-tool">
+      <div class="container-brutal">
+        <TestMadurez client:load />
+      </div>
+    </section>
+
+    <section class="rc-section">
+      <div class="container-brutal">
+        <h2 class="rc-h2 heading-display">Las cinco áreas que medimos</h2>
+        <ul class="rc-concepts">
+          {areas.map((a) => (
+            <li class="rc-concept">
+              <span class="rc-concept__k text-mono" style={`color:${a.color}`}>{a.n.toUpperCase()}</span>
+              <p class="rc-concept__d" style="margin-top:.5rem">{a.d}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="rc-section rc-section--alt">
+      <div class="container-brutal">
+        <h2 class="rc-h2 heading-display">Preguntas sobre el test</h2>
+        <div class="rc-faq">
+          {preguntas.map((f) => (
+            <details class="rc-faq__item">
+              <summary class="rc-faq__q"><span>{f.q}</span><span class="rc-faq__i" aria-hidden="true"></span></summary>
+              <p class="rc-faq__a">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="rc-cta">
+      <div class="container-brutal">
+        <div class="rc-cta__box">
+          <h2 class="rc-cta__t heading-display">El test señala. La auditoría demuestra.</h2>
+          <p class="rc-cta__l">
+            El cuestionario te dice dónde mirar. Para saber cuánto te está costando esa fuga
+            hay que entrar en tus cuentas, y eso lo hacemos gratis y sin compromiso.
+          </p>
+          <div class="rc-cta__btns">
+            <a href="/contacto/" class="rc-btn rc-btn--primary">Pedir auditoría gratuita</a>
+            <a href="/marketing/recursos/calculadora-roas/" class="rc-btn rc-btn--ghost">Calculadora de ROAS</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .rc { --rc-bg: #05070d; --rc-panel: #0b111c; --rc-line: #1c2740; --rc-text: #e8edf5; --rc-muted: #8fa0b6; --rc-cyan: #18e0ff; --rc-lime: #c6ff3a; background: var(--rc-bg); color: var(--rc-text); }
+  .rc-hero { padding: 3.5rem 0 2rem; }
+  .rc-kicker { color: var(--rc-cyan); display: block; margin-bottom: .8rem; }
+  .rc-h1 { font-size: clamp(2.1rem, 5.5vw, 3.8rem); line-height: 1; margin: 0 0 1.2rem; }
+  .rc-h1 em { display: block; color: var(--rc-cyan); }
+  .rc-lead { font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.65; color: var(--rc-muted); max-width: 60ch; margin: 0; }
+  .rc-tool { padding: 1rem 0 3rem; }
+  .rc-section { padding: 3.5rem 0; border-top: 1px solid var(--rc-line); }
+  .rc-section--alt { background: var(--rc-panel); }
+  .rc-h2 { font-size: clamp(1.5rem, 3.2vw, 2.3rem); line-height: 1.1; margin: 0 0 2rem; }
+
+  .rc-concepts { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .rc-concepts { grid-template-columns: repeat(2, 1fr); } }
+  .rc-concept { background: var(--rc-panel); border: 1px solid var(--rc-line); border-radius: 14px; padding: 1.3rem; }
+  .rc-concept__k { font-size: .68rem; letter-spacing: .12em; font-weight: 800; }
+  .rc-concept__d { font-size: .88rem; line-height: 1.65; color: var(--rc-muted); margin: 0; }
+
+  .rc-faq { display: grid; gap: .7rem; }
+  .rc-faq__item { background: var(--rc-bg); border: 1px solid var(--rc-line); border-radius: 12px; }
+  .rc-faq__q { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; cursor: pointer; font-weight: 700; font-size: .92rem; list-style: none; }
+  .rc-faq__q::-webkit-details-marker { display: none; }
+  .rc-faq__i { flex: none; width: 16px; height: 16px; position: relative; }
+  .rc-faq__i::before, .rc-faq__i::after { content: ''; position: absolute; background: var(--rc-cyan); transition: transform .25s; }
+  .rc-faq__i::before { top: 7px; left: 0; width: 16px; height: 2px; }
+  .rc-faq__i::after { left: 7px; top: 0; width: 2px; height: 16px; }
+  .rc-faq__item[open] .rc-faq__i::after { transform: scaleY(0); }
+  .rc-faq__a { padding: 0 1.2rem 1.1rem; font-size: .88rem; line-height: 1.7; color: var(--rc-muted); margin: 0; }
+
+  .rc-cta { padding: 3.5rem 0 4.5rem; border-top: 1px solid var(--rc-line); }
+  .rc-cta__box { background: var(--rc-panel); border: 1px solid var(--rc-line); border-radius: 18px; padding: clamp(1.6rem, 4vw, 2.8rem); text-align: center; }
+  .rc-cta__t { font-size: clamp(1.6rem, 3.6vw, 2.6rem); margin: 0 0 .9rem; line-height: 1.1; }
+  .rc-cta__l { font-size: .98rem; line-height: 1.7; color: var(--rc-muted); max-width: 56ch; margin: 0 auto 1.8rem; }
+  .rc-cta__btns { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; }
+  .rc-btn { display: inline-flex; align-items: center; padding: .8rem 1.5rem; border-radius: 999px; font-weight: 800; font-size: .92rem; text-decoration: none; border: 1px solid transparent; transition: transform .18s, filter .18s; }
+  .rc-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+  .rc-btn--primary { background: var(--rc-cyan); color: #05070d; }
+  .rc-btn--ghost { border-color: var(--rc-line); color: var(--rc-text); }
+
+  @media (prefers-reduced-motion: reduce) { .rc-btn, .rc-faq__i::before, .rc-faq__i::after { transition: none; } .rc-btn:hover { transform: none; } }
+</style>

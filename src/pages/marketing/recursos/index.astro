@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/layout/Header.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+
+const title = 'Recursos y herramientas gratuitas de marketing digital | Almería';
+const description = 'Herramientas gratuitas para ordenar tu marketing antes de invertir: calculadora de ROAS y captación de clientes, y test de madurez digital. Sin registro y sin enviar tus datos a ningún sitio.';
+const canonical = 'https://platanitorico.com/marketing/recursos/';
+
+const herramientas = [
+  {
+    slug: 'calculadora-roas',
+    nombre: 'Calculadora de ROAS y captación',
+    claim: '¿Cuánto puedes pagar por un cliente sin perder dinero?',
+    desc: 'Introduce tu ticket medio, tasa de cierre y margen, y te dice cuántas oportunidades necesitas, qué coste por lead te puedes permitir y a partir de qué ROAS la campaña deja de perder dinero.',
+    tiempo: '1 minuto',
+    tags: ['CPL', 'CAC', 'ROAS', 'Punto de equilibrio'],
+    color: 'cyan',
+  },
+  {
+    slug: 'test-marketing',
+    nombre: 'Test de madurez digital',
+    claim: 'Casi nadie pierde clientes donde cree.',
+    desc: 'Diez preguntas sobre medición, captación, conversión, seguimiento comercial y reputación. Te devuelve una puntuación sobre 100 y señala cuál de las cinco áreas es tu fuga principal.',
+    tiempo: '2 minutos',
+    tags: ['Medición', 'Captación', 'Conversión', 'Seguimiento'],
+    color: 'lime',
+  },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"CollectionPage","name":title,"description":description,"url":canonical,"inLanguage":"es" },
+  { "@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Marketing Digital","item":"https://platanitorico.com/marketing/"},{"@type":"ListItem","position":3,"name":"Recursos","item":canonical}] },
+  { "@context":"https://schema.org","@type":"ItemList","itemListElement":herramientas.map((h,i)=>({"@type":"ListItem","position":i+1,"name":h.nombre,"url":`https://platanitorico.com/marketing/recursos/${h.slug}/`})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-marketing-web.jpg"
+  imageAlt="Herramientas gratuitas de marketing digital"
+  type="website"
+  keywords="herramientas marketing digital gratis, calculadora roas, test madurez digital, recursos marketing almería"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Marketing Digital', href: '/marketing/' },
+    { label: 'Recursos' },
+  ]} />
+
+  <main id="main-content" class="rh">
+
+    <section class="rh-hero">
+      <div class="container-brutal">
+        <span class="text-meta rh-kicker">Herramientas gratuitas</span>
+        <h1 class="rh-h1 heading-display">
+          Haz los números
+          <em class="heading-editorial">antes</em>
+          <span class="heading-display-block">de que te los hagan.</span>
+        </h1>
+        <p class="rh-lead">
+          Dos herramientas para ordenar la conversación sobre marketing sin que nadie te
+          venda nada. Funcionan en tu navegador, no piden registro y no envían lo que
+          escribes a ningún servidor.
+        </p>
+      </div>
+    </section>
+
+    <section class="rh-list-wrap">
+      <div class="container-brutal">
+        <ul class="rh-list">
+          {herramientas.map((h) => (
+            <li class={`rh-card rh-card--${h.color}`}>
+              <a href={`/marketing/recursos/${h.slug}/`} class="rh-card__link">
+                <span class="rh-card__time text-mono">{h.tiempo}</span>
+                <h2 class="rh-card__n heading-display">{h.nombre}</h2>
+                <p class="rh-card__c">{h.claim}</p>
+                <p class="rh-card__d">{h.desc}</p>
+                <ul class="rh-card__tags">
+                  {h.tags.map((t) => <li class="text-mono">{t}</li>)}
+                </ul>
+                <span class="rh-card__cta">
+                  Abrir herramienta
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <p class="rh-note">
+          Iremos añadiendo más: generador de UTM, plantillas de plan de marketing y
+          checklists de lanzamiento. Si echas en falta alguna,
+          <a href="/contacto/">dínoslo</a> y la priorizamos.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .rh { --rh-bg: #05070d; --rh-panel: #0b111c; --rh-line: #1c2740; --rh-text: #e8edf5; --rh-muted: #8fa0b6; --rh-cyan: #18e0ff; --rh-lime: #c6ff3a; background: var(--rh-bg); color: var(--rh-text); min-height: 60vh; }
+  .rh-hero { padding: 3.5rem 0 2rem; }
+  .rh-kicker { color: var(--rh-cyan); display: block; margin-bottom: .8rem; }
+  .rh-h1 { font-size: clamp(2.1rem, 5.5vw, 3.8rem); line-height: 1; margin: 0 0 1.2rem; }
+  .rh-h1 em { display: block; color: var(--rh-cyan); }
+  .rh-lead { font-size: clamp(1rem, 1.5vw, 1.15rem); line-height: 1.65; color: var(--rh-muted); max-width: 62ch; margin: 0; }
+
+  .rh-list-wrap { padding: 1.5rem 0 4.5rem; }
+  .rh-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.2rem; grid-template-columns: 1fr; }
+  @media (min-width: 800px) { .rh-list { grid-template-columns: repeat(2, 1fr); } }
+  .rh-card { background: var(--rh-panel); border: 1px solid var(--rh-line); border-radius: 18px; overflow: hidden; transition: transform .25s, border-color .25s; }
+  .rh-card:hover { transform: translateY(-4px); }
+  .rh-card--cyan:hover { border-color: var(--rh-cyan); }
+  .rh-card--lime:hover { border-color: var(--rh-lime); }
+  .rh-card__link { display: block; padding: 1.6rem; text-decoration: none; color: inherit; }
+  .rh-card__time { font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; color: var(--rh-muted); }
+  .rh-card__n { font-size: 1.35rem; line-height: 1.15; margin: .5rem 0 .5rem; }
+  .rh-card--cyan .rh-card__n { color: var(--rh-cyan); }
+  .rh-card--lime .rh-card__n { color: var(--rh-lime); }
+  .rh-card__c { font-size: .95rem; font-weight: 700; margin: 0 0 .6rem; line-height: 1.4; }
+  .rh-card__d { font-size: .88rem; line-height: 1.65; color: var(--rh-muted); margin: 0 0 1rem; }
+  .rh-card__tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0 0 1.2rem; }
+  .rh-card__tags li { font-size: .62rem; padding: .28rem .6rem; border: 1px solid var(--rh-line); border-radius: 999px; color: var(--rh-muted); }
+  .rh-card__cta { display: inline-flex; align-items: center; gap: .4rem; font-weight: 800; font-size: .88rem; }
+  .rh-card--cyan .rh-card__cta { color: var(--rh-cyan); }
+  .rh-card--lime .rh-card__cta { color: var(--rh-lime); }
+
+  .rh-note { margin: 2rem 0 0; font-size: .87rem; line-height: 1.7; color: var(--rh-muted); }
+  .rh-note a { color: var(--rh-cyan); }
+
+  @media (prefers-reduced-motion: reduce) { .rh-card { transition: none; } .rh-card:hover { transform: none; } }
+</style>
