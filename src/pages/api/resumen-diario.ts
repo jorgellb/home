@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 import { readMany, statsEnabled } from '../../lib/stats';
 import { listConversations } from '../../lib/chatlog';
 import { chatText } from '../../lib/openrouter';
+import { cronSecret, openrouterApiKey, resendApiKey, statsKey } from '../../lib/env';
 
 /* Resumen diario por email (Vercel Cron, 06:00 UTC ≈ 08:00 España). Recopila la
    actividad de AYER (visitas, demos, leads, conversaciones) desde Upstash, pide a
@@ -80,7 +81,7 @@ async function build() {
 type Digest = Awaited<ReturnType<typeof build>>;
 
 async function recommend(d: Digest): Promise<string[]> {
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) return [];
   const facts = `Visitas ayer: ${d.visits} (anteayer ${d.visitsPrev}). Usos de demos: ${d.demosTotal} (top: ${d.topDemo?.[0]} ${d.topDemo?.[1]}). Leads: ${d.leadsTotal}. Conversaciones del chat: ${d.convCount}, de ellas posibles clientes: ${d.hotCount}. Página más vista: ${d.topPage?.[0]} (${d.topPage?.[1]}).`;
   const res = await chatText({
@@ -127,13 +128,21 @@ function renderHtml(d: Digest, recs: string[]): string {
 
 export const GET: APIRoute = async ({ request, url }) => {
   // Autorización: cron de Vercel (CRON_SECRET) o prueba manual (?k=STATS_KEY).
-  const cronSecret = import.meta.env.CRON_SECRET;
-  const statsKey = import.meta.env.STATS_KEY;
+  // Falla CERRADA: si no hay ningún secreto configurado se rechaza. Antes se
+  // asumía que la llamada venía del cron, lo que dejaba el endpoint abierto a
+  // cualquiera (coste de modelo + envío de emails a discreción).
+  const secret = cronSecret();
+  const key = statsKey();
   const k = url.searchParams.get('k') || '';
   const bearer = request.headers.get('authorization') || '';
-  const byCron = cronSecret ? bearer === `Bearer ${cronSecret}` : true; // si no hay secret, se asume cron
-  const byKey = Boolean(statsKey && k === statsKey);
-  if (!byCron && !byKey) return json({ error: 'No autorizado.' }, 401);
+  const byCron = Boolean(secret && bearer === `Bearer ${secret}`);
+  const byKey = Boolean(key && k === key);
+  if (!byCron && !byKey) {
+    if (!secret && !key) {
+      console.error('[resumen-diario] ni CRON_SECRET ni STATS_KEY configuradas: endpoint bloqueado');
+    }
+    return json({ error: 'No autorizado.' }, 401);
+  }
 
   if (!statsEnabled) return json({ error: 'Upstash no configurado.' }, 200);
 
@@ -143,7 +152,7 @@ export const GET: APIRoute = async ({ request, url }) => {
   const hayActividad = d.visits || d.demosTotal || d.convCount || d.leadsTotal;
   if (!hayActividad && !force) return json({ ok: true, skipped: 'sin actividad ayer', day: d.y });
 
-  const apiKey = import.meta.env.RESEND_API_KEY;
+  const apiKey = resendApiKey();
   if (!apiKey) return json({ ok: true, emailed: false, reason: 'RESEND_API_KEY no configurada', summary: d });
 
   try {

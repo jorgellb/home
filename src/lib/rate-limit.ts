@@ -4,8 +4,10 @@
    Sin dependencias: la API REST de Upstash se llama con fetch. */
 
 // Acepta el naming de Upstash directo y el de la integración Vercel KV.
-const UPSTASH_URL = import.meta.env.UPSTASH_REDIS_REST_URL || import.meta.env.KV_REST_API_URL;
-const UPSTASH_TOKEN = import.meta.env.UPSTASH_REDIS_REST_TOKEN || import.meta.env.KV_REST_API_TOKEN;
+import { upstashUrl, upstashToken } from './env';
+
+const UPSTASH_URL = upstashUrl();
+const UPSTASH_TOKEN = upstashToken();
 const useUpstash = Boolean(UPSTASH_URL && UPSTASH_TOKEN);
 
 export function clientIp(request: Request): string {

@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { chatText } from '../../lib/openrouter';
 import { bump } from '../../lib/stats';
+import { openrouterApiKey } from '../../lib/env';
 
 /* "Sonido de Marca" — la IA COMPONE la identidad sonora (escala, tempo,
    instrumento, motivo del logo sonoro y melodía del jingle + acordes). El cliente
@@ -76,7 +77,7 @@ export const POST: APIRoute = async ({ request }) => {
   const limit = await rateLimit(`sonido:${clientIp(request)}`, 10, 300);
   if (!limit.ok) return jsonError('Has generado varios sonidos seguidos. Espera un momento.', 429, { 'Retry-After': String(limit.retryAfter) });
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) {
     console.error('[sonido-marca] OPENROUTER_API_KEY no configurada');
     return jsonError('El compositor no está disponible ahora mismo. Mira el ejemplo mientras tanto.', 503);

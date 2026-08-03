@@ -8,8 +8,20 @@ import { pueblos, getPueblosByComarca, type Pueblo } from '../../data/pueblos-al
 import { esPuebloIndexable } from '../../data/pueblos-indexables';
 
 export async function getStaticPaths() {
+  /* Pueblos que ya tienen su propia página a medida en este directorio. Se
+     deducen de los ficheros para no mantener la lista a mano: antes era una
+     cadena de `!==` a la que se le habían olvidado dos slugs, y el build
+     avisaba de rutas en conflicto. Al añadir un `mi-pueblo.astro` se excluye
+     solo. Va dentro de la función porque Astro extrae `getStaticPaths` a su
+     propio módulo y no ve las constantes del frontmatter. */
+  const conPaginaPropia = new Set(
+    Object.keys(import.meta.glob('./*.astro'))
+      .map((ruta) => ruta.replace(/^\.\//, '').replace(/\.astro$/, ''))
+      .filter((slug) => slug !== 'index' && slug !== '[pueblo]'),
+  );
+
   return pueblos
-    .filter((pueblo) => pueblo.slug !== 'almeria' && pueblo.slug !== 'mojacar' && pueblo.slug !== 'huercal-overa' && pueblo.slug !== 'albox' && pueblo.slug !== 'vera' && pueblo.slug !== 'carboneras' && pueblo.slug !== 'cuevas-del-almanzora' && pueblo.slug !== 'el-ejido' && pueblo.slug !== 'garrucha' && pueblo.slug !== 'nijar' && pueblo.slug !== 'pulpi' && pueblo.slug !== 'roquetas-de-mar' && pueblo.slug !== 'seron' && pueblo.slug !== 'tabernas' && pueblo.slug !== 'fines' && pueblo.slug !== 'macael' && pueblo.slug !== 'purchena' && pueblo.slug !== 'cantoria' && pueblo.slug !== 'olula-del-rio')
+    .filter((pueblo) => !conPaginaPropia.has(pueblo.slug))
     .map((pueblo) => ({
       params: { pueblo: pueblo.slug },
       props: { pueblo },

@@ -118,6 +118,12 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    css: {
+      // Tailwind v4 entra por el plugin de Vite: no hay PostCSS en el proyecto.
+      // Con un objeto inline, Vite deja de buscar postcss.config.* hacia arriba
+      // y el build no depende de ficheros fuera del repo.
+      postcss: {},
+    },
     build: {
       cssCodeSplit: true,
       minify: 'esbuild',

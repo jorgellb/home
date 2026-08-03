@@ -1,4 +1,5 @@
 import { sseToText } from './sse-stream';
+import { openrouterModel } from './env';
 
 /* Llamada a OpenRouter en streaming con CADENA DE MODELOS GRATIS y fallback:
    si un modelo está saturado (429) o falla, prueba el siguiente. Así el demo
@@ -37,7 +38,7 @@ interface Opts {
 /** Devuelve una Response: stream de texto (200) o JSON de error (502). */
 export async function streamChatResponse(opts: Opts): Promise<Response> {
   // Si hay un modelo forzado por entorno, se prueba primero; si no, la cadena gratis.
-  const forced = import.meta.env.OPENROUTER_MODEL as string | undefined;
+  const forced = openrouterModel();
   const models = forced ? [forced, ...FREE_MODELS.filter((m) => m !== forced)] : FREE_MODELS;
 
   let lastStatus = 0;

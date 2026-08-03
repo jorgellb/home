@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { bump } from '../../lib/stats';
+import { resendApiKey } from '../../lib/env';
 
 /* Captura de leads del demo Vera AI. Recibe los datos de contacto + el contexto
    del negocio + la propuesta generada, y se lo envía al negocio por email
@@ -84,7 +85,7 @@ export const POST: APIRoute = async ({ request }) => {
   const presupuesto = String(body.presupuesto || '').trim().slice(0, 200);
   const proposal = String(body.proposal || '').trim().slice(0, 8000);
 
-  const apiKey = import.meta.env.RESEND_API_KEY;
+  const apiKey = resendApiKey();
   if (!apiKey) {
     // Paridad con /api/contact: sin key registramos y devolvemos OK (no rompe el demo).
     console.error('[vera-lead] RESEND_API_KEY no configurada — lead no enviado:', { name, email, contacto, sectorNombre });

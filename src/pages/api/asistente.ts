@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
 import { bump } from '../../lib/stats';
+import { openrouterApiKey } from '../../lib/env';
 
 /* Asistente IA de Platanito Rico — chat conversacional sobre los servicios.
    Streaming desde OpenRouter; la API key vive solo en el servidor. */
@@ -75,7 +76,7 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonError('Estás escribiendo muy rápido 🙂. Espera un momento y sigue.', 429, { 'Retry-After': String(limit.retryAfter) });
   }
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) {
     console.error('[asistente] OPENROUTER_API_KEY no configurada');
     return jsonError('El asistente no está disponible ahora mismo. Escríbenos a hola@platanitorico.com.', 503);

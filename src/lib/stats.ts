@@ -2,8 +2,10 @@
    (mismo store que el rate limiter). Si no está configurado, no hace nada.
    Solo guarda números (totales y por día), nunca IPs ni datos del usuario. */
 
-const URL = import.meta.env.UPSTASH_REDIS_REST_URL || import.meta.env.KV_REST_API_URL;
-const TOKEN = import.meta.env.UPSTASH_REDIS_REST_TOKEN || import.meta.env.KV_REST_API_TOKEN;
+import { upstashUrl, upstashToken } from './env';
+
+const URL = upstashUrl();
+const TOKEN = upstashToken();
 export const statsEnabled = Boolean(URL && TOKEN);
 
 async function cmd(c: (string | number)[]): Promise<{ result: unknown } | null> {

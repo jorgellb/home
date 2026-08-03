@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
+import { resendApiKey } from '../../lib/env';
+import { rateLimit, clientIp } from '../../lib/rate-limit';
 
 // Ejecutar como Vercel Function, no prerender en build
 export const prerender = false;
@@ -13,8 +15,14 @@ const HONEYPOT_FIELD = 'bot-field';
 
 const RAW = Symbol('html-raw');
 
-function raw(s: string): { __html: string; [RAW]: true } {
+interface RawHtml { __html: string; [RAW]: true }
+
+function raw(s: string): RawHtml {
   return { __html: s, [RAW]: true as const };
+}
+
+function isRaw(v: unknown): v is RawHtml {
+  return typeof v === 'object' && v !== null && RAW in v;
 }
 
 function escapeHtml(s: string): string {
@@ -29,8 +37,8 @@ function escapeHtml(s: string): string {
 function html(strings: TemplateStringsArray, ...values: unknown[]): string {
   return strings.reduce((acc, s, i) => {
     const v = i < values.length ? values[i] : '';
-    if (typeof v === 'object' && v !== null && RAW in v) {
-      return acc + s + (v as { __html: string }).__html;
+    if (isRaw(v)) {
+      return acc + s + v.__html;
     }
     return acc + s + escapeHtml(String(v ?? ''));
   }, '');
@@ -66,9 +74,19 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     return new Response('Email no válido', { status: 400 });
   }
 
+  // El honeypot solo frena bots ingenuos: limitamos también por IP para que no
+  // se pueda inundar el buzón ni agotar la cuota de Resend.
+  const limit = await rateLimit(`contact:${clientIp(request)}`, 5, 900);
+  if (!limit.ok) {
+    return new Response('Has enviado varios mensajes seguidos. Espera unos minutos.', {
+      status: 429,
+      headers: { 'Retry-After': String(limit.retryAfter) },
+    });
+  }
+
   // Si no hay API key configurada, devolvemos error claro (no enviamos email pero la
   // app sigue funcionando — útil en preview y dev sin variables).
-  const apiKey = import.meta.env.RESEND_API_KEY;
+  const apiKey = resendApiKey();
   if (!apiKey) {
     console.error('[contact] RESEND_API_KEY no configurada — el envío se ha omitido');
     // En producción esto es un fallo silencioso para el usuario pero registrado en logs.

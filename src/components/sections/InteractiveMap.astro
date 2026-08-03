@@ -14,6 +14,17 @@ interface Props {
     coords: [number, number];
     tipo?: string;
   }>;
+  /* Pueblos vecinos que pasan las landings de /diseno-web/*. Se serializan a
+     `data-pueblos`, pero OJO: el script cliente solo pinta el marcador central
+     todavía — ni `pueblos` ni `puntosInteres` generan marcadores secundarios. */
+  pueblos?: Array<{
+    slug: string;
+    nombre: string;
+    coords: number[];
+    poblacion?: number;
+    descripcion?: string;
+    destacado?: boolean;
+  }>;
 }
 
 const {
@@ -27,6 +38,7 @@ const {
   themeColorDark = '#0E0D0B',
   townInitial,
   puntosInteres = [],
+  pueblos = [],
 } = Astro.props;
 
 const mapId = `map-${Math.random().toString(36).substring(7)}`;
@@ -69,6 +81,7 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
       data-theme={themeColor}
       data-theme-d={themeColorDark}
       data-puntos={JSON.stringify(puntosInteres)}
+      data-pueblos={JSON.stringify(pueblos)}
     ></div>
 
     {/* Esquinas con marcas de registro (estilo plano técnico) */}
@@ -534,13 +547,13 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
   function purgeMarkers(container) {
     /* 1. Quitar marcador almacenado en la propiedad */
     if (container._iMapMarker) {
-      try { container._iMapMarker.remove(); } catch(e) {}
+      try { container._iMapMarker.remove(); } catch (_e) { /* noop */ }
       container._iMapMarker = null;
     }
     /* 2. Quitar cualquier elemento .iMap-marker huérfano del DOM del mapa */
     var orphans = container.querySelectorAll('.maplibregl-marker, .iMap-marker');
     for (var i = 0; i < orphans.length; i++) {
-      try { orphans[i].remove(); } catch(e) {}
+      try { orphans[i].remove(); } catch (_e) { /* noop */ }
     }
   }
 
@@ -617,7 +630,7 @@ const lngStr = `${Math.abs(parseFloat(lng))}° ${center[0] >= 0 ? 'E' : 'W'}`;
             id: 'iMap-ring-line', type: 'line', source: 'iMap-ring',
             paint: { 'line-color': theme, 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.6 }
           });
-        } catch (e) {}
+        } catch (_e) { /* noop */ }
 
         /* Nuclear cleanup antes de crear el pin → 0 posibilidad de duplicado */
         purgeMarkers(container);

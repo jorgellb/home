@@ -413,10 +413,8 @@ export default function VirtualTryOn() {
     e.stream?.getTracks().forEach((t) => t.stop());
     if (videoRef.current) videoRef.current.srcObject = null;
     try { e.faceLandmarker?.close(); } catch { /* noop */ }
-    e.shadow.material.dispose();
-    e.shadow.geometry.dispose();
-    e.occluder.material.dispose();
-    e.occluder.geometry.dispose();
+    disposeObject(e.shadow);
+    disposeObject(e.occluder);
     e.scene.environment?.dispose();
     disposeObject(e.scene);
     e.renderer.dispose();

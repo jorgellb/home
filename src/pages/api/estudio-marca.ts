@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { chatText } from '../../lib/openrouter';
 import { bump } from '../../lib/stats';
+import { openrouterApiKey } from '../../lib/env';
 
 /* "Estudio de Marca · IA" — orquestador multi-agente. Un solo modelo actúa como
    4 especialistas (Estratega, Naming, Copy, Diseñador) y devuelve un kit de marca
@@ -121,7 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
   const limit = await rateLimit(`marca:${clientIp(request)}`, 8, 300);
   if (!limit.ok) return jsonError('Has creado varias marcas seguidas. Espera un momento y vuelve a probar.', 429, { 'Retry-After': String(limit.retryAfter) });
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) {
     console.error('[estudio-marca] OPENROUTER_API_KEY no configurada');
     return jsonError('El estudio no está disponible ahora mismo. Mira el ejemplo mientras tanto.', 503);
