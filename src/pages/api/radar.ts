@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
+import { statsKey, upstashToken, upstashUrl } from '../../lib/env';
 
 /* "Radar captador de clientes" — herramienta PRIVADA (clave STATS_KEY). Busca
    negocios reales de un sector y pueblo usando datos públicos de OpenStreetMap
@@ -10,8 +11,8 @@ export const prerender = false;
 const UA = 'PlatanitoRico-Radar/1.0 (https://platanitorico.com; hola@platanitorico.com)';
 const OVERPASS = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
 
-const URL_UP = import.meta.env.UPSTASH_REDIS_REST_URL || import.meta.env.KV_REST_API_URL;
-const TOK_UP = import.meta.env.UPSTASH_REDIS_REST_TOKEN || import.meta.env.KV_REST_API_TOKEN;
+const URL_UP = upstashUrl();
+const TOK_UP = upstashToken();
 
 export const SECTORS: Record<string, { label: string; tags: string[] }> = {
   peluqueria: { label: 'Peluquerías', tags: ['shop=hairdresser'] },
@@ -124,7 +125,7 @@ export const POST: APIRoute = async ({ request }) => {
   let body: { k?: string; pueblo?: string; sector?: string };
   try { body = await request.json(); } catch { return json({ error: 'Petición inválida.' }, 400); }
 
-  const STATS_KEY = import.meta.env.STATS_KEY;
+  const STATS_KEY = statsKey();
   if (!STATS_KEY || body.k !== STATS_KEY) return json({ error: 'No autorizado.' }, 401);
 
   const pueblo = String(body.pueblo || '').trim().slice(0, 60);

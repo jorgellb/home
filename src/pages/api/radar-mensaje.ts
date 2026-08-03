@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { chatText } from '../../lib/openrouter';
+import { openrouterApiKey, statsKey } from '../../lib/env';
 
 /* Redacta un mensaje de contacto comercial B2B para un negocio detectado por el
    Radar. Privado (clave STATS_KEY). Tono honesto y conforme a LSSI/RGPD:
@@ -24,7 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
   let body: { k?: string; negocio?: string; sector?: string; pueblo?: string; sinWeb?: boolean; redes?: string[] };
   try { body = await request.json(); } catch { return json({ error: 'Petición inválida.' }, 400); }
 
-  const STATS_KEY = import.meta.env.STATS_KEY;
+  const STATS_KEY = statsKey();
   if (!STATS_KEY || body.k !== STATS_KEY) return json({ error: 'No autorizado.' }, 401);
 
   const negocio = String(body.negocio || '').trim().slice(0, 120);
@@ -35,7 +36,7 @@ export const POST: APIRoute = async ({ request }) => {
   const rl = await rateLimit(`radarmsg:${clientIp(request)}`, 25, 300);
   if (!rl.ok) return json({ error: 'Demasiados mensajes seguidos. Espera un momento.' }, 429);
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) return json({ error: 'IA no configurada.' }, 503);
 
   const situacion = body.sinWeb

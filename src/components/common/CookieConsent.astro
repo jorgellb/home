@@ -158,7 +158,8 @@
     const now = Date.now();
     if (action === 'accept') save({ necessary: true, analytics: true, marketing: true, ts: now });
     else if (action === 'reject') save({ necessary: true, analytics: false, marketing: false, ts: now });
-    else if (action === 'config') toggleConfig(config ? config.hidden : true);
+    // `hidden` puede ser boolean o 'until-found': cualquier valor truthy = oculto.
+    else if (action === 'config') toggleConfig(config ? Boolean(config.hidden) : true);
     else if (action === 'save') save({ necessary: true, analytics: !!analytics?.checked, marketing: !!marketing?.checked, ts: now });
   });
 

@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { saveConversation, claimNotify, validCid, type StoredMsg } from '../../lib/chatlog';
 import { bump } from '../../lib/stats';
+import { resendApiKey } from '../../lib/env';
 
 /* Guarda las conversaciones del asistente IA en Upstash (con caducidad) y, cuando
    una parece un cliente potencial (pide precio/presupuesto o deja contacto), envía
@@ -69,7 +70,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   // Aviso por email solo si parece cliente, hay intercambio real, y solo una vez.
   if (hot && msgs.length >= 2) {
-    const apiKey = import.meta.env.RESEND_API_KEY;
+    const apiKey = resendApiKey();
     if (apiKey && (await claimNotify(cid))) {
       void bump('chat:hot');
       const rows = msgs.map((m) => {

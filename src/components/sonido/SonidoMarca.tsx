@@ -230,7 +230,7 @@ export default function SonidoMarca() {
   }
 
   const b = brief!;
-  const Player = ({ part, label, color, canvasRef }: { part: Part; label: string; color: string; canvasRef: React.RefObject<HTMLCanvasElement> }) => (
+  const Player = ({ part, label, color, canvasRef }: { part: Part; label: string; color: string; canvasRef: React.RefObject<HTMLCanvasElement | null> }) => (
     <div className={styles.player} style={{ ['--c' as string]: color }}>
       <div className={styles.pHead}><b>{label}</b><span>{part === 'logo' ? `${b.logo_sonoro.length} notas` : `${b.jingle.melodia.length} notas · ${b.jingle.acordes.join(' ')}`}</span></div>
       <canvas ref={canvasRef} className={styles.wave} />

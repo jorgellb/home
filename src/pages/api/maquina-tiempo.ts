@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { chatText } from '../../lib/openrouter';
 import { bump } from '../../lib/stats';
+import { openrouterApiKey } from '../../lib/env';
 
 /* "Máquina del Tiempo de Marca" — la IA imagina la web de un negocio en 4 épocas
    (1995, 2010, 2026, 2035). Devuelve solo el CONTENIDO por época; el cliente lo
@@ -72,7 +73,7 @@ export const POST: APIRoute = async ({ request }) => {
   const limit = await rateLimit(`tiempo:${clientIp(request)}`, 8, 300);
   if (!limit.ok) return jsonError('Has viajado en el tiempo varias veces seguidas. Espera un momento.', 429, { 'Retry-After': String(limit.retryAfter) });
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) {
     console.error('[maquina-tiempo] OPENROUTER_API_KEY no configurada');
     return jsonError('La máquina del tiempo no está disponible ahora mismo. Mira el ejemplo mientras tanto.', 503);

@@ -4,12 +4,14 @@
    ordenado por fecha para listarlas en el panel privado. Si Upstash no está
    configurado, no hace nada. */
 
-const URL = import.meta.env.UPSTASH_REDIS_REST_URL || import.meta.env.KV_REST_API_URL;
-const TOKEN = import.meta.env.UPSTASH_REDIS_REST_TOKEN || import.meta.env.KV_REST_API_TOKEN;
+import { upstashUrl, upstashToken, chatlogTtlDays } from './env';
+
+const URL = upstashUrl();
+const TOKEN = upstashToken();
 export const chatlogEnabled = Boolean(URL && TOKEN);
 
 /* Caducidad de las conversaciones (días). Configurable por entorno. */
-const TTL_DAYS = Number(import.meta.env.CHATLOG_TTL_DAYS) || 90;
+const TTL_DAYS = chatlogTtlDays();
 const TTL_SEC = Math.max(1, TTL_DAYS) * 86400;
 const INDEX_KEY = 'chatlog:index';
 const MAX_INDEX = 1000; // tope de conversaciones en el índice

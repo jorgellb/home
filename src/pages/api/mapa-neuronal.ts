@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
 import { bump } from '../../lib/stats';
+import { openrouterApiKey } from '../../lib/env';
 
 /* "Mapa Neuronal de la Empresa" — agente que diseña la propuesta del producto
    adaptada al sector del visitante. Streaming desde OpenRouter; key en servidor. */
@@ -57,7 +58,7 @@ export const POST: APIRoute = async ({ request }) => {
   const limit = await rateLimit(`mapa:${clientIp(request)}`, 10, 300);
   if (!limit.ok) return jsonError('Has generado varios mapas seguidos. Espera un momento.', 429, { 'Retry-After': String(limit.retryAfter) });
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) {
     console.error('[mapa-neuronal] OPENROUTER_API_KEY no configurada');
     return jsonError('El generador no está disponible ahora mismo.', 503);

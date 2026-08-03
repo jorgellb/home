@@ -11,8 +11,11 @@ export default [
       'node_modules/**',
       '.astro/**',
       '.netlify/**',
+      '.vercel/**',
       'vendor/**',
-      'public/scripts/**',
+      // public/ solo contiene bundles de terceros (mediapipe, maplibre) y los
+      // scripts sueltos del sitio: no son código fuente que debamos lintar.
+      'public/**',
       '**/*.min.js',
     ],
   },

@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { streamChatResponse } from '../../lib/openrouter';
 import { bump } from '../../lib/stats';
+import { openrouterApiKey } from '../../lib/env';
 
 /* Vera AI Business Agent — endpoint server (Vercel Function), con streaming.
    La API key de OpenRouter vive SOLO aquí (entorno), nunca en el navegador.
@@ -164,7 +165,7 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  const apiKey = import.meta.env.OPENROUTER_API_KEY;
+  const apiKey = openrouterApiKey();
   if (!apiKey) {
     console.error('[vera] OPENROUTER_API_KEY no configurada en el entorno');
     return jsonError('El asistente no está configurado todavía. Mira un ejemplo mientras tanto.', 503);
