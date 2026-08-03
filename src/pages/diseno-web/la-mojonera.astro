@@ -1,0 +1,1209 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosPoniente = getPueblosByComarca('Poniente Almeriense').filter(p => p.slug !== 'la-mojonera');
+
+const title = 'Diseño Web en La Mojonera | Webs B2B para Empresas del Invernadero · Almería';
+const description = 'Agencia de diseño web en La Mojonera, polo de servicios del Mar de Plástico. Webs B2B con catálogo técnico para fitosanitarios, riego, maquinaria y embalaje; logística refrigerada de exportación y comercio local. SEO industrial, multiidioma y presupuesto en 24h.';
+const canonical = 'https://platanitorico.com/diseno-web/la-mojonera/';
+
+const sectores = [
+  { nombre: 'Suministro al Invernadero',        stat: 'B2B',  statLabel: 'catálogo técnico',   desc: 'Fitosanitarios, semillas, sustratos y sistemas de riego. El agricultor busca por especificación, no por marca: quien tiene ficha de producto, dosis y compatibilidades publicadas es quien aparece cuando alguien busca "sistema de riego invernadero".', tags: ['Catálogo técnico','Ficha de producto','Formulario de pedido','SEO industrial'] },
+  { nombre: 'Maquinaria e Instalación',          stat: '24/7', statLabel: 'campaña viva',       desc: 'Maquinaria, estructuras, automatismos y climatización de invernadero. Un cliente con una avería en plena campaña no llama al que conoce: llama al primero que encuentra con teléfono visible y servicio descrito. La web decide esa llamada.', tags: ['Servicio urgente','Google Maps','Casos de instalación','Contacto directo'] },
+  { nombre: 'Logística Refrigerada y Export',    stat: 'UE',   statLabel: 'destino europeo',     desc: 'El Poniente exporta millones de toneladas al año. Transportistas y operadores de comercio exterior necesitan web profesional con rutas, certificaciones de cadena de frío y referencias, en varios idiomas, para cerrar contratos con exportadores.', tags: ['Multiidioma','Cadena de frío','Rutas y flota','Certificaciones'] },
+  { nombre: 'Embalaje y Manipulado',             stat: 'Campaña', statLabel: 'picos de demanda', desc: 'Confección, envase, etiquetado y paletizado. Un comprador que necesita 40.000 barquetas la semana que viene no abre un catálogo en PDF de 2019: quiere formatos, medidas y plazos en la web y un formulario que responda hoy.', tags: ['Catálogo de formatos','Solicitud de muestra','Plazos visibles','B2B'] },
+  { nombre: 'Comercio y Servicios Locales',      stat: '9k',   statLabel: 'habitantes',          desc: 'La alta concentración de trabajadores agrícolas genera demanda constante de servicios cotidianos: comida, ropa, telefonía, envíos y reparaciones. Comercios con ficha de Google cuidada captan ese mercado sin gastar un euro en publicidad.', tags: ['Ficha de Google','Reseñas','Web sencilla','SEO local'] },
+  { nombre: 'Gestoría, Ingeniería y Técnicos',   stat: 'Pro',  statLabel: 'servicios al agro',   desc: 'Gestorías agrícolas, ingenieros técnicos, asesores de PAC y peritos que trabajan para explotaciones de todo el Poniente. El agricultor busca a su gestoría en el móvil: quien está en el mapa con reseñas y servicios claros se lleva la consulta.', tags: ['Captación de leads','Servicios listados','Google Maps','Formularios'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Mar de Plástico',       sub: 'CONCENTRACIÓN RÉCORD',   desc: 'La Mojonera está en el corazón de una de las mayores concentraciones de invernaderos de España. Kilómetros de cubierta plástica que se ven desde el satélite y que alimentan a media Europa durante todo el invierno.', dato: 'Visible desde el espacio', color: 'plastic' },
+  { code: 'B', name: 'Polo de Servicios',     sub: 'EL TALLER DEL PONIENTE', desc: 'Aquí no solo se cultiva: se vende el fitosanitario, la semilla, el riego, la maquinaria y el embalaje. Una de las redes de proveedores al invernadero más densas del país, concentrada en pocos kilómetros.', dato: 'Red B2B densa',        color: 'steel' },
+  { code: 'C', name: 'Cadena de Frío',        sub: 'EXPORTACIÓN A EUROPA',   desc: 'La hortaliza sale de La Mojonera y llega refrigerada a Alemania, Francia o Países Bajos en cuestión de horas. Logística de precisión donde un grado de más arruina la carga.', dato: 'Export refrigerada',   color: 'cold' },
+  { code: 'D', name: 'Mercado Técnico',       sub: 'SE COMPRA POR FICHA',    desc: 'El comprador del Poniente no busca marcas: busca especificaciones. Caudal, dosis, material, medida, plazo. Quien publica esos datos gana la consulta; quien esconde el catálogo, la pierde.', dato: 'Compra por spec',      color: 'green' },
+];
+
+const hitos = [
+  { k: 'ECONOMÍA',  v: 'Polo de servicios al invernadero' },
+  { k: 'B2B',       v: 'Fitosanitarios · riego · maquinaria · embalaje' },
+  { k: 'LOGÍSTICA', v: 'Exportación refrigerada a Europa' },
+  { k: 'POBLACIÓN', v: '9.000 habitantes' },
+  { k: 'ICONO',     v: 'Polígono Agrícola de La Mojonera' },
+  { k: 'COBERTURA', v: 'El Ejido · Roquetas · Vícar · Adra' },
+];
+
+const diferenciales = [
+  { title: 'Un mercado que compra por especificación', desc: 'Esto no es comercio de escaparate. El agricultor y el exportador buscan caudal, dosis, medida y plazo de entrega. Una web bonita sin datos técnicos no vende nada aquí; una web fea con el catálogo completo y bien indexado, sí. Nosotros hacemos que sea completa y además esté bien hecha.' },
+  { title: 'La campaña no espera',                     desc: 'En plena temporada, una avería de riego o de climatización se resuelve en horas o se pierde la cosecha. El proveedor que aparece el primero en Google con teléfono visible y servicio descrito se lleva la llamada. Los demás se enteran al día siguiente.' },
+  { title: 'Vendes a Europa y tu web habla solo español', desc: 'Los compradores están en Alemania, Francia y Países Bajos. Llegan buscando en su idioma y aterrizan en una web que no entienden, sin certificaciones visibles. Se van a la siguiente. El multiidioma aquí no es un extra: es la puerta de entrada.' },
+  { title: 'Tus clientes ya no son solo de Almería',    desc: 'La tecnología del invernadero almeriense se exporta a Murcia, Huelva, Marruecos y Latinoamérica. Una web B2B bien posicionada convierte un negocio comarcal en un proveedor con alcance nacional e internacional, sin abrir una sola delegación.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Entramos en la nave',        eta: '1–2 días',  body: 'Visitamos tu empresa en el polígono: qué vendes, con qué especificaciones, quién decide la compra y contra quién compites. En B2B técnico no se puede escribir una web desde fuera sin decir tonterías.', deliverable: 'Briefing técnico' },
+  { num: '02', title: 'Diseño industrial y claro',  eta: '3–5 días',  body: 'Diseño sobrio y funcional, pensado para que un técnico encuentre el dato en tres clics. Tablas legibles, fichas descargables y fotografía real de producto e instalaciones. Nada de decoración.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Catálogo + motor SEO',       eta: '5–12 días', body: 'Astro ultrarrápido, catálogo filtrable por especificación, fichas de producto indexables, formulario de presupuesto, multiidioma si exportas y Core Web Vitals verdes.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + captación',    eta: '1–2 días',  body: 'Publicamos, configuramos Google Business Profile y Search Console, e indexamos el catálogo entero para que cada ficha de producto trabaje como una puerta de entrada distinta.', deliverable: 'Sitio LIVE + manual' },
+];
+
+/* Testimonios tal y como están recogidos en la ficha del municipio.
+   No añadimos ninguno más: son opiniones atribuidas a personas concretas. */
+const testimonios = [
+  { nombre: 'Domingo Fernández', negocio: 'Empresa de sistemas de riego',  texto: 'Tenemos clientes en todo el Poniente pero nos llegaban por referencias. La web con catálogo técnico nos abrió el mercado de Murcia y Huelva. Ahora tenemos comerciales en dos nuevas provincias.' },
+  { nombre: 'Milagros Vargas',   negocio: 'Gestoría para agricultores',    texto: 'La mayoría de los agricultores del Poniente buscan su gestoría en el móvil. Aparecer en Google Maps con buenas reseñas y web con los servicios listados nos triplicó los nuevos clientes en seis meses.' },
+];
+
+const faq = [
+  { q: '¿Qué tipo de webs necesitan las empresas agrícolas de La Mojonera?', a: 'Empresas de fitosanitarios y maquinaria necesitan webs B2B con catálogo técnico, ficha de producto descargable y formulario de pedido. Logísticas necesitan web de presentación de servicio con contacto y referencias de clientes.' },
+  { q: '¿Merece la pena el SEO para una empresa de servicios agrícolas en La Mojonera?', a: 'Absolutamente. Los agricultores del Poniente buscan proveedores en Google igual que cualquier comprador B2B. Posicionarse para "maquinaria invernadero Almería" o "fitosanitarios Poniente" trae consultas de calidad.' },
+  { q: '¿Cuánto cuesta una web B2B para empresa agrícola de La Mojonera?', a: 'Desde 650€ para web de empresa con catálogo básico y formulario de contacto. Con catálogo técnico avanzado y área de clientes desde 900€. Hosting gratuito siempre.' },
+  { q: '¿Podéis montar un catálogo con filtros por especificación técnica?', a: 'Sí, y es justo lo que más convierte en este sector. Filtros por caudal, medida, material, cultivo o formato, con ficha individual indexable para cada referencia. Así cada producto se posiciona por su cuenta y capta búsquedas muy concretas.' },
+  { q: '¿Hacéis webs multiidioma para exportar a Europa?', a: 'Sí, con traducción real y SEO específico en cada idioma, no traductor automático. Inglés, alemán, francés y neerlandés son los habituales aquí. Un comprador alemán tiene que encontrarte buscando en alemán, no solo entenderte cuando ya ha llegado.' },
+  { q: '¿Se puede integrar la web con mi ERP o mi programa de gestión?', a: 'Depende del sistema, pero en la mayoría de casos sí: sincronizamos catálogo, stock o tarifas para no duplicar trabajo. Lo valoramos en la primera reunión, viendo qué programa usas y qué exporta.' },
+  { q: '¿Hacéis reuniones presenciales en La Mojonera?', a: 'Sí. Estamos en Vera y nos desplazamos al Poniente para reunirnos en tu nave, tu oficina o el polígono. La primera consulta es gratuita y sin compromiso.' },
+  { q: '¿En cuánto tiempo tengo la web lista?', a: 'Web de empresa con servicios: 1–2 semanas. Con catálogo técnico y fichas de producto: 2–3 semanas. Con multiidioma completo e integración de catálogo: 3–5 semanas.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web La Mojonera","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en La Mojonera","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/diseno-web-seo-la-mojonera.jpg","address":{"@type":"PostalAddress","addressLocality":"La Mojonera","addressRegion":"Almería","postalCode":"04745","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":36.8050,"longitude":-2.7120},"areaServed":["La Mojonera","El Ejido","Vícar","Roquetas de Mar","Adra","Poniente Almeriense"] },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web B2B en La Mojonera","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/diseno-web-seo-la-mojonera.jpg"
+  imageAlt="Diseño web en La Mojonera - Invernaderos, polígono agrícola y logística de exportación"
+  type="service"
+  keywords="diseño web la mojonera, web b2b agrícola almería, seo industrial poniente, catálogo técnico invernadero, transporte refrigerado almería"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="mj">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — EL TALLER DEL MAR DE PLÁSTICO              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-hero">
+      <div class="container-brutal">
+
+        <header class="mj-hero__top">
+          <span class="text-meta">N.º 039 — Poniente Almeriense · Polo agroindustrial</span>
+          <span class="text-meta mj-hero__status">
+            <span class="mj-pulse"></span>
+            ★ EL TALLER DEL MAR DE PLÁSTICO ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="mj-hero__grid">
+
+          <div class="mj-hero__intro">
+            <span class="text-meta mj-hero__chapter">Cap. 01 / La Mojonera · Almería</span>
+            <h1 class="mj-hero__title heading-display">
+              Aquí no se compra
+              <em class="heading-editorial">por marca.</em>
+              <span class="mj-hero__title-stamp">Se compra por ficha técnica.</span>
+            </h1>
+
+            <p class="mj-hero__lead">
+              <strong>La Mojonera</strong> vende el riego, el fitosanitario, la maquinaria
+              y el embalaje de todo el Poniente. Un mercado <em>B2B puro</em> donde el
+              cliente busca por especificación y compara plazos.
+              <strong>Si tu catálogo no está en Google, no existes.</strong>
+            </p>
+
+            <div class="mj-hero__cta">
+              <a href="/contacto/" class="mj-btn mj-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#sectores" class="mj-btn mj-btn--ghost">
+                <span>Ver sectores B2B</span>
+              </a>
+            </div>
+
+            <ul class="mj-hero__kpis">
+              <li class="mj-kpi mj-kpi--green">
+                <span class="mj-kpi__v text-mono">9<small>k</small></span>
+                <span class="mj-kpi__l">Habitantes</span>
+              </li>
+              <li class="mj-kpi mj-kpi--amber">
+                <span class="mj-kpi__v text-mono">B2B</span>
+                <span class="mj-kpi__l">Mercado técnico</span>
+              </li>
+              <li class="mj-kpi mj-kpi--cold">
+                <span class="mj-kpi__v text-mono">UE</span>
+                <span class="mj-kpi__l">Destino export</span>
+              </li>
+              <li class="mj-kpi mj-kpi--ink">
+                <span class="mj-kpi__v text-mono">24<small>h</small></span>
+                <span class="mj-kpi__l">Presupuesto</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — perfil agroindustrial */}
+          <aside class="mj-hero__postcard" aria-hidden="true">
+            <div class="mj-postcard">
+
+              <header class="mj-postcard__head">
+                <span class="text-mono">LA MOJONERA · 04745 · ALMERÍA</span>
+                <span class="text-mono">36.805° N · 2.712° W</span>
+              </header>
+
+              {/* Perfil del Mar de Plástico SVG */}
+              <div class="mj-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="mj-sky-g" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#9FC0D4"/>
+                      <stop offset="100%" stop-color="#E7E4D6"/>
+                    </linearGradient>
+                    <linearGradient id="mj-plastic-g" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#D6E2DE"/>
+                      <stop offset="50%" stop-color="#EDF3F1"/>
+                      <stop offset="100%" stop-color="#C7D6D2"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo */}
+                  <rect width="540" height="220" fill="url(#mj-sky-g)"/>
+                  <circle cx="446" cy="42" r="16" fill="#F0D080" stroke="#1A1816" stroke-width="1.5"/>
+
+                  {/* Sierra de Gádor */}
+                  <path d="M 0 84 L 80 52 L 140 70 L 210 44 L 280 76 L 350 54 L 430 80 L 500 62 L 540 78 L 540 112 L 0 112 Z" fill="#7C8A8E" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 100 L 90 78 L 170 92 L 250 72 L 330 96 L 410 80 L 490 100 L 540 90 L 540 118 L 0 118 Z" fill="#67747A" stroke="#1A1816" stroke-width="1"/>
+
+                  {/* MAR DE PLÁSTICO — hileras de invernaderos hasta el horizonte */}
+                  <g>
+                    {/* Fila lejana */}
+                    <rect x="0" y="112" width="540" height="16" fill="#C7D6D2" stroke="#1A1816" stroke-width="1.2"/>
+                    <path d="M 6 112 l 8 16 M 26 112 l 8 16 M 46 112 l 8 16 M 66 112 l 8 16 M 86 112 l 8 16 M 106 112 l 8 16 M 126 112 l 8 16 M 146 112 l 8 16 M 166 112 l 8 16 M 186 112 l 8 16 M 206 112 l 8 16 M 226 112 l 8 16 M 246 112 l 8 16 M 266 112 l 8 16 M 286 112 l 8 16 M 306 112 l 8 16 M 326 112 l 8 16 M 346 112 l 8 16 M 366 112 l 8 16 M 386 112 l 8 16 M 406 112 l 8 16 M 426 112 l 8 16 M 446 112 l 8 16 M 466 112 l 8 16 M 486 112 l 8 16 M 506 112 l 8 16 M 526 112 l 8 16" stroke="#A8BCB7" stroke-width="1"/>
+
+                    {/* Fila media */}
+                    <rect x="0" y="128" width="540" height="22" fill="url(#mj-plastic-g)" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 10 128 l 11 22 M 38 128 l 11 22 M 66 128 l 11 22 M 94 128 l 11 22 M 122 128 l 11 22 M 150 128 l 11 22 M 178 128 l 11 22 M 206 128 l 11 22 M 234 128 l 11 22 M 262 128 l 11 22 M 290 128 l 11 22 M 318 128 l 11 22 M 346 128 l 11 22 M 374 128 l 11 22 M 402 128 l 11 22 M 430 128 l 11 22 M 458 128 l 11 22 M 486 128 l 11 22 M 514 128 l 11 22" stroke="#A8BCB7" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Invernaderos túnel en primer plano */}
+                  <g transform="translate(0, 150)">
+                    <path d="M 0 30 q 26 -30 52 0 Z" fill="url(#mj-plastic-g)" stroke="#1A1816" stroke-width="2"/>
+                    <path d="M 60 30 q 26 -30 52 0 Z" fill="url(#mj-plastic-g)" stroke="#1A1816" stroke-width="2"/>
+                    <path d="M 120 30 q 26 -30 52 0 Z" fill="url(#mj-plastic-g)" stroke="#1A1816" stroke-width="2"/>
+                    <path d="M 26 4 l 0 26 M 86 4 l 0 26 M 146 4 l 0 26" stroke="#A8BCB7" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Suelo / albero */}
+                  <rect x="0" y="180" width="540" height="40" fill="#D8CDB4" stroke="#1A1816" stroke-width="1.5"/>
+
+                  {/* NAVE INDUSTRIAL — polígono */}
+                  <g transform="translate(300, 138)">
+                    <rect x="0" y="10" width="130" height="42" fill="#DAD6C8" stroke="#1A1816" stroke-width="2"/>
+                    <polygon points="0,10 65,-6 130,10" fill="#5C6B77" stroke="#1A1816" stroke-width="2"/>
+                    {/* Portones */}
+                    <rect x="12" y="26" width="24" height="26" fill="#E0A32E" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="46" y="26" width="24" height="26" fill="#E0A32E" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="80" y="26" width="24" height="26" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                    {/* Cartel */}
+                    <rect x="40" y="0" width="50" height="9" fill="#2F7D4F" stroke="#1A1816" stroke-width="1.5"/>
+                    <text x="65" y="7" text-anchor="middle" fill="#F2F1EC" font-size="5" font-weight="800" font-family="monospace" letter-spacing="1">AGRO</text>
+                  </g>
+
+                  {/* Camión frigorífico */}
+                  <g transform="translate(96, 176)">
+                    <rect x="0" y="0" width="52" height="22" fill="#F2F1EC" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="0" y="0" width="52" height="5" fill="#4C8FB8" stroke="#1A1816" stroke-width="1"/>
+                    {/* Grupo de frío */}
+                    <rect x="4" y="-7" width="14" height="8" fill="#4C8FB8" stroke="#1A1816" stroke-width="1.2"/>
+                    <path d="M 8 -5 l 0 4 M 6 -3 l 4 0 M 6.6 -4.4 l 2.8 2.8 M 9.4 -4.4 l -2.8 2.8" stroke="#F2F1EC" stroke-width="0.8"/>
+                    {/* Cabina */}
+                    <path d="M 52 6 l 14 0 l 6 8 l 0 8 l -20 0 Z" fill="#E0A32E" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="56" y="9" width="9" height="7" fill="#9FC0D4" stroke="#1A1816" stroke-width="1"/>
+                    <circle cx="12" cy="24" r="4.5" fill="#2A2723" stroke="#1A1816" stroke-width="1.2"/>
+                    <circle cx="40" cy="24" r="4.5" fill="#2A2723" stroke="#1A1816" stroke-width="1.2"/>
+                    <circle cx="62" cy="24" r="4.5" fill="#2A2723" stroke="#1A1816" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Palés apilados */}
+                  <g transform="translate(200, 190)">
+                    <rect x="0" y="0" width="26" height="6" fill="#B08A54" stroke="#1A1816" stroke-width="1.2"/>
+                    <rect x="0" y="6" width="26" height="6" fill="#C79A5E" stroke="#1A1816" stroke-width="1.2"/>
+                    <rect x="0" y="12" width="26" height="6" fill="#B08A54" stroke="#1A1816" stroke-width="1.2"/>
+                    <rect x="32" y="6" width="22" height="12" fill="#2F7D4F" stroke="#1A1816" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Depósito de riego */}
+                  <g transform="translate(452, 156)">
+                    <ellipse cx="18" cy="6" rx="18" ry="5" fill="#4C8FB8" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 0 6 L 0 30 q 18 8 36 0 L 36 6" fill="#5C9FC4" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 36 20 l 14 0 l 0 14" fill="none" stroke="#5C6B77" stroke-width="2"/>
+                  </g>
+
+                  {/* Aspersor / goteo */}
+                  <g transform="translate(258, 194)">
+                    <rect x="0" y="8" width="2" height="14" fill="#5C6B77" stroke="#1A1816" stroke-width="0.7"/>
+                    <path d="M 1 8 q -8 -6 -14 -2 M 1 8 q 8 -6 14 -2" fill="none" stroke="#4C8FB8" stroke-width="1.4" stroke-linecap="round"/>
+                    <circle cx="1" cy="7" r="2" fill="#4C8FB8" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="mj-postcard__img-wrap">
+                <img
+                  src="/imagenes/diseno-web-seo-la-mojonera.jpg"
+                  alt="La Mojonera — invernaderos y polígono agroindustrial del Poniente"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="mj-postcard__img"
+                />
+                <div class="mj-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <circle cx="50" cy="50" r="46" fill="#2F7D4F" stroke="#1A1816" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="#F2F1EC" stroke-width="1.5" stroke-dasharray="3 3"/>
+                    <text x="50" y="42" text-anchor="middle" fill="#F2F1EC" font-size="10" font-weight="800" font-family="monospace">MOJONERA</text>
+                    <text x="50" y="56" text-anchor="middle" fill="#E0A32E" font-size="7" font-family="monospace">POLO B2B</text>
+                    <text x="50" y="68" text-anchor="middle" fill="#F2F1EC" font-size="6" font-family="monospace">PONIENTE</text>
+                  </svg>
+                </div>
+              </div>
+
+              <footer class="mj-postcard__foot">
+                <span class="text-mono">★ INVERNADERO · POLÍGONO · EXPORTACIÓN ★</span>
+              </footer>
+
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-hitos-section">
+      <div class="container-brutal">
+        <ul class="mj-hitos">
+          {hitos.map((h) => (
+            <li class="mj-hito">
+              <span class="mj-hito__k text-mono">{h.k}</span>
+              <span class="mj-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-ico-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter">Cap. 02 / Señas de identidad</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Cuatro cosas que
+            <em class="heading-editorial">definen</em>
+            <span class="heading-display-block">La Mojonera.</span>
+          </h2>
+        </div>
+
+        <ol class="mj-ico">
+          {iconos.map((ic) => (
+            <li class={`mj-ico__item mj-ico__item--${ic.color}`}>
+              <span class="mj-ico__code text-mono">{ic.code}</span>
+              <div class="mj-ico__body">
+                <span class="text-meta mj-ico__sub">{ic.sub}</span>
+                <h3 class="mj-ico__name heading-display">{ic.name}</h3>
+                <p class="mj-ico__desc">{ic.desc}</p>
+                <span class="mj-ico__dato text-mono">★ {ic.dato}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* POLÍGONO — FLAGSHIP SECTION                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-pol-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter" style="color:var(--mj-amber)">Cap. 03 / El polígono</span>
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-paper)">
+            Tu catálogo es
+            <em class="heading-editorial">tu comercial</em>
+            <span class="heading-display-block">que no duerme.</span>
+          </h2>
+        </div>
+
+        <div class="mj-pol__grid">
+
+          <div class="mj-pol__svg-wrap" aria-hidden="true">
+            <svg viewBox="0 0 600 340" width="100%" height="100%">
+              <defs>
+                <linearGradient id="mj-nave-roof" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#6E7E8A"/>
+                  <stop offset="100%" stop-color="#4A5762"/>
+                </linearGradient>
+              </defs>
+
+              {/* Fondo de nave */}
+              <rect width="600" height="340" fill="#22282C"/>
+
+              {/* Estructura del techo */}
+              <path d="M 0 60 L 300 8 L 600 60 L 600 78 L 300 26 L 0 78 Z" fill="url(#mj-nave-roof)" stroke="#1A1816" stroke-width="2"/>
+              <path d="M 60 70 L 60 300 M 180 66 L 180 300 M 420 66 L 420 300 M 540 70 L 540 300" stroke="#3A444C" stroke-width="6"/>
+              <path d="M 60 96 L 180 84 M 420 84 L 540 96 M 180 84 L 420 84" stroke="#3A444C" stroke-width="4"/>
+
+              {/* Suelo de hormigón */}
+              <rect x="0" y="272" width="600" height="68" fill="#3C4247" stroke="#1A1816" stroke-width="2"/>
+              <path d="M 0 288 L 600 288" stroke="#4C545A" stroke-width="2"/>
+              {/* Línea de seguridad */}
+              <path d="M 0 300 L 600 300" stroke="#E0A32E" stroke-width="3" stroke-dasharray="18 12"/>
+
+              {/* ESTANTERÍA INDUSTRIAL con producto */}
+              <g transform="translate(40, 120)">
+                {/* Montantes */}
+                <rect x="0" y="0" width="8" height="152" fill="#C2551F" stroke="#1A1816" stroke-width="2"/>
+                <rect x="152" y="0" width="8" height="152" fill="#C2551F" stroke="#1A1816" stroke-width="2"/>
+                {/* Baldas */}
+                <rect x="0" y="46" width="160" height="7" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="0" y="98" width="160" height="7" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="0" y="145" width="160" height="7" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Bidones de fitosanitario */}
+                <rect x="16" y="20" width="20" height="26" fill="#2F7D4F" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="20" y="16" width="12" height="5" fill="#E0A32E" stroke="#1A1816" stroke-width="1"/>
+                <rect x="44" y="20" width="20" height="26" fill="#4C8FB8" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="48" y="16" width="12" height="5" fill="#E0A32E" stroke="#1A1816" stroke-width="1"/>
+                <rect x="72" y="20" width="20" height="26" fill="#2F7D4F" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="76" y="16" width="12" height="5" fill="#E0A32E" stroke="#1A1816" stroke-width="1"/>
+                {/* Rollos de tubería de riego */}
+                <circle cx="30" cy="80" r="15" fill="none" stroke="#2A2723" stroke-width="6"/>
+                <circle cx="30" cy="80" r="7" fill="none" stroke="#4C8FB8" stroke-width="3"/>
+                <circle cx="72" cy="80" r="15" fill="none" stroke="#2A2723" stroke-width="6"/>
+                <circle cx="72" cy="80" r="7" fill="none" stroke="#4C8FB8" stroke-width="3"/>
+                {/* Sacos de sustrato */}
+                <path d="M 110 62 q 20 -6 34 0 l 4 32 q -22 6 -42 0 Z" fill="#C7B896" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Cajas */}
+                <rect x="14" y="118" width="34" height="27" fill="#C79A5E" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="54" y="118" width="34" height="27" fill="#B08A54" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="94" y="118" width="34" height="27" fill="#C79A5E" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M 31 118 l 0 27 M 71 118 l 0 27 M 111 118 l 0 27" stroke="#8A6B3E" stroke-width="1"/>
+              </g>
+
+              {/* CARRETILLA ELEVADORA */}
+              <g transform="translate(300, 196)">
+                {/* Mástil */}
+                <rect x="52" y="-56" width="7" height="76" fill="#E0A32E" stroke="#1A1816" stroke-width="2"/>
+                <rect x="64" y="-56" width="7" height="76" fill="#E0A32E" stroke="#1A1816" stroke-width="2"/>
+                {/* Horquillas con palé */}
+                <rect x="56" y="-18" width="34" height="5" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="70" y="-40" width="34" height="8" fill="#B08A54" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="70" y="-32" width="34" height="14" fill="#2F7D4F" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Cuerpo */}
+                <rect x="0" y="-14" width="54" height="40" fill="#E0A32E" stroke="#1A1816" stroke-width="2.5"/>
+                <rect x="6" y="-40" width="34" height="26" fill="none" stroke="#1A1816" stroke-width="2.5"/>
+                <rect x="8" y="-10" width="18" height="14" fill="#2A2723" stroke="#1A1816" stroke-width="1.5"/>
+                <circle cx="14" cy="30" r="9" fill="#2A2723" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="14" cy="30" r="3.5" fill="#5C6B77"/>
+                <circle cx="46" cy="30" r="7" fill="#2A2723" stroke="#1A1816" stroke-width="2"/>
+              </g>
+
+              {/* Palés en el suelo */}
+              <g transform="translate(452, 238)">
+                <rect x="0" y="0" width="46" height="10" fill="#2F7D4F" stroke="#1A1816" stroke-width="2"/>
+                <rect x="0" y="10" width="46" height="10" fill="#C79A5E" stroke="#1A1816" stroke-width="2"/>
+                <rect x="0" y="20" width="46" height="10" fill="#B08A54" stroke="#1A1816" stroke-width="2"/>
+                <rect x="54" y="10" width="40" height="20" fill="#4C8FB8" stroke="#1A1816" stroke-width="2"/>
+              </g>
+
+              {/* Panel de catálogo digital — el guiño al servicio */}
+              <g transform="translate(430, 96)">
+                <rect x="0" y="0" width="130" height="94" rx="4" fill="#F2F1EC" stroke="#1A1816" stroke-width="3"/>
+                <rect x="0" y="0" width="130" height="16" rx="4" fill="#2F7D4F" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="10" cy="8" r="2.5" fill="#E0A32E"/>
+                <circle cx="19" cy="8" r="2.5" fill="#F2F1EC"/>
+                {/* Filas de catálogo */}
+                <rect x="8" y="24" width="46" height="26" fill="#C7D6D2" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="60" y="24" width="62" height="5" fill="#5C6B77"/>
+                <rect x="60" y="33" width="46" height="4" fill="#A8B2BA"/>
+                <rect x="60" y="41" width="54" height="4" fill="#A8B2BA"/>
+                <rect x="8" y="56" width="46" height="26" fill="#C7D6D2" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="60" y="56" width="54" height="5" fill="#5C6B77"/>
+                <rect x="60" y="65" width="40" height="4" fill="#A8B2BA"/>
+                <rect x="60" y="73" width="50" height="4" fill="#A8B2BA"/>
+                {/* Cable al suelo */}
+                <path d="M 65 94 q 0 40 -20 60" fill="none" stroke="#3A444C" stroke-width="2.5"/>
+              </g>
+
+              {/* Lámparas industriales */}
+              <g>
+                <path d="M 150 26 L 150 46" stroke="#3A444C" stroke-width="2"/>
+                <path d="M 138 46 l 24 0 l -6 10 l -12 0 Z" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                <ellipse cx="150" cy="58" rx="7" ry="3" fill="#FFF0BF"/>
+                <path d="M 360 20 L 360 40" stroke="#3A444C" stroke-width="2"/>
+                <path d="M 348 40 l 24 0 l -6 10 l -12 0 Z" fill="#5C6B77" stroke="#1A1816" stroke-width="1.5"/>
+                <ellipse cx="360" cy="52" rx="7" ry="3" fill="#FFF0BF"/>
+              </g>
+
+            </svg>
+          </div>
+
+          <div class="mj-pol__body">
+            <p class="mj-pol__lead">
+              Tu comercial visita cinco clientes al día. Tu catálogo online, si está
+              bien hecho, atiende a <em>quinientos</em> — y trabaja de madrugada,
+              en domingo y en alemán.
+            </p>
+            <p class="mj-pol__text">
+              En un mercado que compra por especificación, cada ficha de producto
+              indexada es una puerta de entrada distinta. El agricultor que busca
+              «gotero autocompensante 4 l/h» no llega a tu portada: llega a esa ficha
+              concreta, y de ahí al formulario.
+            </p>
+            <ul class="mj-pol__list">
+              <li><strong>Catálogo filtrable</strong> por caudal, medida, material o cultivo.</li>
+              <li><strong>Ficha indexable</strong> por referencia, con datos técnicos descargables.</li>
+              <li><strong>Multiidioma real</strong> para el comprador alemán, francés u holandés.</li>
+              <li><strong>Formulario de presupuesto</strong> que llega a tu correo al instante.</li>
+            </ul>
+            <a href="/contacto/" class="mj-btn mj-btn--amber">
+              <span>Quiero mi catálogo online</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CADENA DE FRÍO — EXPORTACIÓN                      */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-frio-section">
+      <div class="container-brutal">
+
+        <div class="mj-frio__grid">
+
+          <div class="mj-frio__body">
+            <span class="text-meta mj-chapter">Cap. 04 / Cadena de frío</span>
+            <h2 class="heading-display mj-frio__title">
+              De aquí a Alemania
+              <em class="heading-editorial">sin romper</em>
+              <span class="heading-display-block">la cadena.</span>
+            </h2>
+            <p class="mj-frio__text">
+              La hortaliza sale del Poniente y llega refrigerada a media Europa en
+              cuestión de horas. Es logística de precisión, donde un grado de más
+              arruina un camión entero y una hora de retraso cuesta un cliente.
+            </p>
+            <p class="mj-frio__text">
+              Para transportistas y operadores de comercio exterior, la web no es un
+              folleto: es <strong>la prueba de que eres fiable</strong>. Flota,
+              certificaciones, rutas y referencias visibles, en el idioma del comprador.
+              Sin eso, el exportador llama a otro.
+            </p>
+            <ul class="mj-frio__tags">
+              <li class="text-mono">Certificaciones visibles</li>
+              <li class="text-mono">Rutas y flota</li>
+              <li class="text-mono">Multiidioma</li>
+              <li class="text-mono">Referencias reales</li>
+            </ul>
+          </div>
+
+          <div class="mj-frio__svg-wrap" aria-hidden="true">
+            <svg viewBox="0 0 560 300" width="100%" height="100%">
+              <defs>
+                <linearGradient id="mj-frio-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#BBD3E4"/>
+                  <stop offset="100%" stop-color="#E9EDEA"/>
+                </linearGradient>
+              </defs>
+
+              <rect width="560" height="300" fill="url(#mj-frio-sky)"/>
+
+              {/* Horizonte de invernaderos */}
+              <rect x="0" y="120" width="560" height="14" fill="#C7D6D2" stroke="#1A1816" stroke-width="1.2"/>
+              <path d="M 8 120 l 7 14 M 30 120 l 7 14 M 52 120 l 7 14 M 74 120 l 7 14 M 96 120 l 7 14 M 118 120 l 7 14 M 140 120 l 7 14 M 162 120 l 7 14 M 184 120 l 7 14 M 206 120 l 7 14 M 228 120 l 7 14 M 250 120 l 7 14 M 272 120 l 7 14 M 294 120 l 7 14 M 316 120 l 7 14 M 338 120 l 7 14 M 360 120 l 7 14 M 382 120 l 7 14 M 404 120 l 7 14 M 426 120 l 7 14 M 448 120 l 7 14 M 470 120 l 7 14 M 492 120 l 7 14 M 514 120 l 7 14 M 536 120 l 7 14" stroke="#A8BCB7" stroke-width="1"/>
+
+              {/* MUELLE DE CARGA */}
+              <rect x="0" y="134" width="230" height="106" fill="#DAD6C8" stroke="#1A1816" stroke-width="2"/>
+              <polygon points="0,134 115,112 230,134" fill="#5C6B77" stroke="#1A1816" stroke-width="2"/>
+              {/* Portones del muelle */}
+              <rect x="18" y="160" width="52" height="60" fill="#2A2723" stroke="#1A1816" stroke-width="2"/>
+              <rect x="88" y="160" width="52" height="60" fill="#4C8FB8" stroke="#1A1816" stroke-width="2"/>
+              <rect x="158" y="160" width="52" height="60" fill="#2A2723" stroke="#1A1816" stroke-width="2"/>
+              {/* Persianas */}
+              <path d="M 88 170 l 52 0 M 88 182 l 52 0 M 88 194 l 52 0 M 88 206 l 52 0" stroke="#3A7CA5" stroke-width="1.5"/>
+              {/* Cartel de temperatura */}
+              <rect x="82" y="128" width="64" height="20" fill="#F2F1EC" stroke="#1A1816" stroke-width="2"/>
+              <text x="114" y="142" text-anchor="middle" fill="#4C8FB8" font-size="11" font-weight="800" font-family="monospace">2°C</text>
+
+              {/* Suelo */}
+              <rect x="0" y="240" width="560" height="60" fill="#C9C3B2" stroke="#1A1816" stroke-width="2"/>
+              <path d="M 0 262 L 560 262" stroke="#E0A32E" stroke-width="3" stroke-dasharray="16 12"/>
+
+              {/* CAMIÓN FRIGORÍFICO */}
+              <g transform="translate(250, 168)">
+                {/* Remolque */}
+                <rect x="0" y="0" width="190" height="66" fill="#F2F1EC" stroke="#1A1816" stroke-width="3"/>
+                <rect x="0" y="0" width="190" height="14" fill="#4C8FB8" stroke="#1A1816" stroke-width="2"/>
+                {/* Grupo frigorífico */}
+                <rect x="6" y="-20" width="40" height="22" fill="#4C8FB8" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="26" cy="-9" r="7" fill="#BBD3E4" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M 26 -15 l 0 12 M 20 -9 l 12 0 M 21.8 -13.2 l 8.4 8.4 M 30.2 -13.2 l -8.4 8.4" stroke="#1A1816" stroke-width="1.2"/>
+                {/* Rótulo lateral */}
+                <rect x="24" y="26" width="90" height="18" fill="#2F7D4F" stroke="#1A1816" stroke-width="2"/>
+                <text x="69" y="39" text-anchor="middle" fill="#F2F1EC" font-size="9" font-weight="800" font-family="monospace" letter-spacing="1">EXPORT</text>
+                <path d="M 130 30 l 40 0 M 130 38 l 30 0" stroke="#A8B2BA" stroke-width="3"/>
+                {/* Cabeza tractora */}
+                <path d="M 190 16 l 40 0 l 18 24 l 0 26 l -58 0 Z" fill="#E0A32E" stroke="#1A1816" stroke-width="3"/>
+                <rect x="198" y="22" width="26" height="18" fill="#BBD3E4" stroke="#1A1816" stroke-width="2"/>
+                <rect x="228" y="46" width="14" height="8" fill="#2A2723" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Ruedas */}
+                <circle cx="34" cy="72" r="12" fill="#2A2723" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="34" cy="72" r="4.5" fill="#5C6B77"/>
+                <circle cx="70" cy="72" r="12" fill="#2A2723" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="70" cy="72" r="4.5" fill="#5C6B77"/>
+                <circle cx="160" cy="72" r="12" fill="#2A2723" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="160" cy="72" r="4.5" fill="#5C6B77"/>
+                <circle cx="222" cy="72" r="12" fill="#2A2723" stroke="#1A1816" stroke-width="2.5"/>
+                <circle cx="222" cy="72" r="4.5" fill="#5C6B77"/>
+              </g>
+
+              {/* Palés de hortaliza esperando carga */}
+              <g transform="translate(200, 210)">
+                <rect x="0" y="0" width="34" height="8" fill="#2F7D4F" stroke="#1A1816" stroke-width="2"/>
+                <rect x="0" y="8" width="34" height="8" fill="#C2551F" stroke="#1A1816" stroke-width="2"/>
+                <rect x="0" y="16" width="34" height="8" fill="#E0A32E" stroke="#1A1816" stroke-width="2"/>
+                <rect x="0" y="24" width="34" height="6" fill="#B08A54" stroke="#1A1816" stroke-width="2"/>
+              </g>
+
+              {/* Copos / indicador de frío */}
+              <g stroke="#4C8FB8" stroke-width="1.6" stroke-linecap="round" opacity="0.75">
+                <path d="M 480 46 l 0 16 M 472 54 l 16 0 M 474.5 48.5 l 11 11 M 485.5 48.5 l -11 11"/>
+                <path d="M 516 80 l 0 12 M 510 86 l 12 0 M 511.7 81.7 l 8.6 8.6 M 520.3 81.7 l -8.6 8.6"/>
+                <path d="M 452 92 l 0 10 M 447 97 l 10 0 M 448.5 93.5 l 7 7 M 455.5 93.5 l -7 7"/>
+              </g>
+
+              {/* Flecha de ruta a Europa */}
+              <g transform="translate(370, 60)">
+                <path d="M 0 30 q 60 -34 130 -8" fill="none" stroke="#2F7D4F" stroke-width="2.5" stroke-dasharray="7 5"/>
+                <path d="M 124 16 l 10 6 l -9 7" fill="none" stroke="#2F7D4F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="60" y="8" text-anchor="middle" fill="#2F7D4F" font-size="10" font-weight="800" font-family="monospace" letter-spacing="1">EUROPA</text>
+              </g>
+
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-svc-section" id="sectores">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter">Cap. 05 / Sectores</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Seis mercados,
+            <em class="heading-editorial">todos</em>
+            <span class="heading-display-block">técnicos.</span>
+          </h2>
+        </div>
+
+        <ol class="mj-svc">
+          {sectores.map((s, i) => (
+            <li class="mj-svc__item">
+              <header class="mj-svc__head">
+                <span class="mj-svc__num text-mono">{String(i + 1).padStart(2, '0')}</span>
+                <span class="mj-svc__stat">
+                  <b class="text-mono">{s.stat}</b>
+                  <small>{s.statLabel}</small>
+                </span>
+              </header>
+              <h3 class="mj-svc__name heading-display">{s.nombre}</h3>
+              <p class="mj-svc__desc">{s.desc}</p>
+              <ul class="mj-svc__tags">
+                {s.tags.map(t => <li class="text-mono">{t}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-map-section">
+      <div class="container-brutal">
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter">Cap. 06 / Situación</span>
+          <h2 class="heading-display brutal-section-head__title">
+            En el centro del
+            <em class="heading-editorial">Poniente.</em>
+          </h2>
+        </div>
+        <div class="mj-map-wrap">
+          <InteractiveMap
+            center={[-2.7120, 36.8050]}
+            zoom={13}
+            label="La Mojonera"
+            townInitial="M"
+            themeColor="#2F7D4F"
+            themeColorDark="#1B4F31"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta mj-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="mj-dif-title heading-display">
+          Por qué vender aquí
+          <em class="heading-editorial">no se parece</em>
+          <span class="heading-display-block">a vender en la costa.</span>
+        </h2>
+
+        <ol class="mj-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`mj-dif__item mj-dif__item--${i}`}>
+              <span class="mj-dif__num text-mono">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="mj-dif__t">{d.title}</h3>
+              <p class="mj-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-proc-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter" style="color:var(--mj-amber)">Cap. 08 / Proceso</span>
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-paper)">
+            De la nave
+            <em class="heading-editorial">al</em>
+            <span class="heading-display-block">catálogo indexado.</span>
+          </h2>
+        </div>
+
+        <ol class="mj-proc">
+          {proceso.map((p) => (
+            <li class="mj-proc__step">
+              <span class="mj-proc__num text-mono">{p.num}</span>
+              <div class="mj-proc__body">
+                <header class="mj-proc__head">
+                  <h3 class="mj-proc__t heading-display">{p.title}</h3>
+                  <span class="mj-proc__eta text-mono">{p.eta}</span>
+                </header>
+                <p class="mj-proc__desc">{p.body}</p>
+                <span class="mj-proc__deliv text-mono">→ {p.deliverable}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-tst-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter">Cap. 09 / Voces del Poniente</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Lo cuentan
+            <em class="heading-editorial">mejor</em>
+            <span class="heading-display-block">ellos.</span>
+          </h2>
+        </div>
+
+        <ul class="mj-tst">
+          {testimonios.map((t) => (
+            <li class="mj-tst__item">
+              <span class="mj-tst__quote" aria-hidden="true">”</span>
+              <p class="mj-tst__text">{t.texto}</p>
+              <footer class="mj-tst__foot">
+                <span class="mj-tst__name">{t.nombre}</span>
+                <span class="mj-tst__biz text-mono">{t.negocio}</span>
+              </footer>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-faq-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta mj-chapter">Cap. 10 / Dudas</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Lo que nos preguntan
+            <em class="heading-editorial">siempre.</em>
+          </h2>
+        </div>
+
+        <div class="mj-faq">
+          {faq.map((f) => (
+            <details class="mj-faq__item">
+              <summary class="mj-faq__q">
+                <span>{f.q}</span>
+                <span class="mj-faq__icon" aria-hidden="true"></span>
+              </summary>
+              <p class="mj-faq__a">{f.a}</p>
+            </details>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-vec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta mj-chapter">Cap. 11 / Comarca</span>
+        <h2 class="heading-display mj-vec-title">
+          También trabajamos en el
+          <em class="heading-editorial">Poniente.</em>
+        </h2>
+
+        <ul class="mj-vec">
+          {pueblosPoniente.map((p) => (
+            <li>
+              <a href={`/diseno-web/${p.slug}/`} class="mj-vecino">
+                <span class="mj-vecino__n">{p.nombre}</span>
+                {/* `poblacion` es opcional en el modelo: si falta, mostramos la comarca. */}
+                <span class="mj-vecino__p text-mono">
+                  {p.poblacion ? `${p.poblacion.toLocaleString('es-ES')} hab` : p.comarca}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="mj-final">
+      <div class="container-brutal">
+        <div class="mj-final__box">
+
+          <span class="text-meta mj-final__meta">★ LA MOJONERA · PONIENTE ALMERIENSE ★</span>
+          <h2 class="mj-final__title heading-display">
+            Tu competencia todavía
+            <em class="heading-editorial">manda el catálogo</em>
+            <span class="heading-display-block">en PDF por WhatsApp.</span>
+          </h2>
+          <p class="mj-final__lead">
+            Presupuesto cerrado en 24 horas, sin compromiso y sin letra pequeña.
+            Nos desplazamos a tu nave o a tu oficina del polígono.
+          </p>
+
+          <div class="mj-final__cta">
+            <a href="/contacto/" class="mj-btn mj-btn--primary mj-btn--lg">
+              <span>Pedir presupuesto</span>
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="tel:+34657085019" class="mj-btn mj-btn--ghost mj-btn--lg">
+              <span>657 085 019</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* LA MOJONERA DESIGN SYSTEM — plástico y acero     */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --mj-paper:   #F2F1EC;
+    --mj-paper-2: #E3E0D5;
+    --mj-ink:     #1A1816;
+    --mj-green:   #2F7D4F;
+    --mj-green-2: #1B4F31;
+    --mj-steel:   #5C6B77;
+    --mj-deep:    #22282C;
+    --mj-amber:   #E0A32E;
+    --mj-cold:    #4C8FB8;
+    --mj-plastic: #C7D6D2;
+    --mj-shadow:  8px 8px 0 var(--mj-ink);
+  }
+
+  .mj-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--mj-green);
+    box-shadow: 0 0 0 0 rgba(47,125,79,0.55);
+    animation: mj-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes mj-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(47,125,79,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(47,125,79,0); }
+    100% { box-shadow: 0 0 0 0 rgba(47,125,79,0); }
+  }
+
+  /* ── HERO ── */
+  .mj-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 72% 28%, rgba(47,125,79,0.10), transparent 52%),
+      radial-gradient(circle at 22% 78%, rgba(224,163,46,0.10), transparent 52%),
+      var(--mj-paper);
+    border-bottom: 3px solid var(--mj-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .mj-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, transparent 0 30px, rgba(92,107,119,0.06) 30px 31px);
+    pointer-events: none;
+  }
+  .mj-hero > * { position: relative; }
+  .mj-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .mj-hero__status { color: var(--mj-green); font-weight: 700; }
+  .mj-hero__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; padding: 2.5rem 0 4rem; }
+  @media (min-width: 1024px) {
+    .mj-hero__grid { grid-template-columns: 1.05fr .95fr; align-items: center; gap: 4rem; }
+  }
+  .mj-hero__chapter { color: var(--mj-amber); display: block; margin-bottom: .8rem; }
+  .mj-hero__title { font-size: clamp(2.5rem, 6.2vw, 4.8rem); line-height: .95; margin: 0 0 1.5rem; }
+  .mj-hero__title em { display: block; color: var(--mj-green); }
+  .mj-hero__title-stamp { display: block; }
+  .mj-hero__lead { font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; max-width: 46ch; margin-bottom: 2rem; }
+  .mj-hero__lead em { color: var(--mj-green); font-style: italic; }
+  .mj-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+
+  .mj-hero__kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; list-style: none; padding: 0; margin: 0; }
+  @media (min-width: 560px) { .mj-hero__kpis { grid-template-columns: repeat(4, 1fr); } }
+  .mj-kpi {
+    border: 2px solid var(--mj-ink);
+    padding: .9rem .8rem;
+    background: var(--mj-paper);
+    box-shadow: 4px 4px 0 var(--mj-ink);
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+  .mj-kpi__v { font-size: 1.7rem; font-weight: 800; line-height: 1; }
+  .mj-kpi__v small { font-size: .9rem; }
+  .mj-kpi__l { font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; opacity: .75; }
+  .mj-kpi--green .mj-kpi__v { color: var(--mj-green); }
+  .mj-kpi--amber .mj-kpi__v { color: var(--mj-amber); }
+  .mj-kpi--cold  .mj-kpi__v { color: var(--mj-cold); }
+  .mj-kpi--ink   .mj-kpi__v { color: var(--mj-ink); }
+
+  /* ── POSTAL ── */
+  .mj-postcard {
+    border: 3px solid var(--mj-ink);
+    background: var(--mj-paper);
+    box-shadow: var(--mj-shadow);
+    overflow: hidden;
+    transform: rotate(1deg);
+    transition: transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  .mj-postcard:hover { transform: rotate(0deg) translateY(-4px); }
+  .mj-postcard__head,
+  .mj-postcard__foot {
+    display: flex; justify-content: space-between; gap: .5rem;
+    padding: .6rem .9rem;
+    font-size: .62rem; letter-spacing: .08em;
+    background: var(--mj-paper-2);
+    border-bottom: 2px solid var(--mj-ink);
+  }
+  .mj-postcard__foot { border-bottom: none; border-top: 2px solid var(--mj-ink); justify-content: center; color: var(--mj-green); font-weight: 700; }
+  .mj-postcard__profile { aspect-ratio: 540 / 220; border-bottom: 2px solid var(--mj-ink); }
+  .mj-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--mj-ink); }
+  .mj-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.02); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .mj-postcard:hover .mj-postcard__img { transform: scale(1.05); }
+  .mj-postcard__seal { position: absolute; top: 12px; right: 12px; width: 82px; height: 82px; transform: rotate(-8deg); filter: drop-shadow(0 4px 10px rgba(47,125,79,0.5)); }
+
+  /* ── BOTONES ── */
+  .mj-btn {
+    display: inline-flex; align-items: center; gap: .55rem;
+    padding: .85rem 1.4rem;
+    border: 2px solid var(--mj-ink);
+    font-weight: 700; font-size: .92rem;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 var(--mj-ink);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .mj-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--mj-ink); }
+  .mj-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--mj-ink); }
+  .mj-btn--primary { background: var(--mj-green); color: var(--mj-paper); }
+  .mj-btn--ghost { background: transparent; color: var(--mj-ink); }
+  .mj-btn--amber { background: var(--mj-amber); color: var(--mj-ink); }
+  .mj-btn--lg { padding: 1.05rem 1.9rem; font-size: 1.02rem; }
+
+  /* ── HITOS ── */
+  .mj-hitos-section { background: var(--mj-ink); padding: 1.6rem 0; }
+  .mj-hitos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem 1.6rem; list-style: none; padding: 0; margin: 0; }
+  .mj-hito { display: flex; flex-direction: column; gap: .15rem; }
+  .mj-hito__k { font-size: .62rem; letter-spacing: .12em; color: var(--mj-amber); }
+  .mj-hito__v { font-size: .84rem; color: var(--mj-paper); }
+
+  /* ── ICONOS ── */
+  .mj-ico-section { background: var(--mj-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-chapter { color: var(--mj-amber); display: block; margin-bottom: .7rem; }
+  .mj-ico { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  @media (min-width: 768px) { .mj-ico { grid-template-columns: repeat(2, 1fr); } }
+  .mj-ico__item {
+    display: flex; gap: 1.1rem;
+    border: 2px solid var(--mj-ink);
+    background: var(--mj-paper);
+    padding: 1.4rem;
+    box-shadow: 6px 6px 0 var(--mj-ink);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .mj-ico__item:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--mj-ink); }
+  .mj-ico__code {
+    flex: none;
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    font-size: 1.2rem; font-weight: 800;
+    border: 2px solid var(--mj-ink);
+    color: var(--mj-paper);
+  }
+  .mj-ico__item--green   .mj-ico__code { background: var(--mj-green); }
+  .mj-ico__item--steel   .mj-ico__code { background: var(--mj-steel); }
+  .mj-ico__item--cold    .mj-ico__code { background: var(--mj-cold); }
+  .mj-ico__item--plastic .mj-ico__code { background: var(--mj-plastic); color: var(--mj-ink); }
+  .mj-ico__sub { font-size: .6rem; color: var(--mj-green); }
+  .mj-ico__name { font-size: 1.35rem; margin: .2rem 0 .5rem; line-height: 1.1; }
+  .mj-ico__desc { font-size: .9rem; line-height: 1.6; margin: 0 0 .7rem; }
+  .mj-ico__dato { font-size: .68rem; color: var(--mj-amber); font-weight: 700; }
+
+  /* ── POLÍGONO ── */
+  .mj-pol-section { background: var(--mj-deep); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-pol__grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-top: 2.5rem; }
+  @media (min-width: 1024px) { .mj-pol__grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 3.5rem; } }
+  .mj-pol__svg-wrap { border: 3px solid var(--mj-ink); box-shadow: var(--mj-shadow); overflow: hidden; aspect-ratio: 600 / 340; background: var(--mj-deep); }
+  .mj-pol__lead { font-size: 1.15rem; line-height: 1.6; color: var(--mj-amber); margin: 0 0 1.1rem; font-weight: 600; }
+  .mj-pol__lead em { font-style: italic; color: var(--mj-paper); }
+  .mj-pol__text { font-size: .95rem; line-height: 1.7; color: rgba(242,241,236,0.82); margin: 0 0 1.3rem; }
+  .mj-pol__list { list-style: none; padding: 0; margin: 0 0 1.8rem; display: grid; gap: .6rem; }
+  .mj-pol__list li { font-size: .9rem; line-height: 1.55; color: rgba(242,241,236,0.9); padding-left: 1.4rem; position: relative; }
+  .mj-pol__list li::before { content: '▸'; position: absolute; left: 0; color: var(--mj-amber); font-weight: 800; }
+  .mj-pol__list strong { color: var(--mj-paper); }
+
+  /* ── CADENA DE FRÍO ── */
+  .mj-frio-section { background: var(--mj-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-frio__grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+  @media (min-width: 1024px) { .mj-frio__grid { grid-template-columns: .9fr 1.1fr; align-items: center; gap: 3.5rem; } }
+  .mj-frio__title { font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1; margin: 0 0 1.2rem; }
+  .mj-frio__title em { display: block; color: var(--mj-cold); }
+  .mj-frio__text { font-size: .96rem; line-height: 1.7; margin: 0 0 1rem; }
+  .mj-frio__tags { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 1.4rem 0 0; }
+  .mj-frio__tags li { font-size: .66rem; padding: .35rem .7rem; border: 2px solid var(--mj-ink); background: var(--mj-paper); letter-spacing: .05em; }
+  .mj-frio__svg-wrap { border: 3px solid var(--mj-ink); box-shadow: var(--mj-shadow); overflow: hidden; aspect-ratio: 560 / 300; }
+
+  /* ── SECTORES ── */
+  .mj-svc-section { background: var(--mj-paper); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); scroll-margin-top: 5rem; }
+  .mj-svc { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  @media (min-width: 700px)  { .mj-svc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .mj-svc { grid-template-columns: repeat(3, 1fr); } }
+  .mj-svc__item {
+    border: 2px solid var(--mj-ink);
+    background: var(--mj-paper);
+    padding: 1.5rem;
+    box-shadow: 6px 6px 0 var(--mj-ink);
+    display: flex; flex-direction: column;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .mj-svc__item:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--mj-ink); }
+  .mj-svc__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .9rem; }
+  .mj-svc__num { font-size: 2rem; font-weight: 800; color: var(--mj-paper-2); line-height: 1; }
+  .mj-svc__stat { text-align: right; display: flex; flex-direction: column; }
+  .mj-svc__stat b { font-size: 1.15rem; color: var(--mj-green); line-height: 1; }
+  .mj-svc__stat small { font-size: .6rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+  .mj-svc__name { font-size: 1.2rem; line-height: 1.15; margin: 0 0 .6rem; }
+  .mj-svc__desc { font-size: .88rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; }
+  .mj-svc__tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
+  .mj-svc__tags li { font-size: .6rem; padding: .28rem .55rem; background: var(--mj-paper-2); border: 1px solid var(--mj-ink); }
+
+  /* ── MAPA ── */
+  .mj-map-section { background: var(--mj-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-map-wrap { margin-top: 2.5rem; }
+
+  /* ── DIFERENCIALES ── */
+  .mj-dif-section { background: var(--mj-paper); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-dif-chapter { color: var(--mj-amber); display: block; margin-bottom: .7rem; }
+  .mj-dif-title { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: .98; margin: 0 0 2.5rem; }
+  .mj-dif-title em { display: block; color: var(--mj-green); }
+  .mj-dif { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 0; }
+  @media (min-width: 768px) { .mj-dif { grid-template-columns: repeat(2, 1fr); } }
+  .mj-dif__item { border-left: 4px solid var(--mj-green); padding: .3rem 0 .3rem 1.3rem; }
+  .mj-dif__item--1 { border-left-color: var(--mj-amber); }
+  .mj-dif__item--2 { border-left-color: var(--mj-cold); }
+  .mj-dif__item--3 { border-left-color: var(--mj-steel); }
+  .mj-dif__num { font-size: .68rem; color: var(--mj-amber); font-weight: 800; letter-spacing: .1em; }
+  .mj-dif__t { font-size: 1.15rem; margin: .3rem 0 .5rem; line-height: 1.2; }
+  .mj-dif__desc { font-size: .9rem; line-height: 1.65; margin: 0; }
+
+  /* ── PROCESO ── */
+  .mj-proc-section { background: var(--mj-green); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-proc { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1.2rem; }
+  @media (min-width: 900px) { .mj-proc { grid-template-columns: repeat(2, 1fr); } }
+  .mj-proc__step {
+    display: flex; gap: 1.1rem;
+    background: var(--mj-paper);
+    border: 2px solid var(--mj-ink);
+    padding: 1.4rem;
+    box-shadow: 6px 6px 0 var(--mj-ink);
+  }
+  .mj-proc__num { flex: none; font-size: 1.9rem; font-weight: 800; color: var(--mj-amber); line-height: 1; }
+  .mj-proc__head { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .mj-proc__t { font-size: 1.15rem; margin: 0; line-height: 1.2; }
+  .mj-proc__eta { font-size: .64rem; color: var(--mj-green); background: var(--mj-paper-2); padding: .2rem .5rem; border: 1px solid var(--mj-ink); }
+  .mj-proc__desc { font-size: .88rem; line-height: 1.6; margin: .55rem 0 .7rem; }
+  .mj-proc__deliv { font-size: .66rem; color: var(--mj-cold); font-weight: 700; }
+
+  /* ── TESTIMONIOS ── */
+  .mj-tst-section { background: var(--mj-paper); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-tst { display: grid; grid-template-columns: 1fr; gap: 1.5rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  @media (min-width: 768px) { .mj-tst { grid-template-columns: repeat(2, 1fr); } }
+  .mj-tst__item {
+    position: relative;
+    border: 2px solid var(--mj-ink);
+    background: var(--mj-paper-2);
+    padding: 2rem 1.5rem 1.4rem;
+    box-shadow: 6px 6px 0 var(--mj-ink);
+  }
+  .mj-tst__quote { position: absolute; top: -.2rem; left: 1rem; font-size: 4rem; line-height: 1; color: var(--mj-green); opacity: .3; font-family: Georgia, serif; }
+  .mj-tst__text { font-size: .95rem; line-height: 1.7; margin: 0 0 1.2rem; position: relative; }
+  .mj-tst__foot { display: flex; flex-direction: column; gap: .1rem; border-top: 2px solid var(--mj-ink); padding-top: .8rem; }
+  .mj-tst__name { font-weight: 800; font-size: .95rem; }
+  .mj-tst__biz { font-size: .66rem; color: var(--mj-green); }
+
+  /* ── FAQ ── */
+  .mj-faq-section { background: var(--mj-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-faq { display: grid; gap: .8rem; margin-top: 2.5rem; }
+  .mj-faq__item { border: 2px solid var(--mj-ink); background: var(--mj-paper); box-shadow: 4px 4px 0 var(--mj-ink); }
+  .mj-faq__q {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1.1rem 1.3rem;
+    cursor: pointer; font-weight: 700; font-size: .95rem;
+    list-style: none;
+  }
+  .mj-faq__q::-webkit-details-marker { display: none; }
+  .mj-faq__icon { flex: none; width: 18px; height: 18px; position: relative; }
+  .mj-faq__icon::before,
+  .mj-faq__icon::after {
+    content: ''; position: absolute; background: var(--mj-amber);
+    transition: transform .25s;
+  }
+  .mj-faq__icon::before { top: 8px; left: 0; width: 18px; height: 2.5px; }
+  .mj-faq__icon::after  { left: 8px; top: 0; width: 2.5px; height: 18px; }
+  .mj-faq__item[open] .mj-faq__icon::after { transform: scaleY(0); }
+  .mj-faq__a { padding: 0 1.3rem 1.2rem; font-size: .89rem; line-height: 1.7; margin: 0; }
+
+  /* ── VECINOS ── */
+  .mj-vec-section { background: var(--mj-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-vec-title { font-size: clamp(1.7rem, 3.5vw, 2.6rem); line-height: 1; margin: 0 0 2rem; }
+  .mj-vec-title em { color: var(--mj-green); }
+  .mj-vec { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .8rem; list-style: none; padding: 0; margin: 0; }
+  .mj-vecino {
+    display: flex; flex-direction: column; gap: .15rem;
+    border: 2px solid var(--mj-ink);
+    padding: .8rem 1rem;
+    text-decoration: none; color: inherit;
+    background: var(--mj-paper);
+    transition: background .2s, transform .2s;
+  }
+  .mj-vecino:hover { background: var(--mj-green); color: var(--mj-paper); transform: translateY(-3px); }
+  .mj-vecino__n { font-weight: 700; font-size: .95rem; }
+  .mj-vecino__p { font-size: .64rem; opacity: .75; }
+
+  /* ── CTA FINAL ── */
+  .mj-final { background: var(--mj-ink); padding: 5rem 0; }
+  .mj-final__box {
+    border: 3px solid var(--mj-green);
+    background: var(--mj-deep);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    box-shadow: 10px 10px 0 var(--mj-green);
+  }
+  .mj-final__meta { color: var(--mj-amber); display: block; margin-bottom: 1rem; }
+  .mj-final__title { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: .98; color: var(--mj-paper); margin: 0 0 1.2rem; }
+  .mj-final__title em { display: block; color: var(--mj-amber); }
+  .mj-final__lead { font-size: 1rem; line-height: 1.65; color: rgba(242,241,236,0.82); max-width: 52ch; margin: 0 auto 2rem; }
+  .mj-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+  .mj-final__cta .mj-btn--ghost { color: var(--mj-paper); border-color: var(--mj-amber); box-shadow: 4px 4px 0 var(--mj-amber); }
+  .mj-final__cta .mj-btn--ghost:hover { box-shadow: 7px 7px 0 var(--mj-amber); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mj-pulse { animation: none; }
+    .mj-postcard,
+    .mj-postcard__img,
+    .mj-btn,
+    .mj-ico__item,
+    .mj-svc__item,
+    .mj-vecino { transition: none; }
+  }
+</style>
