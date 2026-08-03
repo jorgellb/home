@@ -1,0 +1,1226 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+const pueblosPoniente = getPueblosByComarca('Poniente Almeriense').filter(p => p.slug !== 'adra');
+
+const title = 'Diseño Web en Adra | Puerto Pesquero, Invernaderos y Turismo de Costa · Almería';
+const description = 'Agencia de diseño web en Adra, la antigua Abdera fenicia y segunda ciudad del Poniente almeriense. Webs para restaurantes de pescado y lonja, empresas hortofrutícolas B2B multiidioma, apartamentos de playa y comercio local. SEO local, reservas directas y presupuesto en 24h.';
+const canonical = 'https://platanitorico.com/diseno-web/adra/';
+
+const sectores = [
+  { nombre: 'Pesca, Lonja y Restauración',        stat: 'Diaria', statLabel: 'descarga en lonja',   desc: 'El puerto de Adra descarga cada día pescado y marisco fresco que abastece a toda la comarca. Restaurantes, pescaderías y la propia lonja pueden posicionarse como destino gastronómico con carta digital, fotografía de producto y SEO para "pescado fresco Adra" y "restaurante puerto Adra".', tags: ['SEO pescado fresco','Carta digital','Reservas de mesa','Google Business'] },
+  { nombre: 'Agricultura Intensiva y Manipulado', stat: 'B2B',    statLabel: 'export europea',      desc: 'Adra forma parte del cinturón hortofrutícola del Poniente. Cooperativas, manipulados y empresas de suministro agrícola necesitan webs B2B con catálogo, certificaciones y multiidioma para vender a compradores europeos, igual que sus vecinos de El Ejido.', tags: ['Web B2B agro','Certificaciones','Multiidioma export','SEO internacional'] },
+  { nombre: 'Turismo de Costa y Alojamiento',     stat: '0%',     statLabel: 'comisión directa',    desc: 'Las playas de Adra y el paraje de las Albuferas atraen un turismo familiar tranquilo. Apartamentos, casas vacacionales y hostelería de playa que aparezcan bien en Google captan reservas directas sin depender de las plataformas.', tags: ['Reservas directas','SEO playa Adra','Galería de fotos','Apartamentos'] },
+  { nombre: 'Comercio Local y Hostelería',        stat: '25k',    statLabel: 'habitantes',          desc: 'Con 25.000 habitantes, Adra tiene un tejido comercial denso que compite con la oferta de El Ejido. Tiendas, bares y comercios de barrio con ficha de Google cuidada y web sencilla retienen al cliente que hoy se va a comprar fuera.', tags: ['Ficha de Google','Web de comercio','Reseñas','SEO local'] },
+  { nombre: 'Servicios Profesionales',            stat: '2ª',     statLabel: 'ciudad del Poniente', desc: 'Gestorías, clínicas, asesorías y despachos de Adra atienden a pescadores, agricultores y familias de toda la franja costera. Una web con formulario, servicios claros y Google Maps optimizado capta al cliente que busca profesional cerca.', tags: ['Captación de leads','Google Maps','Formularios','SEO servicios'] },
+  { nombre: 'Náutica y Ocio Marítimo',            stat: 'Puerto', statLabel: 'deportivo y pesquero', desc: 'El puerto no solo es pesca: amarres, mantenimiento de embarcaciones, escuelas náuticas y excursiones en barco son negocios con clientela de toda la costa granadina y almeriense que apenas compiten en Google.', tags: ['Reserva de actividades','SEO náutico','Multiidioma','Calendario online'] },
+];
+
+const iconos = [
+  { code: 'A', name: 'Puerto Pesquero',      sub: 'LONJA ACTIVA A DIARIO',   desc: 'Uno de los puertos pesqueros más activos del Mediterráneo andaluz. Cada madrugada la lonja subasta el pescado que llega a las mesas de toda la comarca: gamba, pescadilla, boquerón y marisco de bajura.', dato: 'Lonja diaria',      color: 'sea' },
+  { code: 'B', name: 'Abdera Fenicia',       sub: 'FUNDADA S. VIII a.C.',    desc: 'Adra es una de las ciudades con más historia de Almería. La fenicia Abdera se fundó hace casi 3.000 años, lo que la convierte en uno de los asentamientos continuamente habitados más antiguos de la península.', dato: '3.000 años',       color: 'accent' },
+  { code: 'C', name: 'Mar de Invernaderos',  sub: 'CINTURÓN DEL PONIENTE',   desc: 'Adra forma parte del cinturón hortofrutícola que exporta a media Europa. Cooperativas y manipulados mueven producto a Alemania, Francia y Países Bajos durante toda la campaña.', dato: 'Export europea',   color: 'plastic' },
+  { code: 'D', name: 'Albuferas de Adra',    sub: 'RESERVA NATURAL',         desc: 'Dos lagunas litorales declaradas Reserva Natural y humedal de importancia internacional. Refugio de la malvasía cabeciblanca y punto de parada para aves migratorias entre Europa y África.', dato: 'Humedal protegido', color: 'green' },
+];
+
+const hitos = [
+  { k: 'FUNDACIÓN',  v: 'Abdera fenicia · s. VIII a.C.' },
+  { k: 'POBLACIÓN',  v: '25.000 hab · 2ª del Poniente' },
+  { k: 'PUERTO',     v: 'Pesquero activo · lonja diaria' },
+  { k: 'NATURALEZA', v: 'Reserva de las Albuferas de Adra' },
+  { k: 'ECONOMÍA',   v: 'Pesca · Invernadero · Turismo' },
+  { k: 'COBERTURA',  v: 'Berja · Balanegra · Balerma · El Ejido' },
+];
+
+const diferenciales = [
+  { title: 'Tres economías en pocos kilómetros', desc: 'Pesca, agricultura bajo plástico y turismo de costa conviven en el mismo término municipal. Cada una juega un partido distinto en Google: la lonja compite por "dónde comer pescado", el agro por compradores europeos y los apartamentos por la reserva directa. Una web genérica no gana ninguno de los tres.' },
+  { title: 'Segunda ciudad del Poniente',        desc: 'Con 25.000 habitantes, Adra es la segunda localidad de la comarca tras El Ejido. Es mercado suficiente para sostener comercio y servicios propios, pero muchos negocios pierden clientes que acaban comprando en El Ejido simplemente porque allí sí los encuentran en Google.' },
+  { title: 'Export que necesita multiidioma',    desc: 'Las hortofrutícolas de Adra venden a Alemania, Francia y Países Bajos. Un comprador europeo que llega a una web solo en español y sin certificaciones visibles se va a la siguiente. El multiidioma no es un extra aquí: es la condición para competir.' },
+  { title: 'Una costa que casi nadie conoce',    desc: 'Las playas de Adra y las Albuferas atraen turismo familiar tranquilo, muy por debajo de la saturación de Roquetas o Mojácar. Ese es justo el argumento de venta, y hoy apenas se cuenta: quien lo comunique bien capta al visitante que huye de la masificación.' },
+];
+
+const proceso = [
+  { num: '01', title: 'Bajamos al puerto',        eta: '1–2 días',  body: 'Nos plantamos en tu negocio de Adra: el restaurante, el almacén de manipulado o los apartamentos. Vemos cómo trabajas, de dónde viene tu cliente y contra quién compites de verdad en el Poniente.', deliverable: 'Briefing + análisis' },
+  { num: '02', title: 'Diseño con luz de mar',    eta: '3–5 días',  body: 'Diseño que respira Mediterráneo: paleta marina, tipografía clara y fotografía real de tu producto. Si vendes pescado del día, la web tiene que oler a pescado del día. Nada de plantillas.', deliverable: 'Prototipo Figma' },
+  { num: '03', title: 'Desarrollo + motor SEO',   eta: '5–10 días', body: 'Astro ultrarrápido, reservas directas o catálogo B2B según el caso, multiidioma si exportas, páginas por municipio del Poniente, Core Web Vitals verdes y accesibilidad AAA.', deliverable: 'Web en staging' },
+  { num: '04', title: 'Lanzamiento + rodaje',     eta: '1–2 días',  body: 'Publicamos y configuramos Google Business Profile para Adra y tu zona de cobertura. Indexamos en Search Console y arrancamos el SEO local para que empieces a aparecer.', deliverable: 'Sitio LIVE + manual' },
+];
+
+/* Testimonios tal y como están recogidos en la ficha del municipio.
+   No añadimos ninguno más: son opiniones atribuidas a personas concretas. */
+const testimonios = [
+  { nombre: 'Salvador Martín',  negocio: 'Restaurante de pescado del puerto', texto: 'Vivíamos del cliente de toda la vida y poco más. Con la web, la carta y las fotos del pescado del día, ahora vienen a comer desde El Ejido y Berja. Aparecemos los primeros cuando buscan marisco en Adra.' },
+  { nombre: 'Inmaculada Ruiz',  negocio: 'Apartamentos en primera línea',     texto: 'Tenía los apartamentos solo en un portal con comisión. La web con reservas directas me ha traído familias que repiten cada verano y reservan sin intermediarios. Adra tiene playas preciosas que poca gente conoce.' },
+];
+
+const faq = [
+  { q: '¿Hacéis webs para restaurantes y negocios de pescado en Adra?', a: 'Sí. Creamos webs con carta digital, fotografía de producto, reservas de mesa y SEO para "pescado fresco Adra", "marisquería Adra" y "restaurante puerto". Contamos la frescura del producto de la lonja, que es vuestro mejor argumento de venta.' },
+  { q: '¿Trabajáis con empresas agrícolas y de manipulado de Adra?', a: 'Sí, igual que en El Ejido y el resto del Poniente. Hacemos webs B2B con catálogo de producto, certificaciones visibles y multiidioma (inglés, alemán, francés) para vender a compradores europeos. SEO internacional incluido.' },
+  { q: '¿Cuánto cuesta una web para un negocio en Adra?', a: 'Una web corporativa o de restaurante desde 450€ con hosting gratuito. Web de apartamentos con reservas directas o portal B2B agro, según funcionalidades. Presupuesto cerrado en 24h, sin sorpresas.' },
+  { q: '¿Podéis montar reservas directas para mis apartamentos?', a: 'Sí. Montamos motor de reserva propio con calendario, precios por temporada y pago online, para que dejes de pagar comisión en cada noche vendida. Los portales siguen siendo un canal más, pero la reserva directa pasa a ser la principal.' },
+  { q: '¿Hacéis webs multiidioma para exportar a Europa?', a: 'Sí, y en el Poniente es casi obligatorio. Traducimos a inglés, alemán y francés con SEO específico en cada idioma, no con traductor automático, para que un comprador alemán te encuentre buscando en su idioma.' },
+  { q: '¿Hacéis reuniones presenciales en Adra?', a: 'Sí. Estamos en Vera y nos desplazamos al Poniente para reunirnos en tu negocio, tu almacén o el puerto. La primera consulta es gratuita y sin compromiso.' },
+  { q: '¿En cuánto tiempo tengo la web lista?', a: 'Web corporativa o de restaurante: 1–2 semanas. Con reservas directas o catálogo B2B: 2–3 semanas. Con multiidioma completo y SEO internacional: 3–4 semanas.' },
+  { q: '¿Ayudáis también con Google y las reseñas?', a: 'Sí. Configuramos y optimizamos tu ficha de Google Business Profile para Adra, te enseñamos a pedir reseñas sin resultar pesado y trabajamos el SEO local para que aparezcas en el mapa cuando alguien busca cerca.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es","breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Diseño Web","item":"https://platanitorico.com/diseno-web/"},{"@type":"ListItem","position":3,"name":"Diseño Web Adra","item":canonical}]} },
+  { "@context":"https://schema.org","@type":"ProfessionalService","name":"Platanito Rico — Diseño Web en Adra","url":canonical,"telephone":"+34657085019","image":"https://platanitorico.com/imagenes/hero.jpg","address":{"@type":"PostalAddress","addressLocality":"Adra","addressRegion":"Almería","postalCode":"04770","addressCountry":"ES"},"geo":{"@type":"GeoCoordinates","latitude":36.7486,"longitude":-3.0206},"areaServed":["Adra","Berja","Balanegra","Balerma","La Mojonera","El Ejido","Poniente Almeriense"] },
+  { "@context":"https://schema.org","@type":"HowTo","name":"Cómo creamos tu web en Adra","step":proceso.map((p,i)=>({"@type":"HowToStep","position":i+1,"name":p.title,"text":p.body})) },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/hero.jpg"
+  imageAlt="Diseño web en Adra - Puerto pesquero, invernaderos del Poniente y Albuferas"
+  type="service"
+  keywords="diseño web adra, seo adra almería, web restaurante pescado adra, web apartamentos adra, abdera, poniente almeriense, web b2b hortofrutícola"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+
+  <main id="main-content" class="ad">
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HERO — PUERTO · ABDERA · INVERNADEROS             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-hero">
+      <div class="container-brutal">
+
+        <header class="ad-hero__top">
+          <span class="text-meta">N.º 038 — Poniente Almeriense · Costa</span>
+          <span class="text-meta ad-hero__status">
+            <span class="ad-pulse"></span>
+            ★ LA ANTIGUA ABDERA · ADRA ★
+          </span>
+        </header>
+
+        <div class="divider-brutal"></div>
+
+        <div class="ad-hero__grid">
+
+          <div class="ad-hero__intro">
+            <span class="text-meta ad-hero__chapter">Cap. 01 / Adra · Almería</span>
+            <h1 class="ad-hero__title heading-display">
+              Diseño web donde el
+              <em class="heading-editorial">mar</em>
+              <span class="ad-hero__title-stamp">y el invernadero se tocan.</span>
+            </h1>
+
+            <p class="ad-hero__lead">
+              <strong>Adra</strong> es puerto pesquero, cinturón hortofrutícola y playa
+              familiar en el mismo término municipal. Tres economías, tres clientes
+              distintos y tres partidos diferentes que jugar en Google.
+              <strong>Con una web genérica no se gana ninguno.</strong>
+            </p>
+
+            <div class="ad-hero__cta">
+              <a href="/contacto/" class="ad-btn ad-btn--primary">
+                <span>Presupuesto en 24h</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+              <a href="#sectores" class="ad-btn ad-btn--ghost">
+                <span>Ver sectores de Adra</span>
+              </a>
+            </div>
+
+            <ul class="ad-hero__kpis">
+              <li class="ad-kpi ad-kpi--sea">
+                <span class="ad-kpi__v text-mono">25<small>k</small></span>
+                <span class="ad-kpi__l">Habitantes</span>
+              </li>
+              <li class="ad-kpi ad-kpi--accent">
+                <span class="ad-kpi__v text-mono">2<small>ª</small></span>
+                <span class="ad-kpi__l">Del Poniente</span>
+              </li>
+              <li class="ad-kpi ad-kpi--green">
+                <span class="ad-kpi__v text-mono">3<small>k</small></span>
+                <span class="ad-kpi__l">Años de historia</span>
+              </li>
+              <li class="ad-kpi ad-kpi--ink">
+                <span class="ad-kpi__v text-mono">24<small>h</small></span>
+                <span class="ad-kpi__l">Presupuesto</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* POSTAL — perfil marino de Adra */}
+          <aside class="ad-hero__postcard" aria-hidden="true">
+            <div class="ad-postcard">
+
+              <header class="ad-postcard__head">
+                <span class="text-mono">ADRA · 04770 · ALMERÍA</span>
+                <span class="text-mono">36.749° N · 3.021° W</span>
+              </header>
+
+              {/* Perfil costero SVG */}
+              <div class="ad-postcard__profile" aria-hidden="true">
+                <svg viewBox="0 0 540 220" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="ad-sky-g" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#8FC2CE"/>
+                      <stop offset="100%" stop-color="#E4D5B7"/>
+                    </linearGradient>
+                    <linearGradient id="ad-sea-g" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#2E90A3"/>
+                      <stop offset="100%" stop-color="#1B6C7D"/>
+                    </linearGradient>
+                  </defs>
+
+                  {/* Cielo mediterráneo */}
+                  <rect width="540" height="220" fill="url(#ad-sky-g)"/>
+
+                  {/* Sol bajo */}
+                  <circle cx="450" cy="52" r="18" fill="#F2C14E" stroke="#1A1816" stroke-width="1.5"/>
+
+                  {/* Sierra de Gádor al fondo */}
+                  <path d="M 0 96 L 70 62 L 120 78 L 180 50 L 250 84 L 310 60 L 380 88 L 440 70 L 540 92 L 540 130 L 0 130 Z" fill="#7E8B86" stroke="#1A1816" stroke-width="1.5"/>
+                  <path d="M 0 112 L 80 88 L 150 100 L 220 80 L 300 104 L 370 86 L 450 108 L 540 96 L 540 132 L 0 132 Z" fill="#68766F" stroke="#1A1816" stroke-width="1"/>
+
+                  {/* Franja de invernaderos */}
+                  <g>
+                    <rect x="0" y="128" width="540" height="18" fill="#CBD8D5" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 8 128 L 20 146 M 34 128 L 46 146 M 60 128 L 72 146 M 86 128 L 98 146 M 112 128 L 124 146 M 138 128 L 150 146 M 164 128 L 176 146 M 190 128 L 202 146 M 216 128 L 228 146 M 242 128 L 254 146 M 268 128 L 280 146 M 294 128 L 306 146 M 320 128 L 332 146 M 346 128 L 358 146 M 372 128 L 384 146 M 398 128 L 410 146 M 424 128 L 436 146 M 450 128 L 462 146 M 476 128 L 488 146 M 502 128 L 514 146" stroke="#9FB2AE" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Mar */}
+                  <rect x="0" y="146" width="540" height="74" fill="url(#ad-sea-g)"/>
+                  <path d="M 0 158 q 18 -5 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0 t 36 0" fill="none" stroke="#5FB3C0" stroke-width="1.4" opacity="0.75"/>
+                  <path d="M 0 182 q 22 -6 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0 t 44 0" fill="none" stroke="#5FB3C0" stroke-width="1.2" opacity="0.55"/>
+                  <path d="M 0 204 q 26 -6 52 0 t 52 0 t 52 0 t 52 0 t 52 0 t 52 0 t 52 0 t 52 0 t 52 0 t 52 0" fill="none" stroke="#7FC7D1" stroke-width="1" opacity="0.4"/>
+
+                  {/* Dique del puerto */}
+                  <g transform="translate(300, 150)">
+                    <rect x="0" y="0" width="180" height="8" fill="#B0A894" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="168" y="-14" width="12" height="16" fill="#E2703A" stroke="#1A1816" stroke-width="1.5"/>
+                    <circle cx="174" cy="-16" r="3" fill="#F2C14E" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* LONJA — nave del puerto */}
+                  <g transform="translate(60, 108)">
+                    <rect x="0" y="8" width="120" height="38" fill="#DCD3C0" stroke="#1A1816" stroke-width="2"/>
+                    <polygon points="-6,8 60,-10 126,8" fill="#1B6C7D" stroke="#1A1816" stroke-width="2"/>
+                    {/* Portones de descarga */}
+                    <rect x="10" y="22" width="20" height="24" fill="#2E90A3" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="40" y="22" width="20" height="24" fill="#2E90A3" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="70" y="22" width="20" height="24" fill="#2E90A3" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="100" y="22" width="12" height="24" fill="#2E90A3" stroke="#1A1816" stroke-width="1.5"/>
+                    {/* Cartel LONJA */}
+                    <rect x="34" y="-4" width="52" height="10" fill="#E2703A" stroke="#1A1816" stroke-width="1.5"/>
+                    <text x="60" y="4" text-anchor="middle" fill="#F5F0E8" font-size="6" font-weight="800" font-family="monospace" letter-spacing="1.5">LONJA</text>
+                  </g>
+
+                  {/* Cajas de pescado apiladas */}
+                  <g transform="translate(190, 134)">
+                    <rect x="0" y="0" width="14" height="6" fill="#F2F4F0" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="0" y="6" width="14" height="6" fill="#E2703A" stroke="#1A1816" stroke-width="1"/>
+                    <rect x="16" y="3" width="14" height="9" fill="#F2F4F0" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Barco pesquero grande */}
+                  <g transform="translate(224, 152)">
+                    <path d="M 0 20 L 6 34 L 78 34 L 86 20 Z" fill="#E2703A" stroke="#1A1816" stroke-width="2"/>
+                    <rect x="0" y="14" width="86" height="6" fill="#F2F4F0" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="46" y="-2" width="26" height="16" fill="#F2F4F0" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="52" y="2" width="6" height="6" fill="#1B6C7D" stroke="#1A1816" stroke-width="0.8"/>
+                    <rect x="62" y="2" width="6" height="6" fill="#1B6C7D" stroke="#1A1816" stroke-width="0.8"/>
+                    {/* Palo y aparejo */}
+                    <rect x="20" y="-18" width="2.5" height="32" fill="#6B5B45" stroke="#1A1816" stroke-width="0.8"/>
+                    <path d="M 21 -18 L 46 0" stroke="#1A1816" stroke-width="1" fill="none"/>
+                    <path d="M 21 -18 L 2 4" stroke="#1A1816" stroke-width="1" fill="none"/>
+                    <circle cx="21" cy="-20" r="2.5" fill="#F2C14E" stroke="#1A1816" stroke-width="1"/>
+                  </g>
+
+                  {/* Barca pequeña */}
+                  <g transform="translate(400, 176)">
+                    <path d="M 0 8 L 4 16 L 40 16 L 44 8 Z" fill="#F2F4F0" stroke="#1A1816" stroke-width="1.5"/>
+                    <rect x="18" y="-8" width="2" height="16" fill="#6B5B45" stroke="#1A1816" stroke-width="0.7"/>
+                    <path d="M 20 -8 L 34 6 L 20 6 Z" fill="#E2703A" stroke="#1A1816" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Boyas */}
+                  <g transform="translate(150, 190)">
+                    <circle cx="0" cy="0" r="4" fill="#E2703A" stroke="#1A1816" stroke-width="1.2"/>
+                    <circle cx="30" cy="6" r="3" fill="#F2C14E" stroke="#1A1816" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Ánfora fenicia — guiño a Abdera */}
+                  <g transform="translate(24, 168)">
+                    <path d="M 8 0 q 10 4 10 14 q 0 12 -6 20 l -1 10 l -6 0 l -1 -10 q -6 -8 -6 -20 q 0 -10 10 -14 Z" fill="#C4915C" stroke="#1A1816" stroke-width="1.5"/>
+                    <path d="M 2 6 q -6 4 -2 12" fill="none" stroke="#1A1816" stroke-width="1.2"/>
+                    <path d="M 14 6 q 6 4 2 12" fill="none" stroke="#1A1816" stroke-width="1.2"/>
+                    <rect x="4" y="-3" width="8" height="4" fill="#C4915C" stroke="#1A1816" stroke-width="1.2"/>
+                  </g>
+
+                  {/* Flamencos de las Albuferas */}
+                  <g transform="translate(468, 122)">
+                    <path d="M 0 18 l 0 -10 q 0 -6 6 -6 q 5 0 5 4" fill="none" stroke="#E88CA0" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M 11 6 l 4 2" stroke="#1A1816" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M 0 18 l -3 6 M 0 18 l 2 6" stroke="#E88CA0" stroke-width="1.4" stroke-linecap="round"/>
+                    <path d="M 14 20 l 0 -8 q 0 -5 5 -5 q 4 0 4 3" fill="none" stroke="#E88CA0" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M 14 20 l -2 5 M 14 20 l 2 5" stroke="#E88CA0" stroke-width="1.2" stroke-linecap="round"/>
+                  </g>
+
+                  {/* Gaviotas */}
+                  <path d="M 120 44 q 7 -6 14 0 q 7 -6 14 0" fill="none" stroke="#1A1816" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M 200 30 q 5 -4 10 0 q 5 -4 10 0" fill="none" stroke="#1A1816" stroke-width="1.3" stroke-linecap="round"/>
+                  <path d="M 330 56 q 6 -5 12 0 q 6 -5 12 0" fill="none" stroke="#1A1816" stroke-width="1.4" stroke-linecap="round"/>
+
+                </svg>
+              </div>
+
+              {/* Imagen real */}
+              <div class="ad-postcard__img-wrap">
+                <img
+                  src="/imagenes/hero.jpg"
+                  alt="Adra — puerto pesquero y costa del Poniente almeriense"
+                  width="640" height="320"
+                  loading="eager"
+                  decoding="async"
+                  class="ad-postcard__img"
+                />
+                <div class="ad-postcard__seal" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <circle cx="50" cy="50" r="46" fill="#1B6C7D" stroke="#1A1816" stroke-width="3"/>
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="#F5F0E8" stroke-width="1.5" stroke-dasharray="3 3"/>
+                    <text x="50" y="44" text-anchor="middle" fill="#F5F0E8" font-size="13" font-weight="800" font-family="monospace">ADRA</text>
+                    <text x="50" y="58" text-anchor="middle" fill="#F2C14E" font-size="8" font-family="monospace">ABDERA</text>
+                    <text x="50" y="70" text-anchor="middle" fill="#F5F0E8" font-size="6" font-family="monospace">s. VIII a.C.</text>
+                  </svg>
+                </div>
+              </div>
+
+              <footer class="ad-postcard__foot">
+                <span class="text-mono">★ PUERTO · INVERNADERO · PLAYA ★</span>
+              </footer>
+
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* HITOS                                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-hitos-section">
+      <div class="container-brutal">
+        <ul class="ad-hitos">
+          {hitos.map((h) => (
+            <li class="ad-hito">
+              <span class="ad-hito__k text-mono">{h.k}</span>
+              <span class="ad-hito__v">{h.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ICONOS — 4 SEÑAS DE IDENTIDAD                     */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-ico-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter">Cap. 02 / Señas de identidad</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Cuatro cosas que
+            <em class="heading-editorial">solo</em>
+            <span class="heading-display-block">tiene Adra.</span>
+          </h2>
+        </div>
+
+        <ol class="ad-ico">
+          {iconos.map((ic) => (
+            <li class={`ad-ico__item ad-ico__item--${ic.color}`}>
+              <span class="ad-ico__code text-mono">{ic.code}</span>
+              <div class="ad-ico__body">
+                <span class="text-meta ad-ico__sub">{ic.sub}</span>
+                <h3 class="ad-ico__name heading-display">{ic.name}</h3>
+                <p class="ad-ico__desc">{ic.desc}</p>
+                <span class="ad-ico__dato text-mono">★ {ic.dato}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUERTO — FLAGSHIP SECTION                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-port-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter" style="color:var(--ad-sand)">Cap. 03 / El puerto</span>
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--ad-paper)">
+            La lonja abre de
+            <em class="heading-editorial">madrugada.</em>
+            <span class="heading-display-block">Google, todo el día.</span>
+          </h2>
+        </div>
+
+        <div class="ad-port__grid">
+
+          <div class="ad-port__svg-wrap" aria-hidden="true">
+            <svg viewBox="0 0 600 340" width="100%" height="100%" class="ad-port-svg">
+              <defs>
+                <linearGradient id="ad-port-water" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2E90A3"/>
+                  <stop offset="100%" stop-color="#14515E"/>
+                </linearGradient>
+              </defs>
+
+              {/* Cielo de madrugada */}
+              <rect width="600" height="340" fill="#0E2A33"/>
+              <circle cx="512" cy="56" r="20" fill="#F2E3B0" stroke="#1A1816" stroke-width="2"/>
+              <circle cx="504" cy="50" r="18" fill="#0E2A33"/>
+              {/* Estrellas */}
+              <circle cx="80" cy="40" r="1.8" fill="#F2F4F0" opacity="0.9"/>
+              <circle cx="160" cy="70" r="1.4" fill="#F2F4F0" opacity="0.7"/>
+              <circle cx="250" cy="34" r="1.6" fill="#F2F4F0" opacity="0.8"/>
+              <circle cx="360" cy="62" r="1.3" fill="#F2F4F0" opacity="0.6"/>
+              <circle cx="430" cy="30" r="1.7" fill="#F2F4F0" opacity="0.85"/>
+
+              {/* Muelle */}
+              <rect x="0" y="196" width="600" height="60" fill="#3A3630" stroke="#1A1816" stroke-width="2"/>
+              <path d="M 0 206 L 600 206" stroke="#5A544A" stroke-width="2"/>
+
+              {/* Agua */}
+              <rect x="0" y="256" width="600" height="84" fill="url(#ad-port-water)"/>
+              <path d="M 0 274 q 20 -6 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0 t 40 0" fill="none" stroke="#5FB3C0" stroke-width="1.5" opacity="0.6"/>
+              <path d="M 0 302 q 24 -7 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0" fill="none" stroke="#5FB3C0" stroke-width="1.2" opacity="0.4"/>
+
+              {/* NAVE DE LA LONJA */}
+              <g transform="translate(60, 96)">
+                <rect x="0" y="20" width="200" height="80" fill="#DCD3C0" stroke="#1A1816" stroke-width="3"/>
+                <polygon points="-12,20 100,-16 212,20" fill="#1B6C7D" stroke="#1A1816" stroke-width="3"/>
+                {/* Portones */}
+                <rect x="16" y="46" width="34" height="54" fill="#2E90A3" stroke="#1A1816" stroke-width="2"/>
+                <rect x="62" y="46" width="34" height="54" fill="#2E90A3" stroke="#1A1816" stroke-width="2"/>
+                <rect x="108" y="46" width="34" height="54" fill="#2E90A3" stroke="#1A1816" stroke-width="2"/>
+                <rect x="154" y="46" width="34" height="54" fill="#F2C14E" stroke="#1A1816" stroke-width="2"/>
+                {/* Luz encendida */}
+                <rect x="160" y="52" width="10" height="10" fill="#FFF3C4" stroke="#1A1816" stroke-width="1"/>
+                {/* Cartel */}
+                <rect x="58" y="2" width="84" height="16" fill="#E2703A" stroke="#1A1816" stroke-width="2"/>
+                <text x="100" y="14" text-anchor="middle" fill="#F5F0E8" font-size="10" font-weight="800" font-family="monospace" letter-spacing="2">LONJA</text>
+              </g>
+
+              {/* Grúa del muelle */}
+              <g transform="translate(430, 96)">
+                <rect x="16" y="0" width="8" height="100" fill="#E2703A" stroke="#1A1816" stroke-width="2"/>
+                <rect x="-30" y="0" width="90" height="8" fill="#E2703A" stroke="#1A1816" stroke-width="2"/>
+                <path d="M -20 8 L -20 40" stroke="#1A1816" stroke-width="2"/>
+                <rect x="-30" y="40" width="20" height="14" fill="#F2C14E" stroke="#1A1816" stroke-width="2"/>
+                <rect x="4" y="96" width="32" height="6" fill="#3A3630" stroke="#1A1816" stroke-width="1.5"/>
+              </g>
+
+              {/* Cajas de pescado en el muelle */}
+              <g transform="translate(300, 168)">
+                <rect x="0" y="0" width="30" height="12" fill="#F2F4F0" stroke="#1A1816" stroke-width="2"/>
+                <rect x="0" y="12" width="30" height="12" fill="#E2703A" stroke="#1A1816" stroke-width="2"/>
+                <rect x="34" y="6" width="30" height="18" fill="#F2F4F0" stroke="#1A1816" stroke-width="2"/>
+                <rect x="68" y="12" width="26" height="12" fill="#F2C14E" stroke="#1A1816" stroke-width="2"/>
+                {/* Pescados asomando */}
+                <path d="M 6 -4 q 8 -5 16 0 q -8 5 -16 0 Z" fill="#8FC2CE" stroke="#1A1816" stroke-width="1.2"/>
+                <path d="M 40 2 q 7 -4 14 0 q -7 4 -14 0 Z" fill="#8FC2CE" stroke="#1A1816" stroke-width="1.2"/>
+              </g>
+
+              {/* Barco pesquero atracado */}
+              <g transform="translate(120, 232)">
+                <path d="M 0 30 L 10 58 L 150 58 L 162 30 Z" fill="#E2703A" stroke="#1A1816" stroke-width="3"/>
+                <rect x="0" y="20" width="162" height="10" fill="#F2F4F0" stroke="#1A1816" stroke-width="2.5"/>
+                {/* Puente */}
+                <rect x="94" y="-10" width="46" height="30" fill="#F2F4F0" stroke="#1A1816" stroke-width="2.5"/>
+                <rect x="102" y="-2" width="12" height="12" fill="#FFF3C4" stroke="#1A1816" stroke-width="1.5"/>
+                <rect x="120" y="-2" width="12" height="12" fill="#1B6C7D" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Mástil y aparejos */}
+                <rect x="42" y="-46" width="4" height="66" fill="#6B5B45" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M 44 -46 L 94 -6" stroke="#1A1816" stroke-width="1.5" fill="none"/>
+                <path d="M 44 -46 L 4 8" stroke="#1A1816" stroke-width="1.5" fill="none"/>
+                <circle cx="44" cy="-50" r="4" fill="#F2C14E" stroke="#1A1816" stroke-width="1.5"/>
+                {/* Red colgada */}
+                <path d="M 56 -20 l 30 0 l -6 20 l -18 0 Z" fill="none" stroke="#3E7A55" stroke-width="1.2"/>
+                <path d="M 60 -20 l -3 20 M 68 -20 l -2 20 M 76 -20 l -1 20 M 84 -20 l 0 20" stroke="#3E7A55" stroke-width="0.9"/>
+                <path d="M 57 -13 l 28 0 M 56 -6 l 27 0 M 55 0 l 26 0" stroke="#3E7A55" stroke-width="0.9"/>
+              </g>
+
+              {/* Boyas flotando */}
+              <circle cx="400" cy="290" r="7" fill="#E2703A" stroke="#1A1816" stroke-width="2"/>
+              <circle cx="440" cy="304" r="5" fill="#F2C14E" stroke="#1A1816" stroke-width="2"/>
+              <circle cx="500" cy="284" r="6" fill="#F2F4F0" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Faro al fondo */}
+              <g transform="translate(548, 130)">
+                <path d="M 4 66 L 8 12 L 22 12 L 26 66 Z" fill="#F2F4F0" stroke="#1A1816" stroke-width="2.5"/>
+                <path d="M 6 44 L 24 44 M 5 56 L 25 56" stroke="#E2703A" stroke-width="4"/>
+                <rect x="6" y="0" width="18" height="12" fill="#1B6C7D" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="15" cy="6" r="3" fill="#FFF3C4" stroke="#1A1816" stroke-width="1"/>
+                <path d="M 22 6 l 26 -8 M 22 6 l 26 8" stroke="#F2C14E" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+              </g>
+
+            </svg>
+          </div>
+
+          <div class="ad-port__body">
+            <p class="ad-port__lead">
+              A las cinco de la mañana el pescado ya está subastado. A las nueve, el
+              cliente busca en el móvil <em>«dónde comer pescado en Adra»</em> — y ahí
+              se decide la comida del domingo.
+            </p>
+            <p class="ad-port__text">
+              El puerto de Adra descarga cada día un producto que no tiene ningún
+              restaurante de interior: pescado y marisco de bajura llegado esa misma
+              madrugada. Es un argumento de venta imbatible que casi nadie está
+              contando en internet.
+            </p>
+            <ul class="ad-port__list">
+              <li><strong>Carta digital</strong> que se actualiza con el pescado del día, sin reimprimir nada.</li>
+              <li><strong>Fotografía real del producto</strong>, no bancos de imágenes genéricos.</li>
+              <li><strong>Reservas de mesa</strong> sin comisión de intermediarios.</li>
+              <li><strong>SEO local</strong> para «pescado fresco Adra» y «marisquería Adra».</li>
+            </ul>
+            <a href="/contacto/" class="ad-btn ad-btn--sand">
+              <span>Quiero llenar el comedor</span>
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* ALBUFERAS — RESERVA NATURAL                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-alb-section">
+      <div class="container-brutal">
+
+        <div class="ad-alb__grid">
+
+          <div class="ad-alb__body">
+            <span class="text-meta ad-chapter">Cap. 04 / Las Albuferas</span>
+            <h2 class="heading-display ad-alb__title">
+              Un humedal
+              <em class="heading-editorial">internacional</em>
+              <span class="heading-display-block">que nadie sabe que existe.</span>
+            </h2>
+            <p class="ad-alb__text">
+              Dos lagunas litorales declaradas Reserva Natural, refugio de la malvasía
+              cabeciblanca y parada de aves migratorias entre Europa y África. A pocos
+              minutos de la playa y sin las aglomeraciones de Roquetas o Mojácar.
+            </p>
+            <p class="ad-alb__text">
+              Para los apartamentos, casas vacacionales y hostelería de la zona, esto
+              no es un dato de folleto: es <strong>el motivo por el que un turista
+              elige Adra</strong> en lugar de la costa saturada. Contarlo bien vale
+              más que bajar el precio.
+            </p>
+            <ul class="ad-alb__tags">
+              <li class="text-mono">Turismo ornitológico</li>
+              <li class="text-mono">Familias que repiten</li>
+              <li class="text-mono">Temporada extendida</li>
+              <li class="text-mono">Reserva directa</li>
+            </ul>
+          </div>
+
+          <div class="ad-alb__svg-wrap" aria-hidden="true">
+            <svg viewBox="0 0 560 300" width="100%" height="100%">
+              <defs>
+                <linearGradient id="ad-alb-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#F2C99B"/>
+                  <stop offset="55%" stop-color="#EFD9B4"/>
+                  <stop offset="100%" stop-color="#DCE7DC"/>
+                </linearGradient>
+                <linearGradient id="ad-alb-water" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#9CC7C4"/>
+                  <stop offset="100%" stop-color="#4E8D8C"/>
+                </linearGradient>
+              </defs>
+
+              <rect width="560" height="300" fill="url(#ad-alb-sky)"/>
+
+              {/* Sol poniente */}
+              <circle cx="440" cy="86" r="26" fill="#F2A65A" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Sierra lejana */}
+              <path d="M 0 130 L 70 100 L 130 118 L 200 92 L 270 122 L 340 104 L 420 128 L 490 112 L 560 130 L 560 150 L 0 150 Z" fill="#8C9A93" stroke="#1A1816" stroke-width="1.5"/>
+
+              {/* Orilla / dunas */}
+              <path d="M 0 150 q 80 -12 160 -2 q 90 12 180 -4 q 110 -18 220 2 L 560 176 L 0 176 Z" fill="#D9C79E" stroke="#1A1816" stroke-width="2"/>
+
+              {/* Lámina de agua */}
+              <rect x="0" y="176" width="560" height="124" fill="url(#ad-alb-water)"/>
+              <path d="M 0 200 q 24 -5 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0 t 48 0" fill="none" stroke="#C6E2DF" stroke-width="1.5" opacity="0.7"/>
+              <path d="M 0 240 q 30 -6 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0" fill="none" stroke="#C6E2DF" stroke-width="1.3" opacity="0.5"/>
+              <path d="M 0 276 q 34 -6 68 0 t 68 0 t 68 0 t 68 0 t 68 0 t 68 0 t 68 0 t 68 0" fill="none" stroke="#C6E2DF" stroke-width="1.1" opacity="0.35"/>
+
+              {/* Reflejo del sol */}
+              <path d="M 428 176 q 12 40 0 90 q -12 -50 0 -90 Z" fill="#F2C99B" opacity="0.45"/>
+
+              {/* Cañaveral izquierda */}
+              <g transform="translate(20, 132)">
+                <path d="M 0 46 q -4 -26 2 -46 M 10 46 q -2 -30 6 -50 M 22 46 q 0 -24 8 -42 M 34 46 q 2 -28 12 -46 M 46 46 q 4 -22 14 -38" fill="none" stroke="#3E7A55" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cx="2" cy="-2" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="16" cy="-6" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="30" cy="2" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="46" cy="-1" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="60" cy="6" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+              </g>
+
+              {/* Cañaveral derecha */}
+              <g transform="translate(486, 140)">
+                <path d="M 0 40 q -3 -22 2 -38 M 12 40 q -2 -26 6 -42 M 26 40 q 0 -20 8 -36 M 40 40 q 3 -24 12 -40" fill="none" stroke="#3E7A55" stroke-width="2.5" stroke-linecap="round"/>
+                <ellipse cx="2" cy="0" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="18" cy="-4" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="34" cy="2" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+                <ellipse cx="52" cy="-2" rx="2.5" ry="6" fill="#7A6A48" stroke="#1A1816" stroke-width="0.8"/>
+              </g>
+
+              {/* Flamenco grande */}
+              <g transform="translate(150, 168)">
+                <path d="M 0 60 L 0 26 q 0 -18 18 -18 q 16 0 16 12 q 0 8 -8 10" fill="none" stroke="#E88CA0" stroke-width="6" stroke-linecap="round"/>
+                <path d="M 34 20 l 10 5 l -10 4" fill="#1A1816" stroke="#1A1816" stroke-width="1.5" stroke-linejoin="round"/>
+                <ellipse cx="26" cy="20" rx="1.6" ry="1.6" fill="#1A1816"/>
+                <path d="M 0 34 q 16 -8 26 4 q -14 10 -26 2 Z" fill="#F2A6B8" stroke="#1A1816" stroke-width="1.5"/>
+                <path d="M 0 60 l -4 12 M 0 60 l 3 12" stroke="#E88CA0" stroke-width="3" stroke-linecap="round"/>
+              </g>
+
+              {/* Flamenco mediano */}
+              <g transform="translate(228, 186)">
+                <path d="M 0 46 L 0 22 q 0 -14 14 -14 q 12 0 12 9 q 0 6 -6 8" fill="none" stroke="#E88CA0" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M 26 17 l 8 4 l -8 3" fill="#1A1816" stroke="#1A1816" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M 0 28 q 12 -6 20 3 q -11 8 -20 2 Z" fill="#F2A6B8" stroke="#1A1816" stroke-width="1.2"/>
+                <path d="M 0 46 l -3 10 M 0 46 l 2 10" stroke="#E88CA0" stroke-width="2.4" stroke-linecap="round"/>
+              </g>
+
+              {/* Malvasía cabeciblanca */}
+              <g transform="translate(330, 232)">
+                <ellipse cx="14" cy="10" rx="18" ry="9" fill="#6B4A2E" stroke="#1A1816" stroke-width="2"/>
+                <circle cx="30" cy="2" r="7" fill="#F2F4F0" stroke="#1A1816" stroke-width="2"/>
+                <path d="M 36 1 l 8 2 l -8 3" fill="#4E7FC4" stroke="#1A1816" stroke-width="1.2" stroke-linejoin="round"/>
+                <circle cx="32" cy="0" r="1.3" fill="#1A1816"/>
+                <path d="M -4 6 l -10 -8" stroke="#6B4A2E" stroke-width="3" stroke-linecap="round"/>
+              </g>
+
+              {/* Aves en vuelo */}
+              <path d="M 100 60 q 9 -8 18 0 q 9 -8 18 0" fill="none" stroke="#1A1816" stroke-width="2" stroke-linecap="round"/>
+              <path d="M 210 40 q 7 -6 14 0 q 7 -6 14 0" fill="none" stroke="#1A1816" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M 320 74 q 6 -5 12 0 q 6 -5 12 0" fill="none" stroke="#1A1816" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M 386 46 q 8 -7 16 0 q 8 -7 16 0" fill="none" stroke="#1A1816" stroke-width="1.8" stroke-linecap="round"/>
+
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* SECTORES — 6 MERCADOS                             */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-svc-section" id="sectores">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter">Cap. 05 / Sectores</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Seis mercados,
+            <em class="heading-editorial">seis</em>
+            <span class="heading-display-block">estrategias distintas.</span>
+          </h2>
+        </div>
+
+        <ol class="ad-svc">
+          {sectores.map((s, i) => (
+            <li class="ad-svc__item">
+              <header class="ad-svc__head">
+                <span class="ad-svc__num text-mono">{String(i + 1).padStart(2, '0')}</span>
+                <span class="ad-svc__stat">
+                  <b class="text-mono">{s.stat}</b>
+                  <small>{s.statLabel}</small>
+                </span>
+              </header>
+              <h3 class="ad-svc__name heading-display">{s.nombre}</h3>
+              <p class="ad-svc__desc">{s.desc}</p>
+              <ul class="ad-svc__tags">
+                {s.tags.map(t => <li class="text-mono">{t}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* MAPA                                              */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-map-section">
+      <div class="container-brutal">
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter">Cap. 06 / Situación</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Adra, en el
+            <em class="heading-editorial">Poniente</em>
+            <span class="heading-display-block">almeriense.</span>
+          </h2>
+        </div>
+        <div class="ad-map-wrap">
+          <InteractiveMap
+            center={[-3.0206, 36.7486]}
+            zoom={12}
+            label="Adra"
+            townInitial="A"
+            themeColor="#1B6C7D"
+            themeColorDark="#0E4551"
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* DIFERENCIALES — 4 RAZONES                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-dif-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ad-dif-chapter">Cap. 07 / Diferencial</span>
+        <h2 class="ad-dif-title heading-display">
+          Por qué Adra
+          <em class="heading-editorial">no se parece</em>
+          <span class="heading-display-block">a ningún otro pueblo.</span>
+        </h2>
+
+        <ol class="ad-dif">
+          {diferenciales.map((d, i) => (
+            <li class={`ad-dif__item ad-dif__item--${i}`}>
+              <span class="ad-dif__num text-mono">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="ad-dif__t">{d.title}</h3>
+              <p class="ad-dif__desc">{d.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PROCESO — 4 PASOS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-proc-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter" style="color:var(--ad-sand)">Cap. 08 / Proceso</span>
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--ad-paper)">
+            De la primera visita
+            <em class="heading-editorial">al</em>
+            <span class="heading-display-block">sitio publicado.</span>
+          </h2>
+        </div>
+
+        <ol class="ad-proc">
+          {proceso.map((p) => (
+            <li class="ad-proc__step">
+              <span class="ad-proc__num text-mono">{p.num}</span>
+              <div class="ad-proc__body">
+                <header class="ad-proc__head">
+                  <h3 class="ad-proc__t heading-display">{p.title}</h3>
+                  <span class="ad-proc__eta text-mono">{p.eta}</span>
+                </header>
+                <p class="ad-proc__desc">{p.body}</p>
+                <span class="ad-proc__deliv text-mono">→ {p.deliverable}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* TESTIMONIOS                                       */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-tst-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter">Cap. 09 / Voces de Adra</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Lo cuentan
+            <em class="heading-editorial">mejor</em>
+            <span class="heading-display-block">ellos.</span>
+          </h2>
+        </div>
+
+        <ul class="ad-tst">
+          {testimonios.map((t) => (
+            <li class="ad-tst__item">
+              <span class="ad-tst__quote" aria-hidden="true">”</span>
+              <p class="ad-tst__text">{t.texto}</p>
+              <footer class="ad-tst__foot">
+                <span class="ad-tst__name">{t.nombre}</span>
+                <span class="ad-tst__biz text-mono">{t.negocio}</span>
+              </footer>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* FAQ — 8 PREGUNTAS                                 */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-faq-section">
+      <div class="container-brutal">
+
+        <div class="brutal-section-head">
+          <span class="text-meta ad-chapter">Cap. 10 / Dudas</span>
+          <h2 class="heading-display brutal-section-head__title">
+            Lo que nos preguntan
+            <em class="heading-editorial">siempre.</em>
+          </h2>
+        </div>
+
+        <div class="ad-faq">
+          {faq.map((f) => (
+            <details class="ad-faq__item">
+              <summary class="ad-faq__q">
+                <span>{f.q}</span>
+                <span class="ad-faq__icon" aria-hidden="true"></span>
+              </summary>
+              <p class="ad-faq__a">{f.a}</p>
+            </details>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* PUEBLOS VECINOS                                   */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-vec-section">
+      <div class="container-brutal">
+
+        <span class="text-meta ad-chapter">Cap. 11 / Comarca</span>
+        <h2 class="heading-display ad-vec-title">
+          También trabajamos en el
+          <em class="heading-editorial">Poniente.</em>
+        </h2>
+
+        <ul class="ad-vec">
+          {pueblosPoniente.map((p) => (
+            <li>
+              <a href={`/diseno-web/${p.slug}/`} class="ad-vecino">
+                <span class="ad-vecino__n">{p.nombre}</span>
+                {/* `poblacion` es opcional en el modelo: si falta, mostramos la comarca. */}
+                <span class="ad-vecino__p text-mono">
+                  {p.poblacion ? `${p.poblacion.toLocaleString('es-ES')} hab` : p.comarca}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </section>
+
+    {/* ════════════════════════════════════════════════ */}
+    {/* CTA FINAL                                         */}
+    {/* ════════════════════════════════════════════════ */}
+    <section class="ad-final">
+      <div class="container-brutal">
+        <div class="ad-final__box">
+
+          <span class="text-meta ad-final__meta">★ ADRA · PONIENTE ALMERIENSE ★</span>
+          <h2 class="ad-final__title heading-display">
+            Tu competencia en Adra
+            <em class="heading-editorial">todavía</em>
+            <span class="heading-display-block">no tiene web.</span>
+          </h2>
+          <p class="ad-final__lead">
+            Presupuesto cerrado en 24 horas, sin compromiso y sin letra pequeña.
+            Nos desplazamos a tu negocio, tu almacén o el puerto.
+          </p>
+
+          <div class="ad-final__cta">
+            <a href="/contacto/" class="ad-btn ad-btn--primary ad-btn--lg">
+              <span>Pedir presupuesto</span>
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="tel:+34657085019" class="ad-btn ad-btn--ghost ad-btn--lg">
+              <span>657 085 019</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════ */
+  /* ADRA DESIGN SYSTEM — puerto, sal y plástico      */
+  /* ═══════════════════════════════════════════════ */
+
+  :root {
+    --ad-paper:   #F2EFE6;
+    --ad-paper-2: #E3DDCE;
+    --ad-ink:     #1A1816;
+    --ad-sea:     #1B6C7D;
+    --ad-sea-2:   #2E90A3;
+    --ad-deep:    #0E2A33;
+    --ad-accent:  #E2703A;
+    --ad-sand:    #E0CFA8;
+    --ad-green:   #3E7A55;
+    --ad-plastic: #CBD8D5;
+    --ad-shadow:  8px 8px 0 var(--ad-ink);
+  }
+
+  .ad-pulse {
+    display: inline-block;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--ad-accent);
+    box-shadow: 0 0 0 0 rgba(226,112,58,0.55);
+    animation: ad-pulse 1.8s ease-out infinite;
+    vertical-align: middle;
+    margin-right: .35rem;
+  }
+  @keyframes ad-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(226,112,58,0.6); }
+    70%  { box-shadow: 0 0 0 10px rgba(226,112,58,0); }
+    100% { box-shadow: 0 0 0 0 rgba(226,112,58,0); }
+  }
+
+  /* ── HERO ── */
+  .ad-hero {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    background:
+      radial-gradient(circle at 70% 25%, rgba(27,108,125,0.10), transparent 52%),
+      radial-gradient(circle at 25% 75%, rgba(226,112,58,0.08), transparent 52%),
+      var(--ad-paper);
+    border-bottom: 3px solid var(--ad-ink);
+    position: relative;
+    overflow: hidden;
+  }
+  .ad-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent 0 26px, rgba(27,108,125,0.05) 26px 27px);
+    pointer-events: none;
+  }
+  .ad-hero > * { position: relative; }
+  .ad-hero__top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
+  .ad-hero__status { color: var(--ad-sea); font-weight: 700; }
+  .ad-hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 2.5rem 0 4rem;
+  }
+  @media (min-width: 1024px) {
+    .ad-hero__grid { grid-template-columns: 1.05fr .95fr; align-items: center; gap: 4rem; }
+  }
+  .ad-hero__chapter { color: var(--ad-accent); display: block; margin-bottom: .8rem; }
+  .ad-hero__title { font-size: clamp(2.6rem, 6.5vw, 5rem); line-height: .95; margin: 0 0 1.5rem; }
+  .ad-hero__title em { display: block; color: var(--ad-sea); }
+  .ad-hero__title-stamp { display: block; }
+  .ad-hero__lead { font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; max-width: 46ch; margin-bottom: 2rem; }
+  .ad-hero__lead em { color: var(--ad-sea); font-style: italic; }
+  .ad-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
+
+  .ad-hero__kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; list-style: none; padding: 0; margin: 0; }
+  @media (min-width: 560px) { .ad-hero__kpis { grid-template-columns: repeat(4, 1fr); } }
+  .ad-kpi {
+    border: 2px solid var(--ad-ink);
+    padding: .9rem .8rem;
+    background: var(--ad-paper);
+    box-shadow: 4px 4px 0 var(--ad-ink);
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+  .ad-kpi__v { font-size: 1.7rem; font-weight: 800; line-height: 1; }
+  .ad-kpi__v small { font-size: .9rem; }
+  .ad-kpi__l { font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; opacity: .75; }
+  .ad-kpi--sea .ad-kpi__v { color: var(--ad-sea); }
+  .ad-kpi--accent .ad-kpi__v { color: var(--ad-accent); }
+  .ad-kpi--green .ad-kpi__v { color: var(--ad-green); }
+  .ad-kpi--ink .ad-kpi__v { color: var(--ad-ink); }
+
+  /* ── POSTAL ── */
+  .ad-postcard {
+    border: 3px solid var(--ad-ink);
+    background: var(--ad-paper);
+    box-shadow: var(--ad-shadow);
+    overflow: hidden;
+    transform: rotate(-1deg);
+    transition: transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  .ad-postcard:hover { transform: rotate(0deg) translateY(-4px); }
+  .ad-postcard__head,
+  .ad-postcard__foot {
+    display: flex; justify-content: space-between; gap: .5rem;
+    padding: .6rem .9rem;
+    font-size: .62rem; letter-spacing: .08em;
+    background: var(--ad-paper-2);
+    border-bottom: 2px solid var(--ad-ink);
+  }
+  .ad-postcard__foot { border-bottom: none; border-top: 2px solid var(--ad-ink); justify-content: center; color: var(--ad-sea); font-weight: 700; }
+  .ad-postcard__profile { aspect-ratio: 540 / 220; border-bottom: 2px solid var(--ad-ink); }
+  .ad-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--ad-ink); }
+  .ad-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.05); transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .ad-postcard:hover .ad-postcard__img { transform: scale(1.05); }
+  .ad-postcard__seal { position: absolute; top: 12px; right: 12px; width: 82px; height: 82px; transform: rotate(9deg); filter: drop-shadow(0 4px 10px rgba(27,108,125,0.5)); }
+
+  /* ── BOTONES ── */
+  .ad-btn {
+    display: inline-flex; align-items: center; gap: .55rem;
+    padding: .85rem 1.4rem;
+    border: 2px solid var(--ad-ink);
+    font-weight: 700; font-size: .92rem;
+    text-decoration: none;
+    box-shadow: 4px 4px 0 var(--ad-ink);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .ad-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ad-ink); }
+  .ad-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ad-ink); }
+  .ad-btn--primary { background: var(--ad-sea); color: var(--ad-paper); }
+  .ad-btn--ghost { background: transparent; color: var(--ad-ink); }
+  .ad-btn--sand { background: var(--ad-sand); color: var(--ad-ink); }
+  .ad-btn--lg { padding: 1.05rem 1.9rem; font-size: 1.02rem; }
+
+  /* ── HITOS ── */
+  .ad-hitos-section { background: var(--ad-ink); padding: 1.6rem 0; }
+  .ad-hitos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem 1.6rem; list-style: none; padding: 0; margin: 0; }
+  .ad-hito { display: flex; flex-direction: column; gap: .15rem; }
+  .ad-hito__k { font-size: .62rem; letter-spacing: .12em; color: var(--ad-accent); }
+  .ad-hito__v { font-size: .84rem; color: var(--ad-paper); }
+
+  /* ── ICONOS ── */
+  .ad-ico-section { background: var(--ad-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-chapter { color: var(--ad-accent); display: block; margin-bottom: .7rem; }
+  .ad-ico { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  @media (min-width: 768px) { .ad-ico { grid-template-columns: repeat(2, 1fr); } }
+  .ad-ico__item {
+    display: flex; gap: 1.1rem;
+    border: 2px solid var(--ad-ink);
+    background: var(--ad-paper);
+    padding: 1.4rem;
+    box-shadow: 6px 6px 0 var(--ad-ink);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ad-ico__item:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ad-ink); }
+  .ad-ico__code {
+    flex: none;
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    font-size: 1.2rem; font-weight: 800;
+    border: 2px solid var(--ad-ink);
+    color: var(--ad-paper);
+  }
+  .ad-ico__item--sea     .ad-ico__code { background: var(--ad-sea); }
+  .ad-ico__item--accent  .ad-ico__code { background: var(--ad-accent); }
+  .ad-ico__item--green   .ad-ico__code { background: var(--ad-green); }
+  .ad-ico__item--plastic .ad-ico__code { background: var(--ad-plastic); color: var(--ad-ink); }
+  .ad-ico__sub { font-size: .6rem; color: var(--ad-sea); }
+  .ad-ico__name { font-size: 1.35rem; margin: .2rem 0 .5rem; line-height: 1.1; }
+  .ad-ico__desc { font-size: .9rem; line-height: 1.6; margin: 0 0 .7rem; }
+  .ad-ico__dato { font-size: .68rem; color: var(--ad-accent); font-weight: 700; }
+
+  /* ── PUERTO ── */
+  .ad-port-section { background: var(--ad-deep); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-port__grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-top: 2.5rem; }
+  @media (min-width: 1024px) { .ad-port__grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 3.5rem; } }
+  .ad-port__svg-wrap { border: 3px solid var(--ad-ink); box-shadow: var(--ad-shadow); overflow: hidden; aspect-ratio: 600 / 340; background: var(--ad-deep); }
+  .ad-port__lead { font-size: 1.15rem; line-height: 1.6; color: var(--ad-sand); margin: 0 0 1.1rem; font-weight: 600; }
+  .ad-port__lead em { font-style: italic; color: var(--ad-paper); }
+  .ad-port__text { font-size: .95rem; line-height: 1.7; color: rgba(242,239,230,0.82); margin: 0 0 1.3rem; }
+  .ad-port__list { list-style: none; padding: 0; margin: 0 0 1.8rem; display: grid; gap: .6rem; }
+  .ad-port__list li { font-size: .9rem; line-height: 1.55; color: rgba(242,239,230,0.9); padding-left: 1.4rem; position: relative; }
+  .ad-port__list li::before { content: '▸'; position: absolute; left: 0; color: var(--ad-accent); font-weight: 800; }
+  .ad-port__list strong { color: var(--ad-paper); }
+
+  /* ── ALBUFERAS ── */
+  .ad-alb-section { background: var(--ad-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-alb__grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+  @media (min-width: 1024px) { .ad-alb__grid { grid-template-columns: .9fr 1.1fr; align-items: center; gap: 3.5rem; } }
+  .ad-alb__title { font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1; margin: 0 0 1.2rem; }
+  .ad-alb__title em { display: block; color: var(--ad-green); }
+  .ad-alb__text { font-size: .96rem; line-height: 1.7; margin: 0 0 1rem; }
+  .ad-alb__tags { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 1.4rem 0 0; }
+  .ad-alb__tags li { font-size: .66rem; padding: .35rem .7rem; border: 2px solid var(--ad-ink); background: var(--ad-paper); letter-spacing: .05em; }
+  .ad-alb__svg-wrap { border: 3px solid var(--ad-ink); box-shadow: var(--ad-shadow); overflow: hidden; aspect-ratio: 560 / 300; }
+
+  /* ── SECTORES ── */
+  .ad-svc-section { background: var(--ad-paper); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); scroll-margin-top: 5rem; }
+  .ad-svc { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  @media (min-width: 700px)  { .ad-svc { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .ad-svc { grid-template-columns: repeat(3, 1fr); } }
+  .ad-svc__item {
+    border: 2px solid var(--ad-ink);
+    background: var(--ad-paper);
+    padding: 1.5rem;
+    box-shadow: 6px 6px 0 var(--ad-ink);
+    display: flex; flex-direction: column;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .ad-svc__item:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ad-ink); }
+  .ad-svc__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .9rem; }
+  .ad-svc__num { font-size: 2rem; font-weight: 800; color: var(--ad-paper-2); line-height: 1; }
+  .ad-svc__stat { text-align: right; display: flex; flex-direction: column; }
+  .ad-svc__stat b { font-size: 1.15rem; color: var(--ad-sea); line-height: 1; }
+  .ad-svc__stat small { font-size: .6rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
+  .ad-svc__name { font-size: 1.2rem; line-height: 1.15; margin: 0 0 .6rem; }
+  .ad-svc__desc { font-size: .88rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; }
+  .ad-svc__tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
+  .ad-svc__tags li { font-size: .6rem; padding: .28rem .55rem; background: var(--ad-paper-2); border: 1px solid var(--ad-ink); }
+
+  /* ── MAPA ── */
+  .ad-map-section { background: var(--ad-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-map-wrap { margin-top: 2.5rem; }
+
+  /* ── DIFERENCIALES ── */
+  .ad-dif-section { background: var(--ad-paper); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-dif-chapter { color: var(--ad-accent); display: block; margin-bottom: .7rem; }
+  .ad-dif-title { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: .98; margin: 0 0 2.5rem; }
+  .ad-dif-title em { display: block; color: var(--ad-sea); }
+  .ad-dif { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 0; counter-reset: dif; }
+  @media (min-width: 768px) { .ad-dif { grid-template-columns: repeat(2, 1fr); } }
+  .ad-dif__item { border-left: 4px solid var(--ad-sea); padding: .3rem 0 .3rem 1.3rem; }
+  .ad-dif__item--1 { border-left-color: var(--ad-accent); }
+  .ad-dif__item--2 { border-left-color: var(--ad-green); }
+  .ad-dif__item--3 { border-left-color: var(--ad-sand); }
+  .ad-dif__num { font-size: .68rem; color: var(--ad-accent); font-weight: 800; letter-spacing: .1em; }
+  .ad-dif__t { font-size: 1.15rem; margin: .3rem 0 .5rem; line-height: 1.2; }
+  .ad-dif__desc { font-size: .9rem; line-height: 1.65; margin: 0; }
+
+  /* ── PROCESO ── */
+  .ad-proc-section { background: var(--ad-sea); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-proc { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1.2rem; }
+  @media (min-width: 900px) { .ad-proc { grid-template-columns: repeat(2, 1fr); } }
+  .ad-proc__step {
+    display: flex; gap: 1.1rem;
+    background: var(--ad-paper);
+    border: 2px solid var(--ad-ink);
+    padding: 1.4rem;
+    box-shadow: 6px 6px 0 var(--ad-ink);
+  }
+  .ad-proc__num { flex: none; font-size: 1.9rem; font-weight: 800; color: var(--ad-accent); line-height: 1; }
+  .ad-proc__head { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
+  .ad-proc__t { font-size: 1.15rem; margin: 0; line-height: 1.2; }
+  .ad-proc__eta { font-size: .64rem; color: var(--ad-sea); background: var(--ad-paper-2); padding: .2rem .5rem; border: 1px solid var(--ad-ink); }
+  .ad-proc__desc { font-size: .88rem; line-height: 1.6; margin: .55rem 0 .7rem; }
+  .ad-proc__deliv { font-size: .66rem; color: var(--ad-green); font-weight: 700; }
+
+  /* ── TESTIMONIOS ── */
+  .ad-tst-section { background: var(--ad-paper); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-tst { display: grid; grid-template-columns: 1fr; gap: 1.5rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
+  @media (min-width: 768px) { .ad-tst { grid-template-columns: repeat(2, 1fr); } }
+  .ad-tst__item {
+    position: relative;
+    border: 2px solid var(--ad-ink);
+    background: var(--ad-paper-2);
+    padding: 2rem 1.5rem 1.4rem;
+    box-shadow: 6px 6px 0 var(--ad-ink);
+  }
+  .ad-tst__quote { position: absolute; top: -.2rem; left: 1rem; font-size: 4rem; line-height: 1; color: var(--ad-sea); opacity: .35; font-family: Georgia, serif; }
+  .ad-tst__text { font-size: .95rem; line-height: 1.7; margin: 0 0 1.2rem; position: relative; }
+  .ad-tst__foot { display: flex; flex-direction: column; gap: .1rem; border-top: 2px solid var(--ad-ink); padding-top: .8rem; }
+  .ad-tst__name { font-weight: 800; font-size: .95rem; }
+  .ad-tst__biz { font-size: .66rem; color: var(--ad-sea); }
+
+  /* ── FAQ ── */
+  .ad-faq-section { background: var(--ad-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-faq { display: grid; gap: .8rem; margin-top: 2.5rem; }
+  .ad-faq__item { border: 2px solid var(--ad-ink); background: var(--ad-paper); box-shadow: 4px 4px 0 var(--ad-ink); }
+  .ad-faq__q {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    padding: 1.1rem 1.3rem;
+    cursor: pointer; font-weight: 700; font-size: .95rem;
+    list-style: none;
+  }
+  .ad-faq__q::-webkit-details-marker { display: none; }
+  .ad-faq__icon { flex: none; width: 18px; height: 18px; position: relative; }
+  .ad-faq__icon::before,
+  .ad-faq__icon::after {
+    content: ''; position: absolute; background: var(--ad-accent);
+    transition: transform .25s;
+  }
+  .ad-faq__icon::before { top: 8px; left: 0; width: 18px; height: 2.5px; }
+  .ad-faq__icon::after  { left: 8px; top: 0; width: 2.5px; height: 18px; }
+  .ad-faq__item[open] .ad-faq__icon::after { transform: scaleY(0); }
+  .ad-faq__a { padding: 0 1.3rem 1.2rem; font-size: .89rem; line-height: 1.7; margin: 0; }
+
+  /* ── VECINOS ── */
+  .ad-vec-section { background: var(--ad-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-vec-title { font-size: clamp(1.7rem, 3.5vw, 2.6rem); line-height: 1; margin: 0 0 2rem; }
+  .ad-vec-title em { color: var(--ad-sea); }
+  .ad-vec { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .8rem; list-style: none; padding: 0; margin: 0; }
+  .ad-vecino {
+    display: flex; flex-direction: column; gap: .15rem;
+    border: 2px solid var(--ad-ink);
+    padding: .8rem 1rem;
+    text-decoration: none; color: inherit;
+    background: var(--ad-paper);
+    transition: background .2s, transform .2s;
+  }
+  .ad-vecino:hover { background: var(--ad-sea); color: var(--ad-paper); transform: translateY(-3px); }
+  .ad-vecino__n { font-weight: 700; font-size: .95rem; }
+  .ad-vecino__p { font-size: .64rem; opacity: .75; }
+
+  /* ── CTA FINAL ── */
+  .ad-final { background: var(--ad-ink); padding: 5rem 0; }
+  .ad-final__box {
+    border: 3px solid var(--ad-sea);
+    background: var(--ad-deep);
+    padding: clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    box-shadow: 10px 10px 0 var(--ad-sea);
+  }
+  .ad-final__meta { color: var(--ad-accent); display: block; margin-bottom: 1rem; }
+  .ad-final__title { font-size: clamp(2rem, 5vw, 3.6rem); line-height: .98; color: var(--ad-paper); margin: 0 0 1.2rem; }
+  .ad-final__title em { display: block; color: var(--ad-sand); }
+  .ad-final__lead { font-size: 1rem; line-height: 1.65; color: rgba(242,239,230,0.82); max-width: 52ch; margin: 0 auto 2rem; }
+  .ad-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+  .ad-final__cta .ad-btn--ghost { color: var(--ad-paper); border-color: var(--ad-sand); box-shadow: 4px 4px 0 var(--ad-sand); }
+  .ad-final__cta .ad-btn--ghost:hover { box-shadow: 7px 7px 0 var(--ad-sand); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ad-pulse { animation: none; }
+    .ad-postcard,
+    .ad-postcard__img,
+    .ad-btn,
+    .ad-ico__item,
+    .ad-svc__item,
+    .ad-vecino { transition: none; }
+  }
+</style>
