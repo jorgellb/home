@@ -65,6 +65,12 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const budget  = String(data.get('budget')  || '').trim();
   const timing  = String(data.get('timing')  || '').trim();
   const message = String(data.get('message') || '').trim();
+  // Campos opcionales del formulario de auditoría (/marketing/auditoria/).
+  // El formulario general no los envía y simplemente no se pintan.
+  const web      = String(data.get('web')      || '').trim();
+  const sector   = String(data.get('sector')   || '').trim();
+  const canales  = String(data.get('canales')  || '').trim();
+  const objetivo = String(data.get('objetivo') || '').trim();
 
   // Validación mínima — campos obligatorios
   if (!name || !email || !message) {
@@ -114,6 +120,10 @@ export const POST: APIRoute = async ({ request, redirect }) => {
           ${service ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Servicio</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${service}</td></tr>`) : ''}
           ${budget  ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Presupuesto</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${budget}</td></tr>`) : ''}
           ${timing  ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Plazo</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${timing}</td></tr>`) : ''}
+          ${web      ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Web</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${web}</td></tr>`) : ''}
+          ${sector   ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Sector</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${sector}</td></tr>`) : ''}
+          ${canales  ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Canales activos</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${canales}</td></tr>`) : ''}
+          ${objetivo ? raw(html`<tr><td style="padding: 8px 0; border-bottom: 1px solid #eee; font-weight: 700;">Objetivo</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${objetivo}</td></tr>`) : ''}
         </table>
 
         <h2 style="font-size: 16px; margin: 24px 0 8px;">Mensaje</h2>

@@ -1,0 +1,448 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+
+const title = 'Auditoría de marketing digital gratuita en Almería | 48 horas, sin compromiso';
+const description = 'Auditoría gratuita de tu marketing en 48 horas: web, campañas de Google y Meta, SEO, ficha de Google y medición. Diagnóstico escrito con lo que está fallando y qué priorizar. Sin permanencia y sin compromiso.';
+const canonical = 'https://platanitorico.com/marketing/auditoria/';
+
+/* Alcance: recoge lo que la web ya compromete en /marketing/ (auditoría
+   gratuita en 48h, diagnóstico escrito + recomendaciones, analizando web,
+   campañas, SEO y redes). Aquí solo se detalla, no se amplía la promesa. */
+const analizamos = [
+  { a: 'Tu web',                 d: 'Velocidad real en móvil, Core Web Vitals, si los formularios funcionan de verdad, si hay landings por servicio o todo el tráfico cae en la portada, y dónde se pierde el visitante antes de contactar.' },
+  { a: 'Campañas activas',       d: 'Estructura de campañas, términos de búsqueda por los que estás pagando, palabras negativas que faltan, audiencias demasiado amplias, presupuesto repartido entre demasiadas campañas y automatismos funcionando sin datos suficientes.' },
+  { a: 'SEO y posicionamiento',  d: 'Qué búsquedas te traen tráfico hoy, cuáles deberías estar capturando, estado técnico indexable, contenido creado sin intención de búsqueda y consistencia de tus datos locales.' },
+  { a: 'Ficha de Google',        d: 'Categorías, servicios, fotos, publicaciones, flujo de reseñas nuevas, duplicados y posición en Maps para las búsquedas que te interesan en tu zona.' },
+  { a: 'Medición',              d: 'Si GA4 está bien montado, si se registran formularios, llamadas y clics a WhatsApp, conversiones duplicadas, píxeles mal configurados y si puedes saber qué campaña genera clientes de verdad.' },
+  { a: 'Competencia cercana',    d: 'Qué están haciendo dos o tres competidores de tu zona: por qué búsquedas aparecen, qué anuncios tienen activos y dónde te están ganando terreno.' },
+];
+
+const noAnalizamos = [
+  'No auditamos tu contabilidad, tus márgenes ni tu política de precios: solo lo que afecta a la captación.',
+  'No entramos en tus redes sociales a nivel de comunidad ni valoramos la línea creativa de tu marca.',
+  'No revisamos aspectos legales de tu web (RGPD, cookies, avisos), que es otro trabajo distinto.',
+  'No hacemos keyword research exhaustivo ni un plan de contenidos completo: eso ya es trabajo de proyecto.',
+  'No auditamos cuentas a las que no nos des acceso de lectura: sin datos solo podemos ver la parte pública.',
+];
+
+const necesitamos = [
+  { k: 'Imprescindible', v: 'La URL de tu web y a qué te dedicas.' },
+  { k: 'Muy útil',       v: 'Acceso de lectura a Google Analytics y Search Console.' },
+  { k: 'Muy útil',       v: 'Acceso de lectura a tus cuentas de Google Ads o Meta Ads, si tienes campañas.' },
+  { k: 'Ayuda mucho',    v: 'Qué servicio o producto te interesa vender más, y cuál te deja mejor margen.' },
+  { k: 'Ayuda mucho',    v: 'Cómo llegan hoy tus clientes y qué pasa cuando entra un contacto nuevo.' },
+  { k: 'Opcional',       v: 'Presupuesto que estás invirtiendo ahora y desde cuándo.' },
+];
+
+const proceso = [
+  { n: '01', t: 'Nos escribes',        eta: 'Ahora',      d: 'Rellenas el formulario de abajo. Cuanto más concreto seas en el problema principal, más útil sale el diagnóstico.' },
+  { n: '02', t: 'Te pedimos accesos',  eta: '24 h',       d: 'Te decimos exactamente qué accesos de lectura necesitamos y cómo dárnoslos. Si no puedes o no quieres, trabajamos con la parte pública y te lo advertimos.' },
+  { n: '03', t: 'Analizamos',          eta: '48 h',       d: 'Revisamos web, campañas, SEO, ficha de Google y medición. No es un informe automático: lo mira una persona.' },
+  { n: '04', t: 'Te lo contamos',      eta: 'Al entregar', d: 'Recibes el diagnóstico escrito y, si quieres, lo repasamos en una llamada o presencialmente. Sin presentación de dos horas: lo que falla y qué haríamos primero.' },
+];
+
+const objeciones = [
+  { q: '«Ya probé Google Ads y no funcionó»',       a: 'Es lo más habitual que nos cuentan, y casi siempre aparece la misma causa: campañas sin negativas quemando presupuesto en búsquedas irrelevantes, tráfico enviado a la portada en vez de a una landing del servicio, o conversiones mal medidas que hacían que Google optimizara hacia el objetivo equivocado. La auditoría dice cuál de las tres fue tu caso.' },
+  { q: '«Mi sector va por el boca a boca»',          a: 'Perfecto, y eso es una ventaja: significa que tu producto convence. El boca a boca hoy pasa por Google — la gente que te recomiendan te busca antes de llamarte, y lo que encuentra decide. Ahí se mira ficha de Google, reseñas y qué aparece con tu nombre.' },
+  { q: '«No sé cuánto debería invertir»',            a: 'Para eso está la calculadora: metes tu ticket medio, tu tasa de cierre y tu margen, y te dice cuánto puedes pagar por cliente sin perder dinero. Como referencia, para campañas locales en Almería recomendamos un mínimo de 300 €/mes; en e-commerce o mercados amplios, entre 500 y 1.000 €/mes.' },
+  { q: '«No puedo atender más contactos»',           a: 'Entonces no necesitas más leads, necesitas mejores. Se puede cualificar el formulario, excluir búsquedas que traen curiosos y optimizar hacia ventas en vez de hacia formularios. Menos contactos y mejores es un objetivo perfectamente válido.' },
+  { q: '«Mi web no convierte»',                      a: 'Es lo primero que miramos, porque comprar tráfico para una web que no convierte es tirar dinero con más volumen. Si el problema está ahí, te lo decimos antes de proponerte nada de publicidad.' },
+];
+
+const faq = [
+  { q: '¿Es realmente gratis o acaba habiendo letra pequeña?', a: 'Es gratis y sin compromiso. Dedicamos tiempo a analizarlo porque es la mejor forma de enseñar cómo trabajamos, y porque también nos sirve para saber si podemos ayudarte. Si vemos que no encajamos, te lo decimos y ahí acaba.' },
+  { q: '¿Cuánto tarda?', a: '48 horas desde que tenemos los accesos. Si es un caso con muchas cuentas o varias webs, te avisamos antes de empezar.' },
+  { q: '¿Qué recibo exactamente?', a: 'Un diagnóstico escrito con lo que hemos encontrado, ordenado por impacto: qué está fallando, cuánto te puede estar costando y qué haríamos primero. No es un PDF genérico de 40 páginas con capturas de herramientas.' },
+  { q: '¿Tengo que darte acceso a mis cuentas?', a: 'No es obligatorio, pero cambia mucho el resultado. Sin acceso solo vemos la parte pública: web, SEO visible y ficha de Google. Con acceso de lectura vemos dónde se va el presupuesto de verdad. Nunca pedimos permisos de administración ni tocamos nada.' },
+  { q: '¿Quién puede pedirla?', a: 'Negocios con algo que vender y capacidad de atender clientes nuevos. Si buscas resultados garantizados en dos semanas o solo quieres más seguidores, probablemente no te sirvamos de mucho.' },
+  { q: '¿Qué pasa después?', a: 'Nada automático. Te entregamos el diagnóstico y decides. Puedes aplicarlo por tu cuenta, con tu equipo o con otra agencia: las conclusiones son tuyas. Si quieres que lo hagamos nosotros, te pasamos propuesta.' },
+  { q: '¿Y si no tengo nada montado todavía?', a: 'También sirve, y suele ser el mejor momento. En ese caso la auditoría es más de oportunidad que de errores: qué buscan tus clientes en tu zona, qué está haciendo tu competencia y por dónde empezar sin desperdiciar presupuesto.' },
+  { q: '¿Trabajáis con permanencia?', a: 'No. Ni en la auditoría ni después. Las cuentas publicitarias son tuyas, los accesos son tuyos y si un mes decides parar, paras.' },
+];
+
+const jsonLdSchemas = [
+  { "@context":"https://schema.org","@type":"WebPage","name":title,"description":description,"url":canonical,"inLanguage":"es" },
+  { "@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://platanitorico.com/"},{"@type":"ListItem","position":2,"name":"Marketing Digital","item":"https://platanitorico.com/marketing/"},{"@type":"ListItem","position":3,"name":"Auditoría gratuita","item":canonical}] },
+  { "@context":"https://schema.org","@type":"Service","name":"Auditoría de marketing digital","serviceType":"Auditoría de marketing digital","url":canonical,"areaServed":["Almería","Andalucía","España"],"provider":{"@type":"ProfessionalService","name":"Platanito Rico","url":"https://platanitorico.com/","telephone":"+34657085019"},"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR","description":"Auditoría inicial gratuita y sin compromiso, entregada en 48 horas."} },
+  { "@context":"https://schema.org","@type":"FAQPage","mainEntity":faq.map(f=>({"@type":"Question","name":f.q,"acceptedAnswer":{"@type":"Answer","text":f.a}})) }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image="/imagenes/equipo-marketing-web.jpg"
+  imageAlt="Auditoría de marketing digital gratuita en Almería"
+  type="service"
+  keywords="auditoria marketing digital gratis, auditoria google ads, auditoria seo almería, diagnostico marketing, agencia marketing almería"
+  jsonLd={jsonLdSchemas}
+>
+  <Header />
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Marketing Digital', href: '/marketing/' },
+    { label: 'Auditoría gratuita' },
+  ]} />
+
+  <main id="main-content" class="au">
+
+    {/* ═══════════════ HERO ═══════════════ */}
+    <section class="au-hero">
+      <div class="container-brutal">
+        <span class="text-meta au-kicker">Gratis · 48 horas · sin compromiso</span>
+        <h1 class="au-h1 heading-display">
+          Te decimos dónde
+          <em class="heading-editorial">se te está</em>
+          <span class="heading-display-block">escapando el dinero.</span>
+        </h1>
+        <p class="au-lead">
+          Revisamos tu web, tus campañas, tu SEO, tu ficha de Google y tu medición.
+          Te entregamos por escrito qué está fallando, cuánto te puede estar costando
+          y qué haríamos primero. Lo mira una persona, no un generador de informes.
+        </p>
+        <div class="au-hero__btns">
+          <a href="#solicitar" class="au-btn au-btn--primary">Solicitar la auditoría</a>
+          <a href="/marketing/recursos/test-marketing/" class="au-btn au-btn--ghost">Antes, hacer el test rápido</a>
+        </div>
+        <ul class="au-hero__facts">
+          <li><b>48 h</b><span>De entrega</span></li>
+          <li><b>0 €</b><span>Coste</span></li>
+          <li><b>0</b><span>Permanencia</span></li>
+          <li><b>Tuyas</b><span>Las cuentas</span></li>
+        </ul>
+      </div>
+    </section>
+
+    {/* ═══════════════ QUÉ ANALIZAMOS ═══════════════ */}
+    <section class="au-section">
+      <div class="container-brutal">
+        <h2 class="au-h2 heading-display">Qué miramos exactamente</h2>
+        <ul class="au-scope">
+          {analizamos.map((x, i) => (
+            <li class="au-scope__item">
+              <span class="au-scope__n text-mono">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="au-scope__t">{x.a}</h3>
+                <p class="au-scope__d">{x.d}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ═══════════════ QUÉ NO ═══════════════ */}
+    <section class="au-section au-section--alt">
+      <div class="container-brutal">
+        <h2 class="au-h2 heading-display">Y qué no, para que no haya sorpresas</h2>
+        <ul class="au-no">
+          {noAnalizamos.map((x) => <li>{x}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    {/* ═══════════════ QUÉ NECESITAMOS ═══════════════ */}
+    <section class="au-section">
+      <div class="container-brutal">
+        <h2 class="au-h2 heading-display">Qué necesitamos de ti</h2>
+        <p class="au-p">
+          Solo lo primero es obligatorio. Cuanto más nos des, menos tendremos que suponer
+          — y más concreto sale el diagnóstico. Pedimos siempre <b>acceso de lectura</b>:
+          nunca permisos de administración y nunca tocamos configuraciones.
+        </p>
+        <ul class="au-need">
+          {necesitamos.map((n) => (
+            <li class="au-need__item">
+              <span class={`au-need__k text-mono au-need__k--${n.k === 'Imprescindible' ? 'must' : n.k === 'Opcional' ? 'opt' : 'nice'}`}>{n.k}</span>
+              <span class="au-need__v">{n.v}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    {/* ═══════════════ PROCESO ═══════════════ */}
+    <section class="au-section au-section--alt">
+      <div class="container-brutal">
+        <h2 class="au-h2 heading-display">Cómo va</h2>
+        <ol class="au-proc">
+          {proceso.map((p) => (
+            <li class="au-proc__step">
+              <span class="au-proc__n text-mono">{p.n}</span>
+              <div>
+                <header class="au-proc__head">
+                  <h3 class="au-proc__t">{p.t}</h3>
+                  <span class="au-proc__eta text-mono">{p.eta}</span>
+                </header>
+                <p class="au-proc__d">{p.d}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    {/* ═══════════════ OBJECIONES ═══════════════ */}
+    <section class="au-section">
+      <div class="container-brutal">
+        <h2 class="au-h2 heading-display">Lo que sueles pensar antes de pedirla</h2>
+        <div class="au-obj">
+          {objeciones.map((o) => (
+            <article class="au-obj__item">
+              <h3 class="au-obj__q">{o.q}</h3>
+              <p class="au-obj__a">{o.a}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ═══════════════ FORMULARIO ═══════════════ */}
+    <section class="au-form-wrap" id="solicitar">
+      <div class="container-brutal">
+        <div class="au-form-box">
+          <h2 class="au-h2 heading-display" style="margin-bottom:.6rem">Pide tu auditoría</h2>
+          <p class="au-p" style="margin-bottom:2rem">
+            Tardas dos minutos. Te respondemos en 24 horas diciéndote qué accesos
+            necesitamos, y en 48 tienes el diagnóstico.
+          </p>
+
+          <form method="POST" action="/api/contact/" class="au-form">
+            <input type="hidden" name="service" value="marketing" />
+            <label class="au-hp" aria-hidden="true">
+              No rellenar: <input name="bot-field" tabindex="-1" autocomplete="off" />
+            </label>
+
+            <div class="au-form__grid">
+              <div class="au-field">
+                <label class="au-label" for="au-name">Nombre *</label>
+                <input class="au-input" id="au-name" type="text" name="name" required autocomplete="name" placeholder="Cómo te llamas" />
+              </div>
+              <div class="au-field">
+                <label class="au-label" for="au-email">Email *</label>
+                <input class="au-input" id="au-email" type="email" name="email" required autocomplete="email" placeholder="tu@email.com" />
+              </div>
+              <div class="au-field">
+                <label class="au-label" for="au-phone">Teléfono</label>
+                <input class="au-input" id="au-phone" type="tel" name="phone" autocomplete="tel" placeholder="+34 600 000 000" />
+              </div>
+              <div class="au-field">
+                <label class="au-label" for="au-web">Tu web</label>
+                <input class="au-input" id="au-web" type="text" name="web" placeholder="tunegocio.com" />
+              </div>
+              <div class="au-field">
+                <label class="au-label" for="au-company">Negocio</label>
+                <input class="au-input" id="au-company" type="text" name="company" placeholder="Nombre del negocio" />
+              </div>
+              <div class="au-field">
+                <label class="au-label" for="au-sector">Sector</label>
+                <select class="au-input" id="au-sector" name="sector">
+                  <option value="">Selecciona…</option>
+                  <option>Inmobiliaria</option>
+                  <option>Clínica / Estética</option>
+                  <option>Restaurante / Hostelería</option>
+                  <option>Hotel / Alojamiento</option>
+                  <option>Reformas / Construcción</option>
+                  <option>Despacho profesional</option>
+                  <option>Ecommerce</option>
+                  <option>Taller / Automoción</option>
+                  <option>Academia / Formación</option>
+                  <option>Agricultura / Agroindustria</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+            </div>
+
+            <fieldset class="au-fieldset">
+              <legend class="au-legend">¿Qué tienes activo ahora?</legend>
+              <div class="au-checks">
+                <label class="au-check"><input type="checkbox" name="canales" value="Google Ads" /> <span>Google Ads</span></label>
+                <label class="au-check"><input type="checkbox" name="canales" value="Meta Ads" /> <span>Meta Ads</span></label>
+                <label class="au-check"><input type="checkbox" name="canales" value="SEO" /> <span>SEO</span></label>
+                <label class="au-check"><input type="checkbox" name="canales" value="Redes sociales" /> <span>Redes sociales</span></label>
+                <label class="au-check"><input type="checkbox" name="canales" value="Email marketing" /> <span>Email</span></label>
+                <label class="au-check"><input type="checkbox" name="canales" value="Nada todavía" /> <span>Nada todavía</span></label>
+              </div>
+            </fieldset>
+
+            <div class="au-form__grid">
+              <div class="au-field">
+                <label class="au-label" for="au-objetivo">Objetivo principal</label>
+                <select class="au-input" id="au-objetivo" name="objetivo">
+                  <option value="">Selecciona…</option>
+                  <option>Conseguir más clientes</option>
+                  <option>Conseguir mejores clientes, no más</option>
+                  <option>Bajar el coste por cliente</option>
+                  <option>Dejar de depender de portales o intermediarios</option>
+                  <option>Vender más a los clientes que ya tengo</option>
+                  <option>Saber si lo que invierto funciona</option>
+                </select>
+              </div>
+              <div class="au-field">
+                <label class="au-label" for="au-budget">Inversión publicitaria actual</label>
+                <select class="au-input" id="au-budget" name="budget">
+                  <option value="">Selecciona…</option>
+                  <option value="0">Ninguna todavía</option>
+                  <option value="0-300">Menos de 300 €/mes</option>
+                  <option value="300-1000">300 – 1.000 €/mes</option>
+                  <option value="1000-3000">1.000 – 3.000 €/mes</option>
+                  <option value="3000+">Más de 3.000 €/mes</option>
+                  <option value="no-idea">Prefiero no decirlo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="au-field">
+              <label class="au-label" for="au-message">¿Cuál es el problema principal? *</label>
+              <textarea class="au-input au-textarea" id="au-message" name="message" required rows="4"
+                placeholder="Cuéntanoslo con tus palabras. Por ejemplo: «invierto 400€ al mes en Google Ads y me llegan contactos que no compran»."></textarea>
+              <span class="au-hint">Cuanto más concreto, más útil sale el diagnóstico.</span>
+            </div>
+
+            <div class="au-field">
+              <label class="au-label" for="au-timing">¿Para cuándo?</label>
+              <select class="au-input" id="au-timing" name="timing">
+                <option value="">Selecciona…</option>
+                <option value="urgente">Urgente, quiero moverlo ya</option>
+                <option value="1-mes">Este mes</option>
+                <option value="3-meses">En los próximos meses</option>
+                <option value="explorando">Solo estoy explorando</option>
+              </select>
+            </div>
+
+            <button type="submit" class="au-btn au-btn--primary au-btn--full">
+              Pedir la auditoría gratuita
+            </button>
+            <p class="au-legal">
+              Usamos tus datos solo para responderte. Ni newsletter ni cesión a terceros.
+              Puedes leer la <a href="/privacidad/">política de privacidad</a>.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    {/* ═══════════════ FAQ ═══════════════ */}
+    <section class="au-section au-section--alt">
+      <div class="container-brutal">
+        <h2 class="au-h2 heading-display">Preguntas frecuentes</h2>
+        <div class="au-faq">
+          {faq.map((f) => (
+            <details class="au-faq__item">
+              <summary class="au-faq__q"><span>{f.q}</span><span class="au-faq__i" aria-hidden="true"></span></summary>
+              <p class="au-faq__a">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .au { --au-bg:#05070d; --au-panel:#0b111c; --au-line:#1c2740; --au-text:#e8edf5; --au-muted:#8fa0b6; --au-cyan:#18e0ff; --au-lime:#c6ff3a; --au-amber:#ffb24d; background:var(--au-bg); color:var(--au-text); }
+
+  .au-hero { padding: 3.5rem 0 3rem; }
+  .au-kicker { color: var(--au-lime); display:block; margin-bottom:.8rem; }
+  .au-h1 { font-size: clamp(2.2rem, 6vw, 4.2rem); line-height:.98; margin:0 0 1.3rem; }
+  .au-h1 em { display:block; color: var(--au-cyan); }
+  .au-lead { font-size: clamp(1rem,1.5vw,1.15rem); line-height:1.7; color:var(--au-muted); max-width:62ch; margin:0 0 2rem; }
+  .au-hero__btns { display:flex; flex-wrap:wrap; gap:.8rem; margin-bottom:2.5rem; }
+  .au-hero__facts { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; list-style:none; padding:0; margin:0; }
+  @media (min-width:640px){ .au-hero__facts { grid-template-columns:repeat(4,1fr); } }
+  .au-hero__facts li { background:var(--au-panel); border:1px solid var(--au-line); border-radius:12px; padding:.9rem; text-align:center; }
+  .au-hero__facts b { display:block; font-size:1.5rem; color:var(--au-lime); font-family:ui-monospace,SFMono-Regular,monospace; line-height:1.1; }
+  .au-hero__facts span { display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.08em; color:var(--au-muted); margin-top:.25rem; }
+
+  .au-section { padding:3.5rem 0; border-top:1px solid var(--au-line); }
+  .au-section--alt { background:var(--au-panel); }
+  .au-h2 { font-size:clamp(1.5rem,3.4vw,2.4rem); line-height:1.1; margin:0 0 1.8rem; }
+  .au-p { font-size:.95rem; line-height:1.75; color:var(--au-muted); max-width:64ch; margin:0 0 1.6rem; }
+  .au-p b { color:var(--au-text); }
+
+  .au-scope { list-style:none; padding:0; margin:0; display:grid; gap:1rem; grid-template-columns:1fr; }
+  @media (min-width:820px){ .au-scope { grid-template-columns:repeat(2,1fr); } }
+  .au-scope__item { display:flex; gap:1rem; background:var(--au-panel); border:1px solid var(--au-line); border-radius:14px; padding:1.3rem; }
+  .au-section--alt .au-scope__item { background:var(--au-bg); }
+  .au-scope__n { flex:none; font-size:1.1rem; font-weight:800; color:var(--au-cyan); }
+  .au-scope__t { font-size:1.05rem; margin:0 0 .45rem; }
+  .au-scope__d { font-size:.88rem; line-height:1.7; color:var(--au-muted); margin:0; }
+
+  .au-no { list-style:none; padding:0; margin:0; display:grid; gap:.7rem; }
+  .au-no li { font-size:.92rem; line-height:1.65; color:var(--au-muted); padding-left:1.6rem; position:relative; }
+  .au-no li::before { content:'×'; position:absolute; left:0; top:-.1rem; color:var(--au-amber); font-weight:800; font-size:1.1rem; }
+
+  .au-need { list-style:none; padding:0; margin:0; display:grid; gap:.6rem; }
+  .au-need__item { display:flex; flex-wrap:wrap; align-items:baseline; gap:.8rem; background:var(--au-panel); border:1px solid var(--au-line); border-radius:10px; padding:.75rem 1rem; }
+  .au-need__k { flex:none; font-size:.6rem; letter-spacing:.09em; text-transform:uppercase; font-weight:800; padding:.2rem .5rem; border-radius:999px; }
+  .au-need__k--must { background:rgba(255,178,77,.16); color:var(--au-amber); }
+  .au-need__k--nice { background:rgba(24,224,255,.14); color:var(--au-cyan); }
+  .au-need__k--opt  { background:rgba(143,160,182,.14); color:var(--au-muted); }
+  .au-need__v { font-size:.9rem; line-height:1.55; }
+
+  .au-proc { list-style:none; padding:0; margin:0; display:grid; gap:1rem; grid-template-columns:1fr; }
+  @media (min-width:820px){ .au-proc { grid-template-columns:repeat(2,1fr); } }
+  .au-proc__step { display:flex; gap:1rem; background:var(--au-bg); border:1px solid var(--au-line); border-radius:14px; padding:1.3rem; }
+  .au-proc__n { flex:none; font-size:1.4rem; font-weight:800; color:var(--au-lime); line-height:1; }
+  .au-proc__head { display:flex; justify-content:space-between; align-items:baseline; gap:.7rem; flex-wrap:wrap; }
+  .au-proc__t { font-size:1.02rem; margin:0; }
+  .au-proc__eta { font-size:.62rem; color:var(--au-cyan); border:1px solid var(--au-line); padding:.15rem .5rem; border-radius:999px; }
+  .au-proc__d { font-size:.87rem; line-height:1.7; color:var(--au-muted); margin:.5rem 0 0; }
+
+  .au-obj { display:grid; gap:1rem; grid-template-columns:1fr; }
+  @media (min-width:820px){ .au-obj { grid-template-columns:repeat(2,1fr); } }
+  .au-obj__item { background:var(--au-panel); border:1px solid var(--au-line); border-left:3px solid var(--au-amber); border-radius:0 14px 14px 0; padding:1.2rem 1.3rem; }
+  .au-obj__q { font-size:1rem; margin:0 0 .55rem; color:var(--au-amber); }
+  .au-obj__a { font-size:.88rem; line-height:1.7; color:var(--au-muted); margin:0; }
+
+  /* ── Formulario ── */
+  .au-form-wrap { padding:3.5rem 0; border-top:1px solid var(--au-line); scroll-margin-top:4rem; }
+  .au-form-box { background:var(--au-panel); border:1px solid var(--au-line); border-radius:18px; padding:clamp(1.4rem,4vw,2.6rem); }
+  .au-form__grid { display:grid; grid-template-columns:1fr; gap:1rem; margin-bottom:1rem; }
+  @media (min-width:640px){ .au-form__grid { grid-template-columns:repeat(2,1fr); } }
+  .au-field { display:flex; flex-direction:column; gap:.35rem; margin-bottom:1rem; }
+  .au-label { font-size:.76rem; font-weight:700; letter-spacing:.02em; }
+  .au-hint { font-size:.72rem; color:var(--au-muted); }
+  .au-input { width:100%; font:inherit; font-size:.93rem; padding:.68rem .85rem; background:var(--au-bg); border:1px solid var(--au-line); border-radius:10px; color:var(--au-text); }
+  .au-input:focus { outline:none; border-color:var(--au-cyan); box-shadow:0 0 0 3px rgba(24,224,255,.16); }
+  .au-textarea { resize:vertical; min-height:110px; line-height:1.6; }
+
+  .au-fieldset { border:1px solid var(--au-line); border-radius:12px; padding:1rem 1.1rem; margin:0 0 1.4rem; }
+  .au-legend { font-size:.76rem; font-weight:700; padding:0 .4rem; }
+  .au-checks { display:flex; flex-wrap:wrap; gap:.6rem; }
+  .au-check { display:inline-flex; align-items:center; gap:.4rem; font-size:.85rem; background:var(--au-bg); border:1px solid var(--au-line); border-radius:999px; padding:.4rem .8rem; cursor:pointer; }
+  .au-check input { accent-color:var(--au-cyan); }
+
+  .au-hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .au-legal { font-size:.74rem; line-height:1.6; color:var(--au-muted); margin:1rem 0 0; text-align:center; }
+  .au-legal a { color:var(--au-cyan); }
+
+  .au-btn { display:inline-flex; align-items:center; justify-content:center; padding:.85rem 1.6rem; border-radius:999px; font-weight:800; font-size:.94rem; text-decoration:none; border:1px solid transparent; cursor:pointer; font-family:inherit; transition:transform .18s, filter .18s; }
+  .au-btn:hover { transform:translateY(-2px); filter:brightness(1.08); }
+  .au-btn--primary { background:var(--au-lime); color:#05070d; }
+  .au-btn--ghost { border-color:var(--au-line); color:var(--au-text); }
+  .au-btn--full { width:100%; margin-top:.5rem; }
+
+  .au-faq { display:grid; gap:.7rem; }
+  .au-faq__item { background:var(--au-bg); border:1px solid var(--au-line); border-radius:12px; }
+  .au-faq__q { display:flex; justify-content:space-between; align-items:center; gap:1rem; padding:1rem 1.2rem; cursor:pointer; font-weight:700; font-size:.93rem; list-style:none; }
+  .au-faq__q::-webkit-details-marker { display:none; }
+  .au-faq__i { flex:none; width:16px; height:16px; position:relative; }
+  .au-faq__i::before,.au-faq__i::after { content:''; position:absolute; background:var(--au-cyan); transition:transform .25s; }
+  .au-faq__i::before { top:7px; left:0; width:16px; height:2px; }
+  .au-faq__i::after { left:7px; top:0; width:2px; height:16px; }
+  .au-faq__item[open] .au-faq__i::after { transform:scaleY(0); }
+  .au-faq__a { padding:0 1.2rem 1.1rem; font-size:.88rem; line-height:1.75; color:var(--au-muted); margin:0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .au-btn, .au-faq__i::before, .au-faq__i::after { transition:none; }
+    .au-btn:hover { transform:none; }
+  }
+</style>
