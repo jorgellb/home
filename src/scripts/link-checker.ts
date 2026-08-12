@@ -141,7 +141,9 @@ function buildValidPaths(srcDir: string, publicDir: string): Set<string> {
   // Add public files
   if (fs.existsSync(publicDir)) {
     const publicFiles = findFiles(publicDir, [
-      '.html', '.pdf', '.jpg', '.png', '.svg', '.webp', '.gif'
+      '.html', '.pdf', '.jpg', '.png', '.svg', '.webp', '.gif',
+      '.css', '.js', '.mjs', '.wasm', '.webmanifest', '.ico',
+      '.txt', '.xml', '.json', '.woff', '.woff2', '.mp3', '.mp4'
     ])
 
     for (const file of publicFiles) {
@@ -163,6 +165,11 @@ function isValidPath(href: string, validPaths: Set<string>): boolean {
 
   // Special protocols
   if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('#')) {
+    return true
+  }
+
+  // Runtime-interpolated values (template literals) can't be resolved statically
+  if (href.includes('${')) {
     return true
   }
 
