@@ -42,8 +42,10 @@ jobs:
       - name: Build
         run: npm run build
       
+      # `astro preview` no funciona con el adaptador de Vercel, así que
+      # servimos directamente la salida estática del build.
       - name: Preview
-        run: npm run preview &
+        run: npx --yes serve dist/client -l 4321 &
       
       - name: Wait for server
         run: npx wait-on http://localhost:4321
