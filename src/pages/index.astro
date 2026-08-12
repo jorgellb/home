@@ -270,7 +270,10 @@ const faqHome = [
         </div>
 
         {/* Titular cinético con palabra rotatoria */}
-        <p class="ho-kinetic" aria-label="Hacemos webs que venden, vuelan, convierten y enamoran">
+        {/* aria-label está prohibido en <p> (rol genérico) y los lectores de
+            pantalla lo ignoran, así que el texto va en un span oculto. */}
+        <p class="ho-kinetic">
+          <span class="ho-sr-only">Hacemos webs que venden, vuelan, convierten y enamoran</span>
           <span class="ho-kinetic__pre" aria-hidden="true">Hacemos webs que</span>
           <span class="ho-kinetic__rot" aria-hidden="true">
             <span class="ho-kinetic__stack">
@@ -309,7 +312,7 @@ const faqHome = [
         </ul>
 
         {/* Indicador de scroll */}
-        <a href="#servicios" class="ho-scrollcue" aria-label="Desplázate para ver más">
+        <a href="#servicios" class="ho-scrollcue" aria-label="SCROLL — desplázate para ver más">
           <span class="ho-scrollcue__txt text-mono">SCROLL</span>
           <span class="ho-scrollcue__mouse" aria-hidden="true"><span></span></span>
         </a>
@@ -505,7 +508,7 @@ const faqHome = [
             <span class="text-meta" style="color:var(--ho-lime)">Cap. 05 / Método</span>
             <h2 class="heading-display brutal-section-head__title" style="color:var(--ho-paper)">
               Cómo
-              <em class="heading-editorial" style="color:var(--ho-accent)">trabajamos.</em>
+              <em class="heading-editorial" style="color:var(--ho-accent-ink)">trabajamos.</em>
             </h2>
           </div>
           <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.7)">
@@ -552,7 +555,12 @@ const faqHome = [
         <ol class="ho-port">
           {casos.map((c, i) => (
             <li class="ho-port__item">
-              <a href={c.url} target="_blank" rel="noopener noreferrer" class="ho-port__link" aria-label={`Abrir ${c.cliente} en nueva pestaña`}>
+              {/* Sin aria-label: la tarjeta tiene mucho texto visible y el
+                  nombre accesible debe contenerlo (WCAG 2.5.3), así que lo
+                  genera el propio contenido. El aviso de nueva pestaña va
+                  en texto oculto. */}
+              <a href={c.url} target="_blank" rel="noopener noreferrer" class="ho-port__link">
+                <span class="ho-sr-only">(abre en una pestaña nueva)</span>
                 <div class="ho-port__media">
                   <span class="ho-port__num text-mono">N.º {String(i + 1).padStart(2, '0')}</span>
                   <span class="ho-port__year text-mono">{c.year}</span>
@@ -994,6 +1002,9 @@ const faqHome = [
     --ho-cream:    #ECE3CB;
     --ho-ink:      #0E0D0B;
     --ho-accent:   #FF6B35;
+    /* Variante del acento para texto sobre fondos claros: el #FF6B35 se
+       queda en 2.77:1 y no llega al mínimo AA. Mismo tono, 4.75:1. */
+    --ho-accent-ink: #AE3F13;
     --ho-lime:     #D6FF44;
     --ho-blue:     #003B7A;
     --ho-cyan:     #00B8D9;
@@ -1066,7 +1077,7 @@ const faqHome = [
   }
   @media (min-width: 768px) { .ho-mast { grid-template-columns: 1fr auto; gap: 3rem; } }
 
-  .ho-mast__chapter { color: var(--ho-accent); display: block; margin-bottom: 1rem; }
+  .ho-mast__chapter { color: var(--ho-accent-ink); display: block; margin-bottom: 1rem; }
   .ho-mast__title {
     margin: 0;
     display: flex; flex-direction: column;
@@ -1077,7 +1088,7 @@ const faqHome = [
     font-family: var(--font-mono);
     font-size: .75rem;
     letter-spacing: .85em;
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
     font-weight: 700;
     margin-bottom: .85rem;
     margin-left: .3em;
@@ -1096,7 +1107,7 @@ const faqHome = [
     font-style: italic;
     font-size: clamp(3rem, 11vw, 7.5rem);
     letter-spacing: -.025em;
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
     line-height: .85;
     margin-top: -.05em;
   }
@@ -1137,7 +1148,7 @@ const faqHome = [
     font-weight: 500;
   }
   .ho-manifest em {
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
     font-style: italic;
     font-weight: 600;
   }
@@ -1271,7 +1282,7 @@ const faqHome = [
     opacity: .85;
   }
   .ho-why__num { font-size: 1.4rem; font-weight: 800; }
-  .ho-why__check { color: var(--ho-accent); }
+  .ho-why__check { color: var(--ho-accent-ink); }
   .ho-why__item--3 .ho-why__check { color: var(--ho-lime); }
   .ho-why__t {
     font-size: clamp(1.3rem, 2.2vw, 1.6rem);
@@ -1410,7 +1421,7 @@ const faqHome = [
   .ho-proc__step:hover { background: rgba(214,255,68,0.1); transform: translateY(-3px); }
   .ho-proc__head { display: flex; justify-content: space-between; padding-bottom: .5rem; border-bottom: 1.5px dashed rgba(255,252,246,0.25); }
   .ho-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ho-lime); line-height: 1; }
-  .ho-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ho-accent); }
+  .ho-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ho-accent-ink); }
   .ho-proc__t {
     font-size: clamp(1.2rem, 2vw, 1.45rem);
     line-height: 1.05;
@@ -1454,7 +1465,7 @@ const faqHome = [
     background: currentColor;
   }
   .ho-aud__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
-  .ho-aud__item--accent { color: var(--ho-accent); }
+  .ho-aud__item--accent { color: var(--ho-accent-ink); }
   .ho-aud__item--navy   { color: var(--ho-blue); }
   .ho-aud__item--woo    { color: var(--ho-woo); }
 
@@ -1613,7 +1624,7 @@ const faqHome = [
   }
   .ho-port__result {
     font-size: .7rem;
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
     font-weight: 800;
     letter-spacing: .1em;
   }
@@ -1625,7 +1636,7 @@ const faqHome = [
     color: var(--ho-ink);
     transition: color .2s;
   }
-  .ho-port__link:hover .ho-port__client { color: var(--ho-accent); }
+  .ho-port__link:hover .ho-port__client { color: var(--ho-accent-ink); }
   .ho-port__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .25rem; }
   .ho-port__tag {
     background: var(--ho-paper-2);
@@ -1661,7 +1672,9 @@ const faqHome = [
     padding: 1.75rem 1.5rem;
     display: flex; flex-direction: column; align-items: flex-start; gap: .35rem;
   }
-  .ho-port-strip__hi  { background: var(--ho-accent) !important; color: var(--ho-paper); }
+  /* Tinta sobre el naranja (6.85:1); en paper se quedaba en 2.77:1 y no
+     alcanzaba el mínimo AA. Mismo criterio que el bloque lima. */
+  .ho-port-strip__hi  { background: var(--ho-accent) !important; color: var(--ho-ink); }
   .ho-port-strip__hi2 { background: var(--ho-lime) !important; color: var(--ho-ink); }
   .ho-port-strip__v {
     font-size: clamp(2rem, 4vw, 3rem);
@@ -1672,10 +1685,10 @@ const faqHome = [
   .ho-port-strip__v sup, .ho-port-strip__v small {
     font-size: .5em;
     vertical-align: super;
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
   }
   .ho-port-strip__hi .ho-port-strip__v sup, .ho-port-strip__hi .ho-port-strip__v small { color: var(--ho-ink); }
-  .ho-port-strip__hi2 .ho-port-strip__v sup, .ho-port-strip__hi2 .ho-port-strip__v small { color: var(--ho-accent); }
+  .ho-port-strip__hi2 .ho-port-strip__v sup, .ho-port-strip__hi2 .ho-port-strip__v small { color: var(--ho-accent-ink); }
   .ho-port-strip__l {
     font-family: var(--font-mono);
     font-size: .68rem;
@@ -1800,7 +1813,7 @@ const faqHome = [
 
   .ho-tech__i {
     font-size: .65rem;
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
     font-weight: 800;
     letter-spacing: .2em;
   }
@@ -1863,7 +1876,7 @@ const faqHome = [
   .ho-cover-tile .text-meta { grid-area: meta; }
   .ho-cover-tile__name { grid-area: name; font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: .95; letter-spacing: -.025em; }
   .ho-cover-tile__sub { grid-area: sub; font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
-  .ho-cover-tile__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ho-accent); font-size: 1.5rem; transition: transform .25s; }
+  .ho-cover-tile__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ho-accent-ink); font-size: 1.5rem; transition: transform .25s; }
   .ho-cover-tile:hover { background: var(--ho-accent); color: var(--ho-paper); }
   .ho-cover-tile:hover .ho-cover-tile__sub { color: var(--ho-paper); opacity: .85; }
   .ho-cover-tile:hover .ho-cover-tile__arrow { color: var(--ho-paper); transform: translateX(4px); }
@@ -1874,7 +1887,7 @@ const faqHome = [
   .ho-cover-tile--5:hover { background: var(--ho-ink); color: var(--ho-paper); }
   .ho-cover-tile--5:hover .ho-cover-tile__arrow { color: var(--ho-lime); }
 
-  .ho-cover-h3 { display: block; margin-bottom: 1rem; color: var(--ho-accent); }
+  .ho-cover-h3 { display: block; margin-bottom: 1rem; color: var(--ho-accent-ink); }
   .ho-comarcas {
     display: grid; gap: 0;
     grid-template-columns: 1fr;
@@ -1912,7 +1925,7 @@ const faqHome = [
   .ho-vera__lead strong { color: #c6ff3a; }
   .ho-vera__btn {
     display: inline-block; font-family: var(--font-display, sans-serif); font-weight: 800; font-size: 1.05rem;
-    padding: .9rem 1.6rem; background: #FF6B35; color: #fff; border: 2.5px solid #fff;
+    padding: .9rem 1.6rem; background: #FF6B35; color: #0E0D0B; border: 2.5px solid #fff;
     box-shadow: 5px 5px 0 #c6ff3a; text-decoration: none; transition: transform .12s, box-shadow .12s;
   }
   .ho-vera__btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #c6ff3a; }
@@ -1947,7 +1960,7 @@ const faqHome = [
     padding-bottom: .65rem;
     border-bottom: 2px dashed var(--ho-ink);
   }
-  .ho-blog__num { font-size: .7rem; letter-spacing: .15em; color: var(--ho-accent); font-weight: 800; }
+  .ho-blog__num { font-size: .7rem; letter-spacing: .15em; color: var(--ho-accent-ink); font-weight: 800; }
   .ho-blog__date { font-size: .65rem; letter-spacing: .15em; color: var(--ho-ink); opacity: .65; }
   .ho-blog__title {
     font-family: var(--font-display);
@@ -1982,7 +1995,7 @@ const faqHome = [
     font-family: var(--font-mono);
     font-size: .7rem;
     font-weight: 800;
-    color: var(--ho-accent);
+    color: var(--ho-accent-ink);
     letter-spacing: .15em;
     text-transform: uppercase;
   }
@@ -2012,7 +2025,7 @@ const faqHome = [
     transition: padding .2s, background .2s;
   }
   .ho-faq__sum:hover { padding-inline: 1rem; background: var(--ho-paper); }
-  .ho-faq__num { font-size: 1rem; font-weight: 800; color: var(--ho-accent); letter-spacing: .1em; }
+  .ho-faq__num { font-size: 1rem; font-weight: 800; color: var(--ho-accent-ink); letter-spacing: .1em; }
   .ho-faq__q {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
@@ -2080,7 +2093,7 @@ const faqHome = [
   /* — Formas flotantes — */
   .ho-shapes { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
   .ho-shape { position: absolute; opacity: .16; will-change: transform; }
-  .ho-shape--star { top: 12%;  right: 7%;  color: var(--ho-accent);  animation: ho-float-y 8s ease-in-out infinite; }
+  .ho-shape--star { top: 12%;  right: 7%;  color: var(--ho-accent-ink);  animation: ho-float-y 8s ease-in-out infinite; }
   .ho-shape--ring { bottom: 24%; left: 3%; color: var(--ho-blue);    animation: ho-spin 28s linear infinite; opacity: .12; }
   .ho-shape--tri  { top: 46%;  left: 52%;  color: var(--ho-magenta); animation: ho-float-x 11s ease-in-out infinite; opacity: .1; }
   .ho-shape--plus { bottom: 12%; right: 22%; color: var(--ho-green); animation: ho-float-y 6.5s ease-in-out infinite; }
@@ -2089,6 +2102,16 @@ const faqHome = [
   @media (max-width: 768px) { .ho-shape--tri, .ho-shape--ring { display: none; } }
 
   /* — Titular cinético con palabra rotatoria — */
+  /* Visible solo para lectores de pantalla */
+  .ho-sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
   .ho-kinetic {
     font-family: var(--font-display);
     font-weight: 800;
@@ -2114,11 +2137,11 @@ const faqHome = [
     height: 1.16em; line-height: 1.16em;
     white-space: nowrap; font-style: italic;
   }
-  .ho-kinetic__stack > span:nth-child(1) { color: var(--ho-accent); }
+  .ho-kinetic__stack > span:nth-child(1) { color: var(--ho-accent-ink); }
   .ho-kinetic__stack > span:nth-child(2) { color: var(--ho-blue); }
   .ho-kinetic__stack > span:nth-child(3) { color: var(--ho-magenta); }
   .ho-kinetic__stack > span:nth-child(4) { color: var(--ho-green); }
-  .ho-kinetic__stack > span:nth-child(5) { color: var(--ho-accent); }
+  .ho-kinetic__stack > span:nth-child(5) { color: var(--ho-accent-ink); }
   @keyframes ho-rotword {
     0%, 15%   { transform: translateY(0); }
     20%, 35%  { transform: translateY(-20%); }

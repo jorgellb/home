@@ -73,7 +73,12 @@ function runLighthouse (url: string): Record<string, number> | null {
     const outputPath = path.join(process.cwd(), '.lighthouse-results.json')
 
     execSync(
-      `npx lighthouse ${url} --config-path=${configPath} --output=json --output-path=${outputPath} --chrome-flags="--headless --no-sandbox"`,
+      // --force-prefers-reduced-motion: sin él, Lighthouse mide la página a
+      // mitad de las animaciones de entrada y reporta contrastes de colores
+      // intermedios que no existen en el diseño. Los resultados variaban de
+      // una ejecución a otra. Con movimiento reducido se audita el estado
+      // final, que es el que ve el usuario.
+      `npx lighthouse ${url} --config-path=${configPath} --output=json --output-path=${outputPath} --chrome-flags="--headless --no-sandbox --force-prefers-reduced-motion"`,
       { stdio: 'pipe' }
     )
 

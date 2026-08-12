@@ -45,7 +45,7 @@ readingTime: 14
 .arp-eyebrow {
   display:inline-flex; align-items:center; gap:.5rem;
   font-family: var(--font-mono, monospace); font-size:.66rem; font-weight:800;
-  letter-spacing:.22em; text-transform:uppercase; color: var(--brutal-accent, #FF6B35);
+  letter-spacing:.22em; text-transform:uppercase; color: var(--brutal-accent-ink, #AE3F13);
   margin: 2.5rem 0 .25rem;
 }
 .arp-eyebrow::before { content:'★'; }
@@ -77,7 +77,7 @@ readingTime: 14
   background: var(--brutal-card, #FFF); border:2px solid var(--brutal-ink,#0E0D0B);
   box-shadow: 4px 4px 0 var(--brutal-ink,#0E0D0B); padding: .95rem 1rem;
 }
-.arp-why svg { width:42px; height:42px; color: var(--brutal-accent,#FF6B35); }
+.arp-why svg { width:42px; height:42px; color: var(--brutal-accent-ink,#AE3F13); }
 .arp-why b { font-size:.95rem; font-weight:800; letter-spacing:-.01em; }
 .arp-why p { margin:.15rem 0 0; font-size:.82rem; line-height:1.4; color: var(--brutal-text-secondary,#4a453f); font-family:var(--font-display,sans-serif); }
 
