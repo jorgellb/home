@@ -1,0 +1,87 @@
+---
+/* Franja de cifras. El HTML trae el valor final (buscadores y sin JS); en el
+   navegador cuenta desde 0 al entrar en pantalla, salvo con movimiento
+   reducido. Sin React: un script de pocas líneas. */
+import type { Cifra } from './tipos';
+
+interface Props {
+  cifras: Cifra[];
+  class?: string;
+}
+
+const { cifras, class: clase } = Astro.props;
+---
+
+<dl class:list={['cdm-telemetria', clase]}>
+  {cifras.map((c) => (
+    <div class="cdm-telemetria__cifra">
+      <dt>{c.etiqueta}</dt>
+      <dd>
+        <span data-cuenta={c.valor} data-prefijo={c.prefijo ?? ''} data-sufijo={c.sufijo ?? ''}>{`${c.prefijo ?? ''}${c.valor}${c.sufijo ?? ''}`}</span>
+      </dd>
+    </div>
+  ))}
+</dl>
+
+<script>
+  const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cifras = document.querySelectorAll<HTMLElement>('[data-cuenta]');
+
+  function contar(el: HTMLElement) {
+    const objetivo = Number(el.dataset.cuenta);
+    const prefijo = el.dataset.prefijo ?? '';
+    const sufijo = el.dataset.sufijo ?? '';
+    const inicio = performance.now();
+    const paso = (ahora: number) => {
+      const t = Math.min((ahora - inicio) / 1400, 1);
+      el.textContent = `${prefijo}${Math.round(objetivo * (1 - Math.pow(1 - t, 3)))}${sufijo}`;
+      if (t < 1) requestAnimationFrame(paso);
+    };
+    requestAnimationFrame(paso);
+  }
+
+  if (!reducido && 'IntersectionObserver' in window) {
+    const observador = new IntersectionObserver((entradas) => {
+      for (const entrada of entradas) {
+        if (!entrada.isIntersecting) continue;
+        contar(entrada.target as HTMLElement);
+        observador.unobserve(entrada.target);
+      }
+    }, { threshold: 0.6 });
+    cifras.forEach((el) => observador.observe(el));
+  }
+</script>
+
+<style>
+  .cdm-telemetria {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+    border-top: 1px solid var(--color-cdm-regla);
+    background: rgb(7 11 16 / 0.9);
+  }
+  .cdm-telemetria__cifra {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.25rem;
+    padding: 1.1rem 1.4rem;
+    border-right: 1px solid var(--color-cdm-regla);
+  }
+  .cdm-telemetria__cifra:last-child { border-right: 0; }
+  .cdm-telemetria dt { font-size: 0.82rem; color: var(--color-cdm-tenue); }
+  .cdm-telemetria dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 700;
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-cdm-texto);
+  }
+  @media (max-width: 900px) {
+    .cdm-telemetria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cdm-telemetria__cifra:nth-child(2n) { border-right: 0; }
+    .cdm-telemetria__cifra:nth-child(-n + 2) { border-bottom: 1px solid var(--color-cdm-regla); }
+  }
+</style>

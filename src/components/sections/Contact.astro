@@ -1,4 +1,10 @@
 ---
+interface Props {
+  /* 'consola': versión oscura para la home del centro de mando. */
+  tono?: 'papel' | 'consola';
+}
+const { tono = 'papel' } = Astro.props;
+
 const channels = [
   { label: 'Llamada directa', value: '+34 657 085 019', meta: 'L–V · 09:00 – 19:00', href: 'tel:+34657085019' },
   { label: 'Email',            value: 'hola@platanitorico.com', meta: 'Respuesta < 24h',     href: 'mailto:hola@platanitorico.com' },
@@ -7,7 +13,7 @@ const channels = [
 ];
 ---
 
-<section class="section-brutal" id="contacto">
+<section class:list={['section-brutal', { 'contacto--consola dark': tono === 'consola' }]} id="contacto">
   <div class="container-brutal">
     <header class="brutal-section-head">
       <div class="brutal-section-head__col">
@@ -269,4 +275,40 @@ const channels = [
   }
   .contact-form__submit { flex-shrink: 0; }
   .contact-form__legal { font-size: .65rem; color: var(--brutal-text-muted); text-transform: uppercase; letter-spacing: .12em; max-width: 24ch; }
+
+  /* Tono consola: se reasignan las variables de la paleta brutal dentro de la
+     sección, así los utilitarios globales (input-brutal, spec-list…) se pintan
+     en oscuro sin duplicar sus reglas. */
+  .contacto--consola {
+    --brutal-bg-alt: var(--color-cdm-panel-2);
+    --brutal-card: var(--color-cdm-panel);
+    --brutal-ink: var(--color-cdm-texto);
+    --brutal-text-secondary: #b9c5cf;
+    --brutal-text-muted: var(--color-cdm-tenue);
+    --brutal-border-soft: var(--color-cdm-regla);
+    --brutal-accent-ink: var(--color-cdm-senal);
+    color-scheme: dark;
+    background: var(--color-cdm-suelo);
+    color: var(--color-cdm-texto);
+    border-top: 1px solid var(--color-cdm-regla);
+  }
+  .contacto--consola .brutal-section-head__col > .text-meta,
+  .contacto--consola .contact-channels > .text-meta { display: none; }
+  .contacto--consola .brutal-section-head__title { font-stretch: 82%; letter-spacing: -0.02em; }
+  .contacto--consola .brutal-section-head__title em { font-family: inherit; font-style: normal; font-weight: inherit; color: inherit; }
+  .contacto--consola .contact-channels__list { border-top: 1px solid var(--color-cdm-regla-2); }
+  .contacto--consola .contact-status { background: transparent; border: 1px solid var(--color-cdm-regla-2); box-shadow: none; }
+  .contacto--consola .contact-status .live-dot { background: var(--color-cdm-ok); }
+  .contacto--consola .contact-status__sub { color: var(--color-cdm-tenue); opacity: 1; }
+  .contacto--consola .contact-form-wrap { border: 1px solid var(--color-cdm-regla-2); box-shadow: none; }
+  .contacto--consola .contact-form-head,
+  .contacto--consola .contact-form__foot { border-color: var(--color-cdm-regla); border-width: 1px; }
+  .contacto--consola .input-brutal { border: 1px solid var(--color-cdm-regla-2); }
+  .contacto--consola .input-brutal:focus { box-shadow: 0 0 0 2px var(--color-cdm-ok); transform: none; }
+  .contacto--consola select option { background: var(--color-cdm-panel); color: var(--color-cdm-texto); }
+  .contacto--consola .contact-form__chips label { border-color: var(--color-cdm-regla-2); }
+  .contacto--consola .contact-form__chips input[type='radio']:checked + label { background: var(--color-cdm-senal); border-color: var(--color-cdm-senal); color: #120600; }
+  .contacto--consola .contact-form__chips input[type='radio']:focus-visible + label { outline: 2px solid var(--color-cdm-ok); outline-offset: 2px; }
+  .contacto--consola .contact-form__submit { background: var(--color-cdm-senal); border: 1px solid var(--color-cdm-senal); color: #120600; box-shadow: none; }
+  .contacto--consola .spec-list { border-top-color: var(--color-cdm-regla-2); }
 </style>

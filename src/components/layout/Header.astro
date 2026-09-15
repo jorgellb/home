@@ -1,792 +1,275 @@
 ---
-import { SpotlightNavbar } from '@/components/ui/spotlight-navbar';
+/* Cabecera del centro de mando: barra de estado oscura con marca, menú,
+   posición de la sede, turno de técnicos y hora de Madrid. Por debajo de
+   1280 px el menú va en un cajón lateral. */
 const navLinks = [
-  { num: '01', href: '/desarrollo-web/',       label: 'Web',          meta: 'Diseño + desarrollo' },
-  { num: '02', href: '/informatica-empresas/', label: 'Sistemas IT',  meta: 'Redes · equipos · soporte' },
-  { num: '03', href: '/plan-360/',             label: 'Plan 360',     meta: 'Web + IT · 400 €/mes' },
-  { num: '04', href: '/audiovisual/',          label: 'Audiovisual',  meta: 'Dron + vídeo · 4K' },
-  { num: '05', href: '/marketing/',            label: 'Marketing',    meta: 'SEO + SEM + ads' },
-  { num: '06', href: '/diseno-grafico/',       label: 'Diseño',       meta: 'Branding + print' },
-  { num: '07', href: '/soporte/',              label: 'Soporte',      meta: 'Mantenimiento web' },
-  { num: '08', href: '/blog/',                 label: 'Blog',         meta: 'Diario · tecnología' },
-  { num: '09', href: '/laboratorio-ia/',       label: 'Lab IA',       meta: 'Demos de IA en vivo' },
+  { href: '/desarrollo-web/', label: 'Web', meta: 'Diseño y desarrollo' },
+  { href: '/informatica-empresas/', label: 'Sistemas IT', meta: 'Redes, equipos y soporte' },
+  { href: '/plan-360/', label: 'Plan 360', meta: 'Web e informática, 400 €/mes' },
+  { href: '/audiovisual/', label: 'Audiovisual', meta: 'Dron y vídeo 4K' },
+  { href: '/marketing/', label: 'Marketing', meta: 'SEO, SEM y anuncios' },
+  { href: '/diseno-grafico/', label: 'Diseño', meta: 'Marca e impresión' },
+  { href: '/soporte/', label: 'Soporte', meta: 'Mantenimiento web' },
+  { href: '/blog/', label: 'Blog', meta: 'Guías y tecnología' },
+  { href: '/laboratorio-ia/', label: 'Lab IA', meta: 'Demos de IA en vivo' },
 ];
 
 const solutionLinks = [
   { href: '/soluciones/emprendedor/', label: 'Emprendedores', meta: 'Lanza tu negocio' },
-  { href: '/soluciones/empresa/',     label: 'Empresas',      meta: 'Escala tu marca' },
-  { href: '/soluciones/ecommerce/',   label: 'E-commerce',    meta: 'Tienda online' },
-  { href: '/soluciones/agencia/',     label: 'Agencias',      meta: 'White-label' },
+  { href: '/soluciones/empresa/', label: 'Empresas', meta: 'Escala tu marca' },
+  { href: '/soluciones/ecommerce/', label: 'E-commerce', meta: 'Tienda online' },
+  { href: '/soluciones/agencia/', label: 'Agencias', meta: 'Marca blanca' },
 ];
 
 const legalLinks = [
-  { href: '/privacidad/',           label: 'Privacidad' },
+  { href: '/privacidad/', label: 'Privacidad' },
   { href: '/terminos-condiciones/', label: 'Términos' },
-  { href: '/cookies/',              label: 'Cookies' },
-  { href: '/aviso-legal/',          label: 'Aviso legal' },
+  { href: '/cookies/', label: 'Cookies' },
+  { href: '/aviso-legal/', label: 'Aviso legal' },
 ];
 
 const currentPath = Astro.url.pathname;
-const activeIndex = navLinks.findIndex((l) => currentPath === l.href || currentPath.startsWith(l.href));
-const today = new Date();
-const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+const esActivo = (href: string) => currentPath === href || currentPath.startsWith(href);
 ---
 
-<header class="brutal-header" data-header>
-  <div class="brutal-header__inner container-brutal">
-    {/* Sin aria-label: el nombre accesible sale del propio texto visible,
-        que ya es descriptivo. Con aria-label incumplía WCAG 2.5.3, porque
-        el nombre debe contener el texto visible (incluido el «P★»). */}
-    <a href="/" class="brutal-logo">
-      <span class="brutal-logo__mark" aria-hidden="true">P★</span>
-      <span class="brutal-logo__word">
-        <span class="brutal-logo__line1">PLATANITO</span>
-        <span class="brutal-logo__line2">/ rico — estudio</span>
-      </span>
+<header class="cdm-barra dark">
+  <div class="cdm-barra__dentro">
+    <a href="/" class="cdm-barra__marca">
+      <span class="cdm-barra__sello" aria-hidden="true">P★</span>
+      <span>Platanito Rico</span>
     </a>
 
-    <div class="brutal-nav">
-      <SpotlightNavbar client:idle items={navLinks.map((l) => ({ label: l.label, href: l.href }))} defaultActiveIndex={activeIndex} className="pt-0" />
+    <nav class="cdm-barra__nav" aria-label="Principal">
+      <ul>
+        {navLinks.map((l) => (
+          <li>
+            <a href={l.href} class:list={['cdm-barra__enlace', { 'is-activo': esActivo(l.href) }]} aria-current={esActivo(l.href) ? 'page' : undefined}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="cdm-barra__estado">
+      <span>Vera 37,25 N</span>
+      <span class="cdm-barra__turno" data-turno>
+        <span class="cdm-barra__led" aria-hidden="true"></span>
+        <span data-turno-texto>L–V de 9 a 19 h</span>
+      </span>
+      <time class="cdm-barra__hora" data-reloj></time>
     </div>
 
-    <div class="brutal-header__cta">
-      <a href="/contacto/" class="btn-brutal btn-brutal--sm">
-        <span class="live-dot" aria-hidden="true"></span>
-        Presupuesto
-      </a>
+    <a href="/contacto/" class="cdm-barra__cta">Presupuesto</a>
 
-      <button
-        id="menuBtn"
-        class="brutal-burger"
-        aria-label="Abrir menú"
-        aria-expanded="false"
-        aria-controls="mobileMenu"
-      >
-        <span class="brutal-burger__bars" aria-hidden="true">
-          <span class="brutal-burger__bar"></span>
-          <span class="brutal-burger__bar"></span>
-          <span class="brutal-burger__bar"></span>
-        </span>
-        <span class="brutal-burger__txt">MENÚ</span>
-      </button>
-    </div>
+    <button id="menuBtn" class="cdm-barra__menu" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="cdm-barra__barras" aria-hidden="true"><span></span><span></span><span></span></span>
+      <span class="cdm-barra__menu-txt">Menú</span>
+    </button>
   </div>
 </header>
 
-<aside
-  id="mobileMenu"
-  class="md"
-  aria-hidden="true"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Menú principal"
->
-  <div class="md__backdrop" data-menu-backdrop></div>
-
-  <div class="md__panel">
-
-    {/* HEAD: índice + fecha + close */}
-    <header class="md__head">
-      <div class="md__head-l">
-        <span class="md__head-num text-mono">N.º 027</span>
-        <span class="md__head-date text-mono">{dateStr}</span>
-      </div>
-      <button id="menuClose" class="md__close" aria-label="Cerrar menú">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
+<aside id="mobileMenu" class="cdm-cajon dark" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Menú principal">
+  <div class="cdm-cajon__fondo" data-menu-backdrop></div>
+  <div class="cdm-cajon__panel">
+    <div class="cdm-cajon__cab">
+      <span class="cdm-cajon__titulo">Menú</span>
+      <button id="menuClose" class="cdm-cajon__cerrar" aria-label="Cerrar menú">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
       </button>
-    </header>
-
-    {/* TITULAR ÍNDICE */}
-    <div class="md__title-row">
-      <h2 class="md__title">
-        <span>★</span>
-        <span class="md__title-em">Índice</span>
-      </h2>
-      <span class="md__title-meta text-mono"><span class="md-pulse"></span> EN VIVO</span>
     </div>
 
-    {/* Decorative rotating star */}
-    <div class="md__deco" aria-hidden="true">
-      <svg viewBox="0 0 80 80" width="100%" height="100%">
-        <defs>
-          <path id="md-arc" d="M40,40 m-32,0 a32,32 0 1,1 64,0 a32,32 0 1,1 -64,0"/>
-        </defs>
-        <g class="md-spin">
-          <text font-family="monospace" font-size="8" font-weight="bold" fill="currentColor" letter-spacing="3">
-            <textPath href="#md-arc" startOffset="0%">★ PLATANITO RICO · 2026 · ALMERÍA ★</textPath>
-          </text>
-        </g>
-        <text x="40" y="48" text-anchor="middle" font-family="serif" font-size="22" font-weight="bold" fill="currentColor">P★</text>
-      </svg>
-    </div>
-
-    {/* NAV principal */}
-    <nav class="md__nav md__nav--main" aria-label="Servicios">
-      {navLinks.map((link, i) => {
-        const active = currentPath === link.href || currentPath.startsWith(link.href + '/');
-        return (
-          <a
-            href={link.href}
-            class={`md-link mobile-nav-link${active ? ' is-active' : ''}`}
-            style={`--md-i:${i}`}
-          >
-            <span class="md-link__num text-mono">{link.num}</span>
-            <span class="md-link__body">
-              <span class="md-link__label">{link.label}</span>
-              <span class="md-link__meta text-mono">{link.meta}</span>
-            </span>
-            <span class="md-link__arrow" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </a>
-        );
-      })}
+    <nav aria-label="Servicios">
+      <ul class="cdm-cajon__lista">
+        {navLinks.map((l) => (
+          <li>
+            <a href={l.href} class:list={['cdm-cajon__enlace', 'mobile-nav-link', { 'is-activo': esActivo(l.href) }]}>
+              <span class="cdm-cajon__etq">{l.label}</span>
+              <span class="cdm-cajon__meta">{l.meta}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
     </nav>
 
-    {/* SECCIÓN: Soluciones */}
-    <div class="md__divider">
-      <span></span>
-      <span class="md__divider-txt text-mono">★ SOLUCIONES ★</span>
-      <span></span>
-    </div>
-
-    <nav class="md__nav md__nav--sub" aria-label="Soluciones">
-      {solutionLinks.map((link, i) => (
-        <a
-          href={link.href}
-          class="md-sub mobile-nav-link"
-          style={`--md-i:${i+6}`}
-        >
-          <span class="md-sub__label">{link.label}</span>
-          <span class="md-sub__meta text-mono">{link.meta}</span>
-          <span class="md-sub__arrow" aria-hidden="true">↗</span>
-        </a>
-      ))}
+    <p class="cdm-cajon__grupo">Soluciones</p>
+    <nav aria-label="Soluciones">
+      <ul class="cdm-cajon__sub">
+        {solutionLinks.map((l) => (
+          <li><a href={l.href} class="mobile-nav-link">{l.label}<span>{l.meta}</span></a></li>
+        ))}
+      </ul>
     </nav>
 
-    {/* CTA CARD */}
-    <div class="md__cta">
-      <div class="md__cta-head">
-        <span class="text-mono md__cta-lbl"><span class="md-pulse"></span> ACEPTANDO PROYECTOS</span>
-        <span class="text-mono md__cta-num">2026</span>
-      </div>
-      <p class="md__cta-title">
-        ¿Empezamos
-        <em>esta semana?</em>
-      </p>
-      <a href="/contacto/" class="md__cta-btn" data-menu-link>
-        Empezar proyecto
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-
-      {/* Contact direct buttons */}
-      <div class="md__contact">
-        <a href="https://wa.me/34657085019" target="_blank" rel="noopener noreferrer" class="md__contact-btn md__contact-btn--wa" data-menu-link>
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5C8.4 21.5 10.2 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm5.2 14.2c-.3.6-1.4 1.2-1.9 1.3-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-5-4.3-5.1-4.5-.2-.2-1.3-1.7-1.3-3.2 0-1.5.8-2.3 1.1-2.6.3-.3.6-.4.8-.4h.6c.2 0 .5 0 .7.5l1 2.4c.1.2.1.4 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.3.1 1.9.9 2.2 1 .3.1.5.2.6.3.1.2.1.6-.1 1.2z" fill="currentColor"/></svg>
-          <span>WhatsApp</span>
-        </a>
-        <a href="tel:+34657085019" class="md__contact-btn" data-menu-link>
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.37 1.9.72 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>657 085 019</span>
-        </a>
+    <div class="cdm-cajon__contacto">
+      <a href="/contacto/" class="cdm-cajon__cta" data-menu-link>Pedir presupuesto</a>
+      <div class="cdm-cajon__directo">
+        <a href="https://wa.me/34657085019" target="_blank" rel="noopener noreferrer" data-menu-link>WhatsApp</a>
+        <a href="tel:+34657085019" data-menu-link>657 085 019</a>
       </div>
     </div>
 
-    {/* LEGAL mini-links */}
-    <div class="md__divider">
-      <span></span>
-      <span class="md__divider-txt text-mono">LEGAL</span>
-      <span></span>
-    </div>
-    <nav class="md__legal" aria-label="Legal">
-      {legalLinks.map((link, i) => (
-        <a
-          href={link.href}
-          class="md-legal-link mobile-nav-link"
-          style={`--md-i:${i+10}`}
-        >
-          {link.label}
-        </a>
-      ))}
+    <nav aria-label="Legal" class="cdm-cajon__legal">
+      {legalLinks.map((l) => <a href={l.href} class="mobile-nav-link">{l.label}</a>)}
     </nav>
-
-    {/* FOOT — colofón mini */}
-    <footer class="md__foot">
-      <span class="text-mono">★ Platanito Rico · Vera · Almería · ES</span>
-      <span class="text-mono">EST. MMXVIII · TODOS LOS DERECHOS RESERVADOS</span>
-    </footer>
   </div>
 </aside>
 
 <style>
-  .brutal-header {
+  .cdm-barra {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(245, 241, 234, 0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 2px solid var(--brutal-ink);
+    background: rgb(7 11 16 / 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    color: var(--color-cdm-texto);
   }
-  .brutal-header__inner {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+  .cdm-barra__dentro {
+    display: flex;
     align-items: center;
-    height: 78px;
-    gap: 1rem;
+    gap: 1.25rem;
+    height: 64px;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--container-gutter);
   }
-  @media (min-width: 768px) { .brutal-header__inner { gap: 2rem; } }
-  .brutal-logo {
+  .cdm-barra__marca {
     display: inline-flex;
     align-items: center;
-    gap: .65rem;
+    gap: 0.6rem;
+    color: inherit;
     text-decoration: none;
-    color: var(--brutal-ink);
-    min-width: 0;
-  }
-  .brutal-logo__mark {
-    width: 38px;
-    height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--brutal-ink);
-    color: var(--brutal-lime);
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: .9rem;
-    border: 2px solid var(--brutal-ink);
-    transition: transform .2s;
-    flex-shrink: 0;
-  }
-  .brutal-logo:hover .brutal-logo__mark { transform: rotate(-6deg); background: var(--brutal-accent); color: var(--brutal-ink); }
-  .brutal-logo__word { display: flex; flex-direction: column; line-height: 1; min-width: 0; }
-  .brutal-logo__line1 {
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.05rem;
-    letter-spacing: -0.02em;
+    font-weight: 700;
+    font-size: 1rem;
     white-space: nowrap;
   }
-  .brutal-logo__line2 {
+  .cdm-barra__sello {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-cdm-senal);
+    color: var(--color-cdm-senal);
     font-family: var(--font-mono);
-    font-size: .58rem;
-    text-transform: uppercase;
-    letter-spacing: .14em;
-    color: var(--brutal-text-muted);
-    margin-top: .15rem;
-    white-space: nowrap;
+    font-size: 0.72rem;
   }
-  @media (max-width: 420px) {
-    .brutal-logo__line2 { display: none; }
-  }
-
-  .brutal-nav {
-    display: none;
-    justify-content: center;
-    gap: .25rem;
-  }
-  /* Con 9 secciones el menú horizontal solo cabe desde 1280px; por debajo se
-     usa el menú desplegable. Los números se ocultan hasta 1536px. */
-  @media (min-width: 1280px) {
-    .brutal-nav { display: flex; }
-  }
-  .brutal-nav__link {
-    display: inline-flex;
-    align-items: baseline;
-    gap: .35rem;
-    padding: .5rem .6rem;
-    white-space: nowrap;
+  .cdm-barra__nav { display: none; flex: 1; }
+  .cdm-barra__nav ul { display: flex; gap: 1.1rem; margin: 0; padding: 0; list-style: none; }
+  .cdm-barra__enlace {
+    padding-block: 0.35rem;
+    color: var(--color-cdm-tenue);
     text-decoration: none;
-    color: var(--brutal-ink);
-    font-family: var(--font-body);
-    font-size: .9rem;
-    font-weight: 500;
-    border: 1.5px solid transparent;
-    transition: border-color .15s, background .15s, color .15s;
+    font-size: 0.88rem;
+    white-space: nowrap;
   }
-  .brutal-nav__link:hover { border-color: var(--brutal-ink); background: var(--brutal-card); }
-  .brutal-nav__link.is-active { background: var(--brutal-ink); color: var(--brutal-lime); border-color: var(--brutal-ink); }
-  .brutal-nav__num {
+  .cdm-barra__enlace:hover { color: var(--color-cdm-texto); }
+  .cdm-barra__enlace.is-activo { color: var(--color-cdm-texto); box-shadow: inset 0 -2px 0 var(--color-cdm-senal); }
+  .cdm-barra__estado {
+    display: none;
+    align-items: center;
+    gap: 0.9rem;
     font-family: var(--font-mono);
-    font-size: .58rem;
-    letter-spacing: .15em;
-    color: var(--brutal-text-muted);
-    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: var(--color-cdm-tenue);
+    white-space: nowrap;
   }
-  @media (max-width: 1535px) {
-    .brutal-nav__num { display: none; }
-  }
-  .brutal-nav__link.is-active .brutal-nav__num { color: var(--brutal-lime); opacity: .7; }
-  .brutal-nav__label { letter-spacing: -.01em; }
-
-  .brutal-header__cta {
+  .cdm-barra__turno { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .cdm-barra__led { width: 6px; height: 6px; border-radius: 50%; background: var(--color-cdm-tenue); }
+  .cdm-barra__turno.is-abierto .cdm-barra__led { background: var(--color-cdm-ok); }
+  .cdm-barra__cta {
     display: inline-flex;
     align-items: center;
-    gap: .5rem;
+    min-height: 2.5rem;
+    margin-left: auto;
+    padding: 0.5rem 0.95rem;
+    background: var(--color-cdm-senal);
+    color: #120600;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
   }
-  @media (min-width: 768px) { .brutal-header__cta { gap: .75rem; } }
-  .brutal-header__cta .btn-brutal { display: none; }
-  @media (min-width: 768px) {
-    .brutal-header__cta .btn-brutal { display: inline-flex; }
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* BURGER — más brutal, con label "MENÚ"                   */
-  /* ═══════════════════════════════════════════════════════ */
-  .brutal-burger {
-    height: 44px;
+  .cdm-barra__cta:hover { background: #ff7a33; }
+  .cdm-barra__menu {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: .5rem;
-    background: var(--brutal-ink);
-    color: var(--brutal-lime);
-    border: 2px solid var(--brutal-ink);
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    background: transparent;
+    color: var(--color-cdm-texto);
+    border: 1px solid var(--color-cdm-regla-2);
     cursor: pointer;
-    padding: 0 .75rem;
-    box-shadow: 3px 3px 0 0 var(--brutal-accent);
-    transition: transform .15s, box-shadow .15s;
+    font: inherit;
+    font-size: 0.85rem;
   }
-  .brutal-burger:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 0 var(--brutal-accent);
+  .cdm-barra__barras { display: grid; gap: 4px; width: 16px; }
+  .cdm-barra__barras span { display: block; height: 1.5px; background: currentColor; transition: transform 0.25s, opacity 0.2s; }
+  .cdm-barra__menu.is-open .cdm-barra__barras span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+  .cdm-barra__menu.is-open .cdm-barra__barras span:nth-child(2) { opacity: 0; }
+  .cdm-barra__menu.is-open .cdm-barra__barras span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+  .cdm-barra a:focus-visible,
+  .cdm-barra button:focus-visible,
+  .cdm-cajon a:focus-visible,
+  .cdm-cajon button:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }
+  @media (max-width: 480px) {
+    .cdm-barra__cta { display: none; }
+    .cdm-barra__menu { margin-left: auto; }
   }
-  .brutal-burger__bars {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-    width: 18px;
-  }
-  .brutal-burger__bar {
-    display: block;
-    width: 18px;
-    height: 2.5px;
-    background: var(--brutal-lime);
-    transition: transform .3s, opacity .25s;
-    transform-origin: center;
-  }
-  .brutal-burger__txt {
-    font-family: var(--font-mono);
-    font-size: .7rem;
-    font-weight: 800;
-    letter-spacing: .15em;
-    color: var(--brutal-lime);
-  }
-  .brutal-burger.is-open .brutal-burger__bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-  .brutal-burger.is-open .brutal-burger__bar:nth-child(2) { opacity: 0; }
-  .brutal-burger.is-open .brutal-burger__bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-  @media (max-width: 380px) {
-    .brutal-burger__txt { display: none; }
-    .brutal-burger { padding: 0 .65rem; }
-  }
-  /* Mismo corte que .brutal-nav: el desplegable se mantiene hasta 1280px */
   @media (min-width: 1280px) {
-    .brutal-burger { display: none; }
+    .cdm-barra__nav { display: block; }
+    .cdm-barra__menu { display: none; }
+    .cdm-barra__cta { margin-left: 0; }
+  }
+  @media (min-width: 1536px) {
+    .cdm-barra__estado { display: inline-flex; }
   }
 
-  /* ═══════════════════════════════════════════════════════ */
-  /* MOBILE DRAWER (.md)                                     */
-  /* ═══════════════════════════════════════════════════════ */
-  .md {
-    --md-paper:  #FFFCF6;
-    --md-paper-2:#F5EFE0;
-    --md-ink:    #0E0D0B;
-    --md-accent: #FF6B35;
-    --md-lime:   #D6FF44;
-    --md-blue:   #003B7A;
-    --md-red:    #DC1B2C;
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    pointer-events: none;
-    visibility: hidden;
-  }
-  .md.is-open { pointer-events: auto; visibility: visible; }
-
-  .md__backdrop {
-    position: absolute; inset: 0;
-    background: rgba(14, 13, 11, 0.75);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    opacity: 0;
-    transition: opacity .4s;
-  }
-  .md.is-open .md__backdrop { opacity: 1; }
-
-  .md__panel {
+  .cdm-cajon { position: fixed; inset: 0; z-index: 60; visibility: hidden; pointer-events: none; }
+  .cdm-cajon.is-open { visibility: visible; pointer-events: auto; }
+  .cdm-cajon__fondo { position: absolute; inset: 0; background: rgb(3 6 10 / 0.7); opacity: 0; transition: opacity 0.3s; }
+  .cdm-cajon.is-open .cdm-cajon__fondo { opacity: 1; }
+  .cdm-cajon__panel {
     position: absolute;
     top: 0;
     right: 0;
-    height: 100%;
-    width: min(96vw, 460px);
-    background:
-      radial-gradient(circle, rgba(14,13,11,0.08) 1.2px, transparent 1.2px) 0 0/22px 22px,
-      var(--md-paper);
-    border-left: 3px solid var(--md-ink);
-    transform: translateX(102%);
-    transition: transform .55s cubic-bezier(.16, 1, .3, 1);
     display: flex;
     flex-direction: column;
-    padding: 1.25rem 1.5rem 2rem;
+    gap: 1.25rem;
+    width: min(92vw, 420px);
+    height: 100%;
     overflow-y: auto;
     overscroll-behavior: contain;
+    padding: 1rem 1.25rem 2rem;
+    background: var(--color-cdm-suelo);
+    border-left: 1px solid var(--color-cdm-regla-2);
+    color: var(--color-cdm-texto);
+    transform: translateX(100%);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .md.is-open .md__panel { transform: translateX(0); }
-
-  /* HEAD */
-  .md__head {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 1rem;
-    padding: .5rem 0 1rem;
-    border-bottom: 2px solid var(--md-ink);
-    margin-bottom: 1rem;
-  }
-  .md__head-l { display: flex; gap: .75rem; align-items: baseline; }
-  .md__head-num {
-    background: var(--md-ink); color: var(--md-lime);
-    padding: .25rem .55rem;
-    font-size: .65rem; font-weight: 800; letter-spacing: .2em;
-  }
-  .md__head-date {
-    font-size: .6rem; letter-spacing: .2em; color: var(--md-ink); opacity: .6;
-  }
-  .md__close {
-    width: 40px; height: 40px;
-    border: 2px solid var(--md-ink);
-    background: var(--md-paper);
-    color: var(--md-ink);
-    cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center;
-    box-shadow: 3px 3px 0 var(--md-ink);
-    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
-  }
-  .md__close:hover {
-    background: var(--md-red); color: var(--md-paper);
-    transform: translate(-1px, -1px);
-    box-shadow: 4px 4px 0 var(--md-ink);
-  }
-
-  /* TITULAR */
-  .md__title-row {
-    display: flex; justify-content: space-between; align-items: baseline;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-  }
-  .md__title {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 12vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -.03em;
-    line-height: 1;
-    color: var(--md-ink);
-    display: inline-flex; align-items: baseline; gap: .35rem;
-  }
-  .md__title > span:first-child {
-    color: var(--md-accent);
-    font-family: var(--font-mono);
-    font-size: .7em;
-  }
-  .md__title-em {
-    font-style: italic;
-    color: var(--md-ink);
-  }
-  .md__title-meta {
-    font-size: .65rem;
-    letter-spacing: .2em;
-    color: var(--md-ink);
-    display: inline-flex; align-items: center; gap: .35rem;
-    background: var(--md-lime);
-    padding: .35rem .55rem;
-    border: 1.5px solid var(--md-ink);
-  }
-
-  /* Deco rotating star */
-  .md__deco {
-    position: absolute;
-    top: 100px; right: -20px;
-    width: 80px; height: 80px;
-    color: var(--md-blue);
-    opacity: 0.18;
-    pointer-events: none;
-  }
-  .md-spin { transform-origin: 50% 50%; animation: md-spin 22s linear infinite; }
-  @keyframes md-spin { to { transform: rotate(360deg); } }
-
-  /* Pulse dot */
-  .md-pulse {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #00B85C;
-    box-shadow: 0 0 0 0 rgba(0,184,92,0.55);
-    animation: md-pulse-anim 1.8s ease-out infinite;
-  }
-  @keyframes md-pulse-anim {
-    0%   { box-shadow: 0 0 0 0 rgba(0,184,92,0.6); }
-    70%  { box-shadow: 0 0 0 8px rgba(0,184,92,0); }
-    100% { box-shadow: 0 0 0 0 rgba(0,184,92,0); }
-  }
-
-  /* NAV principal */
-  .md__nav { display: flex; flex-direction: column; }
-  .md__nav--main {
-    border-top: 2px solid var(--md-ink);
-    border-bottom: 2px solid var(--md-ink);
-    margin-bottom: 1.5rem;
-  }
-
-  .md-link {
-    display: grid;
-    grid-template-columns: 36px 1fr auto;
-    gap: .85rem;
-    align-items: center;
-    padding: .85rem 0;
-    text-decoration: none;
-    color: var(--md-ink);
-    border-bottom: 1px solid rgba(14,13,11,0.12);
-    transition: padding .25s, background .25s, color .25s;
-    opacity: 0;
-    transform: translateX(20px);
-    animation: md-link-in 0.45s cubic-bezier(.16,1,.3,1) forwards;
-    animation-delay: calc(0.06s * var(--md-i) + 0.2s);
-  }
-  .md-link:last-child { border-bottom: none; }
-  .md-link:hover {
-    padding-inline: .75rem;
-    background: var(--md-lime);
-  }
-  .md-link:hover .md-link__arrow svg { transform: translateX(4px); color: var(--md-accent); }
-  .md-link.is-active {
-    background: var(--md-ink);
-    color: var(--md-lime);
-    padding-inline: .75rem;
-  }
-  .md-link.is-active .md-link__num { color: var(--md-lime); opacity: .7; }
-  .md-link.is-active .md-link__meta { color: var(--md-lime); opacity: .65; }
-
-  @keyframes md-link-in {
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  .md-link__num {
-    font-size: .7rem;
-    font-weight: 800;
-    letter-spacing: .15em;
-    color: var(--md-accent);
-  }
-  .md-link__body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-  .md-link__label {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 700;
-    font-size: clamp(1.75rem, 7vw, 2.25rem);
-    letter-spacing: -.025em;
-    line-height: 1;
-    color: inherit;
-  }
-  .md-link__meta {
-    font-size: .58rem;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--md-ink);
-    opacity: .55;
-    margin-top: 4px;
-  }
-  .md-link.is-active .md-link__meta { color: var(--md-lime); opacity: .6; }
-  .md-link__arrow svg {
-    color: var(--md-ink);
-    transition: transform .3s, color .25s;
-  }
-  .md-link.is-active .md-link__arrow svg { color: var(--md-lime); }
-
-  /* Divider with text */
-  .md__divider {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: .65rem;
-    align-items: center;
-    margin: 1.5rem 0 1rem;
-  }
-  .md__divider span:first-child, .md__divider span:last-child {
-    height: 0;
-    border-bottom: 1.5px solid var(--md-ink);
-    opacity: .35;
-  }
-  .md__divider-txt {
-    font-size: .6rem;
-    letter-spacing: .25em;
-    color: var(--md-blue);
-    font-weight: 800;
-  }
-
-  /* SUB-nav (Soluciones) */
-  .md__nav--sub { gap: 0; }
-  .md-sub {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 0 .65rem;
-    padding: .75rem .85rem;
-    background: var(--md-paper-2);
-    border: 1.5px solid var(--md-ink);
-    text-decoration: none;
-    color: var(--md-ink);
-    margin-bottom: .4rem;
-    transition: background .2s, transform .15s;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: md-sub-in 0.4s ease forwards;
-    animation-delay: calc(0.05s * var(--md-i) + 0.4s);
-  }
-  .md-sub:hover { background: var(--md-lime); transform: translateY(-2px); }
-  .md-sub__label {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: -.015em;
-    grid-row: 1;
-  }
-  .md-sub__meta {
-    grid-column: 1; grid-row: 2;
-    font-size: .58rem;
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    color: var(--md-blue);
-    opacity: .8;
-  }
-  .md-sub__arrow {
-    grid-column: 2; grid-row: 1 / span 2;
-    align-self: center;
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    color: var(--md-accent);
-    font-weight: 800;
-  }
-  @keyframes md-sub-in {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* CTA card                                                */
-  /* ═══════════════════════════════════════════════════════ */
-  .md__cta {
-    margin: 1.75rem 0 .5rem;
-    background: var(--md-ink);
-    color: var(--md-paper);
-    border: 2.5px solid var(--md-ink);
-    box-shadow: 6px 6px 0 var(--md-accent);
-    padding: 1.25rem 1.25rem 1.5rem;
-    opacity: 0;
-    transform: scale(0.96);
-    animation: md-cta-in 0.5s ease 0.6s forwards;
-  }
-  @keyframes md-cta-in {
-    to { opacity: 1; transform: scale(1); }
-  }
-  .md__cta-head {
-    display: flex; justify-content: space-between; align-items: center;
-    gap: .5rem;
-    padding-bottom: .65rem;
-    border-bottom: 1.5px dashed rgba(255,252,246,0.25);
-    margin-bottom: .85rem;
-  }
-  .md__cta-lbl {
-    font-size: .58rem;
-    letter-spacing: .2em;
-    color: var(--md-lime);
-    display: inline-flex; align-items: center; gap: .35rem;
-  }
-  .md__cta-num {
-    font-size: .58rem;
-    letter-spacing: .2em;
-    color: var(--md-paper);
-    opacity: .6;
-  }
-  .md__cta-title {
-    margin: 0 0 .85rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.5rem, 5vw, 1.85rem);
-    line-height: 1.05;
-    letter-spacing: -.02em;
-    color: var(--md-paper);
-  }
-  .md__cta-title em {
-    color: var(--md-lime);
-    font-style: italic;
-    display: block;
-  }
-  .md__cta-btn {
-    display: flex; align-items: center; justify-content: center; gap: .65rem;
-    background: var(--md-lime);
-    color: var(--md-ink);
-    padding: .95rem 1rem;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1rem;
-    border: 2px solid var(--md-lime);
-    text-decoration: none;
-    transition: background .2s, color .2s;
-  }
-  .md__cta-btn:hover { background: var(--md-accent); color: var(--md-paper); border-color: var(--md-accent); }
-
-  .md__contact {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .5rem;
-    margin-top: .65rem;
-  }
-  .md__contact-btn {
-    display: flex; align-items: center; justify-content: center; gap: .5rem;
-    background: transparent;
-    color: var(--md-paper);
-    padding: .65rem .5rem;
-    font-family: var(--font-mono);
-    font-size: .72rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-    border: 1.5px solid rgba(255,252,246,0.5);
-    text-decoration: none;
-    transition: background .2s, color .2s, border-color .2s;
-  }
-  .md__contact-btn:hover { background: var(--md-paper); color: var(--md-ink); border-color: var(--md-paper); }
-  .md__contact-btn--wa:hover { background: #25D366; color: var(--md-ink); border-color: #25D366; }
-
-  /* Legal mini-links */
-  .md__legal {
-    display: flex; flex-wrap: wrap;
-    gap: .35rem .85rem;
-    padding-bottom: 1rem;
-  }
-  .md-legal-link {
-    font-family: var(--font-mono);
-    font-size: .68rem;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--md-ink);
-    opacity: .7;
-    text-decoration: underline;
-    text-decoration-color: var(--md-accent);
-    text-underline-offset: 3px;
-    transition: opacity .2s;
-  }
-  .md-legal-link:hover { opacity: 1; color: var(--md-accent); }
-
-  /* FOOT */
-  .md__foot {
-    display: flex; flex-direction: column; gap: .25rem;
-    padding-top: 1.5rem;
-    margin-top: auto;
-    border-top: 2px dashed rgba(14,13,11,0.18);
-    font-size: .58rem;
-    letter-spacing: .15em;
-    color: var(--md-ink);
-    opacity: .55;
+  .cdm-cajon.is-open .cdm-cajon__panel { transform: none; }
+  .cdm-cajon__cab { display: flex; justify-content: space-between; align-items: center; padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-cdm-regla); }
+  .cdm-cajon__titulo { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
+  .cdm-cajon__cerrar { display: grid; place-items: center; width: 40px; height: 40px; background: transparent; color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); cursor: pointer; }
+  .cdm-cajon__lista,
+  .cdm-cajon__sub { margin: 0; padding: 0; list-style: none; }
+  .cdm-cajon__enlace { display: flex; flex-direction: column; padding: 0.7rem 0 0.7rem 0.75rem; border-bottom: 1px solid var(--color-cdm-regla); color: inherit; text-decoration: none; }
+  .cdm-cajon__enlace.is-activo { box-shadow: inset 2px 0 0 var(--color-cdm-senal); }
+  .cdm-cajon__etq { font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.5rem; line-height: 1.1; }
+  .cdm-cajon__meta { font-size: 0.8rem; color: var(--color-cdm-tenue); }
+  .cdm-cajon__grupo { margin: 0.5rem 0 0; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-cdm-tenue); }
+  .cdm-cajon__sub { display: grid; gap: 0.4rem; }
+  .cdm-cajon__sub a { display: flex; justify-content: space-between; gap: 1rem; padding: 0.6rem 0.75rem; border: 1px solid var(--color-cdm-regla); color: inherit; text-decoration: none; font-weight: 600; }
+  .cdm-cajon__sub a span { font-weight: 400; font-size: 0.8rem; color: var(--color-cdm-tenue); }
+  .cdm-cajon__contacto { display: grid; gap: 0.5rem; }
+  .cdm-cajon__cta { display: flex; justify-content: center; padding: 0.85rem; background: var(--color-cdm-senal); color: #120600; font-weight: 600; text-decoration: none; }
+  .cdm-cajon__directo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .cdm-cajon__directo a { display: flex; justify-content: center; padding: 0.7rem; border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; font-size: 0.9rem; }
+  .cdm-cajon__legal { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: auto; }
+  .cdm-cajon__legal a { color: var(--color-cdm-tenue); font-size: 0.8rem; }
+  @media (prefers-reduced-motion: reduce) {
+    .cdm-cajon__panel,
+    .cdm-cajon__fondo { transition: none; }
   }
 </style>
 
@@ -807,13 +290,35 @@ const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-di
     document.body.style.overflow = open ? 'hidden' : '';
   }
 
-  menuBtn?.addEventListener('click', () => {
-    setOpen(!drawer?.classList.contains('is-open'));
-  });
+  menuBtn?.addEventListener('click', () => setOpen(!drawer?.classList.contains('is-open')));
   menuClose?.addEventListener('click', () => setOpen(false));
   backdrop?.addEventListener('click', () => setOpen(false));
-  links?.forEach(l => l.addEventListener('click', () => setOpen(false)));
+  links?.forEach((l) => l.addEventListener('click', () => setOpen(false)));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && drawer?.classList.contains('is-open')) setOpen(false);
   });
+
+  // Hora de Madrid y turno de técnicos (L–V de 9 a 19 h). Se calcula en el
+  // navegador: el HTML estático solo trae el horario.
+  const reloj = document.querySelector<HTMLTimeElement>('[data-reloj]');
+  const turno = document.querySelector<HTMLElement>('[data-turno]');
+  const turnoTexto = document.querySelector<HTMLElement>('[data-turno-texto]');
+  const madrid = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Madrid', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+
+  function actualizarEstado() {
+    const p = Object.fromEntries(madrid.formatToParts(new Date()).map((x) => [x.type, x.value]));
+    const hora = Number(p.hour);
+    const abierto = !['Sat', 'Sun'].includes(p.weekday) && hora >= 9 && hora < 19;
+    if (reloj) {
+      reloj.textContent = `${p.hour}:${p.minute}`;
+      reloj.dateTime = `${p.hour}:${p.minute}`;
+    }
+    if (turno && turnoTexto) {
+      turno.classList.toggle('is-abierto', abierto);
+      turnoTexto.textContent = abierto ? 'Técnicos disponibles' : 'Fuera de horario: L–V de 9 a 19 h';
+    }
+  }
+
+  actualizarEstado();
+  setInterval(actualizarEstado, 30_000);
 </script>

@@ -1,0 +1,81 @@
+---
+/* Lighthouse móvil real de las primeras webs de proyectos.ts, en su orden
+   (no las de mejor nota). Sin medida se dice «sin medida». Solo ≥ 90 va en
+   lima, porque lima significa «ok». */
+import Panel from './Panel.astro';
+import medidasJson from '../../data/medidas.json';
+import { fechaCorta, medidasSchema } from '../../data/medidas';
+import { proyectos } from '../../data/proyectos';
+
+interface Props {
+  max?: number;
+  class?: string;
+}
+
+const { max = 4, class: clase } = Astro.props;
+const medidas = medidasSchema.parse(medidasJson);
+const porId = new Map(medidas.webs.map((w) => [w.id, w]));
+const filas = proyectos.slice(0, max).map((p) => ({
+  dominio: new URL(p.url).hostname.replace(/^www\./, ''),
+  url: p.url,
+  lighthouse: porId.get(p.id)?.lighthouse ?? null,
+}));
+const fecha = fechaCorta(medidas.medidoEl);
+const nota = fecha ? `Lighthouse móvil medido el ${fecha} con PageSpeed Insights` : 'Todavía sin medida disponible';
+---
+
+<Panel titulo="Webs de clientes medidas" tipo="real" nota={nota} class={clase}>
+  <ul class="cdm-medidas">
+    {filas.map((f) => (
+      <li class="cdm-medidas__fila">
+        <a href={f.url} target="_blank" rel="noopener noreferrer" class="cdm-medidas__dominio">
+          {f.dominio}<span class="sr-only"> (abre en una pestaña nueva)</span>
+        </a>
+        {f.lighthouse === null ? (
+          <span class="cdm-medidas__valor is-vacio">sin medida</span>
+        ) : (
+          <span class:list={['cdm-medidas__valor', { 'is-bajo': f.lighthouse < 90 }]}>
+            {f.lighthouse}<span class="sr-only"> sobre 100 en Lighthouse</span>
+          </span>
+        )}
+        <span class:list={['cdm-medidas__barra', { 'is-bajo': (f.lighthouse ?? 0) < 90 }]} aria-hidden="true">
+          <i style={`--v:${f.lighthouse ?? 0}`}></i>
+        </span>
+      </li>
+    ))}
+  </ul>
+</Panel>
+
+<style>
+  .cdm-medidas { list-style: none; margin: 0; padding: 0.35rem 0.8rem 0.6rem; }
+  .cdm-medidas__fila {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.3rem 0.6rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-cdm-regla);
+    font-size: 0.82rem;
+  }
+  .cdm-medidas__fila:last-child { border-bottom: 0; }
+  .cdm-medidas__dominio { color: #c9d3db; text-decoration: none; overflow-wrap: anywhere; }
+  .cdm-medidas__dominio:hover { color: var(--color-cdm-texto); text-decoration: underline; }
+  .cdm-medidas__dominio:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 2px; }
+  .cdm-medidas__valor { font-family: var(--font-mono); color: var(--color-cdm-ok); }
+  .cdm-medidas__valor.is-bajo { color: var(--color-cdm-texto); }
+  .cdm-medidas__valor.is-vacio { font-size: 0.72rem; color: var(--color-cdm-tenue); }
+  .cdm-medidas__barra { grid-column: 1 / -1; height: 3px; background: var(--color-cdm-regla); }
+  .cdm-medidas__barra i {
+    display: block;
+    height: 100%;
+    width: calc(var(--v) * 1%);
+    background: var(--color-cdm-ok);
+    transform-origin: left;
+  }
+  .cdm-medidas__barra.is-bajo i { background: var(--color-cdm-tenue); }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(:root:not([data-cdm-arranque='hecho'])) .cdm-medidas__barra i {
+      animation: cdm-carga 1.4s 1.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  }
+  @keyframes cdm-carga { from { transform: scaleX(0); } }
+</style>

@@ -12,233 +12,157 @@ const currentYear = new Date().getFullYear();
 // El buscador del footer enlaza solo a los pueblos indexables (Tier 1): evita
 // volcar ~90 enlaces (muchos noindex) en cada página y concentra el link equity.
 const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable(p.slug));
+
+const servicios = [
+  { href: '/desarrollo-web/', label: 'Diseño web' },
+  { href: '/informatica-empresas/', label: 'Mantenimiento informático' },
+  { href: '/plan-360/', label: 'Plan 360: web e informática' },
+  { href: '/audiovisual/', label: 'Audiovisual' },
+  { href: '/marketing/', label: 'Marketing y SEO' },
+  { href: '/diseno-grafico/', label: 'Diseño gráfico' },
+  { href: '/soporte/', label: 'Mantenimiento web' },
+];
+const capacidades = ['Diseño web', 'SEO local', 'Tiendas online', 'Redes y wifi', 'Servidores', 'Ciberseguridad', 'Vídeo con dron', 'Branding', 'Astro', 'WordPress', 'WooCommerce', 'Analytics'];
 ---
 
-<footer class="brutal-footer">
+<footer class="cdm-pie dark">
   {!hideHero && (
-    <>
-      {/* Banda final / declaración de marca */}
-      <section class="brutal-footer__hero">
-        <div class="container-brutal">
-          <div class="brutal-footer__hero-grid">
-            <p class="brutal-footer__hero-meta">
-              <span>37,2471 N · 1,8673 O</span>
-              <span>Vera, Almería</span>
-            </p>
-            <h2 class="brutal-footer__claim">¿Empezamos tu proyecto?</h2>
-            <p class="brutal-footer__claim-sub">
-              Web, sistemas informáticos y vídeo con dron desde Vera para toda la provincia.
-              Presupuesto cerrado en 24 horas.
-            </p>
-            <div class="brutal-footer__hero-cta">
-              <a href="/contacto/?servicio=web#contacto" class="brutal-footer__btn brutal-footer__btn--lima">Pedir presupuesto</a>
-              <a href="tel:+34657085019" class="brutal-footer__btn brutal-footer__btn--line">Llamar al 657 085 019</a>
-            </div>
-          </div>
+    <section class="cdm-pie__cierre">
+      <div class="cdm-pie__dentro">
+        <p class="cdm-pie__coord">37,2471 N  1,8673 O  Vera, Almería</p>
+        <h2 class="cdm-pie__claim">¿Empezamos tu proyecto?</h2>
+        <p class="cdm-pie__sub">Web, sistemas informáticos y vídeo con dron desde Vera para toda la provincia. Presupuesto cerrado en 24 horas.</p>
+        <div class="cdm-pie__acciones">
+          <a href="/contacto/?servicio=web#contacto" class="cdm-pie__btn is-senal">Pedir presupuesto</a>
+          <a href="tel:+34657085019" class="cdm-pie__btn is-linea">Llamar al 657 085 019</a>
         </div>
-      </section>
-
-      <div class="section-divider-thick"></div>
-    </>
+      </div>
+    </section>
   )}
 
-  {/* Grid principal del footer */}
-  <section class="brutal-footer__body">
-    <div class="container-brutal">
-      <div class="brutal-footer__cols">
-        {/* Col 1 — Brand */}
-        <div class="brutal-footer__col brutal-footer__col--brand">
-          <a href="/" class="brutal-footer__logo">
-            <span class="brutal-footer__logo-mark">P★</span>
-            <span class="brutal-footer__logo-text">
-              <span>Platanito Rico</span>
-              <small>Estudio digital · Est. 2018</small>
-            </span>
-          </a>
-          <p class="brutal-footer__pitch">
-            Diseñamos y construimos productos digitales con presencia. Web, vídeo,
-            identidad y crecimiento — sin plantillas, sin atajos.
-          </p>
-          <span class="badge-brutal badge-brutal--lime">
-            <span class="live-dot" style="background:var(--brutal-ink)"></span>
-            Aceptando proyectos · 2026
-          </span>
-        </div>
+  <section class="cdm-pie__cuerpo">
+    <div class="cdm-pie__dentro cdm-pie__cols">
+      <div>
+        <a href="/" class="cdm-pie__logo">
+          <span class="cdm-pie__sello" aria-hidden="true">P★</span>
+          <span>Platanito Rico</span>
+        </a>
+        <p class="cdm-pie__pitch">Diseñamos y construimos productos digitales con presencia. Web, vídeo, identidad y crecimiento, sin plantillas ni atajos.</p>
+        <p class="cdm-pie__estado"><span class="cdm-pie__led" aria-hidden="true"></span>Aceptando proyectos en {currentYear}</p>
+      </div>
 
-        {/* Col 2 — Servicios */}
-        <nav class="brutal-footer__col" aria-label="Servicios">
-          <h3 class="brutal-footer__heading"><span class="text-meta">01 /</span> Servicios</h3>
-          <ul class="brutal-footer__list">
-            <li><a class="brutal-footer__link" href="/desarrollo-web/">Diseño Web</a></li>
-            <li><a class="brutal-footer__link" href="/informatica-empresas/">Mantenimiento informático</a></li>
-            <li><a class="brutal-footer__link" href="/plan-360/">Plan 360 · Web + IT</a></li>
-            <li><a class="brutal-footer__link" href="/audiovisual/">Audiovisual</a></li>
-            <li><a class="brutal-footer__link" href="/marketing/">Marketing &amp; SEO</a></li>
-            <li><a class="brutal-footer__link" href="/diseno-grafico/">Diseño Gráfico</a></li>
-            <li><a class="brutal-footer__link" href="/soporte/">Mantenimiento</a></li>
-          </ul>
-        </nav>
+      <nav aria-label="Servicios">
+        <h3 class="cdm-pie__titulo">Servicios</h3>
+        <ul class="cdm-pie__lista">
+          {servicios.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
+        </ul>
+      </nav>
 
-        {/* Col 3 — Contacto */}
-        <div class="brutal-footer__col">
-          <h3 class="brutal-footer__heading"><span class="text-meta">02 /</span> Contacto</h3>
-          <ul class="brutal-footer__list">
-            <li><a class="brutal-footer__link" href="tel:+34657085019">+34 657 085 019</a></li>
-            <li><a class="brutal-footer__link" href="mailto:hola@platanitorico.com">hola@platanitorico.com</a></li>
-            <li><span class="text-mono text-sm" style="color:var(--brutal-text-muted)">Vera · Almería · ES</span></li>
-            <li><span class="text-mono text-sm" style="color:var(--brutal-text-muted)">L–V · 09:00 – 19:00</span></li>
-          </ul>
-        </div>
+      <div>
+        <h3 class="cdm-pie__titulo">Contacto</h3>
+        <ul class="cdm-pie__lista">
+          <li><a href="tel:+34657085019">+34 657 085 019</a></li>
+          <li><a href="mailto:hola@platanitorico.com">hola@platanitorico.com</a></li>
+          <li class="cdm-pie__dato">Vera, Almería</li>
+          <li class="cdm-pie__dato">L–V de 9:00 a 19:00</li>
+        </ul>
+      </div>
 
-        {/* Col 4 — Capacidades */}
-        <div class="brutal-footer__col">
-          <h3 class="brutal-footer__heading"><span class="text-meta">03 /</span> Capacidades</h3>
-          <div class="brutal-footer__tags">
-            {['Diseño web','SEO local','Tiendas online','Redes y wifi','Servidores','Ciberseguridad','Vídeo con dron','Branding','Astro','WordPress','WooCommerce','Analytics'].map(t => (
-              <span class="tag-brutal">{t}</span>
-            ))}
-          </div>
-        </div>
+      <div>
+        <h3 class="cdm-pie__titulo">Capacidades</h3>
+        <ul class="cdm-pie__etiquetas">
+          {capacidades.map((c) => <li>{c}</li>)}
+        </ul>
       </div>
     </div>
   </section>
 
-  <div class="section-divider"></div>
-
-  {/* Localidades — buscador de pueblos */}
-  <section class="brutal-footer__pueblos">
-    <div class="container-brutal">
-      <div class="brutal-footer__pueblos-head">
+  <section class="cdm-pie__pueblos">
+    <div class="cdm-pie__dentro">
+      <div class="cdm-pie__pueblos-cab">
         <div>
-          <span class="text-meta">04 / Cobertura local</span>
-          <h3 class="heading-display brutal-footer__pueblos-title">
-            Diseño Web en
-            <em class="heading-editorial">toda Almería</em>
-          </h3>
-          <p class="brutal-footer__pueblos-sub text-mono">{pueblos.length} localidades · {comarcas.length} comarcas</p>
-          <a href="/diseno-web/" class="brutal-footer__atlas-link" style="display:inline-block;margin-top:.5rem;font-weight:700;text-decoration:underline;text-underline-offset:3px">
-            Ver todos los municipios con diseño web en Almería →
-          </a>
+          <h3 class="cdm-pie__pueblos-titulo">Diseño web en toda Almería</h3>
+          <p class="cdm-pie__dato">{pueblos.length} localidades en {comarcas.length} comarcas</p>
+          <a href="/diseno-web/" class="cdm-pie__atlas">Ver todos los municipios con diseño web en Almería</a>
         </div>
 
-        <div class="brutal-footer__pueblos-selector" id="pueblo-selector">
-          <button
-            type="button"
-            id="pueblo-dropdown-btn"
-            class="brutal-footer__selector-btn"
-            aria-expanded="false"
-            aria-haspopup="listbox"
-          >
-            <span class="brutal-footer__selector-icon">⌖</span>
-            <span id="selected-pueblo-text">Busca tu pueblo…</span>
-            <span class="brutal-footer__selector-arrow" id="dropdown-arrow">▾</span>
+        <div class="cdm-pie__selector" id="pueblo-selector">
+          <button type="button" id="pueblo-dropdown-btn" class="cdm-pie__selector-btn" aria-expanded="false" aria-haspopup="listbox">
+            <span aria-hidden="true">⌖</span>
+            <span id="selected-pueblo-text">Busca tu pueblo</span>
+            <span id="dropdown-arrow" aria-hidden="true">▾</span>
           </button>
 
-          <div
-            id="pueblo-dropdown-panel"
-            class="brutal-footer__panel"
-            role="listbox"
-          >
-            <div class="brutal-footer__panel-search">
-              <input
-                type="text"
-                id="pueblo-search"
-                placeholder="Escribe un pueblo o comarca…"
-                class="input-brutal"
-              />
+          <div id="pueblo-dropdown-panel" class="cdm-pie__panel" role="listbox">
+            <div class="cdm-pie__panel-buscar">
+              <input type="text" id="pueblo-search" placeholder="Escribe un pueblo o comarca" class="cdm-pie__input" aria-label="Buscar pueblo o comarca" />
             </div>
-
-            <div class="brutal-footer__panel-list" id="pueblos-list">
-              <div class="brutal-footer__panel-group">
-                <span class="text-meta">★ Destacadas</span>
+            <div class="cdm-pie__panel-lista" id="pueblos-list">
+              <div class="cdm-pie__grupo">
+                <span class="cdm-pie__grupo-titulo">Destacadas</span>
                 {pueblosDestacados.map((pueblo) => (
-                  <a
-                    href={`/diseno-web/${pueblo.slug}/`}
-                    class="pueblo-item brutal-footer__panel-item"
-                    data-nombre={pueblo.nombre.toLowerCase()}
-                    data-comarca={pueblo.comarca.toLowerCase()}
-                  >
-                    <span class="brutal-footer__panel-item-name">{pueblo.nombre}</span>
-                    <span class="brutal-footer__panel-item-meta">{pueblo.comarca} →</span>
+                  <a href={`/diseno-web/${pueblo.slug}/`} class="pueblo-item cdm-pie__item" data-nombre={pueblo.nombre.toLowerCase()} data-comarca={pueblo.comarca.toLowerCase()}>
+                    <span>{pueblo.nombre}</span>
+                    <span class="cdm-pie__item-meta">{pueblo.comarca}</span>
                   </a>
                 ))}
               </div>
-
               {comarcas.map((comarca) => {
-                const items = getPueblosByComarca(comarca).filter(p => !p.destacado && esPuebloIndexable(p.slug));
+                const items = getPueblosByComarca(comarca).filter((p) => !p.destacado && esPuebloIndexable(p.slug));
                 if (!items.length) return null;
                 return (
-                  <div class="brutal-footer__panel-group comarca-section" data-comarca={comarca.toLowerCase()}>
-                    <span class="text-meta">{comarca}</span>
+                  <div class="cdm-pie__grupo comarca-section" data-comarca={comarca.toLowerCase()}>
+                    <span class="cdm-pie__grupo-titulo">{comarca}</span>
                     {items.map((pueblo) => (
-                      <a
-                        href={`/diseno-web/${pueblo.slug}/`}
-                        class="pueblo-item brutal-footer__panel-item"
-                        data-nombre={pueblo.nombre.toLowerCase()}
-                        data-comarca={pueblo.comarca.toLowerCase()}
-                      >
-                        <span class="brutal-footer__panel-item-name">{pueblo.nombre}</span>
-                        <span class="brutal-footer__panel-item-meta">→</span>
+                      <a href={`/diseno-web/${pueblo.slug}/`} class="pueblo-item cdm-pie__item" data-nombre={pueblo.nombre.toLowerCase()} data-comarca={pueblo.comarca.toLowerCase()}>
+                        <span>{pueblo.nombre}</span>
                       </a>
                     ))}
                   </div>
                 );
               })}
-
-              <div id="no-results" class="brutal-footer__panel-empty">
-                <p class="text-mono">∅ Sin resultados</p>
+              <div id="no-results" class="cdm-pie__vacio">
+                <p>Sin resultados</p>
                 <small>Prueba con otro nombre</small>
               </div>
             </div>
-
-            <div class="brutal-footer__panel-foot text-meta">
-              <span class="text-stroke-ink">{pueblos.length}</span>&nbsp;pueblos · provincia de Almería
-            </div>
+            <div class="cdm-pie__panel-pie">{pueblos.length} pueblos de la provincia de Almería</div>
           </div>
         </div>
       </div>
 
-      <div class="brutal-footer__pueblos-chips">
-        {pueblosDestacados.slice(0, 10).map((pueblo) => (
-          <a href={`/diseno-web/${pueblo.slug}/`} class="tag-brutal hover:bg-brutal-ink hover:text-brutal-lime transition-colors">
-            ★ {pueblo.nombre}
-          </a>
-        ))}
-        <button type="button" id="ver-todos-btn" class="tag-brutal" style="background:var(--brutal-ink);color:var(--brutal-lime);cursor:pointer;">
-          Ver todos →
-        </button>
+      <div class="cdm-pie__chips">
+        {pueblosDestacados.slice(0, 10).map((pueblo) => <a href={`/diseno-web/${pueblo.slug}/`}>{pueblo.nombre}</a>)}
+        <button type="button" id="ver-todos-btn">Ver todos</button>
       </div>
     </div>
   </section>
 
-  <div class="section-divider"></div>
-
-  {/* Bottom bar */}
-  <section class="brutal-footer__bottom">
-    <div class="container-brutal brutal-footer__bottom-inner">
-      <p class="text-meta">© {currentYear} Platanito Rico · Todos los derechos reservados</p>
-      <ul class="brutal-footer__legal">
-        <li><a class="text-meta" href="/privacidad/">Privacidad</a></li>
-        <li><a class="text-meta" href="/aviso-legal/">Aviso legal</a></li>
-        <li><a class="text-meta" href="/cookies/">Cookies</a></li>
-        <li><a class="text-meta" href="/terminos-condiciones/">Términos</a></li>
+  <section class="cdm-pie__legal">
+    <div class="cdm-pie__dentro cdm-pie__legal-dentro">
+      <p>© {currentYear} Platanito Rico. Todos los derechos reservados.</p>
+      <ul>
+        <li><a href="/privacidad/">Privacidad</a></li>
+        <li><a href="/aviso-legal/">Aviso legal</a></li>
+        <li><a href="/cookies/">Cookies</a></li>
+        <li><a href="/terminos-condiciones/">Términos</a></li>
       </ul>
-      <p class="text-meta">Hecho con tinta y código en <span style="color:var(--brutal-accent-ink)">★</span> Almería</p>
+      <p>Hecho en Almería</p>
     </div>
   </section>
 
   {/* Cierre animado (Vengeance UI): estrellas de marca en ASCII que se iluminan con el cursor */}
-  <div class="brutal-footer__ascii dark" aria-hidden="true">
+  <div class="cdm-pie__ascii" aria-hidden="true">
     <AnimatedFooter
       client:visible
       headingLines={['Platanito', 'Rico']}
       leftImage="/imagenes/ascii/estrella.png"
       rightImage="/imagenes/ascii/estrella.png"
-      background="#070707"
-      textColor="#F5F1EA"
+      background="#070B10"
+      textColor="#E6EDF2"
       charColor="#803500"
       hoverColor="#FF5A00"
-      hoverCharColor="#0E0D0B"
+      hoverCharColor="#070B10"
       columns={56}
       cellSize={14}
       fontSize={12}
@@ -247,285 +171,97 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
 </footer>
 
 <style>
-  .brutal-footer {
-    background: var(--brutal-bg);
-    border-top: 3px solid var(--brutal-ink);
-    position: relative;
+  .cdm-pie { background: var(--color-cdm-suelo); color: var(--color-cdm-texto); border-top: 1px solid var(--color-cdm-regla); }
+  .cdm-pie__dentro { max-width: var(--container-max); margin-inline: auto; padding-inline: var(--container-gutter); }
+  .cdm-pie a:focus-visible,
+  .cdm-pie button:focus-visible,
+  .cdm-pie input:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }
+
+  .cdm-pie__cierre {
+    padding-block: clamp(4rem, 8vw, 6.5rem);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background-image:
+      linear-gradient(var(--color-cdm-regla) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-cdm-regla) 1px, transparent 1px);
+    background-size: 64px 64px;
   }
-  /* Cierre — lámina final sobre tinta con retícula de plano */
-  .brutal-footer__hero {
-    padding: clamp(4rem, 8vw, 7rem) 0;
-    background:
-      linear-gradient(rgb(245 241 234 / .06) 1px, transparent 1px) 0 0 / 100% 64px,
-      linear-gradient(90deg, rgb(245 241 234 / .06) 1px, transparent 1px) 0 0 / 64px 100%,
-      var(--color-plano-tinta);
-    color: var(--color-plano-papel);
-    border-bottom: 3px solid var(--color-plano-tinta);
-  }
-  .brutal-footer__hero-grid { display: grid; gap: 1.5rem; }
-  .brutal-footer__hero-meta {
+  .cdm-pie__coord { margin: 0 0 1rem; font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-cdm-ok); white-space: pre; }
+  .cdm-pie__claim {
     margin: 0;
-    display: flex; flex-wrap: wrap; gap: .25rem 1.5rem;
-    font-family: var(--font-mono); font-size: .76rem;
-    color: var(--color-plano-lima);
-  }
-  .brutal-footer__claim {
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(2.6rem, 7.5vw, 6rem);
-    line-height: .95;
-    letter-spacing: -.045em;
     max-width: 16ch;
-  }
-  .brutal-footer__claim-sub { margin: 0; max-width: 52ch; font-size: 1.1rem; line-height: 1.55; color: #cfc8bc; }
-  .brutal-footer__hero-cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .75rem; }
-  .brutal-footer__btn {
-    display: inline-flex; align-items: center; min-height: 3.1rem;
-    padding: .85rem 1.5rem;
-    font-family: var(--font-mono); font-weight: 800;
-    text-decoration: none;
-    border: 3px solid var(--color-plano-lima);
-    transition: transform .15s, box-shadow .15s;
-  }
-  .brutal-footer__btn--lima { background: var(--color-plano-lima); color: var(--color-plano-tinta); box-shadow: 6px 6px 0 var(--color-plano-naranja); }
-  .brutal-footer__btn--line { background: transparent; color: var(--color-plano-lima); }
-  .brutal-footer__btn:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--color-plano-naranja); }
-  .brutal-footer__btn:focus-visible { outline: 3px solid var(--color-plano-lima); outline-offset: 4px; }
-
-  /* Body */
-  .brutal-footer__body { padding: 4rem 0; }
-  .brutal-footer__cols {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem 2.5rem;
-  }
-  @media (min-width: 640px) { .brutal-footer__cols { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1024px) { .brutal-footer__cols { grid-template-columns: 1.4fr 1fr 1fr 1.2fr; } }
-  .brutal-footer__heading {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: -.02em;
-    color: var(--brutal-ink);
-    margin-bottom: 1.25rem;
-    display: flex;
-    align-items: baseline;
-    gap: .5rem;
+    font-stretch: 82%;
+    font-weight: 760;
+    font-size: clamp(2.6rem, 7vw, 5.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
   }
-  .brutal-footer__heading .text-meta {
-    color: var(--brutal-accent-ink);
-  }
-  .brutal-footer__logo {
-    display: inline-flex;
-    align-items: center;
-    gap: .75rem;
-    text-decoration: none;
-    color: var(--brutal-ink);
-    margin-bottom: 1.5rem;
-  }
-  .brutal-footer__logo-mark {
-    width: 44px;
-    height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--brutal-ink);
-    color: var(--brutal-lime);
-    font-family: var(--font-mono);
-    font-weight: 700;
-    border: 2px solid var(--brutal-ink);
-    box-shadow: 3px 3px 0 0 var(--brutal-accent);
-  }
-  .brutal-footer__logo-text { display: flex; flex-direction: column; line-height: 1.1; }
-  .brutal-footer__logo-text span { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; }
-  .brutal-footer__logo-text small { font-family: var(--font-mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .15em; color: var(--brutal-text-muted); margin-top: .2rem; }
-  .brutal-footer__pitch {
-    font-size: .92rem;
-    color: var(--brutal-text-secondary);
-    line-height: 1.55;
-    margin-bottom: 1.5rem;
-    max-width: 32ch;
-  }
+  .cdm-pie__sub { max-width: 52ch; margin: 1.25rem 0 0; font-size: 1.1rem; line-height: 1.55; color: #b9c5cf; }
+  .cdm-pie__acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+  .cdm-pie__btn { display: inline-flex; align-items: center; min-height: 3rem; padding: 0.75rem 1.25rem; border: 1px solid; font-weight: 600; text-decoration: none; }
+  .cdm-pie__btn.is-senal { background: var(--color-cdm-senal); border-color: var(--color-cdm-senal); color: #120600; }
+  .cdm-pie__btn.is-senal:hover { background: #ff7a33; border-color: #ff7a33; }
+  .cdm-pie__btn.is-linea { border-color: var(--color-cdm-regla-2); color: var(--color-cdm-texto); }
+  .cdm-pie__btn.is-linea:hover { border-color: var(--color-cdm-texto); }
 
-  .brutal-footer__list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: .65rem;
-  }
-  .brutal-footer__link {
-    color: var(--brutal-ink);
-    font-size: .95rem;
-    text-decoration: none;
-    position: relative;
-    display: inline-block;
-    padding-left: 1rem;
-    transition: color .15s, padding .15s;
-  }
-  .brutal-footer__link::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: .5em;
-    width: .4rem;
-    height: .4rem;
-    background: var(--brutal-accent-ink);
-    opacity: .5;
-    transition: opacity .15s, transform .15s;
-  }
-  .brutal-footer__link:hover { color: var(--brutal-accent-ink); padding-left: 1.25rem; }
-  .brutal-footer__link:hover::before { opacity: 1; transform: translateX(2px); }
+  .cdm-pie__cuerpo { padding-block: 3.5rem; }
+  .cdm-pie__cols { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 640px) { .cdm-pie__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .cdm-pie__cols { grid-template-columns: 1.4fr 1fr 1fr 1.2fr; } }
+  .cdm-pie__logo { display: inline-flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem; color: inherit; text-decoration: none; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; }
+  .cdm-pie__sello { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--color-cdm-senal); color: var(--color-cdm-senal); font-family: var(--font-mono); font-size: 0.8rem; }
+  .cdm-pie__pitch { max-width: 34ch; margin: 0 0 1.25rem; font-size: 0.92rem; line-height: 1.55; color: #b9c5cf; }
+  .cdm-pie__estado { display: inline-flex; align-items: center; gap: 0.5rem; margin: 0; font-size: 0.85rem; }
+  .cdm-pie__led { width: 7px; height: 7px; border-radius: 50%; background: var(--color-cdm-ok); }
+  .cdm-pie__titulo { margin: 0 0 1rem; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
+  .cdm-pie__lista { display: grid; gap: 0.6rem; margin: 0; padding: 0; list-style: none; font-size: 0.95rem; }
+  .cdm-pie__lista a { color: #c9d3db; text-decoration: none; }
+  .cdm-pie__lista a:hover { color: var(--color-cdm-texto); text-decoration: underline; }
+  .cdm-pie__dato { margin: 0; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
+  .cdm-pie__etiquetas { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+  .cdm-pie__etiquetas li { padding: 0.25rem 0.55rem; border: 1px solid var(--color-cdm-regla-2); font-size: 0.8rem; color: #c9d3db; }
 
-  .brutal-footer__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .4rem;
-  }
+  .cdm-pie__pueblos { padding-block: 3.5rem; border-top: 1px solid var(--color-cdm-regla); background: var(--color-cdm-panel); }
+  .cdm-pie__pueblos-cab { display: grid; gap: 2rem; margin-bottom: 1.5rem; }
+  @media (min-width: 1024px) { .cdm-pie__pueblos-cab { grid-template-columns: 1fr auto; align-items: end; } }
+  .cdm-pie__pueblos-titulo { margin: 0 0 0.5rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: clamp(2rem, 4.5vw, 3.2rem); line-height: 0.95; letter-spacing: -0.02em; }
+  .cdm-pie__atlas { display: inline-block; margin-top: 0.75rem; color: var(--color-cdm-texto); font-weight: 600; text-underline-offset: 3px; }
+  .cdm-pie__selector { position: relative; width: 100%; max-width: 380px; }
+  .cdm-pie__selector-btn { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 0.75rem; width: 100%; padding: 0.9rem 1.1rem; background: var(--color-cdm-suelo); color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); font: inherit; text-align: left; cursor: pointer; }
+  .cdm-pie__selector-btn:hover { border-color: var(--color-cdm-texto); }
+  #dropdown-arrow { transition: transform 0.25s; }
+  .cdm-pie__panel { position: absolute; bottom: calc(100% + 0.5rem); left: 0; right: 0; z-index: 30; max-height: 440px; overflow: hidden; background: var(--color-cdm-suelo); border: 1px solid var(--color-cdm-regla-2); opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s, visibility 0.2s; }
+  .cdm-pie__panel.is-open { opacity: 1; visibility: visible; transform: none; }
+  .cdm-pie__panel-buscar { padding: 0.75rem; border-bottom: 1px solid var(--color-cdm-regla); }
+  .cdm-pie__input { width: 100%; padding: 0.7rem 0.8rem; background: var(--color-cdm-panel); color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); font: inherit; }
+  .cdm-pie__input::placeholder { color: var(--color-cdm-tenue); }
+  .cdm-pie__panel-lista { max-height: 320px; overflow-y: auto; padding: 0.75rem; }
+  .cdm-pie__grupo { margin-bottom: 1rem; }
+  .cdm-pie__grupo-titulo { display: block; margin-bottom: 0.4rem; padding-bottom: 0.25rem; border-bottom: 1px solid var(--color-cdm-regla); font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-cdm-tenue); }
+  .cdm-pie__item { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem; color: var(--color-cdm-texto); text-decoration: none; font-size: 0.92rem; }
+  .cdm-pie__item:hover { background: var(--color-cdm-panel-2); }
+  .cdm-pie__item-meta { font-size: 0.75rem; color: var(--color-cdm-tenue); }
+  .cdm-pie__vacio { display: none; padding: 1.5rem; text-align: center; color: var(--color-cdm-tenue); }
+  .cdm-pie__vacio.is-shown { display: block; }
+  .cdm-pie__vacio p { margin: 0 0 0.25rem; color: var(--color-cdm-texto); }
+  .cdm-pie__panel-pie { padding: 0.6rem 0.75rem; border-top: 1px solid var(--color-cdm-regla); font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-cdm-tenue); text-align: center; }
+  .cdm-pie__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .cdm-pie__chips a,
+  .cdm-pie__chips button { padding: 0.35rem 0.7rem; background: transparent; color: #c9d3db; border: 1px solid var(--color-cdm-regla-2); font: inherit; font-size: 0.85rem; text-decoration: none; cursor: pointer; }
+  .cdm-pie__chips a:hover,
+  .cdm-pie__chips button:hover { color: var(--color-cdm-texto); border-color: var(--color-cdm-texto); }
 
-  /* Pueblos */
-  .brutal-footer__pueblos { padding: 4rem 0; background: var(--brutal-bg-alt); }
-  .brutal-footer__pueblos-head {
-    display: grid;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
-  @media (min-width: 1024px) {
-    .brutal-footer__pueblos-head { grid-template-columns: 1fr auto; align-items: end; }
-  }
-  .brutal-footer__pueblos-title {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    margin-top: .5rem;
-    line-height: .95;
-  }
-  .brutal-footer__pueblos-title em { color: var(--brutal-accent-ink); }
-  .brutal-footer__pueblos-sub {
-    color: var(--brutal-text-muted);
-    font-size: .8rem;
-    margin-top: .75rem;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-  }
-
-  .brutal-footer__pueblos-selector { position: relative; width: 100%; max-width: 380px; }
-  .brutal-footer__selector-btn {
-    width: 100%;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: .75rem;
-    padding: 1rem 1.25rem;
-    background: var(--brutal-card);
-    border: 2px solid var(--brutal-ink);
-    box-shadow: 4px 4px 0 0 var(--brutal-accent);
-    font-family: var(--font-mono);
-    font-size: .8rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
-    color: var(--brutal-ink);
-    cursor: pointer;
-    transition: transform .15s, box-shadow .15s;
-    text-align: left;
-  }
-  .brutal-footer__selector-btn:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--brutal-accent); }
-  .brutal-footer__selector-icon { font-size: 1.1rem; color: var(--brutal-accent-ink); }
-  .brutal-footer__selector-arrow { font-family: var(--font-mono); transition: transform .25s; }
-
-  .brutal-footer__panel {
-    position: absolute;
-    bottom: calc(100% + .5rem);
-    left: 0;
-    right: 0;
-    max-height: 440px;
-    overflow: hidden;
-    background: var(--brutal-card);
-    border: 2px solid var(--brutal-ink);
-    box-shadow: 8px 8px 0 0 var(--brutal-ink);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(8px);
-    transition: opacity .2s, transform .2s, visibility .2s;
-    z-index: 30;
-  }
-  .brutal-footer__panel.is-open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  .brutal-footer__panel-search { padding: 1rem; border-bottom: 2px solid var(--brutal-ink); }
-  .brutal-footer__panel-list { max-height: 320px; overflow-y: auto; padding: 1rem; }
-  .brutal-footer__panel-group { margin-bottom: 1.25rem; }
-  .brutal-footer__panel-group .text-meta { display: block; margin-bottom: .5rem; padding-bottom: .25rem; border-bottom: 1px solid var(--brutal-border-soft); }
-  .brutal-footer__panel-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: .55rem .5rem;
-    text-decoration: none;
-    color: var(--brutal-ink);
-    transition: background .15s, padding .15s;
-  }
-  .brutal-footer__panel-item:hover { background: var(--brutal-lime-soft); padding-inline: .75rem; }
-  .brutal-footer__panel-item-name { font-family: var(--font-display); font-weight: 600; font-size: .92rem; }
-  .brutal-footer__panel-item-meta { font-family: var(--font-mono); font-size: .65rem; color: var(--brutal-text-muted); text-transform: uppercase; letter-spacing: .15em; }
-  .brutal-footer__panel-empty { display: none; text-align: center; padding: 2rem; }
-  .brutal-footer__panel-empty.is-shown { display: block; }
-  .brutal-footer__panel-foot {
-    padding: .75rem 1rem;
-    border-top: 2px solid var(--brutal-ink);
-    text-align: center;
-    background: var(--brutal-bg-alt);
-  }
-
-  .brutal-footer__pueblos-chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.5rem; }
-
-  /* Bottom bar */
-  .brutal-footer__bottom { padding: 1.25rem 0; background: var(--brutal-ink); color: var(--brutal-bg); }
-  .brutal-footer__bottom-inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .brutal-footer__bottom .text-meta { color: var(--brutal-bg-alt); }
-  .brutal-footer__bottom a.text-meta { color: var(--brutal-bg); text-decoration: none; transition: color .15s; }
-  .brutal-footer__bottom a.text-meta:hover { color: var(--brutal-lime); }
-  .brutal-footer__legal { display: flex; gap: 1.25rem; list-style: none; padding: 0; margin: 0; flex-wrap: wrap; }
-
-  /* Wordmark */
-  .brutal-footer__wordmark {
-    overflow: hidden;
-    background: var(--brutal-ink);
-    border-top: 2px solid var(--brutal-accent);
-    padding: clamp(2rem, 5vw, 4rem) 0;
-  }
-  .brutal-footer__wordmark-track {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    width: max-content;
-    animation: marquee 35s linear infinite;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(4rem, 10vw, 8rem);
-    color: transparent;
-    -webkit-text-stroke: 2px var(--brutal-bg);
-    line-height: 1;
-    letter-spacing: -.04em;
-    user-select: none;
-  }
-  .brutal-footer__wordmark-track span:nth-child(even) {
-    color: var(--brutal-accent-ink);
-    -webkit-text-stroke: 0;
-  }
+  .cdm-pie__legal { padding-block: 1.1rem; border-top: 1px solid var(--color-cdm-regla); font-size: 0.82rem; color: var(--color-cdm-tenue); }
+  .cdm-pie__legal-dentro { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; }
+  .cdm-pie__legal p { margin: 0; }
+  .cdm-pie__legal ul { display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .cdm-pie__legal a { color: #c9d3db; }
+  .cdm-pie__legal a:hover { color: var(--color-cdm-texto); }
+  .cdm-pie__ascii { height: clamp(260px, 34vw, 480px); background: var(--color-cdm-suelo); }
   @media (prefers-reduced-motion: reduce) {
-    .brutal-footer__wordmark-track { animation: none; }
+    .cdm-pie__panel,
+    #dropdown-arrow { transition: none; }
   }
-  .brutal-footer__ascii { height: clamp(260px, 34vw, 480px); background: #070707; }
 </style>
 
 <script>

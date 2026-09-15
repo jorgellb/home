@@ -1,0 +1,34 @@
+---
+interface Props {
+  href: string;
+  variante?: 'senal' | 'linea';
+  class?: string;
+}
+
+const { href, variante = 'senal', class: clase } = Astro.props;
+---
+
+<a href={href} class:list={['cdm-boton', `cdm-boton--${variante}`, clase]}><slot /></a>
+
+<style>
+  .cdm-boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.9rem;
+    padding: 0.7rem 1.15rem;
+    border: 1px solid;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.1;
+    text-decoration: none;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+  /* #120600 sobre #FF5A00: 6,5:1 */
+  .cdm-boton--senal { background: var(--color-cdm-senal); border-color: var(--color-cdm-senal); color: #120600; }
+  .cdm-boton--senal:hover { background: #ff7a33; border-color: #ff7a33; }
+  .cdm-boton--linea { background: transparent; border-color: var(--color-cdm-regla-2); color: var(--color-cdm-texto); }
+  .cdm-boton--linea:hover { border-color: var(--color-cdm-texto); }
+  .cdm-boton:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }
+</style>

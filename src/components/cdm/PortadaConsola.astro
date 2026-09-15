@@ -1,0 +1,141 @@
+---
+/* Portada del centro de mando. El H1, el H2 y los botones se pintan desde el
+   primer momento (son el LCP); solo los paneles de la derecha se encienden en
+   el arranque, que ocurre una vez por visita. */
+import Consola from './Consola.astro';
+import Boton from './Boton.astro';
+import RadarCobertura from './RadarCobertura.astro';
+import WebsMedidas from './WebsMedidas.astro';
+import RegistroDemo from './RegistroDemo.astro';
+import Telemetria from './Telemetria.astro';
+import type { Cifra, Enlace, LineaRegistro } from './tipos';
+
+interface Props {
+  prompt: string;
+  h1Lineas: string[];
+  frases: string[];
+  h2: string;
+  primario: Enlace;
+  secundario: Enlace;
+  confianza: { valor: string; texto: string }[];
+  registro: LineaRegistro[];
+  cifras: Cifra[];
+}
+
+const { prompt, h1Lineas, frases, h2, primario, secundario, confianza, registro, cifras } = Astro.props;
+if (frases.length !== 4) throw new Error('PortadaConsola: `frases` necesita 4 elementos; la animación está calculada para 4.');
+const ultima = h1Lineas.length - 1;
+---
+
+<Consola escaner class="cdm-portada" aria-labelledby="cdm-portada-h1">
+  <div class="cdm-portada__rejilla">
+    <div>
+      <p class="cdm-portada__prompt cdm-enciende" style="--cdm-retardo: 0.9s"><span aria-hidden="true">&gt; </span>{prompt}</p>
+      <h1 id="cdm-portada-h1" class="cdm-portada__h1">
+        {h1Lineas.map((linea, i) => (
+          <span class="cdm-portada__linea">{i > 0 && ' '}{linea}{i === ultima && <span class="cdm-portada__cursor" aria-hidden="true"></span>}</span>
+        ))}
+      </h1>
+      <p class="cdm-portada__frases" aria-hidden="true">
+        <span class="cdm-portada__carril">{[...frases, frases[0]].map((f) => <span>{f}</span>)}</span>
+      </p>
+      <h2 class="cdm-portada__h2">{h2}</h2>
+      <div class="cdm-portada__acciones">
+        <Boton href={primario.href}>{primario.label}</Boton>
+        <Boton href={secundario.href} variante="linea">{secundario.label}</Boton>
+      </div>
+      <ul class="cdm-portada__confianza">
+        {confianza.map((c) => <li><strong>{c.valor}</strong> {c.texto}</li>)}
+      </ul>
+    </div>
+
+    <div class="cdm-portada__paneles">
+      <RadarCobertura class="cdm-enciende cdm-portada__radar" />
+      <div class="cdm-portada__dos">
+        <WebsMedidas class="cdm-enciende cdm-portada__medidas" />
+        <RegistroDemo lineas={registro} class="cdm-enciende cdm-portada__registro" />
+      </div>
+    </div>
+  </div>
+
+  <Telemetria cifras={cifras} />
+</Consola>
+
+<style>
+  .cdm-portada__rejilla {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: clamp(2rem, 5vw, 3.5rem) var(--container-gutter) 2.5rem;
+  }
+  @media (min-width: 1100px) {
+    .cdm-portada__rejilla { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+  }
+  .cdm-portada__prompt { margin: 0 0 1.25rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-cdm-ok); }
+  .cdm-portada__prompt span { color: var(--color-cdm-tenue); }
+  .cdm-portada__h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 760;
+    font-size: clamp(3.1rem, 7.2vw, 5.9rem);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    color: var(--color-cdm-texto);
+  }
+  .cdm-portada__linea { display: block; }
+  .cdm-portada__cursor {
+    display: inline-block;
+    width: 0.42em;
+    height: 0.74em;
+    margin-left: 0.1em;
+    vertical-align: -0.04em;
+    background: var(--color-cdm-senal);
+  }
+  .cdm-portada__frases {
+    height: 1.1em;
+    margin: 0.9rem 0 1.25rem;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 500;
+    font-size: clamp(1.9rem, 3.6vw, 3rem);
+    line-height: 1.1;
+    color: var(--color-cdm-tenue);
+  }
+  .cdm-portada__carril { display: flex; flex-direction: column; }
+  .cdm-portada__carril span { height: 1.1em; line-height: 1.1em; }
+  .cdm-portada__h2 {
+    max-width: 46ch;
+    margin: 0 0 1.75rem;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.55;
+    letter-spacing: 0;
+    color: #b9c5cf;
+  }
+  .cdm-portada__acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .cdm-portada__confianza { display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; margin: 1.75rem 0 0; padding: 0; list-style: none; font-size: 0.88rem; color: var(--color-cdm-tenue); }
+  .cdm-portada__confianza strong { font-weight: 600; color: var(--color-cdm-texto); }
+  .cdm-portada__paneles { display: grid; gap: 0.9rem; }
+  .cdm-portada__dos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+  @media (min-width: 640px) { .cdm-portada__dos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .cdm-portada__radar { --cdm-retardo: 1.4s; }
+  .cdm-portada__medidas { --cdm-retardo: 1.6s; }
+  .cdm-portada__registro { --cdm-retardo: 1.75s; }
+  @media (prefers-reduced-motion: no-preference) {
+    .cdm-portada__cursor { animation: cdm-parpadeo 1.1s steps(1) infinite; }
+    .cdm-portada__carril { animation: cdm-frases 12s cubic-bezier(0.7, 0, 0.3, 1) infinite; }
+  }
+  @keyframes cdm-parpadeo { 50% { opacity: 0; } }
+  @keyframes cdm-frases {
+    0%, 20% { transform: translateY(0); }
+    25%, 45% { transform: translateY(-1.1em); }
+    50%, 70% { transform: translateY(-2.2em); }
+    75%, 95% { transform: translateY(-3.3em); }
+    100% { transform: translateY(-4.4em); }
+  }
+</style>

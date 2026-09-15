@@ -1,0 +1,86 @@
+---
+/* Radar de cobertura con visita el mismo día. Dato real: son los pueblos
+   del servicio IT, en sus coordenadas, sobre la costa del Levante. */
+import Panel from './Panel.astro';
+import { CAJA_RADAR, puntosRadar, trazadoCosta, type PuntoRadar } from '../../data/cobertura';
+
+interface Props {
+  destacado?: string;
+  class?: string;
+}
+
+const { destacado, class: clase } = Astro.props;
+const { ancho, alto } = CAJA_RADAR;
+const puntos = puntosRadar();
+const { linea, tierra } = trazadoCosta();
+const sede = puntos.find((p) => p.sede) ?? puntos[0];
+const anillos = [60, 120, 180];
+const nombres = puntos.map((p) => p.nombre).join(', ');
+
+function posicion(p: PuntoRadar): { x: number; y: number; anclaje: 'start' | 'middle' | 'end' } {
+  switch (p.etiqueta) {
+    case 'izquierda': return { x: p.x - 7, y: p.y + 3.5, anclaje: 'end' };
+    case 'arriba': return { x: p.x, y: p.y - 8, anclaje: 'middle' };
+    case 'abajo': return { x: p.x, y: p.y + 15, anclaje: 'middle' };
+    default: return { x: p.x + 7, y: p.y + 3.5, anclaje: 'start' };
+  }
+}
+---
+
+<Panel titulo="Cobertura in situ el mismo día" tipo="real" nota="Sede en Vera, visita el mismo día en el Levante y el Almanzora" class:list={['cdm-radar', clase]}>
+  <svg viewBox={`0 0 ${ancho} ${alto}`} role="img" aria-label={`Mapa de pueblos con visita el mismo día: ${nombres}.`} class="cdm-radar__mapa">
+    <defs>
+      <pattern id="cdm-radar-mar" width="10" height="10" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.8" fill="#26394a"></circle>
+      </pattern>
+      <linearGradient id="cdm-radar-haz" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#ff5a00" stop-opacity="0"></stop>
+        <stop offset="1" stop-color="#ff5a00" stop-opacity="0.38"></stop>
+      </linearGradient>
+    </defs>
+    <rect width={ancho} height={alto} fill="url(#cdm-radar-mar)"></rect>
+    <path d={tierra} class="cdm-radar__tierra"></path>
+    <path d={linea} class="cdm-radar__costa"></path>
+    {anillos.map((r) => <circle cx={sede.x} cy={sede.y} r={r} class="cdm-radar__anillo"></circle>)}
+    <line x1={sede.x} y1="0" x2={sede.x} y2={alto} class="cdm-radar__eje"></line>
+    <line x1="0" y1={sede.y} x2={ancho} y2={sede.y} class="cdm-radar__eje"></line>
+    <g class="cdm-radar__barrido" style={`transform-origin:${sede.x}px ${sede.y}px`}>
+      <path d={`M${sede.x} ${sede.y} L${sede.x} ${sede.y - 190} A190 190 0 0 1 ${sede.x + 164.5} ${sede.y - 95} Z`} fill="url(#cdm-radar-haz)"></path>
+    </g>
+    {puntos.map((p) => {
+      const e = posicion(p);
+      return (
+        <g class:list={['cdm-radar__pueblo', { 'is-sede': p.sede, 'is-destacado': p.slug === destacado }]}>
+          {p.sede && <circle cx={p.x} cy={p.y} r="3" class="cdm-radar__pulso"></circle>}
+          <circle cx={p.x} cy={p.y} r={p.sede ? 4.2 : 2.6} class="cdm-radar__punto"></circle>
+          <text x={e.x} y={e.y} text-anchor={e.anclaje}>{p.sede ? `${p.nombre}, sede` : p.nombre}</text>
+        </g>
+      );
+    })}
+  </svg>
+</Panel>
+
+<style>
+  .cdm-radar__mapa { display: block; width: 100%; height: auto; }
+  .cdm-radar__tierra { fill: var(--color-cdm-panel-2); }
+  .cdm-radar__costa { fill: none; stroke: var(--color-cdm-texto); stroke-width: 1.2; opacity: 0.75; }
+  .cdm-radar__anillo { fill: none; stroke: var(--color-cdm-regla-2); }
+  .cdm-radar__eje { stroke: var(--color-cdm-regla); }
+  .cdm-radar__barrido { transform-box: view-box; }
+  .cdm-radar__punto { fill: var(--color-cdm-texto); }
+  .is-sede .cdm-radar__punto,
+  .is-destacado .cdm-radar__punto { fill: var(--color-cdm-senal); }
+  .cdm-radar__pulso { fill: none; stroke: var(--color-cdm-senal); transform-box: fill-box; transform-origin: center; }
+  .cdm-radar__pueblo text { font-family: var(--font-mono); font-size: 9.5px; fill: var(--color-cdm-tenue); }
+  .is-sede text,
+  .is-destacado text { fill: var(--color-cdm-texto); }
+  @media (prefers-reduced-motion: no-preference) {
+    .cdm-radar__barrido { animation: cdm-gira 6s linear infinite; }
+    .cdm-radar__pulso { animation: cdm-pulso 2.4s ease-out infinite; }
+  }
+  @keyframes cdm-gira { to { transform: rotate(360deg); } }
+  @keyframes cdm-pulso {
+    0% { transform: scale(1); opacity: 0.9; }
+    100% { transform: scale(5); opacity: 0; }
+  }
+</style>

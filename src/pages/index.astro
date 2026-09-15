@@ -4,14 +4,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Contact from '../components/sections/Contact.astro';
-import HeroVengeance from '../components/vg/HeroVengeance.astro';
-import PreciosVengeance from '../components/vg/PreciosVengeance.astro';
+import PortadaConsola from '../components/cdm/PortadaConsola.astro';
+import PreciosConsola from '../components/cdm/PreciosConsola.astro';
 import { PerspectiveCarousel } from '@/components/ui/perspective-carousel';
 import { TestimonialsCard } from '@/components/ui/testimonials-card';
 import { FaqAccordion } from '@/components/ui/faq-accordion';
-import type { Tarifa } from '../components/brutal/types';
+import type { LineaRegistro, TarifaCdm } from '../components/cdm/tipos';
+import { CIFRAS, aniosEnAlmeria } from '../data/negocio';
 import { plan360 } from '../data/servicios-it';
 import { comarcas, getPueblosByComarca, comarcaSlug } from '../data/pueblos-almeria';
+import { proyectos as casos } from '../data/proyectos';
+import medidasJson from '../data/medidas.json';
+import { fechaCorta, medidasSchema } from '../data/medidas';
 
 type Post = CollectionEntry<'posts'>;
 
@@ -62,21 +66,6 @@ const soluciones = [
   { href: '/soluciones/ecommerce/',   code: 'SHOP', name: 'Tienda online',  sub: 'WooCommerce',          desc: '0% comisión por venta. Stripe + Bizum + Redsys. Tienda 100% tuya.',          price: 'Desde 700€', color: 'woo',    icon: 'cart' },
 ];
 
-// Casos reales con imágenes
-const casos = [
-  // El campo `result` recoge datos publicados por el propio cliente en su web,
-  // no métricas nuestras: así no afirmamos nada que no puedan respaldar ellos.
-  { id: 'juan-alcaraz',       cliente: 'Juan Alcaraz',               sector: 'Web · Audiovisual', result: '+25 selecciones · 6 premios', tags: ['Astro', 'Vimeo', 'Portfolio'],      year: '2026', url: 'https://juanalcaraz.es/',            image: '/imagenes/clientes/juan.jpg' },
-  { id: 'taller-el-pinon',    cliente: 'Taller El Piñón',            sector: 'Web · Automoción',  result: '+20 años de servicio',        tags: ['Astro', 'SEO Local', 'Automoción'], year: '2026', url: 'https://tallerelpinon.com/',         image: '/imagenes/clientes/taller.jpg' },
-  { id: 'excavaciones-tripiana', cliente: 'Excavaciones Tripiana',   sector: 'Web · Mov. de tierras', result: '+20 años · maquinaria propia', tags: ['Astro', 'SEO Local', 'Obra civil'], year: '2026', url: 'https://excavacionestripiana.com/', image: '/imagenes/clientes/tripiana.jpg' },
-  { id: 'clinica-koral',      cliente: 'Clínica Dental Koral',       sector: 'Web · SEO',         result: '+220% leads orgánicos', tags: ['Astro', 'SEO', 'Multiidioma'],     year: '2024', url: 'https://clinicadentalkoral.es/',     image: '/imagenes/clientes/clinica-dental-koral.jpg' },
-  { id: 'murcia-production',  cliente: 'Murcia Production Service',  sector: 'Web · Corporativa', result: '#1 keyword sector',     tags: ['Producción', 'Cine', 'AV'],         year: '2025', url: 'https://murciaproductionservice.com/', image: '/imagenes/clientes/murcia-production-services.jpg' },
-  { id: 'actualidad-almanzora',cliente: 'Actualidad Almanzora',      sector: 'Portal Noticias',   result: '+45k visitas/mes',      tags: ['Noticias', 'Radio', 'Podcast'],     year: '2023', url: 'https://www.actualidadalmanzora.es/',  image: '/imagenes/clientes/actualidad-almanzora.jpg' },
-  { id: 'oveja-bohemia',      cliente: 'Oveja Bohemia',              sector: 'E-commerce',        result: '+180% ventas',          tags: ['WooCommerce', 'E-com', 'Branding'], year: '2024', url: 'https://ovejabohemia.com/',            image: '/imagenes/clientes/oveja-bohemia.jpg' },
-  { id: 'ysy',                cliente: 'YSY Style Up',               sector: 'Web · Diseño',      result: 'Lighthouse 100',        tags: ['Elementor', 'SEO', 'Moda'],         year: '2024', url: 'https://ysy.es/',                      image: '/imagenes/clientes/ysy.es.jpg' },
-  { id: 'metales-sureste',    cliente: 'Metales del Sureste',        sector: 'Web · B2B',         result: '+12 leads/mes',         tags: ['Astro', 'SEO Local', 'B2B'],        year: '2023', url: 'https://metalesdelsureste.com/',       image: '/imagenes/clientes/metalesdelsureste.com.jpg' },
-];
-
 // Tech stack con SVGs custom — los renderizamos inline en la sección
 const tech = [
   { id: 'astro',     name: 'Astro',          v: 'Sitios estáticos ultrarrápidos · Lighthouse 99+',     bg: 'orange' },
@@ -89,6 +78,15 @@ const tech = [
   { id: 'ga4',       name: 'Analytics + GSC',v: 'GA4 · Search Console · Tag Manager configurados',    bg: 'yellow' },
 ];
 
+// Lighthouse real de cada proyecto (src/data/medidas.json). Sin medida → null.
+const medidas = medidasSchema.parse(medidasJson);
+const lighthousePorId = new Map(medidas.webs.map((w) => [w.id, w.lighthouse]));
+const casosMedidos = casos.map((c) => ({ ...c, lighthouse: lighthousePorId.get(c.id) ?? null }));
+const fechaMedidas = fechaCorta(medidas.medidoEl);
+const notaMedidas = fechaMedidas
+  ? `Lighthouse móvil medido el ${fechaMedidas} con PageSpeed Insights.`
+  : 'Estas webs todavía no tienen medida de Lighthouse.';
+
 // Testimonios destacados (subset de los del JSON-LD)
 const testimonios = [
   { text: 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y dedicación excepcionales.',          author: 'Ana Padilla',  role: 'Directora · Almería', metric: '★★★★★ · 2026' },
@@ -97,7 +95,7 @@ const testimonios = [
 ];
 
 // Tarifas de salida: los tres precios de entrada (panel de fichas)
-const tarifas: Tarifa[] = [
+const tarifas: TarifaCdm[] = [
   { servicio: 'Página web', desde: '500 €', nota: 'pago único', incluye: ['Diseño a medida, sin plantillas', 'SEO local y ficha de Google', 'Hosting y correo el primer año', 'Plazo de entrega cerrado por escrito'], href: '/contacto/?servicio=web#contacto', cta: 'Pedir presupuesto' },
   { servicio: 'Tienda online', desde: '700 €', nota: 'pago único', incluye: ['WooCommerce sin comisión por venta', 'Stripe, Bizum y Redsys', 'Catálogo, envíos y stock', 'Formación para gestionarla'], href: '/contacto/?servicio=tienda#contacto', cta: 'Pedir presupuesto' },
   { servicio: 'Plan 360', desde: '400 €/mes', nota: '+ IVA, web e informática', incluye: ['Web y hasta 10 puestos con servidor', 'Helpdesk ilimitado y visita el mismo día', 'Copias verificadas y ciberseguridad', 'Sin permanencia ni alta'], href: '/plan-360/', cta: 'Ver el Plan 360', destacada: true },
@@ -118,6 +116,26 @@ const faqHome = [
   { q: '¿Hacéis también mantenimiento informático?', a: 'Sí. Nuestro equipo de sistemas mantiene ordenadores, redes, servidores y copias de empresas del Levante y el Almanzora, con visita el mismo día. El Plan 360 junta web e informática por 400 € + IVA al mes.' },
   { q: '¿Hay permanencia?',                                a: 'No. Sin permanencia. Cancelas cuando quieras. Tu web es 100% tuya, exportable, migrable. Nuestros clientes se quedan por resultados.' },
   { q: '¿Qué pasa después del primer año (hosting)?',     a: 'Hosting + correo desde 90€/año si sigues con nosotros, o exportas y te vas. Sin extorsión, sin sorpresas. Tú decides cada año.' },
+];
+
+// Localidades destacadas de la sección de cobertura
+const localidadesDestacadas = [
+  { nombre: 'Almería', slug: 'almeria', sub: 'Capital, 200.000 habitantes' },
+  { nombre: 'Vera', slug: 'vera', sub: 'Levante, sede del estudio' },
+  { nombre: 'Mojácar', slug: 'mojacar', sub: 'Levante, turismo' },
+  { nombre: 'Huércal-Overa', slug: 'huercal-overa', sub: 'Almanzora, cabecera comarcal' },
+  { nombre: 'Albox', slug: 'albox', sub: 'Almanzora, centro comercial' },
+  { nombre: 'Garrucha', slug: 'garrucha', sub: 'Costa, puerto pesquero' },
+];
+
+// Registro simulado del Plan 360 (portada y precios). Siempre en un panel «demo».
+const registroPlan360: LineaRegistro[] = [
+  { hora: '09:41', texto: 'Copia del servidor completada, 128 GB', estado: 'ok' },
+  { hora: '09:44', texto: 'Parches instalados en 8 de 10 puestos' },
+  { hora: '09:46', texto: 'Disco de recepción al 91 %', estado: 'aviso' },
+  { hora: '09:47', texto: 'Ticket 0412, impresora de recepción', estado: 'ok' },
+  { hora: '09:49', texto: 'Certificado de la web renovado', estado: 'ok' },
+  { hora: '09:50', texto: 'Técnico en camino a Garrucha' },
 ];
 ---
 
@@ -205,106 +223,80 @@ const faqHome = [
 >
   <Header />
 
-  {/* Activa reveal/animaciones solo si hay JS (fallback: todo visible) */}
-  <script is:inline>document.documentElement.classList.add('ho-js');</script>
-
-  <main id="main-content" class="ho">
+  <main id="main-content" class="cdm-home">
 
     {/* ════════════════════════════════════════════════ */}
-    {/* HERO — VENGEANCE UI + SVG DE MARCA (oscuro)       */}
+    {/* PORTADA — CENTRO DE MANDO                         */}
     {/* ════════════════════════════════════════════════ */}
-    <HeroVengeance
-      eyebrow="Agencia web y sistemas IT en Vera, Almería"
-      h1Lines={['Diseño web', 'en Almería']}
-      words={['que vende.', 'que posiciona.', 'que impacta.', 'sin plantillas.']}
+    <PortadaConsola
+      prompt="Diseño web y sistemas IT para empresas de Almería"
+      h1Lineas={['Diseño web', 'en Almería']}
+      frases={['que vende.', 'que posiciona.', 'que impacta.', 'sin plantillas.']}
       h2="Webs, sistemas informáticos y vídeo con dron que hacen vender a tu empresa"
-      primary={{ href: '/contacto/?servicio=web#contacto', label: 'Pedir presupuesto' }}
-      secondary={{ href: plan360.href, label: 'Ver el Plan 360' }}
-      stats={[
-        { value: 50, prefix: '+', label: 'webs entregadas' },
-        { value: 8, label: 'años en Almería' },
-        { value: 99, suffix: '/100', label: 'Lighthouse medio' },
-        { value: 4, prefix: '<', suffix: ' h', label: 'tiempo de respuesta' },
+      primario={{ href: '/contacto/?servicio=web#contacto', label: 'Pedir presupuesto' }}
+      secundario={{ href: plan360.href, label: 'Ver el Plan 360' }}
+      confianza={[
+        { valor: String(CIFRAS.valoracion).replace('.', ','), texto: `en ${CIFRAS.numResenas} reseñas` },
+        { valor: `< ${CIFRAS.respuestaHoras} h`, texto: 'de respuesta' },
+        { valor: 'Sin permanencia', texto: 'en el Plan 360' },
+      ]}
+      registro={registroPlan360}
+      cifras={[
+        { valor: CIFRAS.websEntregadas, prefijo: '+', etiqueta: 'webs entregadas' },
+        { valor: aniosEnAlmeria(), sufijo: ' años', etiqueta: 'trabajando en Almería' },
+        { valor: CIFRAS.respuestaHoras, prefijo: '< ', sufijo: ' h', etiqueta: 'de respuesta a una incidencia' },
+        { valor: 400, sufijo: ' €', etiqueta: 'al mes el Plan 360, + IVA' },
       ]}
     />
 
     {/* ════════════════════════════════════════════════ */}
     {/* PRECIOS Y PLAN 360 — VENGEANCE UI (oscuro)        */}
     {/* ════════════════════════════════════════════════ */}
-    <PreciosVengeance
+    <PreciosConsola
       h2="Precios de páginas web y del Plan 360 en Almería"
       lead="Precio de partida claro y presupuesto cerrado por escrito. Web, tienda online o tu tecnología completa por una cuota fija."
       tarifas={tarifas}
+      registro={registroPlan360}
     />
 
     {/* ════════════════════════════════════════════════ */}
-    {/* RAZONES — POR QUÉ NOSOTROS                       */}
+    {/* POR QUÉ NOSOTROS                                  */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-why-section">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 02 / Por qué nosotros</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Por qué somos la agencia web
-              <em class="heading-editorial">del Levante almeriense.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            En 8 años en Almería hemos aprendido qué <strong>importa de verdad</strong>
-            cuando contratas un equipo digital. Esto es lo que ofrecemos —
-            y lo que NO toleramos.
+    <section class="cdm-seccion dark" aria-labelledby="h2-razones">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-razones" class="cdm-cabecera__h2">Por qué somos la agencia web del Levante almeriense.</h2>
+          <p class="cdm-cabecera__lead">
+            En {aniosEnAlmeria()} años en Almería hemos aprendido qué <strong>importa de verdad</strong> cuando contratas un equipo digital. Esto es lo que ofrecemos, y lo que no toleramos.
           </p>
         </header>
-
-        <ol class="ho-why">
-          {razones.map((r, i) => (
-            <li class={`ho-why__item ho-why__item--${i}`}>
-              <header class="ho-why__head">
-                <span class="text-mono ho-why__num">{r.num}</span>
-                <span class="ho-why__check" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="22" height="22"><path d="M 5 12 L 10 17 L 19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
-              </header>
-              <h3 class="ho-why__t heading-display">{r.t}</h3>
-              <p class="ho-why__s">{r.s}</p>
+        <ul class="h-razones">
+          {razones.map((r) => (
+            <li class="h-razones__item">
+              <h3 class="h-razones__t">{r.t}</h3>
+              <p class="h-razones__s">{r.s}</p>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* SERVICIOS — BENTO 6-UP                            */}
+    {/* SERVICIOS                                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-svc-section" id="servicios">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 03 / Servicios</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Diseño web, sistemas IT y vídeo aéreo
-              <em class="heading-editorial">bajo el mismo techo.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Diseño web, sistemas IT, audiovisual, marketing, identidad y
-            mantenimiento. Hechos por el <strong>mismo equipo bajo el mismo techo</strong>.
-            Sin descoordinación, sin "te derivamos al freelance X".
+    <section class="cdm-seccion dark" id="servicios" aria-labelledby="h2-servicios">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-servicios" class="cdm-cabecera__h2">Diseño web, sistemas IT y vídeo aéreo bajo el mismo techo.</h2>
+          <p class="cdm-cabecera__lead">
+            Diseño web, sistemas IT, audiovisual, marketing, identidad y mantenimiento. Hechos por el <strong>mismo equipo bajo el mismo techo</strong>, sin descoordinación ni «te derivamos al freelance X».
           </p>
         </header>
-
-        <ol class="ho-svc">
+        <ul class="h-modulos">
           {servicios.map((s) => (
-            <li class={`ho-svc__item ho-svc__item--${s.color}`}>
-              <a href={s.href} class="ho-svc__link">
-
-                <header class="ho-svc__head">
-                  <span class="text-mono ho-svc__num">{s.num}</span>
-                  <span class="text-mono ho-svc__sub">{s.sub}</span>
-                </header>
-
-                <div class="ho-svc__icon" aria-hidden="true">
+            <li>
+              <a href={s.href} class="h-modulo">
+                <span class={`h-modulo__icono h-tinta--${s.color}`} aria-hidden="true">
                   {s.icon === 'web'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="10" width="48" height="36" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><line x1="6" y1="18" x2="54" y2="18" stroke="#0E0D0B" stroke-width="2"/><circle cx="11" cy="14" r="1.5" fill="#0E0D0B"/><circle cx="16" cy="14" r="1.5" fill="#0E0D0B"/><circle cx="21" cy="14" r="1.5" fill="#0E0D0B"/><line x1="14" y1="28" x2="46" y2="28" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/><line x1="14" y1="36" x2="38" y2="36" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/></svg>}
                   {s.icon === 'cam'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="16" width="38" height="28" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><path d="M 44 24 L 54 18 L 54 42 L 44 36 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><circle cx="22" cy="30" r="7" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="22" cy="30" r="3" fill="#0E0D0B"/><circle cx="38" cy="22" r="2" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
                   {s.icon === 'mkt'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 6 50 L 18 36 L 30 44 L 42 22 L 54 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="54" cy="10" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="42" cy="22" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="30" cy="44" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="18" cy="36" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><line x1="6" y1="54" x2="54" y2="54" stroke="#0E0D0B" stroke-width="2"/></svg>}
@@ -312,50 +304,34 @@ const faqHome = [
                   {s.icon === 'cart'   && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="22" cy="50" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="44" cy="50" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><path d="M 4 8 L 12 8 L 18 38 L 48 38 L 54 16 L 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 30 22 L 30 28 M 27 25 L 33 25" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/></svg>}
                   {s.icon === 'shield' && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 30 6 C 22 6 16 9 8 12 L 8 30 C 8 44 30 54 30 54 C 30 54 52 44 52 30 L 52 12 C 44 9 38 6 30 6 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 18 30 L 26 38 L 42 22" fill="none" stroke="#0E0D0B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>}
                   {s.icon === 'it'     && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="8" y="6" width="44" height="30" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><line x1="30" y1="36" x2="30" y2="44" stroke="#0E0D0B" stroke-width="3"/><path d="M 12 54 L 30 44 L 48 54" fill="none" stroke="#0E0D0B" stroke-width="2.5" stroke-linejoin="round"/><circle cx="12" cy="54" r="3.5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="30" cy="44" r="3.5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="48" cy="54" r="3.5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><path d="M 17 26 L 25 16 L 32 22 L 43 12" fill="none" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>}
-                </div>
-
-                <h3 class="ho-svc__title heading-display">{s.title}</h3>
-                <p class="ho-svc__desc">{s.desc}</p>
-
-                <footer class="ho-svc__foot">
-                  <div class="ho-svc__metric">
-                    <span class="ho-svc__metric-v text-mono">{s.metric}</span>
-                    <span class="ho-svc__metric-l">{s.metricLbl}</span>
-                  </div>
-                  <span class="ho-svc__cta">Ver más →</span>
-                </footer>
+                </span>
+                <span class="h-modulo__sub">{s.sub}</span>
+                <h3 class="h-modulo__titulo">{s.title}</h3>
+                <p class="h-modulo__desc">{s.desc}</p>
+                <span class="h-modulo__dato"><strong>{s.metric}</strong> {s.metricLbl}</span>
               </a>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
     {/* SOLUCIONES POR PERFIL                             */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-aud-section">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 04 / Soluciones</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Soluciones de diseño web
-              <em class="heading-editorial">para cada tipo de negocio.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Cada perfil tiene necesidades distintas. Estos son nuestros
-            <strong>3 packs principales</strong> con todo lo que incluyen, precios
-            cerrados y plazos de entrega claros.
+    <section class="cdm-seccion dark" aria-labelledby="h2-soluciones">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-soluciones" class="cdm-cabecera__h2">Soluciones de diseño web para cada tipo de negocio.</h2>
+          <p class="cdm-cabecera__lead">
+            Cada perfil tiene necesidades distintas. Estos son nuestros <strong>3 packs principales</strong> con todo lo que incluyen, precios cerrados y plazos de entrega claros.
           </p>
         </header>
-
-        <ol class="ho-aud">
+        <ul class="h-packs">
           {soluciones.map((s) => (
-            <li class={`ho-aud__item ho-aud__item--${s.color}`}>
-              <a href={s.href} class="ho-aud__link">
-                <div class="ho-aud__icon" aria-hidden="true">
+            <li>
+              <a href={s.href} class="h-pack">
+                <span class={`h-pack__icono h-tinta--${s.color}`} aria-hidden="true">
                   {s.icon === 'rocket' && (
                     <svg viewBox="0 0 80 80" width="100%" height="100%">
                       <path d="M 40 8 L 50 24 L 50 52 L 44 60 L 36 60 L 30 52 L 30 24 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
@@ -387,55 +363,37 @@ const faqHome = [
                       <path d="M 42 28 L 42 38 M 37 33 L 47 33" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/>
                     </svg>
                   )}
-                </div>
-                <header class="ho-aud__head">
-                  <span class="ho-aud__code text-mono">{s.code}</span>
-                  <span class="text-mono ho-aud__price">{s.price}</span>
-                </header>
-                <h3 class="ho-aud__name heading-display">{s.name}</h3>
-                <span class="ho-aud__sub text-mono">{s.sub}</span>
-                <p class="ho-aud__desc">{s.desc}</p>
-                <footer class="ho-aud__foot">
-                  <span class="ho-aud__cta">
-                    Ver pack completo
-                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </span>
-                </footer>
+                </span>
+                <span class="h-pack__precio">{s.price}</span>
+                <h3 class="h-pack__nombre">{s.name}</h3>
+                <span class="h-pack__sub">{s.sub}</span>
+                <p class="h-pack__desc">{s.desc}</p>
+                <span class="h-pack__cta">Ver pack completo</span>
               </a>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* PROCESO — 5 PASOS                                 */}
+    {/* PROCESO (secuencia real: numerada)                */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-proc-section">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta" style="color:var(--ho-lime)">Cap. 05 / Método</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--ho-paper)">
-              Cómo hacemos
-              <em class="heading-editorial" style="color:var(--ho-accent-ink)">tu página web.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead" style="color:rgba(255,252,246,0.7)">
-            Cinco fases bien definidas. Cada una con entregables claros, fecha y
-            tu aprobación antes de avanzar. <strong style="color:var(--ho-paper)">Sin sorpresas.</strong>
+    <section class="cdm-seccion dark" aria-labelledby="h2-proceso">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-proceso" class="cdm-cabecera__h2">Cómo hacemos tu página web.</h2>
+          <p class="cdm-cabecera__lead">
+            Cinco fases bien definidas, cada una con entregables claros, fecha y tu aprobación antes de avanzar. <strong>Sin sorpresas.</strong>
           </p>
         </header>
-
-        <ol class="ho-proc">
+        <ol class="h-proceso">
           {proceso.map((p) => (
-            <li class="ho-proc__step">
-              <header class="ho-proc__head">
-                <span class="text-mono ho-proc__num">{p.num}</span>
-                <span class="text-mono ho-proc__eta">{p.eta}</span>
-              </header>
-              <h3 class="heading-display ho-proc__t">{p.t}</h3>
-              <p class="ho-proc__body">{p.body}</p>
+            <li class="h-proceso__paso">
+              <span class="h-proceso__num">{p.num}</span>
+              <h3 class="h-proceso__t">{p.t}</h3>
+              <p class="h-proceso__body">{p.body}</p>
+              <span class="h-proceso__eta">{p.eta}</span>
             </li>
           ))}
         </ol>
@@ -443,26 +401,18 @@ const faqHome = [
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* PORTFOLIO / CASOS REALES                          */}
+    {/* PORTFOLIO CON MEDIDAS REALES                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-port-section" id="portfolio">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 06 / Portfolio</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Portfolio de diseño web
-              <em class="heading-editorial">con resultados reales.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Una selección de proyectos lanzados en los últimos años. Sin
-            renders falsos, sin maquetas vacías — <strong>todos en línea
-            ahora mismo</strong>. Puedes visitarlos.
+    <section class="cdm-seccion dark" id="portfolio" aria-labelledby="h2-portfolio">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-portfolio" class="cdm-cabecera__h2">Portfolio de diseño web con resultados reales.</h2>
+          <p class="cdm-cabecera__lead">
+            Una selección de proyectos lanzados en los últimos años. Sin renders falsos ni maquetas vacías: <strong>todos en línea ahora mismo</strong>. Puedes visitarlos.
           </p>
         </header>
 
-        <div class="ho-port-carousel">
+        <div class="h-carrusel">
           <PerspectiveCarousel
             client:visible
             items={casos.map((c) => ({ src: c.image, title: `${c.cliente} · ${c.result}`, alt: `${c.cliente}, ${c.sector}` }))}
@@ -472,89 +422,66 @@ const faqHome = [
             aspectClassName="aspect-[16/10]"
             label="Proyectos publicados"
             loop
-            imageClassName="ring-1 ring-black/10"
+            imageClassName="ring-1 ring-white/10"
             labelClassName="font-semibold"
           />
         </div>
-        <ul class="ho-port-links">
-          {casos.map((c) => (
+
+        <ul class="h-proyectos">
+          {casosMedidos.map((c) => (
             <li>
-              <a href={c.url} target="_blank" rel="noopener noreferrer">
-                <strong>{c.cliente}</strong>
-                <span>{c.sector} · {c.result}</span>
-                <span class="ho-sr-only">(abre en una pestaña nueva)</span>
+              <a href={c.url} target="_blank" rel="noopener noreferrer" class="h-proyecto">
+                <span class="h-proyecto__cliente">{c.cliente}</span>
+                <span class="h-proyecto__sector">{c.sector}, {c.result}</span>
+                <span class:list={['h-proyecto__lh', { 'is-ok': c.lighthouse !== null && c.lighthouse >= 90 }]}>
+                  {c.lighthouse === null ? 'sin medida' : `Lighthouse ${c.lighthouse}`}
+                </span>
+                <span class="sr-only">(abre en una pestaña nueva)</span>
               </a>
             </li>
           ))}
         </ul>
-
-        {/* Stats strip */}
-        <ul class="ho-port-strip">
-          <li><span class="text-mono ho-port-strip__v">50<sup>+</sup></span><span class="ho-port-strip__l">webs entregadas</span></li>
-          <li class="ho-port-strip__hi"><span class="text-mono ho-port-strip__v">99/100</span><span class="ho-port-strip__l">Lighthouse medio</span></li>
-          <li><span class="text-mono ho-port-strip__v">&lt;1<small>s</small></span><span class="ho-port-strip__l">Tiempo de carga</span></li>
-          <li class="ho-port-strip__hi2"><span class="text-mono ho-port-strip__v">100<small>%</small></span><span class="ho-port-strip__l">Clientes que repiten</span></li>
-        </ul>
+        <p class="h-proyectos__nota">{notaMedidas}</p>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* TESTIMONIOS                                       */}
+    {/* OPINIONES                                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-quote-section">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 07 / Lo que dicen</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Opiniones de clientes:
-              <em class="heading-editorial">4,9 sobre 5.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Reseñas reales de empresas, autónomos y emprendedores con los
-            que hemos trabajado. Sin filtros.
-          </p>
+    <section class="cdm-seccion dark" aria-labelledby="h2-opiniones">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-opiniones" class="cdm-cabecera__h2">Opiniones de clientes: {String(CIFRAS.valoracion).replace('.', ',')} sobre 5.</h2>
+          <p class="cdm-cabecera__lead">Reseñas reales de empresas, autónomos y emprendedores con los que hemos trabajado. Sin filtros.</p>
         </header>
-
         <TestimonialsCard
           client:visible
           items={testimonios.map((t, i) => ({ id: i, title: `${t.author} · ${t.role}`, description: t.text, image: monograma(t.author, i) }))}
           width={860}
           autoPlay
           autoPlayInterval={5000}
-          className="ho-testimonials"
+          className="h-testimonios"
         />
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* STACK TECNOLÓGICO con SVGs CUSTOM                 */}
+    {/* TECNOLOGÍA (órbita fija: solo se mueven radar y registro) */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-tech-section">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 08 / Stack</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Tecnología web
-              <em class="heading-editorial">que dominamos.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Tecnologías estándar de la industria, probadas en cientos de
-            proyectos. Sin plataformas raras de las que no puedas escapar.
-            <strong>Tu stack es tuyo. Para siempre.</strong>
+    <section class="cdm-seccion dark" aria-labelledby="h2-tecnologia">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-tecnologia" class="cdm-cabecera__h2">Tecnología web que dominamos.</h2>
+          <p class="cdm-cabecera__lead">
+            Tecnologías estándar de la industria, probadas en cientos de proyectos. Sin plataformas raras de las que no puedas escapar. <strong>Tu stack es tuyo. Para siempre.</strong>
           </p>
         </header>
-
-        <div class="ho-orbit">
-          <div class="ho-orbit__core" aria-hidden="true"><span>P★</span></div>
-          <ul class="ho-tech">
-          {tech.map((t, i) => (
-            <li class={`ho-tech__item ho-tech__item--${t.bg}`}>
-              <span class="text-mono ho-tech__i">0{i+1}</span>
-              <div class="ho-tech__logo" aria-hidden="true">
+        <div class="h-orbita">
+          <div class="h-orbita__nucleo" aria-hidden="true"><span>P★</span></div>
+          <ul class="h-tech">
+            {tech.map((t) => (
+              <li class="h-tech__item">
+                <div class="h-tech__logo" aria-hidden="true">
                 {t.id === 'astro' && (
                   <svg viewBox="0 0 100 100" width="100%" height="100%">
                     <rect x="6" y="6" width="88" height="88" rx="6" fill="#0E0D0B" stroke="#0E0D0B" stroke-width="3"/>
@@ -629,51 +556,32 @@ const faqHome = [
                     <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#0E0D0B" letter-spacing="2">ANALYTICS</text>
                   </svg>
                 )}
-              </div>
-              <h3 class="ho-tech__name">{t.name}</h3>
-              <p class="ho-tech__desc">{t.v}</p>
-            </li>
-          ))}
-        </ul>
+                </div>
+                <h3 class="h-tech__nombre">{t.name}</h3>
+                <p class="h-tech__desc">{t.v}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* COBERTURA ALMERÍA                                 */}
+    {/* COBERTURA                                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-cover-section" id="cobertura">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 09 / Cobertura</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Diseño web e informática
-              <em class="heading-editorial">en toda Almería.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Trabajamos con negocios de la provincia entera. Encuentra tu
-            localidad — o pídenos cobertura en la tuya si no aparece.
-          </p>
+    <section class="cdm-seccion dark" id="cobertura" aria-labelledby="h2-cobertura">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-cobertura" class="cdm-cabecera__h2">Diseño web e informática en toda Almería.</h2>
+          <p class="cdm-cabecera__lead">Trabajamos con negocios de la provincia entera. Encuentra tu localidad o pídenos cobertura en la tuya si no aparece.</p>
         </header>
 
-        {/* Destacadas */}
-        <ul class="ho-cover-grid">
-          {[
-            { nombre: 'Almería',       slug: 'almeria',       sub: 'Capital · 200k hab.' },
-            { nombre: 'Vera',          slug: 'vera',          sub: 'Levante · sede' },
-            { nombre: 'Mojácar',       slug: 'mojacar',       sub: 'Levante · turismo' },
-            { nombre: 'Huércal-Overa', slug: 'huercal-overa', sub: 'Almanzora · hub' },
-            { nombre: 'Albox',         slug: 'albox',         sub: 'Almanzora · centro' },
-            { nombre: 'Garrucha',      slug: 'garrucha',      sub: 'Costa · puerto' },
-          ].map((p, i) => (
+        <ul class="h-localidades">
+          {localidadesDestacadas.map((p) => (
             <li>
-              <a href={`/diseno-web/${p.slug}/`} class={`ho-cover-tile ho-cover-tile--${i % 6}`}>
-                <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
-                <span class="ho-cover-tile__name heading-display">{p.nombre}</span>
-                <span class="ho-cover-tile__sub text-mono">{p.sub}</span>
-                <span class="ho-cover-tile__arrow" aria-hidden="true">→</span>
+              <a href={`/diseno-web/${p.slug}/`} class="h-localidad">
+                <span class="h-localidad__nombre">{p.nombre}</span>
+                <span class="h-localidad__sub">{p.sub}</span>
               </a>
             </li>
           ))}
@@ -682,98 +590,69 @@ const faqHome = [
         {/* Comarcas — enlazado en cascada: cada comarca lleva al hub /diseno-web/
             (a su sección), en lugar de volcar las ~90 localidades aquí. Concentra
             el link equity en el hub y evita enlazar páginas noindex desde la home. */}
-        <h3 class="text-meta ho-cover-h3">★ Por comarcas</h3>
-        <div class="ho-comarcas">
-          {comarcas.map(comarca => {
+        <h3 class="h-comarcas__titulo">Por comarcas</h3>
+        <div class="h-comarcas">
+          {comarcas.map((comarca) => {
             const list = getPueblosByComarca(comarca);
             if (!list.length) return null;
             return (
-              <a class="ho-comarca ho-comarca-link" href={`/diseno-web/#${comarcaSlug(comarca)}`}>
-                <span class="ho-comarca__name heading-display">{comarca}</span>
-                <span class="ho-comarca__count text-mono">{list.length} localidades</span>
-                <span class="ho-comarca__toggle" aria-hidden="true">→</span>
+              <a class="h-comarca" href={`/diseno-web/#${comarcaSlug(comarca)}`}>
+                <span class="h-comarca__nombre">{comarca}</span>
+                <span class="h-comarca__num">{list.length} localidades</span>
               </a>
             );
           })}
         </div>
-
-        <div class="ho-cover-cta">
-          <a href="/diseno-web/" class="ho-btn ho-btn--ghost">
-            Ver todas las localidades →
-          </a>
-        </div>
+        <a href="/diseno-web/" class="h-enlace">Ver todas las localidades</a>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
     {/* VERA AI — Demo de agente de IA                   */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-vera">
-      <div class="container-brutal ho-vera__inner">
-        <div class="ho-vera__copy">
-          <span class="ho-vera__eyebrow">✦ Nuevo · Demo de IA</span>
-          <h2 class="heading-display ho-vera__title">Vera AI Business Agent</h2>
-          <p class="ho-vera__lead">
-            Una IA que analiza tu negocio local y te propone qué automatizar. Elige tu sector,
-            cuéntale tu problema y recibe un diagnóstico, una solución y un precio orientativo.
-            No es un chatbot: es un <strong>consultor de IA</strong>.
+    <section class="cdm-seccion dark" aria-labelledby="h2-vera">
+      <div class="cdm-dentro h-vera">
+        <div>
+          <p class="h-vera__etq">Demo de IA</p>
+          <h2 id="h2-vera" class="cdm-cabecera__h2">Vera AI Business Agent</h2>
+          <p class="cdm-cabecera__lead h-vera__lead">
+            Una IA que analiza tu negocio local y te propone qué automatizar. Elige tu sector, cuéntale tu problema y recibe un diagnóstico, una solución y un precio orientativo. No es un chatbot: es un <strong>consultor de IA</strong>.
           </p>
-          <a href="/vera-ai/" class="ho-vera__btn">Probar la demo de Vera →</a>
+          <a href="/vera-ai/" class="h-vera__btn">Probar la demo de Vera</a>
         </div>
-        <ul class="ho-vera__tags" aria-hidden="true">
-          <li>🏖️ Alquiler vacacional</li>
-          <li>🏠 Inmobiliarias</li>
-          <li>🍽️ Restaurantes</li>
-          <li>💆 Clínicas y estética</li>
-          <li>🧾 Facturación / pymes</li>
+        <ul class="h-vera__sectores" aria-label="Sectores que analiza la demo">
+          <li>Alquiler vacacional</li>
+          <li>Inmobiliarias</li>
+          <li>Restaurantes</li>
+          <li>Clínicas y estética</li>
+          <li>Facturación y pymes</li>
         </ul>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
-    {/* BLOG — Últimas crónicas                          */}
+    {/* BLOG — Últimos artículos                         */}
     {/* ════════════════════════════════════════════════ */}
     {recentPosts.length > 0 && (
-      <section class="ho-blog-section">
-        <div class="container-brutal">
-          <header class="brutal-section-head">
-            <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 10 / Diario</span>
-              <h2 class="heading-display brutal-section-head__title">
-                Guías de diseño web
-                <em class="heading-editorial">y tecnología.</em>
-              </h2>
-            </div>
-            <p class="brutal-section-head__lead">
-              Tecnología, marketing, casos de estudio y opinión. Publicado
-              cuando tenemos algo que decir.
-            </p>
+      <section class="cdm-seccion dark" aria-labelledby="h2-blog">
+        <div class="cdm-dentro">
+          <header class="cdm-cabecera">
+            <h2 id="h2-blog" class="cdm-cabecera__h2">Guías de diseño web y tecnología.</h2>
+            <p class="cdm-cabecera__lead">Tecnología, marketing, casos de estudio y opinión. Publicado cuando tenemos algo que decir.</p>
           </header>
-
-          <ol class="ho-blog">
-            {recentPosts.map((p: Post, i: number) => (
-              <li class="ho-blog__item">
-                <a href={`/blog/${p.data.slug}/`} class="ho-blog__link">
-                  <header class="ho-blog__head">
-                    <span class="text-mono ho-blog__num">N.º {String(i+1).padStart(2,'0')}</span>
-                    <span class="text-mono ho-blog__date">{formatDateShort(p.data.publishedAt)}</span>
-                  </header>
-                  <h3 class="ho-blog__title">{p.data.title}</h3>
-                  {p.data.excerpt && <p class="ho-blog__excerpt">{p.data.excerpt}</p>}
-                  <footer class="ho-blog__foot">
-                    {p.data.categories && p.data.categories[0] && (
-                      <span class="ho-blog__tag">★ {p.data.categories[0]}</span>
-                    )}
-                    <span class="ho-blog__cta">Leer →</span>
-                  </footer>
+          <ul class="h-blog">
+            {recentPosts.map((p: Post) => (
+              <li>
+                <a href={`/blog/${p.data.slug}/`} class="h-post">
+                  <time class="h-post__fecha" datetime={p.data.publishedAt.toISOString()}>{formatDateShort(p.data.publishedAt)}</time>
+                  <h3 class="h-post__titulo">{p.data.title}</h3>
+                  {p.data.excerpt && <p class="h-post__resumen">{p.data.excerpt}</p>}
+                  {p.data.categories?.[0] && <span class="h-post__cat">{p.data.categories[0]}</span>}
                 </a>
               </li>
             ))}
-          </ol>
-
-          <div class="ho-blog-cta">
-            <a href="/blog/" class="ho-btn ho-btn--ghost">Ver todas las crónicas →</a>
-          </div>
+          </ul>
+          <a href="/blog/" class="h-enlace">Ver todos los artículos</a>
         </div>
       </section>
     )}
@@ -781,22 +660,12 @@ const faqHome = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ho-faq-section">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 11 / Preguntas frecuentes</span>
-            <h2 class="heading-display brutal-section-head__title">
-              Preguntas frecuentes sobre
-              <em class="heading-editorial">precios de páginas web.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Respuestas honestas. Si no está aquí, escríbenos por WhatsApp
-            y respondemos en menos de 4h.
-          </p>
+    <section class="cdm-seccion dark" aria-labelledby="h2-faq">
+      <div class="cdm-dentro">
+        <header class="cdm-cabecera">
+          <h2 id="h2-faq" class="cdm-cabecera__h2">Preguntas frecuentes sobre precios de páginas web.</h2>
+          <p class="cdm-cabecera__lead">Respuestas honestas. Si no está aquí, escríbenos por WhatsApp y respondemos en menos de {CIFRAS.respuestaHoras} h.</p>
         </header>
-
         <FaqAccordion client:visible title="" items={faqHome.map((f) => ({ question: f.q, answer: f.a }))} className="max-w-4xl" />
       </div>
     </section>
@@ -804,1123 +673,178 @@ const faqHome = [
     {/* ════════════════════════════════════════════════ */}
     {/* CONTACTO (componente existente)                  */}
     {/* ════════════════════════════════════════════════ */}
-    <Contact />
+    <Contact tono="consola" />
   </main>
 
   <Footer />
 </BaseLayout>
 
-<script>
-  // ✦ Contadores animados + scroll reveal de la home
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // — Stagger entre tarjetas de cada lista —
-  document.querySelectorAll('.ho-why, .ho-svc, .ho-aud, .ho-proc, .ho-port, .ho-quotes, .ho-tech, .ho-cover-grid').forEach((group) => {
-    Array.from(group.children).forEach((child, i) => {
-      (child as HTMLElement).style.transitionDelay = Math.min(i, 6) * 65 + 'ms';
-    });
-  });
-
-  // — Scroll reveal —
-  const revealEls = document.querySelectorAll('.brutal-section-head, .ho-why__item, .ho-svc__item, .ho-aud__item, .ho-proc__step, .ho-port__item, .ho-quote, .ho-tech__item, .ho-cover-grid > li');
-  if (reduce) {
-    revealEls.forEach((el) => el.classList.add('is-in'));
-  } else if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-    revealEls.forEach((el) => io.observe(el));
-    // Salvaguarda: si algo no se revela en 2.5s, mostrarlo igualmente
-    setTimeout(() => revealEls.forEach((el) => el.classList.add('is-in')), 2500);
-  } else {
-    revealEls.forEach((el) => el.classList.add('is-in'));
-  }
-
-  // — Contadores —
-  function runCount(el: HTMLElement) {
-    const target = parseFloat(el.dataset.count || '0');
-    const prefix = el.dataset.prefix || '';
-    const suffix = el.dataset.suffix || '';
-    if (reduce) { el.textContent = prefix + target + suffix; return; }
-    const dur = 1500;
-    const start = performance.now();
-    function tick(now: number) {
-      const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = prefix + Math.round(target * eased) + suffix;
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
-  if (counters.length) {
-    if (!('IntersectionObserver' in window)) {
-      counters.forEach(runCount);
-    } else {
-      const cio = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) { runCount(e.target as HTMLElement); cio.unobserve(e.target); }
-        });
-      }, { threshold: 0.6 });
-      counters.forEach((el) => cio.observe(el));
-    }
-  }
-</script>
 
 <style>
-  /* ═══════════════════════════════════════════════════════ */
-  /* PALETA · HOME EDITORIAL                                 */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho {
-    --ho-paper:    #FFFCF6;
-    --ho-paper-2:  #F5EFE0;
-    --ho-cream:    #ECE3CB;
-    --ho-ink:      #0E0D0B;
-    --ho-accent:   #FF6B35;
-    /* Variante del acento para texto sobre fondos claros: el #FF6B35 se
-       queda en 2.77:1 y no llega al mínimo AA. Mismo tono, 4.75:1. */
-    --ho-accent-ink: #AE3F13;
-    --ho-lime:     #D6FF44;
-    --ho-blue:     #003B7A;
-    --ho-cyan:     #00B8D9;
-    --ho-magenta:  #FF2D9A;
-    --ho-gold:     #C9A24F;
-    --ho-green:    #00B85C;
-    --ho-red:      #DC1B2C;
-    --ho-woo:      #7F54B3;
-    --ho-yellow:   #FFD600;
-    --ho-mint:     #C8F2D6;
-    --ho-shadow:   8px 8px 0 var(--ho-ink);
-  }
+  /* ═══ CENTRO DE MANDO: secciones de la home ═══ */
+  .cdm-home { background: var(--color-cdm-suelo); }
 
-  .ho-pulse {
-    display: inline-block;
-    width: 9px; height: 9px;
-    border-radius: 50%;
-    background: var(--ho-green);
-    box-shadow: 0 0 0 0 rgba(0,184,92,0.55);
-    animation: ho-pulse 1.8s ease-out infinite;
-    vertical-align: middle;
-    margin-right: .35rem;
-  }
-  @keyframes ho-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(0,184,92,0.6); }
-    70%  { box-shadow: 0 0 0 10px rgba(0,184,92,0); }
-    100% { box-shadow: 0 0 0 0 rgba(0,184,92,0); }
-  }
-  .ho-spin     { transform-origin: 50% 50%; animation: ho-spin 30s linear infinite; }
-  .ho-spin-rev { transform-origin: 50% 50%; animation: ho-spin 22s linear infinite reverse; }
-  @keyframes ho-spin { to { transform: rotate(360deg); } }
+  /* Ficha clara para los iconos hechos a mano: conservan su color */
+  .h-tinta--green { color: #00b85c; }
+  .h-tinta--red { color: #dc1b2c; }
+  .h-tinta--blue { color: #003b7a; }
+  .h-tinta--magenta { color: #ff2d9a; }
+  .h-tinta--woo { color: #7f54b3; }
+  .h-tinta--gold { color: #c9a24f; }
+  .h-tinta--accent { color: #ae3f13; }
+  .h-tinta--navy { color: #003b7a; }
 
-  .ho-btn {
-    display: inline-flex; align-items: center; gap: .75rem;
-    padding: 1.1rem 1.85rem;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.05rem;
-    border: 2.5px solid var(--ho-ink);
-    text-decoration: none;
-    transition: transform .2s, box-shadow .2s, background .2s, color .2s;
-    cursor: pointer;
-  }
-  .ho-btn--primary {
-    background: var(--ho-ink);
-    color: var(--ho-lime);
-    box-shadow: 6px 6px 0 var(--ho-accent);
-  }
-  .ho-btn--primary:hover {
-    background: var(--ho-accent);
-    color: var(--ho-ink);
-    transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--ho-ink);
-  }
-  .ho-btn--ghost {
-    background: transparent;
-    color: var(--ho-ink);
-    box-shadow: 6px 6px 0 var(--ho-ink);
-  }
-  .ho-btn--ghost:hover {
-    background: var(--ho-ink);
-    color: var(--ho-lime);
-    transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--ho-accent);
-  }
-
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* WHY (4 razones)                                         */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-why-section {
-    background: var(--ho-paper);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-why {
-    list-style: none; padding: 0; margin: 2rem 0 0;
+  .h-razones {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    border: 2.5px solid var(--ho-ink);
-    background: var(--ho-ink);
-  }
-  @media (min-width: 768px)  { .ho-why { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
-  @media (min-width: 1024px) { .ho-why { grid-template-columns: repeat(4, 1fr); } }
-  .ho-why__item {
-    background: var(--ho-paper);
-    padding: 1.75rem 1.5rem;
-    display: flex; flex-direction: column; gap: .75rem;
-    transition: background .25s;
-  }
-  .ho-why__item:hover { background: var(--ho-paper-2); }
-  .ho-why__item--0 { background: var(--ho-lime); }
-  .ho-why__item--0:hover { background: var(--ho-accent); color: var(--ho-paper); }
-  .ho-why__item--3 { background: var(--ho-ink); color: var(--ho-paper); }
-  .ho-why__item--3:hover { background: var(--ho-accent); }
-  .ho-why__head {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-bottom: .5rem;
-    border-bottom: 2px solid currentColor;
-    opacity: .85;
-  }
-  .ho-why__num { font-size: 1.4rem; font-weight: 800; }
-  .ho-why__check { color: var(--ho-accent-ink); }
-  .ho-why__item--3 .ho-why__check { color: var(--ho-lime); }
-  .ho-why__t {
-    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-    line-height: 1.05;
-    letter-spacing: -.025em;
-    color: inherit;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1px;
     margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--color-cdm-regla);
+    border: 1px solid var(--color-cdm-regla);
   }
-  .ho-why__s {
-    font-size: .92rem;
-    line-height: 1.5;
-    color: inherit;
-    opacity: .85;
+  @media (min-width: 768px) { .h-razones { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1200px) { .h-razones { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .h-razones__item { padding: 1.5rem; background: var(--color-cdm-suelo); }
+  .h-razones__t { margin: 0 0 0.6rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.45rem; line-height: 1.05; }
+  .h-razones__s { margin: 0; font-size: 0.95rem; line-height: 1.6; color: #b9c5cf; }
+
+  .h-modulos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 700px) { .h-modulos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .h-modulos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .h-modulo { display: flex; flex-direction: column; height: 100%; padding: 1.4rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; transition: border-color 0.15s; }
+  .h-modulo:hover { border-color: var(--color-cdm-texto); }
+  .h-modulo__icono { display: block; width: 72px; height: 72px; margin-bottom: 1.1rem; padding: 6px; background: #f5f1ea; }
+  .h-modulo__icono svg { display: block; width: 100%; height: 100%; }
+  .h-modulo__sub { font-size: 0.8rem; color: var(--color-cdm-tenue); }
+  .h-modulo__titulo { margin: 0.25rem 0 0.6rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: 1.9rem; line-height: 1; letter-spacing: -0.02em; }
+  .h-modulo__desc { margin: 0 0 1.2rem; font-size: 0.95rem; line-height: 1.55; color: #b9c5cf; }
+  .h-modulo__dato { margin-top: auto; padding-top: 0.8rem; border-top: 1px solid var(--color-cdm-regla); font-size: 0.85rem; color: var(--color-cdm-tenue); }
+  .h-modulo__dato strong { font-weight: 600; color: var(--color-cdm-texto); }
+
+  .h-packs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 900px) { .h-packs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .h-pack { display: flex; flex-direction: column; height: 100%; padding: 1.4rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; transition: border-color 0.15s; }
+  .h-pack:hover { border-color: var(--color-cdm-texto); }
+  .h-pack__icono { display: block; width: 88px; height: 88px; margin-bottom: 1rem; padding: 6px; background: #f5f1ea; }
+  .h-pack__icono svg { display: block; width: 100%; height: 100%; }
+  .h-pack__precio { font-weight: 600; color: var(--color-cdm-texto); }
+  .h-pack__nombre { margin: 0.3rem 0 0.15rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: 2rem; line-height: 1; letter-spacing: -0.02em; }
+  .h-pack__sub { font-size: 0.85rem; color: var(--color-cdm-tenue); }
+  .h-pack__desc { margin: 0.8rem 0 1.2rem; font-size: 0.95rem; line-height: 1.55; color: #b9c5cf; }
+  .h-pack__cta { margin-top: auto; font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-cdm-senal); text-underline-offset: 4px; }
+
+  .h-proceso { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-cdm-regla); }
+  .h-proceso__paso { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 0.2rem 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--color-cdm-regla); }
+  .h-proceso__num { grid-row: span 3; font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-cdm-tenue); }
+  .h-proceso__t { margin: 0; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.5rem; line-height: 1.05; }
+  .h-proceso__body { margin: 0.4rem 0; font-size: 0.92rem; line-height: 1.55; color: #b9c5cf; }
+  .h-proceso__eta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
+  @media (min-width: 1000px) {
+    .h-proceso { grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 0; }
+    .h-proceso__paso { grid-template-columns: minmax(0, 1fr); padding: 1.25rem 1.1rem 1.5rem 0; border-bottom: 0; border-top: 2px solid var(--color-cdm-regla-2); }
+    .h-proceso__num { grid-row: auto; }
   }
 
-  /* ═══════════════════════════════════════════════════════ */
-  /* SERVICIOS                                               */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-svc-section {
-    background: var(--ho-paper-2);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-svc {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  @media (min-width: 768px)  { .ho-svc { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .ho-svc { grid-template-columns: repeat(3, 1fr); } }
-  .ho-svc__item {
-    background: var(--ho-paper);
-    border: 2.5px solid var(--ho-ink);
-    box-shadow: var(--ho-shadow);
-    transition: transform .25s, box-shadow .25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .ho-svc__item::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 6px;
-    background: currentColor;
-  }
-  .ho-svc__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
-  .ho-svc__item--green   { color: var(--ho-green); }
-  .ho-svc__item--red     { color: var(--ho-red); }
-  .ho-svc__item--blue    { color: var(--ho-blue); }
-  .ho-svc__item--magenta { color: var(--ho-magenta); }
-  .ho-svc__item--woo     { color: var(--ho-woo); }
-  .ho-svc__item--gold    { color: var(--ho-gold); }
+  /* El carrusel ocupa el 100 % del alto de su contenedor: sin altura, mide 0. */
+  .h-carrusel { position: relative; height: clamp(320px, 42vw, 440px); margin-bottom: 2rem; }
+  .h-proyectos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
+  @media (min-width: 700px) { .h-proyectos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .h-proyecto { display: grid; gap: 0.2rem; height: 100%; padding: 1rem 1.1rem; background: var(--color-cdm-suelo); color: inherit; text-decoration: none; }
+  .h-proyecto:hover { background: var(--color-cdm-panel); }
+  .h-proyecto__cliente { font-weight: 600; }
+  .h-proyecto__sector { font-size: 0.85rem; color: var(--color-cdm-tenue); }
+  .h-proyecto__lh { margin-top: 0.3rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-texto); }
+  .h-proyecto__lh.is-ok { color: var(--color-cdm-ok); }
+  .h-proyectos__nota { margin: 0.75rem 0 0; font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
 
-  .ho-svc__link {
-    display: flex; flex-direction: column; gap: 1rem;
-    padding: 1.75rem 1.5rem 1.5rem;
-    text-decoration: none;
-    color: var(--ho-ink);
-    height: 100%;
-  }
-  .ho-svc__head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding-bottom: .5rem;
-    border-bottom: 2px dashed currentColor;
-  }
-  .ho-svc__num { font-size: 1.5rem; font-weight: 800; color: currentColor; }
-  .ho-svc__sub { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; opacity: .65; text-align: right; }
-  .ho-svc__icon { width: 60px; height: 60px; color: currentColor; }
-  .ho-svc__title {
-    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
-    line-height: 1;
-    letter-spacing: -.025em;
-    color: var(--ho-ink);
-    margin: .25rem 0 0;
-  }
-  .ho-svc__desc {
-    font-size: .92rem;
-    line-height: 1.5;
-    color: var(--brutal-text-secondary);
-    flex: 1;
-  }
-  .ho-svc__foot {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    padding-top: .85rem;
-    border-top: 2px solid var(--ho-ink);
-    margin-top: auto;
-  }
-  .ho-svc__metric { display: flex; flex-direction: column; gap: 2px; }
-  .ho-svc__metric-v { font-size: 1.5rem; font-weight: 800; line-height: 1; color: currentColor; }
-  .ho-svc__metric-l { font-family: var(--font-mono); font-size: .58rem; text-transform: uppercase; letter-spacing: .15em; opacity: .65; }
-  .ho-svc__cta {
-    font-family: var(--font-mono);
-    font-size: .75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    color: currentColor;
-    border-bottom: 2px solid currentColor;
-    padding-bottom: 2px;
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* PROCESO                                                 */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-proc-section {
-    background: var(--ho-ink);
-    color: var(--ho-paper);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-    position: relative;
-    overflow: hidden;
-  }
-  .ho-proc-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(214,255,68,0.06) 1.2px, transparent 1.2px);
-    background-size: 24px 24px;
-    pointer-events: none;
-  }
-  .ho-proc-section > * { position: relative; }
-  .ho-proc {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  @media (min-width: 768px)  { .ho-proc { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1280px) { .ho-proc { grid-template-columns: repeat(5, 1fr); } }
-  .ho-proc__step {
-    background: rgba(255,252,246,0.05);
-    border: 2px solid var(--ho-paper);
-    padding: 1.5rem 1.25rem;
-    display: flex; flex-direction: column; gap: .85rem;
-    transition: background .25s, transform .25s;
-  }
-  .ho-proc__step:hover { background: rgba(214,255,68,0.1); transform: translateY(-3px); }
-  .ho-proc__head { display: flex; justify-content: space-between; padding-bottom: .5rem; border-bottom: 1.5px dashed rgba(255,252,246,0.25); }
-  .ho-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ho-lime); line-height: 1; }
-  .ho-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ho-accent-ink); }
-  .ho-proc__t {
-    font-size: clamp(1.2rem, 2vw, 1.45rem);
-    line-height: 1.05;
-    letter-spacing: -.02em;
-    color: var(--ho-paper);
-    margin: 0;
-  }
-  .ho-proc__body {
-    font-size: .85rem;
-    line-height: 1.45;
-    color: rgba(255,252,246,0.75);
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* SOLUCIONES POR PERFIL (Para quién)                      */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-aud-section {
-    background: var(--ho-paper);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-aud {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  @media (min-width: 1024px) { .ho-aud { grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 2rem; } }
-  .ho-aud__item {
-    background: var(--ho-paper);
-    border: 3px solid var(--ho-ink);
-    box-shadow: var(--ho-shadow);
-    transition: transform .25s, box-shadow .25s;
-    position: relative;
-    overflow: hidden;
-  }
-  .ho-aud__item::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 8px;
-    background: currentColor;
-  }
-  .ho-aud__item:hover { transform: translate(-4px, -4px); box-shadow: 14px 14px 0 currentColor; }
-  .ho-aud__item--accent { color: var(--ho-accent-ink); }
-  .ho-aud__item--navy   { color: var(--ho-blue); }
-  .ho-aud__item--woo    { color: var(--ho-woo); }
-
-  .ho-aud__link {
-    display: flex; flex-direction: column; gap: 1rem;
-    padding: 2.25rem 1.75rem 1.75rem;
-    text-decoration: none;
-    color: var(--ho-ink);
-    height: 100%;
-  }
-  .ho-aud__icon { width: 80px; height: 80px; color: currentColor; }
-  .ho-aud__head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding-bottom: .5rem;
-    border-bottom: 2px dashed currentColor;
-  }
-  .ho-aud__code {
-    background: var(--ho-ink); color: var(--ho-lime);
-    padding: .3rem .65rem;
-    font-size: .7rem;
-    font-weight: 800;
-    letter-spacing: .2em;
-  }
-  .ho-aud__price {
-    font-size: .82rem;
-    font-weight: 800;
-    color: currentColor;
-    letter-spacing: .12em;
-  }
-  .ho-aud__name {
-    font-size: clamp(1.6rem, 3vw, 2.1rem);
-    line-height: 1;
-    letter-spacing: -.025em;
-    color: var(--ho-ink);
-    margin: 0;
-  }
-  .ho-aud__sub {
-    font-size: .65rem;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: currentColor;
-    font-weight: 800;
-  }
-  .ho-aud__desc {
-    font-size: .92rem;
-    line-height: 1.5;
-    color: var(--brutal-text-secondary);
-    flex: 1;
-  }
-  .ho-aud__foot {
-    padding-top: 1rem;
-    border-top: 2px solid var(--ho-ink);
-    margin-top: auto;
-  }
-  .ho-aud__cta {
-    display: inline-flex; align-items: center; gap: .65rem;
-    font-family: var(--font-mono);
-    font-size: .8rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    color: currentColor;
-  }
-  .ho-aud__item:hover .ho-aud__cta svg { transform: translateX(4px); }
-  .ho-aud__cta svg { transition: transform .25s; }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* PORTFOLIO REAL (con imágenes)                           */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-port-section {
-    background: var(--ho-paper);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-port {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    border: 2.5px solid var(--ho-ink);
-    background: var(--ho-ink);
-  }
-  @media (min-width: 768px)  { .ho-port { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
-  @media (min-width: 1280px) { .ho-port { grid-template-columns: repeat(3, 1fr); } }
-  .ho-port__item { background: var(--ho-paper); }
-  .ho-port__link {
-    display: flex; flex-direction: column;
-    height: 100%;
-    text-decoration: none;
-    color: var(--ho-ink);
-    background: var(--ho-paper);
-    transition: background .25s;
-  }
-  .ho-port__link:hover { background: var(--ho-paper-2); }
-
-  .ho-port__media {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 16 / 10;
-    background: var(--ho-cream);
-    border-bottom: 2px solid var(--ho-ink);
-  }
-  .ho-port__num, .ho-port__year {
-    position: absolute;
-    top: 1rem;
-    z-index: 2;
-    background: var(--ho-ink);
-    color: var(--ho-lime);
-    padding: .25rem .55rem;
-    font-size: .62rem;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    font-weight: 800;
-  }
-  .ho-port__num  { left: 1rem; }
-  .ho-port__year { right: 1rem; background: var(--ho-accent); color: var(--ho-ink); }
-  .ho-port__img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: transform .6s cubic-bezier(.16,1,.3,1), filter .4s;
-    filter: grayscale(.15) contrast(1.02);
-  }
-  .ho-port__link:hover .ho-port__img { transform: scale(1.04); filter: none; }
-  .ho-port__overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(14,13,11,.85));
-    display: flex; align-items: flex-end; justify-content: center;
-    padding: 1.5rem;
-    opacity: 0;
-    transition: opacity .35s;
-  }
-  .ho-port__link:hover .ho-port__overlay { opacity: 1; }
-  .ho-port__overlay-cta {
-    display: inline-flex; align-items: center; gap: .5rem;
-    background: var(--ho-lime); color: var(--ho-ink);
-    padding: .75rem 1.25rem;
-    border: 2px solid var(--ho-ink);
-    font-family: var(--font-mono);
-    font-size: .72rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    box-shadow: 4px 4px 0 var(--ho-accent);
-  }
-
-  .ho-port__body { padding: 1.5rem; display: flex; flex-direction: column; gap: .65rem; flex: 1; }
-  .ho-port__meta {
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: .5rem;
-  }
-  .ho-port__cat {
-    font-size: .65rem;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    color: var(--brutal-text-muted);
-  }
-  .ho-port__result {
-    font-size: .7rem;
-    color: var(--ho-accent-ink);
-    font-weight: 800;
-    letter-spacing: .1em;
-  }
-  .ho-port__client {
-    font-size: clamp(1.3rem, 2.2vw, 1.55rem);
-    line-height: 1;
-    letter-spacing: -.025em;
-    margin: 0;
-    color: var(--ho-ink);
-    transition: color .2s;
-  }
-  .ho-port__link:hover .ho-port__client { color: var(--ho-accent-ink); }
-  .ho-port__tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .25rem; }
-  .ho-port__tag {
-    background: var(--ho-paper-2);
-    padding: .2rem .5rem;
-    border: 1.5px solid var(--ho-ink);
-    font-size: .58rem;
-    text-transform: uppercase;
-    letter-spacing: .12em;
-    color: var(--ho-ink);
-  }
-  .ho-port__url {
-    font-size: .68rem;
-    color: var(--brutal-text-muted);
-    text-transform: uppercase;
-    letter-spacing: .12em;
-    padding-top: .75rem;
-    border-top: 1.5px dashed var(--ho-ink);
-    margin-top: auto;
-  }
-
-  .ho-port-strip {
-    list-style: none; padding: 0;
-    margin-top: 3rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border: 2.5px solid var(--ho-ink);
-    background: var(--ho-ink);
-  }
-  @media (min-width: 768px) { .ho-port-strip { grid-template-columns: repeat(4, 1fr); gap: 2px; } }
-  .ho-port-strip li {
-    background: var(--ho-paper);
-    padding: 1.75rem 1.5rem;
-    display: flex; flex-direction: column; align-items: flex-start; gap: .35rem;
-  }
-  /* Tinta sobre el naranja (6.85:1); en paper se quedaba en 2.77:1 y no
-     alcanzaba el mínimo AA. Mismo criterio que el bloque lima. */
-  .ho-port-strip__hi  { background: var(--ho-accent) !important; color: var(--ho-ink); }
-  .ho-port-strip__hi2 { background: var(--ho-lime) !important; color: var(--ho-ink); }
-  .ho-port-strip__v {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -.02em;
-  }
-  .ho-port-strip__v sup, .ho-port-strip__v small {
-    font-size: .5em;
-    vertical-align: super;
-    color: var(--ho-accent-ink);
-  }
-  .ho-port-strip__hi .ho-port-strip__v sup, .ho-port-strip__hi .ho-port-strip__v small { color: var(--ho-ink); }
-  .ho-port-strip__hi2 .ho-port-strip__v sup, .ho-port-strip__hi2 .ho-port-strip__v small { color: var(--ho-accent-ink); }
-  .ho-port-strip__l {
-    font-family: var(--font-mono);
-    font-size: .68rem;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    opacity: .85;
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* TESTIMONIOS                                             */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-quote-section {
-    background: var(--ho-paper-2);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-quotes {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  @media (min-width: 768px) { .ho-quotes { grid-template-columns: repeat(3, 1fr); } }
-  .ho-quote {
-    position: relative;
-    background: var(--ho-paper);
-    border: 2.5px solid var(--ho-ink);
-    box-shadow: var(--ho-shadow);
-    padding: 2rem 1.5rem 1.5rem;
-    display: flex; flex-direction: column; gap: 1rem;
-    transition: transform .25s;
-  }
-  .ho-quote:hover { transform: translateY(-3px); }
-  .ho-quote--0 { background: var(--ho-lime); }
-  .ho-quote--1 { background: var(--ho-mint); }
-  .ho-quote--2 { background: var(--ho-cream); }
-  .ho-quote__metric {
-    position: absolute;
-    top: -12px; left: 16px;
-    background: var(--ho-ink);
-    color: var(--ho-lime);
-    padding: .3rem .75rem;
-    font-family: var(--font-mono);
-    font-size: .62rem;
-    font-weight: 800;
-    letter-spacing: .12em;
-    border: 2px solid var(--ho-ink);
-    box-shadow: 3px 3px 0 var(--ho-accent);
-  }
-  .ho-quote__t {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 1.05rem;
-    line-height: 1.45;
-    color: var(--ho-ink);
-    margin: 0;
-    flex: 1;
-  }
-  .ho-quote__f { display: flex; align-items: center; gap: .85rem; padding-top: 1rem; border-top: 2px dashed var(--ho-ink); }
-  .ho-quote__avatar {
-    width: 40px; height: 40px;
-    background: var(--ho-ink); color: var(--ho-lime);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 50%;
-    font-family: var(--font-display);
-    font-weight: 800;
-  }
-  .ho-quote__f div { display: flex; flex-direction: column; }
-  .ho-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .95rem; color: var(--ho-ink); }
-  .ho-quote__role { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .1em; opacity: .7; text-transform: uppercase; }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* TECH STACK con SVGs CUSTOM                              */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-tech-section {
-    background: var(--ho-paper-2);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-    position: relative;
-    overflow: hidden;
-  }
-  .ho-tech-section::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(14,13,11,0.045) 1.2px, transparent 1.2px);
-    background-size: 24px 24px;
-    pointer-events: none;
-  }
-  .ho-tech-section > * { position: relative; }
-  .ho-tech {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  @media (min-width: 640px)  { .ho-tech { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .ho-tech { grid-template-columns: repeat(4, 1fr); } }
-  .ho-tech__item {
-    background: var(--ho-paper);
-    border: 2.5px solid var(--ho-ink);
-    box-shadow: 6px 6px 0 var(--ho-ink);
-    padding: 1.25rem 1.25rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-    transition: transform .25s, box-shadow .25s;
-    position: relative;
-  }
-  .ho-tech__item:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0 var(--ho-ink);
-  }
-  .ho-tech__item--orange  { background: rgba(255, 107, 53, 0.10); }
-  .ho-tech__item--blue    { background: rgba(0, 59, 122, 0.08); }
-  .ho-tech__item--woo     { background: rgba(127, 84, 179, 0.10); }
-  .ho-tech__item--purple  { background: rgba(99, 91, 255, 0.10); }
-  .ho-tech__item--cyan    { background: rgba(0, 195, 203, 0.10); }
-  .ho-tech__item--green   { background: rgba(0, 184, 92, 0.10); }
-  .ho-tech__item--orange-d { background: rgba(243, 128, 32, 0.10); }
-  .ho-tech__item--yellow  { background: rgba(255, 214, 0, 0.15); }
-  .ho-tech__item:hover { background: var(--ho-paper); }
-
-  .ho-tech__i {
-    font-size: .65rem;
-    color: var(--ho-accent-ink);
-    font-weight: 800;
-    letter-spacing: .2em;
-  }
-  .ho-tech__logo {
-    width: 100%;
-    aspect-ratio: 1;
-    max-width: 120px;
-    margin: 0 auto;
-    filter: drop-shadow(0 4px 8px rgba(14,13,11,0.18));
-    transition: transform .25s;
-  }
-  .ho-tech__item:hover .ho-tech__logo { transform: scale(1.04) rotate(-2deg); }
-  .ho-tech__name {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
-    letter-spacing: -.015em;
-    color: var(--ho-ink);
-    margin: .25rem 0 0;
-    text-align: center;
-  }
-  .ho-tech__desc {
-    font-size: .82rem;
-    line-height: 1.45;
-    color: var(--brutal-text-secondary);
-    margin: 0;
-    text-align: center;
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* COBERTURA                                               */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-cover-section {
-    background: var(--ho-paper-2);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-cover-grid {
-    list-style: none; padding: 0; margin: 2rem 0 3rem;
-    display: grid; gap: 0;
-    grid-template-columns: 1fr;
-    border: 2px solid var(--ho-ink);
-    background: var(--ho-ink);
-  }
-  @media (min-width: 640px) { .ho-cover-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
-  @media (min-width: 1024px) { .ho-cover-grid { grid-template-columns: repeat(3, 1fr); } }
-  .ho-cover-tile {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto 1fr auto;
-    gap: .35rem;
-    padding: 1.75rem;
-    background: var(--ho-paper);
-    color: var(--ho-ink);
-    text-decoration: none;
-    min-height: 160px;
-    transition: background .25s, color .25s;
-    grid-template-areas: 'meta arrow' 'name name' 'sub sub';
-  }
-  .ho-cover-tile .text-meta { grid-area: meta; }
-  .ho-cover-tile__name { grid-area: name; font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: .95; letter-spacing: -.025em; }
-  .ho-cover-tile__sub { grid-area: sub; font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
-  .ho-cover-tile__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ho-accent-ink); font-size: 1.5rem; transition: transform .25s; }
-  .ho-cover-tile:hover { background: var(--ho-accent); color: var(--ho-paper); }
-  .ho-cover-tile:hover .ho-cover-tile__sub { color: var(--ho-paper); opacity: .85; }
-  .ho-cover-tile:hover .ho-cover-tile__arrow { color: var(--ho-paper); transform: translateX(4px); }
-  .ho-cover-tile--1:hover { background: var(--ho-lime); color: var(--ho-ink); }
-  .ho-cover-tile--2:hover { background: var(--ho-ink); color: var(--ho-paper); }
-  .ho-cover-tile--2:hover .ho-cover-tile__arrow { color: var(--ho-lime); }
-  .ho-cover-tile--4:hover { background: var(--ho-lime); color: var(--ho-ink); }
-  .ho-cover-tile--5:hover { background: var(--ho-ink); color: var(--ho-paper); }
-  .ho-cover-tile--5:hover .ho-cover-tile__arrow { color: var(--ho-lime); }
-
-  .ho-cover-h3 { display: block; margin-bottom: 1rem; color: var(--ho-accent-ink); }
-  .ho-comarcas {
-    display: grid; gap: 0;
-    grid-template-columns: 1fr;
-    border: 2px solid var(--ho-ink);
-  }
-  @media (min-width: 768px) { .ho-comarcas { grid-template-columns: 1fr 1fr; } }
-  .ho-comarca { background: var(--ho-paper); border-bottom: 1px solid var(--ho-ink); }
-  @media (min-width: 768px) { .ho-comarca:nth-child(odd) { border-right: 1px solid var(--ho-ink); } }
-  .ho-comarca-link {
-    display: grid; grid-template-columns: 1fr auto auto;
-    align-items: center; gap: 1rem;
-    padding: 1.25rem 1.5rem; text-decoration: none; color: inherit;
-    transition: background .15s;
-  }
-  .ho-comarca-link:hover { background: var(--ho-paper-2); }
-  .ho-comarca__name { font-size: 1.4rem; line-height: 1; letter-spacing: -.025em; }
-  .ho-comarca__count { font-size: .65rem; text-transform: uppercase; letter-spacing: .14em; color: var(--brutal-text-muted); }
-  .ho-comarca__toggle {
-    width: 30px; height: 30px;
-    display: inline-flex; align-items: center; justify-content: center;
-    background: var(--ho-paper); border: 2px solid var(--ho-ink);
-    font-family: var(--font-mono); font-weight: 700;
-    transition: transform .25s, background .15s, color .15s;
-  }
-  .ho-comarca-link:hover .ho-comarca__toggle { background: var(--ho-accent); color: var(--ho-paper); transform: translateX(2px); }
-  .ho-cover-cta { margin-top: 3rem; text-align: center; }
-
-  /* ── Vera AI demo ── */
-  .ho-vera { background: #05070b; color: #e8edf5; padding: 4.5rem 0; border-block: 3px solid var(--ho-ink, #0E0D0B); }
-  .ho-vera__inner { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
-  @media (min-width: 880px) { .ho-vera__inner { grid-template-columns: 1.3fr 1fr; gap: 3rem; } }
-  .ho-vera__eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .68rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #c6ff3a; }
-  .ho-vera__title { font-size: clamp(2.2rem, 6vw, 3.8rem); line-height: .95; letter-spacing: -.03em; margin: 1rem 0; color: #fff; }
-  .ho-vera__lead { font-size: clamp(1rem, 2.2vw, 1.2rem); line-height: 1.55; color: #b9c4d4; max-width: 56ch; margin: 0 0 1.75rem; }
-  .ho-vera__lead strong { color: #c6ff3a; }
-  .ho-vera__btn {
-    display: inline-block; font-family: var(--font-display, sans-serif); font-weight: 800; font-size: 1.05rem;
-    padding: .9rem 1.6rem; background: #FF6B35; color: #0E0D0B; border: 2.5px solid #fff;
-    box-shadow: 5px 5px 0 #c6ff3a; text-decoration: none; transition: transform .12s, box-shadow .12s;
-  }
-  .ho-vera__btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #c6ff3a; }
-  .ho-vera__tags { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
-  .ho-vera__tags li { font-family: var(--font-mono, monospace); font-size: .85rem; padding: .7rem 1rem; border: 1px solid #232a38; border-radius: 12px; background: #0c111b; color: #cdd7e6; }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* BLOG preview                                            */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-blog-section {
-    background: var(--ho-paper);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-blog {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  @media (min-width: 768px) { .ho-blog { grid-template-columns: repeat(3, 1fr); } }
-  .ho-blog__item {
-    background: var(--ho-paper);
-    border: 2.5px solid var(--ho-ink);
-    box-shadow: 5px 5px 0 var(--ho-ink);
-    transition: transform .25s, box-shadow .25s;
-  }
-  .ho-blog__item:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--ho-accent); }
-  .ho-blog__link { display: flex; flex-direction: column; gap: .85rem; padding: 1.5rem; text-decoration: none; color: var(--ho-ink); height: 100%; }
-  .ho-blog__head {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding-bottom: .65rem;
-    border-bottom: 2px dashed var(--ho-ink);
-  }
-  .ho-blog__num { font-size: .7rem; letter-spacing: .15em; color: var(--ho-accent-ink); font-weight: 800; }
-  .ho-blog__date { font-size: .65rem; letter-spacing: .15em; color: var(--ho-ink); opacity: .65; }
-  .ho-blog__title {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 700;
-    font-size: clamp(1.2rem, 2vw, 1.45rem);
-    line-height: 1.1;
-    letter-spacing: -.015em;
-    color: var(--ho-ink);
-    margin: 0;
-  }
-  .ho-blog__excerpt {
-    font-size: .88rem;
-    line-height: 1.5;
-    color: var(--brutal-text-secondary);
-    flex: 1;
-  }
-  .ho-blog__foot {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: .75rem;
-    border-top: 1.5px solid var(--ho-ink);
-  }
-  .ho-blog__tag {
-    background: var(--ho-ink); color: var(--ho-lime);
-    padding: .2rem .55rem;
-    font-family: var(--font-mono);
-    font-size: .58rem;
-    font-weight: 800;
-    letter-spacing: .15em;
-  }
-  .ho-blog__cta {
-    font-family: var(--font-mono);
-    font-size: .7rem;
-    font-weight: 800;
-    color: var(--ho-accent-ink);
-    letter-spacing: .15em;
-    text-transform: uppercase;
-  }
-  .ho-blog-cta { margin-top: 2rem; text-align: center; }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* FAQ                                                     */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-faq-section {
-    background: var(--ho-paper-2);
-    padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--ho-ink);
-  }
-  .ho-faq {
-    list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--ho-ink);
-  }
-  .ho-faq__item { border-bottom: 2px solid var(--ho-ink); }
-  .ho-faq__det summary { list-style: none; cursor: pointer; }
-  .ho-faq__det summary::-webkit-details-marker { display: none; }
-  .ho-faq__sum {
-    display: grid;
-    grid-template-columns: 60px 1fr 40px;
-    gap: 1rem;
-    align-items: center;
-    padding: 1.5rem 0;
-    transition: padding .2s, background .2s;
-  }
-  .ho-faq__sum:hover { padding-inline: 1rem; background: var(--ho-paper); }
-  .ho-faq__num { font-size: 1rem; font-weight: 800; color: var(--ho-accent-ink); letter-spacing: .1em; }
-  .ho-faq__q {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
-    line-height: 1.3;
-    letter-spacing: -.015em;
-    color: var(--ho-ink);
-    font-weight: 700;
-  }
-  .ho-faq__toggle {
-    width: 40px; height: 40px;
-    border: 2px solid var(--ho-ink);
-    background: var(--ho-paper);
-    color: var(--ho-ink);
-    display: flex; align-items: center; justify-content: center;
-    transition: transform .3s, background .2s, color .2s;
-  }
-  .ho-faq__det[open] .ho-faq__toggle { transform: rotate(180deg); background: var(--ho-accent); color: var(--ho-paper); }
-  .ho-faq__ans {
-    padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
-    font-size: .98rem;
-    line-height: 1.55;
-    max-width: 70ch;
-  }
-  @media (max-width: 640px) {
-    .ho-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; }
-    .ho-faq__ans { padding-left: 48px; }
-  }
-
-  /* Visible solo para lectores de pantalla */
-  .ho-sr-only {
-    position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-    border: 0;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    /* — Scroll reveal global — */
-    :global(.ho-js) .brutal-section-head,
-    :global(.ho-js) .ho-why__item,
-    :global(.ho-js) .ho-svc__item,
-    :global(.ho-js) .ho-aud__item,
-    :global(.ho-js) .ho-proc__step,
-    :global(.ho-js) .ho-port__item,
-    :global(.ho-js) .ho-quote,
-    :global(.ho-js) .ho-tech__item,
-    :global(.ho-js) .ho-cover-grid > li {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1);
-    }
-    :global(.ho-js) .brutal-section-head.is-in,
-    :global(.ho-js) .ho-cover-grid > li.is-in,
-    :global(.ho-js) .is-in {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  /* ═══════════════════════════════════════════════════════ */
-  /* PLAN 360 — TINTA Y LIMA                                 */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-360 {
-    background: var(--color-plano-tinta);
-    color: var(--color-plano-papel);
-    padding: clamp(3.5rem, 8vw, 6rem) 1.5rem;
-    border-bottom: 3px solid var(--color-plano-tinta);
-  }
-  .ho-360__inner { display: grid; gap: 2.5rem; }
-  @media (min-width: 1024px) { .ho-360__inner { grid-template-columns: 1.05fr 1fr; align-items: center; gap: 4rem; } }
-  .ho-360__kicker { margin: 0 0 1rem; font-family: var(--font-mono); font-size: .82rem; color: var(--color-plano-lima); }
-  .ho-360__title {
-    margin: 0;
-    font-family: var(--font-display); font-weight: 800;
-    font-size: clamp(2.4rem, 5.6vw, 4.6rem); line-height: .95; letter-spacing: -.045em;
-    text-wrap: balance;
-  }
-  .ho-360__lead { margin: 1.25rem 0 0; max-width: 46ch; font-size: 1.1rem; line-height: 1.55; color: #d9d2c6; }
-  .ho-360__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 2rem; }
-  .ho-360__btn {
-    display: inline-flex; align-items: center; min-height: 3.1rem;
-    padding: .85rem 1.5rem;
-    font-family: var(--font-mono); font-weight: 800;
-    background: var(--color-plano-lima); color: var(--color-plano-tinta);
-    text-decoration: none;
-    border: 3px solid var(--color-plano-lima);
-    box-shadow: 6px 6px 0 var(--color-plano-naranja);
-    transition: transform .15s, box-shadow .15s;
-  }
-  .ho-360__btn:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--color-plano-naranja); }
-  .ho-360__link { color: var(--color-plano-lima); font-family: var(--font-mono); font-weight: 800; text-underline-offset: 4px; }
-  .ho-360__btn:focus-visible, .ho-360__link:focus-visible { outline: 3px solid var(--color-plano-lima); outline-offset: 4px; }
-  .ho-360__list {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: 1fr;
-    border: 3px solid var(--color-plano-papel);
-    box-shadow: 10px 10px 0 var(--color-plano-naranja);
-  }
-  @media (min-width: 640px) { .ho-360__list { grid-template-columns: 1fr 1fr; } }
-  .ho-360__list li { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .3rem; border-bottom: 1px solid rgb(245 241 234 / .22); border-right: 1px solid rgb(245 241 234 / .22); }
-  .ho-360__list strong { font-size: 1rem; color: var(--color-plano-papel); }
-  .ho-360__list span { font-size: .9rem; line-height: 1.45; color: #bdb6aa; }
-  /* ═══════════════════════════════════════════════════════ */
-  /* VENGEANCE UI — portfolio, opiniones y órbita tecnológica */
-  /* ═══════════════════════════════════════════════════════ */
-  .ho-port-carousel { position: relative; height: clamp(320px, 42vw, 440px); margin-top: 1.5rem; }
-  .ho-port-links {
-    list-style: none; margin: 2rem 0 0; padding: 0;
-    display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  }
-  .ho-port-links a {
-    display: flex; flex-direction: column; gap: .15rem;
-    padding: .9rem 1rem;
-    border: 1px solid rgb(14 13 11 / .12);
-    border-radius: 14px;
-    background: #fffcf6;
-    color: var(--ho-ink);
-    text-decoration: none;
-    transition: border-color .2s, transform .2s, box-shadow .2s;
-  }
-  .ho-port-links a:hover { border-color: #ff5a00; transform: translateY(-2px); box-shadow: 0 10px 24px rgb(255 90 0 / .12); }
-  .ho-port-links strong { font-weight: 800; }
-  .ho-port-links span { font-size: .85rem; color: #4a453f; }
-
-  .ho-quote-section :global(.ho-testimonials) { padding-inline: 0; }
-
-  .ho-orbit { position: relative; }
-  .ho-orbit__core { display: none; }
-  @property --ho-orbit {
-    syntax: '<angle>';
-    inherits: true;
-    initial-value: 0deg;
-  }
+  .h-tech { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 640px) { .h-tech { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .h-tech { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .h-tech__item { padding: 1.1rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); }
+  .h-tech__logo { width: 56px; height: 56px; margin-bottom: 0.75rem; }
+  .h-tech__nombre { margin: 0 0 0.3rem; font-weight: 600; font-size: 1rem; }
+  .h-tech__desc { margin: 0; font-size: 0.85rem; line-height: 1.5; color: #b9c5cf; }
+  .h-orbita { position: relative; }
+  .h-orbita__nucleo { display: none; }
   @media (min-width: 1100px) {
-    .ho-orbit { height: 820px; display: grid; place-items: center; }
-    .ho-orbit::before, .ho-orbit::after {
-      content: ''; position: absolute; left: 50%; top: 50%;
-      border: 1px dashed rgb(14 13 11 / .22); border-radius: 50%;
-      transform: translate(-50%, -50%); pointer-events: none;
-    }
-    .ho-orbit::before { width: 380px; height: 380px; }
-    .ho-orbit::after { width: 690px; height: 690px; }
-    .ho-orbit__core {
-      position: absolute; left: 50%; top: 50%; z-index: 2;
-      display: grid; place-items: center;
-      width: 150px; height: 150px; margin: -75px 0 0 -75px;
+    .h-orbita { display: grid; place-items: center; height: 820px; }
+    .h-orbita::before,
+    .h-orbita::after { content: ''; position: absolute; left: 50%; top: 50%; border: 1px dashed var(--color-cdm-regla-2); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+    .h-orbita::before { width: 380px; height: 380px; }
+    .h-orbita::after { width: 690px; height: 690px; }
+    .h-orbita__nucleo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 150px;
+      height: 150px;
+      margin: -75px 0 0 -75px;
+      border: 1px solid var(--color-cdm-senal);
       border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #2a2622, #0e0d0b 70%);
-      color: #d6ff44; font-family: serif; font-weight: 800; font-size: 3rem;
-      box-shadow: 0 0 0 10px rgb(255 90 0 / .12), 0 0 60px rgb(255 90 0 / .35);
+      background: var(--color-cdm-panel);
+      color: var(--color-cdm-senal);
+      font-family: var(--font-mono);
+      font-size: 2.6rem;
+      box-shadow: 0 0 0 10px rgb(255 90 0 / 0.08), 0 0 60px rgb(255 90 0 / 0.25);
     }
-    .ho-tech {
-      position: absolute !important; inset: 0; margin: 0 !important;
-      display: block !important;
-      border: 0 !important; background: none !important;
-      --ho-orbit: 0deg;
-    }
-    .ho-tech__item {
-      position: absolute !important;
-      width: 132px; margin: -66px 0 0 -66px;
-      padding: .75rem !important;
-      border-radius: 18px;
+    .h-tech { position: absolute; inset: 0; display: block; }
+    .h-tech__item {
+      position: absolute;
+      width: 132px;
+      margin: -66px 0 0 -66px;
+      padding: 0.75rem;
       text-align: center;
-      background: #fffcf6 !important;
-      border: 1px solid rgb(14 13 11 / .12) !important;
-      box-shadow: 0 12px 30px rgb(14 13 11 / .12);
-      /* Posición en órbita con trigonometría en left/top: el scroll reveal de la
-         home controla transform y lo dejaría a none. */
-      left: calc(50% + var(--r) * cos(calc(var(--a0) + var(--ho-orbit))));
-      top: calc(50% + var(--r) * sin(calc(var(--a0) + var(--ho-orbit))));
+      left: calc(50% + var(--r) * cos(var(--a0)));
+      top: calc(50% + var(--r) * sin(var(--a0)));
     }
-    .ho-tech__item .ho-tech__desc, .ho-tech__item .ho-tech__i {
-      position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
-    }
-    .ho-tech__item .ho-tech__logo { width: 64px; height: 64px; margin: 0 auto .4rem; }
-    .ho-tech__item .ho-tech__name { font-size: .85rem; margin: 0; }
+    .h-tech__desc { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .h-tech__logo { width: 64px; height: 64px; margin: 0 auto 0.4rem; }
+    .h-tech__nombre { margin: 0; font-size: 0.85rem; }
     /* Anillo interior (3) y exterior (5) con ángulos alternos para que no se solapen */
-    .ho-tech__item:nth-child(1) { --a0: 36deg;  --r: 190px; }
-    .ho-tech__item:nth-child(2) { --a0: 156deg; --r: 190px; }
-    .ho-tech__item:nth-child(3) { --a0: 276deg; --r: 190px; }
-    .ho-tech__item:nth-child(4) { --a0: 0deg;   --r: 345px; }
-    .ho-tech__item:nth-child(5) { --a0: 72deg;  --r: 345px; }
-    .ho-tech__item:nth-child(6) { --a0: 144deg; --r: 345px; }
-    .ho-tech__item:nth-child(7) { --a0: 216deg; --r: 345px; }
-    .ho-tech__item:nth-child(8) { --a0: 288deg; --r: 345px; }
+    .h-tech__item:nth-child(1) { --a0: 36deg; --r: 190px; }
+    .h-tech__item:nth-child(2) { --a0: 156deg; --r: 190px; }
+    .h-tech__item:nth-child(3) { --a0: 276deg; --r: 190px; }
+    .h-tech__item:nth-child(4) { --a0: 0deg; --r: 345px; }
+    .h-tech__item:nth-child(5) { --a0: 72deg; --r: 345px; }
+    .h-tech__item:nth-child(6) { --a0: 144deg; --r: 345px; }
+    .h-tech__item:nth-child(7) { --a0: 216deg; --r: 345px; }
+    .h-tech__item:nth-child(8) { --a0: 288deg; --r: 345px; }
   }
-  @media (min-width: 1100px) and (prefers-reduced-motion: no-preference) {
-    .ho-tech { animation: ho-orbit-spin 70s linear infinite; }
-    .ho-orbit:hover .ho-tech { animation-play-state: paused; }
-  }
-  @keyframes ho-orbit-spin { to { --ho-orbit: 360deg; } }
+
+  .h-localidades { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 0 0 2.5rem; padding: 0; list-style: none; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
+  @media (min-width: 900px) { .h-localidades { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .h-localidad { display: grid; gap: 0.25rem; height: 100%; padding: 1.2rem; background: var(--color-cdm-suelo); color: inherit; text-decoration: none; }
+  .h-localidad:hover { background: var(--color-cdm-panel); }
+  .h-localidad__nombre { font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1; }
+  .h-localidad__sub { font-size: 0.85rem; color: var(--color-cdm-tenue); }
+  .h-comarcas__titulo { margin: 0 0 0.75rem; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; }
+  .h-comarcas { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+  .h-comarca { display: inline-flex; align-items: baseline; gap: 0.6rem; padding: 0.55rem 0.85rem; border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; }
+  .h-comarca:hover { border-color: var(--color-cdm-texto); }
+  .h-comarca__nombre { font-weight: 600; }
+  .h-comarca__num { font-size: 0.8rem; color: var(--color-cdm-tenue); }
+  .h-enlace { display: inline-block; color: var(--color-cdm-texto); font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-cdm-senal); text-underline-offset: 4px; }
+
+  .h-vera { display: grid; gap: 2rem; align-items: center; }
+  @media (min-width: 1000px) { .h-vera { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
+  .h-vera__etq { margin: 0 0 0.75rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
+  .h-vera__lead { margin-top: 1rem; }
+  .h-vera__btn { display: inline-flex; align-items: center; min-height: 2.9rem; margin-top: 1.5rem; padding: 0.7rem 1.15rem; background: var(--color-cdm-senal); color: #120600; font-weight: 600; text-decoration: none; }
+  .h-vera__btn:hover { background: #ff7a33; }
+  .h-vera__sectores { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
+  .h-vera__sectores li { padding: 0.85rem 1rem; background: var(--color-cdm-panel); font-size: 0.95rem; }
+
+  .h-blog { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0 0 1.75rem; padding: 0; list-style: none; }
+  @media (min-width: 900px) { .h-blog { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .h-post { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; padding: 1.3rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; }
+  .h-post:hover { border-color: var(--color-cdm-texto); }
+  .h-post__fecha { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
+  .h-post__titulo { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.15; }
+  .h-post__resumen { margin: 0; font-size: 0.92rem; line-height: 1.55; color: #b9c5cf; }
+  .h-post__cat { margin-top: auto; padding-top: 0.6rem; font-size: 0.8rem; color: var(--color-cdm-tenue); }
 </style>

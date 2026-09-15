@@ -6,7 +6,7 @@
 /* Fuentes self-hosted con @fontsource — sin peticiones a Google Fonts
    (mismo origen, cacheables, font-display:swap por defecto). Las variables
    --font-* del @theme siguen referenciando estas familias por nombre. */
-@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource-variable/bricolage-grotesque/wdth.css';
 @import '@fontsource-variable/dm-sans';
 @import '@fontsource-variable/jetbrains-mono';
 @import '@fontsource/instrument-serif';
@@ -33,21 +33,32 @@
   /* Cianotipo: 5.9:1 sobre papel, apto para texto pequeño */
   --color-plano-ciano: #2447e0;
   --color-plano-reticula: rgb(14 13 11 / 0.11);
+
+  /* Centro de mando (rediseño 2026-09-15) */
+  --color-cdm-suelo: #070b10;
+  --color-cdm-panel: #0c131a;
+  --color-cdm-panel-2: #111b24;
+  --color-cdm-regla: #1c2a36;
+  --color-cdm-regla-2: #26394a;
+  --color-cdm-texto: #e6edf2;
+  --color-cdm-tenue: #8494a2;
+  --color-cdm-senal: #ff5a00;
+  --color-cdm-ok: #d6ff44;
 }
 
 
 @theme {
   --font-display:
-    Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif,
+    'Bricolage Grotesque Variable', 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-editorial:
     Instrument Serif, ui-serif, Georgia, Cambria, 'Times New Roman', Times,
     serif;
   --font-body:
-    DM Sans, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'DM Sans Variable', 'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono:
-    JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
 
   --color-brutal-bg: #f5f1ea;
@@ -736,10 +747,10 @@
 @layer utilities {
   :root {
     /* — Tipografías — */
-    --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', system-ui, sans-serif;
     --font-editorial: 'Instrument Serif', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    --font-body: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
 
     /* — Paleta — */
     --brutal-bg: #f5f1ea;
@@ -1948,3 +1959,61 @@ html, body { overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) {
   [class*='border-beam']::after { animation: none !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   CENTRO DE MANDO — capa compartida del rediseño (2026-09-15)
+   ════════════════════════════════════════════════════════════════════ */
+.cdm-dentro {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: clamp(4rem, 8vw, 6.5rem) var(--container-gutter);
+}
+.cdm-cabecera {
+  display: grid;
+  gap: 1rem 3rem;
+  margin-bottom: 2.5rem;
+}
+@media (min-width: 1024px) {
+  .cdm-cabecera { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: end; }
+}
+.cdm-cabecera__h2 {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-stretch: 82%;
+  font-weight: 740;
+  font-size: clamp(2.2rem, 5vw, 3.9rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--color-cdm-texto);
+}
+.cdm-cabecera__lead {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #b9c5cf;
+}
+.cdm-cabecera__lead strong { color: var(--color-cdm-texto); font-weight: 600; }
+
+/* Arranque: los paneles secundarios se encienden una sola vez por visita.
+   Nunca se aplica a H1, H2 ni botones (LCP). */
+@keyframes cdm-enciende {
+  0% { opacity: 0; }
+  30% { opacity: 0.6; }
+  40% { opacity: 0.15; }
+  60% { opacity: 0.9; }
+  70% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-cdm-arranque='hecho']) .cdm-enciende {
+    animation: cdm-enciende 0.9s var(--cdm-retardo, 0s) both;
+  }
+}
+.cdm-seccion {
+  background: var(--color-cdm-suelo);
+  color: var(--color-cdm-texto);
+  border-top: 1px solid var(--color-cdm-regla);
+}
+.cdm-seccion a:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }

@@ -46,10 +46,11 @@ Los tokens `--color-plano-*` se mantienen mientras queden páginas sin migrar y 
 
 ### 3.2 Tipografía
 
-- Titulares: Bricolage Grotesque variable con `font-variation-settings: "wdth" 82`, peso 700-760, interlineado 0,92-0,95, tracking −0,02 em. Importar `wdth.css` en lugar del índice.
+- Titulares: Bricolage Grotesque variable con `font-stretch: 82%` (eje de anchura), peso 700-760, interlineado 0,92-0,95, tracking −0,02 em. Importar `wdth.css` en lugar del índice.
 - Lectura: DM Sans 17-18 px, interlineado 1,6, columna ≤ 68 ch.
 - Telemetría: JetBrains Mono solo en datos (coordenadas, horas, registros, etiquetas real/demo). Nunca en párrafos.
-- Se elimina Instrument Serif y sus imports.
+- Instrument Serif se mantiene hasta cerrar la fase 4, porque la usa `.heading-editorial` en páginas sin migrar.
+- Corrección previa (hallada al planificar): fontsource registra las familias como `'Bricolage Grotesque Variable'`, `'DM Sans Variable'` y `'JetBrains Mono Variable'`, pero las variables `--font-*` pedían los nombres sin «Variable». Hasta hoy la web se veía con fuentes del sistema. Se corrige en la fase 1 con un test.
 
 ### 3.3 Reglas de lenguaje visual
 
@@ -68,26 +69,27 @@ Todos son `.astro` sin hidratación salvo que se indique.
 |---|---|---|
 | `Consola.astro` | Sección oscura con retícula y viñeta; opcional escáner de arranque | `escaner?: boolean`, `as?: 'section'\|'div'`, slot |
 | `Panel.astro` | Marco con cabecera y etiqueta | `titulo`, `tipo: 'real'\|'demo'\|'neutro'`, `nota?`, slot |
-| `BarraEstado.astro` | Cabecera global: marca P★, menú, hora de Vera, «técnicos disponibles», botón Presupuesto; menú hamburguesa < 1280 px. `layout/Header.astro` pasa a renderizarla, así cambia en todas las páginas a la vez | `currentPath` |
+| `BarraEstado.astro` | Cabecera global: marca P★, menú, hora de Vera, «técnicos disponibles», botón Presupuesto; menú hamburguesa < 1280 px. se implementa directamente dentro de `layout/Header.astro` (sin archivo aparte), así cambia en todas las páginas a la vez | `currentPath` |
 | `RadarCobertura.astro` | Mapa SVG del Levante y Almanzora con costa, anillos desde Vera, barrido CSS y pueblos | `pueblos` de `src/data/cobertura.ts`, `destacado?: slug` |
 | `WebsMedidas.astro` | Lista de webs de clientes con Lighthouse, barra y fecha de medida | lee `src/data/medidas.json` |
 | `RegistroDemo.astro` | Registro animado del Plan 360, siempre `tipo="demo"` | `lineas: {hora, texto, estado?}[]` |
-| `Telemetria.astro` | Franja de cifras con contador | `cifras: {valor, prefijo?, sufijo?, etiqueta}[]` (usa `StatsCounter`, `client:visible`) |
+| `Telemetria.astro` | Franja de cifras con contador | `cifras: {valor, prefijo?, sufijo?, etiqueta}[]` (contador propio en un script pequeño, sin React; el HTML trae el valor final) |
 | `IndiceLateral.astro` | Raíl de secciones con progreso de lectura y coordenadas; script pequeño con `IntersectionObserver` | `secciones: {id, etiqueta}[]`, `coordenadas?` |
 | `Postal.astro` | Marco para ilustraciones a mano con pie | `pie?`, `nota?`, slot |
 | `Boton.astro` | Botón primario/línea con foco visible | `href`, `variante: 'senal'\|'linea'` |
 
-Se conservan y reestilizan: `animated-footer` (footer ASCII), `stats-counter`, `faq-accordion`, `perspective-carousel`, `testimonials-card`.
-Se eliminan al terminar la fase en que dejan de usarse: `animated-rays`, `morph-text`, `radial-glow-button`, `corner-button`, `glow-border-card`, `research-bento-grid`, `spotlight-navbar`, `border-beam`, `flip-fade-text`, `vg/*`, `brutal/*`, `it/*`, y las dependencias `gsap`, `lucide-react` si nada las usa.
+Se conservan y reestilizan: `animated-footer` (footer ASCII), `faq-accordion`, `perspective-carousel`, `testimonials-card`.
+Se eliminan al terminar la fase en que dejan de usarse: `animated-rays`, `morph-text`, `radial-glow-button`, `corner-button`, `glow-border-card`, `research-bento-grid`, `spotlight-navbar`, `border-beam`, `flip-fade-text`, `stats-counter`, `vg/*`, `brutal/*`, `it/*`, y las dependencias `gsap`, `lucide-react` si nada las usa.
 
 ## 5. Datos
 
-### 5.1 Medidas reales (`scripts/medir-webs.mjs`)
+### 5.1 Medidas reales (`src/scripts/medir-webs.ts`, con `tsx` como el resto de scripts del repo)
 
 - Entrada: la lista de proyectos con URL de `src/pages/index.astro`, movida a `src/data/proyectos.ts` para compartirla.
 - Por cada URL: PageSpeed Insights v5, estrategia móvil, categoría rendimiento (clave opcional `PSI_API_KEY`); y tiempo hasta el primer byte con `fetch` (3 intentos, mediana).
-- Salida `src/data/medidas.json`, validada con Zod: `{ medidoEl: ISO, webs: [{ id, url, lighthouse: number|null, ttfbMs: number|null }] }`.
-- Se ejecuta en `prebuild`. Límite total 90 s; timeout por URL 25 s.
+- Salida `src/data/medidas.json`, validada con Zod: `{ medidoEl: ISO|null, webs: [{ id, url, lighthouse: number|null, ttfbMs: number|null, medidoEl: ISO|null }] }`.
+- Se ejecuta en `prebuild` con `--si-caduca`: solo vuelve a medir si la última medida tiene más de 12 h. Límite total 90 s; timeout por URL 25 s.
+- El panel de la portada muestra las cuatro primeras webs de `proyectos.ts` en su orden, no las de mejor nota. Por debajo de 90 la cifra no va en lima.
 - Si una web falla, conserva su último valor y fecha. Si no hay ningún valor, el panel muestra «sin medida disponible» y no se pinta la cifra. Nunca se escriben valores inventados.
 - El JSON se versiona para que un build sin red siga funcionando.
 - El panel muestra «medido el 15 sep» a partir de `medidoEl`.
@@ -111,7 +113,7 @@ Mismo orden de secciones y mismos textos que hoy; cambia la presentación.
 1. Consola de portada: prompt de sector, H1 «Diseño web en Almería» con cursor, frase rotatoria en CSS, H2, botones, línea de confianza; a la derecha `RadarCobertura`, `WebsMedidas`, `RegistroDemo`; debajo `Telemetria`.
 2. Servicios como módulos de consola.
 3. Precios: tres paneles (Página web 500 €, Tienda online 700 €, Plan 360 400 €/mes con `RegistroDemo` resumido).
-4. Proyectos: carrusel reestilizado; cada web con su Lighthouse medido.
+4. Proyectos: carrusel reestilizado; cada web con su Lighthouse medido. La franja «99/100 Lighthouse medio, < 1 s, 100 % clientes que repiten» no tiene respaldo y se sustituye por esas medidas reales.
 5. Tecnologías: la órbita actual con sus logos SVG, en paleta de consola.
 6. Testimonios, pueblos, FAQ (JSON-LD FAQPage intacto), contacto.
 
@@ -150,7 +152,7 @@ Desarrollo web, audiovisual, marketing (+ auditoría, recursos), diseño gráfic
   - `proyectar()` sitúa Vera, Garrucha y Carboneras en su orden correcto y dentro del `viewBox`.
   - Lector de `medidas.json`: esquema válido, valores nulos no se pintan, fecha formateada.
   - `svg-landings.test`: recuento de `<svg` por landing a mano ≥ al guardado antes de la fase 2.
-  - SEO en `dist/`: por página indexable, 1 H1, título ≤ 60, descripción 110-160, canonical con barra final; lista de URLs igual a la de `feat/rediseno-cine`.
+  - `npm run audit:seo` (`src/scripts/auditoria-seo.ts`) sobre `dist/client`: compara con una línea base guardada antes de tocar nada (URLs, título, descripción, canonical, robots, H1, primer H2 dentro de `<main>`, tipos JSON-LD); exige 1 H1 en páginas indexables, que cada panel demo lleve su etiqueta, HTML de la home ≤ 180 KB y no más JS de islas que la base.
 - Visual: capturas Playwright 1440 px y 390 px de cada plantilla al cerrar cada fase.
 - Lighthouse local sobre el build estático al cerrar cada fase (umbrales §2).
 

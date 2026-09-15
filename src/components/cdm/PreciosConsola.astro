@@ -1,0 +1,80 @@
+---
+/* Precios de entrada: tres fichas y, debajo, qué hace el Plan 360 cada día
+   con su panel demo. El H2 conserva la palabra clave de la home actual. */
+import Consola from './Consola.astro';
+import RegistroDemo from './RegistroDemo.astro';
+import type { LineaRegistro, TarifaCdm } from './tipos';
+
+interface Props {
+  h2: string;
+  lead: string;
+  tarifas: TarifaCdm[];
+  registro: LineaRegistro[];
+}
+
+const { h2, lead, tarifas, registro } = Astro.props;
+---
+
+<Consola id="precios" class="cdm-precios" aria-labelledby="cdm-precios-h2">
+  <div class="cdm-dentro">
+    <header class="cdm-cabecera">
+      <h2 id="cdm-precios-h2" class="cdm-cabecera__h2">{h2}</h2>
+      <p class="cdm-cabecera__lead">{lead}</p>
+    </header>
+
+    <ul class="cdm-precios__lista">
+      {tarifas.map((t) => (
+        <li class:list={['cdm-precios__tarifa', { 'is-destacada': t.destacada }]}>
+          <p class="cdm-precios__servicio">{t.servicio}</p>
+          <p class="cdm-precios__precio"><span class="cdm-precios__desde">desde</span> {t.desde}</p>
+          <p class="cdm-precios__nota">{t.nota}</p>
+          <ul class="cdm-precios__incluye">
+            {t.incluye.map((item) => <li>{item}</li>)}
+          </ul>
+          <a href={t.href} class:list={['cdm-precios__cta', t.destacada ? 'is-senal' : 'is-linea']}>{t.cta}</a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="cdm-precios__plan">
+      <div>
+        <h3 class="cdm-precios__plan-titulo">Qué pasa cada día con el Plan 360</h3>
+        <p class="cdm-precios__plan-texto">Vigilamos tus equipos, la red, las copias y la web. Cuando algo falla lo ves en tu panel, y un técnico lo resuelve en remoto o en tu local el mismo día.</p>
+      </div>
+      <RegistroDemo lineas={registro} titulo="Panel del Plan 360" />
+    </div>
+  </div>
+</Consola>
+
+<style>
+  .cdm-precios__lista { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 900px) { .cdm-precios__lista { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .cdm-precios__tarifa { display: flex; flex-direction: column; padding: 1.4rem; background: rgb(12 19 26 / 0.92); border: 1px solid var(--color-cdm-regla-2); }
+  .cdm-precios__tarifa.is-destacada { border-color: var(--color-cdm-senal); box-shadow: 0 0 0 1px var(--color-cdm-senal); }
+  .cdm-precios__servicio { margin: 0; font-weight: 600; color: var(--color-cdm-texto); }
+  .cdm-precios__precio {
+    margin: 0.6rem 0 0.2rem;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 740;
+    font-size: clamp(2.3rem, 4vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-cdm-texto);
+  }
+  .cdm-precios__desde { font-family: var(--font-body); font-stretch: 100%; font-weight: 400; font-size: 0.9rem; letter-spacing: 0; color: var(--color-cdm-tenue); }
+  .cdm-precios__nota { margin: 0 0 1.1rem; font-size: 0.85rem; color: var(--color-cdm-tenue); }
+  .cdm-precios__incluye { display: grid; gap: 0.5rem; margin: 0 0 1.4rem; padding: 0; list-style: none; font-size: 0.92rem; color: #c3ced7; }
+  .cdm-precios__incluye li { position: relative; padding-left: 1.1rem; }
+  .cdm-precios__incluye li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 0.45rem; height: 1px; background: var(--color-cdm-tenue); }
+  .cdm-precios__cta { display: flex; justify-content: center; margin-top: auto; padding: 0.75rem 1rem; border: 1px solid; font-weight: 600; text-decoration: none; }
+  .cdm-precios__cta.is-senal { background: var(--color-cdm-senal); border-color: var(--color-cdm-senal); color: #120600; }
+  .cdm-precios__cta.is-senal:hover { background: #ff7a33; border-color: #ff7a33; }
+  .cdm-precios__cta.is-linea { border-color: var(--color-cdm-regla-2); color: var(--color-cdm-texto); }
+  .cdm-precios__cta.is-linea:hover { border-color: var(--color-cdm-texto); }
+  .cdm-precios__cta:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }
+  .cdm-precios__plan { display: grid; gap: 1.5rem; align-items: center; margin-top: 2.5rem; }
+  @media (min-width: 900px) { .cdm-precios__plan { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); } }
+  .cdm-precios__plan-titulo { margin: 0 0 0.6rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.8rem; line-height: 1.05; }
+  .cdm-precios__plan-texto { max-width: 46ch; margin: 0; line-height: 1.6; color: #b9c5cf; }
+</style>

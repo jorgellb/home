@@ -1,0 +1,69 @@
+---
+/* Panel del centro de mando.
+   tipo="real": dato medido, marco sólido y etiqueta «real».
+   tipo="demo": simulación, marco discontinuo y etiqueta «demo».
+   La auditoría SEO comprueba que todo data-panel="demo" lleva su etiqueta. */
+interface Props {
+  titulo: string;
+  tipo?: 'real' | 'demo' | 'neutro';
+  nota?: string;
+  as?: 'div' | 'section' | 'article';
+  class?: string;
+  id?: string;
+}
+
+const { titulo, tipo = 'neutro', nota, as: Etiqueta = 'div', class: clase, id } = Astro.props;
+---
+
+<Etiqueta class:list={['cdm-panel', `cdm-panel--${tipo}`, clase]} data-panel={tipo} id={id}>
+  <div class="cdm-panel__cab">
+    <span class="cdm-panel__titulo">{titulo}</span>
+    {tipo !== 'neutro' && <span class="cdm-panel__etq" data-panel-etiqueta={tipo}>{tipo}</span>}
+  </div>
+  <div class="cdm-panel__cuerpo"><slot /></div>
+  {nota && <p class="cdm-panel__nota">{nota}</p>}
+</Etiqueta>
+
+<style>
+  .cdm-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: rgb(12 19 26 / 0.92);
+    border: 1px solid var(--color-cdm-regla-2);
+    color: var(--color-cdm-texto);
+  }
+  .cdm-panel--demo {
+    background: rgb(12 19 26 / 0.7);
+    border-style: dashed;
+    border-color: #3a4c5c;
+  }
+  .cdm-panel__cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--color-cdm-regla);
+    font-size: 0.8rem;
+  }
+  .cdm-panel__titulo { font-weight: 600; }
+  .cdm-panel__etq {
+    padding: 0.05rem 0.4rem;
+    border: 1px solid currentColor;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+  }
+  .cdm-panel--real .cdm-panel__etq { color: var(--color-cdm-ok); }
+  .cdm-panel--demo .cdm-panel__etq { color: var(--color-cdm-tenue); border-style: dashed; }
+  .cdm-panel__cuerpo { flex: 1; min-width: 0; }
+  .cdm-panel__nota {
+    margin: 0;
+    padding: 0.5rem 0.8rem;
+    border-top: 1px solid var(--color-cdm-regla);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-cdm-tenue);
+  }
+</style>

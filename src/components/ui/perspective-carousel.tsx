@@ -212,19 +212,25 @@ export function PerspectiveCarousel({
           </button>
 
           {showDots && (
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center">
               {items.map((item, index) => (
+                /* Zona táctil de 24 px (WCAG 2.5.8) con el punto visual dentro */
                 <button
                   key={`${item.title}-${index}`}
                   type="button"
                   aria-label={`Ir a ${index + 1}: ${item.title}`}
                   aria-current={currentIndex === index ? "true" : undefined}
-                  className={cn(
-                    "h-2 rounded-full bg-current transition-[width,opacity] duration-300",
-                    currentIndex === index ? "w-7 opacity-100" : "w-2 opacity-30"
-                  )}
+                  className="grid h-6 min-w-6 place-items-center px-0.5"
                   onClick={() => selectSlide(index)}
-                />
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "block h-2 rounded-full bg-current transition-[width,opacity] duration-300",
+                      currentIndex === index ? "w-7 opacity-100" : "w-2 opacity-30"
+                    )}
+                  />
+                </button>
               ))}
             </div>
           )}

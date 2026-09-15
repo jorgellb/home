@@ -1,0 +1,77 @@
+---
+/* Sección oscura del centro de mando: retícula de plano y viñeta. Lleva la
+   clase "dark" para que los componentes React con variantes dark: se pinten
+   en oscuro. Con `escaner`, pasa la franja naranja una sola vez por visita:
+   el script marca la sesión antes de que se pinte el contenido. */
+interface Props {
+  as?: 'section' | 'div';
+  id?: string;
+  escaner?: boolean;
+  class?: string;
+  'aria-labelledby'?: string;
+}
+
+const { as: Etiqueta = 'section', id, escaner = false, class: clase, 'aria-labelledby': etiquetadaPor } = Astro.props;
+---
+
+<Etiqueta class:list={['cdm-consola', 'dark', clase]} id={id} aria-labelledby={etiquetadaPor}>
+  {escaner && (
+    <script is:inline>
+      try {
+        if (sessionStorage.getItem('cdm-arranque')) document.documentElement.dataset.cdmArranque = 'hecho';
+        else sessionStorage.setItem('cdm-arranque', '1');
+      } catch (_error) {
+        // Sin sessionStorage (modo privado): el arranque se repite en cada vista.
+      }
+    </script>
+  )}
+  {escaner && <div class="cdm-consola__escaner" aria-hidden="true"></div>}
+  <slot />
+</Etiqueta>
+
+<style>
+  .cdm-consola {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: var(--color-cdm-texto);
+    background-color: var(--color-cdm-suelo);
+    background-image:
+      linear-gradient(var(--color-cdm-regla) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-cdm-regla) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+  }
+  .cdm-consola::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(90% 70% at 70% 35%, transparent 0, var(--color-cdm-suelo) 78%);
+  }
+  .cdm-consola__escaner {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      180deg,
+      transparent calc(100% - 120px),
+      rgb(255 90 0 / 0.1) calc(100% - 24px),
+      rgb(255 90 0 / 0.55) calc(100% - 2px),
+      transparent 100%
+    );
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(:root:not([data-cdm-arranque='hecho'])) .cdm-consola__escaner {
+      animation: cdm-escanea 2.2s 0.15s cubic-bezier(0.5, 0, 0.3, 1) both;
+    }
+  }
+  @keyframes cdm-escanea {
+    0% { opacity: 1; transform: translateY(-100%); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(0); }
+  }
+</style>

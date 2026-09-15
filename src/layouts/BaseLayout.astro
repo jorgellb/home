@@ -2,6 +2,9 @@
 import '../styles/global.css';
 import CookieConsent from '../components/common/CookieConsent.astro';
 import ChatWidget from '../components/asistente/ChatWidget.astro';
+// Precarga del subconjunto latino de Bricolage (titulares): evita el salto
+// de fuente en el H1, que es el LCP de casi todas las páginas.
+import bricolageLatino from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -77,7 +80,8 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <link rel="icon" type="image/png" href="/imagenes/icon.png" />
     <link rel="apple-touch-icon" href="/imagenes/icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#F5F1EA" />
+    <meta name="theme-color" content="#070B10" />
+    <link rel="preload" href={bricolageLatino} as="font" type="font/woff2" crossorigin />
     <meta name="generator" content={Astro.generator} />
 
     {preload.map(resource => (
@@ -100,57 +104,10 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
   <body>
     <a href="#main-content" class="skip-link">Saltar al contenido</a>
 
-    {/* Marquee superior — banda fija de identidad */}
-    <div class="brand-band" aria-hidden="true">
-      <div class="brand-band__track">
-        <span class="brand-band__item">★ Platanito Rico</span>
-        <span class="brand-band__item">Est. 2018 — Almería</span>
-        <span class="brand-band__item">★ Diseño · Código · Vídeo</span>
-        <span class="brand-band__item">Edición / 2026</span>
-        <span class="brand-band__item">★ Open for projects</span>
-        <span class="brand-band__item">+34 657 085 019</span>
-        <span class="brand-band__item">★ Platanito Rico</span>
-        <span class="brand-band__item">Est. 2018 — Almería</span>
-        <span class="brand-band__item">★ Diseño · Código · Vídeo</span>
-        <span class="brand-band__item">Edición / 2026</span>
-        <span class="brand-band__item">★ Open for projects</span>
-        <span class="brand-band__item">+34 657 085 019</span>
-      </div>
-    </div>
-
     <slot />
 
     <CookieConsent />
     <ChatWidget />
 
-    <style is:global>
-      /* — Marquee superior — */
-      .brand-band {
-        position: relative;
-        width: 100%;
-        background: #0E0D0B;
-        color: #F5F1EA;
-        border-bottom: 2px solid #0E0D0B;
-        overflow: hidden;
-        height: 32px;
-      }
-      .brand-band__track {
-        display: flex;
-        width: max-content;
-        align-items: center;
-        height: 100%;
-        gap: 2.5rem;
-        padding-left: 1rem;
-        animation: marquee 42s linear infinite;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: .68rem;
-        text-transform: uppercase;
-        letter-spacing: .18em;
-      }
-      .brand-band__item { display: inline-flex; align-items: center; white-space: nowrap; }
-      @media (prefers-reduced-motion: reduce) {
-        .brand-band__track { animation: none; }
-      }
-    </style>
   </body>
 </html>
