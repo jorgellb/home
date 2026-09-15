@@ -17,6 +17,25 @@
 @plugin '@tailwindcss/typography';
 @plugin '@tailwindcss/forms';
 
+/* ════════════════════════════════════════════════════════════════════
+   BRUTAL TECH — capa v2 del rediseño: la web como juego de láminas técnicas.
+   Papel y tinta de siempre + cianotipo solo para cotas y coordenadas.
+   ════════════════════════════════════════════════════════════════════ */
+@theme static {
+  --color-plano-papel: #f5f1ea;
+  --color-plano-papel-2: #ede8de;
+  --color-plano-blanco: #fffcf6;
+  --color-plano-tinta: #0e0d0b;
+  --color-plano-naranja: #ff5a00;
+  --color-plano-naranja-ink: #ae3f13;
+  --color-plano-lima: #d6ff44;
+  --color-plano-grafito: #6b655e;
+  /* Cianotipo: 5.9:1 sobre papel, apto para texto pequeño */
+  --color-plano-ciano: #2447e0;
+  --color-plano-reticula: rgb(14 13 11 / 0.11);
+}
+
+
 @theme {
   --font-display:
     Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif,
@@ -1876,4 +1895,56 @@ html, body { overflow-x: hidden; }
   a, button, .btn-brutal, .em-btn, .sp-btn, .ct-channel, .md-link {
     min-height: 44px;
   }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   VENGEANCE UI — utilidades que dan por hechas sus componentes
+   (src/components/ui). «dark» funciona por clase: una sección con
+   class="dark" activa las variantes dark: de su interior, así la home
+   puede mezclar secciones oscuras y claras.
+   ════════════════════════════════════════════════════════════════════ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root { --stripe-color: #fff; }
+.dark { --stripe-color: #000; }
+
+@keyframes aurora-smooth-bg {
+  from { background-position: 50% 50%, 50% 50%; }
+  to { background-position: 350% 50%, 350% 50%; }
+}
+.animate-aurora-bg { animation: aurora-smooth-bg 60s linear infinite; }
+
+@property --glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes glow-angle-rotate { to { --glow-angle: 1turn; } }
+.glow-conic {
+  border-image: conic-gradient(from var(--glow-angle),
+      var(--glow-color-1), var(--glow-color-2), var(--glow-color-3), var(--glow-color-4), var(--glow-color-5),
+      var(--glow-color-6), var(--glow-color-7), var(--glow-color-8), var(--glow-color-9), var(--glow-color-10),
+      var(--glow-color-1)) 1;
+  animation: glow-angle-rotate var(--glow-animation-duration, 4s) linear infinite;
+}
+
+.spotlight-nav { --spotlight-color: rgb(14 13 11 / 0.08); --ambience-color: #ff5a00; }
+.dark .spotlight-nav { --spotlight-color: rgb(255 255 255 / 0.15); --ambience-color: #d6ff44; }
+.spotlight-nav-bg { background-color: rgb(255 252 246 / 0.85); backdrop-filter: blur(10px); }
+.dark .spotlight-nav-bg { background-color: rgb(10 10 10 / 0.6); }
+.spotlight-nav-shadow { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.12), 0 4px 6px -4px rgb(0 0 0 / 0.08); }
+.glass-border { border: 1px solid rgb(14 13 11 / 0.15); }
+.dark .glass-border { border: 1px solid rgb(255 255 255 / 0.2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora-bg,
+  .glow-conic { animation: none; }
+}
+
+/* Border Beam (Vengeance UI): el haz recorre el borde siguiendo offset-path */
+@keyframes border-beam {
+  100% { offset-distance: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [class*='border-beam']::after { animation: none !important; }
 }

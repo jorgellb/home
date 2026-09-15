@@ -1,0 +1,36 @@
+---
+/* Ficha técnica: pares dato/valor con trazo de plano y cotas en cianotipo. */
+interface Props {
+  items: { k: string; v: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="fd">
+  {items.map((d) => (
+    <div class="fd__row">
+      <dt class="fd__k">{d.k}</dt>
+      <dd class="fd__v">{d.v}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .fd {
+    margin: 0;
+    display: grid; grid-template-columns: 1fr;
+    border: 3px solid var(--it-line);
+    background: var(--it-card);
+    box-shadow: 8px 8px 0 var(--it-shadow);
+  }
+  @media (min-width: 800px) { .fd { grid-template-columns: 1fr 1fr; } }
+  .fd__row {
+    display: grid; grid-template-columns: minmax(7rem, 38%) 1fr; gap: 1rem; align-items: baseline;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--it-line);
+  }
+  @media (min-width: 800px) { .fd__row:nth-child(odd) { border-right: 1px solid var(--it-line); } }
+  .fd__k { font-family: var(--font-mono); font-size: .8rem; color: var(--color-plano-ciano); }
+  .fd__v { margin: 0; font-weight: 700; line-height: 1.4; }
+</style>

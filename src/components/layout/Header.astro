@@ -1,12 +1,15 @@
 ---
+import { SpotlightNavbar } from '@/components/ui/spotlight-navbar';
 const navLinks = [
-  { num: '01', href: '/desarrollo-web/', label: 'Web',          meta: 'Diseño + desarrollo' },
-  { num: '02', href: '/audiovisual/',    label: 'Audiovisual',  meta: 'Dron + vídeo · 4K' },
-  { num: '03', href: '/marketing/',      label: 'Marketing',    meta: 'SEO + SEM + ads' },
-  { num: '04', href: '/diseno-grafico/', label: 'Diseño',       meta: 'Branding + print' },
-  { num: '05', href: '/soporte/',        label: 'Soporte',      meta: 'Mantenimiento 24/7' },
-  { num: '06', href: '/blog/',           label: 'Blog',         meta: 'Diario · tecnología' },
-  { num: '07', href: '/laboratorio-ia/', label: 'Lab IA',       meta: 'Demos de IA en vivo' },
+  { num: '01', href: '/desarrollo-web/',       label: 'Web',          meta: 'Diseño + desarrollo' },
+  { num: '02', href: '/informatica-empresas/', label: 'Sistemas IT',  meta: 'Redes · equipos · soporte' },
+  { num: '03', href: '/plan-360/',             label: 'Plan 360',     meta: 'Web + IT · 400 €/mes' },
+  { num: '04', href: '/audiovisual/',          label: 'Audiovisual',  meta: 'Dron + vídeo · 4K' },
+  { num: '05', href: '/marketing/',            label: 'Marketing',    meta: 'SEO + SEM + ads' },
+  { num: '06', href: '/diseno-grafico/',       label: 'Diseño',       meta: 'Branding + print' },
+  { num: '07', href: '/soporte/',              label: 'Soporte',      meta: 'Mantenimiento web' },
+  { num: '08', href: '/blog/',                 label: 'Blog',         meta: 'Diario · tecnología' },
+  { num: '09', href: '/laboratorio-ia/',       label: 'Lab IA',       meta: 'Demos de IA en vivo' },
 ];
 
 const solutionLinks = [
@@ -24,6 +27,7 @@ const legalLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
+const activeIndex = navLinks.findIndex((l) => currentPath === l.href || currentPath.startsWith(l.href));
 const today = new Date();
 const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
 ---
@@ -41,22 +45,14 @@ const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-di
       </span>
     </a>
 
-    <nav class="brutal-nav" aria-label="Principal">
-      {navLinks.map(link => {
-        const active = currentPath === link.href || currentPath.startsWith(link.href + '/');
-        return (
-          <a href={link.href} class={`brutal-nav__link${active ? ' is-active' : ''}`}>
-            <span class="brutal-nav__num">{link.num}</span>
-            <span class="brutal-nav__label">{link.label}</span>
-          </a>
-        );
-      })}
-    </nav>
+    <div class="brutal-nav">
+      <SpotlightNavbar client:idle items={navLinks.map((l) => ({ label: l.label, href: l.href }))} defaultActiveIndex={activeIndex} className="pt-0" />
+    </div>
 
     <div class="brutal-header__cta">
       <a href="/contacto/" class="btn-brutal btn-brutal--sm">
         <span class="live-dot" aria-hidden="true"></span>
-        Hablemos
+        Presupuesto
       </a>
 
       <button
@@ -292,14 +288,17 @@ const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-di
     justify-content: center;
     gap: .25rem;
   }
-  @media (min-width: 1024px) {
+  /* Con 9 secciones el menú horizontal solo cabe desde 1280px; por debajo se
+     usa el menú desplegable. Los números se ocultan hasta 1536px. */
+  @media (min-width: 1280px) {
     .brutal-nav { display: flex; }
   }
   .brutal-nav__link {
     display: inline-flex;
     align-items: baseline;
     gap: .35rem;
-    padding: .5rem .75rem;
+    padding: .5rem .6rem;
+    white-space: nowrap;
     text-decoration: none;
     color: var(--brutal-ink);
     font-family: var(--font-body);
@@ -316,6 +315,9 @@ const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-di
     letter-spacing: .15em;
     color: var(--brutal-text-muted);
     text-transform: uppercase;
+  }
+  @media (max-width: 1535px) {
+    .brutal-nav__num { display: none; }
   }
   .brutal-nav__link.is-active .brutal-nav__num { color: var(--brutal-lime); opacity: .7; }
   .brutal-nav__label { letter-spacing: -.01em; }
@@ -381,7 +383,8 @@ const dateStr = today.toLocaleDateString('es-ES', { weekday: 'short', day: '2-di
     .brutal-burger__txt { display: none; }
     .brutal-burger { padding: 0 .65rem; }
   }
-  @media (min-width: 1024px) {
+  /* Mismo corte que .brutal-nav: el desplegable se mantiene hasta 1280px */
+  @media (min-width: 1280px) {
     .brutal-burger { display: none; }
   }
 

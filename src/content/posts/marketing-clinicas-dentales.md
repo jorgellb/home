@@ -12,7 +12,7 @@ featuredImage: "/imagenes/marketing-clinicas-dentales.jpg"
 featuredImageAlt: "Marketing digital para clínicas dentales: estrategia de captación de pacientes"
 readingTime: 14
 seo:
-  title: "Marketing Dental: Capta Pacientes Sin Competir en Precio"
+  title: "Marketing Dental: Cómo Captar Más Pacientes"
   description: "Guía completa de marketing dental: posicionamiento, web, SEO local, Meta Ads y reputación online para clínicas que quieren crecer de forma sólida y sostenible."
   keywords: ["marketing clinicas dentales", "captar pacientes clinica dental", "seo local dentista", "publicidad clinica dental", "marketing odontologia"]
   image: "/imagenes/marketing-clinicas-dentales.jpg"

@@ -1,0 +1,51 @@
+---
+/* Cinta de métricas en movimiento (terminal). Se pausa al pasar el ratón o
+   al enfocar, y con reduced-motion se muestra quieta y en varias líneas. */
+interface Props {
+  items: string[];
+  label: string;
+  tone?: 'tinta' | 'lima';
+}
+
+const { items, label, tone = 'tinta' } = Astro.props;
+---
+
+<div class={`tk tk--${tone}`} role="region" aria-label={label} tabindex="0">
+  <div class="tk__track">
+    <ul class="tk__list">
+      {items.map((item) => <li>{item}</li>)}
+    </ul>
+    <ul class="tk__list" aria-hidden="true">
+      {items.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .tk {
+    overflow: hidden;
+    border-block: 3px solid var(--color-plano-tinta);
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    white-space: nowrap;
+  }
+  .tk--tinta { background: var(--color-plano-tinta); color: var(--color-plano-lima); }
+  .tk--lima { background: var(--color-plano-lima); color: var(--color-plano-tinta); }
+  .tk:focus-visible { outline: 3px solid var(--color-plano-ciano); outline-offset: -3px; }
+  .tk__track { display: flex; width: max-content; }
+  .tk__list { list-style: none; margin: 0; padding: .8rem 0; display: flex; }
+  .tk__list li { padding-inline: 1.5rem; position: relative; }
+  .tk__list li::before { content: '▮'; margin-right: .7rem; opacity: .6; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tk__track { animation: tk-move 38s linear infinite; }
+    .tk:hover .tk__track, .tk:focus-within .tk__track { animation-play-state: paused; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tk { white-space: normal; }
+    .tk__track { width: auto; }
+    .tk__list { flex-wrap: wrap; }
+    .tk__list[aria-hidden='true'] { display: none; }
+  }
+  @keyframes tk-move { to { transform: translateX(-50%); } }
+</style>

@@ -34,6 +34,8 @@ const {
 } = Astro.props;
 
 const siteName = 'Platanito Rico';
+// Algunas páginas ya incluyen la marca en su título: no la repetimos.
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 const siteBase = Astro.site ? Astro.site.origin : 'https://platanitorico.com';
 const siteUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
 const canonicalUrl = canonical || siteUrl;
@@ -46,7 +48,7 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>{title} | {siteName}</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Platanito Rico" />
@@ -55,7 +57,7 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
 
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:title" content={`${title} | ${siteName}`} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:alt" content={imageAlt} />
@@ -66,7 +68,7 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content={canonicalUrl} />
-    <meta name="twitter:title" content={`${title} | ${siteName}`} />
+    <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={imageAlt} />

@@ -1,0 +1,385 @@
+---
+/* Hero oscuro y sobrio (Vengeance UI + SVG de marca).
+   Un solo protagonista: la ventana de navegador de cristal con una web real,
+   que se inclina con el ratón. Alrededor, todo en voz baja: aurora tenue,
+   retícula de puntos, borde de luz en la etiqueta y palabra que rota con un
+   fundido letra a letra. Un único <h1> estático + <h2> gancho. */
+import { AnimatedRays } from '@/components/ui/animated-rays';
+import { FlipFadeText } from '@/components/ui/flip-fade-text';
+import { CornerButton } from '@/components/ui/corner-button';
+import { BorderBeam } from '@/components/ui/border-beam';
+import StatsCounter from '@/components/ui/stats-counter';
+
+interface Cta {
+  href: string;
+  label: string;
+}
+
+interface Stat {
+  value: number;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+}
+
+interface Showcase {
+  src: string;
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface Props {
+  eyebrow: string;
+  h1Lines: string[];
+  h2: string;
+  words: string[];
+  primary: Cta;
+  secondary: Cta;
+  stats: Stat[];
+  showcase?: Showcase;
+}
+
+const {
+  eyebrow,
+  h1Lines,
+  h2,
+  words,
+  primary,
+  secondary,
+  stats,
+  showcase = { src: '/imagenes/clientes/juan.jpg', url: 'juanalcaraz.es', width: 1200, height: 809 },
+} = Astro.props;
+
+const star = 'M10 1.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z';
+---
+
+<section class="vh dark" aria-labelledby="vh-h1" data-vh>
+  <div class="vh__bg" aria-hidden="true">
+    <div class="vh__rays"><AnimatedRays client:load forceDark /></div>
+    <div class="vh__dots"></div>
+    <div class="vh__glow"></div>
+  </div>
+
+  <div class="container-brutal vh__inner">
+    <div class="vh__copy">
+      <p class="vh__eyebrow">
+        <span class="vh__dot" aria-hidden="true"></span>
+        {eyebrow}
+        <BorderBeam size={70} duration={7} borderWidth={1} colorFrom="#D6FF44" colorTo="#FF5A00" />
+      </p>
+
+      <h1 id="vh-h1" class="vh__h1">
+        {h1Lines.map((line, i) => (
+          <Fragment>
+            <span class="vh__line">{line}</span>
+            {i < h1Lines.length - 1 ? ' ' : ''}
+          </Fragment>
+        ))}
+      </h1>
+
+      <div class="vh__rotator" aria-hidden="true">
+        <FlipFadeText
+          client:load
+          words={words}
+          interval={2800}
+          className="vh__flip"
+          textClassName="vh__flip-text"
+          letterDuration={0.5}
+          staggerDelay={0.03}
+          exitStaggerDelay={0.018}
+        />
+      </div>
+
+      <h2 class="vh__h2">{h2}</h2>
+
+      <div class="vh__ctas">
+        <CornerButton href={primary.href} accentColor="#D6FF44" showIcon={false}>{primary.label}</CornerButton>
+        <a class="vh__link" href={secondary.href}>
+          {secondary.label}
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </a>
+      </div>
+
+      <p class="vh__trust">
+        <span class="vh__stars" aria-hidden="true">
+          {[0, 1, 2, 3, 4].map(() => <svg viewBox="0 0 20 20" width="13" height="13"><path d={star} fill="currentColor" /></svg>)}
+        </span>
+        <span>4,9 en 87 reseñas</span>
+        <span class="vh__sep" aria-hidden="true"></span>
+        <span>Respuesta en menos de 4 h</span>
+      </p>
+    </div>
+
+    <div class="vh__stage" aria-hidden="true">
+      <svg class="vh__rings" viewBox="0 0 400 400">
+        <circle cx="200" cy="200" r="190" fill="none" stroke="rgb(255 255 255 / .07)" />
+        <circle cx="200" cy="200" r="140" fill="none" stroke="rgb(255 255 255 / .06)" stroke-dasharray="2 6" />
+        <g class="vh__orbit">
+          <circle cx="200" cy="10" r="3.5" fill="#D6FF44" />
+          <circle cx="200" cy="390" r="2.5" fill="#FF5A00" />
+        </g>
+      </svg>
+
+      <figure class="vh__browser" data-vh-tilt>
+        <div class="vh__bar"><i></i><i></i><i></i><span>{showcase.url}</span></div>
+        <img src={showcase.src} alt="" width={showcase.width} height={showcase.height} decoding="async" />
+        <BorderBeam size={140} duration={11} borderWidth={1.5} colorFrom="#FF5A00" colorTo="#D6FF44" />
+      </figure>
+
+      <div class="vh__gauge">
+        <svg viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="25" fill="none" stroke="rgb(255 255 255 / .1)" stroke-width="5" />
+          <circle class="vh__arc" cx="30" cy="30" r="25" fill="none" stroke="#D6FF44" stroke-width="5" stroke-linecap="round" pathLength="100" transform="rotate(-90 30 30)" />
+        </svg>
+        <div><strong>99</strong><span>Lighthouse</span></div>
+      </div>
+
+      <div class="vh__badge">
+        <svg viewBox="0 0 180 180" width="100%" height="100%">
+          <defs>
+            <path id="vh-seal-arc" d="M90,90 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+          </defs>
+          <circle cx="90" cy="90" r="86" fill="rgb(10 10 10 / .85)" stroke="rgb(255 255 255 / .18)" />
+          <g class="vh__spin">
+            <text font-family="monospace" font-size="11" fill="#F5F1EA" letter-spacing="4">
+              <textPath href="#vh-seal-arc">PLATANITO RICO ★ ALMERÍA ★ EST. 2018 ★</textPath>
+            </text>
+          </g>
+          <circle cx="90" cy="90" r="46" fill="none" stroke="#D6FF44" stroke-width="1" stroke-dasharray="2 3" />
+          <text x="90" y="101" text-anchor="middle" font-family="serif" font-size="34" font-weight="bold" fill="#D6FF44">P★</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-brutal">
+    <dl class="vh__stats">
+      {stats.map((s) => (
+        <div class="vh__stat">
+          <dt>{s.label}</dt>
+          <dd><StatsCounter client:visible value={s.value} prefix={s.prefix} suffix={s.suffix} /></dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<script>
+  // Inclinación 3D de la ventana siguiendo al ratón (solo puntero fino y sin reduced-motion)
+  document.querySelectorAll<HTMLElement>('[data-vh]').forEach((hero) => {
+    const tilt = hero.querySelector<HTMLElement>('[data-vh-tilt]');
+    if (!tilt) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.matchMedia('(pointer: fine)').matches) return;
+    let frame = 0;
+    hero.addEventListener('pointermove', (event) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const rect = hero.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        tilt.style.setProperty('--ry', `${(-9 + x * 14).toFixed(2)}deg`);
+        tilt.style.setProperty('--rx', `${(5 - y * 10).toFixed(2)}deg`);
+      });
+    });
+    hero.addEventListener('pointerleave', () => {
+      tilt.style.removeProperty('--ry');
+      tilt.style.removeProperty('--rx');
+    });
+  });
+</script>
+
+<style>
+  .vh {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: #050505;
+    color: #f5f1ea;
+    padding-block: clamp(4.5rem, 9vw, 7.5rem) clamp(3rem, 5vw, 4.5rem);
+  }
+
+  /* — Fondo en voz baja — */
+  .vh__bg { position: absolute; inset: 0; z-index: -1; }
+  .vh__rays {
+    position: absolute; inset: -20% -10% 25% 35%;
+    opacity: .3;
+    mask-image: radial-gradient(ellipse at 75% 25%, #000 15%, transparent 68%);
+  }
+  .vh__rays > :global(*) { height: 100%; }
+  .vh__dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgb(255 255 255 / .1) 1px, transparent 1.2px);
+    background-size: 26px 26px;
+    mask-image: radial-gradient(ellipse at 40% 35%, #000 5%, transparent 65%);
+  }
+  .vh__glow {
+    position: absolute; right: -18vw; top: -28vw;
+    width: 70vw; height: 70vw;
+    background: radial-gradient(circle, rgb(255 90 0 / .16), transparent 60%);
+  }
+
+  .vh__inner { display: grid; gap: clamp(3rem, 6vw, 4rem); align-items: center; }
+  @media (min-width: 1024px) { .vh__inner { grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 4.5rem; } }
+
+  /* — Texto — */
+  .vh__eyebrow {
+    position: relative;
+    display: inline-flex; align-items: center; gap: .6rem;
+    margin: 0 0 1.75rem;
+    padding: .45rem 1rem;
+    font-size: .85rem;
+    color: #cfc8bc;
+    border-radius: 999px;
+    background: rgb(255 255 255 / .04);
+    border: 1px solid rgb(255 255 255 / .09);
+  }
+  .vh__dot { width: 6px; height: 6px; border-radius: 50%; background: #d6ff44; box-shadow: 0 0 10px #d6ff44; }
+
+  .vh__h1 {
+    margin: 0;
+    display: flex; flex-direction: column;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.9rem, 6.4vw, 5.6rem);
+    line-height: 1;
+    letter-spacing: -.045em;
+    color: #f5f1ea;
+  }
+  .vh__line:last-child {
+    background: linear-gradient(90deg, #f5f1ea 0%, #f5f1ea 35%, rgb(245 241 234 / .42) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .vh__rotator { display: flex; align-items: center; height: clamp(2.6rem, 5vw, 4rem); margin-top: .35rem; }
+  .vh__rotator :global(.vh__flip) { min-height: 0; justify-content: flex-start; }
+  .vh__rotator :global(.vh__flip > div) { justify-content: flex-start; }
+  .vh__rotator :global(.vh__flip-text) {
+    gap: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4.2vw, 3.4rem);
+    font-weight: 500;
+    line-height: 1.1;
+    text-transform: none;
+    letter-spacing: -.03em;
+    color: #d6ff44;
+  }
+
+  .vh__h2 {
+    margin: 1.25rem 0 0;
+    max-width: 40ch;
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.55;
+    color: #a39c92;
+  }
+
+  .vh__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; margin-top: 2.25rem; }
+  .vh__link {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .45rem 0;
+    color: #f5f1ea;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid rgb(245 241 234 / .25);
+    transition: border-color .2s, gap .2s, color .2s;
+  }
+  .vh__link:hover { border-color: #d6ff44; color: #d6ff44; gap: .75rem; }
+  .vh__link:focus-visible { outline: 2px solid #d6ff44; outline-offset: 4px; }
+
+  .vh__trust { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; margin: 2.25rem 0 0; font-size: .85rem; color: #8f887e; }
+  .vh__stars { display: inline-flex; gap: 2px; color: #d6ff44; }
+  .vh__sep { width: 1px; height: 14px; background: rgb(255 255 255 / .15); }
+
+  /* — Escenario: la pieza protagonista — */
+  .vh__stage { position: relative; width: 100%; max-width: 620px; aspect-ratio: 1 / .9; justify-self: center; perspective: 1400px; }
+  .vh__rings { position: absolute; inset: -6%; z-index: -1; width: 112%; height: 112%; }
+  .vh__browser {
+    position: absolute; left: 5%; right: 5%; top: 16%;
+    margin: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #0d0d0d;
+    border: 1px solid rgb(255 255 255 / .12);
+    box-shadow: 0 50px 90px -30px rgb(0 0 0 / .9), 0 0 90px rgb(255 90 0 / .12);
+    transform: rotateX(var(--rx, 5deg)) rotateY(var(--ry, -9deg));
+    transition: transform .7s cubic-bezier(.2, .8, .2, 1);
+  }
+  .vh__bar { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; background: rgb(255 255 255 / .035); border-bottom: 1px solid rgb(255 255 255 / .08); }
+  .vh__bar i { width: 8px; height: 8px; border-radius: 50%; background: rgb(255 255 255 / .18); }
+  .vh__bar span { margin-left: 10px; padding: .15rem .7rem; font-family: var(--font-mono); font-size: .7rem; color: #8f887e; border-radius: 999px; background: rgb(255 255 255 / .05); }
+  .vh__browser img { display: block; width: 100%; height: auto; }
+
+  .vh__gauge {
+    position: absolute; left: -1%; bottom: 4%;
+    display: flex; align-items: center; gap: .8rem;
+    padding: .7rem 1.1rem .7rem .7rem;
+    border-radius: 16px;
+    background: rgb(16 16 16 / .78);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgb(255 255 255 / .1);
+    box-shadow: 0 24px 40px -12px rgb(0 0 0 / .7);
+  }
+  .vh__gauge svg { width: 50px; height: 50px; }
+  .vh__arc { stroke-dasharray: 100; stroke-dashoffset: 1; }
+  .vh__gauge strong { display: block; font-family: var(--font-display); font-size: 1.35rem; line-height: 1; color: #fff; }
+  .vh__gauge span { font-size: .76rem; color: #8f887e; }
+
+  .vh__badge { position: absolute; right: -1%; top: 0; width: clamp(92px, 10vw, 128px); filter: drop-shadow(0 12px 30px rgb(255 90 0 / .25)); }
+  .vh__spin { transform-origin: 90px 90px; }
+  .vh__orbit { transform-origin: 200px 200px; }
+
+  @media (max-width: 1023px) { .vh__stage { max-width: 540px; } }
+  @media (max-width: 640px) {
+    .vh__badge { width: 78px; right: 0; }
+    .vh__gauge { left: 0; bottom: 0; }
+  }
+
+  /* — Cifras — */
+  .vh__stats {
+    margin: clamp(3.5rem, 6vw, 5rem) 0 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgb(255 255 255 / .08);
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem;
+  }
+  @media (min-width: 768px) {
+    .vh__stats { grid-template-columns: repeat(4, 1fr); }
+    .vh__stat + .vh__stat { padding-left: 2rem; border-left: 1px solid rgb(255 255 255 / .08); }
+  }
+  .vh__stat { display: flex; flex-direction: column-reverse; gap: .35rem; }
+  .vh__stat dt { font-size: .85rem; color: #8f887e; }
+  .vh__stat dd { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1; letter-spacing: -.035em; color: #f5f1ea; }
+
+  /* — Movimiento: una entrada orquestada y detalles lentos — */
+  @media (prefers-reduced-motion: no-preference) {
+    .vh__copy > * { opacity: 0; animation: vh-in .9s cubic-bezier(.2, .8, .2, 1) forwards; }
+    .vh__copy > :nth-child(1) { animation-delay: .05s; }
+    .vh__copy > :nth-child(2) { animation-delay: .15s; }
+    .vh__copy > :nth-child(3) { animation-delay: .3s; }
+    .vh__copy > :nth-child(4) { animation-delay: .4s; }
+    .vh__copy > :nth-child(5) { animation-delay: .5s; }
+    .vh__copy > :nth-child(6) { animation-delay: .6s; }
+    .vh__stage { opacity: 0; animation: vh-stage 1.2s .25s cubic-bezier(.2, .8, .2, 1) forwards; }
+    .vh__arc { stroke-dashoffset: 100; animation: vh-arc 1.6s 1s cubic-bezier(.6, 0, .2, 1) forwards; }
+    .vh__gauge { animation: vh-bob 6s 1.5s ease-in-out infinite; }
+    .vh__badge { animation: vh-bob 7s ease-in-out infinite reverse; }
+    .vh__spin { animation: vh-rot 40s linear infinite; }
+    .vh__orbit { animation: vh-rot 24s linear infinite; }
+  }
+  @keyframes vh-in {
+    from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+    to { opacity: 1; transform: none; filter: blur(0); }
+  }
+  @keyframes vh-stage {
+    from { opacity: 0; transform: translateY(30px) scale(.97); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes vh-arc { to { stroke-dashoffset: 1; } }
+  @keyframes vh-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes vh-rot { to { transform: rotate(360deg); } }
+</style>

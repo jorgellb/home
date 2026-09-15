@@ -1,0 +1,235 @@
+---
+/* Tarifas como panel de salidas de fichas (split-flap).
+   Es una <table> real: los lectores de pantalla leen el texto final y las
+   fichas animadas van ocultas a la tecnología de apoyo. Las fichas giran una
+   sola vez al entrar en pantalla; con reduced-motion se ven quietas.
+   Debajo, una ficha por tarifa con lo que incluye. */
+
+import type { Tarifa } from './types';
+
+interface Props {
+  h2: string;
+  lead?: string;
+  tarifas: Tarifa[];
+  id?: string;
+}
+
+const { h2, lead, tarifas, id = 'precios' } = Astro.props;
+const chars = (text: string) => [...text.toUpperCase()];
+---
+
+<section class="tf" id={id} aria-labelledby={`${id}-title`} data-tf>
+  <div class="container-brutal">
+    <header class="tf-head">
+      <h2 id={`${id}-title`} class="tf-title">{h2}</h2>
+      {lead && <p class="tf-lead">{lead}</p>}
+    </header>
+
+    <div class="tf-board-wrap">
+      <table class="tf-board">
+        <caption class="sr-only">Precios de partida de cada servicio</caption>
+        <thead>
+          <tr>
+            <th scope="col">Servicio</th>
+            <th scope="col">Desde</th>
+            <th scope="col" class="tf-col-nota">Condiciones</th>
+            <th scope="col"><span class="sr-only">Acción</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {tarifas.map((t) => (
+            <tr class={t.destacada ? 'is-hot' : ''}>
+              <th scope="row">
+                <span class="sr-only">{t.servicio}</span>
+                <span class="tf-flap tf-flap--lima" aria-hidden="true">
+                  {chars(t.servicio).map((c) => <span class="tf-ch" data-final={c}>{c === ' ' ? '\u00A0' : c}</span>)}
+                </span>
+              </th>
+              <td>
+                <span class="sr-only">{t.desde}</span>
+                <span class="tf-flap" aria-hidden="true">
+                  {chars(t.desde).map((c) => <span class="tf-ch" data-final={c}>{c === ' ' ? '\u00A0' : c}</span>)}
+                </span>
+              </td>
+              <td class="tf-col-nota">{t.nota}</td>
+              <td class="tf-col-cta"><a href={t.href} class="tf-go">{t.cta}</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="tf-cards">
+      {tarifas.map((t) => (
+        <li class={`tf-card${t.destacada ? ' tf-card--hot' : ''}`}>
+          <h3 class="tf-card__name">{t.servicio}</h3>
+          <p class="tf-card__price">{t.desde} <span>{t.nota}</span></p>
+          <ul class="tf-card__list">
+            {t.incluye.map((x) => <li>{x}</li>)}
+          </ul>
+          <a href={t.href} class="tf-card__cta">{t.cta}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const GLYPHS = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ0123456789€+/';
+
+  document.querySelectorAll<HTMLElement>('[data-tf]').forEach((section) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const cells = Array.from(section.querySelectorAll<HTMLElement>('.tf-ch'));
+    const finals = cells.map((c) => c.dataset.final ?? '');
+
+    // Mientras no ha girado, las fichas muestran huecos (no el texto final)
+    cells.forEach((c, i) => { if (finals[i] !== ' ') c.textContent = '\u00A0'; });
+
+    const run = () => {
+      cells.forEach((cell, i) => {
+        const final = finals[i];
+        if (final === ' ') return;
+        const flips = 6 + (i % 7);
+        let n = 0;
+        const delay = i * 28;
+        setTimeout(function flip() {
+          if (n < flips) {
+            cell.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+            cell.classList.remove('is-flip');
+            void cell.offsetWidth;
+            cell.classList.add('is-flip');
+            n += 1;
+            setTimeout(flip, 55);
+          } else {
+            cell.textContent = final;
+          }
+        }, delay);
+      });
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        io.disconnect();
+        run();
+      }
+    }, { threshold: 0.35 });
+    io.observe(section.querySelector('.tf-board') ?? section);
+  });
+</script>
+
+<style>
+  .tf {
+    --ink: var(--color-plano-tinta);
+    background: var(--color-plano-papel-2);
+    color: var(--ink);
+    padding-block: clamp(3.5rem, 8vw, 6.5rem);
+    border-bottom: 3px solid var(--ink);
+  }
+  .tf-head { max-width: 50rem; margin-bottom: clamp(2rem, 4vw, 3rem); }
+  .tf-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.2rem, 5.4vw, 4.4rem);
+    line-height: .95;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+  .tf-lead { margin: 1rem 0 0; max-width: 52ch; font-size: 1.1rem; line-height: 1.55; color: #3a352f; }
+
+  /* — Panel de salidas — */
+  .tf-board-wrap {
+    background: var(--ink);
+    border: 3px solid var(--ink);
+    box-shadow: 10px 10px 0 var(--color-plano-naranja);
+    padding: clamp(.75rem, 2vw, 1.5rem);
+    overflow-x: auto;
+  }
+  .tf-board { width: 100%; border-collapse: separate; border-spacing: 0 .6rem; color: var(--color-plano-papel); }
+  .tf-board thead th {
+    text-align: left;
+    padding: 0 .75rem .25rem;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 400;
+    color: #a39d94;
+  }
+  .tf-board tbody th, .tf-board td { padding: .35rem .75rem; text-align: left; vertical-align: middle; }
+  .tf-board tbody tr { background: #1a1815; }
+  .tf-board tbody tr.is-hot { background: #262115; box-shadow: inset 4px 0 0 var(--color-plano-naranja); }
+
+  .tf-flap { display: inline-flex; gap: 2px; }
+  .tf-ch {
+    position: relative;
+    display: inline-grid; place-items: center;
+    width: 1.35em; height: 1.9em;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: clamp(.8rem, 1.5vw, 1.15rem);
+    color: var(--color-plano-papel);
+    background: linear-gradient(180deg, #2b2824 0 50%, #221f1b 50% 100%);
+    border-radius: 2px;
+  }
+  .tf-ch::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: #0a0908; }
+  .tf-flap--lima .tf-ch { color: var(--color-plano-lima); }
+  .tf-ch.is-flip { animation: tf-flip .055s linear; }
+  @keyframes tf-flip {
+    0% { transform: scaleY(1); }
+    50% { transform: scaleY(.15); filter: brightness(1.6); }
+    100% { transform: scaleY(1); }
+  }
+
+  .tf-col-nota { font-family: var(--font-mono); font-size: .8rem; color: #cfc8bc; white-space: nowrap; }
+  .tf-col-cta { text-align: right !important; }
+  .tf-go {
+    display: inline-flex; align-items: center; min-height: 2.6rem;
+    padding: .45rem .9rem;
+    font-family: var(--font-mono); font-weight: 800; font-size: .8rem;
+    color: var(--ink); background: var(--color-plano-lima);
+    text-decoration: none; white-space: nowrap;
+    border: 2px solid var(--color-plano-lima);
+  }
+  .tf-go:hover { background: var(--color-plano-naranja); border-color: var(--color-plano-naranja); }
+  .tf-go:focus-visible, .tf-card__cta:focus-visible { outline: 3px solid var(--color-plano-ciano); outline-offset: 3px; }
+
+  @media (max-width: 760px) {
+    .tf-board thead { display: none; }
+    .tf-board, .tf-board tbody, .tf-board tr, .tf-board th, .tf-board td { display: block; }
+    .tf-board tbody tr { padding: .75rem; margin-bottom: .75rem; }
+    .tf-board tbody th, .tf-board td { padding: .25rem 0; }
+    .tf-col-cta { text-align: left !important; padding-top: .6rem !important; }
+    .tf-ch { width: 1.2em; height: 1.75em; }
+  }
+
+  /* — Fichas de tarifa — */
+  .tf-cards {
+    list-style: none; margin: clamp(2.5rem, 5vw, 3.5rem) 0 0; padding: 0;
+    display: grid; gap: 1.5rem; grid-template-columns: 1fr;
+  }
+  @media (min-width: 900px) { .tf-cards { grid-template-columns: repeat(3, 1fr); } }
+  .tf-card {
+    display: flex; flex-direction: column; gap: .75rem;
+    padding: 1.5rem;
+    background: var(--color-plano-blanco);
+    border: 3px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+  }
+  .tf-card--hot { background: var(--color-plano-lima); }
+  .tf-card__name { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.6rem; letter-spacing: -.03em; line-height: 1; }
+  .tf-card__price { margin: 0; font-weight: 800; font-size: 1.5rem; letter-spacing: -.02em; }
+  .tf-card__price span { font-family: var(--font-mono); font-weight: 400; font-size: .8rem; letter-spacing: 0; }
+  .tf-card__list { list-style: none; margin: .25rem 0 0; padding: 0; display: grid; gap: .5rem; border-top: 2px solid var(--ink); padding-top: .9rem; }
+  .tf-card__list li { position: relative; padding-left: 1.3rem; line-height: 1.4; }
+  .tf-card__list li::before { content: ''; position: absolute; left: 0; top: .5em; width: .55rem; height: .55rem; background: var(--color-plano-naranja); }
+  .tf-card--hot .tf-card__list li::before { background: var(--ink); }
+  .tf-card__cta {
+    margin-top: auto;
+    display: inline-flex; justify-content: center; align-items: center; min-height: 3rem;
+    padding: .8rem 1.1rem;
+    font-family: var(--font-mono); font-weight: 800;
+    color: var(--color-plano-lima); background: var(--ink);
+    text-decoration: none;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .tf-card__cta:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--color-plano-naranja); }
+</style>

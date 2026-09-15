@@ -1,0 +1,50 @@
+---
+/* Lámina de las páginas de Sistemas IT (brutal tech). El tono define las
+   variables que heredan los bloques de dentro: acento, trazo, tarjeta, texto
+   secundario y sombra dura. Así cada bloque funciona sobre papel o tinta sin
+   duplicar estilos. */
+interface Props {
+  tone?: 'bone' | 'paper' | 'night';
+  id?: string;
+  labelledby?: string;
+}
+
+const { tone = 'bone', id, labelledby } = Astro.props;
+---
+
+<section class={`it-sec it-sec--${tone}`} id={id} aria-labelledby={labelledby}>
+  <div class="container-brutal">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .it-sec { position: relative; padding-block: clamp(3.5rem, 8vw, 6rem); border-bottom: 3px solid var(--color-plano-tinta); }
+  .it-sec--bone {
+    background: var(--color-plano-papel);
+    color: var(--color-plano-tinta);
+    --it-accent: var(--color-plano-naranja-ink);
+    --it-line: var(--color-plano-tinta);
+    --it-card: var(--color-plano-blanco);
+    --it-muted: #4a453f;
+    --it-shadow: var(--color-plano-tinta);
+  }
+  .it-sec--paper {
+    background: var(--color-plano-papel-2);
+    color: var(--color-plano-tinta);
+    --it-accent: var(--color-plano-ciano);
+    --it-line: var(--color-plano-tinta);
+    --it-card: var(--color-plano-blanco);
+    --it-muted: #4a453f;
+    --it-shadow: var(--color-plano-tinta);
+  }
+  .it-sec--night {
+    background: var(--color-plano-tinta);
+    color: var(--color-plano-papel);
+    --it-accent: var(--color-plano-lima);
+    --it-line: var(--color-plano-papel);
+    --it-card: #1a1815;
+    --it-muted: #cfc8bc;
+    --it-shadow: var(--color-plano-naranja);
+  }
+</style>

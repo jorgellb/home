@@ -13,8 +13,8 @@ const channels = [
       <div class="brutal-section-head__col">
         <span class="text-meta">Cap. 07 / Contacto</span>
         <h2 class="heading-display brutal-section-head__title">
-          Cuéntanos tu
-          <em class="heading-editorial">proyecto.</em>
+          Pide presupuesto
+          <em class="heading-editorial">sin compromiso.</em>
         </h2>
       </div>
       <p class="brutal-section-head__lead">
@@ -97,6 +97,9 @@ const channels = [
               <select name="service" class="input-brutal">
                 <option value="">Selecciona…</option>
                 <option value="web">Diseño Web</option>
+                <option value="tienda">Tienda online</option>
+                <option value="sistemas-it">Sistemas IT (informática, redes, equipos)</option>
+                <option value="plan-360">Plan 360 (web + IT · 400 €/mes)</option>
                 <option value="video">Audiovisual</option>
                 <option value="marketing">Marketing &amp; SEO</option>
                 <option value="branding">Diseño gráfico</option>
@@ -139,6 +142,16 @@ const channels = [
     </div>
   </div>
 </section>
+
+<script>
+  // Precarga el servicio desde los CTAs (?servicio=plan-360) para que el
+  // cliente no tenga que volver a elegir lo que ya eligió en la cartelera.
+  const servicio = new URLSearchParams(window.location.search).get('servicio');
+  const select = document.querySelector<HTMLSelectElement>('#contacto select[name="service"]');
+  if (servicio && select && Array.from(select.options).some((o) => o.value === servicio)) {
+    select.value = servicio;
+  }
+</script>
 
 <style>
   .brutal-section-head { display: grid; gap: 2rem; grid-template-columns: 1fr; margin-bottom: 3rem; }

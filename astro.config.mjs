@@ -96,6 +96,11 @@ export default defineConfig({
         return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.8, lastmod: BUILD_DATE };
       }
 
+      // Sistemas IT (hub, servicios y landings por pueblo) y Plan 360
+      if (path.startsWith('/informatica-empresas/') || path === '/plan-360/') {
+        return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.9, lastmod: BUILD_DATE };
+      }
+
       // Páginas de diseño web por localidad — contenido único por pueblo
       if (path.includes('/diseno-web/')) {
         return { ...item, changefreq: ChangeFreqEnum.WEEKLY, priority: 0.9, lastmod: BUILD_DATE };

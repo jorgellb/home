@@ -11,8 +11,11 @@
     <div class="cc__body">
       <p class="cc__title">🍪 Tu privacidad</p>
       <p class="cc__text">
-        Usamos cookies propias necesarias para que la web funcione y, con tu permiso, de analítica y
-        marketing para mejorar. Puedes aceptar, rechazar o configurar. Más info en nuestra
+        <span class="cc__long">
+          Usamos cookies propias necesarias para que la web funcione y, con tu permiso, de analítica y
+          marketing para mejorar. Puedes aceptar, rechazar o configurar. Más info en nuestra
+        </span>
+        <span class="cc__short">Cookies propias y, con tu permiso, de analítica y marketing.</span>
         <a href="/cookies/">Política de cookies</a>.
       </p>
 
@@ -81,9 +84,20 @@
   @media (min-width: 560px) {
     .cc__btn--accept, .cc__btn--reject { min-width: 120px; text-align: center; }
   }
-  @media (max-width: 460px) {
-    .cc__btn { flex: 1 1 auto; text-align: center; }
+  .cc__short { display: none; }
+  /* En móvil el aviso era tan alto que tapaba el botón de presupuesto de la
+     portada: texto corto y los tres botones en una fila, con el mismo peso. */
+  @media (max-width: 640px) {
+    .cc { left: .5rem; right: .5rem; bottom: .5rem; }
+    .cc__card { padding: .75rem .85rem; box-shadow: 4px 4px 0 var(--brutal-ink, #0E0D0B); border-width: 2px; }
+    .cc__title { font-size: .92rem; margin-bottom: .15rem; }
+    .cc__text { font-size: .8rem; line-height: 1.4; }
+    .cc__long { display: none; }
+    .cc__short { display: inline; }
+    .cc__actions { flex-wrap: nowrap; gap: .4rem; margin-top: .6rem; }
+    .cc__btn { flex: 1 1 0; min-width: 0; min-height: 44px; padding: .45rem .3rem; font-size: .72rem; text-align: center; }
     .cc__btn--accept { margin-left: 0; }
+    .cc__card:has(.cc__config:not([hidden])) .cc__actions { flex-wrap: wrap; }
   }
 
   .cc-reopen {

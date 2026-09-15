@@ -1,31 +1,46 @@
 ---
+/* Plantilla única de las landings de diseño web por municipio (brutal tech).
+   El contenido propio de cada pueblo sale de src/data/landings.ts, que une
+   las antiguas páginas hechas a mano con los datos base. La indexación sigue
+   gobernada por pueblos-indexables.ts. */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import Contact from '../../components/sections/Contact.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import BlueprintHero from '../../components/brutal/BlueprintHero.astro';
+import Ticker from '../../components/brutal/Ticker.astro';
+import LugaresBento from '../../components/brutal/LugaresBento.astro';
+import FichaDatos from '../../components/brutal/FichaDatos.astro';
+import SectoresGrid from '../../components/brutal/SectoresGrid.astro';
+import ItemsLista from '../../components/brutal/ItemsLista.astro';
+import Testimonios from '../../components/brutal/Testimonios.astro';
+import Pasos from '../../components/brutal/Pasos.astro';
+import PueblosLinks from '../../components/brutal/PueblosLinks.astro';
+import ItSection from '../../components/it/ItSection.astro';
+import SectionHead from '../../components/it/SectionHead.astro';
+import BloquesGrid from '../../components/it/BloquesGrid.astro';
+import FaqList from '../../components/it/FaqList.astro';
+import Plan360Teaser from '../../components/it/Plan360Teaser.astro';
 import { pueblos, getPueblosByComarca, type Pueblo } from '../../data/pueblos-almeria';
 import { esPuebloIndexable } from '../../data/pueblos-indexables';
+import { getLanding } from '../../data/landings';
+import { getPuebloIT, HUB_IT } from '../../data/servicios-it';
+import { SITE, PROVEEDOR } from '../../data/negocio';
 
-export async function getStaticPaths() {
-  /* Pueblos que ya tienen su propia página a medida en este directorio. Se
-     deducen de los ficheros para no mantener la lista a mano: antes era una
-     cadena de `!==` a la que se le habían olvidado dos slugs, y el build
-     avisaba de rutas en conflicto. Al añadir un `mi-pueblo.astro` se excluye
-     solo. Va dentro de la función porque Astro extrae `getStaticPaths` a su
-     propio módulo y no ve las constantes del frontmatter. */
+export function getStaticPaths() {
+  /* Los pueblos con página propia hecha a mano (con sus ilustraciones SVG)
+     se excluyen: se deducen de los ficheros del directorio. */
   const conPaginaPropia = new Set(
     Object.keys(import.meta.glob('./*.astro'))
       .map((ruta) => ruta.replace(/^\.\//, '').replace(/\.astro$/, ''))
       .filter((slug) => slug !== 'index' && slug !== '[pueblo]'),
   );
-
   return pueblos
     .filter((pueblo) => !conPaginaPropia.has(pueblo.slug))
-    .map((pueblo) => ({
-      params: { pueblo: pueblo.slug },
-      props: { pueblo },
-    }));
+    .map((pueblo) => ({ params: { pueblo: pueblo.slug }, props: { pueblo } }));
 }
 
 interface Props {
@@ -33,711 +48,206 @@ interface Props {
 }
 
 const { pueblo } = Astro.props;
+const l = getLanding(pueblo);
+const n = l.nombre;
+const canonical = `${SITE}/diseno-web/${l.slug}/`;
 
-// Servicios con iconos premium
-const servicios = [
-  {
-    titulo: 'Diseño Web Profesional',
-    descripcion: `Creamos sitios web únicos y personalizados para empresas y negocios de ${pueblo.nombre}. Diseño moderno, responsive y optimizado para convertir visitantes en clientes.`,
-    icon: 'globe',
-    beneficios: ['Diseño 100% personalizado', 'Adaptable a todos los dispositivos', 'Velocidad de carga optimizada', 'Experiencia de usuario premium']
-  },
-  {
-    titulo: 'Desarrollo Web a Medida',
-    descripcion: `Desarrollamos soluciones web avanzadas para negocios de ${pueblo.nombre}. Desde tiendas online hasta aplicaciones web complejas con las últimas tecnologías.`,
-    icon: 'code',
-    beneficios: ['Código limpio y escalable', 'Integraciones personalizadas', 'Panel de administración', 'Soporte técnico continuo']
-  },
-  {
-    titulo: 'SEO y Posicionamiento',
-    descripcion: `Posicionamos tu negocio de ${pueblo.nombre} en las primeras posiciones de Google. Estrategias SEO locales para atraer clientes de tu zona.`,
-    icon: 'chart',
-    beneficios: [`SEO local para ${pueblo.nombre}`, 'Optimización On-Page', 'Link building estratégico', 'Informes mensuales']
-  },
-  {
-    titulo: 'Marketing Digital',
-    descripcion: `Estrategias de marketing digital adaptadas a negocios de ${pueblo.nombre}. Redes sociales, publicidad online y contenido que conecta con tu audiencia.`,
-    icon: 'megaphone',
-    beneficios: ['Gestión de redes sociales', 'Campañas de publicidad', 'Email marketing', 'Contenido estratégico']
-  },
-  {
-    titulo: 'Tiendas Online',
-    descripcion: `Crea tu tienda online y vende tus productos desde ${pueblo.nombre} a toda España. Plataformas seguras, fáciles de gestionar y listas para vender.`,
-    icon: 'cart',
-    beneficios: ['Catálogo de productos', 'Pasarelas de pago seguras', 'Gestión de inventario', 'Envíos automatizados']
-  },
-  {
-    titulo: 'Mantenimiento Web',
-    descripcion: `Mantenemos tu web siempre actualizada, segura y funcionando perfectamente. Servicio de mantenimiento profesional para empresas de ${pueblo.nombre}.`,
-    icon: 'shield',
-    beneficios: ['Actualizaciones de seguridad', 'Copias de seguridad', 'Soporte prioritario', 'Monitorización 24/7']
-  }
+const fmtCoord = (v: number) => Math.abs(v).toFixed(4).replace('.', ',');
+const coords = l.coords ? `${fmtCoord(l.coords[1])} N · ${fmtCoord(l.coords[0])} O` : undefined;
+
+const pasos = [
+  { t: 'Llamada de 30 minutos', d: `Nos cuentas tu negocio en ${n} y qué quieres conseguir. Sin compromiso.` },
+  { t: 'Presupuesto cerrado', d: 'Precio, plazo y entregables por escrito en menos de 24 horas.' },
+  { t: 'Diseño y desarrollo', d: 'Apruebas el diseño antes de programar y ves el avance en un entorno de pruebas.' },
+  { t: 'Publicación y SEO local', d: `Publicamos, damos de alta tu ficha de Google y te formamos para gestionarla.` },
 ];
 
-// Razones para elegirnos
-const razones = [
-  { titulo: 'Conocemos la zona', descripcion: `Trabajamos con negocios de ${pueblo.comarca} y entendemos las necesidades locales.`, icon: 'map' },
-  { titulo: 'Resultados garantizados', descripcion: 'Nuestros clientes mejoran su presencia online y aumentan sus ventas.', icon: 'trending' },
-  { titulo: 'Atención personalizada', descripcion: 'Trato directo, sin intermediarios. Tu proyecto es nuestra prioridad.', icon: 'users' },
-  { titulo: 'Tecnología puntera', descripcion: 'Utilizamos las últimas tecnologías para webs rápidas y modernas.', icon: 'rocket' },
+const it = getPuebloIT(l.slug);
+
+// Primero los municipios indexables: son los que merece la pena enlazar.
+const vecinos = getPueblosByComarca(l.comarca)
+  .filter((p) => p.slug !== l.slug)
+  .sort((a, b) => Number(esPuebloIndexable(b.slug)) - Number(esPuebloIndexable(a.slug)))
+  .slice(0, 10)
+  .map((p) => ({ href: `/diseno-web/${p.slug}/`, label: `Diseño web en ${p.nombre}` }));
+
+const ticker = [
+  ...(l.sectores.length > 0 ? l.sectores.map((s) => s.nombre) : l.caracteristicas),
+  'Web desde 500 €',
+  'Presupuesto en 24 horas',
+  'Sin permanencia',
 ];
 
-// Proceso de trabajo
-const proceso = [
-  { paso: 1, titulo: 'Consulta gratuita', descripcion: 'Analizamos tu negocio y objetivos sin compromiso' },
-  { paso: 2, titulo: 'Propuesta personalizada', descripcion: 'Diseñamos una solución a medida para tu proyecto' },
-  { paso: 3, titulo: 'Desarrollo', descripcion: 'Creamos tu web con revisión continua y feedback' },
-  { paso: 4, titulo: 'Lanzamiento', descripcion: 'Publicamos tu web y te formamos para gestionarla' },
+let lamina = 0;
+const siguienteLamina = () => `Lámina ${String(++lamina).padStart(2, '0')}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'serviceType': 'Diseño web',
+    'name': `Diseño web en ${n}`,
+    'description': l.description,
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': { '@type': 'City', 'name': n, 'containedInPlace': { '@type': 'AdministrativeArea', 'name': l.comarca } },
+    'offers': { '@type': 'Offer', 'price': '500', 'priceCurrency': 'EUR', 'description': 'Web profesional desde 500 €' },
+  },
+  ...(l.faq.length > 0
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': l.faq.map((f) => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } })),
+      }]
+    : []),
 ];
-
-// SEO Meta - Custom titles and descriptions for specific pueblos
-const title = pueblo.sectorPrincipal
-  ? `Diseño Web en ${pueblo.nombre} | ${pueblo.sectorPrincipal.slice(0, 50)}`
-  : `Diseño Web en ${pueblo.nombre} | Páginas Web y SEO Local en ${pueblo.comarca}`;
-const description = pueblo.sectorPrincipal
-  ? `Diseño web en ${pueblo.nombre} para ${pueblo.sectorPrincipal.slice(0, 45)}. Desde 500€ con hosting gratis de por vida. Presupuesto en 24h.`
-  : `Diseño web en ${pueblo.nombre}, ${pueblo.comarca}. Desde 500€ con hosting gratis. SEO local incluido. Presupuesto gratis en 24h.`;
-
-// Indexación selectiva: solo los pueblos del Tier 1 (lista blanca) se indexan.
-// El resto se sirve con noindex para evitar el estado "Descubierta: actualmente
-// sin indexar" provocado por el exceso de landings locales casi idénticas.
-const noindex = !esPuebloIndexable(pueblo.slug);
-
 ---
 
 <BaseLayout
-  title={title}
-  description={description}
-  noindex={noindex}
-  canonical={`https://platanitorico.com/diseno-web/${pueblo.slug}/`}
+  title={l.title}
+  description={l.description}
+  noindex={!l.indexable}
+  canonical={canonical}
   image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
-  imageAlt={`Diseño web en ${pueblo.nombre} - Platanito Rico`}
-  type="website"
-  lang="es"
-  keywords={`diseño web ${pueblo.nombre}, agencia web ${pueblo.comarca}, páginas web ${pueblo.nombre}, seo ${pueblo.nombre}, tienda online ${pueblo.nombre}`}
-  jsonLd={[
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Inicio",
-          "item": "https://platanitorico.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Diseño Web Almería",
-          "item": "https://platanitorico.com/desarrollo-web/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": pueblo.nombre,
-          "item": `https://platanitorico.com/diseno-web/${pueblo.slug}/`
-        }
-      ]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": `Platanito Rico — Diseño Web en ${pueblo.nombre}`,
-      "url": `https://platanitorico.com/diseno-web/${pueblo.slug}/`,
-      "telephone": "+34657085019",
-      "email": "hola@platanitorico.com",
-      "priceRange": "€€",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Ctra de Ronda, 82",
-        "addressLocality": "Vera",
-        "addressRegion": "Almería",
-        "postalCode": "04620",
-        "addressCountry": "ES"
-      },
-      "geo": { "@type": "GeoCoordinates", "latitude": "37.2450", "longitude": "-1.8614" },
-      "areaServed": { "@type": "City", "name": pueblo.nombre },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "87",
-        "bestRating": "5",
-        "worstRating": "1"
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "Diseño Web",
-      "name": `Diseño Web en ${pueblo.nombre}`,
-      "description": description,
-      "url": `https://platanitorico.com/diseno-web/${pueblo.slug}/`,
-      "areaServed": {
-        "@type": "City",
-        "name": pueblo.nombre,
-        "containedInPlace": {
-          "@type": "AdministrativeArea",
-          "name": pueblo.comarca
-        }
-      },
-      "provider": {
-        "@type": "LocalBusiness",
-        "name": "Platanito Rico",
-        "url": "https://platanitorico.com",
-        "telephone": "+34657085019",
-        "email": "hola@platanitorico.com",
-        "priceRange": "€€",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Ctra de Ronda, 82",
-          "addressLocality": "Vera",
-          "addressRegion": "Almería",
-          "postalCode": "04620",
-          "addressCountry": "ES"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "37.2450",
-          "longitude": "-1.8614"
-        },
-        "openingHoursSpecification": {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "opens": "09:00",
-          "closes": "18:00"
-        }
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": `Servicios Web en ${pueblo.nombre}`,
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Diseño Web Profesional",
-              "description": `Sitios web personalizados para empresas de ${pueblo.nombre}`
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "SEO Local",
-              "description": `Posicionamiento en Google para negocios de ${pueblo.nombre}`
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Tienda Online",
-              "description": `E-commerce para vender desde ${pueblo.nombre}`
-            }
-          }
-        ]
-      }
-    },
-    ...(pueblo.faqs && pueblo.faqs.length > 0 ? [{
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": pueblo.faqs.map(faq => ({
-        "@type": "Question",
-        "name": faq.q,
-        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
-      }))
-    }] : []),
-  ]}
+  imageAlt={`Diseño web en ${n} por Platanito Rico`}
+  jsonLd={jsonLd}
 >
   <Header />
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño web en Almería', href: '/diseno-web/' }, { label: n }]} />
 
   <main id="main-content">
-    {/* HERO editorial del pueblo */}
-    <section class="svc-hero">
-      <div class="container-brutal">
-        <header class="svc-hero__head">
-          <span class="text-meta">N.º {String(pueblo.poblacion ? Math.min(99, Math.floor(pueblo.poblacion / 1000)) : 10).padStart(3, '0')} — {pueblo.comarca}</span>
-          <span class="text-meta">
-            <span class="live-dot"></span>
-            {pueblo.destacado ? 'Localidad destacada · proyectos activos' : `Cobertura · ${pueblo.comarca}`}
-          </span>
-        </header>
-        <div class="divider-brutal-thick"></div>
+    <BlueprintHero
+      size="compact"
+      h1Lines={[l.h1]}
+      h2={`Páginas web que traen clientes a negocios de ${n}`}
+      lead={l.lead}
+      primary={{ href: '/contacto/?servicio=web#contacto', label: 'Pedir presupuesto' }}
+      secondary={{ href: 'tel:+34657085019', label: 'Llamar al 657 085 019' }}
+      place={`${n}, ${l.comarca}`}
+      coords={coords}
+      proyecto={`Diseño web en ${n}`}
+      lamina="DW"
+      specs={[
+        { k: 'Web profesional', v: 'Desde 500 €' },
+        { k: 'Tienda online', v: 'Desde 700 €' },
+        { k: 'Presupuesto', v: 'En 24 horas' },
+        { k: 'Comarca', v: l.comarca },
+      ]}
+    />
+    <Ticker label={`Diseño web para negocios de ${n}`} items={ticker} />
 
-        <div class="svc-hero__grid">
+    {l.lugares.length > 0 ? (
+      <ItSection tone="bone" labelledby="dw-lugares">
+        <SectionHead id="dw-lugares" kicker={siguienteLamina()} title={l.cabeceras.lugares.h2} lead={l.cabeceras.lugares.lead || undefined} />
+        <LugaresBento items={l.lugares} />
+      </ItSection>
+    ) : (
+      <ItSection tone="bone" labelledby="dw-panorama">
+        <div class="dw-panorama">
           <div>
-            <span class="text-meta">Diseño Web · {pueblo.comarca}</span>
-            <h1 class="svc-hero__title">
-              Diseño web
-              <em>en {pueblo.nombre},</em>
-              <span class="text-stroke-ink">SEO local</span>
-              que vende.
-            </h1>
-            <p class="svc-hero__lead">
-              {pueblo.descripcion} Creamos <strong>páginas web profesionales</strong>
-              que impulsan tu negocio y te posicionan en Google para búsquedas locales en {pueblo.nombre}.
-            </p>
-
-            <div class="pueblo-tags">
-              {pueblo.caracteristicas.slice(0, 4).map((tag) => (
-                <span class="tag-brutal">★ {tag}</span>
-              ))}
-            </div>
-
-            <div class="svc-hero__cta">
-              <a href="/contacto/" class="btn-brutal btn-brutal--lg">
-                Presupuesto en 24h →
-              </a>
-              <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-                657 085 019
-              </a>
-            </div>
+            <SectionHead id="dw-panorama" kicker={siguienteLamina()} title={`El tejido de ${n} en internet`} />
+            {l.panorama.length > 0
+              ? l.panorama.map((p) => <p class="dw-panorama__p">{p}</p>)
+              : <p class="dw-panorama__p">{l.lead}</p>}
           </div>
-
-          <aside class="svc-hero__specs">
-            <div class="svc-hero__spec svc-hero__spec--accent">
-              <span class="svc-hero__spec-num text-mono">500€</span>
-              <span class="svc-hero__spec-lbl">Desde · web pro</span>
-            </div>
-            <div class="svc-hero__spec svc-hero__spec--lime">
-              <span class="svc-hero__spec-num text-mono">0€</span>
-              <span class="svc-hero__spec-lbl">Hosting web estática</span>
-            </div>
-            <div class="svc-hero__spec">
-              <span class="svc-hero__spec-num text-mono">1–2sem</span>
-              <span class="svc-hero__spec-lbl">A producción</span>
-            </div>
-            <div class="svc-hero__spec svc-hero__spec--ink">
-              <span class="svc-hero__spec-num text-mono">99/100</span>
-              <span class="svc-hero__spec-lbl">Lighthouse target</span>
-            </div>
-          </aside>
-        </div>
-      </div>
-
-      <div class="svc-hero__marquee">
-        <div class="svc-hero__marquee-track">
-          {Array.from({length: 6}).map(() => (
-            <span>★ {pueblo.nombre.toUpperCase()} ★ {pueblo.comarca.toUpperCase()} ★ DISEÑO WEB ★ SEO LOCAL ★ HOSTING GRATIS ★</span>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* Panorama digital local — contenido ÚNICO por pueblo (anti contenido fino) */}
-    <section class="section-brutal pueblo-panorama">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">★ Panorama digital · {pueblo.nombre}</span>
-            <h2 class="brutal-section-head__title">
-              El tejido de
-              <em>{pueblo.nombre}</em>
-              en internet.
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">{pueblo.descripcion}.</p>
-        </header>
-
-        <div class="pueblo-panorama__grid">
-          <div class="pueblo-panorama__text">
-            {pueblo.panorama && pueblo.panorama.length > 0
-              ? pueblo.panorama.map((p) => <p class="pueblo-panorama__p">{p}</p>)
-              : (
-                <p class="pueblo-panorama__p">
-                  {pueblo.nombre} ({pueblo.comarca}{pueblo.poblacion ? `, ${pueblo.poblacion.toLocaleString('es-ES')} habitantes` : ''}) es {pueblo.descripcion.charAt(0).toLowerCase() + pueblo.descripcion.slice(1)}.
-                  {pueblo.lugarIconico ? ` Con ${pueblo.lugarIconico} como referencia, sus` : ' Sus'} negocios —comercio, hostelería, servicios y turismo— compiten cada día en Google por aparecer cuando un cliente busca {pueblo.sectorPrincipal ? pueblo.sectorPrincipal.toLowerCase() : 'servicios'} en {pueblo.nombre}. Una web rápida, bien estructurada y posicionada en local es la diferencia entre captar a ese cliente o perderlo ante la competencia de la comarca.
-                </p>
-              )
-            }
-            <ul class="pueblo-panorama__keys">
-              {pueblo.caracteristicas.map((c) => <li class="tag-brutal">★ {c}</li>)}
-            </ul>
-          </div>
-
-          {pueblo.hitos && pueblo.hitos.length > 0 && (
-            <ul class="pueblo-panorama__hitos">
-              {pueblo.hitos.map((h) => (
-                <li class="pueblo-panorama__hito">
-                  <span class="pueblo-panorama__hk">{h.k}</span>
-                  <span class="pueblo-panorama__hv">{h.v}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </section>
-
-    {/* Mapa interactivo si hay coords */}
-    {pueblo.coords && (
-      <section class="section-brutal" style="padding:0;background:var(--brutal-bg-alt);border-bottom:2px solid var(--brutal-ink);">
-        <div class="pueblo-map-wrap">
-          <InteractiveMap center={pueblo.coords} zoom={13} pitch={25} bearing={-15} label={pueblo.nombre} themeColor="#FF6B35" themeColorDark="#0E0D0B" townInitial={pueblo.nombre.charAt(0)} />
-        </div>
-      </section>
-    )}
-
-    {/* SERVICIOS — bento brutal */}
-    <section class="section-brutal" id="servicios">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 01 / Servicios para {pueblo.nombre}</span>
-            <h2 class="brutal-section-head__title">
-              Qué hacemos por
-              <em>tu negocio.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Seis servicios que cubren todo el ciclo digital: desde la web
-            hasta el SEO local, el e-commerce y el mantenimiento mensual.
-          </p>
-        </header>
-
-        <ol class="svc-bento">
-          {servicios.map((s, i) => {
-            const accents = ['accent', 'paper', 'lime', 'paper', 'ink', 'paper'];
-            const accent = accents[i % accents.length];
-            return (
-              <li class={`svc-card svc-card--${accent}`}>
-                <header class="svc-card__head">
-                  <span class="svc-card__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span class="svc-card__kicker">{pueblo.nombre}</span>
-                </header>
-                <h3 class="svc-card__title">{s.titulo}</h3>
-                <p class="svc-card__desc">{s.descripcion}</p>
-                <ul class="svc-card__features">
-                  {s.beneficios.map((b) => (
-                    <li class="svc-card__feat"><span class="svc-card__feat-mark">+</span><span>{b}</span></li>
-                  ))}
-                </ul>
-                <footer class="svc-card__foot">
-                  <div class="svc-card__figure">
-                    <span class="svc-card__figure-val">★</span>
-                    <span class="svc-card__figure-lbl">Para {pueblo.comarca}</span>
-                  </div>
-                  <a href="/contacto/" class="svc-card__cta">Pedir →</a>
-                </footer>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
-    </section>
-
-    {/* Sector principal + especificaciones */}
-    {pueblo.sectorPrincipal && (
-      <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
-        <div class="container-brutal">
-          <header class="brutal-section-head">
-            <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 02 / Especialización en {pueblo.nombre}</span>
-              <h2 class="brutal-section-head__title">
-                Conocemos
-                <em>tu sector.</em>
-              </h2>
-            </div>
-            <p class="brutal-section-head__lead">
-              Trabajamos con negocios del sector
-              <strong> {pueblo.sectorPrincipal.toLowerCase()}</strong> en {pueblo.nombre}.
-              Conocemos el mercado local y los códigos visuales del sector.
-            </p>
-          </header>
-
-          <dl class="spec-list" style="max-width:760px;margin:2rem auto 0;">
-            <div><dt class="spec-k">Localidad</dt><dd class="spec-v">{pueblo.nombre}</dd></div>
-            <div><dt class="spec-k">Comarca</dt><dd class="spec-v">{pueblo.comarca}</dd></div>
-            {pueblo.poblacion && <div><dt class="spec-k">Población</dt><dd class="spec-v">{pueblo.poblacion.toLocaleString('es-ES')} habitantes</dd></div>}
-            <div><dt class="spec-k">Sector principal</dt><dd class="spec-v">{pueblo.sectorPrincipal}</dd></div>
-            {pueblo.lugarIconico && <div><dt class="spec-k">Lugar icónico</dt><dd class="spec-v">{pueblo.lugarIconico}</dd></div>}
-            <div><dt class="spec-k">Cobertura</dt><dd class="spec-v">Reuniones presenciales · entregas remotas</dd></div>
-          </dl>
-        </div>
-      </section>
-    )}
-
-    {/* Sectores locales si existen */}
-    {pueblo.sectores && pueblo.sectores.length > 0 && (
-      <section class="section-brutal">
-        <div class="container-brutal">
-          <header class="brutal-section-head">
-            <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 03 / Quién contrata en {pueblo.nombre}</span>
-              <h2 class="brutal-section-head__title">
-                Para
-                <em>quién diseñamos</em>
-                en {pueblo.nombre}.
-              </h2>
-            </div>
-            <p class="brutal-section-head__lead">
-              Sectores locales que ya venden más online con una web hecha
-              con criterio. Identifica el tuyo y pide presupuesto.
-            </p>
-          </header>
-
-          <ul class="svc-sectors">
-            {pueblo.sectores.map((s, i) => (
-              <li class={`svc-sector svc-sector--${i % 3}`}>
-                <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
-                <h3 class="svc-sector__title">{s.nombre}</h3>
-                <p class="svc-sector__desc">{s.descripcion}</p>
-                {s.keywords && s.keywords.length > 0 && (
-                  <div class="pueblo-sector-keys">
-                    {s.keywords.slice(0, 3).map((k) => <span class="tag-brutal">{k}</span>)}
-                  </div>
-                )}
-              </li>
-            ))}
+          <ul class="dw-chips">
+            {l.caracteristicas.map((c) => <li>{c}</li>)}
           </ul>
         </div>
+      </ItSection>
+    )}
+
+    {l.datos.length > 0 && (
+      <ItSection tone="paper" labelledby="dw-datos">
+        <SectionHead id="dw-datos" kicker={siguienteLamina()} title={l.cabeceras.datos.h2} lead={l.cabeceras.datos.lead || undefined} />
+        <FichaDatos items={l.datos} />
+      </ItSection>
+    )}
+
+    {l.coords && (
+      <section class="dw-map" aria-label={`Mapa de ${n}`}>
+        <InteractiveMap center={l.coords} zoom={13} pitch={25} bearing={-15} label={n} themeColor="#FF5A00" themeColorDark="#0E0D0B" townInitial={n.charAt(0)} />
       </section>
     )}
 
-    {/* Por qué nosotros */}
-    <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 04 / Por qué Platanito Rico</span>
-            <h2 class="brutal-section-head__title">
-              Estudio local
-              <em>con criterio.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            No somos una agencia genérica que vende plantillas. Conocemos
-            {' '}{pueblo.comarca} y entendemos las necesidades específicas de
-            negocios de {pueblo.nombre}.
-          </p>
-        </header>
-
-        <ul class="svc-sectors">
-          {razones.map((r, i) => (
-            <li class={`svc-sector svc-sector--${i % 3}`}>
-              <span class="text-meta">★ Razón {String(i + 1).padStart(2, '0')}</span>
-              <h3 class="svc-sector__title">{r.titulo}</h3>
-              <p class="svc-sector__desc">{r.descripcion}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    {/* Proceso */}
-    <section class="section-brutal">
-      <div class="container-brutal">
-        <header class="brutal-section-head">
-          <div class="brutal-section-head__col">
-            <span class="text-meta">Cap. 05 / Método</span>
-            <h2 class="brutal-section-head__title">
-              De cero a producción
-              <em>en 2 semanas.</em>
-            </h2>
-          </div>
-          <p class="brutal-section-head__lead">
-            Cuatro fases con entregables claros. Sin sorpresas, sin retrasos —
-            sabes exactamente qué pasa en cada paso.
-          </p>
-        </header>
-
-        <ol class="svc-process">
-          {proceso.map((p, i) => (
-            <li class={`svc-process__step svc-process__step--${i % 2 === 0 ? 'a' : 'b'}`}>
-              <div class="svc-process__rail">
-                <span class="svc-process__dot"></span>
-                {i < proceso.length - 1 && <span class="svc-process__line"></span>}
-              </div>
-              <div class="svc-process__num">
-                <span class="text-mono">{String(p.paso).padStart(2, '0')}</span>
-                <span class="svc-process__eta">Fase {p.paso}</span>
-              </div>
-              <div class="svc-process__content">
-                <h3 class="svc-process__title">{p.titulo}</h3>
-                <p class="svc-process__body">{p.descripcion}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    {/* Testimonios locales si existen */}
-    {pueblo.testimonios && pueblo.testimonios.length > 0 && (
-      <section class="section-brutal" style="background:var(--brutal-bg-alt);border-block:2px solid var(--brutal-ink);">
-        <div class="container-brutal">
-          <header class="brutal-section-head">
-            <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 06 / Voces de {pueblo.nombre}</span>
-              <h2 class="brutal-section-head__title">
-                Lo que dicen
-                <em>negocios locales.</em>
-              </h2>
-            </div>
-          </header>
-
-          <figure class="svc-pull">
-            <div class="svc-pull__marks" aria-hidden="true">“</div>
-            <blockquote class="svc-pull__quote">{pueblo.testimonios[0].texto}</blockquote>
-            <figcaption class="svc-pull__cap">
-              <span class="svc-pull__avatar">{pueblo.testimonios[0].nombre[0]}</span>
-              <div>
-                <span class="svc-pull__name">{pueblo.testimonios[0].nombre}</span>
-                <span class="svc-pull__role">{pueblo.testimonios[0].sector} · {pueblo.nombre}</span>
-              </div>
-            </figcaption>
-          </figure>
-
-          {pueblo.testimonios.length > 1 && (
-            <ul class="svc-quotes">
-              {pueblo.testimonios.slice(1, 4).map((t, i) => (
-                <li class={`svc-quote svc-quote--${i}`}>
-                  <p>"{t.texto}"</p>
-                  <footer>
-                    <span class="svc-quote__avatar">{t.nombre[0]}</span>
-                    <div>
-                      <span class="svc-quote__name">{t.nombre}</span>
-                      <span class="svc-quote__role">{t.sector}</span>
-                    </div>
-                  </footer>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </section>
+    {l.sectores.length > 0 && (
+      <ItSection tone="bone" labelledby="dw-sectores">
+        <SectionHead id="dw-sectores" kicker={siguienteLamina()} title={l.cabeceras.sectores.h2} lead={l.cabeceras.sectores.lead || undefined} />
+        <SectoresGrid items={l.sectores} />
+      </ItSection>
     )}
 
-    {/* FAQs locales si existen */}
-    {pueblo.faqs && pueblo.faqs.length > 0 && (
-      <section class="section-brutal">
-        <div class="container-brutal">
-          <header class="brutal-section-head">
-            <div class="brutal-section-head__col">
-              <span class="text-meta">Cap. 07 / Preguntas en {pueblo.nombre}</span>
-              <h2 class="brutal-section-head__title">
-                Lo que más
-                <em>nos preguntan.</em>
-              </h2>
-            </div>
-            <p class="brutal-section-head__lead">
-              Plazos, precios, hosting, SEO local y reuniones presenciales en
-              {' '}{pueblo.nombre}. Si no está aquí, escríbenos y respondemos en 24h.
-            </p>
-          </header>
+    {l.extras.map((e, i) => (
+      <ItSection tone={i % 2 === 0 ? 'night' : 'paper'} labelledby={`dw-extra-${e.key}`}>
+        <SectionHead id={`dw-extra-${e.key}`} kicker={siguienteLamina()} title={e.titulo} lead={e.lead || undefined} />
+        <ItemsLista items={e.items} />
+      </ItSection>
+    ))}
 
-          <ol class="svc-faq">
-            {pueblo.faqs.map((f, i) => (
-              <li class="svc-faq__item">
-                <details class="svc-faq__details" open={i === 0}>
-                  <summary class="svc-faq__sum">
-                    <span class="svc-faq__num">{String(i + 1).padStart(2, '0')}</span>
-                    <span class="svc-faq__q">{f.q}</span>
-                    <span class="svc-faq__toggle" aria-hidden="true">+</span>
-                  </summary>
-                  <div class="svc-faq__answer"><p>{f.a}</p></div>
-                </details>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+    <ItSection tone="paper" labelledby="dw-diferenciales">
+      <SectionHead id="dw-diferenciales" kicker={siguienteLamina()} title={l.cabeceras.diferenciales.h2} lead={l.cabeceras.diferenciales.lead || undefined} />
+      <BloquesGrid items={l.diferenciales} columns={2} />
+    </ItSection>
+
+    <ItSection tone="bone" labelledby="dw-proceso">
+      <SectionHead id="dw-proceso" kicker={siguienteLamina()} title={`Cómo hacemos tu página web en ${n}`} />
+      <Pasos items={pasos} />
+    </ItSection>
+
+    {l.testimonios.length > 0 && (
+      <ItSection tone="night" labelledby="dw-testimonios">
+        <SectionHead id="dw-testimonios" kicker={siguienteLamina()} title={l.cabeceras.testimonios.h2} lead={l.cabeceras.testimonios.lead || undefined} />
+        <Testimonios items={l.testimonios} />
+      </ItSection>
     )}
 
-    {/* Otros pueblos de la comarca */}
-    {(() => {
-      const otros = getPueblosByComarca(pueblo.comarca).filter(p => p.slug !== pueblo.slug).slice(0, 8);
-      return otros.length > 0 ? (
-        <section class="section-brutal" style="background:var(--brutal-bg-alt);border-top:2px solid var(--brutal-ink);">
-          <div class="container-brutal">
-            <header class="brutal-section-head">
-              <div class="brutal-section-head__col">
-                <span class="text-meta">Cap. 08 / Cobertura {pueblo.comarca}</span>
-                <h2 class="brutal-section-head__title">
-                  También en
-                  <em>tu comarca.</em>
-                </h2>
-              </div>
-              <p class="brutal-section-head__lead">
-                Otras localidades de {pueblo.comarca} donde ya trabajamos.
-                Si tu pueblo no está, escríbenos — cubrimos toda Almería.
-              </p>
-            </header>
+    {it && (
+      <ItSection tone="paper" labelledby="dw-it">
+        <SectionHead
+          id="dw-it"
+          kicker={siguienteLamina()}
+          title={`Web e informática en ${n}, en una sola cuota`}
+          lead={`En ${n} también mantenemos ordenadores, redes y copias de seguridad, con técnico en tu empresa el mismo día.`}
+        />
+        <Plan360Teaser />
+        <p class="dw-it-link"><a href={`${HUB_IT}${it.slug}/`}>Mantenimiento informático en {n}</a></p>
+      </ItSection>
+    )}
 
-            <ul class="cobertura-grid" style="margin-top:2rem;">
-              {otros.map((p, i) => (
-                <li>
-                  <a href={`/diseno-web/${p.slug}/`} class={`cobertura-tile cobertura-tile--${i % 6}`}>
-                    <span class="text-meta">N.º {String(i + 1).padStart(2, '0')}</span>
-                    <span class="cobertura-tile__name heading-display">{p.nombre}</span>
-                    <span class="cobertura-tile__sub text-mono">{p.comarca}</span>
-                    <span class="cobertura-tile__arrow" aria-hidden="true">→</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+    {l.faq.length > 0 && (
+      <ItSection tone="bone" labelledby="dw-faq">
+        <SectionHead id="dw-faq" kicker={siguienteLamina()} title={l.cabeceras.faq.h2} lead={l.cabeceras.faq.lead || undefined} />
+        <FaqList items={l.faq} />
+      </ItSection>
+    )}
 
-            <div style="margin-top:2rem;text-align:center;">
-              <a href="/diseno-web/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-                Ver todos los municipios con diseño web en Almería →
-              </a>
-            </div>
-          </div>
-        </section>
-      ) : null;
-    })()}
+    {vecinos.length > 0 && (
+      <ItSection tone="paper" labelledby="dw-vecinos">
+        <SectionHead
+          id="dw-vecinos"
+          kicker={siguienteLamina()}
+          title={`Diseño web en ${l.comarca}`}
+          lead="Otros municipios de la comarca donde trabajamos. Si el tuyo no aparece, escríbenos: cubrimos toda la provincia."
+        />
+        <PueblosLinks items={[...vecinos, { href: '/diseno-web/', label: 'Todos los municipios de Almería' }]} />
+      </ItSection>
+    )}
 
-    {/* CTA final */}
-    <section class="svc-final">
-      <div class="container-brutal">
-        <div class="svc-final__inner">
-          <span class="text-meta">★ Próximo paso</span>
-          <h2 class="svc-final__title">
-            ¿Empezamos tu web en
-            <em>{pueblo.nombre}?</em>
-          </h2>
-          <p class="svc-final__text">
-            Cuéntanos tu proyecto y te enviamos presupuesto detallado en 24h.
-            Hosting gratuito para webs estáticas, sin permanencia, soporte local
-            en {pueblo.comarca}.
-          </p>
-          <div class="svc-final__btns">
-            <a href="/contacto/" class="btn-brutal btn-brutal--lg">Pedir presupuesto →</a>
-            <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Llamar al 657 085 019</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <ServiciosPueblo pueblo={pueblo.nombre} />
-
+    <ServiciosPueblo pueblo={n} />
+    <Contact />
   </main>
 
   <Footer />
 </BaseLayout>
 
 <style>
-  .pueblo-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.5rem 0 2rem; }
-  .pueblo-sector-keys { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .75rem; }
-  .pueblo-map-wrap { width: 100%; height: clamp(360px, 50vh, 520px); overflow: hidden; border-bottom: 2px solid var(--brutal-ink); }
-  .pueblo-map-wrap > * { width: 100%; height: 100%; }
-
-  /* Panorama digital local — contenido único por pueblo */
-  .pueblo-panorama { background: var(--brutal-bg-alt); border-bottom: 2px solid var(--brutal-ink); }
-  .pueblo-panorama__grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 1.5rem; align-items: start; }
-  @media (min-width: 900px) { .pueblo-panorama__grid { grid-template-columns: 1.6fr 1fr; gap: 3rem; } }
-  .pueblo-panorama__p { font-size: 1.05rem; line-height: 1.65; color: var(--brutal-text-secondary); margin: 0 0 1.1rem; max-width: 64ch; }
-  .pueblo-panorama__p:first-child::first-letter {
-    font-family: var(--font-display); font-weight: 800; font-size: 3.2rem;
-    float: left; line-height: .8; margin: .1rem .5rem 0 0; color: var(--brutal-accent-ink);
-  }
-  .pueblo-panorama__keys { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
-  .pueblo-panorama__hitos {
-    list-style: none; padding: 0; margin: 0;
-    border: 2.5px solid var(--brutal-ink); background: var(--brutal-ink);
-    display: grid; grid-template-columns: 1fr; gap: 2px;
-  }
-  .pueblo-panorama__hito { background: var(--brutal-paper); padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: .25rem; }
-  .pueblo-panorama__hk { font-family: var(--font-mono); font-size: .62rem; font-weight: 800; letter-spacing: .2em; color: var(--brutal-accent-ink); text-transform: uppercase; }
-  .pueblo-panorama__hv { font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; line-height: 1.3; color: var(--brutal-ink); }
+  .dw-panorama { display: grid; gap: 2rem; }
+  @media (min-width: 1024px) { .dw-panorama { grid-template-columns: 1.5fr 1fr; gap: 4rem; align-items: start; } }
+  .dw-panorama__p { margin: 0 0 1.1rem; max-width: 64ch; font-size: 1.08rem; line-height: 1.65; }
+  .dw-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; align-content: start; }
+  .dw-chips li { padding: .45rem .8rem; font-family: var(--font-mono); font-size: .82rem; background: var(--color-plano-lima); border: 2px solid var(--color-plano-tinta); }
+  .dw-map { height: clamp(360px, 50vh, 520px); border-bottom: 3px solid var(--color-plano-tinta); }
+  .dw-map > :global(*) { width: 100%; height: 100%; }
+  .dw-it-link { margin: 1.75rem 0 0; font-family: var(--font-mono); font-weight: 800; }
+  .dw-it-link a { color: var(--it-accent); text-underline-offset: 4px; text-decoration-thickness: 2px; }
 </style>

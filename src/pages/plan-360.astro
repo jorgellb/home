@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import Contact from '../components/sections/Contact.astro';
+import BlueprintHero from '../components/brutal/BlueprintHero.astro';
+import Ticker from '../components/brutal/Ticker.astro';
+import ItSection from '../components/it/ItSection.astro';
+import SectionHead from '../components/it/SectionHead.astro';
+import BloquesGrid from '../components/it/BloquesGrid.astro';
+import ServiciosGrid from '../components/it/ServiciosGrid.astro';
+import FaqList from '../components/it/FaqList.astro';
+import CoberturaList from '../components/it/CoberturaList.astro';
+import { plan360, pueblosIT } from '../data/servicios-it';
+import { SITE, PROVEEDOR } from '../data/negocio';
+
+const canonical = `${SITE}${plan360.href}`;
+const contactoHref = '/contacto/?servicio=plan-360#contacto';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': 'Plan 360: web y mantenimiento informático',
+    'serviceType': 'Mantenimiento informático y web para empresas',
+    'description': plan360.description,
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': [
+      ...pueblosIT.map((p) => ({ '@type': 'City', 'name': p.nombre })),
+      { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
+    ],
+    'offers': {
+      '@type': 'Offer',
+      'url': canonical,
+      'price': String(plan360.precio),
+      'priceCurrency': 'EUR',
+      'availability': 'https://schema.org/InStock',
+      'priceSpecification': {
+        '@type': 'UnitPriceSpecification',
+        'price': String(plan360.precio),
+        'priceCurrency': 'EUR',
+        'unitCode': 'MON',
+        'unitText': 'mes',
+        'valueAddedTaxIncluded': false,
+      },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': plan360.faq.map((f) => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } })),
+  },
+];
+---
+
+<BaseLayout title={plan360.title} description={plan360.description} canonical={canonical} jsonLd={jsonLd}>
+  <Header />
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Plan 360' }]} />
+
+  <main id="main-content">
+    <BlueprintHero
+      size="compact"
+      h1Lines={['Plan 360: web y mantenimiento', 'informático por 400 € al mes']}
+      h2={plan360.h2}
+      primary={{ href: contactoHref, label: 'Quiero el Plan 360' }}
+      secondary={{ href: '#incluye', label: 'Ver qué incluye' }}
+      proyecto="Plan 360"
+      lamina="360"
+      specs={[{ k: 'Precio', v: `${plan360.precio} € + IVA al mes` }, { k: 'Puestos', v: `Hasta ${plan360.puestos} (+${plan360.precioPuestoExtra} €/puesto)` }, { k: 'Visita in situ', v: 'El mismo día' }, { k: 'Permanencia', v: 'Ninguna' }]}
+    />
+    <Ticker label="Qué incluye el Plan 360" tone="lima" items={plan360.incluye.map((b) => b.t)} />
+
+    <ItSection tone="bone" id="incluye" labelledby="p360-incluye">
+      <SectionHead
+        id="p360-incluye"
+        kicker="Cap. 01 / Qué incluye"
+        title="Qué incluye el Plan 360"
+        lead={`Todo lo que necesita una pyme de hasta ${plan360.puestos} puestos para que su tecnología funcione, por una cuota fija.`}
+      />
+      <BloquesGrid items={plan360.incluye} />
+    </ItSection>
+
+    <ItSection tone="night" labelledby="p360-precio">
+      <SectionHead
+        id="p360-precio"
+        kicker="Cap. 02 / Cuentas claras"
+        title="Cuánto cuesta tener la tecnología de tu empresa cubierta"
+      />
+      <ul class="p360-comp">
+        {plan360.comparativa.map((c) => (
+          <li class={`p360-comp__item${c.destacado ? ' is-hot' : ''}`}>
+            <span class="p360-comp__k">{c.concepto}</span>
+            <strong class="p360-comp__v">{c.coste}</strong>
+            <span class="p360-comp__n">{c.nota}</span>
+          </li>
+        ))}
+      </ul>
+    </ItSection>
+
+    <ItSection tone="paper" labelledby="p360-condiciones">
+      <div class="p360-cond">
+        <div>
+          <SectionHead id="p360-condiciones" kicker="Cap. 03 / Condiciones" title="Sin permanencia y sin cuota de alta" />
+          <p class="p360-cond__p">{plan360.salida}</p>
+          <p class="p360-cond__p">
+            ¿Más de {plan360.puestos} puestos? Cada puesto adicional cuesta {plan360.precioPuestoExtra} € + IVA al mes.
+          </p>
+          <a class="p360-cond__btn" href={contactoHref}>Pedir el Plan 360</a>
+        </div>
+        <div class="p360-cond__box">
+          <p class="p360-cond__t">No incluido en la cuota</p>
+          <ul>
+            {plan360.noIncluye.map((x) => <li>{x}</li>)}
+          </ul>
+        </div>
+      </div>
+    </ItSection>
+
+    <ItSection tone="bone" labelledby="p360-servicios">
+      <SectionHead id="p360-servicios" kicker="Cap. 04 / Servicios" title="Servicios informáticos que cubre el plan" />
+      <ServiciosGrid />
+    </ItSection>
+
+    <ItSection tone="paper" labelledby="p360-cobertura">
+      <SectionHead
+        id="p360-cobertura"
+        kicker="Cap. 05 / Cobertura"
+        title="Visita el mismo día en el Levante y el Almanzora"
+        lead="En el resto de la provincia de Almería el Plan 360 funciona con soporte remoto y visitas programadas."
+      />
+      <CoberturaList />
+    </ItSection>
+
+    <ItSection tone="bone" labelledby="p360-faq">
+      <SectionHead id="p360-faq" kicker="Cap. 06 / Preguntas" title="Preguntas frecuentes sobre el Plan 360" />
+      <FaqList items={plan360.faq} />
+    </ItSection>
+
+    <Contact />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .p360-comp { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+  @media (min-width: 900px) { .p360-comp { grid-template-columns: repeat(3, 1fr); } }
+  .p360-comp__item {
+    display: flex; flex-direction: column; gap: .5rem;
+    padding: 1.6rem 1.5rem;
+    background: var(--it-card);
+    border: 3px solid var(--it-line);
+    box-shadow: 7px 7px 0 var(--it-shadow);
+  }
+  .p360-comp__item.is-hot { background: var(--color-plano-lima); color: var(--color-plano-tinta); border-color: var(--color-plano-lima); }
+  .p360-comp__k { font-family: var(--font-mono); font-size: .8rem; }
+  .p360-comp__v { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.8rem, 3.4vw, 2.5rem); line-height: 1; letter-spacing: -.04em; }
+  .p360-comp__n { line-height: 1.5; color: var(--it-muted); }
+  .p360-comp__item.is-hot .p360-comp__n { color: var(--color-plano-tinta); font-weight: 600; }
+
+  .p360-cond { display: grid; gap: 2rem; }
+  @media (min-width: 1024px) { .p360-cond { grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: start; } }
+  .p360-cond__p { margin: 0 0 1rem; max-width: 60ch; font-size: 1.1rem; line-height: 1.6; }
+  .p360-cond__btn {
+    display: inline-flex; align-items: center; min-height: 3.1rem;
+    margin-top: .5rem; padding: .85rem 1.5rem;
+    font-family: var(--font-mono); font-weight: 800;
+    background: var(--color-plano-tinta); color: var(--color-plano-lima);
+    text-decoration: none;
+    border: 3px solid var(--color-plano-tinta);
+    box-shadow: 6px 6px 0 var(--color-plano-naranja);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .p360-cond__btn:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--color-plano-naranja); }
+  .p360-cond__btn:focus-visible { outline: 3px solid var(--color-plano-ciano); outline-offset: 4px; }
+  .p360-cond__box { padding: 1.5rem; background: var(--it-card); border: 3px solid var(--it-line); box-shadow: 7px 7px 0 var(--it-shadow); }
+  .p360-cond__t { margin: 0 0 1rem; font-family: var(--font-mono); font-size: .8rem; color: var(--it-accent); }
+  .p360-cond__box ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .7rem; line-height: 1.5; }
+</style>

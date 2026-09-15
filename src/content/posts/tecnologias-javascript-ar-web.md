@@ -3,7 +3,7 @@ title: "Tecnologías JavaScript para Realidad Aumentada (AR) en la Web"
 slug: "tecnologias-javascript-ar-web"
 excerpt: "Three.js, WebXR, React Three Fiber, AR.js, Babylon.js y TensorFlow.js. La guía definitiva de las tecnologías JavaScript para construir experiencias de realidad aumentada directamente en el navegador — sin apps nativas, sin fricción y con el stack recomendado para 2026."
 seo:
-  title: "Tecnologías JavaScript para AR en la Web (2026)"
+  title: "JavaScript para Realidad Aumentada Web"
   description: "Guía de tecnologías JavaScript para realidad aumentada: Three.js, WebXR, AR.js, Babylon.js y TensorFlow.js. Comparativa y stack recomendado 2026."
   keywords:
     [

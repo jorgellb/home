@@ -3,7 +3,7 @@ title: "La 'tormenta perfecta' regulatoria: cumplir o arriesgarse"
 slug: "tormenta-perfecta-regulatoria-cumplir-o-arriesgarse"
 excerpt: "Las empresas españolas se enfrentan a un desafío sin precedentes con NIS2, DORA y CRA. Descubre qué implica esta tormenta regulatoria y cómo preparar tu empresa."
 seo:
-  title: "NIS2, DORA y CRA: La Tormenta Regulatoria 2025-2027"
+  title: "NIS2, DORA y CRA: Cómo Cumplir la Normativa"
   description: "Guía completa sobre las nuevas regulaciones europeas de ciberseguridad: NIS2, DORA y CRA. Aprende a cumplir y evita sanciones millonarias."
   keywords: ["NIS2", "DORA", "CRA", "ciberseguridad", "regulación europea", "compliance", "pymes"]
 categories: ["Ciberseguridad", "Normativa"]

@@ -1,0 +1,45 @@
+---
+/* Lugares y núcleos que definen un municipio. Usa las variables --it-* de la
+   lámina (ItSection) que lo contiene. */
+interface Lugar {
+  name: string;
+  sub: string;
+  desc: string;
+  dato: string;
+}
+
+interface Props {
+  items: Lugar[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="lb">
+  {items.map((l) => (
+    <li class="lb__item">
+      {l.dato && <p class="lb__dato">{l.dato}</p>}
+      <h3 class="lb__name">{l.name}</h3>
+      {l.sub && <p class="lb__sub">{l.sub}</p>}
+      {l.desc && <p class="lb__desc">{l.desc}</p>}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .lb { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .lb__item {
+    display: flex; flex-direction: column; gap: .45rem;
+    padding: 1.5rem;
+    background: var(--it-card);
+    border: 3px solid var(--it-line);
+    box-shadow: 7px 7px 0 var(--it-shadow);
+  }
+  .lb__item:first-child { background: var(--color-plano-lima); color: var(--color-plano-tinta); }
+  .lb__dato { margin: 0; font-family: var(--font-mono); font-size: .85rem; font-weight: 700; color: var(--color-plano-ciano); }
+  .lb__item:first-child .lb__dato { color: var(--color-plano-tinta); }
+  .lb__name { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; line-height: 1.05; letter-spacing: -.03em; }
+  .lb__sub { margin: 0; font-family: var(--font-mono); font-size: .76rem; }
+  .lb__desc { margin: .3rem 0 0; line-height: 1.55; color: var(--it-muted); }
+  .lb__item:first-child .lb__desc { color: var(--color-plano-tinta); }
+</style>

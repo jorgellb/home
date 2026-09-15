@@ -1,0 +1,107 @@
+---
+/* Precios en oscuro: tarjetas con borde de brillo animado (Vengeance UI
+   GlowBorderCard, CSS puro) + bento interactivo del Plan 360 (isla React). */
+import GlowBorderCard from '@/components/ui/glow-border-card';
+import PlanBento from './PlanBento';
+import type { Tarifa } from '../brutal/types';
+
+interface Props {
+  h2: string;
+  lead: string;
+  tarifas: Tarifa[];
+}
+
+const { h2, lead, tarifas } = Astro.props;
+
+const NARANJA = ['#ff5a00', '#ff7a1f', '#ffb36b', '#ff5a00', '#ff8c3a', '#ffb36b', '#ff5a00', '#d6ff44', '#ff7a1f', '#ff5a00'];
+const LIMA = ['#d6ff44', '#b8ff2e', '#ecffa0', '#d6ff44', '#ff5a00', '#d6ff44', '#aee600', '#ecffa0', '#d6ff44', '#b8ff2e'];
+---
+
+<section class="vp dark" id="precios" aria-labelledby="vp-title">
+  <div class="container-brutal">
+    <header class="vp__head">
+      <h2 id="vp-title" class="vp__title">{h2}</h2>
+      <p class="vp__lead">{lead}</p>
+    </header>
+
+    <ul class="vp__cards">
+      {tarifas.map((t) => (
+        <li class="vp__cell">
+          <GlowBorderCard
+            width="100%"
+            height="100%"
+            borderRadius="22px"
+            gradientColors={t.destacada ? LIMA : NARANJA}
+            animationDuration={t.destacada ? 3 : 7}
+            className="vp__glow"
+          >
+            <div class={`vp__card${t.destacada ? ' vp__card--hot' : ''}`}>
+              <p class="vp__name">{t.servicio}</p>
+              <p class="vp__price">{t.desde} <span>{t.nota}</span></p>
+              <ul class="vp__list">
+                {t.incluye.map((x) => <li>{x}</li>)}
+              </ul>
+              <a href={t.href} class="vp__cta">{t.cta}</a>
+            </div>
+          </GlowBorderCard>
+        </li>
+      ))}
+    </ul>
+
+    <div class="vp__bento">
+      <PlanBento client:visible />
+    </div>
+  </div>
+</section>
+
+<style>
+  .vp {
+    background: #070707;
+    color: #f5f1ea;
+    padding-block: clamp(4rem, 9vw, 7rem);
+    border-top: 1px solid rgb(255 255 255 / .06);
+  }
+  .vp__head { max-width: 52rem; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+  .vp__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.3rem, 5.4vw, 4.4rem);
+    line-height: .98;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+  }
+  .vp__lead { margin: 1rem 0 0; max-width: 54ch; font-size: 1.1rem; line-height: 1.55; color: #a39d94; }
+
+  .vp__cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .vp__cards { grid-template-columns: repeat(3, 1fr); } }
+  .vp__cell { display: flex; }
+  .vp__cell > :global(*) { flex: 1; }
+
+  .vp__card { width: 100%; height: 100%; display: flex; flex-direction: column; gap: .85rem; padding: .75rem .5rem; text-align: left; align-self: stretch; }
+  .vp__name { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; letter-spacing: -.03em; color: #fff; }
+  .vp__price { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: 2.2rem; line-height: 1; letter-spacing: -.04em; color: #ff8c3a; }
+  .vp__card--hot .vp__price { color: #d6ff44; }
+  .vp__price span { display: block; margin-top: .35rem; font-family: var(--font-body); font-size: .9rem; font-weight: 500; letter-spacing: 0; color: #a39d94; }
+  .vp__list { list-style: none; margin: .4rem 0 0; padding: .9rem 0 0; display: grid; gap: .55rem; border-top: 1px solid rgb(255 255 255 / .1); color: #d9d2c6; font-size: .95rem; line-height: 1.4; }
+  .vp__list li { position: relative; padding-left: 1.3rem; }
+  .vp__list li::before { content: ''; position: absolute; left: 0; top: .5em; width: .45rem; height: .45rem; border-radius: 50%; background: #ff5a00; box-shadow: 0 0 10px #ff5a00; }
+  .vp__card--hot .vp__list li::before { background: #d6ff44; box-shadow: 0 0 10px #d6ff44; }
+  .vp__cta {
+    margin-top: auto;
+    display: inline-flex; justify-content: center; align-items: center;
+    min-height: 3rem; padding: .8rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #0e0d0b;
+    background: #f5f1ea;
+    transition: transform .2s, background .2s;
+  }
+  .vp__card--hot .vp__cta { background: #d6ff44; }
+  .vp__cta:hover { transform: translateY(-2px); background: #ff5a00; }
+  .vp__cta:focus-visible { outline: 3px solid #d6ff44; outline-offset: 3px; }
+
+  .vp__bento { margin-top: clamp(3rem, 6vw, 4.5rem); }
+  @media (min-width: 900px) { .vp__bento { height: 680px; } }
+</style>

@@ -3,7 +3,7 @@ title: "Cuándo rediseñar una página web: 10 señales claras"
 slug: "cuando-redisenar-pagina-web-10-senales-claras"
 excerpt: "Hay empresas que aguantan años con una web 'porque todavía funciona'. El problema es que una web puede seguir online y, al mismo tiempo, quedarse atrás en imagen, rendimiento, captación y posicionamiento."
 seo:
-  title: "Rediseñar página web: 10 señales para hacerlo"
+  title: "Rediseñar una Web: 10 Señales para Hacerlo"
   description: "Descubre las 10 señales claras que indican que es momento de rediseñar tu página web para mejorar rendimiento, conversión y posicionamiento."
   keywords:
     [

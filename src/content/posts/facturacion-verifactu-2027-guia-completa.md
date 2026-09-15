@@ -3,7 +3,7 @@ title: "VERIFACTU 2027: La Nueva Facturación Electrónica Obligatoria en Españ
 slug: "facturacion-verifactu-2027-guia-completa"
 excerpt: "Todo lo que necesitas saber sobre VERIFACTU: qué es, cuándo entra en vigor, quién está obligado y cómo preparar tu empresa para cumplir con la nueva normativa de facturación electrónica."
 seo:
-  title: "VERIFACTU 2027: Guía de Facturación Electrónica Obligatoria"
+  title: "VERIFACTU 2027: Guía de Facturación"
   description: "Descubre qué es VERIFACTU, cuándo es obligatorio y cómo adaptar tu empresa. Guía completa sobre la nueva facturación electrónica en España."
   keywords: ["VERIFACTU", "facturación electrónica", "AEAT", "autónomos", "pymes", "ley antifraude"]
 categories: ["Tecnología", "Fiscalidad"]

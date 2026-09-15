@@ -1,0 +1,63 @@
+---
+interface Testimonio {
+  nombre: string;
+  negocio: string;
+  texto: string;
+}
+
+interface Props {
+  items: Testimonio[];
+}
+
+const { items } = Astro.props;
+const [destacado, ...resto] = items;
+---
+
+{destacado && (
+  <figure class="ts-main">
+    <blockquote class="ts-main__q">{destacado.texto}</blockquote>
+    <figcaption class="ts-cap">
+      <span class="ts-cap__name">{destacado.nombre}</span>
+      <span class="ts-cap__role">{destacado.negocio}</span>
+    </figcaption>
+  </figure>
+)}
+
+{resto.length > 0 && (
+  <ul class="ts-grid">
+    {resto.map((t) => (
+      <li>
+        <figure class="ts-card">
+          <blockquote class="ts-card__q">{t.texto}</blockquote>
+          <figcaption class="ts-cap">
+            <span class="ts-cap__name">{t.nombre}</span>
+            <span class="ts-cap__role">{t.negocio}</span>
+          </figcaption>
+        </figure>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .ts-main {
+    margin: 0 0 1.75rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    background: var(--color-plano-lima);
+    color: var(--color-plano-tinta);
+    border: 3px solid var(--color-plano-tinta);
+    box-shadow: 10px 10px 0 var(--it-shadow);
+  }
+  .ts-main__q { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.3rem, 2.8vw, 2rem); line-height: 1.25; letter-spacing: -.02em; max-width: 50ch; }
+  .ts-main__q::before { content: '“'; display: block; font-size: 3em; line-height: .6; margin-bottom: .1em; }
+  .ts-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .ts-grid { grid-template-columns: repeat(3, 1fr); } }
+  .ts-grid > li { display: flex; }
+  .ts-card { flex: 1; margin: 0; padding: 1.4rem; display: flex; flex-direction: column; gap: 1rem; background: var(--it-card); border: 3px solid var(--it-line); }
+  .ts-card__q { margin: 0; line-height: 1.55; }
+  .ts-cap { display: flex; flex-direction: column; gap: .1rem; margin-top: auto; padding-top: 1rem; }
+  .ts-main .ts-cap { border-top: 2px solid var(--color-plano-tinta); margin-top: 1.25rem; }
+  .ts-card .ts-cap { border-top: 1px solid var(--it-line); }
+  .ts-cap__name { font-weight: 800; }
+  .ts-cap__role { font-family: var(--font-mono); font-size: .78rem; }
+</style>

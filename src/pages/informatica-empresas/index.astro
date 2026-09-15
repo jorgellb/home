@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import Contact from '../../components/sections/Contact.astro';
+import BlueprintHero from '../../components/brutal/BlueprintHero.astro';
+import Ticker from '../../components/brutal/Ticker.astro';
+import ItSection from '../../components/it/ItSection.astro';
+import SectionHead from '../../components/it/SectionHead.astro';
+import ServiciosGrid from '../../components/it/ServiciosGrid.astro';
+import BloquesGrid from '../../components/it/BloquesGrid.astro';
+import FaqList from '../../components/it/FaqList.astro';
+import CoberturaList from '../../components/it/CoberturaList.astro';
+import Plan360Teaser from '../../components/it/Plan360Teaser.astro';
+import { serviciosIT, pueblosIT, plan360, getServicioIT, HUB_IT, type Bloque, type Faq } from '../../data/servicios-it';
+import { SITE, PROVEEDOR } from '../../data/negocio';
+
+const canonical = `${SITE}${HUB_IT}`;
+const title = 'Mantenimiento Informático Empresas Almería';
+const description = 'Mantenimiento informático para empresas en Almería: redes, servidores, copias, ordenadores y ciberseguridad, con técnico el mismo día en Levante y Almanzora.';
+
+const proceso: Bloque[] = [
+  { t: 'Auditoría inicial', d: 'Visitamos tu empresa y revisamos equipos, red, copias y seguridad para saber de dónde partimos.' },
+  { t: 'Propuesta cerrada', d: 'Te decimos qué urge, qué puede esperar y cuánto cuesta cada cosa, por escrito y sin tecnicismos.' },
+  { t: 'Puesta a punto', d: 'Corregimos lo crítico primero: copias que no funcionan, equipos sin proteger y redes mal configuradas.' },
+  { t: 'Mantenimiento continuo', d: 'Preventivo mensual, helpdesk remoto y visita el mismo día. Tú te olvidas de la informática.' },
+];
+
+// Preguntas más buscadas, reunidas desde los servicios para no duplicar copy.
+const faq: Faq[] = [
+  ['mantenimiento-informatico', 0],
+  ['mantenimiento-informatico', 1],
+  ['mantenimiento-informatico', 2],
+  ['servidores-copias-seguridad', 2],
+  ['ciberseguridad', 0],
+].flatMap(([slug, i]) => {
+  const item = getServicioIT(slug as string)?.faq[i as number];
+  return item ? [item] : [];
+});
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': 'Mantenimiento informático para empresas',
+    'serviceType': 'Mantenimiento informático',
+    'description': description,
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': [
+      ...pueblosIT.map((p) => ({ '@type': 'City', 'name': p.nombre })),
+      { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
+    ],
+    'hasOfferCatalog': {
+      '@type': 'OfferCatalog',
+      'name': 'Servicios informáticos para empresas',
+      'itemListElement': serviciosIT.map((s) => ({
+        '@type': 'Offer',
+        'itemOffered': { '@type': 'Service', 'name': s.nav, 'url': `${canonical}${s.slug}/` },
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faq.map((f) => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <Header />
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Sistemas IT' }]} />
+
+  <main id="main-content">
+    <BlueprintHero
+      size="compact"
+      h1Lines={['Mantenimiento informático', 'para empresas en Almería']}
+      h2="Tu departamento IT en el Levante y el Almanzora, con visita el mismo día"
+      primary={{ href: '/contacto/?servicio=sistemas-it#contacto', label: 'Pedir presupuesto' }}
+      secondary={{ href: plan360.href, label: 'Ver el Plan 360' }}
+      proyecto="Sistemas IT"
+      lamina="IT"
+      specs={[{ k: 'Visita in situ', v: 'El mismo día' }, { k: 'Helpdesk', v: 'Remoto ilimitado' }, { k: 'Cobertura', v: 'Levante y Almanzora' }, { k: 'Permanencia', v: 'Ninguna' }]}
+    />
+    <Ticker label="Compromisos de Sistemas IT" items={['Visita in situ el mismo día en el Levante y el Almanzora', 'Helpdesk remoto ilimitado', 'Copias de seguridad verificadas cada mes', 'Antivirus gestionado', 'Plan 360: web e informática por 400 € + IVA al mes', 'Sin permanencia']} />
+
+    <ItSection tone="bone" labelledby="it-servicios">
+      <SectionHead
+        id="it-servicios"
+        kicker="Cap. 01 / Servicios"
+        title="Servicios informáticos para empresas"
+        lead="Nuestro equipo de sistemas se ocupa de todo lo que hace funcionar tu oficina: ordenadores, red, servidores, copias y seguridad. Un solo interlocutor y una sola factura."
+      />
+      <ServiciosGrid />
+    </ItSection>
+
+    <ItSection tone="night" labelledby="it-360">
+      <SectionHead
+        id="it-360"
+        kicker="Cap. 02 / Pase especial"
+        title="Web e informática en una sola cuota"
+        lead="Para pymes de hasta 10 puestos: tu web, tus equipos, el servidor, la red y las copias por un precio fijo al mes."
+      />
+      <Plan360Teaser />
+    </ItSection>
+
+    <ItSection tone="paper" labelledby="it-proceso">
+      <SectionHead id="it-proceso" kicker="Cap. 03 / Método" title="Cómo empezamos a cuidar tu informática" />
+      <BloquesGrid items={proceso} columns={2} />
+    </ItSection>
+
+    <ItSection tone="bone" labelledby="it-cobertura">
+      <SectionHead
+        id="it-cobertura"
+        kicker="Cap. 04 / Cobertura"
+        title="Técnico informático in situ en el Levante y el Almanzora"
+        lead="Si una incidencia no se resuelve en remoto, vamos a tu empresa el mismo día. En el resto de la provincia damos soporte remoto y visitas programadas."
+      />
+      <CoberturaList />
+    </ItSection>
+
+    <ItSection tone="paper" labelledby="it-faq">
+      <SectionHead id="it-faq" kicker="Cap. 05 / Preguntas" title="Preguntas frecuentes sobre mantenimiento informático" />
+      <FaqList items={faq} />
+    </ItSection>
+
+    <Contact />
+  </main>
+
+  <Footer />
+</BaseLayout>

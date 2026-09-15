@@ -1,4 +1,5 @@
 ---
+import { AnimatedFooter } from '@/components/ui/animated-footer';
 import { pueblos, comarcas, getPueblosByComarca, getPueblosDestacados } from '../../data/pueblos-almeria';
 import { esPuebloIndexable } from '../../data/pueblos-indexables';
 
@@ -20,24 +21,18 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
       <section class="brutal-footer__hero">
         <div class="container-brutal">
           <div class="brutal-footer__hero-grid">
-            <div class="brutal-footer__hero-meta">
-              <span class="text-meta">★ Colofón / Vol. {currentYear}</span>
-              <span class="text-meta">Almería · 37.236° N — 1.866° W</span>
-            </div>
-            <h2 class="brutal-footer__claim heading-display">
-              ¿Listo para
-              <span class="text-stroke-ink">construir</span>
-              algo
-              <em class="heading-editorial">memorable?</em>
-            </h2>
+            <p class="brutal-footer__hero-meta">
+              <span>37,2471 N · 1,8673 O</span>
+              <span>Vera, Almería</span>
+            </p>
+            <h2 class="brutal-footer__claim">¿Empezamos tu proyecto?</h2>
+            <p class="brutal-footer__claim-sub">
+              Web, sistemas informáticos y vídeo con dron desde Vera para toda la provincia.
+              Presupuesto cerrado en 24 horas.
+            </p>
             <div class="brutal-footer__hero-cta">
-              <a href="/contacto/" class="btn-brutal btn-brutal--lg">
-                Empezar proyecto
-                <span aria-hidden="true">→</span>
-              </a>
-              <a href="tel:+34657085019" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-                Llamar ahora
-              </a>
+              <a href="/contacto/?servicio=web#contacto" class="brutal-footer__btn brutal-footer__btn--lima">Pedir presupuesto</a>
+              <a href="tel:+34657085019" class="brutal-footer__btn brutal-footer__btn--line">Llamar al 657 085 019</a>
             </div>
           </div>
         </div>
@@ -75,6 +70,8 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
           <h3 class="brutal-footer__heading"><span class="text-meta">01 /</span> Servicios</h3>
           <ul class="brutal-footer__list">
             <li><a class="brutal-footer__link" href="/desarrollo-web/">Diseño Web</a></li>
+            <li><a class="brutal-footer__link" href="/informatica-empresas/">Mantenimiento informático</a></li>
+            <li><a class="brutal-footer__link" href="/plan-360/">Plan 360 · Web + IT</a></li>
             <li><a class="brutal-footer__link" href="/audiovisual/">Audiovisual</a></li>
             <li><a class="brutal-footer__link" href="/marketing/">Marketing &amp; SEO</a></li>
             <li><a class="brutal-footer__link" href="/diseno-grafico/">Diseño Gráfico</a></li>
@@ -97,7 +94,7 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
         <div class="brutal-footer__col">
           <h3 class="brutal-footer__heading"><span class="text-meta">03 /</span> Capacidades</h3>
           <div class="brutal-footer__tags">
-            {['UI/UX','Branding','SEO','E-commerce','Performance','Social Ads','Analytics','Consultoría','Headless','Astro','Webflow','Shopify'].map(t => (
+            {['Diseño web','SEO local','Tiendas online','Redes y wifi','Servidores','Ciberseguridad','Vídeo con dron','Branding','Astro','WordPress','WooCommerce','Analytics'].map(t => (
               <span class="tag-brutal">{t}</span>
             ))}
           </div>
@@ -230,53 +227,71 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
     </div>
   </section>
 
-  {/* Wordmark mural — pieza tipográfica final */}
-  <div class="brutal-footer__wordmark" aria-hidden="true">
-    <div class="brutal-footer__wordmark-track">
-      <span>PLATANITO</span><span>★</span><span>RICO</span><span>★</span><span>PLATANITO</span><span>★</span><span>RICO</span><span>★</span>
-    </div>
+  {/* Cierre animado (Vengeance UI): estrellas de marca en ASCII que se iluminan con el cursor */}
+  <div class="brutal-footer__ascii dark" aria-hidden="true">
+    <AnimatedFooter
+      client:visible
+      headingLines={['Platanito', 'Rico']}
+      leftImage="/imagenes/ascii/estrella.png"
+      rightImage="/imagenes/ascii/estrella.png"
+      background="#070707"
+      textColor="#F5F1EA"
+      charColor="#803500"
+      hoverColor="#FF5A00"
+      hoverCharColor="#0E0D0B"
+      columns={56}
+      cellSize={14}
+      fontSize={12}
+    />
   </div>
 </footer>
 
 <style>
   .brutal-footer {
-    margin-top: 6rem;
     background: var(--brutal-bg);
     border-top: 3px solid var(--brutal-ink);
     position: relative;
   }
-  /* Hero CTA */
+  /* Cierre — lámina final sobre tinta con retícula de plano */
   .brutal-footer__hero {
     padding: clamp(4rem, 8vw, 7rem) 0;
-    background: var(--brutal-bg-alt);
-    border-bottom: 2px solid var(--brutal-ink);
+    background:
+      linear-gradient(rgb(245 241 234 / .06) 1px, transparent 1px) 0 0 / 100% 64px,
+      linear-gradient(90deg, rgb(245 241 234 / .06) 1px, transparent 1px) 0 0 / 64px 100%,
+      var(--color-plano-tinta);
+    color: var(--color-plano-papel);
+    border-bottom: 3px solid var(--color-plano-tinta);
   }
-  .brutal-footer__hero-grid {
-    display: grid;
-    gap: 2rem;
-  }
+  .brutal-footer__hero-grid { display: grid; gap: 1.5rem; }
   .brutal-footer__hero-meta {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+    margin: 0;
+    display: flex; flex-wrap: wrap; gap: .25rem 1.5rem;
+    font-family: var(--font-mono); font-size: .76rem;
+    color: var(--color-plano-lima);
   }
   .brutal-footer__claim {
-    font-size: clamp(2.5rem, 8vw, 6rem);
-    line-height: .9;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 7.5vw, 6rem);
+    line-height: .95;
     letter-spacing: -.045em;
-    max-width: 18ch;
+    max-width: 16ch;
   }
-  .brutal-footer__claim em {
-    font-style: italic;
-    color: var(--brutal-accent-ink);
+  .brutal-footer__claim-sub { margin: 0; max-width: 52ch; font-size: 1.1rem; line-height: 1.55; color: #cfc8bc; }
+  .brutal-footer__hero-cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .75rem; }
+  .brutal-footer__btn {
+    display: inline-flex; align-items: center; min-height: 3.1rem;
+    padding: .85rem 1.5rem;
+    font-family: var(--font-mono); font-weight: 800;
+    text-decoration: none;
+    border: 3px solid var(--color-plano-lima);
+    transition: transform .15s, box-shadow .15s;
   }
-  .brutal-footer__hero-cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
+  .brutal-footer__btn--lima { background: var(--color-plano-lima); color: var(--color-plano-tinta); box-shadow: 6px 6px 0 var(--color-plano-naranja); }
+  .brutal-footer__btn--line { background: transparent; color: var(--color-plano-lima); }
+  .brutal-footer__btn:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--color-plano-naranja); }
+  .brutal-footer__btn:focus-visible { outline: 3px solid var(--color-plano-lima); outline-offset: 4px; }
 
   /* Body */
   .brutal-footer__body { padding: 4rem 0; }
@@ -351,13 +366,15 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
     transition: color .15s, padding .15s;
   }
   .brutal-footer__link::before {
-    content: '→';
+    content: '';
     position: absolute;
     left: 0;
-    color: var(--brutal-accent-ink);
+    top: .5em;
+    width: .4rem;
+    height: .4rem;
+    background: var(--brutal-accent-ink);
     opacity: .5;
     transition: opacity .15s, transform .15s;
-    font-family: var(--font-mono);
   }
   .brutal-footer__link:hover { color: var(--brutal-accent-ink); padding-left: 1.25rem; }
   .brutal-footer__link:hover::before { opacity: 1; transform: translateX(2px); }
@@ -505,6 +522,10 @@ const pueblosDestacados = getPueblosDestacados().filter((p) => esPuebloIndexable
     color: var(--brutal-accent-ink);
     -webkit-text-stroke: 0;
   }
+  @media (prefers-reduced-motion: reduce) {
+    .brutal-footer__wordmark-track { animation: none; }
+  }
+  .brutal-footer__ascii { height: clamp(260px, 34vw, 480px); background: #070707; }
 </style>
 
 <script>
