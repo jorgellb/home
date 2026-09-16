@@ -1,0 +1,298 @@
+---
+/* Ficha de un ejemplo real de web, con previsualización en varios dispositivos.
+   La web se carga SOLO cuando el visitante lo pide: incrustarla arrastra las
+   peticiones del sitio de destino (el puerto trae 47, 16 de ellas a YouTube),
+   y esta página no puede pagar eso en cada visita.
+
+   La previsualización no encoge una foto: pone el iframe al ancho REAL del
+   dispositivo (1280 / 834 / 390) y lo escala para que quepa, así se ve el
+   diseño responsive auténtico. */
+import Panel from './Panel.astro';
+
+export interface Vista {
+  id: 'escritorio' | 'tableta' | 'movil';
+  etiqueta: string;
+  ancho: number;
+  alto: number;
+  /* Nombre base de la portada en /imagenes/ejemplos/ (sin extensión). */
+  poster: string;
+}
+
+export interface Acceso {
+  usuario?: string;
+  clave: string;
+  nota: string;
+}
+
+interface Props {
+  id: string;
+  sector: string;
+  titulo: string;
+  url: string;
+  descripcion: string;
+  puntos: string[];
+  vistas: Vista[];
+  /* Bloque opcional del panel de gestión. */
+  panelTitulo?: string;
+  panelUrl?: string;
+  panelPoster?: string;
+  panelDescripcion?: string;
+  panelAcceso?: Acceso;
+  /* Mientras el destino no permita incrustarse, se enseña su captura. */
+  panelIncrustable?: boolean;
+}
+
+const {
+  id, sector, titulo, url, descripcion, puntos, vistas,
+  panelTitulo, panelUrl, panelPoster, panelDescripcion, panelAcceso, panelIncrustable = false,
+} = Astro.props;
+
+const dominio = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+---
+
+<article class="ej" data-ejemplo={id}>
+  <header class="ej__cab">
+    <p class="ej__sector">{sector}</p>
+    <h3 class="ej__titulo">{titulo}</h3>
+    <p class="ej__desc">{descripcion}</p>
+    <ul class="ej__puntos">
+      {puntos.map((p) => <li>{p}</li>)}
+    </ul>
+    <a class="ej__enlace" href={url} target="_blank" rel="noopener noreferrer">
+      Abrir {dominio} <span class="sr-only">(abre en una pestaña nueva)</span>
+    </a>
+  </header>
+
+  <div class="ej__visor">
+    <div class="ej__botonera" role="group" aria-label={`Ver ${titulo} en distintos dispositivos`}>
+      {vistas.map((v, i) => (
+        <button
+          type="button"
+          class:list={['ej__disp', { 'is-activo': i === 0 }]}
+          data-vista={v.id}
+          data-ancho={v.ancho}
+          data-alto={v.alto}
+          data-poster={v.poster}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+        >{v.etiqueta}</button>
+      ))}
+      <span class="ej__medida" data-medida>{vistas[0].ancho} × {vistas[0].alto}</span>
+    </div>
+
+    <div class="ej__escenario" data-escenario>
+      <div class="ej__marco" data-marco>
+        <picture>
+          <source type="image/avif" srcset={`/imagenes/ejemplos/${vistas[0].poster}.avif`} data-poster-avif />
+          <source type="image/webp" srcset={`/imagenes/ejemplos/${vistas[0].poster}.webp`} data-poster-webp />
+          <img
+            src={`/imagenes/ejemplos/${vistas[0].poster}.jpg`}
+            alt={`Captura de ${titulo} en ${vistas[0].etiqueta.toLowerCase()}`}
+            width={vistas[0].ancho}
+            height={vistas[0].alto}
+            loading="lazy"
+            decoding="async"
+            data-poster-img
+          />
+        </picture>
+      </div>
+      <button type="button" class="ej__lanzar" data-lanzar data-url={url}>
+        Ver la web en vivo
+      </button>
+    </div>
+    <p class="ej__aviso" data-aviso>Se carga al pulsar: la web del cliente trae sus propios vídeos y mapas.</p>
+  </div>
+
+  {panelUrl && (
+    <div class="ej__panel">
+      <div class="ej__panel-texto">
+        <h4 class="ej__panel-titulo">{panelTitulo}</h4>
+        <p class="ej__panel-desc">{panelDescripcion}</p>
+        {panelAcceso && (
+          <Panel titulo="Acceso de demostración" tipo="neutro" nota={panelAcceso.nota} class="ej__acceso">
+            <dl class="ej__claves">
+              {panelAcceso.usuario && (<><dt>Usuario</dt><dd>{panelAcceso.usuario}</dd></>)}
+              <dt>Contraseña</dt><dd>{panelAcceso.clave}</dd>
+            </dl>
+          </Panel>
+        )}
+        <a class="ej__enlace" href={panelUrl} target="_blank" rel="noopener noreferrer">
+          Entrar en el panel <span class="sr-only">(abre en una pestaña nueva)</span>
+        </a>
+      </div>
+
+      <div class="ej__panel-visor" data-panel-visor data-incrustable={panelIncrustable ? 'si' : 'no'} data-url={panelUrl}>
+        <picture>
+          <source type="image/avif" srcset={`/imagenes/ejemplos/${panelPoster}.avif`} />
+          <source type="image/webp" srcset={`/imagenes/ejemplos/${panelPoster}.webp`} />
+          <img
+            src={`/imagenes/ejemplos/${panelPoster}.jpg`}
+            alt={`Panel de gestión de ${titulo}`}
+            width="1280"
+            height="800"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        {panelIncrustable && <button type="button" class="ej__lanzar ej__lanzar--panel" data-lanzar-panel>Ver el panel en vivo</button>}
+      </div>
+    </div>
+  )}
+</article>
+
+<script>
+  /* Cambio de dispositivo y carga bajo demanda. Sin dependencias. */
+  for (const ejemplo of document.querySelectorAll<HTMLElement>('[data-ejemplo]')) {
+    const escenario = ejemplo.querySelector<HTMLElement>('[data-escenario]');
+    const marco = ejemplo.querySelector<HTMLElement>('[data-marco]');
+    const medida = ejemplo.querySelector<HTMLElement>('[data-medida]');
+    const lanzar = ejemplo.querySelector<HTMLButtonElement>('[data-lanzar]');
+    const aviso = ejemplo.querySelector<HTMLElement>('[data-aviso]');
+    const botones = [...ejemplo.querySelectorAll<HTMLButtonElement>('[data-vista]')];
+    if (!escenario || !marco || !botones.length) continue;
+
+    /* Ya comprobados: TypeScript no conserva el estrechamiento dentro de las
+       funciones que se declaran más abajo. */
+    const escena = escenario;
+    const lienzo = marco;
+
+    let enVivo = false;
+    let actual = botones[0];
+
+    /* Escala el marco para que un ancho real de dispositivo quepa en la columna. */
+    function ajustar() {
+      const ancho = Number(actual.dataset.ancho);
+      const alto = Number(actual.dataset.alto);
+      const disponible = Math.round(escena.getBoundingClientRect().width);
+      if (!disponible) return;
+      const escala = Math.min(1, disponible / ancho);
+      lienzo.style.width = `${ancho}px`;
+      lienzo.style.height = `${alto}px`;
+      lienzo.style.transform = `scale(${escala})`;
+      escena.style.height = `${alto * escala}px`;
+    }
+
+    function pintarPoster() {
+      const base = actual.dataset.poster;
+      const avif = lienzo.querySelector<HTMLSourceElement>('[data-poster-avif]');
+      const webp = lienzo.querySelector<HTMLSourceElement>('[data-poster-webp]');
+      const img = lienzo.querySelector<HTMLImageElement>('[data-poster-img]');
+      if (avif) avif.srcset = `/imagenes/ejemplos/${base}.avif`;
+      if (webp) webp.srcset = `/imagenes/ejemplos/${base}.webp`;
+      if (img) img.src = `/imagenes/ejemplos/${base}.jpg`;
+    }
+
+    function activar(boton: HTMLButtonElement) {
+      actual = boton;
+      for (const b of botones) {
+        const activo = b === boton;
+        b.classList.toggle('is-activo', activo);
+        b.setAttribute('aria-pressed', String(activo));
+      }
+      if (medida) medida.textContent = `${boton.dataset.ancho} × ${boton.dataset.alto}`;
+      if (!enVivo) pintarPoster();
+      ajustar();
+    }
+
+    for (const b of botones) b.addEventListener('click', () => activar(b));
+
+    lanzar?.addEventListener('click', () => {
+      const marcoIframe = document.createElement('iframe');
+      marcoIframe.src = lanzar.dataset.url || '';
+      marcoIframe.title = 'Vista en vivo del ejemplo';
+      marcoIframe.loading = 'lazy';
+      marcoIframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+      lienzo.replaceChildren(marcoIframe);
+      enVivo = true;
+      lanzar.remove();
+      if (aviso) aviso.textContent = 'Vista en vivo: cambia de dispositivo para ver cómo se adapta.';
+      ajustar();
+    });
+
+    const panelVisor = ejemplo.querySelector<HTMLElement>('[data-panel-visor]');
+    const lanzarPanel = ejemplo.querySelector<HTMLButtonElement>('[data-lanzar-panel]');
+    lanzarPanel?.addEventListener('click', () => {
+      if (!panelVisor) return;
+      const marcoPanel = document.createElement('iframe');
+      marcoPanel.src = panelVisor.dataset.url || '';
+      marcoPanel.title = 'Panel de gestión en vivo';
+      marcoPanel.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+      panelVisor.replaceChildren(marcoPanel);
+    });
+
+    activar(botones[0]);
+    /* El ancho definitivo puede llegar después del primer pintado (fuentes,
+       columnas del grid): se observa el contenedor en vez de solo la ventana. */
+    new ResizeObserver(ajustar).observe(escena);
+    window.addEventListener('resize', ajustar);
+    requestAnimationFrame(ajustar);
+  }
+</script>
+
+<style>
+  .ej {
+    display: grid;
+    gap: 2rem;
+    padding: 1.6rem;
+    background: var(--color-cdm-panel);
+    border: 1px solid var(--color-cdm-regla-2);
+    color: var(--color-cdm-texto);
+  }
+  @media (min-width: 1100px) { .ej { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 2.5rem; padding: 2rem; } }
+  /* Sin esto, la columna crece hasta el ancho del marco (1280 px) en lugar de
+     encoger: las celdas de grid no bajan de su contenido por defecto. */
+  .ej > *,
+  .ej__panel > * { min-width: 0; }
+
+  .ej__sector { margin: 0 0 0.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
+  .ej__titulo { margin: 0 0 0.75rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1; letter-spacing: -0.02em; }
+  .ej__desc { margin: 0 0 1.25rem; max-width: 46ch; line-height: 1.6; color: #b9c5cf; }
+  .ej__puntos { display: grid; gap: 0.5rem; margin: 0 0 1.5rem; padding: 0; list-style: none; font-size: 0.95rem; color: #c3ced7; }
+  .ej__puntos li { position: relative; padding-left: 1.1rem; }
+  .ej__puntos li::before { content: ''; position: absolute; left: 0; top: 0.7em; width: 0.45rem; height: 1px; background: var(--color-cdm-senal); }
+  .ej__enlace { display: inline-block; color: var(--color-cdm-texto); font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-cdm-senal); text-underline-offset: 4px; }
+  .ej__enlace:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }
+
+  .ej__visor { min-width: 0; }
+  .ej__botonera { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-bottom: 0.8rem; }
+  .ej__disp { padding: 0.45rem 0.8rem; background: transparent; color: var(--color-cdm-tenue); border: 1px solid var(--color-cdm-regla-2); font: inherit; font-size: 0.85rem; cursor: pointer; }
+  .ej__disp:hover { color: var(--color-cdm-texto); }
+  .ej__disp.is-activo { background: var(--color-cdm-suelo); color: var(--color-cdm-texto); border-color: var(--color-cdm-senal); }
+  .ej__disp:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 2px; }
+  .ej__medida { margin-left: auto; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-cdm-tenue); }
+
+  .ej__escenario { position: relative; max-width: 100%; overflow: hidden; background: var(--color-cdm-suelo); border: 1px solid var(--color-cdm-regla); }
+  .ej__marco { transform-origin: top left; background: var(--color-cdm-suelo); }
+  .ej__marco img,
+  .ej__marco :global(iframe) { display: block; width: 100%; height: 100%; border: 0; }
+  .ej__marco img { object-fit: cover; object-position: top center; }
+
+  .ej__lanzar {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0.75rem 1.2rem;
+    background: var(--color-cdm-senal);
+    color: #120600;
+    border: 0;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .ej__lanzar:hover { background: #ff7a33; }
+  .ej__lanzar:focus-visible { outline: 2px solid var(--color-cdm-ok); outline-offset: 3px; }
+  .ej__aviso { margin: 0.6rem 0 0; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-cdm-tenue); }
+
+  .ej__panel { grid-column: 1 / -1; display: grid; gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-cdm-regla); }
+  @media (min-width: 1100px) { .ej__panel { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 2.5rem; } }
+  .ej__panel-titulo { margin: 0 0 0.6rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.5rem; line-height: 1.1; }
+  .ej__panel-desc { margin: 0 0 1.1rem; max-width: 46ch; line-height: 1.6; color: #b9c5cf; }
+  .ej__acceso { margin-bottom: 1.1rem; }
+  .ej__claves { display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 1rem; margin: 0; padding: 0.6rem 0.8rem; font-family: var(--font-mono); font-size: 0.82rem; }
+  .ej__claves dt { color: var(--color-cdm-tenue); }
+  .ej__claves dd { margin: 0; color: var(--color-cdm-texto); }
+  .ej__panel-visor { position: relative; min-width: 0; overflow: hidden; background: var(--color-cdm-suelo); border: 1px solid var(--color-cdm-regla); }
+  .ej__panel-visor img,
+  .ej__panel-visor :global(iframe) { display: block; width: 100%; max-width: 100%; height: auto; border: 0; }
+  .ej__panel-visor :global(iframe) { height: 620px; }
+</style>
