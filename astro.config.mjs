@@ -118,7 +118,10 @@ export default defineConfig({
 
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: 'viewport',
+    // 'hover' en lugar de 'viewport': se precarga cuando hay intención de clic
+    // (ratón encima o toque), no al cargar la página. En la home eso evitaba
+    // descargar /contacto/, /plan-360/ y /cookies/ de entrada.
+    defaultStrategy: 'hover',
   },
 
   vite: {
