@@ -13,6 +13,9 @@ const SITE_URL = 'https://platanitorico.com';
    justo para detectar una deliberación filtrada sin que se note la espera. */
 const MUESTRA_CONTROL = 320;
 
+/* Por debajo de esto no hay respuesta útil (un saludo suelto, un token roto). */
+const MINIMO_RESPUESTA = 40;
+
 /* Modelos gratuitos capaces y multilingües (verificados en la API de OpenRouter).
    Se prueban en orden hasta que uno responda.
    NOTA (16-09-2026): `openai/gpt-oss-120b:free` se retiró de la cadena. Escribe
@@ -45,7 +48,7 @@ interface Opts {
 
 /** Lee el principio del stream para poder inspeccionarlo antes de servirlo.
  *  Devuelve lo leído y un stream que lo reproduce seguido del resto. */
-async function leerInicio(texto: ReadableStream<Uint8Array>, minimo: number): Promise<{ inicio: string; completo: ReadableStream<Uint8Array> }> {
+async function leerInicio(texto: ReadableStream<Uint8Array>, minimo: number): Promise<{ inicio: string; agotado: boolean; completo: ReadableStream<Uint8Array> }> {
   const reader = texto.getReader();
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
@@ -72,7 +75,7 @@ async function leerInicio(texto: ReadableStream<Uint8Array>, minimo: number): Pr
     cancel() { reader.cancel().catch(() => { /* noop */ }); },
   });
 
-  return { inicio, completo };
+  return { inicio, agotado, completo };
 }
 
 /** Devuelve una Response: stream de texto (200) o JSON de error (502). */
@@ -111,7 +114,7 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
     }
 
     if (res.ok && res.body) {
-      const { inicio, completo } = await leerInicio(sseToText(res.body), MUESTRA_CONTROL);
+      const { inicio, agotado, completo } = await leerInicio(sseToText(res.body), MUESTRA_CONTROL);
 
       // El modelo ha soltado su deliberación en vez de la respuesta: no se
       // sirve (llevaría dentro las instrucciones internas) y se prueba otro.
@@ -123,9 +126,13 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
         continue;
       }
 
-      if (!inicio.trim()) {
+      // `leerInicio` solo devuelve menos de MUESTRA_CONTROL caracteres si el
+      // stream ya terminó: entonces eso es TODA la respuesta. Un «Hola» suelto
+      // (visto en producción al pedir que no manden razonamiento) no sirve.
+      if (agotado && inicio.trim().length < MINIMO_RESPUESTA) {
+        console.warn(`[openrouter] ${model} devolvió una respuesta demasiado corta (${inicio.trim().length} caracteres); se prueba el siguiente`);
         lastStatus = 200;
-        lastDetail = 'respuesta vacía';
+        lastDetail = 'respuesta demasiado corta';
         completo.cancel().catch(() => { /* noop */ });
         continue;
       }
