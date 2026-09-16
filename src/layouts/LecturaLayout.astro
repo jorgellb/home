@@ -1,0 +1,122 @@
+---
+/* Plantilla de lectura del centro de mando (variante B aprobada por el
+   usuario): la interfaz es consola, pero el texto largo se lee tranquilo.
+   La usan las landings de pueblo, el hub de diseño web y, en la fase 3,
+   Sistemas IT y el Plan 360. */
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import IndiceLateral from '../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice, Cifra } from '../components/cdm/tipos';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /* Cabecera de consola */
+  ruta: string;
+  h1: string;
+  entradilla?: string;
+  datos?: Cifra[];
+  /* Raíl lateral */
+  secciones: SeccionIndice[];
+  coordenadas?: string;
+}
+
+const {
+  title, description, canonical, image, imageAlt, noindex, jsonLd,
+  ruta, h1, entradilla, datos = [], secciones, coordenadas,
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image={image}
+  imageAlt={imageAlt}
+  noindex={noindex}
+  jsonLd={jsonLd}
+>
+  <Header />
+
+  <main id="main-content" class="lec">
+    <header class="lec__cab">
+      <div class="lec__dentro">
+        <p class="lec__ruta">{ruta}</p>
+        <h1 class="lec__h1">{h1}</h1>
+        {entradilla && <p class="lec__entradilla">{entradilla}</p>}
+        {datos.length > 0 && (
+          <dl class="lec__datos">
+            {datos.map((d) => (
+              <div>
+                <dt>{d.etiqueta}</dt>
+                <dd>{d.prefijo ?? ''}{d.valor}{d.sufijo ?? ''}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+      </div>
+    </header>
+
+    <div class="lec__cuerpo lec__dentro">
+      <IndiceLateral secciones={secciones} coordenadas={coordenadas} />
+      <div class="lec__columna">
+        <slot />
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .lec { background: var(--color-cdm-suelo); color: var(--color-cdm-texto); }
+  .lec__dentro { max-width: var(--container-max); margin-inline: auto; padding-inline: var(--container-gutter); }
+
+  .lec__cab {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background-color: var(--color-cdm-suelo);
+    background-image:
+      linear-gradient(var(--color-cdm-regla) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-cdm-regla) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+  }
+  .lec__ruta { margin: 0 0 0.9rem; font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-cdm-tenue); }
+  .lec__h1 {
+    margin: 0;
+    max-width: 20ch;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 760;
+    font-size: clamp(2.6rem, 6.5vw, 5rem);
+    line-height: 0.94;
+    letter-spacing: -0.025em;
+  }
+  .lec__entradilla { max-width: 56ch; margin: 1.25rem 0 0; font-size: 1.1rem; line-height: 1.6; color: #b9c5cf; }
+  .lec__datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 2rem 0 0;
+    background: var(--color-cdm-regla);
+    border: 1px solid var(--color-cdm-regla);
+  }
+  @media (min-width: 900px) { .lec__datos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .lec__datos > div { display: flex; flex-direction: column-reverse; gap: 0.2rem; padding: 0.9rem 1.1rem; background: var(--color-cdm-suelo); }
+  .lec__datos dt { font-size: 0.78rem; color: var(--color-cdm-tenue); }
+  .lec__datos dd { margin: 0; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.6rem; letter-spacing: -0.02em; }
+
+  .lec__cuerpo { display: grid; gap: 2rem; padding-block: clamp(2rem, 5vw, 3.5rem); }
+  @media (min-width: 1024px) { .lec__cuerpo { grid-template-columns: 180px minmax(0, 1fr); gap: 3rem; } }
+  .lec__columna { min-width: 0; }
+  /* Columna de lectura: el texto largo no pasa de 68 caracteres por línea. */
+  .lec__columna :global(p),
+  .lec__columna :global(li) { max-width: 68ch; }
+</style>

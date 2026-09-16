@@ -5,9 +5,27 @@ import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import Postal from '../../components/cdm/Postal.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'garrucha');
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'gamba',       etiqueta: 'La Gamba Roja' },
+  { id: 'lonja',       etiqueta: 'La Lonja' },
+  { id: 'cocina',      etiqueta: 'Cocina marina' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'mapa',        etiqueta: 'Carta náutica' },
+  { id: 'porque',      etiqueta: 'Por qué Garrucha' },
+  { id: 'metodo',      etiqueta: 'Método' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'levante',     etiqueta: 'El Levante' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const title = 'Diseño Web en Garrucha | Pesca y hostelería';
 const description = 'Diseño web y SEO local en Garrucha para hostelería, pescado y comercio del puerto. Webs rápidas que captan clientes en Google. Presupuesto en 24h.';
@@ -93,9 +111,11 @@ const jsonLdSchemas = [
 >
   <Header />
 
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Garrucha" }]} />
+  <Breadcrumb tono="consola" items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Garrucha" }]} />
 
   <main id="main-content" class="gr">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.183° N · 1.823° W · Calado 4,5 m" class="gr-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — PUERTO PESQUERO                            */}
@@ -379,6 +399,9 @@ const jsonLdSchemas = [
 
           {/* Gamba roja GIGANTE */}
           <aside class="gr-gamba-r" aria-hidden="true">
+            {/* En postal: su firma en negro cae fuera del plato claro y sobre
+                el suelo oscuro se perdería (spec §6.3.4). */}
+            <Postal>
             <svg viewBox="0 0 320 320" width="100%" height="100%">
               <defs>
                 <radialGradient id="gr-gamba-glow" cx="50%" cy="50%" r="60%">
@@ -470,6 +493,7 @@ const jsonLdSchemas = [
               {/* Etiqueta firma */}
               <text x="160" y="305" text-anchor="middle" font-family="monospace" font-size="9" font-weight="bold" fill="#0E0D0B" letter-spacing="3">★ GAMBA ROJA · GARRUCHA · IGP ★</text>
             </svg>
+            </Postal>
           </aside>
         </div>
       </div>
@@ -478,12 +502,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* LA LONJA — datos                                  */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-lonja-section">
+    <section class="gr-lonja-section" id="lonja">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--gr-copper)">Cap. 03 / La Lonja</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--gr-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--gr-tinta)">
               La subasta
               <em class="heading-editorial" style="color:var(--gr-gamba)">de cada tarde.</em>
             </h2>
@@ -552,7 +576,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* COCINA MARINA                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-cocina-section">
+    <section class="gr-cocina-section" id="cocina">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -691,7 +715,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA NÁUTICO                                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-map-section">
+    <section class="gr-map-section" id="mapa">
       <header class="gr-map-head">
         <div class="container-brutal gr-map-head__inner">
           <div>
@@ -746,7 +770,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-dif-section">
+    <section class="gr-dif-section" id="porque">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -778,12 +802,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-proc-section">
+    <section class="gr-proc-section" id="metodo">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--gr-gamba)">Cap. 08 / Método</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--gr-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--gr-tinta)">
               Cuatro pasos
               <em class="heading-editorial" style="color:var(--gr-cuerda)">a tu web en Garrucha.</em>
             </h2>
@@ -813,7 +837,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-quote-section">
+    <section class="gr-quote-section" id="testimonios">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -872,7 +896,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-faq-section">
+    <section class="gr-faq-section" id="faq">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -911,7 +935,7 @@ const jsonLdSchemas = [
     {/* PUEBLOS VECINOS                                  */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosLevante.length > 0 && (
-      <section class="gr-vecinos-section">
+      <section class="gr-vecinos-section" id="levante">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
@@ -947,7 +971,7 @@ const jsonLdSchemas = [
     <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
     {/* CTA FINAL                                        */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="gr-final">
+    <section class="gr-final" id="empezar">
       <div class="container-brutal">
         <div class="gr-final__grid">
 
@@ -1061,23 +1085,73 @@ const jsonLdSchemas = [
 
 <style>
   /* ═══════════════════════════════════════════════════════ */
-  /* PALETA · GARRUCHA · PUERTO PESQUERO                     */
+  /* PALETA · GARRUCHA · CONSOLA (fase 2)                    */
+  /* El navy hacía dos trabajos incompatibles —fondo hondo   */
+  /* de la Lonja y texto de acento—, así que se parte en     */
+  /* navy (claro, para leer) y navy-hondo (fondo). Lo mismo  */
+  /* con gamba-d. Los hexadecimales de las ilustraciones no  */
+  /* se tocan.                                               */
   /* ═══════════════════════════════════════════════════════ */
   .gr {
-    --gr-paper:    #FFFBF0;
-    --gr-paper-2:  #F4EBD8;
-    --gr-sand:     #E8DCC0;
-    --gr-ink:      #0E0D0B;
-    --gr-gamba:    #D9342C;      /* rojo gamba */
-    --gr-gamba-d:  #8E1F1A;
-    --gr-navy:     #0A3D62;      /* mar profundo */
-    --gr-navy-d:   #062841;
-    --gr-copper:   #B87333;      /* cobre · cuerdas */
-    --gr-cuerda:   #C8A87C;      /* yute */
-    --gr-plata:    #9FB4C1;      /* pescado plata */
-    --gr-lima:     #D6FF44;      /* brand */
-    --gr-sun:      #FFD600;      /* faro */
-    --gr-shadow:   8px 8px 0 var(--gr-ink);
+    --gr-paper:      var(--color-cdm-panel);
+    --gr-paper-2:    var(--color-cdm-panel-2);
+    --gr-sand:       var(--color-cdm-panel-2);
+    --gr-suelo:      var(--color-cdm-suelo);
+    --gr-tinta:      var(--color-cdm-texto);
+    --gr-tenue:      var(--color-cdm-tenue);
+    --gr-ink:        var(--color-cdm-regla-2);
+    --gr-gamba:      #F0554C;      /* rojo gamba, aclarado */
+    --gr-gamba-d:    #F08A80;
+    --gr-navy:       #4E9FE0;      /* mar, aclarado para leer */
+    --gr-navy-hondo: #08283F;      /* mar profundo: solo fondo */
+    --gr-navy-d:     #7FB2D8;
+    --gr-copper:     #C98B4B;      /* cobre · cuerdas */
+    --gr-cuerda:     #C8A87C;      /* yute */
+    --gr-plata:      #9FB4C1;      /* pescado plata */
+    --gr-lima:       #D6FF44;      /* solo «ok/verificado» */
+    --gr-sun:        #FFD600;      /* faro */
+    --gr-shadow:     8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--gr-suelo);
+    color: var(--gr-tinta);
+  }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .gr :global(.brutal-section-head__title) { color: var(--gr-tinta); }
+  .gr :global(.brutal-section-head__title em) { color: var(--gr-sun); }
+  .gr :global(.brutal-section-head__lead) { color: var(--gr-tenue); }
+  .gr :global(.text-meta) { color: var(--gr-tenue); }
+  .gr :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .gr :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .gr :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .gr-map-frame,
+    .gr-marquee,
+    .gr-final__marquee { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .gr :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--gr-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .gr :global(.cdm-indice__titulo),
+    .gr :global(.cdm-indice__lista),
+    .gr :global(.cdm-indice__coord) { display: none; }
+    .gr :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
   .gr-pulse {
     display: inline-block;
@@ -1104,10 +1178,10 @@ const jsonLdSchemas = [
     padding-top: 3rem;
     padding-bottom: 0;
     background:
-      radial-gradient(circle at 80% 20%, rgba(10,61,98,0.10), transparent 50%),
-      radial-gradient(circle at 10% 80%, rgba(217,52,44,0.10), transparent 50%),
-      var(--gr-paper);
-    border-bottom: 3px solid var(--gr-ink);
+      radial-gradient(circle at 80% 20%, rgba(78,159,224,0.16), transparent 55%),
+      radial-gradient(circle at 10% 80%, rgba(240,85,76,0.14), transparent 55%),
+      var(--gr-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1146,7 +1220,7 @@ const jsonLdSchemas = [
   .gr-hero__title em { color: var(--gr-navy); font-style: italic; }
   .gr-hero__title-stamp {
     display: inline-block;
-    color: var(--gr-paper);
+    color: var(--gr-suelo);
     background: var(--gr-gamba);
     padding: 0 .2em;
     transform: rotate(-1deg);
@@ -1155,10 +1229,10 @@ const jsonLdSchemas = [
   .gr-hero__lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--gr-tenue);
     max-width: 54ch;
   }
-  .gr-hero__lead strong { color: var(--gr-ink); font-weight: 700; }
+  .gr-hero__lead strong { color: var(--gr-tinta); font-weight: 700; }
   .gr-hero__lead em { color: var(--gr-gamba); font-style: italic; font-weight: 600; }
 
   .gr-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
@@ -1168,28 +1242,29 @@ const jsonLdSchemas = [
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.05rem;
-    border: 2.5px solid var(--gr-ink);
+    border: 2.5px solid var(--color-cdm-regla-2);
     text-decoration: none;
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
     cursor: pointer;
   }
   .gr-btn--primary {
     background: var(--gr-gamba);
-    color: var(--gr-paper);
-    box-shadow: 6px 6px 0 var(--gr-ink);
+    color: #1a0402;
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
   }
   .gr-btn--primary:hover {
     background: var(--gr-navy);
+    color: var(--gr-suelo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--gr-ink);
+    box-shadow: 11px 11px 0 var(--color-cdm-regla-2);
   }
   .gr-btn--ghost {
     background: transparent;
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     box-shadow: 6px 6px 0 var(--gr-navy);
   }
   .gr-btn--ghost:hover {
-    background: var(--gr-ink);
+    background: var(--color-cdm-panel-2);
     color: var(--gr-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--gr-navy);
@@ -1202,29 +1277,29 @@ const jsonLdSchemas = [
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
     margin-top: 1.5rem;
-    border: 2.5px solid var(--gr-ink);
-    background: var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 768px) { .gr-kpis { grid-template-columns: repeat(4, 1fr); } }
   .gr-kpi {
     background: var(--gr-paper);
     padding: 1.25rem;
     display: flex; flex-direction: column; gap: .35rem;
-    border-right: 2px solid var(--gr-ink);
-    border-bottom: 2px solid var(--gr-ink);
+    border-right: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-kpi:nth-child(2n) { border-right: none; }
   .gr-kpi:nth-last-child(-n+2) { border-bottom: none; }
   @media (min-width: 768px) {
-    .gr-kpi:nth-child(2n)      { border-right: 2px solid var(--gr-ink); }
+    .gr-kpi:nth-child(2n)      { border-right: 1px solid var(--color-cdm-regla); }
     .gr-kpi:nth-child(4n)      { border-right: none; }
-    .gr-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--gr-ink); }
+    .gr-kpi:nth-last-child(-n+2) { border-bottom: 1px solid var(--color-cdm-regla); }
     .gr-kpi:nth-last-child(-n+4) { border-bottom: none; }
   }
-  .gr-kpi--gamba  { background: var(--gr-gamba); color: var(--gr-paper); }
-  .gr-kpi--navy   { background: var(--gr-navy); color: var(--gr-paper); }
-  .gr-kpi--copper { background: var(--gr-copper); color: var(--gr-paper); }
-  .gr-kpi--ink    { background: var(--gr-ink); color: var(--gr-paper); }
+  .gr-kpi--gamba  { background: var(--gr-gamba); color: var(--gr-suelo); }
+  .gr-kpi--navy   { background: var(--gr-navy); color: var(--gr-suelo); }
+  .gr-kpi--copper { background: var(--gr-copper); color: var(--gr-suelo); }
+  .gr-kpi--ink    { background: var(--color-cdm-panel-2); color: var(--gr-tinta); }
   .gr-kpi--ink .gr-kpi__v { color: var(--gr-sun); }
   .gr-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
   .gr-kpi__v small { font-size: .55em; opacity: .8; }
@@ -1237,10 +1312,12 @@ const jsonLdSchemas = [
     margin: 0 auto;
     filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
   }
+  /* La postal conserva su papel original (spec §3.3.6): es pieza a mano,
+     no interfaz. Por eso lleva valores literales. */
   .gr-postcard {
-    background: var(--gr-paper);
-    border: 3px solid var(--gr-ink);
-    box-shadow: var(--gr-shadow);
+    background: #FFFBF0;
+    border: 3px solid #0E0D0B;
+    box-shadow: 8px 8px 0 var(--color-cdm-regla-2);
     overflow: hidden;
     transform: rotate(-1deg);
     transition: transform .35s;
@@ -1250,23 +1327,23 @@ const jsonLdSchemas = [
     display: flex; justify-content: space-between; flex-wrap: wrap;
     gap: .5rem;
     padding: .65rem 1rem;
-    background: var(--gr-navy);
-    color: var(--gr-paper);
+    background: #0A3D62;
+    color: #FFFBF0;
     font-size: .58rem;
     letter-spacing: .15em;
-    border-bottom: 2px solid var(--gr-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .gr-postcard__profile {
     width: 100%;
     aspect-ratio: 540 / 220;
-    border-bottom: 2px solid var(--gr-ink);
+    border-bottom: 2px solid #0E0D0B;
     overflow: hidden;
   }
   .gr-postcard__img-wrap {
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-bottom: 2px solid var(--gr-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .gr-postcard__img {
     width: 100%; height: 100%;
@@ -1285,19 +1362,19 @@ const jsonLdSchemas = [
   .gr-postcard__tag {
     position: absolute;
     bottom: 12px; left: 12px;
-    background: var(--gr-paper);
-    color: var(--gr-ink);
+    background: #FFFBF0;
+    color: #0E0D0B;
     padding: .4rem .75rem;
     font-size: .65rem;
     font-weight: 800;
     letter-spacing: .2em;
-    border: 2px solid var(--gr-ink);
-    box-shadow: 3px 3px 0 var(--gr-gamba);
+    border: 2px solid #0E0D0B;
+    box-shadow: 3px 3px 0 #D9342C;
     transform: rotate(-2deg);
   }
   .gr-postcard__data {
     padding: 1rem 1.25rem;
-    background: var(--gr-paper-2);
+    background: #F4EBD8;
     display: grid; gap: .35rem;
   }
   .gr-postcard__data-row {
@@ -1307,16 +1384,16 @@ const jsonLdSchemas = [
     font-size: .68rem;
   }
   .gr-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .gr-postcard__data-row > span:first-child { color: var(--gr-navy); letter-spacing: .2em; font-weight: 800; }
-  .gr-postcard__data-v { color: var(--gr-ink); font-weight: 700; letter-spacing: .05em; }
+  .gr-postcard__data-row > span:first-child { color: #0A3D62; letter-spacing: .2em; font-weight: 800; }
+  .gr-postcard__data-v { color: #0E0D0B; font-weight: 700; letter-spacing: .05em; }
 
   /* Marquee */
   .gr-marquee {
-    background: var(--gr-navy);
+    background: var(--gr-navy-hondo);
     color: var(--gr-sun);
     overflow: hidden;
     padding: .9rem 0;
-    border-top: 3px solid var(--gr-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .gr-marquee__track {
     display: flex; gap: 3rem; width: max-content;
@@ -1336,9 +1413,9 @@ const jsonLdSchemas = [
   /* GAMBA ROJA SECTION                                      */
   /* ═══════════════════════════════════════════════════════ */
   .gr-gamba-section {
-    background: var(--gr-paper-2);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1369,7 +1446,7 @@ const jsonLdSchemas = [
   .gr-gamba-lead {
     font-size: 1.05rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--gr-tenue);
     margin-bottom: 1.5rem;
     max-width: 54ch;
   }
@@ -1381,24 +1458,24 @@ const jsonLdSchemas = [
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2px solid var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     background: var(--gr-paper);
   }
   @media (min-width: 640px) { .gr-gamba-facts { grid-template-columns: 1fr 1fr; } }
   .gr-gamba-facts li {
     padding: .85rem 1rem;
-    border-bottom: 1px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     display: flex; flex-direction: column; gap: 2px;
   }
   @media (min-width: 640px) {
-    .gr-gamba-facts li:nth-child(odd) { border-right: 1px solid var(--gr-ink); }
+    .gr-gamba-facts li:nth-child(odd) { border-right: 1px solid var(--color-cdm-regla); }
     .gr-gamba-facts li:nth-last-child(-n+2) { border-bottom: none; }
   }
   @media (max-width: 639px) {
     .gr-gamba-facts li:last-child { border-bottom: none; }
   }
   .gr-gamba-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--gr-navy); font-weight: 800; }
-  .gr-gamba-facts__v { font-size: .9rem; color: var(--gr-ink); font-weight: 600; line-height: 1.35; }
+  .gr-gamba-facts__v { font-size: .9rem; color: var(--gr-tinta); font-weight: 600; line-height: 1.35; }
   .gr-gamba-facts__v em { color: var(--gr-gamba); font-style: italic; }
 
   .gr-gamba-r {
@@ -1418,10 +1495,10 @@ const jsonLdSchemas = [
   /* LONJA                                                   */
   /* ═══════════════════════════════════════════════════════ */
   .gr-lonja-section {
-    background: var(--gr-navy);
-    color: var(--gr-paper);
+    background: var(--gr-navy-hondo);
+    color: var(--gr-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1444,25 +1521,25 @@ const jsonLdSchemas = [
   /* Lonja card mock */
   .gr-lonja-card {
     background: var(--gr-paper);
-    color: var(--gr-ink);
-    border: 3px solid var(--gr-sun);
+    color: var(--gr-tinta);
+    border: 1px solid var(--gr-sun);
     box-shadow: 12px 12px 0 var(--gr-sun);
   }
   .gr-lonja-card__head {
     display: flex; justify-content: space-between; align-items: center;
     padding: .85rem 1.25rem;
-    background: var(--gr-ink);
-    color: var(--gr-paper);
-    border-bottom: 2px solid var(--gr-ink);
+    background: var(--color-cdm-panel-2);
+    color: var(--gr-tinta);
+    border-bottom: 1px solid var(--color-cdm-regla);
     font-size: .7rem;
     letter-spacing: .2em;
   }
   .gr-lonja-card__live {
     background: var(--gr-gamba);
-    color: var(--gr-paper);
+    color: var(--gr-suelo);
     padding: .2rem .5rem;
     font-weight: 800;
-    border: 1px solid var(--gr-paper);
+    border: 1px solid var(--color-cdm-regla-2);
     animation: gr-blink 1.5s ease-in-out infinite;
   }
   @keyframes gr-blink { 50% { opacity: .55; } }
@@ -1473,18 +1550,20 @@ const jsonLdSchemas = [
     gap: 1rem;
     align-items: center;
     padding: 1rem 1.25rem;
-    border-bottom: 1px dashed var(--gr-ink);
+    border-bottom: 1px dashed var(--color-cdm-regla);
   }
   .gr-lonja-card__row:last-child { border-bottom: none; }
+  /* La fila destacada sigue en amarillo de faro, así que su tinta se queda
+     oscura con valores literales. */
   .gr-lonja-card__row--top {
     background: var(--gr-sun);
-    border-bottom: 2px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla-2);
   }
   .gr-lonja-card__row--top .gr-lonja-card__lbl {
     grid-column: 1 / -1;
     font-size: .58rem;
     letter-spacing: .2em;
-    color: var(--gr-gamba-d);
+    color: #8E1F1A;
     font-weight: 800;
     margin-bottom: .25rem;
   }
@@ -1493,14 +1572,14 @@ const jsonLdSchemas = [
     font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--gr-gamba);
+    color: #A82A22;
     letter-spacing: -.02em;
   }
   .gr-lonja-card__row--top .gr-lonja-card__price {
     grid-column: 2 / -1;
     font-size: 2rem;
     font-weight: 800;
-    color: var(--gr-gamba);
+    color: #A82A22;
     text-align: right;
   }
   .gr-lonja-card__row--top {
@@ -1508,13 +1587,13 @@ const jsonLdSchemas = [
     grid-template-rows: auto auto;
   }
   .gr-lonja-card__n { font-size: .7rem; color: var(--gr-navy); font-weight: 800; }
-  .gr-lonja-card__species { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--gr-ink); }
+  .gr-lonja-card__species { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--gr-tinta); }
   .gr-lonja-card__price { font-size: 1rem; font-weight: 800; color: var(--gr-navy); }
   .gr-lonja-card__price--small { font-size: .9rem; }
   .gr-lonja-card__foot {
     padding: .75rem 1.25rem;
-    background: var(--gr-paper-2);
-    border-top: 2px solid var(--gr-ink);
+    background: var(--color-cdm-panel-2);
+    border-top: 1px solid var(--color-cdm-regla);
     font-size: .6rem;
     letter-spacing: .2em;
     color: var(--gr-navy);
@@ -1528,7 +1607,7 @@ const jsonLdSchemas = [
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2.5px solid var(--gr-paper);
+    border: 1px solid rgba(255,251,240,0.35);
   }
   .gr-lonja-data li {
     padding: .85rem 1.1rem;
@@ -1538,15 +1617,15 @@ const jsonLdSchemas = [
   }
   .gr-lonja-data li:last-child { border-bottom: none; }
   .gr-lonja-data__k { font-size: .58rem; letter-spacing: .2em; color: var(--gr-sun); font-weight: 800; }
-  .gr-lonja-data__v { font-size: .9rem; color: var(--gr-paper); font-weight: 600; line-height: 1.35; }
+  .gr-lonja-data__v { font-size: .9rem; color: var(--gr-tinta); font-weight: 600; line-height: 1.35; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* COCINA                                                  */
   /* ═══════════════════════════════════════════════════════ */
   .gr-cocina-section {
-    background: var(--gr-paper);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-cocina {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1558,8 +1637,8 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .gr-cocina { grid-template-columns: repeat(4, 1fr); } }
   .gr-cocina__card {
     background: var(--gr-paper);
-    border: 2.5px solid var(--gr-ink);
-    box-shadow: 5px 5px 0 var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    box-shadow: 5px 5px 0 var(--color-cdm-regla-2);
     padding: 1.5rem;
     display: flex; flex-direction: column; gap: .5rem; align-items: center;
     text-align: center;
@@ -1575,13 +1654,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.1rem, 2vw, 1.4rem);
     line-height: 1;
     letter-spacing: -.02em;
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     margin: .5rem 0 0;
   }
   .gr-cocina__desc {
     font-size: .82rem;
     line-height: 1.4;
-    color: var(--brutal-text-secondary);
+    color: var(--gr-tenue);
     margin: 0;
   }
   .gr-cocina__rating {
@@ -1595,9 +1674,9 @@ const jsonLdSchemas = [
   /* SECTORES                                                */
   /* ═══════════════════════════════════════════════════════ */
   .gr-sec-section {
-    background: var(--gr-paper-2);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-sec {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1609,7 +1688,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .gr-sec { grid-template-columns: repeat(3, 1fr); } }
   .gr-sec__card {
     background: var(--gr-paper);
-    border: 2.5px solid var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--gr-shadow);
     padding: 1.5rem;
     display: flex; flex-direction: column; gap: .75rem;
@@ -1639,7 +1718,7 @@ const jsonLdSchemas = [
   }
   .gr-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
   .gr-sec__stat-box {
-    background: var(--gr-ink); color: var(--gr-paper);
+    background: var(--color-cdm-panel-2); color: var(--gr-tinta);
     padding: .35rem .65rem;
     display: flex; flex-direction: column;
     border: 1.5px solid currentColor;
@@ -1651,13 +1730,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.15rem, 2vw, 1.4rem);
     line-height: 1.1;
     letter-spacing: -.02em;
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     margin: 0;
   }
   .gr-sec__desc {
     font-size: .88rem;
     line-height: 1.5;
-    color: var(--brutal-text-secondary);
+    color: var(--gr-tenue);
     flex: 1;
   }
   .gr-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
@@ -1665,12 +1744,12 @@ const jsonLdSchemas = [
     display: flex; align-items: flex-start; gap: .35rem;
     font-size: .78rem;
     line-height: 1.35;
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
   }
   .gr-sec__tag span { color: currentColor; font-weight: 800; }
   .gr-sec__foot {
     padding-top: .65rem;
-    border-top: 2px solid var(--gr-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .gr-sec__cta {
     font-family: var(--font-mono);
@@ -1688,8 +1767,8 @@ const jsonLdSchemas = [
   /* MAPA                                                    */
   /* ═══════════════════════════════════════════════════════ */
   .gr-map-section {
-    background: var(--gr-sand);
-    border-bottom: 3px solid var(--gr-ink);
+    background: var(--gr-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-map-head { padding: 4rem 0 2rem; }
   .gr-map-head__inner {
@@ -1709,9 +1788,9 @@ const jsonLdSchemas = [
   .gr-map-title em { color: var(--gr-navy); }
   .gr-map-coords {
     background: var(--gr-gamba);
-    color: var(--gr-paper);
+    color: var(--gr-suelo);
     padding: 1rem 1.25rem;
-    border: 2px solid var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: 5px 5px 0 var(--gr-navy);
     display: flex; flex-direction: column; gap: .35rem;
     font-size: .7rem;
@@ -1720,9 +1799,9 @@ const jsonLdSchemas = [
 
   .gr-map-frame {
     position: relative;
-    border-top: 3px solid var(--gr-ink);
-    border-bottom: 3px solid var(--gr-ink);
-    background: var(--gr-ink);
+    border-top: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background: var(--color-cdm-panel-2);
   }
   .gr-map-anchor {
     position: absolute;
@@ -1746,26 +1825,26 @@ const jsonLdSchemas = [
   /* DIFERENCIALES                                           */
   /* ═══════════════════════════════════════════════════════ */
   .gr-dif-section {
-    background: var(--gr-paper);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-dif {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2px solid var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
   }
   @media (min-width: 768px) { .gr-dif { grid-template-columns: 1fr 1fr; } }
   .gr-dif__item {
     padding: 1.75rem 1.5rem;
-    border-bottom: 1px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .2s;
   }
   @media (min-width: 768px) {
-    .gr-dif__item:nth-child(odd) { border-right: 1px solid var(--gr-ink); }
+    .gr-dif__item:nth-child(odd) { border-right: 1px solid var(--color-cdm-regla); }
     .gr-dif__item:nth-last-child(-n+2) { border-bottom: none; }
   }
   @media (max-width: 767px) {
@@ -1773,27 +1852,29 @@ const jsonLdSchemas = [
   }
   .gr-dif__item--0 { background: var(--gr-paper-2); }
   .gr-dif__item--1 { background: var(--gr-paper); }
-  .gr-dif__item--2 { background: var(--gr-sand); }
+  .gr-dif__item--2 { background: var(--gr-paper-2); }
   .gr-dif__item--3 { background: var(--gr-paper); }
-  .gr-dif__item:hover { background: var(--gr-sun); }
+  /* El hover era amarillo de faro sobre papel; sobre suelo oscuro basta
+     con levantar el panel. */
+  .gr-dif__item:hover { background: var(--color-cdm-regla); }
   .gr-dif__num { font-size: .85rem; color: var(--gr-gamba); font-weight: 800; letter-spacing: .15em; }
   .gr-dif__t {
     font-size: clamp(1.3rem, 2.2vw, 1.65rem);
     line-height: 1.05;
     letter-spacing: -.025em;
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     margin: 0;
   }
-  .gr-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+  .gr-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--gr-tenue); margin: 0; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* PROCESO                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .gr-proc-section {
-    background: var(--gr-ink);
-    color: var(--gr-paper);
+    background: var(--color-cdm-panel-2);
+    color: var(--gr-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1815,7 +1896,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .gr-proc { grid-template-columns: repeat(4, 1fr); } }
   .gr-proc__step {
     background: rgba(255,251,240,0.05);
-    border: 2px solid var(--gr-paper);
+    border: 1px solid rgba(255,251,240,0.35);
     padding: 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .25s, transform .25s;
@@ -1828,7 +1909,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.1rem, 1.8vw, 1.3rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--gr-paper);
+    color: var(--gr-tinta);
     margin: .25rem 0 0;
   }
   .gr-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,251,240,0.75); flex: 1; }
@@ -1845,14 +1926,16 @@ const jsonLdSchemas = [
   /* TESTIMONIOS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .gr-quote-section {
-    background: var(--gr-paper-2);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
+  /* La cita grande conserva su arena clara: es el único acento de papel de
+     la sección, como una postal. Por eso su tinta sigue siendo oscura. */
   .gr-pull {
     position: relative;
-    background: var(--gr-sand);
-    border: 3px solid var(--gr-ink);
+    background: #E8DCC0;
+    border: 3px solid #0E0D0B;
     box-shadow: var(--gr-shadow);
     padding: 3rem 2rem 2rem;
     margin: 2rem 0;
@@ -1870,20 +1953,20 @@ const jsonLdSchemas = [
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.3;
     margin: 0 0 1.5rem;
-    color: var(--gr-ink);
+    color: #0E0D0B;
     max-width: 56ch;
   }
-  .gr-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--gr-ink); }
+  .gr-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed rgba(14,13,11,0.35); }
   .gr-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--gr-gamba); color: var(--gr-paper);
+    background: #D9342C; color: #FFFBF0;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-size: 1.35rem; font-weight: 800;
     border-radius: 50%;
   }
   .gr-pull__cap div { display: flex; flex-direction: column; }
-  .gr-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--gr-ink); }
+  .gr-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: #0E0D0B; }
   .gr-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
 
   .gr-quotes {
@@ -1896,15 +1979,16 @@ const jsonLdSchemas = [
   .gr-quote {
     position: relative;
     background: var(--gr-paper);
-    border: 2px solid var(--gr-ink);
-    box-shadow: 5px 5px 0 var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    box-shadow: 5px 5px 0 var(--color-cdm-regla-2);
     padding: 1.75rem 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: 1rem;
     transition: transform .25s;
   }
   .gr-quote:hover { transform: translateY(-3px); }
-  .gr-quote--0 { background: var(--gr-paper); }
-  .gr-quote--1 { background: var(--gr-sand); }
+  /* Las dos en panel, con un filete de color cada una. */
+  .gr-quote--0 { border-top: 3px solid var(--gr-gamba); }
+  .gr-quote--1 { border-top: 3px solid var(--gr-navy); }
   .gr-quote__mark {
     position: absolute;
     top: -8px; left: 14px;
@@ -1914,11 +1998,11 @@ const jsonLdSchemas = [
     color: var(--gr-gamba);
     opacity: .45;
   }
-  .gr-quote p { font-size: .92rem; line-height: 1.5; color: var(--gr-ink); flex: 1; margin: 0; }
-  .gr-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--gr-ink); }
+  .gr-quote p { font-size: .92rem; line-height: 1.5; color: var(--gr-tinta); flex: 1; margin: 0; }
+  .gr-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1px solid var(--color-cdm-regla); }
   .gr-quote__avatar {
     width: 36px; height: 36px;
-    background: var(--gr-navy); color: var(--gr-paper);
+    background: var(--gr-navy); color: var(--gr-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -1933,15 +2017,15 @@ const jsonLdSchemas = [
   /* FAQ                                                     */
   /* ═══════════════════════════════════════════════════════ */
   .gr-faq-section {
-    background: var(--gr-paper);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-faq {
     list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--gr-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
   }
-  .gr-faq__item { border-bottom: 2px solid var(--gr-ink); }
+  .gr-faq__item { border-bottom: 1px solid var(--color-cdm-regla); }
   .gr-faq__det summary { list-style: none; cursor: pointer; }
   .gr-faq__det summary::-webkit-details-marker { display: none; }
   .gr-faq__sum {
@@ -1952,28 +2036,28 @@ const jsonLdSchemas = [
     padding: 1.5rem 0;
     transition: padding .2s, background .2s;
   }
-  .gr-faq__sum:hover { padding-inline: 1rem; background: var(--gr-paper-2); }
+  .gr-faq__sum:hover { padding-inline: 1rem; background: var(--gr-paper); }
   .gr-faq__num { font-size: 1rem; font-weight: 800; color: var(--gr-navy); letter-spacing: .1em; }
   .gr-faq__q {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     font-weight: 700;
   }
   .gr-faq__toggle {
     width: 40px; height: 40px;
-    border: 2px solid var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     background: var(--gr-paper);
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s, color .2s;
   }
-  .gr-faq__det[open] .gr-faq__toggle { transform: rotate(180deg); background: var(--gr-gamba); color: var(--gr-paper); }
+  .gr-faq__det[open] .gr-faq__toggle { transform: rotate(180deg); background: var(--gr-gamba); color: var(--gr-suelo); }
   .gr-faq__ans {
     padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
+    color: var(--gr-tenue);
     font-size: .98rem;
     line-height: 1.55;
     max-width: 70ch;
@@ -1987,16 +2071,16 @@ const jsonLdSchemas = [
   /* PUEBLOS VECINOS                                         */
   /* ═══════════════════════════════════════════════════════ */
   .gr-vecinos-section {
-    background: var(--gr-paper-2);
+    background: var(--gr-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--gr-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .gr-vecinos {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid; gap: 0;
     grid-template-columns: 1fr;
-    border: 2px solid var(--gr-ink);
-    background: var(--gr-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 640px)  { .gr-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
   @media (min-width: 1024px) { .gr-vecinos { grid-template-columns: repeat(4, 1fr); } }
@@ -2007,7 +2091,7 @@ const jsonLdSchemas = [
     gap: .35rem;
     padding: 1.5rem;
     background: var(--gr-paper);
-    color: var(--gr-ink);
+    color: var(--gr-tinta);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
@@ -2017,20 +2101,20 @@ const jsonLdSchemas = [
   .gr-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .gr-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .gr-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--gr-gamba); font-size: 1.3rem; transition: transform .25s; }
-  .gr-vecino:hover { background: var(--gr-gamba); color: var(--gr-paper); }
+  .gr-vecino:hover { background: var(--gr-gamba); color: var(--gr-suelo); }
   .gr-vecino:hover .gr-vecino__sub, .gr-vecino:hover .gr-vecino__n { opacity: .85; }
-  .gr-vecino:hover .gr-vecino__arrow { color: var(--gr-paper); transform: translateX(4px); }
-  .gr-vecino--1:hover { background: var(--gr-navy); color: var(--gr-paper); }
-  .gr-vecino--2:hover { background: var(--gr-copper); color: var(--gr-paper); }
-  .gr-vecino--3:hover { background: var(--gr-ink); color: var(--gr-sun); }
+  .gr-vecino:hover .gr-vecino__arrow { color: var(--gr-suelo); transform: translateX(4px); }
+  .gr-vecino--1:hover { background: var(--gr-navy); color: var(--gr-suelo); }
+  .gr-vecino--2:hover { background: var(--gr-copper); color: var(--gr-suelo); }
+  .gr-vecino--3:hover { background: var(--color-cdm-panel-2); color: var(--gr-sun); }
   .gr-vecino--3:hover .gr-vecino__arrow { color: var(--gr-sun); }
 
   /* ═══════════════════════════════════════════════════════ */
   /* CTA FINAL                                               */
   /* ═══════════════════════════════════════════════════════ */
   .gr-final {
-    background: var(--gr-navy-d);
-    color: var(--gr-paper);
+    background: var(--gr-navy-hondo);
+    color: var(--gr-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -2056,7 +2140,7 @@ const jsonLdSchemas = [
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--gr-paper);
+    color: var(--gr-tinta);
     margin: 1rem 0;
   }
   .gr-final__title em { color: var(--gr-gamba); font-style: italic; display: block; }
@@ -2079,22 +2163,22 @@ const jsonLdSchemas = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
   }
   .gr-final__btn--primary {
-    background: var(--gr-gamba); color: var(--gr-paper); border-color: var(--gr-gamba);
+    background: var(--gr-gamba); color: #1a0402; border-color: var(--gr-gamba);
     box-shadow: 6px 6px 0 var(--gr-sun);
   }
   .gr-final__btn--primary:hover {
-    background: var(--gr-sun); color: var(--gr-ink); border-color: var(--gr-sun);
+    background: var(--gr-sun); color: var(--gr-suelo); border-color: var(--gr-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--gr-gamba);
   }
   .gr-final__btn--ghost {
-    background: transparent; color: var(--gr-paper); border-color: var(--gr-paper);
-    box-shadow: 6px 6px 0 var(--gr-paper);
+    background: transparent; color: var(--gr-tinta); border-color: rgba(255,251,240,0.4);
+    box-shadow: 6px 6px 0 rgba(255,251,240,0.25);
   }
   .gr-final__btn--ghost:hover {
-    background: var(--gr-paper); color: var(--gr-ink);
+    background: var(--gr-tinta); color: var(--gr-navy-hondo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--gr-paper);
+    box-shadow: 11px 11px 0 rgba(255,251,240,0.25);
   }
   .gr-final__trust {
     display: flex; flex-wrap: wrap;
@@ -2113,10 +2197,10 @@ const jsonLdSchemas = [
 
   .gr-final__marquee {
     background: var(--gr-gamba);
-    color: var(--gr-paper);
+    color: var(--gr-suelo);
     overflow: hidden;
     padding: .85rem 0;
-    border-top: 3px solid var(--gr-ink);
+    border-top: 1px solid var(--color-cdm-regla);
     margin: 0 -1.5rem;
   }
   .gr-final__marquee-track {

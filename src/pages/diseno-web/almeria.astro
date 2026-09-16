@@ -5,6 +5,24 @@ import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import Postal from '../../components/cdm/Postal.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'iconos',        etiqueta: 'Tres iconos' },
+  { id: 'almeriwood',    etiqueta: 'Almeriwood' },
+  { id: 'hitos',         etiqueta: 'Hitos' },
+  { id: 'sectores',      etiqueta: 'Sectores' },
+  { id: 'mapa',          etiqueta: 'Cartografía' },
+  { id: 'porque',        etiqueta: 'Por qué Almería' },
+  { id: 'metodo',        etiqueta: 'Método' },
+  { id: 'testimonios',   etiqueta: 'Testimonios' },
+  { id: 'faq',           etiqueta: 'Preguntas' },
+  { id: 'metropolitana', etiqueta: 'Área metro' },
+  { id: 'empezar',       etiqueta: 'Empezar' },
+];
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const pueblosMetro = getPueblosByComarca('Almería Metropolitana').filter(p => p.slug !== 'almeria');
@@ -103,9 +121,11 @@ const jsonLd = [
 >
   <Header />
 
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Almería" }]} />
+  <Breadcrumb tono="consola" items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Almería" }]} />
 
   <main id="main-content" class="al">
+
+    <IndiceLateral secciones={secciones} coordenadas="36.838° N · 2.485° W · 295 km²" class="al-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — ALCAZABA SILUETA                          */}
@@ -368,7 +388,7 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* 3 ICONOS: Alcazaba · Catedral · Cabo de Gata     */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-iconos-section">
+    <section class="al-iconos-section" id="iconos">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -391,7 +411,8 @@ const jsonLd = [
               <div class="al-icono__code">{i.code}</div>
 
               {/* SVG por icono */}
-              <div class="al-icono__svg" aria-hidden="true">
+              <Postal class="al-icono__postal">
+                <div class="al-icono__svg" aria-hidden="true">
                 {i.color === 'alcazaba' && (
                   <svg viewBox="0 0 100 100" width="100%" height="100%">
                     {/* Alcazaba mini */}
@@ -454,7 +475,8 @@ const jsonLd = [
                     </g>
                   </svg>
                 )}
-              </div>
+                </div>
+              </Postal>
 
               <h3 class="al-icono__name heading-display">{i.name}</h3>
               <span class="text-mono al-icono__sub">{i.sub}</span>
@@ -560,12 +582,12 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* HITOS DE LA CAPITAL                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-hitos-section">
+    <section class="al-hitos-section" id="hitos">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--al-oro)">Cap. 04 / Hitos</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--al-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--al-tinta)">
               Por qué Almería
               <em class="heading-editorial" style="color:var(--al-oro)">pesa.</em>
             </h2>
@@ -638,7 +660,7 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA con marco ámbar/oro                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-map-section">
+    <section class="al-map-section" id="mapa">
       <header class="al-map-head">
         <div class="container-brutal al-map-head__inner">
           <div>
@@ -688,7 +710,7 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-dif-section">
+    <section class="al-dif-section" id="porque">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -720,12 +742,12 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-proc-section">
+    <section class="al-proc-section" id="metodo">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--al-oro)">Cap. 08 / Método</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--al-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--al-tinta)">
               Cuatro pasos
               <em class="heading-editorial" style="color:var(--al-cine)">a tu web en Almería.</em>
             </h2>
@@ -755,7 +777,7 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-quote-section">
+    <section class="al-quote-section" id="testimonios">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -810,7 +832,7 @@ const jsonLd = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-faq-section">
+    <section class="al-faq-section" id="faq">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -849,7 +871,7 @@ const jsonLd = [
     {/* PUEBLOS VECINOS (Almería Metropolitana)          */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosMetro.length > 0 && (
-      <section class="al-vecinos-section">
+      <section class="al-vecinos-section" id="metropolitana">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
@@ -885,7 +907,7 @@ const jsonLd = [
     <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
     {/* CTA FINAL                                        */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="al-final">
+    <section class="al-final" id="empezar">
       <div class="container-brutal">
         <div class="al-final__grid">
 
@@ -993,25 +1015,78 @@ const jsonLd = [
 
 <style>
   /* ═══════════════════════════════════════════════════════ */
-  /* PALETA · ALMERÍA · CAPITAL                              */
+  /* PALETA · ALMERÍA · CONSOLA (fase 2)                     */
+  /* El índigo era a la vez fondo de tres secciones y color  */
+  /* de acento: se queda como fondo y el acento pasa a       */
+  /* indigo-l. Alcazaba, cine y oro-d se aclaran para llegar */
+  /* a 4,5:1 sobre suelo. Las ilustraciones no se tocan.     */
   /* ═══════════════════════════════════════════════════════ */
   .al {
-    --al-paper:      #FFFBF0;
-    --al-paper-2:    #F2E8CC;
-    --al-piedra:     #EAD9B5;       /* piedra arenisca */
-    --al-arena:      #E5D4A8;
-    --al-ink:        #0E0D0B;
-    --al-alcazaba:   #C25E2B;       /* muralla terracota */
+    --al-paper:      var(--color-cdm-panel);
+    --al-paper-2:    var(--color-cdm-panel-2);
+    --al-piedra:     var(--color-cdm-panel-2);
+    --al-arena:      var(--color-cdm-panel-2);
+    --al-suelo:      var(--color-cdm-suelo);
+    --al-tinta:      var(--color-cdm-texto);
+    --al-tenue:      var(--color-cdm-tenue);
+    --al-ink:        var(--color-cdm-regla-2);
+    --al-alcazaba:   #D97A45;       /* muralla terracota, aclarada */
     --al-alcazaba-d: #8E3F1A;
     --al-oro:        #E5A726;       /* oro almeriense */
-    --al-oro-d:      #B07E15;
-    --al-indigo:     #1A2647;       /* mar/cielo profundo */
-    --al-cine:       #B91C2C;       /* rojo cine */
-    --al-gata:       #26A0A0;       /* turquesa Cabo Gata */
+    --al-oro-d:      #D2A33C;
+    --al-indigo:     #16203C;       /* mar/cielo profundo: solo fondo */
+    --al-indigo-l:   #6C8BD0;       /* el mismo, para leer sobre oscuro */
+    --al-cine:       #E14356;       /* rojo cine, aclarado */
+    --al-gata:       #2FBDBD;       /* turquesa Cabo Gata */
     --al-sun:        #FFCC44;
-    --al-lima:       #D6FF44;
-    --al-shadow:     8px 8px 0 var(--al-ink);
+    --al-lima:       #D6FF44;       /* solo «ok/verificado» */
+    --al-shadow:     8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--al-suelo);
+    color: var(--al-tinta);
   }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .al :global(.brutal-section-head__title) { color: var(--al-tinta); }
+  .al :global(.brutal-section-head__title em) { color: var(--al-oro); }
+  .al :global(.brutal-section-head__lead) { color: var(--al-tenue); }
+  .al :global(.text-meta) { color: var(--al-tenue); }
+  .al :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .al :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .al :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .al-map-frame,
+    .al-marquee,
+    .al-final__marquee { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .al :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--al-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .al :global(.cdm-indice__titulo),
+    .al :global(.cdm-indice__lista),
+    .al :global(.cdm-indice__coord) { display: none; }
+    .al :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
+  }
+
+  /* Los tres iconos van en postal: sus trazos negros y sus paredes claras
+     se perderían sobre el panel oscuro (spec §6.3.4). */
+  .al-icono__postal { max-width: 220px; margin: 0 auto; }
   .al-pulse {
     display: inline-block;
     width: 9px; height: 9px;
@@ -1037,10 +1112,10 @@ const jsonLd = [
     padding-top: 3rem;
     padding-bottom: 0;
     background:
-      radial-gradient(circle at 80% 20%, rgba(229,167,38,0.12), transparent 50%),
-      radial-gradient(circle at 10% 80%, rgba(194,94,43,0.10), transparent 50%),
-      var(--al-paper);
-    border-bottom: 3px solid var(--al-ink);
+      radial-gradient(circle at 80% 20%, rgba(229,167,38,0.16), transparent 55%),
+      radial-gradient(circle at 10% 80%, rgba(217,122,69,0.14), transparent 55%),
+      var(--al-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1077,7 +1152,7 @@ const jsonLd = [
   .al-hero__title em { color: var(--al-alcazaba); font-style: italic; }
   .al-hero__title-stamp {
     display: inline-block;
-    color: var(--al-paper);
+    color: var(--al-suelo);
     background: var(--al-cine);
     padding: 0 .2em;
     transform: rotate(-1deg);
@@ -1086,10 +1161,10 @@ const jsonLd = [
   .al-hero__lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--al-tenue);
     max-width: 54ch;
   }
-  .al-hero__lead strong { color: var(--al-ink); font-weight: 700; }
+  .al-hero__lead strong { color: var(--al-tinta); font-weight: 700; }
   .al-hero__lead em { color: var(--al-cine); font-style: italic; font-weight: 600; }
 
   .al-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
@@ -1099,28 +1174,29 @@ const jsonLd = [
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.05rem;
-    border: 2.5px solid var(--al-ink);
+    border: 2.5px solid var(--color-cdm-regla-2);
     text-decoration: none;
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
     cursor: pointer;
   }
   .al-btn--primary {
     background: var(--al-alcazaba);
-    color: var(--al-paper);
-    box-shadow: 6px 6px 0 var(--al-ink);
+    color: #1a0802;
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
   }
   .al-btn--primary:hover {
     background: var(--al-cine);
+    color: #1a0208;
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--al-ink);
+    box-shadow: 11px 11px 0 var(--color-cdm-regla-2);
   }
   .al-btn--ghost {
     background: transparent;
-    color: var(--al-ink);
+    color: var(--al-tinta);
     box-shadow: 6px 6px 0 var(--al-oro);
   }
   .al-btn--ghost:hover {
-    background: var(--al-ink);
+    background: var(--color-cdm-panel-2);
     color: var(--al-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--al-oro);
@@ -1133,29 +1209,29 @@ const jsonLd = [
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
     margin-top: 1.5rem;
-    border: 2.5px solid var(--al-ink);
-    background: var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 768px) { .al-kpis { grid-template-columns: repeat(4, 1fr); } }
   .al-kpi {
     background: var(--al-paper);
     padding: 1.25rem;
     display: flex; flex-direction: column; gap: .35rem;
-    border-right: 2px solid var(--al-ink);
-    border-bottom: 2px solid var(--al-ink);
+    border-right: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-kpi:nth-child(2n) { border-right: none; }
   .al-kpi:nth-last-child(-n+2) { border-bottom: none; }
   @media (min-width: 768px) {
-    .al-kpi:nth-child(2n)      { border-right: 2px solid var(--al-ink); }
+    .al-kpi:nth-child(2n)      { border-right: 1px solid var(--color-cdm-regla); }
     .al-kpi:nth-child(4n)      { border-right: none; }
-    .al-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--al-ink); }
+    .al-kpi:nth-last-child(-n+2) { border-bottom: 1px solid var(--color-cdm-regla); }
     .al-kpi:nth-last-child(-n+4) { border-bottom: none; }
   }
-  .al-kpi--alcazaba { background: var(--al-alcazaba); color: var(--al-paper); }
-  .al-kpi--oro      { background: var(--al-oro); color: var(--al-ink); }
-  .al-kpi--gata     { background: var(--al-gata); color: var(--al-paper); }
-  .al-kpi--ink      { background: var(--al-ink); color: var(--al-paper); }
+  .al-kpi--alcazaba { background: var(--al-alcazaba); color: var(--al-suelo); }
+  .al-kpi--oro      { background: var(--al-oro); color: var(--al-suelo); }
+  .al-kpi--gata     { background: var(--al-gata); color: var(--al-suelo); }
+  .al-kpi--ink      { background: var(--color-cdm-panel-2); color: var(--al-tinta); }
   .al-kpi--ink .al-kpi__v { color: var(--al-sun); }
   .al-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
   .al-kpi__v small { font-size: .55em; opacity: .8; }
@@ -1168,10 +1244,12 @@ const jsonLd = [
     margin: 0 auto;
     filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
   }
+  /* La postal conserva su papel original (spec §3.3.6): es pieza a mano,
+     no interfaz. Por eso lleva valores literales. */
   .al-postcard {
-    background: var(--al-paper);
-    border: 3px solid var(--al-ink);
-    box-shadow: var(--al-shadow);
+    background: #FFFBF0;
+    border: 3px solid #0E0D0B;
+    box-shadow: 8px 8px 0 var(--color-cdm-regla-2);
     overflow: hidden;
     transform: rotate(-1deg);
     transition: transform .35s;
@@ -1181,23 +1259,23 @@ const jsonLd = [
     display: flex; justify-content: space-between; flex-wrap: wrap;
     gap: .5rem;
     padding: .65rem 1rem;
-    background: var(--al-indigo);
-    color: var(--al-sun);
+    background: #1A2647;
+    color: #FFCC44;
     font-size: .58rem;
     letter-spacing: .15em;
-    border-bottom: 2px solid var(--al-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .al-postcard__profile {
     width: 100%;
     aspect-ratio: 540 / 240;
-    border-bottom: 2px solid var(--al-ink);
+    border-bottom: 2px solid #0E0D0B;
     overflow: hidden;
   }
   .al-postcard__img-wrap {
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-bottom: 2px solid var(--al-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .al-postcard__img {
     width: 100%; height: 100%;
@@ -1216,19 +1294,19 @@ const jsonLd = [
   .al-postcard__tag {
     position: absolute;
     bottom: 12px; left: 12px;
-    background: var(--al-cine);
-    color: var(--al-paper);
+    background: #B91C2C;
+    color: #FFFBF0;
     padding: .4rem .75rem;
     font-size: .65rem;
     font-weight: 800;
     letter-spacing: .2em;
-    border: 2px solid var(--al-ink);
-    box-shadow: 3px 3px 0 var(--al-ink);
+    border: 2px solid #0E0D0B;
+    box-shadow: 3px 3px 0 #0E0D0B;
     transform: rotate(-2deg);
   }
   .al-postcard__data {
     padding: 1rem 1.25rem;
-    background: var(--al-paper-2);
+    background: #F2E8CC;
     display: grid; gap: .35rem;
   }
   .al-postcard__data-row {
@@ -1238,8 +1316,8 @@ const jsonLd = [
     font-size: .68rem;
   }
   .al-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
-  .al-postcard__data-row > span:first-child { color: var(--al-alcazaba); letter-spacing: .2em; font-weight: 800; }
-  .al-postcard__data-v { color: var(--al-ink); font-weight: 700; letter-spacing: .05em; }
+  .al-postcard__data-row > span:first-child { color: #C25E2B; letter-spacing: .2em; font-weight: 800; }
+  .al-postcard__data-v { color: #0E0D0B; font-weight: 700; letter-spacing: .05em; }
 
   /* Marquee */
   .al-marquee {
@@ -1247,7 +1325,7 @@ const jsonLd = [
     color: var(--al-sun);
     overflow: hidden;
     padding: .9rem 0;
-    border-top: 3px solid var(--al-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .al-marquee__track {
     display: flex; gap: 3rem; width: max-content;
@@ -1267,9 +1345,9 @@ const jsonLd = [
   /* ICONOS                                                  */
   /* ═══════════════════════════════════════════════════════ */
   .al-iconos-section {
-    background: var(--al-paper-2);
+    background: var(--al-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-iconos {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1281,7 +1359,7 @@ const jsonLd = [
   .al-icono {
     position: relative;
     background: var(--al-paper);
-    border: 3px solid var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--al-shadow);
     padding: 1.75rem 1.5rem;
     display: flex; flex-direction: column; gap: .85rem;
@@ -1294,7 +1372,7 @@ const jsonLd = [
   .al-icono__code {
     position: absolute;
     top: -16px; right: 20px;
-    background: var(--al-ink);
+    background: var(--color-cdm-panel-2);
     color: var(--al-sun);
     width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
@@ -1304,10 +1382,10 @@ const jsonLd = [
     border: 2.5px solid currentColor;
     box-shadow: 3px 3px 0 currentColor;
   }
-  .al-icono__svg { width: 100%; aspect-ratio: 1; max-width: 200px; margin: 0 auto; color: currentColor; }
-  .al-icono__name { font-size: clamp(1.5rem, 2.8vw, 1.85rem); line-height: 1; letter-spacing: -.025em; color: var(--al-ink); margin: .5rem 0 0; text-align: center; }
+  .al-icono__svg { width: 100%; aspect-ratio: 1; margin: 0 auto; color: currentColor; }
+  .al-icono__name { font-size: clamp(1.5rem, 2.8vw, 1.85rem); line-height: 1; letter-spacing: -.025em; color: var(--al-tinta); margin: .5rem 0 0; text-align: center; }
   .al-icono__sub { font-size: .62rem; letter-spacing: .25em; color: currentColor; font-weight: 800; text-align: center; }
-  .al-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; text-align: center; }
+  .al-icono__desc { font-size: .9rem; line-height: 1.5; color: var(--al-tenue); flex: 1; text-align: center; }
   .al-icono__foot { padding-top: .75rem; border-top: 2px dashed currentColor; text-align: center; }
   .al-icono__dato { font-size: .85rem; font-weight: 800; color: currentColor; letter-spacing: .1em; }
 
@@ -1315,10 +1393,10 @@ const jsonLd = [
   /* ALMERIWOOD                                              */
   /* ═══════════════════════════════════════════════════════ */
   .al-aw-section {
-    background: var(--al-ink);
-    color: var(--al-paper);
+    background: var(--color-cdm-panel-2);
+    color: var(--al-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1343,7 +1421,7 @@ const jsonLd = [
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--al-paper);
+    color: var(--al-tinta);
     margin: 1rem 0;
   }
   .al-aw-title em { color: var(--al-cine); display: block; }
@@ -1384,22 +1462,23 @@ const jsonLd = [
     .al-filmstrip { min-width: 0; grid-template-columns: repeat(2, 1fr); }
   }
   .al-film {
-    background: var(--al-paper);
-    color: var(--al-ink);
-    border: 2.5px solid var(--al-paper);
+    background: var(--color-cdm-panel);
+    color: var(--al-tinta);
+    border: 1px solid var(--color-cdm-regla-2);
     overflow: hidden;
     display: grid;
     grid-template-rows: 16px 1fr 16px;
     transition: transform .25s, border-color .25s;
   }
   .al-film:hover { transform: translateY(-4px); border-color: var(--al-oro); }
+  /* Las perforaciones siguen alternando, en tonos de consola. */
   .al-film__perforation {
-    background: var(--al-ink);
+    background: var(--color-cdm-panel-2);
     background-image:
       repeating-linear-gradient(90deg,
-        var(--al-ink) 0 8px,
-        var(--al-paper) 8px 14px);
-    border-block: 1px solid var(--al-paper);
+        var(--color-cdm-suelo) 0 8px,
+        var(--color-cdm-regla-2) 8px 14px);
+    border-block: 1px solid var(--color-cdm-regla);
   }
   .al-film__body {
     display: grid;
@@ -1409,18 +1488,18 @@ const jsonLd = [
     align-items: center;
   }
   .al-film__frame {
-    background: var(--al-ink);
+    background: var(--color-cdm-suelo);
     color: var(--al-sun);
     aspect-ratio: 1;
     border: 2px solid var(--al-cine);
     display: flex; align-items: center; justify-content: center;
     font-size: 2rem;
-    box-shadow: inset 0 0 0 4px var(--al-paper), inset 0 0 0 6px var(--al-ink);
+    box-shadow: inset 0 0 0 4px var(--color-cdm-panel-2), inset 0 0 0 6px var(--color-cdm-suelo);
   }
   .al-film__data { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .al-film__head { display: flex; justify-content: space-between; gap: .5rem; align-items: baseline; }
   .al-film__year {
-    background: var(--al-cine); color: var(--al-paper);
+    background: var(--al-cine); color: var(--al-suelo);
     padding: .15rem .4rem;
     font-size: .65rem;
     font-weight: 800;
@@ -1431,7 +1510,7 @@ const jsonLd = [
     font-size: 1rem;
     line-height: 1.1;
     letter-spacing: -.015em;
-    color: var(--al-ink);
+    color: var(--al-tinta);
     margin: .15rem 0 0;
   }
   .al-film__escena {
@@ -1448,7 +1527,7 @@ const jsonLd = [
     border: 2px solid var(--al-oro);
     font-size: .92rem;
     line-height: 1.5;
-    color: var(--al-paper);
+    color: var(--al-tinta);
   }
   .al-aw-note strong { color: var(--al-sun); }
 
@@ -1457,9 +1536,9 @@ const jsonLd = [
   /* ═══════════════════════════════════════════════════════ */
   .al-hitos-section {
     background: var(--al-indigo);
-    color: var(--al-paper);
+    color: var(--al-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1476,7 +1555,7 @@ const jsonLd = [
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2.5px solid var(--al-paper);
+    border: 1px solid rgba(255,251,240,0.35);
   }
   @media (min-width: 640px)  { .al-hitos { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .al-hitos { grid-template-columns: repeat(3, 1fr); } }
@@ -1502,15 +1581,15 @@ const jsonLd = [
     .al-hito:last-child { border-bottom: none; }
   }
   .al-hito__k { font-size: .62rem; letter-spacing: .25em; color: var(--al-oro); font-weight: 800; }
-  .al-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--al-paper); line-height: 1.35; }
+  .al-hito__v { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--al-tinta); line-height: 1.35; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* SECTORES                                                */
   /* ═══════════════════════════════════════════════════════ */
   .al-sec-section {
-    background: var(--al-paper);
+    background: var(--al-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-sec {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1522,7 +1601,7 @@ const jsonLd = [
   @media (min-width: 1024px) { .al-sec { grid-template-columns: repeat(3, 1fr); } }
   .al-sec__card {
     background: var(--al-paper);
-    border: 2.5px solid var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--al-shadow);
     padding: 1.5rem;
     display: flex; flex-direction: column; gap: .75rem;
@@ -1541,7 +1620,7 @@ const jsonLd = [
   .al-sec__card--oro      { color: var(--al-oro); }
   .al-sec__card--cine     { color: var(--al-cine); }
   .al-sec__card--gata     { color: var(--al-gata); }
-  .al-sec__card--indigo   { color: var(--al-indigo); }
+  .al-sec__card--indigo   { color: var(--al-indigo-l); }
   .al-sec__card--oro-d    { color: var(--al-oro-d); }
 
   .al-sec__head {
@@ -1552,7 +1631,7 @@ const jsonLd = [
   }
   .al-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
   .al-sec__stat-box {
-    background: var(--al-ink); color: var(--al-paper);
+    background: var(--color-cdm-panel-2); color: var(--al-tinta);
     padding: .35rem .65rem;
     border: 1.5px solid currentColor;
   }
@@ -1561,21 +1640,21 @@ const jsonLd = [
     font-size: clamp(1.15rem, 2vw, 1.4rem);
     line-height: 1.1;
     letter-spacing: -.02em;
-    color: var(--al-ink);
+    color: var(--al-tinta);
     margin: 0;
   }
-  .al-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .al-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--al-tenue); flex: 1; }
   .al-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
   .al-sec__tag {
     display: flex; align-items: flex-start; gap: .35rem;
     font-size: .78rem;
     line-height: 1.35;
-    color: var(--al-ink);
+    color: var(--al-tinta);
   }
   .al-sec__tag span { color: currentColor; font-weight: 800; }
   .al-sec__foot {
     padding-top: .65rem;
-    border-top: 2px solid var(--al-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .al-sec__cta {
     font-family: var(--font-mono);
@@ -1593,8 +1672,8 @@ const jsonLd = [
   /* MAPA                                                    */
   /* ═══════════════════════════════════════════════════════ */
   .al-map-section {
-    background: var(--al-piedra);
-    border-bottom: 3px solid var(--al-ink);
+    background: var(--al-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-map-head { padding: 4rem 0 2rem; }
   .al-map-head__inner {
@@ -1616,7 +1695,7 @@ const jsonLd = [
     background: var(--al-indigo);
     color: var(--al-sun);
     padding: 1rem 1.25rem;
-    border: 2px solid var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: 5px 5px 0 var(--al-oro);
     display: flex; flex-direction: column; gap: .35rem;
     font-size: .7rem;
@@ -1625,9 +1704,9 @@ const jsonLd = [
 
   .al-map-frame {
     position: relative;
-    border-top: 3px solid var(--al-ink);
-    border-bottom: 3px solid var(--al-ink);
-    background: var(--al-ink);
+    border-top: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background: var(--color-cdm-panel-2);
   }
   .al-map-deco {
     position: absolute;
@@ -1650,26 +1729,26 @@ const jsonLd = [
   /* DIFERENCIALES                                           */
   /* ═══════════════════════════════════════════════════════ */
   .al-dif-section {
-    background: var(--al-paper);
+    background: var(--al-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-dif {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2px solid var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
   }
   @media (min-width: 768px) { .al-dif { grid-template-columns: 1fr 1fr; } }
   .al-dif__item {
     padding: 1.75rem 1.5rem;
-    border-bottom: 1px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .2s;
   }
   @media (min-width: 768px) {
-    .al-dif__item:nth-child(odd) { border-right: 1px solid var(--al-ink); }
+    .al-dif__item:nth-child(odd) { border-right: 1px solid var(--color-cdm-regla); }
     .al-dif__item:nth-last-child(-n+2) { border-bottom: none; }
   }
   @media (max-width: 767px) {
@@ -1677,27 +1756,28 @@ const jsonLd = [
   }
   .al-dif__item--0 { background: var(--al-paper-2); }
   .al-dif__item--1 { background: var(--al-paper); }
-  .al-dif__item--2 { background: var(--al-piedra); }
+  .al-dif__item--2 { background: var(--al-paper-2); }
   .al-dif__item--3 { background: var(--al-paper); }
-  .al-dif__item:hover { background: var(--al-oro); }
+  /* El hover era oro sobre papel; sobre suelo basta con levantar el panel. */
+  .al-dif__item:hover { background: var(--color-cdm-regla); }
   .al-dif__num { font-size: .85rem; color: var(--al-cine); font-weight: 800; letter-spacing: .15em; }
   .al-dif__t {
     font-size: clamp(1.3rem, 2.2vw, 1.65rem);
     line-height: 1.05;
     letter-spacing: -.025em;
-    color: var(--al-ink);
+    color: var(--al-tinta);
     margin: 0;
   }
-  .al-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+  .al-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--al-tenue); margin: 0; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* PROCESO                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .al-proc-section {
     background: var(--al-indigo);
-    color: var(--al-paper);
+    color: var(--al-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1719,7 +1799,7 @@ const jsonLd = [
   @media (min-width: 1024px) { .al-proc { grid-template-columns: repeat(4, 1fr); } }
   .al-proc__step {
     background: rgba(255,251,240,0.05);
-    border: 2px solid var(--al-paper);
+    border: 1px solid rgba(255,251,240,0.35);
     padding: 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .25s, transform .25s;
@@ -1732,7 +1812,7 @@ const jsonLd = [
     font-size: clamp(1.1rem, 1.8vw, 1.3rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--al-paper);
+    color: var(--al-tinta);
     margin: .25rem 0 0;
   }
   .al-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,251,240,0.75); flex: 1; }
@@ -1749,14 +1829,16 @@ const jsonLd = [
   /* TESTIMONIOS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .al-quote-section {
-    background: var(--al-paper-2);
+    background: var(--al-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
+  /* La cita grande conserva su piedra clara: es el único acento de papel de
+     la sección, como una postal. Por eso su tinta sigue siendo oscura. */
   .al-pull {
     position: relative;
-    background: var(--al-piedra);
-    border: 3px solid var(--al-ink);
+    background: #EAD9B5;
+    border: 3px solid #0E0D0B;
     box-shadow: var(--al-shadow);
     padding: 3rem 2rem 2rem;
     margin: 2rem 0;
@@ -1774,20 +1856,20 @@ const jsonLd = [
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.3;
     margin: 0 0 1.5rem;
-    color: var(--al-ink);
+    color: #0E0D0B;
     max-width: 56ch;
   }
-  .al-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--al-ink); }
+  .al-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed rgba(14,13,11,0.35); }
   .al-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--al-alcazaba); color: var(--al-paper);
+    background: #C25E2B; color: #FFFBF0;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-size: 1.35rem; font-weight: 800;
     border-radius: 50%;
   }
   .al-pull__cap div { display: flex; flex-direction: column; }
-  .al-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--al-ink); }
+  .al-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: #0E0D0B; }
   .al-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
 
   .al-quotes {
@@ -1800,16 +1882,17 @@ const jsonLd = [
   .al-quote {
     position: relative;
     background: var(--al-paper);
-    border: 2px solid var(--al-ink);
-    box-shadow: 5px 5px 0 var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    box-shadow: 5px 5px 0 var(--color-cdm-regla-2);
     padding: 1.75rem 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: 1rem;
     transition: transform .25s;
   }
   .al-quote:hover { transform: translateY(-3px); }
-  .al-quote--0 { background: var(--al-paper); }
-  .al-quote--1 { background: var(--al-piedra); }
-  .al-quote--2 { background: var(--al-paper-2); }
+  /* Las tres en panel, con un filete de color cada una. */
+  .al-quote--0 { border-top: 3px solid var(--al-alcazaba); }
+  .al-quote--1 { border-top: 3px solid var(--al-oro); }
+  .al-quote--2 { border-top: 3px solid var(--al-gata); }
   .al-quote__mark {
     position: absolute;
     top: -8px; left: 14px;
@@ -1819,11 +1902,11 @@ const jsonLd = [
     color: var(--al-alcazaba);
     opacity: .45;
   }
-  .al-quote p { font-size: .92rem; line-height: 1.5; color: var(--al-ink); flex: 1; margin: 0; }
-  .al-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--al-ink); }
+  .al-quote p { font-size: .92rem; line-height: 1.5; color: var(--al-tinta); flex: 1; margin: 0; }
+  .al-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1px solid var(--color-cdm-regla); }
   .al-quote__avatar {
     width: 36px; height: 36px;
-    background: var(--al-indigo); color: var(--al-paper);
+    background: var(--al-indigo-l); color: var(--al-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -1838,15 +1921,15 @@ const jsonLd = [
   /* FAQ                                                     */
   /* ═══════════════════════════════════════════════════════ */
   .al-faq-section {
-    background: var(--al-paper);
+    background: var(--al-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-faq {
     list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--al-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
   }
-  .al-faq__item { border-bottom: 2px solid var(--al-ink); }
+  .al-faq__item { border-bottom: 1px solid var(--color-cdm-regla); }
   .al-faq__det summary { list-style: none; cursor: pointer; }
   .al-faq__det summary::-webkit-details-marker { display: none; }
   .al-faq__sum {
@@ -1857,28 +1940,28 @@ const jsonLd = [
     padding: 1.5rem 0;
     transition: padding .2s, background .2s;
   }
-  .al-faq__sum:hover { padding-inline: 1rem; background: var(--al-paper-2); }
+  .al-faq__sum:hover { padding-inline: 1rem; background: var(--al-paper); }
   .al-faq__num { font-size: 1rem; font-weight: 800; color: var(--al-alcazaba); letter-spacing: .1em; }
   .al-faq__q {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--al-ink);
+    color: var(--al-tinta);
     font-weight: 700;
   }
   .al-faq__toggle {
     width: 40px; height: 40px;
-    border: 2px solid var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     background: var(--al-paper);
-    color: var(--al-ink);
+    color: var(--al-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s, color .2s;
   }
-  .al-faq__det[open] .al-faq__toggle { transform: rotate(180deg); background: var(--al-alcazaba); color: var(--al-paper); }
+  .al-faq__det[open] .al-faq__toggle { transform: rotate(180deg); background: var(--al-alcazaba); color: var(--al-suelo); }
   .al-faq__ans {
     padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
+    color: var(--al-tenue);
     font-size: .98rem;
     line-height: 1.55;
     max-width: 70ch;
@@ -1892,16 +1975,16 @@ const jsonLd = [
   /* PUEBLOS VECINOS                                         */
   /* ═══════════════════════════════════════════════════════ */
   .al-vecinos-section {
-    background: var(--al-paper-2);
+    background: var(--al-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--al-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .al-vecinos {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid; gap: 0;
     grid-template-columns: 1fr;
-    border: 2px solid var(--al-ink);
-    background: var(--al-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 640px)  { .al-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
   @media (min-width: 1024px) { .al-vecinos { grid-template-columns: repeat(4, 1fr); } }
@@ -1912,7 +1995,7 @@ const jsonLd = [
     gap: .35rem;
     padding: 1.5rem;
     background: var(--al-paper);
-    color: var(--al-ink);
+    color: var(--al-tinta);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
@@ -1922,20 +2005,20 @@ const jsonLd = [
   .al-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .al-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .al-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--al-alcazaba); font-size: 1.3rem; transition: transform .25s; }
-  .al-vecino:hover { background: var(--al-alcazaba); color: var(--al-paper); }
+  .al-vecino:hover { background: var(--al-alcazaba); color: var(--al-suelo); }
   .al-vecino:hover .al-vecino__sub, .al-vecino:hover .al-vecino__n { opacity: .85; }
-  .al-vecino:hover .al-vecino__arrow { color: var(--al-paper); transform: translateX(4px); }
-  .al-vecino--1:hover { background: var(--al-oro); color: var(--al-ink); }
+  .al-vecino:hover .al-vecino__arrow { color: var(--al-suelo); transform: translateX(4px); }
+  .al-vecino--1:hover { background: var(--al-oro); color: var(--al-suelo); }
   .al-vecino--2:hover { background: var(--al-indigo); color: var(--al-sun); }
   .al-vecino--2:hover .al-vecino__arrow { color: var(--al-sun); }
-  .al-vecino--3:hover { background: var(--al-cine); color: var(--al-paper); }
+  .al-vecino--3:hover { background: var(--al-cine); color: var(--al-suelo); }
 
   /* ═══════════════════════════════════════════════════════ */
   /* CTA FINAL                                               */
   /* ═══════════════════════════════════════════════════════ */
   .al-final {
     background: var(--al-indigo);
-    color: var(--al-paper);
+    color: var(--al-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -1961,7 +2044,7 @@ const jsonLd = [
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--al-paper);
+    color: var(--al-tinta);
     margin: 1rem 0;
   }
   .al-final__title em { color: var(--al-oro); font-style: italic; display: block; }
@@ -1984,22 +2067,22 @@ const jsonLd = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
   }
   .al-final__btn--primary {
-    background: var(--al-oro); color: var(--al-ink); border-color: var(--al-oro);
+    background: var(--al-oro); color: var(--al-suelo); border-color: var(--al-oro);
     box-shadow: 6px 6px 0 var(--al-sun);
   }
   .al-final__btn--primary:hover {
-    background: var(--al-sun); color: var(--al-ink); border-color: var(--al-sun);
+    background: var(--al-sun); color: var(--al-suelo); border-color: var(--al-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--al-oro);
   }
   .al-final__btn--ghost {
-    background: transparent; color: var(--al-paper); border-color: var(--al-paper);
-    box-shadow: 6px 6px 0 var(--al-paper);
+    background: transparent; color: var(--al-tinta); border-color: rgba(255,251,240,0.4);
+    box-shadow: 6px 6px 0 rgba(255,251,240,0.25);
   }
   .al-final__btn--ghost:hover {
-    background: var(--al-paper); color: var(--al-ink);
+    background: var(--al-tinta); color: var(--al-indigo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--al-paper);
+    box-shadow: 11px 11px 0 rgba(255,251,240,0.25);
   }
   .al-final__trust {
     display: flex; flex-wrap: wrap;
@@ -2026,10 +2109,10 @@ const jsonLd = [
 
   .al-final__marquee {
     background: var(--al-oro);
-    color: var(--al-ink);
+    color: var(--al-suelo);
     overflow: hidden;
     padding: .85rem 0;
-    border-top: 3px solid var(--al-ink);
+    border-top: 1px solid var(--color-cdm-regla);
     margin: 0 -1.5rem;
   }
   .al-final__marquee-track {

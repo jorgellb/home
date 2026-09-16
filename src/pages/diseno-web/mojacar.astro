@@ -5,9 +5,27 @@ import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import Postal from '../../components/cdm/Postal.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'mojacar');
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'indalo',      etiqueta: 'El Indalo' },
+  { id: 'zonas',       etiqueta: 'Pueblo y Playa' },
+  { id: 'idiomas',     etiqueta: 'Multiidioma' },
+  { id: 'mapa',        etiqueta: 'Desde el aire' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'metodo',      etiqueta: 'Método' },
+  { id: 'porque',      etiqueta: 'Por qué Mojácar' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'levante',     etiqueta: 'El Levante' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const title = 'Diseño Web en Mojácar: Turismo y Hostelería';
 const description = 'Diseño web multiidioma y SEO en Mojácar para turismo, hostelería e inmobiliarias. Motor de reservas y captación internacional. Presupuesto en 24h.';
@@ -81,9 +99,11 @@ const jsonLdSchemas = [
 >
   <Header />
 
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Mojácar" }]} />
+  <Breadcrumb tono="consola" items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Mojácar" }]} />
 
   <main id="main-content" class="mj">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.140° N · 1.852° W · Elev. 175 m" class="mj-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — PUEBLO BLANCO + INDALO                    */}
@@ -353,7 +373,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* INDALO — el símbolo                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-indalo-section">
+    <section class="mj-indalo-section" id="indalo">
       <div class="container-brutal">
         <div class="mj-indalo-grid">
 
@@ -476,7 +496,8 @@ const jsonLdSchemas = [
               <span class="text-mono mj-zona__code">A</span>
               <span class="text-mono mj-zona__elev">↑ 175 m</span>
             </header>
-            <div class="mj-zona__icon" aria-hidden="true">
+            <Postal class="mj-zona__postal">
+              <div class="mj-zona__icon" aria-hidden="true">
               <svg viewBox="0 0 120 120" width="100%" height="100%">
                 {/* Pueblo blanco perfil simple */}
                 <path d="M 4 92 Q 60 70 116 92 L 116 116 L 4 116 Z" fill="#B86E4A" stroke="#0E0D0B" stroke-width="2"/>
@@ -499,7 +520,8 @@ const jsonLdSchemas = [
                 {/* Bougainvillea */}
                 <g fill="#C73572"><circle cx="40" cy="80" r="2"/><circle cx="93" cy="78" r="2"/></g>
               </svg>
-            </div>
+              </div>
+            </Postal>
             <h3 class="mj-zona__name heading-display">Mojácar Pueblo</h3>
             <span class="text-mono mj-zona__sub">CULTURA · BOUTIQUES · GASTRO</span>
             <p class="mj-zona__desc">
@@ -521,7 +543,8 @@ const jsonLdSchemas = [
               <span class="text-mono mj-zona__code">B</span>
               <span class="text-mono mj-zona__elev">≈ 0 m</span>
             </header>
-            <div class="mj-zona__icon" aria-hidden="true">
+            <Postal class="mj-zona__postal">
+              <div class="mj-zona__icon" aria-hidden="true">
               <svg viewBox="0 0 120 120" width="100%" height="100%">
                 {/* Cielo + sol */}
                 <circle cx="100" cy="22" r="10" fill="#FFB833" stroke="#0E0D0B" stroke-width="1.8"/>
@@ -542,7 +565,8 @@ const jsonLdSchemas = [
                 <line x1="80" y1="92" x2="82" y2="68" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/>
                 <path d="M 70 68 Q 82 56 94 68 M 68 72 Q 82 60 96 72 M 66 64 Q 82 52 98 64" fill="none" stroke="#8B8842" stroke-width="2" stroke-linecap="round"/>
               </svg>
-            </div>
+              </div>
+            </Postal>
             <h3 class="mj-zona__name heading-display">Mojácar Playa</h3>
             <span class="text-mono mj-zona__sub">SOL · OCIO · DEPORTES · MAR</span>
             <p class="mj-zona__desc">
@@ -564,7 +588,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MULTIIDIOMA — 4 mercados                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-idiomas-section">
+    <section class="mj-idiomas-section" id="idiomas">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -641,7 +665,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA con marco bohemio                            */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-map-section">
+    <section class="mj-map-section" id="mapa">
       <header class="mj-map-head">
         <div class="container-brutal mj-map-head__inner">
           <div>
@@ -738,12 +762,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO                                           */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-proc-section">
+    <section class="mj-proc-section" id="metodo">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--mj-sun)">Cap. 07 / Método</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-white)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-tinta)">
               Cuatro pasos
               <em class="heading-editorial" style="color:var(--mj-bougainvillea)">a tu web en Mojácar.</em>
             </h2>
@@ -773,7 +797,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-dif-section">
+    <section class="mj-dif-section" id="porque">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -804,7 +828,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-quote-section">
+    <section class="mj-quote-section" id="testimonios">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -866,7 +890,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-faq-section">
+    <section class="mj-faq-section" id="faq">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -905,7 +929,7 @@ const jsonLdSchemas = [
     {/* PUEBLOS VECINOS                                  */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosLevante.length > 0 && (
-      <section class="mj-vecinos-section">
+      <section class="mj-vecinos-section" id="levante">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
@@ -941,7 +965,7 @@ const jsonLdSchemas = [
     <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
     {/* CTA FINAL                                        */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-final">
+    <section class="mj-final" id="empezar">
       <div class="container-brutal">
         <div class="mj-final__grid">
 
@@ -1052,24 +1076,76 @@ const jsonLdSchemas = [
 
 <style>
   /* ═══════════════════════════════════════════════════════ */
-  /* PALETA · MOJÁCAR · PUEBLO BLANCO BOHEMIO                */
+  /* PALETA · MOJÁCAR · CONSOLA (fase 2)                     */
+  /* El encalado pasa a panel y la tinta a regla. Indalo,    */
+  /* bugancilla, índigo y olivo se aclaran para llegar a     */
+  /* 4,5:1 sobre suelo; el sol se queda como está. Los       */
+  /* hexadecimales de las ilustraciones no se tocan.         */
   /* ═══════════════════════════════════════════════════════ */
   .mj {
-    --mj-white:         #FAFAF5;          /* encalado */
-    --mj-paper:         #FFFCF6;
-    --mj-paper-2:       #F4EDDA;
-    --mj-cream:         #F0E9D2;          /* adobe */
-    --mj-ink:           #0E0D0B;
-    --mj-indalo:        #C5512E;          /* terracota indalo */
-    --mj-indalo-d:      #8E3A20;
-    --mj-bougainvillea: #C73572;          /* fucsia bougainvillea */
-    --mj-indigo:        #2D4B7A;          /* puerta cobalto */
-    --mj-clay:          #B86E4A;          /* barro */
-    --mj-olive:         #8B8842;          /* olivo */
-    --mj-lime:          #D6FF44;          /* brand */
+    --mj-white:         var(--color-cdm-panel);
+    --mj-paper:         var(--color-cdm-panel);
+    --mj-paper-2:       var(--color-cdm-panel-2);
+    --mj-cream:         var(--color-cdm-panel-2);
+    --mj-suelo:         var(--color-cdm-suelo);
+    --mj-tinta:         var(--color-cdm-texto);
+    --mj-tenue:         var(--color-cdm-tenue);
+    --mj-ink:           var(--color-cdm-regla-2);
+    --mj-indalo:        #D4663F;          /* terracota indalo, aclarada */
+    --mj-indalo-d:      #E08A5F;
+    --mj-bougainvillea: #E0508A;          /* fucsia bougainvillea, aclarada */
+    --mj-indigo:        #5B86C4;          /* puerta cobalto, aclarada */
+    --mj-clay:          #C98156;          /* barro */
+    --mj-olive:         #A8A551;          /* olivo */
+    --mj-lime:          #D6FF44;          /* solo «ok/verificado» */
     --mj-sun:           #FFB833;          /* sol */
-    --mj-shadow:        8px 8px 0 var(--mj-ink);
+    --mj-shadow:        8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--mj-suelo);
+    color: var(--mj-tinta);
   }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .mj :global(.brutal-section-head__title) { color: var(--mj-tinta); }
+  .mj :global(.brutal-section-head__title em) { color: var(--mj-sun); }
+  .mj :global(.brutal-section-head__lead) { color: var(--mj-tenue); }
+  .mj :global(.text-meta) { color: var(--mj-tenue); }
+  .mj :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .mj :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .mj :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .mj-map-frame,
+    .mj-marquee,
+    .mj-final__marquee { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .mj :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--mj-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .mj :global(.cdm-indice__titulo),
+    .mj :global(.cdm-indice__lista),
+    .mj :global(.cdm-indice__coord) { display: none; }
+    .mj :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
+  }
+
+  /* Las dos zonas van en postal: sus casas encaladas y sus trazos negros
+     se perderían sobre el panel oscuro (spec §6.3.4). */
+  .mj-zona__postal { max-width: 230px; margin: 0 auto; }
 
   .mj-pulse {
     display: inline-block;
@@ -1096,10 +1172,10 @@ const jsonLdSchemas = [
     padding-top: 3rem;
     padding-bottom: 0;
     background:
-      radial-gradient(circle at 80% 20%, rgba(199,53,114,0.10), transparent 50%),
-      radial-gradient(circle at 10% 80%, rgba(197,81,46,0.10), transparent 50%),
-      var(--mj-white);
-    border-bottom: 3px solid var(--mj-ink);
+      radial-gradient(circle at 80% 20%, rgba(224,80,138,0.16), transparent 55%),
+      radial-gradient(circle at 10% 80%, rgba(212,102,63,0.14), transparent 55%),
+      var(--mj-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1108,8 +1184,8 @@ const jsonLdSchemas = [
     content: '';
     position: absolute; inset: 0;
     background-image:
-      repeating-linear-gradient(0deg, transparent 0 30px, rgba(14,13,11,0.02) 30px 31px),
-      repeating-linear-gradient(90deg, transparent 0 30px, rgba(14,13,11,0.02) 30px 31px);
+      repeating-linear-gradient(0deg, transparent 0 30px, rgba(230,237,242,0.03) 30px 31px),
+      repeating-linear-gradient(90deg, transparent 0 30px, rgba(230,237,242,0.03) 30px 31px);
     pointer-events: none;
   }
   .mj-hero > * { position: relative; }
@@ -1141,27 +1217,28 @@ const jsonLdSchemas = [
   .mj-hero__title-stamp {
     display: inline-block;
     color: var(--mj-bougainvillea);
-    background: var(--mj-ink);
+    background: var(--color-cdm-panel-2);
     padding: 0 .2em;
     transform: rotate(-1deg);
   }
   .mj-hero__lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--mj-tenue);
     max-width: 54ch;
   }
-  .mj-hero__lead strong { color: var(--mj-ink); font-weight: 700; }
+  .mj-hero__lead strong { color: var(--mj-tinta); font-weight: 700; }
   .mj-hero__lead em { color: var(--mj-bougainvillea); font-style: italic; font-weight: 600; }
+  /* Naranja de acción, no lima: la lima es «ok/verificado» (§3.3.2). */
   .mj-hero__lead-bold {
     display: block;
     margin-top: .75rem;
-    background: var(--mj-lime);
-    color: var(--mj-ink);
+    background: var(--color-cdm-senal);
+    color: #fff4ec;
     padding: .25rem .55rem;
     font-weight: 800;
-    border: 2px solid var(--mj-ink);
-    box-shadow: 3px 3px 0 var(--mj-ink);
+    border: 2px solid var(--color-cdm-senal);
+    box-shadow: 3px 3px 0 var(--color-cdm-regla-2);
   }
 
   .mj-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
@@ -1171,29 +1248,30 @@ const jsonLdSchemas = [
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 1.05rem;
-    border: 2.5px solid var(--mj-ink);
+    border: 2.5px solid var(--color-cdm-regla-2);
     text-decoration: none;
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
     cursor: pointer;
   }
   .mj-btn--primary {
     background: var(--mj-indalo);
-    color: var(--mj-white);
-    box-shadow: 6px 6px 0 var(--mj-ink);
+    color: #1a0a02;
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
   }
   .mj-btn--primary:hover {
     background: var(--mj-bougainvillea);
+    color: #1a0a02;
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--mj-ink);
+    box-shadow: 11px 11px 0 var(--color-cdm-regla-2);
   }
   .mj-btn--ghost {
     background: transparent;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
     box-shadow: 6px 6px 0 var(--mj-bougainvillea);
   }
   .mj-btn--ghost:hover {
-    background: var(--mj-ink);
-    color: var(--mj-lime);
+    background: var(--color-cdm-panel-2);
+    color: var(--mj-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--mj-bougainvillea);
   }
@@ -1205,29 +1283,29 @@ const jsonLdSchemas = [
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
     margin-top: 1.5rem;
-    border: 2.5px solid var(--mj-ink);
-    background: var(--mj-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 768px) { .mj-kpis { grid-template-columns: repeat(4, 1fr); } }
   .mj-kpi {
     background: var(--mj-paper);
     padding: 1.25rem;
     display: flex; flex-direction: column; gap: .35rem;
-    border-right: 2px solid var(--mj-ink);
-    border-bottom: 2px solid var(--mj-ink);
+    border-right: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-kpi:nth-child(2n) { border-right: none; }
   .mj-kpi:nth-last-child(-n+2) { border-bottom: none; }
   @media (min-width: 768px) {
-    .mj-kpi:nth-child(2n)      { border-right: 2px solid var(--mj-ink); }
+    .mj-kpi:nth-child(2n)      { border-right: 1px solid var(--color-cdm-regla); }
     .mj-kpi:nth-child(4n)      { border-right: none; }
-    .mj-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--mj-ink); }
+    .mj-kpi:nth-last-child(-n+2) { border-bottom: 1px solid var(--color-cdm-regla); }
     .mj-kpi:nth-last-child(-n+4) { border-bottom: none; }
   }
-  .mj-kpi--bougainvillea { background: var(--mj-bougainvillea); color: var(--mj-white); }
-  .mj-kpi--indigo        { background: var(--mj-indigo); color: var(--mj-white); }
-  .mj-kpi--indalo        { background: var(--mj-indalo); color: var(--mj-white); }
-  .mj-kpi--ink           { background: var(--mj-ink); color: var(--mj-white); }
+  .mj-kpi--bougainvillea { background: var(--mj-bougainvillea); color: var(--mj-suelo); }
+  .mj-kpi--indigo        { background: var(--mj-indigo); color: var(--mj-suelo); }
+  .mj-kpi--indalo        { background: var(--mj-indalo); color: var(--mj-suelo); }
+  .mj-kpi--ink           { background: var(--color-cdm-panel-2); color: var(--mj-tinta); }
   .mj-kpi--ink .mj-kpi__v { color: var(--mj-lime); }
   .mj-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
   .mj-kpi__v small { font-size: .55em; opacity: .8; }
@@ -1240,10 +1318,12 @@ const jsonLdSchemas = [
     margin: 0 auto;
     filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
   }
+  /* La postal conserva su encalado original (spec §3.3.6): es pieza a mano,
+     no interfaz. Por eso lleva valores literales. */
   .mj-postcard {
-    background: var(--mj-white);
-    border: 3px solid var(--mj-ink);
-    box-shadow: var(--mj-shadow);
+    background: #FAFAF5;
+    border: 3px solid #0E0D0B;
+    box-shadow: 8px 8px 0 var(--color-cdm-regla-2);
     overflow: hidden;
     transform: rotate(1deg);
     transition: transform .35s;
@@ -1253,23 +1333,23 @@ const jsonLdSchemas = [
     display: flex; justify-content: space-between; flex-wrap: wrap;
     gap: .5rem;
     padding: .65rem 1rem;
-    background: var(--mj-indalo);
-    color: var(--mj-white);
+    background: #C5512E;
+    color: #FAFAF5;
     font-size: .58rem;
     letter-spacing: .15em;
-    border-bottom: 2px solid var(--mj-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .mj-postcard__profile {
     width: 100%;
     aspect-ratio: 540 / 220;
-    border-bottom: 2px solid var(--mj-ink);
+    border-bottom: 2px solid #0E0D0B;
     overflow: hidden;
   }
   .mj-postcard__img-wrap {
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    border-bottom: 2px solid var(--mj-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .mj-postcard__img {
     width: 100%; height: 100%;
@@ -1288,37 +1368,37 @@ const jsonLdSchemas = [
   .mj-postcard__tag {
     position: absolute;
     bottom: 12px; left: 12px;
-    background: var(--mj-white);
-    color: var(--mj-ink);
+    background: #FAFAF5;
+    color: #0E0D0B;
     padding: .4rem .75rem;
     font-size: .65rem;
     font-weight: 800;
     letter-spacing: .2em;
-    border: 2px solid var(--mj-ink);
-    box-shadow: 3px 3px 0 var(--mj-indalo);
+    border: 2px solid #0E0D0B;
+    box-shadow: 3px 3px 0 #C5512E;
     transform: rotate(-2deg);
   }
   .mj-postcard__flags {
     padding: .85rem 1rem;
-    background: var(--mj-paper-2);
+    background: #F4EDDA;
     display: flex; align-items: center; gap: .75rem;
     flex-wrap: wrap;
   }
-  .mj-postcard__flags-lbl { font-size: .58rem; letter-spacing: .2em; color: var(--mj-indalo-d); font-weight: 800; }
+  .mj-postcard__flags-lbl { font-size: .58rem; letter-spacing: .2em; color: #8E3A20; font-weight: 800; }
   .mj-postcard__flags-list { display: flex; gap: .4rem; flex-wrap: wrap; }
   .mj-flag {
     display: inline-block;
-    border: 1.5px solid var(--mj-ink);
+    border: 1.5px solid #0E0D0B;
     line-height: 0;
   }
 
   /* Marquee */
   .mj-marquee {
     background: var(--mj-bougainvillea);
-    color: var(--mj-white);
+    color: var(--mj-suelo);
     overflow: hidden;
     padding: .9rem 0;
-    border-top: 3px solid var(--mj-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .mj-marquee__track {
     display: flex; gap: 3rem; width: max-content;
@@ -1338,9 +1418,9 @@ const jsonLdSchemas = [
   /* INDALO SECTION                                          */
   /* ═══════════════════════════════════════════════════════ */
   .mj-indalo-section {
-    background: var(--mj-cream);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1371,7 +1451,7 @@ const jsonLdSchemas = [
   .mj-indalo-lead {
     font-size: 1.05rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--mj-tenue);
     margin-bottom: 1.5rem;
     max-width: 54ch;
   }
@@ -1382,24 +1462,24 @@ const jsonLdSchemas = [
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2px solid var(--mj-ink);
-    background: var(--mj-white);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--mj-paper);
   }
   @media (min-width: 640px) { .mj-indalo-facts { grid-template-columns: 1fr 1fr; } }
   .mj-indalo-facts li {
     padding: .85rem 1rem;
-    border-bottom: 1px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     display: flex; flex-direction: column; gap: 2px;
   }
   @media (min-width: 640px) {
-    .mj-indalo-facts li:nth-child(odd) { border-right: 1px solid var(--mj-ink); }
+    .mj-indalo-facts li:nth-child(odd) { border-right: 1px solid var(--color-cdm-regla); }
     .mj-indalo-facts li:nth-last-child(-n+2) { border-bottom: none; }
   }
   @media (max-width: 639px) {
     .mj-indalo-facts li:last-child { border-bottom: none; }
   }
   .mj-indalo-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--mj-bougainvillea); font-weight: 800; }
-  .mj-indalo-facts__v { font-size: .9rem; color: var(--mj-ink); font-weight: 600; line-height: 1.35; }
+  .mj-indalo-facts__v { font-size: .9rem; color: var(--mj-tinta); font-weight: 600; line-height: 1.35; }
 
   .mj-indalo-r {
     max-width: 360px;
@@ -1418,9 +1498,9 @@ const jsonLdSchemas = [
   /* 2 ZONAS                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .mj-zonas-section {
-    background: var(--mj-white);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-zonas {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1431,8 +1511,8 @@ const jsonLdSchemas = [
   @media (min-width: 768px) { .mj-zonas { grid-template-columns: 1fr 1fr; gap: 2rem; } }
   .mj-zona {
     position: relative;
-    background: var(--mj-white);
-    border: 3px solid var(--mj-ink);
+    background: var(--mj-paper);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--mj-shadow);
     padding: 1.75rem;
     display: flex; flex-direction: column; gap: .85rem;
@@ -1448,8 +1528,8 @@ const jsonLdSchemas = [
     border-bottom: 2px dashed currentColor;
   }
   .mj-zona__code {
-    background: var(--mj-ink);
-    color: var(--mj-lime);
+    background: var(--color-cdm-panel-2);
+    color: var(--mj-sun);
     width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
@@ -1465,7 +1545,6 @@ const jsonLdSchemas = [
   }
   .mj-zona__icon {
     width: 100%;
-    max-width: 200px;
     aspect-ratio: 1;
     margin: 0 auto;
   }
@@ -1473,7 +1552,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.6rem, 3vw, 2rem);
     line-height: 1;
     letter-spacing: -.025em;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
     margin: .5rem 0 0;
     text-align: center;
   }
@@ -1487,7 +1566,7 @@ const jsonLdSchemas = [
   .mj-zona__desc {
     font-size: .92rem;
     line-height: 1.5;
-    color: var(--brutal-text-secondary);
+    color: var(--mj-tenue);
   }
   .mj-zona__tags {
     list-style: none; padding: 0; margin: 0;
@@ -1498,7 +1577,7 @@ const jsonLdSchemas = [
   .mj-zona__tags li {
     font-family: var(--font-mono);
     font-size: .72rem;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
     letter-spacing: .05em;
   }
 
@@ -1506,9 +1585,9 @@ const jsonLdSchemas = [
   /* IDIOMAS                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .mj-idiomas-section {
-    background: var(--mj-paper-2);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-idiomas {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1519,9 +1598,9 @@ const jsonLdSchemas = [
   @media (min-width: 640px)  { .mj-idiomas { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .mj-idiomas { grid-template-columns: repeat(4, 1fr); } }
   .mj-idioma {
-    background: var(--mj-white);
-    border: 2.5px solid var(--mj-ink);
-    box-shadow: 6px 6px 0 var(--mj-ink);
+    background: var(--mj-paper);
+    border: 1px solid var(--color-cdm-regla-2);
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
     transition: transform .25s, box-shadow .25s;
   }
   .mj-idioma:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--mj-bougainvillea); }
@@ -1532,13 +1611,13 @@ const jsonLdSchemas = [
   .mj-idioma__head {
     display: flex; align-items: center; gap: .85rem;
     padding: 1rem 1.25rem;
-    border-bottom: 2px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     background: var(--mj-idioma-tint);
   }
   .mj-idioma__flag {
     width: 50px;
     flex-shrink: 0;
-    border: 1.5px solid var(--mj-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     line-height: 0;
   }
   .mj-idioma__head-r { display: flex; flex-direction: column; gap: 2px; }
@@ -1553,7 +1632,7 @@ const jsonLdSchemas = [
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 1rem;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
   }
   .mj-idioma__body {
     padding: 1rem 1.25rem;
@@ -1562,19 +1641,19 @@ const jsonLdSchemas = [
   .mj-idioma__row {
     display: flex; flex-direction: column; gap: 2px;
     padding-bottom: .5rem;
-    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    border-bottom: 1px dashed rgba(230,237,242,0.14);
   }
   .mj-idioma__row:last-child { border-bottom: none; padding-bottom: 0; }
   .mj-idioma__k { font-size: .55rem; letter-spacing: .2em; color: var(--mj-indalo); font-weight: 800; }
-  .mj-idioma__v { font-size: .85rem; color: var(--mj-ink); line-height: 1.35; }
+  .mj-idioma__v { font-size: .85rem; color: var(--mj-tinta); line-height: 1.35; }
   .mj-idioma__keyword { font-family: var(--font-mono); color: var(--mj-indigo); font-weight: 700; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* MAPA                                                    */
   /* ═══════════════════════════════════════════════════════ */
   .mj-map-section {
-    background: var(--mj-cream);
-    border-bottom: 3px solid var(--mj-ink);
+    background: var(--mj-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-map-head { padding: 4rem 0 2rem; }
   .mj-map-head__inner {
@@ -1594,9 +1673,9 @@ const jsonLdSchemas = [
   .mj-map-title em { color: var(--mj-bougainvillea); }
   .mj-map-coords {
     background: var(--mj-indalo);
-    color: var(--mj-white);
+    color: var(--mj-suelo);
     padding: 1rem 1.25rem;
-    border: 2px solid var(--mj-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: 5px 5px 0 var(--mj-bougainvillea);
     display: flex; flex-direction: column; gap: .35rem;
     font-size: .7rem;
@@ -1605,9 +1684,9 @@ const jsonLdSchemas = [
 
   .mj-map-frame {
     position: relative;
-    border-top: 3px solid var(--mj-ink);
-    border-bottom: 3px solid var(--mj-ink);
-    background: var(--mj-ink);
+    border-top: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background: var(--color-cdm-panel-2);
   }
   .mj-map-bouga {
     position: absolute;
@@ -1630,9 +1709,9 @@ const jsonLdSchemas = [
   /* SECTORES                                                */
   /* ═══════════════════════════════════════════════════════ */
   .mj-sec-section {
-    background: var(--mj-white);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-sec {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1643,8 +1722,8 @@ const jsonLdSchemas = [
   @media (min-width: 768px)  { .mj-sec { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .mj-sec { grid-template-columns: repeat(3, 1fr); } }
   .mj-sec__card {
-    background: var(--mj-white);
-    border: 2.5px solid var(--mj-ink);
+    background: var(--mj-paper);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--mj-shadow);
     padding: 1.5rem;
     display: flex; flex-direction: column; gap: .75rem;
@@ -1677,7 +1756,7 @@ const jsonLdSchemas = [
   }
   .mj-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
   .mj-sec__stat-box {
-    background: var(--mj-ink); color: var(--mj-white);
+    background: var(--color-cdm-panel-2); color: var(--mj-tinta);
     padding: .35rem .65rem;
     display: flex; flex-direction: column; gap: 0;
     border: 1.5px solid currentColor;
@@ -1689,13 +1768,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.15rem, 2vw, 1.4rem);
     line-height: 1.1;
     letter-spacing: -.02em;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
     margin: 0;
   }
   .mj-sec__desc {
     font-size: .88rem;
     line-height: 1.5;
-    color: var(--brutal-text-secondary);
+    color: var(--mj-tenue);
     flex: 1;
   }
   .mj-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
@@ -1703,12 +1782,12 @@ const jsonLdSchemas = [
     display: flex; align-items: flex-start; gap: .35rem;
     font-size: .78rem;
     line-height: 1.35;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
   }
   .mj-sec__tag span { color: currentColor; font-weight: 800; }
   .mj-sec__foot {
     padding-top: .65rem;
-    border-top: 2px solid var(--mj-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .mj-sec__cta {
     font-family: var(--font-mono);
@@ -1726,10 +1805,10 @@ const jsonLdSchemas = [
   /* PROCESO                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .mj-proc-section {
-    background: var(--mj-ink);
-    color: var(--mj-white);
+    background: var(--color-cdm-panel-2);
+    color: var(--mj-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1751,7 +1830,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .mj-proc { grid-template-columns: repeat(4, 1fr); } }
   .mj-proc__step {
     background: rgba(250,250,245,0.05);
-    border: 2px solid var(--mj-white);
+    border: 1px solid rgba(250,250,245,0.35);
     padding: 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .25s, transform .25s;
@@ -1764,7 +1843,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.1rem, 1.8vw, 1.3rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--mj-white);
+    color: var(--mj-tinta);
     margin: .25rem 0 0;
   }
   .mj-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(250,250,245,0.75); flex: 1; }
@@ -1781,26 +1860,26 @@ const jsonLdSchemas = [
   /* DIFERENCIALES                                           */
   /* ═══════════════════════════════════════════════════════ */
   .mj-dif-section {
-    background: var(--mj-white);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-dif {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
-    border: 2px solid var(--mj-ink);
+    border: 1px solid var(--color-cdm-regla-2);
   }
   @media (min-width: 768px) { .mj-dif { grid-template-columns: 1fr 1fr; } }
   .mj-dif__item {
     padding: 1.75rem 1.5rem;
-    border-bottom: 1px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .2s;
   }
   @media (min-width: 768px) {
-    .mj-dif__item:nth-child(odd) { border-right: 1px solid var(--mj-ink); }
+    .mj-dif__item:nth-child(odd) { border-right: 1px solid var(--color-cdm-regla); }
     .mj-dif__item:nth-last-child(-n+2) { border-bottom: none; }
   }
   @media (max-width: 767px) {
@@ -1808,31 +1887,34 @@ const jsonLdSchemas = [
   }
   .mj-dif__item--0 { background: var(--mj-paper-2); }
   .mj-dif__item--1 { background: var(--mj-paper); }
-  .mj-dif__item--2 { background: var(--mj-cream); }
+  .mj-dif__item--2 { background: var(--mj-paper-2); }
   .mj-dif__item--3 { background: var(--mj-paper); }
-  .mj-dif__item:hover { background: var(--mj-lime); }
+  /* El hover era lima; la lima es ahora «ok/verificado» (§3.3.2). */
+  .mj-dif__item:hover { background: var(--color-cdm-regla); }
   .mj-dif__num { font-size: .85rem; color: var(--mj-bougainvillea); font-weight: 800; letter-spacing: .15em; }
   .mj-dif__t {
     font-size: clamp(1.3rem, 2.2vw, 1.65rem);
     line-height: 1.05;
     letter-spacing: -.025em;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
     margin: 0;
   }
-  .mj-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+  .mj-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--mj-tenue); margin: 0; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* TESTIMONIOS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .mj-quote-section {
-    background: var(--mj-paper-2);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
+  /* La cita grande conserva su adobe claro: es el único acento de papel de
+     la sección, como una postal. Por eso su tinta sigue siendo oscura. */
   .mj-pull {
     position: relative;
-    background: var(--mj-cream);
-    border: 3px solid var(--mj-ink);
+    background: #F0E9D2;
+    border: 3px solid #0E0D0B;
     box-shadow: var(--mj-shadow);
     padding: 3rem 2rem 2rem;
     margin: 2rem 0;
@@ -1850,20 +1932,20 @@ const jsonLdSchemas = [
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.3;
     margin: 0 0 1.5rem;
-    color: var(--mj-ink);
+    color: #0E0D0B;
     max-width: 56ch;
   }
-  .mj-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--mj-ink); }
+  .mj-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed rgba(14,13,11,0.35); }
   .mj-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--mj-indalo); color: var(--mj-white);
+    background: #C5512E; color: #FAFAF5;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-size: 1.35rem; font-weight: 800;
     border-radius: 50%;
   }
   .mj-pull__cap div { display: flex; flex-direction: column; }
-  .mj-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--mj-ink); }
+  .mj-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: #0E0D0B; }
   .mj-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
 
   .mj-quotes {
@@ -1875,17 +1957,19 @@ const jsonLdSchemas = [
   @media (min-width: 768px) { .mj-quotes { grid-template-columns: repeat(3, 1fr); } }
   .mj-quote {
     position: relative;
-    background: var(--mj-white);
-    border: 2px solid var(--mj-ink);
-    box-shadow: 5px 5px 0 var(--mj-ink);
+    background: var(--mj-paper);
+    border: 1px solid var(--color-cdm-regla-2);
+    box-shadow: 5px 5px 0 var(--color-cdm-regla-2);
     padding: 1.75rem 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: 1rem;
     transition: transform .25s;
   }
   .mj-quote:hover { transform: translateY(-3px); }
-  .mj-quote--0 { background: var(--mj-white); }
-  .mj-quote--1 { background: var(--mj-paper-2); }
-  .mj-quote--2 { background: var(--mj-cream); }
+  /* Las tres en panel, con un filete de color cada una: mezclar claras y
+     oscuras rompía la sección. El acento claro es la cita de arriba. */
+  .mj-quote--0 { border-top: 3px solid var(--mj-indalo); }
+  .mj-quote--1 { border-top: 3px solid var(--mj-bougainvillea); }
+  .mj-quote--2 { border-top: 3px solid var(--mj-indigo); }
   .mj-quote__mark {
     position: absolute;
     top: -8px; left: 14px;
@@ -1895,11 +1979,11 @@ const jsonLdSchemas = [
     color: var(--mj-indalo);
     opacity: .45;
   }
-  .mj-quote p { font-size: .92rem; line-height: 1.5; color: var(--mj-ink); flex: 1; margin: 0; }
-  .mj-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--mj-ink); }
+  .mj-quote p { font-size: .92rem; line-height: 1.5; color: var(--mj-tinta); flex: 1; margin: 0; }
+  .mj-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1px solid var(--color-cdm-regla); }
   .mj-quote__avatar {
     width: 36px; height: 36px;
-    background: var(--mj-bougainvillea); color: var(--mj-white);
+    background: var(--mj-bougainvillea); color: var(--mj-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -1914,15 +1998,15 @@ const jsonLdSchemas = [
   /* FAQ                                                     */
   /* ═══════════════════════════════════════════════════════ */
   .mj-faq-section {
-    background: var(--mj-white);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-faq {
     list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--mj-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
   }
-  .mj-faq__item { border-bottom: 2px solid var(--mj-ink); }
+  .mj-faq__item { border-bottom: 1px solid var(--color-cdm-regla); }
   .mj-faq__det summary { list-style: none; cursor: pointer; }
   .mj-faq__det summary::-webkit-details-marker { display: none; }
   .mj-faq__sum {
@@ -1933,28 +2017,28 @@ const jsonLdSchemas = [
     padding: 1.5rem 0;
     transition: padding .2s, background .2s;
   }
-  .mj-faq__sum:hover { padding-inline: 1rem; background: var(--mj-paper-2); }
+  .mj-faq__sum:hover { padding-inline: 1rem; background: var(--mj-paper); }
   .mj-faq__num { font-size: 1rem; font-weight: 800; color: var(--mj-bougainvillea); letter-spacing: .1em; }
   .mj-faq__q {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--mj-ink);
+    color: var(--mj-tinta);
     font-weight: 700;
   }
   .mj-faq__toggle {
     width: 40px; height: 40px;
-    border: 2px solid var(--mj-ink);
-    background: var(--mj-white);
-    color: var(--mj-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--mj-paper);
+    color: var(--mj-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s, color .2s;
   }
-  .mj-faq__det[open] .mj-faq__toggle { transform: rotate(180deg); background: var(--mj-indalo); color: var(--mj-white); }
+  .mj-faq__det[open] .mj-faq__toggle { transform: rotate(180deg); background: var(--mj-indalo); color: var(--mj-suelo); }
   .mj-faq__ans {
     padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
+    color: var(--mj-tenue);
     font-size: .98rem;
     line-height: 1.55;
     max-width: 70ch;
@@ -1968,16 +2052,16 @@ const jsonLdSchemas = [
   /* PUEBLOS VECINOS                                         */
   /* ═══════════════════════════════════════════════════════ */
   .mj-vecinos-section {
-    background: var(--mj-paper-2);
+    background: var(--mj-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--mj-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .mj-vecinos {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid; gap: 0;
     grid-template-columns: 1fr;
-    border: 2px solid var(--mj-ink);
-    background: var(--mj-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 640px)  { .mj-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
   @media (min-width: 1024px) { .mj-vecinos { grid-template-columns: repeat(4, 1fr); } }
@@ -1987,8 +2071,8 @@ const jsonLdSchemas = [
     grid-template-rows: auto 1fr auto;
     gap: .35rem;
     padding: 1.5rem;
-    background: var(--mj-white);
-    color: var(--mj-ink);
+    background: var(--mj-paper);
+    color: var(--mj-tinta);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
@@ -1998,20 +2082,20 @@ const jsonLdSchemas = [
   .mj-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .mj-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .mj-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--mj-bougainvillea); font-size: 1.3rem; transition: transform .25s; }
-  .mj-vecino:hover { background: var(--mj-indalo); color: var(--mj-white); }
+  .mj-vecino:hover { background: var(--mj-indalo); color: var(--mj-suelo); }
   .mj-vecino:hover .mj-vecino__sub, .mj-vecino:hover .mj-vecino__n { opacity: .85; }
-  .mj-vecino:hover .mj-vecino__arrow { color: var(--mj-white); transform: translateX(4px); }
-  .mj-vecino--1:hover { background: var(--mj-bougainvillea); color: var(--mj-white); }
-  .mj-vecino--2:hover { background: var(--mj-indigo); color: var(--mj-white); }
-  .mj-vecino--3:hover { background: var(--mj-ink); color: var(--mj-lime); }
-  .mj-vecino--3:hover .mj-vecino__arrow { color: var(--mj-lime); }
+  .mj-vecino:hover .mj-vecino__arrow { color: var(--mj-suelo); transform: translateX(4px); }
+  .mj-vecino--1:hover { background: var(--mj-bougainvillea); color: var(--mj-suelo); }
+  .mj-vecino--2:hover { background: var(--mj-indigo); color: var(--mj-suelo); }
+  .mj-vecino--3:hover { background: var(--color-cdm-panel-2); color: var(--mj-sun); }
+  .mj-vecino--3:hover .mj-vecino__arrow { color: var(--mj-sun); }
 
   /* ═══════════════════════════════════════════════════════ */
   /* CTA FINAL                                               */
   /* ═══════════════════════════════════════════════════════ */
   .mj-final {
-    background: var(--mj-ink);
-    color: var(--mj-white);
+    background: var(--color-cdm-panel);
+    color: var(--mj-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -2036,7 +2120,7 @@ const jsonLdSchemas = [
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--mj-white);
+    color: var(--mj-tinta);
     margin: 1rem 0;
   }
   .mj-final__title em { color: var(--mj-bougainvillea); font-style: italic; display: block; }
@@ -2059,22 +2143,22 @@ const jsonLdSchemas = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
   }
   .mj-final__btn--primary {
-    background: var(--mj-indalo); color: var(--mj-white); border-color: var(--mj-indalo);
+    background: var(--mj-indalo); color: #1a0a02; border-color: var(--mj-indalo);
     box-shadow: 6px 6px 0 var(--mj-bougainvillea);
   }
   .mj-final__btn--primary:hover {
-    background: var(--mj-bougainvillea); color: var(--mj-white); border-color: var(--mj-bougainvillea);
+    background: var(--mj-bougainvillea); color: #1a0a02; border-color: var(--mj-bougainvillea);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--mj-indalo);
   }
   .mj-final__btn--ghost {
-    background: transparent; color: var(--mj-white); border-color: var(--mj-white);
-    box-shadow: 6px 6px 0 var(--mj-white);
+    background: transparent; color: var(--mj-tinta); border-color: var(--color-cdm-regla-2);
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
   }
   .mj-final__btn--ghost:hover {
-    background: var(--mj-white); color: var(--mj-ink);
+    background: var(--mj-tinta); color: var(--mj-suelo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--mj-white);
+    box-shadow: 11px 11px 0 var(--color-cdm-regla-2);
   }
   .mj-final__trust {
     display: flex; flex-wrap: wrap;
@@ -2093,10 +2177,10 @@ const jsonLdSchemas = [
 
   .mj-final__marquee {
     background: var(--mj-bougainvillea);
-    color: var(--mj-white);
+    color: var(--mj-suelo);
     overflow: hidden;
     padding: .85rem 0;
-    border-top: 3px solid var(--mj-ink);
+    border-top: 1px solid var(--color-cdm-regla);
     margin: 0 -1.5rem;
   }
   .mj-final__marquee-track {
