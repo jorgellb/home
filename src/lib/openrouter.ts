@@ -1,19 +1,27 @@
-import { sseToText } from './sse-stream';
+import { sseToText, pareceRazonamiento } from './sse-stream';
 import { openrouterModel } from './env';
 
 /* Llamada a OpenRouter en streaming con CADENA DE MODELOS GRATIS y fallback:
-   si un modelo está saturado (429) o falla, prueba el siguiente. Así el demo
-   sigue funcionando aunque un modelo gratis concreto esté rate-limited. */
+   si un modelo está saturado (429), falla, o devuelve su propio razonamiento
+   en lugar de la respuesta, prueba el siguiente. Así el demo sigue funcionando
+   aunque un modelo gratis concreto esté rate-limited. */
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const SITE_URL = 'https://platanitorico.com';
 
+/* Caracteres que se leen antes de dejar pasar la respuesta al navegador: lo
+   justo para detectar una deliberación filtrada sin que se note la espera. */
+const MUESTRA_CONTROL = 320;
+
 /* Modelos gratuitos capaces y multilingües (verificados en la API de OpenRouter).
-   Se prueban en orden hasta que uno responda. */
+   Se prueban en orden hasta que uno responda.
+   NOTA (16-09-2026): `openai/gpt-oss-120b:free` se retiró de la cadena. Escribe
+   en canales (analysis/commentary/final) y varios proveedores de OpenRouter
+   sirven el canal de análisis como contenido normal: el visitante veía el
+   razonamiento del modelo y las instrucciones internas. */
 export const FREE_MODELS = [
   'meta-llama/llama-3.3-70b-instruct:free',
   'qwen/qwen3-next-80b-a3b-instruct:free',
-  'openai/gpt-oss-120b:free',
   'google/gemma-4-31b-it:free',
   'nvidia/nemotron-3-super-120b-a12b:free',
 ];
@@ -33,6 +41,38 @@ interface Opts {
   messages: ChatMsg[];
   temperature?: number;
   maxTokens?: number;
+}
+
+/** Lee el principio del stream para poder inspeccionarlo antes de servirlo.
+ *  Devuelve lo leído y un stream que lo reproduce seguido del resto. */
+async function leerInicio(texto: ReadableStream<Uint8Array>, minimo: number): Promise<{ inicio: string; completo: ReadableStream<Uint8Array> }> {
+  const reader = texto.getReader();
+  const decoder = new TextDecoder();
+  const encoder = new TextEncoder();
+  let inicio = '';
+  let agotado = false;
+
+  while (inicio.length < minimo) {
+    const { done, value } = await reader.read();
+    if (done) { agotado = true; break; }
+    inicio += decoder.decode(value, { stream: true });
+  }
+
+  const completo = new ReadableStream<Uint8Array>({
+    start(controller) {
+      if (inicio) controller.enqueue(encoder.encode(inicio));
+      if (agotado) controller.close();
+    },
+    async pull(controller) {
+      if (agotado) return;
+      const { done, value } = await reader.read();
+      if (done) { agotado = true; controller.close(); return; }
+      controller.enqueue(value);
+    },
+    cancel() { reader.cancel().catch(() => { /* noop */ }); },
+  });
+
+  return { inicio, completo };
 }
 
 /** Devuelve una Response: stream de texto (200) o JSON de error (502). */
@@ -60,6 +100,8 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
           temperature: opts.temperature ?? 0.7,
           max_tokens: opts.maxTokens ?? 1200,
           stream: true,
+          // Que el proveedor no mande el razonamiento por ningún canal.
+          reasoning: { exclude: true },
           messages: opts.messages,
         }),
       });
@@ -69,7 +111,26 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
     }
 
     if (res.ok && res.body) {
-      return new Response(sseToText(res.body), {
+      const { inicio, completo } = await leerInicio(sseToText(res.body), MUESTRA_CONTROL);
+
+      // El modelo ha soltado su deliberación en vez de la respuesta: no se
+      // sirve (llevaría dentro las instrucciones internas) y se prueba otro.
+      if (pareceRazonamiento(inicio)) {
+        console.warn(`[openrouter] ${model} devolvió su razonamiento; se descarta y se prueba el siguiente`);
+        completo.cancel().catch(() => { /* noop */ });
+        lastStatus = 200;
+        lastDetail = 'razonamiento filtrado';
+        continue;
+      }
+
+      if (!inicio.trim()) {
+        lastStatus = 200;
+        lastDetail = 'respuesta vacía';
+        completo.cancel().catch(() => { /* noop */ });
+        continue;
+      }
+
+      return new Response(completo, {
         headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Accel-Buffering': 'no' },
       });
     }
@@ -110,6 +171,7 @@ export async function chatText(
           model,
           temperature: opts.temperature ?? 0.5,
           max_tokens: opts.maxTokens ?? 1500,
+          reasoning: { exclude: true },
           messages: opts.messages,
         }),
       });
@@ -118,7 +180,14 @@ export async function chatText(
     if (res.ok) {
       const data = await res.json().catch(() => null);
       const text = data?.choices?.[0]?.message?.content;
-      if (typeof text === 'string' && text.trim()) return { ok: true, text };
+      if (typeof text === 'string' && text.trim()) {
+        if (pareceRazonamiento(text)) {
+          console.warn(`[openrouter] (json) ${model} devolvió su razonamiento; se descarta`);
+          lastStatus = 200; lastDetail = 'razonamiento filtrado';
+          continue;
+        }
+        return { ok: true, text };
+      }
       lastStatus = res.status; lastDetail = 'respuesta sin contenido';
       continue;
     }

@@ -150,6 +150,8 @@ export function TestimonialsCard({
                                         src={item.image}
                                         alt={item.title}
                                         className="w-full h-full object-cover"
+                                        loading="lazy"
+                                        decoding="async"
                                         draggable={false}
                                     />
                                 </motion.div>

@@ -9,6 +9,11 @@ export interface PerspectiveCarouselItem {
   src: string;
   title: string;
   alt?: string;
+  /** Formatos modernos para <picture>: el navegador elige el primero que entienda. */
+  sources?: { type: string; srcSet: string }[];
+  /** Dimensiones reales del archivo, para reservar el hueco y evitar saltos. */
+  width?: number;
+  height?: number;
 }
 
 export interface PerspectiveCarouselProps
@@ -165,16 +170,26 @@ export function PerspectiveCarousel({
                     className={cn("w-full cursor-pointer", aspectClassName)}
                     onClick={() => selectSlide(index)}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={item.src}
-                      alt={item.alt ?? item.title}
-                      draggable={false}
-                      className={cn(
-                        "h-full w-full select-none rounded-lg object-cover shadow-xl",
-                        imageClassName
-                      )}
-                    />
+                    {/* Solo la primera diapositiva se carga de inmediato; el resto,
+                        al acercarse. eslint-disable-next-line @next/next/no-img-element */}
+                    <picture className="block h-full w-full">
+                      {(item.sources ?? []).map((fuente) => (
+                        <source key={fuente.type} type={fuente.type} srcSet={fuente.srcSet} />
+                      ))}
+                      <img
+                        src={item.src}
+                        alt={item.alt ?? item.title}
+                        width={item.width}
+                        height={item.height}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        draggable={false}
+                        className={cn(
+                          "h-full w-full select-none rounded-lg object-cover shadow-xl",
+                          imageClassName
+                        )}
+                      />
+                    </picture>
                   </button>
 
                   <motion.p

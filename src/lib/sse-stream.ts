@@ -40,3 +40,52 @@ export function sseToText(upstreamBody: ReadableStream<Uint8Array>): ReadableStr
     cancel() { reader.cancel().catch(() => { /* noop */ }); },
   });
 }
+
+/* ── Detección de razonamiento filtrado ──────────────────────────────────
+   Algunos modelos (gpt-oss y familia) escriben primero su deliberación y
+   luego la respuesta, y ciertos proveedores la sirven como contenido normal.
+   No se puede "recortar": en las muestras reales no hay ninguna marca que
+   separe ambas partes, y la respuesta buena puede aparecer en medio, repetida
+   o entrecomillada. Por eso no se intenta reconstruir nada: se detecta y se
+   descarta la respuesta entera para probar con otro modelo. */
+
+/** Marcas inequívocas de andamiaje interno, en cualquier posición. */
+const MARCAS = [
+  'assistantfinal',
+  '<|channel|>',
+  '<|message|>',
+  '<think>',
+  '</think>',
+];
+
+/** Arranques típicos de deliberación en inglés (el asistente responde en el
+    idioma del usuario, así que un comienzo así ya es anómalo de por sí). */
+const ARRANQUES = [
+  /^\s*(okay|ok|alright|hmm|so)\b[,.]?\s+(the|we|i|let|this|user)\b/i,
+  /^\s*(the user|we need to|i need to|let me|first,?\s+i|we should|i should)\b/i,
+  /^\s*(analysis|commentary)\b\s*[:.]/i,
+];
+
+/** Frases que delatan que está razonando sobre sus propias instrucciones. */
+const REFERENCIAS_AL_PROMPT = [
+  /\b(the|my) (system )?(prompt|guidelines|instructions|rules)\b/i,
+  /\bper the (rules|guidelines|instructions)\b/i,
+  /\bcheck the (guidelines|rules|services|pricing)\b/i,
+];
+
+/**
+ * ¿La respuesta trae el razonamiento del modelo en lugar de (o además de) la
+ * respuesta? Se mira solo el principio para poder decidir en streaming.
+ */
+export function pareceRazonamiento(texto: string): boolean {
+  if (!texto.trim()) return false;
+  const inicio = texto.slice(0, 400);
+
+  if (MARCAS.some((m) => texto.toLowerCase().includes(m))) return true;
+  if (ARRANQUES.some((r) => r.test(inicio))) return true;
+  // Referencias al propio prompt: solo cuentan si además arranca en inglés,
+  // para no marcar una respuesta en español que mencione la palabra "rules".
+  if (REFERENCIAS_AL_PROMPT.some((r) => r.test(inicio)) && /^[\sA-Za-z0-9'",.:;()-]{40,}/.test(inicio)) return true;
+
+  return false;
+}

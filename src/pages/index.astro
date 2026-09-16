@@ -415,7 +415,21 @@ const registroPlan360: LineaRegistro[] = [
         <div class="h-carrusel">
           <PerspectiveCarousel
             client:visible
-            items={casos.map((c) => ({ src: c.image, title: `${c.cliente} · ${c.result}`, alt: `${c.cliente}, ${c.sector}` }))}
+            items={casos.map((c) => {
+              // Versiones ligeras a 680 px (npm run optimizar:imagenes); el JPEG queda de respaldo.
+              const base = c.image.replace(/\.jpe?g$/, '');
+              return {
+                src: c.image,
+                title: `${c.cliente} · ${c.result}`,
+                alt: `${c.cliente}, ${c.sector}`,
+                sources: [
+                  { type: 'image/avif', srcSet: `${base}-680.avif` },
+                  { type: 'image/webp', srcSet: `${base}-680.webp` },
+                ],
+                width: 680,
+                height: 425,
+              };
+            })}
             slideWidth={340}
             rotationStep={42}
             inactiveScale={0.8}

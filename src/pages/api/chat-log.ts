@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { Resend } from 'resend';
 import { rateLimit, clientIp } from '../../lib/rate-limit';
 import { saveConversation, claimNotify, validCid, type StoredMsg } from '../../lib/chatlog';
+import { pareceRazonamiento } from '../../lib/sse-stream';
 import { bump } from '../../lib/stats';
 import { resendApiKey } from '../../lib/env';
 
@@ -50,6 +51,10 @@ export const POST: APIRoute = async ({ request }) => {
     .filter((m): m is StoredMsg => !!m && typeof (m as StoredMsg).content === 'string' && ((m as StoredMsg).role === 'user' || (m as StoredMsg).role === 'assistant'))
     .map((m) => ({ role: m.role, content: m.content.trim().slice(0, MAX_LEN) }))
     .filter((m) => m.content)
+    // Red de seguridad: si a un cliente antiguo (o a un modelo nuevo) se le
+    // escapa el razonamiento del modelo, no se guarda ni se envía por email.
+    // Lleva dentro las instrucciones internas del asistente.
+    .filter((m) => !(m.role === 'assistant' && pareceRazonamiento(m.content)))
     .slice(-MAX_MSGS);
 
   // Necesita al menos un mensaje del usuario para que valga la pena guardar.
