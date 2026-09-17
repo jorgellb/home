@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CAJA_RADAR, COORDENADAS, COSTA, proyectar, puntosRadar, trazadoCosta } from './cobertura';
+import { CAJA_RADAR, COORDENADAS, COSTA, dentroDeCaja, proyectar, puntosRadar, trazadoCosta } from './cobertura';
 import { pueblosIT } from './servicios-it';
 
 function lonCostaEn(lat: number): number {
@@ -15,6 +15,19 @@ describe('proyectar', () => {
   it('lleva las esquinas de la caja a las esquinas del viewBox', () => {
     expect(proyectar(CAJA_RADAR.latMax, CAJA_RADAR.lonMin)).toEqual({ x: 0, y: 0 });
     expect(proyectar(CAJA_RADAR.latMin, CAJA_RADAR.lonMax)).toEqual({ x: CAJA_RADAR.ancho, y: CAJA_RADAR.alto });
+  });
+});
+
+describe('dentroDeCaja', () => {
+  it('acepta los pueblos del radar y los bordes de la caja', () => {
+    for (const [slug, [lat, lon]] of Object.entries(COORDENADAS)) expect(dentroDeCaja(lat, lon), slug).toBe(true);
+    expect(dentroDeCaja(CAJA_RADAR.latMin, CAJA_RADAR.lonMin)).toBe(true);
+    expect(dentroDeCaja(CAJA_RADAR.latMax, CAJA_RADAR.lonMax)).toBe(true);
+  });
+
+  it('deja fuera lo que no cabe en el mapa: Serón al oeste, Almería capital al sur', () => {
+    expect(dentroDeCaja(37.344, -2.509)).toBe(false);
+    expect(dentroDeCaja(36.8381, -2.4597)).toBe(false);
   });
 });
 

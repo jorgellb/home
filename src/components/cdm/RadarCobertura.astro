@@ -2,16 +2,28 @@
 /* Radar de cobertura con visita el mismo día. Dato real: son los pueblos
    del servicio IT, en sus coordenadas, sobre la costa del Levante. */
 import Panel from './Panel.astro';
-import { CAJA_RADAR, puntosRadar, trazadoCosta, type PuntoRadar } from '../../data/cobertura';
+import { CAJA_RADAR, dentroDeCaja, proyectar, puntosRadar, trazadoCosta, type PuntoRadar } from '../../data/cobertura';
 
 interface Props {
   destacado?: string;
+  /* Pueblo de la landing: se resalta si ya es un punto del radar y, si no
+     lo es pero cae dentro del mapa, se dibuja resaltado en su sitio. */
+  pueblo?: { slug: string; nombre: string; lat: number; lon: number };
   class?: string;
 }
 
-const { destacado, class: clase } = Astro.props;
+const { destacado: destacadoProp, pueblo, class: clase } = Astro.props;
+const destacado = pueblo?.slug ?? destacadoProp;
 const { ancho, alto } = CAJA_RADAR;
-const puntos = puntosRadar();
+const base = puntosRadar();
+const extra: PuntoRadar[] =
+  pueblo && !base.some((p) => p.slug === pueblo.slug) && dentroDeCaja(pueblo.lat, pueblo.lon)
+    ? (() => {
+        const { x, y } = proyectar(pueblo.lat, pueblo.lon);
+        return [{ slug: pueblo.slug, nombre: pueblo.nombre, x, y, etiqueta: x > ancho * 0.72 ? 'izquierda' : 'derecha', sede: false }];
+      })()
+    : [];
+const puntos = [...base, ...extra];
 const { linea, tierra } = trazadoCosta();
 const sede = puntos.find((p) => p.sede) ?? puntos[0];
 const anillos = [60, 120, 180];
