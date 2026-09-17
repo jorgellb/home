@@ -6,12 +6,15 @@ interface BreadcrumbItem {
 
 interface Props {
   items: BreadcrumbItem[];
-  /* 'papel' es el de siempre y sigue siendo el predeterminado: las páginas
-     de las fases 3 y 4 aún son claras. 'consola' lo piden las ya migradas. */
+  /* Todo el sitio está en tono consola desde la fase 4; 'papel' se queda por
+     si alguna página futura vuelve a fondo claro. */
   tono?: 'papel' | 'consola';
+  /* Las landings de pueblo ya declaran el breadcrumb dentro de su WebPage:
+     ahí no hace falta repetir el JSON-LD. */
+  jsonLd?: boolean;
 }
 
-const { items, tono = 'papel' } = Astro.props;
+const { items, tono = 'consola', jsonLd = true } = Astro.props;
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
@@ -77,4 +80,4 @@ const breadcrumbSchema = {
   .breadcrumb-brutal--consola .breadcrumb-brutal__current { color: var(--color-cdm-texto); }
 </style>
 
-<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
