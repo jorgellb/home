@@ -17,6 +17,8 @@ interface Props {
   image?: string;
   imageAlt?: string;
   noindex?: boolean;
+  type?: 'website' | 'article' | 'product' | 'service';
+  keywords?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   /* Migas visibles y su BreadcrumbList: las páginas que llegan aquí ya lo
      tenían y la auditoría SEO lo exige. */
@@ -35,7 +37,7 @@ interface Props {
 }
 
 const {
-  title, description, canonical, image, imageAlt, noindex, jsonLd,
+  title, description, canonical, image, imageAlt, noindex, type, keywords, jsonLd,
   migas, ruta, h1, subtitulo, entradilla, datos = [], secciones, coordenadas,
 } = Astro.props;
 /* slot «lateral»: panel a la derecha de la cabecera (radar, ficha…).
@@ -52,6 +54,8 @@ const conLateral = lateral.length > 0;
   image={image}
   imageAlt={imageAlt}
   noindex={noindex}
+  type={type}
+  keywords={keywords}
   jsonLd={jsonLd}
 >
   <Header />

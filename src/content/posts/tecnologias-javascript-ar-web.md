@@ -97,7 +97,7 @@ readingTime: 14
 }
 .arp-tech__emblem svg { width:38px; height:38px; }
 .arp-tech__ttl { margin:0; font-size:1.3rem; font-weight:800; letter-spacing:-.02em; line-height:1; }
-.arp-tech__role { display:block; margin-top:.3rem; font-family:var(--font-mono,monospace); font-size:.58rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--c); }
+.arp-tech__role { display:block; margin-top:.3rem; font-family:var(--font-mono,monospace); font-size:.58rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:color-mix(in srgb, var(--c) 45%, #0E0D0B); }
 .arp-tech__c { font-size:.5rem; }
 .arp-tech p { margin:.9rem 0 0; font-size:.88rem; line-height:1.55; font-family:var(--font-display,sans-serif); color: var(--brutal-text-secondary,#4a453f); }
 .arp-tech ul { list-style:none; padding:0; margin:.85rem 0 0; display:grid; gap:.45rem; }
@@ -117,7 +117,7 @@ readingTime: 14
 .arp-matrix tbody th { font-weight:800; background: var(--brutal-bg-alt,#F0E9D7); }
 .arp-matrix tbody tr:hover td { background: #D6FF4422; }
 .arp-matrix td:last-child, .arp-matrix th:last-child { border-right:0; }
-.arp-yes { color:#0A8F4A; font-weight:800; }
+.arp-yes { color:#07703A; font-weight:800; }
 .arp-no  { color:#C0392B; font-weight:800; }
 
 /* —— Tecnologías complementarias —— */
@@ -138,7 +138,7 @@ readingTime: 14
   border:2px solid; background:#11161f;
 }
 .arp-layer b { font-size:.95rem; font-weight:800; letter-spacing:-.01em; }
-.arp-layer small { display:block; font-family:var(--font-mono,monospace); font-size:.56rem; letter-spacing:.08em; text-transform:uppercase; opacity:.7; margin-top:.1rem; }
+.arp-layer small { display:block; font-family:var(--font-mono,monospace); font-size:.56rem; letter-spacing:.08em; text-transform:uppercase; margin-top:.1rem; }
 .arp-layer span { margin-left:auto; font-family:var(--font-mono,monospace); font-size:.62rem; padding:.2rem .45rem; border:1.5px solid currentColor; white-space:nowrap; }
 
 /* —— Callout —— */
