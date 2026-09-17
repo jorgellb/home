@@ -3,7 +3,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'iconos',      etiqueta: 'Prontuario' },
+  { id: 'industria',   etiqueta: 'La industria' },
+  { id: 'exportacion', etiqueta: 'Exportación' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'mapa',        etiqueta: 'Cartografía' },
+  { id: 'porque',      etiqueta: 'Por qué Olula' },
+  { id: 'metodo',      etiqueta: 'Método' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'comarca',     etiqueta: 'El Almanzora' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'olula-del-rio');
 
@@ -88,6 +105,8 @@ const jsonLdSchemas = [
   <Header />
 
   <main id="main-content" class="ol">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.387° N · 1.863° W · 560 m" class="ol-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — MÁRMOL BLANCO · EXPORTACIÓN MUNDIAL            */}
@@ -431,7 +450,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* ICONOS — 4 SEÑAS DE IDENTIDAD                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-iconos-section">
+    <section class="ol-iconos-section" id="iconos">
       <div class="container-brutal">
 
         <span class="text-meta ol-iconos-chapter">Cap. 02 / Prontuario</span>
@@ -446,41 +465,41 @@ const jsonLdSchemas = [
             <li class={`ol-icono ol-icono--${ico.color}`}>
               <div class="ol-icono__code">
                 <svg viewBox="0 0 80 80" width="100%" height="100%">
-                  <circle cx="40" cy="40" r="38" fill="var(--ol-ink)" stroke="var(--ol-ink)" stroke-width="2"/>
-                  <circle cx="40" cy="40" r="32" fill="var(--ol-paper)" stroke="var(--ol-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="38" fill="#1A1816" stroke="#1A1816" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="#F5F0E8" stroke="#1A1816" stroke-width="2"/>
                   {i === 0 && (
                     <>
-                      <circle cx="40" cy="32" r="14" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-                      <circle cx="40" cy="32" r="7" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-                      <line x1="26" y1="50" x2="54" y2="50" stroke="var(--ol-ink)" stroke-width="2"/>
-                      <line x1="30" y1="46" x2="50" y2="46" stroke="var(--ol-ink)" stroke-width="1"/>
+                      <circle cx="40" cy="32" r="14" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                      <circle cx="40" cy="32" r="7" fill="#C8A84E" stroke="#1A1816" stroke-width="1.5"/>
+                      <line x1="26" y1="50" x2="54" y2="50" stroke="#1A1816" stroke-width="2"/>
+                      <line x1="30" y1="46" x2="50" y2="46" stroke="#1A1816" stroke-width="1"/>
                     </>
                   )}
                   {i === 1 && (
                     <>
-                      <rect x="20" y="22" width="40" height="34" rx="2" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-                      <polygon points="20,22 40,14 60,22" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-                      <rect x="28" y="30" width="8" height="10" fill="var(--ol-ink)"/>
-                      <rect x="40" y="34" width="12" height="10" fill="var(--ol-ink)"/>
-                      <rect x="20" y="22" width="40" height="4" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
+                      <rect x="20" y="22" width="40" height="34" rx="2" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                      <polygon points="20,22 40,14 60,22" fill="#C8A84E" stroke="#1A1816" stroke-width="1.5"/>
+                      <rect x="28" y="30" width="8" height="10" fill="#1A1816"/>
+                      <rect x="40" y="34" width="12" height="10" fill="#1A1816"/>
+                      <rect x="20" y="22" width="40" height="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
                     </>
                   )}
                   {i === 2 && (
                     <>
-                      <circle cx="40" cy="34" r="16" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-                      <path d="M 24 44 Q 40 56 56 44" fill="none" stroke="var(--ol-gold)" stroke-width="2"/>
-                      <circle cx="28" cy="30" r="2" fill="var(--ol-gold)"/>
-                      <circle cx="40" cy="28" r="2" fill="var(--ol-gold)"/>
-                      <circle cx="52" cy="30" r="2" fill="var(--ol-gold)"/>
-                      <circle cx="40" cy="38" r="4" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1"/>
+                      <circle cx="40" cy="34" r="16" fill="#1A2A3A" stroke="#1A1816" stroke-width="1.5"/>
+                      <path d="M 24 44 Q 40 56 56 44" fill="none" stroke="#C8A84E" stroke-width="2"/>
+                      <circle cx="28" cy="30" r="2" fill="#C8A84E"/>
+                      <circle cx="40" cy="28" r="2" fill="#C8A84E"/>
+                      <circle cx="52" cy="30" r="2" fill="#C8A84E"/>
+                      <circle cx="40" cy="38" r="4" fill="#F0F0F0" stroke="#1A1816" stroke-width="1"/>
                     </>
                   )}
                   {i === 3 && (
                     <>
-                      <circle cx="40" cy="30" r="12" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-                      <path d="M 26 44 Q 40 54 54 44" fill="none" stroke="var(--ol-ink)" stroke-width="2"/>
-                      <rect x="34" y="24" width="12" height="14" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
-                      <circle cx="40" cy="30" r="3" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="1"/>
+                      <circle cx="40" cy="30" r="12" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+                      <path d="M 26 44 Q 40 54 54 44" fill="none" stroke="#1A1816" stroke-width="2"/>
+                      <rect x="34" y="24" width="12" height="14" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
+                      <circle cx="40" cy="30" r="3" fill="#1A2A3A" stroke="#1A1816" stroke-width="1"/>
                     </>
                   )}
                 </svg>
@@ -500,7 +519,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* OLULA — FLAGSHIP SECTION                            */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-flagship-section">
+    <section class="ol-flagship-section" id="industria">
       <div class="container-brutal">
         <div class="ol-flagship-grid">
 
@@ -689,7 +708,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* EXPORTACIÓN MUNDIAL — CASO DE ÉXITO                 */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-export-section">
+    <section class="ol-export-section" id="exportacion">
       <div class="container-brutal">
 
         <div class="ol-export-grid">
@@ -838,7 +857,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* SECTORES — 6 MERCADOS                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-sec-section">
+    <section class="ol-sec-section" id="sectores">
       <div class="container-brutal">
 
         <span class="text-meta ol-sec-chapter">Cap. 05 / Oportunidades</span>
@@ -878,7 +897,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA                                                */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-map-section">
+    <section class="ol-map-section" id="mapa">
       <div class="container-brutal">
         <div class="ol-map-head">
           <div class="ol-map-head__inner">
@@ -901,18 +920,18 @@ const jsonLdSchemas = [
       <div class="ol-map-frame">
         <div class="ol-map-icon ol-map-icon--tl" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="100%" height="100%">
-            <rect x="14" y="20" width="32" height="28" rx="2" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="2"/>
-            <polygon points="14,20 30,12 46,20" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="2"/>
-            <rect x="14" y="20" width="32" height="4" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
-            <rect x="24" y="30" width="12" height="18" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="1.5"/>
+            <rect x="14" y="20" width="32" height="28" rx="2" fill="#F0F0F0" stroke="#1A1816" stroke-width="2"/>
+            <polygon points="14,20 30,12 46,20" fill="#C8A84E" stroke="#1A1816" stroke-width="2"/>
+            <rect x="14" y="20" width="32" height="4" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
+            <rect x="24" y="30" width="12" height="18" fill="#1A2A3A" stroke="#1A1816" stroke-width="1.5"/>
           </svg>
         </div>
         <div class="ol-map-icon ol-map-icon--br" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="100%" height="100%">
-            <circle cx="30" cy="30" r="22" fill="var(--ol-navy)" stroke="var(--ol-ink)" stroke-width="2"/>
-            <circle cx="30" cy="30" r="12" fill="var(--ol-marble)" stroke="var(--ol-ink)" stroke-width="1.5"/>
-            <path d="M 16 34 Q 30 46 44 34" fill="none" stroke="var(--ol-gold)" stroke-width="2"/>
-            <circle cx="30" cy="26" r="3" fill="var(--ol-gold)" stroke="var(--ol-ink)" stroke-width="1"/>
+            <circle cx="30" cy="30" r="22" fill="#1A2A3A" stroke="#1A1816" stroke-width="2"/>
+            <circle cx="30" cy="30" r="12" fill="#F0F0F0" stroke="#1A1816" stroke-width="1.5"/>
+            <path d="M 16 34 Q 30 46 44 34" fill="none" stroke="#C8A84E" stroke-width="2"/>
+            <circle cx="30" cy="26" r="3" fill="#C8A84E" stroke="#1A1816" stroke-width="1"/>
           </svg>
         </div>
         <div class="ol-map-wrap">
@@ -933,7 +952,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES — 4 RAZONES                            */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-dif-section">
+    <section class="ol-dif-section" id="porque">
       <div class="container-brutal">
 
         <span class="text-meta ol-dif-chapter">Cap. 07 / Diferencial</span>
@@ -959,7 +978,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO — 4 PASOS                                   */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-proc-section">
+    <section class="ol-proc-section" id="metodo">
       <div class="container-brutal">
 
         <span class="text-meta ol-proc-chapter">Cap. 08 / Método</span>
@@ -989,7 +1008,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS — 3                                     */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-quote-section">
+    <section class="ol-quote-section" id="testimonios">
       <div class="container-brutal">
 
         <span class="text-meta ol-quote-chapter">Cap. 09 / Resultados</span>
@@ -1052,7 +1071,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ — 8 PREGUNTAS                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-faq-section">
+    <section class="ol-faq-section" id="faq">
       <div class="container-brutal">
 
         <span class="text-meta ol-faq-chapter">Cap. 10 / FAQ</span>
@@ -1092,7 +1111,7 @@ const jsonLdSchemas = [
     {/* PUEBLOS VECINOS                                    */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosAlmanzora.length > 0 && (
-      <section class="ol-vecinos-section">
+      <section class="ol-vecinos-section" id="comarca">
         <div class="container-brutal">
 
           <span class="text-meta ol-vecinos-chapter">Cap. 11 / Comarca</span>
@@ -1117,10 +1136,14 @@ const jsonLdSchemas = [
     )}
 
     {/* ════════════════════════════════════════════════ */}
-    <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
+    <div class="ol-todos">
+      <div class="container-brutal">
+        <a href="/diseno-web/">Ver todos los municipios con diseño web en Almería →</a>
+      </div>
+    </div>
     {/* CTA FINAL                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ol-final">
+    <section class="ol-final" id="empezar">
       <div class="container-brutal">
         <div class="ol-final__grid">
 
@@ -1266,16 +1289,72 @@ const jsonLdSchemas = [
   /* OLULA DEL RÍO DESIGN SYSTEM                       */
   /* ═══════════════════════════════════════════════ */
 
-  :root {
-    --ol-paper:    #F5F0E8;
-    --ol-paper-2:  #E8E0D0;
-    --ol-stone:    #A0A0A0;
-    --ol-marble:   #F0F0F0;
-    --ol-ink:      #1A1816;
-    --ol-navy:     #1A2A3A;
-    --ol-gold:     #C8A84E;
-    --ol-gold2:    #B89840;
-    --ol-shadow:   8px 8px 0 var(--ol-ink);
+  /* Fase 2 · consola. La paleta estaba en :root, que Astro no scopea: pasa
+     a .ol, el <main> de esta página. paper hacía de fondo y de tinta clara a
+     la vez, e ink de borde, sombra, fondo y texto: cada uno se reparte. El
+     navy era casi negro: ilegible como texto, pero su fondo con oro encima es
+     la seña de la página, así que se parte en acento aclarado y navy-hondo.
+     Las ilustraciones llevan sus hex literales (§3.3.6). */
+  .ol {
+    --ol-paper:      var(--color-cdm-panel);
+    --ol-paper-2:    var(--color-cdm-panel-2);
+    --ol-suelo:      var(--color-cdm-suelo);
+    --ol-tinta:      var(--color-cdm-texto);
+    --ol-tenue:      var(--color-cdm-tenue);
+    --ol-ink:        var(--color-cdm-regla-2);
+    --ol-hondo:      #1A1816;       /* Tierra de taller: solo fondo */
+    --ol-stone:      #A0A0A0;
+    --ol-marble:     #F0F0F0;
+    --ol-navy:       #6F97C0;       /* Navy, aclarado para leer */
+    --ol-navy-hondo: #1A2A3A;       /* Navy nocturno: solo fondo */
+    --ol-gold:       #C8A84E;
+    --ol-gold2:      #B89840;
+    --ol-shadow:     8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--ol-suelo);
+    color: var(--ol-tinta);
+  }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .ol :global(.brutal-section-head__title) { color: var(--ol-tinta); }
+  .ol :global(.brutal-section-head__lead) { color: var(--ol-tenue); }
+  .ol :global(.text-meta) { color: var(--ol-tenue); }
+  .ol :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  .ol section[id] { scroll-margin-top: 96px; }
+
+  /* El enlace al índice de municipios estaba suelto y con estilos inline,
+     fuera de todo contenedor: se iba a sangre. */
+  .ol-todos { background: var(--ol-suelo); padding: 2.5rem 1.5rem; text-align: center; }
+  .ol-todos a { font-weight: 700; font-size: 1.05rem; color: var(--ol-gold); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .ol :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .ol :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .ol-map-frame { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .ol :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--ol-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .ol :global(.cdm-indice__titulo),
+    .ol :global(.cdm-indice__lista),
+    .ol :global(.cdm-indice__coord) { display: none; }
+    .ol :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
 
   .ol-pulse {
@@ -1336,7 +1415,7 @@ const jsonLdSchemas = [
     background:
       radial-gradient(circle at 65% 30%, rgba(200,168,78,0.08), transparent 50%),
       radial-gradient(circle at 30% 70%, rgba(26,42,58,0.08), transparent 50%),
-      var(--ol-paper);
+      var(--ol-suelo);
     border-bottom: 3px solid var(--ol-ink);
     position: relative;
     overflow: hidden;
@@ -1358,9 +1437,9 @@ const jsonLdSchemas = [
   .ol-hero__chapter { color: var(--ol-navy); }
   .ol-hero__title { font-size: clamp(2.5rem, 7vw, 5rem); line-height: .92; letter-spacing: -.04em; margin: .25rem 0; }
   .ol-hero__title em { color: var(--ol-navy); font-style: italic; }
-  .ol-hero__title-stamp { display: inline-block; color: var(--ol-paper); background: var(--ol-navy); padding: 0 .2em; transform: rotate(-1deg); }
-  .ol-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--brutal-text-secondary); max-width: 54ch; }
-  .ol-hero__lead strong { color: var(--ol-ink); font-weight: 700; }
+  .ol-hero__title-stamp { display: inline-block; color: var(--ol-tinta); background: var(--ol-navy-hondo); padding: 0 .2em; transform: rotate(-1deg); }
+  .ol-hero__lead { font-size: 1.1rem; line-height: 1.55; color: var(--ol-tenue); max-width: 54ch; }
+  .ol-hero__lead strong { color: var(--ol-tinta); font-weight: 700; }
   .ol-hero__lead em { color: var(--ol-gold); font-style: italic; font-weight: 600; }
   .ol-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
 
@@ -1375,9 +1454,9 @@ const jsonLdSchemas = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
     cursor: pointer;
   }
-  .ol-btn--primary { background: var(--ol-gold); color: var(--ol-ink); box-shadow: 6px 6px 0 var(--ol-ink); }
-  .ol-btn--primary:hover { background: var(--ol-navy); color: var(--ol-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-ink); }
-  .ol-btn--ghost { background: transparent; color: var(--ol-ink); box-shadow: 6px 6px 0 var(--ol-stone); }
+  .ol-btn--primary { background: var(--ol-gold); color: var(--ol-suelo); box-shadow: 6px 6px 0 var(--ol-ink); }
+  .ol-btn--primary:hover { background: var(--ol-navy-hondo); color: var(--ol-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-ink); }
+  .ol-btn--ghost { background: transparent; color: var(--ol-tinta); box-shadow: 6px 6px 0 var(--ol-stone); }
   .ol-btn--ghost:hover { background: var(--ol-ink); color: var(--ol-gold); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-stone); }
 
   /* KPIs */
@@ -1392,10 +1471,10 @@ const jsonLdSchemas = [
     .ol-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--ol-ink); }
     .ol-kpi:nth-last-child(-n+4)  { border-bottom: none; }
   }
-  .ol-kpi--gold   { background: var(--ol-gold); color: var(--ol-ink); }
-  .ol-kpi--navy   { background: var(--ol-navy); color: var(--ol-paper); }
-  .ol-kpi--marble { background: var(--ol-marble); color: var(--ol-ink); }
-  .ol-kpi--ink    { background: var(--ol-ink); color: var(--ol-paper); }
+  .ol-kpi--gold   { background: var(--ol-gold); color: var(--ol-suelo); }
+  .ol-kpi--navy   { background: var(--ol-navy-hondo); color: var(--ol-tinta); }
+  .ol-kpi--marble { background: var(--ol-marble); color: var(--ol-suelo); }
+  .ol-kpi--ink    { background: var(--ol-hondo); color: var(--ol-tinta); }
   .ol-kpi--ink .ol-kpi__v { color: var(--ol-gold); }
   .ol-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
   .ol-kpi__v small { font-size: .55em; opacity: .8; }
@@ -1405,21 +1484,21 @@ const jsonLdSchemas = [
   .ol-hero__postcard { width: 100%; max-width: 540px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(26,24,22,0.18)); }
   .ol-postcard { background: var(--ol-paper); border: 3px solid var(--ol-ink); box-shadow: var(--ol-shadow); overflow: hidden; transform: rotate(-1deg); transition: transform .35s; }
   .ol-postcard:hover { transform: rotate(0); }
-  .ol-postcard__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .65rem 1rem; background: var(--ol-ink); color: var(--ol-paper); font-size: .58rem; letter-spacing: .15em; border-bottom: 2px solid var(--ol-ink); }
+  .ol-postcard__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; padding: .65rem 1rem; background: var(--ol-ink); color: var(--ol-tinta); font-size: .58rem; letter-spacing: .15em; border-bottom: 2px solid var(--ol-ink); }
   .ol-postcard__profile { width: 100%; aspect-ratio: 540 / 220; border-bottom: 2px solid var(--ol-ink); overflow: hidden; }
   .ol-postcard__img-wrap { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 2px solid var(--ol-ink); }
   .ol-postcard__img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(1.1); transition: transform .6s cubic-bezier(.16,1,.3,1); }
   .ol-postcard:hover .ol-postcard__img { transform: scale(1.05); }
   .ol-postcard__gear { position: absolute; top: 12px; right: 12px; width: 80px; height: 80px; transform: rotate(10deg); filter: drop-shadow(0 4px 10px rgba(200,168,78,0.5)); }
-  .ol-postcard__tag { position: absolute; bottom: 12px; left: 12px; background: var(--ol-paper); color: var(--ol-ink); padding: .4rem .75rem; font-size: .65rem; font-weight: 800; letter-spacing: .2em; border: 2px solid var(--ol-ink); box-shadow: 3px 3px 0 var(--ol-gold); transform: rotate(-2deg); }
+  .ol-postcard__tag { position: absolute; bottom: 12px; left: 12px; background: var(--ol-paper); color: var(--ol-tinta); padding: .4rem .75rem; font-size: .65rem; font-weight: 800; letter-spacing: .2em; border: 2px solid var(--ol-ink); box-shadow: 3px 3px 0 var(--ol-gold); transform: rotate(-2deg); }
   .ol-postcard__data { padding: 1rem 1.25rem; background: var(--ol-paper-2); display: grid; gap: .35rem; }
-  .ol-postcard__data-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 1px dashed rgba(26,24,22,0.15); font-size: .68rem; }
+  .ol-postcard__data-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: .35rem; border-bottom: 1px dashed rgba(230,237,242,0.16); font-size: .68rem; }
   .ol-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
   .ol-postcard__data-row > span:first-child { color: var(--ol-navy); letter-spacing: .2em; font-weight: 800; }
-  .ol-postcard__data-v { color: var(--ol-ink); font-weight: 700; letter-spacing: .05em; }
+  .ol-postcard__data-v { color: var(--ol-tinta); font-weight: 700; letter-spacing: .05em; }
 
   /* Marquee */
-  .ol-marquee { background: var(--ol-ink); color: var(--ol-gold); overflow: hidden; padding: .9rem 0; border-top: 3px solid var(--ol-ink); }
+  .ol-marquee { background: var(--ol-hondo); color: var(--ol-gold); overflow: hidden; padding: .9rem 0; border-top: 3px solid var(--ol-ink); }
   .ol-marquee__track { display: flex; gap: 3rem; width: max-content; animation: ol-marquee 42s linear infinite; font-family: var(--font-mono); font-size: .82rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
   @keyframes ol-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
@@ -1458,23 +1537,23 @@ const jsonLdSchemas = [
   .ol-icono--gold:hover   { box-shadow: 12px 12px 0 var(--ol-gold); }
   .ol-icono--marble:hover { box-shadow: 12px 12px 0 var(--ol-marble); }
   .ol-icono--navy:hover   { box-shadow: 12px 12px 0 var(--ol-navy); }
-  .ol-icono--ink:hover    { box-shadow: 12px 12px 0 var(--ol-ink); }
+  .ol-icono--ink:hover    { box-shadow: 12px 12px 0 var(--ol-stone); }
   .ol-icono__code { width: 80px; height: 80px; flex-shrink: 0; }
   .ol-icono__letter { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: var(--ol-gold); }
   .ol-icono--marble .ol-icono__letter { color: var(--ol-stone); }
   .ol-icono--navy .ol-icono__letter  { color: var(--ol-navy); }
-  .ol-icono--ink .ol-icono__letter   { color: var(--ol-ink); }
-  .ol-icono__name { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1; letter-spacing: -.025em; color: var(--ol-ink); margin: 0; }
+  .ol-icono--ink .ol-icono__letter   { color: var(--ol-stone); }
+  .ol-icono__name { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1; letter-spacing: -.025em; color: var(--ol-tinta); margin: 0; }
   .ol-icono__sub { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .2em; color: var(--ol-gold); font-weight: 800; }
   .ol-icono--marble .ol-icono__sub { color: var(--ol-stone); }
   .ol-icono--navy .ol-icono__sub  { color: var(--ol-navy); }
-  .ol-icono--ink .ol-icono__sub   { color: var(--ol-ink); }
-  .ol-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
-  .ol-icono__dato { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--ol-ink); border-top: 2px dashed var(--ol-ink); padding-top: .5rem; width: 100%; }
+  .ol-icono--ink .ol-icono__sub   { color: var(--ol-stone); }
+  .ol-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--ol-tenue); margin: 0; flex: 1; }
+  .ol-icono__dato { font-family: var(--font-display); font-size: 1.15rem; font-weight: 800; color: var(--ol-tinta); border-top: 2px dashed var(--ol-ink); padding-top: .5rem; width: 100%; }
 
   /* FLAGSHIP */
   .ol-flagship-section {
-    background: var(--ol-stone);
+    background: var(--ol-navy-hondo);
     padding: 5rem 1.5rem 6rem;
     border-bottom: 3px solid var(--ol-ink);
     position: relative;
@@ -1492,7 +1571,7 @@ const jsonLdSchemas = [
   .ol-flagship-section::after {
     content: '';
     position: absolute; bottom: -3px; left: 0; right: 0; height: 40px;
-    background: var(--ol-paper);
+    background: var(--ol-suelo);
     clip-path: polygon(0 0, 100% 100%, 100% 100%, 0 100%);
     pointer-events: none;
   }
@@ -1502,20 +1581,20 @@ const jsonLdSchemas = [
   .ol-flagship-chapter { color: var(--ol-navy); }
   .ol-flagship-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
   .ol-flagship-title em { color: var(--ol-navy); }
-  .ol-flagship-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
+  .ol-flagship-lead { font-size: 1.05rem; line-height: 1.55; color: var(--ol-tenue); margin-bottom: 1rem; max-width: 54ch; }
   .ol-flagship-lead strong { color: var(--ol-gold); font-weight: 800; }
-  .ol-flagship-lead em { color: var(--ol-ink); font-style: italic; }
+  .ol-flagship-lead em { color: var(--ol-tinta); font-style: italic; }
   .ol-flagship-facts { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0; border: 2px solid var(--ol-ink); background: var(--ol-paper); }
   @media (min-width: 640px) { .ol-flagship-facts { grid-template-columns: 1fr 1fr; } }
   .ol-flagship-facts li { padding: .75rem 1rem; border-bottom: 1px solid var(--ol-ink); display: flex; flex-direction: column; gap: 2px; }
   @media (min-width: 640px) { .ol-flagship-facts li:nth-child(odd) { border-right: 1px solid var(--ol-ink); } .ol-flagship-facts li:nth-last-child(-n+2) { border-bottom: none; } }
   @media (max-width: 639px) { .ol-flagship-facts li:last-child { border-bottom: none; } }
   .ol-flagship-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--ol-navy); font-weight: 800; }
-  .ol-flagship-facts__v { font-size: .9rem; color: var(--ol-ink); font-weight: 600; line-height: 1.35; }
+  .ol-flagship-facts__v { font-size: .9rem; color: var(--ol-tinta); font-weight: 600; line-height: 1.35; }
   .ol-flagship__r { width: 100%; max-width: 360px; margin: 0 auto; filter: drop-shadow(0 14px 30px rgba(0,0,0,0.3)); }
 
   /* EXPORT SECTION */
-  .ol-export-section { background: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
+  .ol-export-section { background: var(--ol-suelo); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
   .ol-export-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,168,78,0.04) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
   .ol-export-section::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--ol-navy), var(--ol-gold), var(--ol-navy)); pointer-events: none; }
   .ol-export-section > * { position: relative; }
@@ -1524,8 +1603,8 @@ const jsonLdSchemas = [
   .ol-export-chapter { color: var(--ol-navy); }
   .ol-export-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
   .ol-export-title em { color: var(--ol-navy); }
-  .ol-export-lead { font-size: 1.05rem; line-height: 1.55; color: var(--brutal-text-secondary); margin-bottom: 1rem; max-width: 54ch; }
-  .ol-export-lead strong { color: var(--ol-ink); font-weight: 700; }
+  .ol-export-lead { font-size: 1.05rem; line-height: 1.55; color: var(--ol-tenue); margin-bottom: 1rem; max-width: 54ch; }
+  .ol-export-lead strong { color: var(--ol-tinta); font-weight: 700; }
   .ol-export-lead em { color: var(--ol-gold); font-style: italic; font-weight: 600; }
   .ol-export-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: .75rem; margin-top: 1.5rem; }
   .ol-export-stat { background: var(--ol-paper-2); border: 2px solid var(--ol-ink); padding: 1rem; display: flex; flex-direction: column; gap: .25rem; text-align: center; }
@@ -1548,32 +1627,32 @@ const jsonLdSchemas = [
   .ol-sec__card--gold   { color: var(--ol-gold); }
   .ol-sec__card--marble { color: var(--ol-stone); }
   .ol-sec__card--navy   { color: var(--ol-navy); }
-  .ol-sec__card--ink    { color: var(--ol-ink); }
+  .ol-sec__card--ink    { color: var(--ol-marble); }
   .ol-sec__card--stone  { color: var(--ol-stone); }
   .ol-sec__card--gold2  { color: var(--ol-gold2); }
   .ol-sec__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: .5rem; border-bottom: 2px dashed currentColor; gap: .5rem; }
   .ol-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
-  .ol-sec__stat-box { background: var(--ol-ink); color: var(--ol-paper); padding: .35rem .65rem; display: flex; flex-direction: column; border: 1.5px solid currentColor; text-align: right; }
+  .ol-sec__stat-box { background: var(--ol-suelo); color: var(--ol-tinta); padding: .35rem .65rem; display: flex; flex-direction: column; border: 1.5px solid currentColor; text-align: right; }
   .ol-sec__stat-v { font-size: .95rem; font-weight: 800; color: currentColor; line-height: 1; }
   .ol-sec__stat-l { font-size: .5rem; letter-spacing: .12em; opacity: .85; text-transform: uppercase; }
-  .ol-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--ol-ink); margin: 0; }
-  .ol-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--brutal-text-secondary); flex: 1; }
+  .ol-sec__title { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.1; letter-spacing: -.02em; color: var(--ol-tinta); margin: 0; }
+  .ol-sec__desc { font-size: .88rem; line-height: 1.5; color: var(--ol-tenue); flex: 1; }
   .ol-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
-  .ol-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--ol-ink); }
+  .ol-sec__tag { display: flex; align-items: flex-start; gap: .35rem; font-size: .78rem; line-height: 1.35; color: var(--ol-tinta); }
   .ol-sec__tag span { color: currentColor; font-weight: 800; }
   .ol-sec__foot { padding-top: .65rem; border-top: 2px solid var(--ol-ink); }
   .ol-sec__cta { font-family: var(--font-mono); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .15em; color: currentColor; text-decoration: none; border-bottom: 2px solid currentColor; padding-bottom: 2px; }
 
   /* MAPA */
-  .ol-map-section { background: var(--ol-marble); border-bottom: 3px solid var(--ol-ink); }
+  .ol-map-section { background: var(--ol-suelo); border-bottom: 3px solid var(--ol-ink); }
   .ol-map-head { padding: 4rem 0 2rem; }
   .ol-map-head__inner { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: end; }
   @media (min-width: 768px) { .ol-map-head__inner { grid-template-columns: 1.5fr 1fr; } }
   .ol-map-chapter { color: var(--ol-navy); }
   .ol-map-title { font-size: clamp(2.25rem, 5vw, 3.5rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0 0; }
   .ol-map-title em { color: var(--ol-navy); }
-  .ol-map-coords { background: var(--ol-gold); color: var(--ol-ink); padding: 1rem 1.25rem; border: 2px solid var(--ol-ink); box-shadow: 5px 5px 0 var(--ol-ink); display: flex; flex-direction: column; gap: .35rem; font-size: .7rem; letter-spacing: .15em; }
-  .ol-map-frame { position: relative; border-top: 3px solid var(--ol-ink); border-bottom: 3px solid var(--ol-ink); background: var(--ol-ink); }
+  .ol-map-coords { background: var(--ol-gold); color: var(--ol-suelo); padding: 1rem 1.25rem; border: 2px solid var(--ol-ink); box-shadow: 5px 5px 0 var(--ol-ink); display: flex; flex-direction: column; gap: .35rem; font-size: .7rem; letter-spacing: .15em; }
+  .ol-map-frame { position: relative; border-top: 3px solid var(--ol-ink); border-bottom: 3px solid var(--ol-ink); background: var(--ol-suelo); }
   .ol-map-icon { position: absolute; width: 60px; height: 60px; z-index: 5; pointer-events: none; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.45)); opacity: 0.85; }
   .ol-map-icon--tl { top: 16px; left: 16px; }
   .ol-map-icon--br { bottom: 16px; right: 16px; }
@@ -1581,7 +1660,7 @@ const jsonLdSchemas = [
   .ol-map-wrap > * { width: 100%; height: 100%; }
 
   /* DIFERENCIALES */
-  .ol-dif-section { background: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-dif-section { background: var(--ol-suelo); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
   .ol-dif-chapter { color: var(--ol-navy); }
   .ol-dif-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
   .ol-dif-title em { color: var(--ol-gold); }
@@ -1592,15 +1671,19 @@ const jsonLdSchemas = [
   @media (max-width: 767px) { .ol-dif__item:last-child { border-bottom: none; } }
   .ol-dif__item--0 { background: var(--ol-paper-2); }
   .ol-dif__item--1 { background: var(--ol-paper); }
-  .ol-dif__item--2 { background: var(--ol-stone); }
+  .ol-dif__item--2 { background: var(--ol-paper-2); }
   .ol-dif__item--3 { background: var(--ol-paper); }
-  .ol-dif__item:hover { background: var(--ol-gold); }
+  /* El oro es un fondo claro: el texto heredado se invierte entero. */
+  .ol-dif__item:hover { background: var(--ol-gold); color: var(--ol-suelo); }
+  .ol-dif__item:hover .ol-dif__num,
+  .ol-dif__item:hover .ol-dif__t,
+  .ol-dif__item:hover .ol-dif__desc { color: var(--ol-suelo); }
   .ol-dif__num { font-size: .85rem; color: var(--ol-navy); font-weight: 800; letter-spacing: .15em; }
-  .ol-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--ol-ink); margin: 0; }
-  .ol-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+  .ol-dif__t { font-size: clamp(1.3rem, 2.2vw, 1.65rem); line-height: 1.05; letter-spacing: -.025em; color: var(--ol-tinta); margin: 0; }
+  .ol-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--ol-tenue); margin: 0; }
 
   /* PROCESO */
-  .ol-proc-section { background: var(--ol-ink); color: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
+  .ol-proc-section { background: var(--ol-hondo); color: var(--ol-tinta); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); position: relative; overflow: hidden; }
   .ol-proc-section::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(200,168,78,0.08) 1.2px, transparent 1.2px); background-size: 22px 22px; pointer-events: none; }
   .ol-proc-section::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--ol-gold), var(--ol-navy), var(--ol-gold)); pointer-events: none; }
   .ol-proc-section > * { position: relative; }
@@ -1610,14 +1693,14 @@ const jsonLdSchemas = [
   .ol-proc { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
   @media (min-width: 768px)  { .ol-proc { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1024px) { .ol-proc { grid-template-columns: repeat(4, 1fr); } }
-  .ol-proc__step { background: rgba(245,240,232,0.05); border: 2px solid var(--ol-paper); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; transition: background .25s, transform .25s, border-color .25s; position: relative; overflow: hidden; }
+  .ol-proc__step { background: rgba(245,240,232,0.05); border: 2px solid rgba(230,237,242,0.28); padding: 1.5rem 1.25rem; display: flex; flex-direction: column; gap: .65rem; transition: background .25s, transform .25s, border-color .25s; position: relative; overflow: hidden; }
   .ol-proc__step::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 0; background: var(--ol-gold); transition: height .35s; }
   .ol-proc__step:hover { background: rgba(200,168,78,0.12); transform: translateY(-4px); border-color: var(--ol-gold); }
   .ol-proc__step:hover::before { height: 100%; }
   .ol-proc__head { display: flex; justify-content: space-between; padding-bottom: .35rem; border-bottom: 1.5px dashed rgba(245,240,232,0.25); }
   .ol-proc__num { font-size: 1.5rem; font-weight: 800; color: var(--ol-gold); line-height: 1; }
   .ol-proc__eta { font-size: .6rem; letter-spacing: .15em; color: var(--ol-gold); }
-  .ol-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ol-paper); margin: .25rem 0 0; }
+  .ol-proc__t { font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.05; letter-spacing: -.02em; color: var(--ol-tinta); margin: .25rem 0 0; }
   .ol-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(245,240,232,0.75); flex: 1; }
   .ol-proc__foot { font-size: .58rem; letter-spacing: .2em; color: var(--ol-gold); font-weight: 800; padding-top: .5rem; border-top: 1.5px solid rgba(245,240,232,0.25); }
 
@@ -1630,28 +1713,28 @@ const jsonLdSchemas = [
   .ol-pull { position: relative; background: var(--ol-paper); border: 3px solid var(--ol-ink); box-shadow: 8px 8px 0 var(--ol-gold); padding: 3rem 2rem 2rem; margin: 2.5rem 0 2rem; }
   .ol-pull::before { content: '"'; position: absolute; top: -20px; left: 24px; font-family: serif; font-size: 6rem; line-height: 1; color: var(--ol-gold); opacity: 0.3; pointer-events: none; }
   .ol-pull__seal { position: absolute; top: -30px; right: 30px; width: 90px; aspect-ratio: 1; transform: rotate(-10deg); filter: drop-shadow(0 4px 8px rgba(200,168,78,0.4)); z-index: 2; }
-  .ol-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--ol-ink); max-width: 56ch; position: relative; }
+  .ol-pull__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.3; margin: 0 0 1.5rem; color: var(--ol-tinta); max-width: 56ch; position: relative; }
   .ol-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--ol-ink); }
-  .ol-pull__avatar { width: 48px; height: 48px; background: var(--ol-navy); color: var(--ol-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
+  .ol-pull__avatar { width: 48px; height: 48px; background: var(--ol-navy-hondo); color: var(--ol-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; border-radius: 50%; }
   .ol-pull__cap div { display: flex; flex-direction: column; }
-  .ol-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ol-ink); }
+  .ol-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ol-tinta); }
   .ol-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
   .ol-quotes { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
   @media (min-width: 768px) { .ol-quotes { grid-template-columns: repeat(2, 1fr); } }
   .ol-quote { position: relative; background: var(--ol-paper); border: 2px solid var(--ol-ink); box-shadow: 5px 5px 0 var(--ol-ink); padding: 1.75rem 1.5rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; transition: transform .25s; }
   .ol-quote:hover { transform: translateY(-3px); }
   .ol-quote--0 { background: var(--ol-paper); }
-  .ol-quote--1 { background: var(--ol-stone); }
+  .ol-quote--1 { background: var(--ol-paper-2); }
   .ol-quote__mark { position: absolute; top: -8px; left: 14px; font-family: serif; font-size: 4rem; line-height: 1; color: var(--ol-gold); opacity: .45; }
-  .ol-quote p { font-size: .92rem; line-height: 1.5; color: var(--ol-ink); flex: 1; margin: 0; }
+  .ol-quote p { font-size: .92rem; line-height: 1.5; color: var(--ol-tinta); flex: 1; margin: 0; }
   .ol-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--ol-ink); }
-  .ol-quote__avatar { width: 36px; height: 36px; background: var(--ol-navy); color: var(--ol-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
+  .ol-quote__avatar { width: 36px; height: 36px; background: var(--ol-navy-hondo); color: var(--ol-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 800; border-radius: 50%; flex-shrink: 0; }
   .ol-quote footer div { display: flex; flex-direction: column; }
   .ol-quote__name { font-family: var(--font-display); font-weight: 700; font-size: .9rem; }
   .ol-quote__role { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; opacity: .65; text-transform: uppercase; }
 
   /* FAQ */
-  .ol-faq-section { background: var(--ol-paper); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
+  .ol-faq-section { background: var(--ol-suelo); padding: 5rem 1.5rem; border-bottom: 3px solid var(--ol-ink); }
   .ol-faq-chapter { color: var(--ol-stone); }
   .ol-faq-title { font-size: clamp(2.25rem, 5vw, 3.75rem); line-height: .95; letter-spacing: -.035em; margin: 1rem 0; }
   .ol-faq-title em { color: var(--ol-gold); }
@@ -1662,10 +1745,10 @@ const jsonLdSchemas = [
   .ol-faq__sum { display: grid; grid-template-columns: 60px 1fr 40px; gap: 1rem; align-items: center; padding: 1.5rem 0; transition: padding .2s, background .2s; }
   .ol-faq__sum:hover { padding-inline: 1rem; background: var(--ol-paper-2); }
   .ol-faq__num { font-size: 1rem; font-weight: 800; color: var(--ol-navy); letter-spacing: .1em; }
-  .ol-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--ol-ink); font-weight: 700; }
-  .ol-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--ol-ink); background: var(--ol-paper); color: var(--ol-ink); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
-  .ol-faq__det[open] .ol-faq__toggle { transform: rotate(180deg); background: var(--ol-navy); color: var(--ol-gold); }
-  .ol-faq__ans { padding: 0 0 1.5rem 76px; color: var(--brutal-text-secondary); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
+  .ol-faq__q { font-family: var(--font-display); font-size: clamp(1.05rem, 1.8vw, 1.25rem); line-height: 1.3; letter-spacing: -.015em; color: var(--ol-tinta); font-weight: 700; }
+  .ol-faq__toggle { width: 40px; height: 40px; border: 2px solid var(--ol-ink); background: var(--ol-paper); color: var(--ol-tinta); display: flex; align-items: center; justify-content: center; transition: transform .3s, background .2s, color .2s; }
+  .ol-faq__det[open] .ol-faq__toggle { transform: rotate(180deg); background: var(--ol-navy-hondo); color: var(--ol-gold); }
+  .ol-faq__ans { padding: 0 0 1.5rem 76px; color: var(--ol-tenue); font-size: .98rem; line-height: 1.55; max-width: 70ch; }
   @media (max-width: 640px) { .ol-faq__sum { grid-template-columns: 40px 1fr 32px; gap: .5rem; } .ol-faq__ans { padding-left: 48px; } }
 
   /* PUEBLOS VECINOS */
@@ -1676,39 +1759,39 @@ const jsonLdSchemas = [
   .ol-vecinos { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 0; grid-template-columns: 1fr; border: 2px solid var(--ol-ink); background: var(--ol-ink); }
   @media (min-width: 640px)  { .ol-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
   @media (min-width: 1024px) { .ol-vecinos { grid-template-columns: repeat(4, 1fr); } }
-  .ol-vecino { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: .35rem; padding: 1.5rem; background: var(--ol-paper); color: var(--ol-ink); text-decoration: none; min-height: 160px; transition: background .25s, color .25s; grid-template-areas: 'n arrow' 'name name' 'sub sub'; }
+  .ol-vecino { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: .35rem; padding: 1.5rem; background: var(--ol-paper); color: var(--ol-tinta); text-decoration: none; min-height: 160px; transition: background .25s, color .25s; grid-template-areas: 'n arrow' 'name name' 'sub sub'; }
   .ol-vecino__n { grid-area: n; font-size: .58rem; letter-spacing: .2em; opacity: .55; }
   .ol-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .ol-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .ol-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--ol-gold); font-size: 1.3rem; transition: transform .25s; }
-  .ol-vecino:hover { background: var(--ol-gold); color: var(--ol-ink); }
+  .ol-vecino:hover { background: var(--ol-gold); color: var(--ol-suelo); }
   .ol-vecino:hover .ol-vecino__sub, .ol-vecino:hover .ol-vecino__n { opacity: .85; }
-  .ol-vecino:hover .ol-vecino__arrow { color: var(--ol-ink); transform: translateX(4px); }
-  .ol-vecino--1:hover { background: var(--ol-navy); color: var(--ol-gold); }
-  .ol-vecino--2:hover { background: var(--ol-stone); color: var(--ol-ink); }
-  .ol-vecino--3:hover { background: var(--ol-marble); color: var(--ol-ink); }
+  .ol-vecino:hover .ol-vecino__arrow { color: var(--ol-suelo); transform: translateX(4px); }
+  .ol-vecino--1:hover { background: var(--ol-navy-hondo); color: var(--ol-gold); }
+  .ol-vecino--2:hover { background: var(--ol-stone); color: var(--ol-suelo); }
+  .ol-vecino--3:hover { background: var(--ol-marble); color: var(--ol-suelo); }
 
   /* CTA FINAL */
-  .ol-final { background: #1C1A16; color: var(--ol-paper); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
+  .ol-final { background: #1C1A16; color: var(--ol-tinta); padding: 6rem 1.5rem 0; position: relative; overflow: hidden; }
   .ol-final::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(26,42,58,0.06) 1.2px, transparent 1.2px); background-size: 24px 24px; pointer-events: none; }
   .ol-final > * { position: relative; }
   .ol-final__grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; padding-bottom: 4rem; }
   @media (min-width: 1024px) { .ol-final__grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
   .ol-final-chapter { color: var(--ol-navy); }
-  .ol-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--ol-paper); margin: 1rem 0; }
+  .ol-final__title { font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .9; letter-spacing: -.045em; color: var(--ol-tinta); margin: 1rem 0; }
   .ol-final__title em { color: var(--ol-gold); font-style: italic; display: block; }
   .ol-final__lead { font-size: 1.05rem; line-height: 1.55; color: rgba(245,240,232,0.75); max-width: 52ch; }
   .ol-final__lead strong { color: var(--ol-gold); }
   .ol-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.75rem 0 1.5rem; }
   .ol-final__btn { display: inline-flex; align-items: center; gap: .75rem; padding: 1.15rem 1.85rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; border: 2.5px solid; text-decoration: none; transition: transform .2s, box-shadow .2s, background .2s, color .2s; }
-  .ol-final__btn--primary { background: var(--ol-gold); color: var(--ol-ink); border-color: var(--ol-gold); box-shadow: 6px 6px 0 var(--ol-navy); }
-  .ol-final__btn--primary:hover { background: var(--ol-navy); color: var(--ol-gold); border-color: var(--ol-navy); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-gold); }
-  .ol-final__btn--ghost { background: transparent; color: var(--ol-paper); border-color: var(--ol-paper); box-shadow: 6px 6px 0 var(--ol-paper); }
-  .ol-final__btn--ghost:hover { background: var(--ol-paper); color: var(--ol-ink); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-paper); }
+  .ol-final__btn--primary { background: var(--ol-gold); color: var(--ol-suelo); border-color: var(--ol-gold); box-shadow: 6px 6px 0 var(--ol-navy); }
+  .ol-final__btn--primary:hover { background: var(--ol-navy-hondo); color: var(--ol-gold); border-color: var(--ol-navy-hondo); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-gold); }
+  .ol-final__btn--ghost { background: transparent; color: var(--ol-tinta); border-color: var(--ol-tinta); box-shadow: 6px 6px 0 var(--ol-tinta); }
+  .ol-final__btn--ghost:hover { background: var(--ol-tinta); color: var(--ol-suelo); transform: translate(-3px, -3px); box-shadow: 11px 11px 0 var(--ol-tinta); }
   .ol-final__trust { display: flex; flex-wrap: wrap; gap: 1rem 1.75rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .15em; color: rgba(245,240,232,0.55); text-transform: uppercase; margin-top: 1.5rem; }
   .ol-final__trust .ol-pulse { background: var(--ol-navy); margin: 0 .25rem 0 0; box-shadow: 0 0 0 0 rgba(26,42,58,0.55); }
   .ol-final__r { display: flex; align-items: center; justify-content: center; max-width: 360px; margin: 0 auto; }
   .ol-final-svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 12px 36px rgba(26,42,58,0.25)); }
-  .ol-final__marquee { background: var(--ol-navy); color: var(--ol-gold); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--ol-ink); margin: 0 -1.5rem; }
+  .ol-final__marquee { background: var(--ol-navy-hondo); color: var(--ol-gold); overflow: hidden; padding: .85rem 0; border-top: 3px solid var(--ol-ink); margin: 0 -1.5rem; }
   .ol-final__marquee-track { display: flex; gap: 3rem; width: max-content; animation: ol-marquee 34s linear infinite; font-family: var(--font-mono); font-size: .85rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
 </style>
