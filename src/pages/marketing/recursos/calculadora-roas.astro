@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Header from '../../../components/layout/Header.astro';
 import Footer from '../../../components/layout/Footer.astro';
 import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+import Boton from '../../../components/cdm/Boton.astro';
 import CalculadoraCaptacion from '../../../components/marketing/CalculadoraCaptacion.tsx';
 
 const title = 'Calculadora de ROAS y Coste por Cliente';
@@ -43,7 +44,7 @@ const jsonLdSchemas = [
   jsonLd={jsonLdSchemas}
 >
   <Header />
-  <Breadcrumb items={[
+  <Breadcrumb tono="consola" items={[
     { label: 'Inicio', href: '/' },
     { label: 'Marketing Digital', href: '/marketing/' },
     { label: 'Recursos', href: '/marketing/recursos/' },
@@ -111,8 +112,8 @@ const jsonLdSchemas = [
             habría que cambiar antes de gastar en publicidad — que suele ser lo más rentable.
           </p>
           <div class="rc-cta__btns">
-            <a href="/marketing/auditoria/" class="rc-btn rc-btn--primary">Pedir auditoría gratuita</a>
-            <a href="/marketing/recursos/test-marketing/" class="rc-btn rc-btn--ghost">Test de madurez digital</a>
+            <Boton href="/marketing/auditoria/">Pedir auditoría gratuita</Boton>
+            <Boton href="/marketing/recursos/test-marketing/" variante="linea">Test de madurez digital</Boton>
           </div>
         </div>
       </div>
@@ -124,7 +125,7 @@ const jsonLdSchemas = [
 </BaseLayout>
 
 <style>
-  .rc { --rc-bg: #05070d; --rc-panel: #0b111c; --rc-line: #1c2740; --rc-text: #e8edf5; --rc-muted: #8fa0b6; --rc-cyan: #18e0ff; --rc-lime: #c6ff3a; background: var(--rc-bg); color: var(--rc-text); }
+  .rc { --rc-bg: var(--color-cdm-suelo); --rc-panel: var(--color-cdm-panel); --rc-line: var(--color-cdm-regla); --rc-text: var(--color-cdm-texto); --rc-muted: #b9c5cf; --rc-cyan: #18e0ff; --rc-lime: var(--color-cdm-ok); background: var(--rc-bg); color: var(--rc-text); }
   .rc-hero { padding: 3.5rem 0 2rem; }
   .rc-kicker { color: var(--rc-cyan); display: block; margin-bottom: .8rem; }
   .rc-h1 { font-size: clamp(2.1rem, 5.5vw, 3.8rem); line-height: 1; margin: 0 0 1.2rem; }
@@ -137,13 +138,13 @@ const jsonLdSchemas = [
 
   .rc-concepts { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
   @media (min-width: 700px) { .rc-concepts { grid-template-columns: repeat(2, 1fr); } }
-  .rc-concept { background: var(--rc-panel); border: 1px solid var(--rc-line); border-radius: 14px; padding: 1.3rem; }
+  .rc-concept { background: var(--rc-panel); border: 1px solid var(--rc-line); border-radius:0; padding: 1.3rem; }
   .rc-concept__k { font-size: .68rem; letter-spacing: .12em; color: var(--rc-lime); font-weight: 800; }
   .rc-concept__n { font-size: 1.05rem; margin: .35rem 0 .5rem; }
   .rc-concept__d { font-size: .88rem; line-height: 1.65; color: var(--rc-muted); margin: 0; }
 
   .rc-faq { display: grid; gap: .7rem; }
-  .rc-faq__item { background: var(--rc-bg); border: 1px solid var(--rc-line); border-radius: 12px; }
+  .rc-faq__item { background: var(--rc-bg); border: 1px solid var(--rc-line); border-radius:0; }
   .rc-faq__q { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; cursor: pointer; font-weight: 700; font-size: .92rem; list-style: none; }
   .rc-faq__q::-webkit-details-marker { display: none; }
   .rc-faq__i { flex: none; width: 16px; height: 16px; position: relative; }
@@ -154,14 +155,10 @@ const jsonLdSchemas = [
   .rc-faq__a { padding: 0 1.2rem 1.1rem; font-size: .88rem; line-height: 1.7; color: var(--rc-muted); margin: 0; }
 
   .rc-cta { padding: 3.5rem 0 4.5rem; border-top: 1px solid var(--rc-line); }
-  .rc-cta__box { background: var(--rc-panel); border: 1px solid var(--rc-line); border-radius: 18px; padding: clamp(1.6rem, 4vw, 2.8rem); text-align: center; }
+  .rc-cta__box { background: var(--rc-panel); border: 1px solid var(--rc-line); border-radius:0; padding: clamp(1.6rem, 4vw, 2.8rem); text-align: center; }
   .rc-cta__t { font-size: clamp(1.6rem, 3.6vw, 2.6rem); margin: 0 0 .9rem; line-height: 1.1; }
   .rc-cta__l { font-size: .98rem; line-height: 1.7; color: var(--rc-muted); max-width: 56ch; margin: 0 auto 1.8rem; }
   .rc-cta__btns { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; }
-  .rc-btn { display: inline-flex; align-items: center; padding: .8rem 1.5rem; border-radius: 999px; font-weight: 800; font-size: .92rem; text-decoration: none; border: 1px solid transparent; transition: transform .18s, filter .18s; }
-  .rc-btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
-  .rc-btn--primary { background: var(--rc-cyan); color: #05070d; }
-  .rc-btn--ghost { border-color: var(--rc-line); color: var(--rc-text); }
 
-  @media (prefers-reduced-motion: reduce) { .rc-btn, .rc-faq__i::before, .rc-faq__i::after { transition: none; } .rc-btn:hover { transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .rc-faq__i::before, .rc-faq__i::after { transition: none; } }
 </style>
