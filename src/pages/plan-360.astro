@@ -1,22 +1,41 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import Breadcrumb from '../components/common/Breadcrumb.astro';
+/* Plan 360 (centro de mando, spec §6.4): abre con una consola cuyo centro es
+   el registro simulado del panel del cliente (siempre etiquetado «demo»),
+   la comparativa va en paneles y las condiciones de salida quedan a la
+   vista. */
+import LecturaLayout from '../layouts/LecturaLayout.astro';
+import Boton from '../components/cdm/Boton.astro';
+import Fichas from '../components/cdm/Fichas.astro';
+import ListaEnlaces from '../components/cdm/ListaEnlaces.astro';
+import Panel from '../components/cdm/Panel.astro';
+import Preguntas from '../components/cdm/Preguntas.astro';
+import RadarCobertura from '../components/cdm/RadarCobertura.astro';
+import RegistroDemo from '../components/cdm/RegistroDemo.astro';
+import SeccionLectura from '../components/cdm/SeccionLectura.astro';
+import ServiciosIT from '../components/cdm/ServiciosIT.astro';
 import Contact from '../components/sections/Contact.astro';
-import BlueprintHero from '../components/brutal/BlueprintHero.astro';
-import Ticker from '../components/brutal/Ticker.astro';
-import ItSection from '../components/it/ItSection.astro';
-import SectionHead from '../components/it/SectionHead.astro';
-import BloquesGrid from '../components/it/BloquesGrid.astro';
-import ServiciosGrid from '../components/it/ServiciosGrid.astro';
-import FaqList from '../components/it/FaqList.astro';
-import CoberturaList from '../components/it/CoberturaList.astro';
-import { plan360, pueblosIT } from '../data/servicios-it';
+import type { Cifra, SeccionIndice } from '../components/cdm/tipos';
+import { plan360, pueblosIT, registroPlan360, HUB_IT } from '../data/servicios-it';
 import { SITE, PROVEEDOR } from '../data/negocio';
 
 const canonical = `${SITE}${plan360.href}`;
 const contactoHref = '/contacto/?servicio=plan-360#contacto';
+
+const datos: Cifra[] = [
+  { etiqueta: 'Al mes, + IVA', valor: plan360.precio, sufijo: ' €' },
+  { etiqueta: 'Puestos incluidos', valor: plan360.puestos },
+  { etiqueta: 'Puesto adicional al mes', valor: plan360.precioPuestoExtra, sufijo: ' €' },
+  { etiqueta: 'Meses de permanencia', valor: 0 },
+];
+
+const secciones: SeccionIndice[] = [
+  { id: 'incluye', etiqueta: 'Qué incluye' },
+  { id: 'precio', etiqueta: 'Cuentas claras' },
+  { id: 'condiciones', etiqueta: 'Condiciones' },
+  { id: 'servicios', etiqueta: 'Servicios' },
+  { id: 'cobertura', etiqueta: 'Cobertura' },
+  { id: 'faq', etiqueta: 'Preguntas' },
+];
 
 const jsonLd = [
   {
@@ -55,127 +74,112 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={plan360.title} description={plan360.description} canonical={canonical} jsonLd={jsonLd}>
-  <Header />
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Plan 360' }]} />
+<LecturaLayout
+  title={plan360.title}
+  description={plan360.description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  migas={[{ label: 'Inicio', href: '/' }, { label: 'Plan 360' }]}
+  h1={plan360.h1.replace(/(\d) €/g, '$1\u00a0€')}
+  subtitulo={plan360.h2}
+  entradilla={`Tu web, hasta ${plan360.puestos} puestos, servidor, red, copias y ciberseguridad, con visita in situ el mismo día en el Levante y el Almanzora.`}
+  datos={datos}
+  secciones={secciones}
+  coordenadas="Plan 360 · base en Vera"
+>
+  <Fragment slot="acciones">
+    <Boton href={contactoHref}>Quiero el Plan 360</Boton>
+    <Boton href="#incluye" variante="linea">Ver qué incluye</Boton>
+  </Fragment>
 
-  <main id="main-content">
-    <BlueprintHero
-      size="compact"
-      h1Lines={['Plan 360: web y mantenimiento', 'informático por 400 € al mes']}
-      h2={plan360.h2}
-      primary={{ href: contactoHref, label: 'Quiero el Plan 360' }}
-      secondary={{ href: '#incluye', label: 'Ver qué incluye' }}
-      proyecto="Plan 360"
-      lamina="360"
-      specs={[{ k: 'Precio', v: `${plan360.precio} € + IVA al mes` }, { k: 'Puestos', v: `Hasta ${plan360.puestos} (+${plan360.precioPuestoExtra} €/puesto)` }, { k: 'Visita in situ', v: 'El mismo día' }, { k: 'Permanencia', v: 'Ninguna' }]}
-    />
-    <Ticker label="Qué incluye el Plan 360" tone="lima" items={plan360.incluye.map((b) => b.t)} />
+  <RegistroDemo slot="lateral" lineas={registroPlan360} retardo={0.5} />
 
-    <ItSection tone="bone" id="incluye" labelledby="p360-incluye">
-      <SectionHead
-        id="p360-incluye"
-        kicker="Cap. 01 / Qué incluye"
-        title="Qué incluye el Plan 360"
-        lead={`Todo lo que necesita una pyme de hasta ${plan360.puestos} puestos para que su tecnología funcione, por una cuota fija.`}
-      />
-      <BloquesGrid items={plan360.incluye} />
-    </ItSection>
+  <SeccionLectura
+    id="incluye"
+    titulo="Qué incluye el Plan 360"
+    lead={`Todo lo que necesita una pyme de hasta ${plan360.puestos} puestos para que su tecnología funcione, por una cuota fija.`}
+  >
+    <Fichas columnas={3} items={plan360.incluye.map((b) => ({ titulo: b.t, texto: b.d }))} />
+  </SeccionLectura>
 
-    <ItSection tone="night" labelledby="p360-precio">
-      <SectionHead
-        id="p360-precio"
-        kicker="Cap. 02 / Cuentas claras"
-        title="Cuánto cuesta tener la tecnología de tu empresa cubierta"
-      />
-      <ul class="p360-comp">
-        {plan360.comparativa.map((c) => (
-          <li class={`p360-comp__item${c.destacado ? ' is-hot' : ''}`}>
-            <span class="p360-comp__k">{c.concepto}</span>
-            <strong class="p360-comp__v">{c.coste}</strong>
-            <span class="p360-comp__n">{c.nota}</span>
-          </li>
-        ))}
-      </ul>
-    </ItSection>
+  <SeccionLectura id="precio" titulo="Cuánto cuesta tener la tecnología de tu empresa cubierta">
+    <div class="p360-comp">
+      {plan360.comparativa.map((c) => (
+        <Panel titulo={c.concepto} class={c.destacado ? 'p360-comp__panel is-destacado' : 'p360-comp__panel'}>
+          <p class="p360-comp__coste">{c.coste}</p>
+          <p class="p360-comp__nota">{c.nota}</p>
+        </Panel>
+      ))}
+    </div>
+  </SeccionLectura>
 
-    <ItSection tone="paper" labelledby="p360-condiciones">
-      <div class="p360-cond">
-        <div>
-          <SectionHead id="p360-condiciones" kicker="Cap. 03 / Condiciones" title="Sin permanencia y sin cuota de alta" />
-          <p class="p360-cond__p">{plan360.salida}</p>
-          <p class="p360-cond__p">
-            ¿Más de {plan360.puestos} puestos? Cada puesto adicional cuesta {plan360.precioPuestoExtra} € + IVA al mes.
-          </p>
-          <a class="p360-cond__btn" href={contactoHref}>Pedir el Plan 360</a>
-        </div>
-        <div class="p360-cond__box">
-          <p class="p360-cond__t">No incluido en la cuota</p>
-          <ul>
-            {plan360.noIncluye.map((x) => <li>{x}</li>)}
-          </ul>
+  <SeccionLectura id="condiciones" titulo="Sin permanencia y sin cuota de alta">
+    <div class="p360-cond">
+      <div>
+        <p class="p360-texto">{plan360.salida}</p>
+        <p class="p360-texto">
+          ¿Más de {plan360.puestos} puestos? Cada puesto adicional cuesta {plan360.precioPuestoExtra} € + IVA al mes.
+        </p>
+        <div class="p360-botones">
+          <Boton href={contactoHref}>Pedir el Plan 360</Boton>
         </div>
       </div>
-    </ItSection>
+      <Panel titulo="No incluido en la cuota" class="p360-noincluye">
+        <ul>
+          {plan360.noIncluye.map((x) => <li>{x}</li>)}
+        </ul>
+      </Panel>
+    </div>
+  </SeccionLectura>
 
-    <ItSection tone="bone" labelledby="p360-servicios">
-      <SectionHead id="p360-servicios" kicker="Cap. 04 / Servicios" title="Servicios informáticos que cubre el plan" />
-      <ServiciosGrid />
-    </ItSection>
+  <SeccionLectura id="servicios" titulo="Servicios informáticos que cubre el plan">
+    <ServiciosIT />
+  </SeccionLectura>
 
-    <ItSection tone="paper" labelledby="p360-cobertura">
-      <SectionHead
-        id="p360-cobertura"
-        kicker="Cap. 05 / Cobertura"
-        title="Visita el mismo día en el Levante y el Almanzora"
-        lead="En el resto de la provincia de Almería el Plan 360 funciona con soporte remoto y visitas programadas."
-      />
-      <CoberturaList />
-    </ItSection>
+  <SeccionLectura
+    id="cobertura"
+    titulo="Visita el mismo día en el Levante y el Almanzora"
+    lead="En el resto de la provincia de Almería el Plan 360 funciona con soporte remoto y visitas programadas."
+  >
+    <div class="p360-radar"><RadarCobertura /></div>
+    <ListaEnlaces columnas={3} items={pueblosIT.map((p) => ({ href: `${HUB_IT}${p.slug}/`, label: `Informático en ${p.nombre}`, sub: p.comarca }))} />
+  </SeccionLectura>
 
-    <ItSection tone="bone" labelledby="p360-faq">
-      <SectionHead id="p360-faq" kicker="Cap. 06 / Preguntas" title="Preguntas frecuentes sobre el Plan 360" />
-      <FaqList items={plan360.faq} />
-    </ItSection>
+  <SeccionLectura id="faq" titulo="Preguntas frecuentes sobre el Plan 360">
+    <Preguntas items={plan360.faq} />
+  </SeccionLectura>
 
-    <Contact />
-  </main>
-
-  <Footer />
-</BaseLayout>
+  <Fragment slot="cierre">
+    <Contact tono="consola" />
+  </Fragment>
+</LecturaLayout>
 
 <style>
-  .p360-comp { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
-  @media (min-width: 900px) { .p360-comp { grid-template-columns: repeat(3, 1fr); } }
-  .p360-comp__item {
-    display: flex; flex-direction: column; gap: .5rem;
-    padding: 1.6rem 1.5rem;
-    background: var(--it-card);
-    border: 3px solid var(--it-line);
-    box-shadow: 7px 7px 0 var(--it-shadow);
+  .p360-texto { max-width: 62ch; margin: 1.1rem 0 0; font-size: 1.06rem; line-height: 1.65; color: #b9c5cf; }
+  .p360-botones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+  .p360-comp { display: grid; gap: 1rem; margin-top: 1.75rem; }
+  @media (min-width: 900px) { .p360-comp { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  /* Las clases van en la raíz de Panel (cid del Panel): :global en ellas. */
+  :global(.p360-comp__panel.is-destacado) { border-color: var(--color-cdm-ok); }
+  .p360-comp__coste {
+    margin: 0;
+    padding: 1rem 1rem 0;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 740;
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-cdm-texto);
   }
-  .p360-comp__item.is-hot { background: var(--color-plano-lima); color: var(--color-plano-tinta); border-color: var(--color-plano-lima); }
-  .p360-comp__k { font-family: var(--font-mono); font-size: .8rem; }
-  .p360-comp__v { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.8rem, 3.4vw, 2.5rem); line-height: 1; letter-spacing: -.04em; }
-  .p360-comp__n { line-height: 1.5; color: var(--it-muted); }
-  .p360-comp__item.is-hot .p360-comp__n { color: var(--color-plano-tinta); font-weight: 600; }
+  :global(.p360-comp__panel.is-destacado) .p360-comp__coste { color: var(--color-cdm-ok); }
+  .p360-comp__nota { margin: 0; padding: 0.7rem 1rem 1.1rem; font-size: 0.95rem; line-height: 1.55; color: #b9c5cf; }
 
   .p360-cond { display: grid; gap: 2rem; }
-  @media (min-width: 1024px) { .p360-cond { grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: start; } }
-  .p360-cond__p { margin: 0 0 1rem; max-width: 60ch; font-size: 1.1rem; line-height: 1.6; }
-  .p360-cond__btn {
-    display: inline-flex; align-items: center; min-height: 3.1rem;
-    margin-top: .5rem; padding: .85rem 1.5rem;
-    font-family: var(--font-mono); font-weight: 800;
-    background: var(--color-plano-tinta); color: var(--color-plano-lima);
-    text-decoration: none;
-    border: 3px solid var(--color-plano-tinta);
-    box-shadow: 6px 6px 0 var(--color-plano-naranja);
-    transition: transform .15s, box-shadow .15s;
-  }
-  .p360-cond__btn:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--color-plano-naranja); }
-  .p360-cond__btn:focus-visible { outline: 3px solid var(--color-plano-ciano); outline-offset: 4px; }
-  .p360-cond__box { padding: 1.5rem; background: var(--it-card); border: 3px solid var(--it-line); box-shadow: 7px 7px 0 var(--it-shadow); }
-  .p360-cond__t { margin: 0 0 1rem; font-family: var(--font-mono); font-size: .8rem; color: var(--it-accent); }
-  .p360-cond__box ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .7rem; line-height: 1.5; }
+  @media (min-width: 1024px) { .p360-cond { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 3rem; align-items: start; } }
+  :global(.p360-noincluye) ul { margin: 0; padding: 0.9rem 1rem 1rem 2.1rem; display: grid; gap: 0.7rem; }
+  :global(.p360-noincluye) li { font-size: 0.95rem; line-height: 1.5; color: var(--color-cdm-texto); }
+
+  .p360-radar { max-width: 560px; margin-top: 1.75rem; }
 </style>

@@ -1,0 +1,142 @@
+---
+/* Vista de una landing IT por pueblo (/informatica-empresas/<pueblo>/) en la
+   plantilla de lectura, con el radar de cobertura y el pueblo resaltado. */
+import LecturaLayout from '../../layouts/LecturaLayout.astro';
+import Boton from '../cdm/Boton.astro';
+import Fichas from '../cdm/Fichas.astro';
+import ListaEnlaces from '../cdm/ListaEnlaces.astro';
+import Plan360Panel from '../cdm/Plan360Panel.astro';
+import Preguntas from '../cdm/Preguntas.astro';
+import RadarCobertura from '../cdm/RadarCobertura.astro';
+import SeccionLectura from '../cdm/SeccionLectura.astro';
+import ServiciosIT from '../cdm/ServiciosIT.astro';
+import Contact from '../sections/Contact.astro';
+import type { Cifra, SeccionIndice } from '../cdm/tipos';
+import { getPuebloIT, pueblosIT, serviciosIT, plan360, HUB_IT, type Faq } from '../../data/servicios-it';
+import { esPuebloIndexable } from '../../data/pueblos-indexables';
+import { SITE, PROVEEDOR } from '../../data/negocio';
+
+interface Props {
+  slug: string;
+}
+
+const pueblo = getPuebloIT(Astro.props.slug);
+if (!pueblo) throw new Error(`Pueblo IT desconocido: ${Astro.props.slug}`);
+
+const n = pueblo.nombre;
+const canonical = `${SITE}${HUB_IT}${pueblo.slug}/`;
+const contactoHref = '/contacto/?servicio=sistemas-it#contacto';
+
+// El título debe caber en 43 caracteres (BaseLayout añade « | Platanito
+// Rico», 17 más, hasta 60): se usa la primera variante que entra.
+const title = [
+  `Mantenimiento Informático en ${n}`,
+  `Informático para Empresas en ${n}`,
+  `Informático en ${n}`,
+].find((t) => t.length <= 43) ?? `Informático en ${n}`;
+
+// ≤160 caracteres incluso con el nombre más largo (Cuevas del Almanzora).
+const description = `Mantenimiento informático en ${n}: técnico in situ el mismo día, redes wifi, servidores, copias y ciberseguridad. Plan 360 por 400 €/mes.`;
+
+const faq: Faq[] = [
+  { q: `¿Tenéis técnico informático en ${n}?`, a: `Sí. ${n} está dentro de nuestra zona de cobertura presencial: si una incidencia no se resuelve en remoto, vamos a tu empresa el mismo día.` },
+  { q: `¿Cuánto cuesta el mantenimiento informático para una empresa de ${n}?`, a: 'Para pymes de hasta 10 puestos, el Plan 360 incluye mantenimiento informático, red, copias, ciberseguridad y la web por 400 € + IVA al mes, sin permanencia. Si solo necesitas un servicio concreto, te damos presupuesto cerrado.' },
+  { q: '¿Instaláis redes wifi y cableado en locales y naves?', a: `Sí. Hacemos estudio de cobertura, cableado estructurado, wifi profesional y firewall para oficinas, hoteles, restaurantes y naves de ${n} y alrededores.` },
+];
+
+const webLocal = esPuebloIndexable(pueblo.slug) ? `/diseno-web/${pueblo.slug}/` : null;
+
+const datos: Cifra[] = [
+  { etiqueta: `Sectores que atendemos en ${n}`, valor: pueblo.sectores.length },
+  { etiqueta: 'Servicios informáticos', valor: serviciosIT.length },
+  { etiqueta: 'Plan 360 al mes, + IVA', valor: plan360.precio, sufijo: ' €' },
+  { etiqueta: 'Meses de permanencia', valor: 0 },
+];
+
+const secciones: SeccionIndice[] = [
+  { id: 'local', etiqueta: `Empresas de ${n}` },
+  { id: 'servicios', etiqueta: 'Servicios' },
+  { id: 'plan-360', etiqueta: 'Plan 360' },
+  { id: 'cobertura', etiqueta: 'Cobertura' },
+  { id: 'faq', etiqueta: 'Preguntas' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': `Mantenimiento informático para empresas en ${n}`,
+    'serviceType': 'Mantenimiento informático',
+    'description': description,
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': { '@type': 'City', 'name': n },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faq.map((f) => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } })),
+  },
+];
+---
+
+<LecturaLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  migas={[{ label: 'Inicio', href: '/' }, { label: 'Sistemas IT', href: HUB_IT }, { label: n }]}
+  h1={`Mantenimiento informático en ${n}`}
+  subtitulo={`Técnico en tu empresa de ${n} el mismo día`}
+  entradilla={pueblo.intro}
+  datos={datos}
+  secciones={secciones}
+  coordenadas={`${n} · ${pueblo.comarca}`}
+>
+  <Fragment slot="acciones">
+    <Boton href={contactoHref}>Pedir presupuesto</Boton>
+    <Boton href={plan360.href} variante="linea">Ver el Plan 360</Boton>
+  </Fragment>
+
+  <RadarCobertura slot="lateral" destacado={pueblo.slug} />
+
+  <SeccionLectura id="local" titulo={`Informática para empresas de ${n}`} lead={`Sectores que atendemos en ${n}.`}>
+    <Fichas items={pueblo.sectores.map((s) => ({ titulo: s }))} columnas={3} />
+    {webLocal && (
+      <p class="pi-web">¿También necesitas web? <a href={webLocal}>Diseño web en {n}</a></p>
+    )}
+  </SeccionLectura>
+
+  <SeccionLectura id="servicios" titulo={`Servicios informáticos en ${n}`}>
+    <ServiciosIT />
+  </SeccionLectura>
+
+  <SeccionLectura
+    id="plan-360"
+    titulo="Web e informática en una sola cuota"
+    lead={`Si tu empresa tiene hasta ${plan360.puestos} puestos, el Plan 360 lo cubre todo: la web, los ordenadores, el servidor, la red y las copias.`}
+  >
+    <Plan360Panel />
+  </SeccionLectura>
+
+  <SeccionLectura id="cobertura" titulo="También vamos in situ a">
+    <ListaEnlaces
+      columnas={3}
+      items={pueblosIT.map((p) => ({ href: `${HUB_IT}${p.slug}/`, label: p.slug === pueblo.slug ? p.nombre : `Informático en ${p.nombre}`, sub: p.comarca, actual: p.slug === pueblo.slug }))}
+    />
+  </SeccionLectura>
+
+  <SeccionLectura id="faq" titulo={`Preguntas frecuentes sobre informática en ${n}`}>
+    <Preguntas items={faq} />
+  </SeccionLectura>
+
+  <Fragment slot="cierre">
+    <Contact tono="consola" />
+  </Fragment>
+</LecturaLayout>
+
+<style>
+  .pi-web { margin: 1.5rem 0 0; font-weight: 600; color: var(--color-cdm-texto); }
+  /* Enlace dentro de una frase: subrayado, no solo color (axe link-in-text-block). */
+  .pi-web a { color: var(--color-cdm-senal); text-decoration: underline; text-underline-offset: 4px; }
+</style>

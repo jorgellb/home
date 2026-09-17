@@ -6,14 +6,17 @@ import type { LineaRegistro } from './tipos';
 interface Props {
   lineas: LineaRegistro[];
   titulo?: string;
+  /* Segundos antes de la primera línea. En la portada espera al arranque
+     de la consola (2,2 s); donde el registro es la pieza central, menos. */
+  retardo?: number;
   class?: string;
 }
 
-const { lineas, titulo = 'Así verás tu Plan 360', class: clase } = Astro.props;
+const { lineas, titulo = 'Así verás tu Plan 360', retardo = 2.2, class: clase } = Astro.props;
 ---
 
 <Panel titulo={titulo} tipo="demo" nota="Simulación del panel del cliente, no son datos reales" class={clase}>
-  <ol class="cdm-registro">
+  <ol class="cdm-registro" style={`--retardo: ${retardo}s`}>
     {lineas.map((l, i) => (
       <li style={`--i:${i}`}>
         <span class="cdm-registro__hora">{l.hora}</span>
@@ -39,7 +42,7 @@ const { lineas, titulo = 'Así verás tu Plan 360', class: clase } = Astro.props
   .cdm-registro__texto.is-ok::after { content: ' ok'; color: var(--color-cdm-ok); }
   .cdm-registro__texto.is-aviso::before { content: 'aviso '; color: var(--color-cdm-senal); }
   @media (prefers-reduced-motion: no-preference) {
-    .cdm-registro li { animation: cdm-linea 0.01s calc(2.2s + var(--i) * 0.6s) both; }
+    .cdm-registro li { animation: cdm-linea 0.01s calc(var(--retardo, 2.2s) + var(--i) * 0.6s) both; }
   }
   @keyframes cdm-linea {
     from { opacity: 0; }

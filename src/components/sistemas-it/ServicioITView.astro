@@ -1,0 +1,144 @@
+---
+/* Vista de una página de servicio IT (/informatica-empresas/<servicio>/)
+   en la plantilla de lectura del centro de mando. */
+import LecturaLayout from '../../layouts/LecturaLayout.astro';
+import Boton from '../cdm/Boton.astro';
+import Fichas from '../cdm/Fichas.astro';
+import ListaEnlaces from '../cdm/ListaEnlaces.astro';
+import Panel from '../cdm/Panel.astro';
+import Plan360Panel from '../cdm/Plan360Panel.astro';
+import Preguntas from '../cdm/Preguntas.astro';
+import SeccionLectura from '../cdm/SeccionLectura.astro';
+import ServiciosIT from '../cdm/ServiciosIT.astro';
+import Contact from '../sections/Contact.astro';
+import type { Cifra, SeccionIndice } from '../cdm/tipos';
+import { getServicioIT, pueblosIT, plan360, HUB_IT } from '../../data/servicios-it';
+import { SITE, PROVEEDOR } from '../../data/negocio';
+
+interface Props {
+  slug: string;
+}
+
+const servicio = getServicioIT(Astro.props.slug);
+if (!servicio) throw new Error(`Servicio IT desconocido: ${Astro.props.slug}`);
+
+const canonical = `${SITE}${HUB_IT}${servicio.slug}/`;
+const contactoHref = '/contacto/?servicio=sistemas-it#contacto';
+
+const datos: Cifra[] = [
+  { etiqueta: 'Pueblos con visita el mismo día', valor: pueblosIT.length },
+  { etiqueta: 'Partes del servicio', valor: servicio.incluye.length },
+  { etiqueta: 'Plan 360 al mes, + IVA', valor: plan360.precio, sufijo: ' €' },
+  { etiqueta: 'Meses de permanencia', valor: 0 },
+];
+
+const secciones: SeccionIndice[] = [
+  { id: 'problema', etiqueta: 'El problema' },
+  { id: 'incluye', etiqueta: 'Qué incluye' },
+  { id: 'para-quien', etiqueta: 'Para quién' },
+  { id: 'otros', etiqueta: 'Más servicios' },
+  { id: 'cobertura', etiqueta: 'Cobertura' },
+  { id: 'faq', etiqueta: 'Preguntas' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': servicio.h1,
+    'serviceType': servicio.nav,
+    'description': servicio.description,
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': [
+      ...pueblosIT.map((p) => ({ '@type': 'City', 'name': p.nombre })),
+      { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': servicio.faq.map((f) => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } })),
+  },
+];
+---
+
+<LecturaLayout
+  title={servicio.title}
+  description={servicio.description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  migas={[{ label: 'Inicio', href: '/' }, { label: 'Sistemas IT', href: HUB_IT }, { label: servicio.nav }]}
+  h1={servicio.h1}
+  subtitulo={servicio.h2}
+  entradilla={servicio.resumen}
+  datos={datos}
+  secciones={secciones}
+  coordenadas="Sistemas IT · base en Vera"
+>
+  <Fragment slot="acciones">
+    <Boton href={contactoHref}>Pedir presupuesto</Boton>
+    <Boton href={plan360.href} variante="linea">Incluido en el Plan 360</Boton>
+  </Fragment>
+
+  <Panel slot="lateral" titulo="Lo que vemos cada semana" class="sv-dolores">
+    <ul>
+      {servicio.dolores.map((d) => <li>{d}</li>)}
+    </ul>
+  </Panel>
+
+  <SeccionLectura id="problema" titulo="Lo que vemos cada semana en las empresas">
+    <p class="sv-texto">{servicio.intro}</p>
+  </SeccionLectura>
+
+  <SeccionLectura id="incluye" titulo={`${servicio.nav} para empresas: qué incluye`}>
+    <Fichas items={servicio.incluye.map((b) => ({ titulo: b.t, texto: b.d }))} />
+  </SeccionLectura>
+
+  <SeccionLectura id="para-quien" titulo="Empresas con las que trabajamos">
+    <ul class="sv-chips">
+      {servicio.paraQuien.map((q) => <li>{q}</li>)}
+    </ul>
+    <Plan360Panel />
+  </SeccionLectura>
+
+  <SeccionLectura id="otros" titulo="Otros servicios informáticos para tu empresa">
+    <ServiciosIT exclude={servicio.slug} />
+  </SeccionLectura>
+
+  <SeccionLectura
+    id="cobertura"
+    titulo="Técnico in situ el mismo día"
+    lead="Vamos a tu empresa en el Levante y el Almanzora. En el resto de la provincia de Almería damos soporte remoto y visitas programadas."
+  >
+    <ListaEnlaces columnas={3} items={pueblosIT.map((p) => ({ href: `${HUB_IT}${p.slug}/`, label: `Informático en ${p.nombre}`, sub: p.comarca }))} />
+  </SeccionLectura>
+
+  <SeccionLectura id="faq" titulo={`Preguntas frecuentes: ${servicio.nav.toLowerCase()}`}>
+    <Preguntas items={servicio.faq} />
+  </SeccionLectura>
+
+  <Fragment slot="cierre">
+    <Contact tono="consola" />
+  </Fragment>
+</LecturaLayout>
+
+<style>
+  .sv-texto { max-width: 68ch; margin: 1.1rem 0 0; font-size: 1.08rem; line-height: 1.65; color: #b9c5cf; }
+  .sv-chips { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .sv-chips li { padding: 0.4rem 0.8rem; font-size: 0.92rem; color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); background: var(--color-cdm-panel-2); }
+
+  /* La clase va en la raíz de Panel, que lleva el cid del Panel: por eso
+     :global en el contenedor; ul y li sí son de esta vista. */
+  :global(.sv-dolores) ul { list-style: none; margin: 0; padding: 0.4rem 1rem 0.9rem; }
+  :global(.sv-dolores) li {
+    position: relative;
+    padding: 0.7rem 0 0.7rem 1.6rem;
+    border-bottom: 1px solid var(--color-cdm-regla);
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--color-cdm-texto);
+  }
+  :global(.sv-dolores) li:last-child { border-bottom: 0; }
+  :global(.sv-dolores) li::before { content: '✕'; position: absolute; left: 0; top: 0.72rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-cdm-senal); }
+</style>
