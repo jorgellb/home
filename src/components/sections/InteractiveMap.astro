@@ -209,7 +209,7 @@ for (let i = 1; i <= 10 && contraste(temaDEnPapel, PAPEL) < 4.5; i++) {
 
   {/* ── Pie con metadata cartográfica ── */}
   <footer class="iMap__foot">
-    <span class="iMap__foot-meta">★ PROYECCIÓN WEB MERCATOR · OSM · CARTO</span>
+    <span class="iMap__foot-meta">★ PROYECCIÓN WEB MERCATOR · © OPENSTREETMAP · OPENFREEMAP</span>
     <span class="iMap__foot-meta">PLATANITO RICO · CARTOGRAFÍA · 2026</span>
   </footer>
 </div>
@@ -630,28 +630,9 @@ for (let i = 1; i <= 10 && contraste(temaDEnPapel, PAPEL) < 4.5; i++) {
 
     var map = new maplibregl.Map({
       container: container,
-      style: {
-        version: 8,
-        glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
-        sources: {
-          carto: {
-            type: 'raster',
-            tiles: [
-              'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-              'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-              'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-            ],
-            tileSize: 256,
-            attribution: '© CartoDB © OSM'
-          }
-        },
-        layers: [{
-          id: 'base',
-          type: 'raster',
-          source: 'carto',
-          paint: { 'raster-opacity': 1 }
-        }]
-      },
+      /* Teselas vectoriales de OpenFreeMap: sin clave ni cuota, estilo oscuro
+         a juego con el centro de mando. Atribución a OSM en el pie. */
+      style: 'https://tiles.openfreemap.org/styles/dark',
       /* Arranca un poco más lejos y plano para el intro cinematográfico */
       center: center,
       zoom: Math.max(zoom - 1.8, 4),
