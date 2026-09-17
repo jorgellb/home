@@ -83,11 +83,16 @@ let temaEnTinta = themeColor;
 for (let i = 1; i <= 10 && contraste(temaEnTinta, TINTA) < 4.5; i++) {
   temaEnTinta = mezcla(themeColor, PAPEL, i / 10);
 }
+// El tema oscuro como texto de la escala, sobre su caja de papel: se oscurece hasta leer.
+let temaDEnPapel = themeColorDark;
+for (let i = 1; i <= 10 && contraste(temaDEnPapel, PAPEL) < 4.5; i++) {
+  temaDEnPapel = mezcla(themeColorDark, TINTA, i / 10);
+}
 ---
 
 <div
   class="iMap"
-  style={`--iMap-theme: ${themeColor}; --iMap-theme-d: ${themeColorDark}; --iMap-theme-bg: ${fondoTema}; --iMap-on-theme: ${sobreTema}; --iMap-theme-text: ${temaEnTinta};`}
+  style={`--iMap-theme: ${themeColor}; --iMap-theme-d: ${themeColorDark}; --iMap-theme-bg: ${fondoTema}; --iMap-on-theme: ${sobreTema}; --iMap-theme-text: ${temaEnTinta}; --iMap-theme-d-text: ${temaDEnPapel};`}
 >
   {/* ── Cabecera con coordenadas tipo carta cartográfica ── */}
   <header class="iMap__head">
@@ -360,7 +365,7 @@ for (let i = 1; i <= 10 && contraste(temaEnTinta, TINTA) < 4.5; i++) {
     font-size: .5rem;
     font-weight: 800;
     letter-spacing: .2em;
-    color: var(--iMap-theme-d);
+    color: var(--iMap-theme-d-text);
   }
 
   /* Grid sutil */
