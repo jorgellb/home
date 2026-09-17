@@ -214,8 +214,6 @@ for (let i = 1; i <= 10 && contraste(temaDEnPapel, PAPEL) < 4.5; i++) {
   </footer>
 </div>
 
-<link rel="stylesheet" href="/vendor/maplibre-gl/maplibre-gl.css" />
-
 <style>
   /* ══════════════════════════════════════════════════════════
      INTERACTIVE MAP — Brutalist cartographic system
@@ -533,8 +531,6 @@ for (let i = 1; i <= 10 && contraste(temaDEnPapel, PAPEL) < 4.5; i++) {
   }
 </style>
 
-<script src="/vendor/maplibre-gl/maplibre-gl.js" is:inline></script>
-
 <script is:inline>
 (function() {
   /* ═══ Guard global: si este IIFE ya corrió, no re-registrar listeners ═══ */
@@ -596,101 +592,140 @@ for (let i = 1; i <= 10 && contraste(temaDEnPapel, PAPEL) < 4.5; i++) {
     }
   }
 
-  /* ═══ Init principal ═══ */
+  /* MapLibre (unos 210 KB) y su hoja de estilos se piden solo cuando un mapa
+     se acerca a la pantalla. Antes iban con un <script> bloqueante en mitad
+     del HTML y el intro animado ocupaba el hilo principal desde el primer
+     segundo aunque el mapa estuviera muy abajo. */
+  var _libreria = null;
+  function cargarMapLibre() {
+    if (_libreria) return _libreria;
+    _libreria = new Promise(function(resolve, reject) {
+      if (typeof maplibregl !== 'undefined') return resolve();
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = '/vendor/maplibre-gl/maplibre-gl.css';
+      document.head.appendChild(css);
+      var js = document.createElement('script');
+      js.src = '/vendor/maplibre-gl/maplibre-gl.js';
+      js.onload = function() { resolve(); };
+      js.onerror = function() { _libreria = null; reject(new Error('MapLibre no cargó')); };
+      document.head.appendChild(js);
+    });
+    return _libreria;
+  }
+
+  /* ═══ Init de un mapa ═══ */
+  function iniciarMapa(container) {
+    /* Guard por contenedor: un solo mapa por elemento, siempre */
+    if (container._iMapInstance) return;
+
+    var center  = JSON.parse(container.dataset.center  || '[0,0]');
+    var zoom    = parseFloat(container.dataset.zoom    || '13');
+    var pitch   = parseFloat(container.dataset.pitch   || '25');
+    var bearing = parseFloat(container.dataset.bearing || '-15');
+    var label   = container.dataset.label || '';
+    var initial = container.dataset.initial || 'A';
+    var theme   = container.dataset.theme || '#0E0D0B';
+    var themeD  = container.dataset.themeD || theme;
+
+    var map = new maplibregl.Map({
+      container: container,
+      style: {
+        version: 8,
+        glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+        sources: {
+          carto: {
+            type: 'raster',
+            tiles: [
+              'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+              'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+              'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+            ],
+            tileSize: 256,
+            attribution: '© CartoDB © OSM'
+          }
+        },
+        layers: [{
+          id: 'base',
+          type: 'raster',
+          source: 'carto',
+          paint: { 'raster-opacity': 1 }
+        }]
+      },
+      /* Arranca un poco más lejos y plano para el intro cinematográfico */
+      center: center,
+      zoom: Math.max(zoom - 1.8, 4),
+      pitch: pitch * 0.35,
+      bearing: bearing * 0.4,
+      attributionControl: false,
+      logoPosition: 'bottom-right',
+      maxZoom: 17,
+      minZoom: 8
+    });
+
+    /* Guardar instancia en el contenedor → guard definitivo */
+    container._iMapInstance = map;
+
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+
+    /* ── map.once: se dispara UNA sola vez, imposible duplicar ── */
+    map.once('load', function() {
+      /* Anillo de cobertura temático */
+      try {
+        map.addSource('iMap-ring', { type: 'geojson', data: iMapCircle(center, 1.6, 96) });
+        map.addLayer({
+          id: 'iMap-ring-fill', type: 'fill', source: 'iMap-ring',
+          paint: { 'fill-color': theme, 'fill-opacity': 0.07 }
+        });
+        map.addLayer({
+          id: 'iMap-ring-line', type: 'line', source: 'iMap-ring',
+          paint: { 'line-color': theme, 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.6 }
+        });
+      } catch (_e) { /* noop */ }
+
+      /* Nuclear cleanup antes de crear el pin → 0 posibilidad de duplicado */
+      purgeMarkers(container);
+
+      var el = buildMarkerElement(theme, themeD, label, initial, container.id);
+
+      var marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
+        .setLngLat(center)
+        .addTo(map);
+      container._iMapMarker = marker;
+
+      /* Intro cinematográfico: vuela suave hasta el encuadre final (sin
+         animación si el usuario pide menos movimiento). */
+      var sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      map[sinMovimiento ? 'jumpTo' : 'easeTo']({
+        center: center, zoom: zoom, pitch: pitch, bearing: bearing,
+        duration: 2400,
+        easing: function(t) { return 1 - Math.pow(1 - t, 3); }
+      });
+
+      /* Resize tras render */
+      setTimeout(function() { map.resize(); }, 500);
+    });
+  }
+
+  /* ═══ Arranque perezoso: cada mapa se inicia al acercarse a la vista ═══ */
+  var _observador = null;
   function initIMaps() {
-    if (typeof maplibregl === 'undefined') {
-      setTimeout(initIMaps, 200);
+    var pendientes = document.querySelectorAll('.iMap__canvas');
+    if (!('IntersectionObserver' in window)) {
+      cargarMapLibre().then(function() { pendientes.forEach(iniciarMapa); }, function() {});
       return;
     }
-
-    document.querySelectorAll('.iMap__canvas').forEach(function(container) {
-      /* Guard por contenedor: un solo mapa por elemento, siempre */
-      if (container._iMapInstance) return;
-
-      var center  = JSON.parse(container.dataset.center  || '[0,0]');
-      var zoom    = parseFloat(container.dataset.zoom    || '13');
-      var pitch   = parseFloat(container.dataset.pitch   || '25');
-      var bearing = parseFloat(container.dataset.bearing || '-15');
-      var label   = container.dataset.label || '';
-      var initial = container.dataset.initial || 'A';
-      var theme   = container.dataset.theme || '#0E0D0B';
-      var themeD  = container.dataset.themeD || theme;
-
-      var map = new maplibregl.Map({
-        container: container,
-        style: {
-          version: 8,
-          glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
-          sources: {
-            carto: {
-              type: 'raster',
-              tiles: [
-                'https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-                'https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-                'https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-              ],
-              tileSize: 256,
-              attribution: '© CartoDB © OSM'
-            }
-          },
-          layers: [{
-            id: 'base',
-            type: 'raster',
-            source: 'carto',
-            paint: { 'raster-opacity': 1 }
-          }]
-        },
-        /* Arranca un poco más lejos y plano para el intro cinematográfico */
-        center: center,
-        zoom: Math.max(zoom - 1.8, 4),
-        pitch: pitch * 0.35,
-        bearing: bearing * 0.4,
-        attributionControl: false,
-        logoPosition: 'bottom-right',
-        maxZoom: 17,
-        minZoom: 8
-      });
-
-      /* Guardar instancia en el contenedor → guard definitivo */
-      container._iMapInstance = map;
-
-      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
-
-      /* ── map.once: se dispara UNA sola vez, imposible duplicar ── */
-      map.once('load', function() {
-        /* Anillo de cobertura temático */
-        try {
-          map.addSource('iMap-ring', { type: 'geojson', data: iMapCircle(center, 1.6, 96) });
-          map.addLayer({
-            id: 'iMap-ring-fill', type: 'fill', source: 'iMap-ring',
-            paint: { 'fill-color': theme, 'fill-opacity': 0.07 }
-          });
-          map.addLayer({
-            id: 'iMap-ring-line', type: 'line', source: 'iMap-ring',
-            paint: { 'line-color': theme, 'line-width': 2, 'line-dasharray': [2, 2], 'line-opacity': 0.6 }
-          });
-        } catch (_e) { /* noop */ }
-
-        /* Nuclear cleanup antes de crear el pin → 0 posibilidad de duplicado */
-        purgeMarkers(container);
-
-        var el = buildMarkerElement(theme, themeD, label, initial, container.id);
-
-        var marker = new maplibregl.Marker({ element: el, anchor: 'bottom' })
-          .setLngLat(center)
-          .addTo(map);
-        container._iMapMarker = marker;
-
-        /* Intro cinematográfico: vuela suave hasta el encuadre final */
-        map.easeTo({
-          center: center, zoom: zoom, pitch: pitch, bearing: bearing,
-          duration: 2400,
-          easing: function(t) { return 1 - Math.pow(1 - t, 3); }
+    if (!_observador) {
+      _observador = new IntersectionObserver(function(entradas) {
+        entradas.forEach(function(entrada) {
+          if (!entrada.isIntersecting) return;
+          _observador.unobserve(entrada.target);
+          cargarMapLibre().then(function() { iniciarMapa(entrada.target); }, function() {});
         });
-
-        /* Resize tras render */
-        setTimeout(function() { map.resize(); }, 500);
-      });
+      }, { rootMargin: '400px 0px' });
+    }
+    pendientes.forEach(function(container) {
+      if (!container._iMapInstance) _observador.observe(container);
     });
   }
 
