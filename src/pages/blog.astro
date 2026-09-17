@@ -39,8 +39,6 @@ const today = new Date();
 const issueNumber = String(100 + posts.length).padStart(3, '0');
 const volume = today.getFullYear() - 2017;
 const dateLong = today.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-const weatherTemp = 22 + Math.floor((today.getMonth() < 5 || today.getMonth() > 9) ? -4 : 6);
-const seaTemp = 18 + Math.floor((today.getMonth() < 5 || today.getMonth() > 9) ? -2 : 5);
 
 // Secciones del índice (mock)
 const indexSections = [
@@ -52,18 +50,19 @@ const indexSections = [
   { id: 'colofon',  name: 'Colofón',     page: 'XX' },
 ];
 
-// Stock ticker mock
-const tickers = [
-  { sym: 'WEB',  val: '127.45', d: '+2.3%',  up: true  },
-  { sym: 'SEO',  val: '89.12',  d: '+1.1%',  up: true  },
-  { sym: 'CMS',  val: '54.80',  d: '-0.4%',  up: false },
-  { sym: 'CWV',  val: '99.97',  d: '+0.05%', up: true  },
-  { sym: 'JS',   val: '21.7K',  d: '+5.2%',  up: true  },
-  { sym: 'WP',   val: '6.8.1',  d: 'STABLE', up: true  },
-];
-
 // Categorías observed
 const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categories || []))).slice(0, 8);
+
+/* Cintillo del periódico con datos reales del propio blog: nada inventado. */
+const minutosTotales = posts.reduce((t: number, p: Post) => t + (p.data.readingTime || calculateReadingTime(p.body || '')), 0);
+const tickers = [
+  { sym: 'CRÓNICAS',  val: String(posts.length),                 d: 'PUBLICADAS', up: true },
+  { sym: 'SECCIONES', val: String(allCategories.length),         d: 'ACTIVAS',    up: true },
+  { sym: 'LECTURA',   val: `${minutosTotales} MIN`,              d: 'EN TOTAL',   up: true },
+  { sym: 'ÚLTIMA',    val: formatDateShort(featured.data.publishedAt), d: 'EDICIÓN', up: true },
+  { sym: 'PRECIO',    val: '0,00 €',                             d: 'SIEMPRE',    up: true },
+  { sym: 'REDACCIÓN', val: 'VERA',                               d: 'ALMERÍA',    up: true },
+];
 ---
 
 <BaseLayout
@@ -177,8 +176,8 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
                 <line x1="16" y1="3" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" transform={`rotate(${i*30} 16 16)`}/>
               ))}
             </svg>
-            <span class="np-strip__val" id="np-air-temp">{weatherTemp}°C · Sol</span>
-            <span class="np-strip__sub" id="np-sea-temp">Mar {seaTemp}°C</span>
+            <span class="np-strip__val" id="np-air-temp">—</span>
+            <span class="np-strip__sub" id="np-sea-temp">Mar —</span>
           </div>
         </div>
 
@@ -205,7 +204,7 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
           <path d="M3 17l6-6 4 4 8-8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M15 7h6v6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>MERCADO · TECH</span>
+        <span>EL POST EN CIFRAS</span>
       </div>
       <div class="np-ticker__track">
         {Array.from({length: 3}).map(() => (
@@ -213,7 +212,7 @@ const allCategories = Array.from(new Set(posts.flatMap((p: Post) => p.data.categ
             <span class={`np-ticker__item ${t.up ? 'np-ticker__item--up' : 'np-ticker__item--down'}`}>
               <span class="np-ticker__sym">{t.sym}</span>
               <span class="np-ticker__val">{t.val}</span>
-              <span class="np-ticker__d">{t.up ? '▲' : '▼'} {t.d}</span>
+              <span class="np-ticker__d">{t.d}</span>
             </span>
           ))
         ))}
