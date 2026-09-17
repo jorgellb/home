@@ -1,0 +1,42 @@
+---
+/* Preguntas frecuentes en tono consola, con <details>: la primera abierta.
+   El JSON-LD FAQPage lo sigue poniendo cada página. */
+interface Props {
+  items: { q: string; a: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="cdm-preguntas">
+  {items.map((f, i) => (
+    <li>
+      <details open={i === 0}>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .cdm-preguntas { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--color-cdm-regla); }
+  .cdm-preguntas > li { border-bottom: 1px solid var(--color-cdm-regla); }
+  .cdm-preguntas summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.05rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-weight: 600;
+    font-size: 1.02rem;
+    line-height: 1.4;
+    color: var(--color-cdm-texto);
+  }
+  .cdm-preguntas summary::-webkit-details-marker { display: none; }
+  .cdm-preguntas summary::after { content: '+'; flex: none; font-family: var(--font-mono); color: var(--color-cdm-senal); }
+  .cdm-preguntas details[open] summary::after { content: '−'; }
+  .cdm-preguntas summary:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: 3px; }
+  .cdm-preguntas p { max-width: 68ch; margin: 0 0 1.2rem; font-size: 0.98rem; line-height: 1.6; color: #b9c5cf; }
+</style>

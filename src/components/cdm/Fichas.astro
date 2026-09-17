@@ -1,0 +1,114 @@
+---
+/* Rejilla de fichas para la columna de lectura: lugares, sectores, ventajas,
+   pasos, servicios incluidos… Las reglas van por celda, así que una última
+   fila incompleta no enseña un bloque del color de la regla. */
+export interface Ficha {
+  titulo: string;
+  texto?: string;
+  /* Cifra grande en señal, encima del título. */
+  cifra?: string;
+  subtitulo?: string;
+  chips?: string[];
+  /* Dato corto en mono al pie, tras una línea discontinua. */
+  dato?: string;
+  href?: string;
+  enlace?: string;
+}
+
+interface Props {
+  items: Ficha[];
+  /* Solo para secuencias de verdad (pasos): numera 01, 02… */
+  numeradas?: boolean;
+  columnas?: 2 | 3;
+}
+
+const { items, numeradas = false, columnas = 2 } = Astro.props;
+const Lista = numeradas ? 'ol' : 'ul';
+---
+
+<Lista class:list={['cdm-fichas', `cdm-fichas--${columnas}`, { 'cdm-fichas--numeradas': numeradas }]}>
+  {items.map((f) => (
+    <li class="cdm-ficha">
+      {f.cifra && <p class="cdm-ficha__cifra">{f.cifra}</p>}
+      <h3 class="cdm-ficha__titulo">{f.titulo}</h3>
+      {f.subtitulo && <p class="cdm-ficha__sub">{f.subtitulo}</p>}
+      {f.texto && <p class="cdm-ficha__texto">{f.texto}</p>}
+      {f.chips && f.chips.length > 0 && (
+        <ul class="cdm-ficha__chips">
+          {f.chips.map((c) => <li>{c}</li>)}
+        </ul>
+      )}
+      {f.dato && <p class="cdm-ficha__dato">{f.dato}</p>}
+      {f.href && f.enlace && <a class="cdm-ficha__enlace" href={f.href}>{f.enlace}</a>}
+    </li>
+  ))}
+</Lista>
+
+<style>
+  .cdm-fichas {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: grid;
+    border-top: 1px solid var(--color-cdm-regla);
+    border-left: 1px solid var(--color-cdm-regla);
+  }
+  @media (min-width: 720px) { .cdm-fichas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .cdm-fichas--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .cdm-ficha {
+    display: flex;
+    flex-direction: column;
+    padding: 1.35rem 1.4rem 1.45rem;
+    background: var(--color-cdm-panel);
+    border-right: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
+  }
+  .cdm-fichas--numeradas { counter-reset: ficha; }
+  .cdm-fichas--numeradas .cdm-ficha { counter-increment: ficha; }
+  .cdm-fichas--numeradas .cdm-ficha::before {
+    content: counter(ficha, decimal-leading-zero);
+    margin-bottom: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-cdm-senal);
+  }
+  .cdm-ficha__cifra { margin: 0 0 0.5rem; font-family: var(--font-mono); font-size: 1.35rem; font-weight: 700; color: var(--color-cdm-senal); }
+  .cdm-ficha__titulo {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 88%;
+    font-weight: 680;
+    font-size: 1.2rem;
+    line-height: 1.15;
+    color: var(--color-cdm-texto);
+  }
+  .cdm-ficha__sub { margin: 0.35rem 0 0; font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-cdm-tenue); }
+  .cdm-ficha__texto { flex: 1; margin: 0.55rem 0 0; font-size: 0.98rem; line-height: 1.6; color: #b9c5cf; }
+  .cdm-ficha__chips { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .cdm-ficha__chips li {
+    padding: 0.25rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-cdm-texto);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-panel-2);
+  }
+  .cdm-ficha__dato {
+    margin: 0.9rem 0 0;
+    padding-top: 0.7rem;
+    border-top: 1px dashed var(--color-cdm-regla-2);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-cdm-senal);
+  }
+  .cdm-ficha__enlace {
+    align-self: flex-start;
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-cdm-senal);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .cdm-ficha__enlace:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: 3px; }
+</style>

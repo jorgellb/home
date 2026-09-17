@@ -82,6 +82,12 @@ export function proyectar(lat: number, lon: number, caja: Caja = CAJA_RADAR): Pu
   return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
 }
 
+/* Si un pueblo cae dentro del mapa. Las landings solo enseñan el radar a
+   los pueblos que salen en él: fuera de la caja no hay visita el mismo día. */
+export function dentroDeCaja(lat: number, lon: number, caja: Caja = CAJA_RADAR): boolean {
+  return lat >= caja.latMin && lat <= caja.latMax && lon >= caja.lonMin && lon <= caja.lonMax;
+}
+
 export function puntosRadar(caja: Caja = CAJA_RADAR): PuntoRadar[] {
   return pueblosIT.map((pueblo) => {
     const coordenada = COORDENADAS[pueblo.slug];

@@ -3,7 +3,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'desierto',    etiqueta: 'Cuatro señas' },
+  { id: 'patrimonio',  etiqueta: 'El desierto' },
+  { id: 'cine',        etiqueta: 'Spaghetti western' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'mapa',        etiqueta: 'Cartografía' },
+  { id: 'porque',      etiqueta: 'Por qué Tabernas' },
+  { id: 'metodo',      etiqueta: 'Método' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'comarca',     etiqueta: 'Filabres-Tabernas' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const pueblosTabernas = getPueblosByComarca('Los Filabres-Tabernas').filter(p => p.slug !== 'tabernas');
 
@@ -95,6 +112,8 @@ const jsonLdSchemas = [
   <Header />
 
   <main id="main-content" class="tb">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.052° N · 2.391° W · 400 m" class="tb-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — DESIERTO DE TABERNAS                       */}
@@ -269,6 +288,7 @@ const jsonLdSchemas = [
                   alt="Tabernas — desierto, badlands y paisaje lunar de Almería"
                   width="640" height="320"
                   loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                   class="tb-postcard__img"
                 />
@@ -343,47 +363,47 @@ const jsonLdSchemas = [
             <li class={`tb-icono tb-icono--${ico.color}`}>
               <div class="tb-icono__code">
                 <svg viewBox="0 0 80 80" width="100%" height="100%">
-                  <circle cx="40" cy="40" r="38" fill="var(--tb-ink)" stroke="var(--tb-ink)" stroke-width="2"/>
-                  <circle cx="40" cy="40" r="32" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="38" fill="#1C1512" stroke="#1C1512" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="#FFF5E6" stroke="#1C1512" stroke-width="2"/>
                   {i === 0 && (
                     <>
                       {/* SVG: dunas/sol */}
-                      <path d="M 12 56 Q 28 42 40 56 T 68 56" fill="none" stroke="var(--tb-terracota)" stroke-width="2.5" stroke-linecap="round"/>
+                      <path d="M 12 56 Q 28 42 40 56 T 68 56" fill="none" stroke="#C85A3A" stroke-width="2.5" stroke-linecap="round"/>
                       <path d="M 12 64 Q 28 52 40 64 T 68 64" fill="none" stroke="#D4A14A" stroke-width="2" stroke-linecap="round"/>
-                      <circle cx="40" cy="32" r="10" fill="#D4A14A" stroke="var(--tb-ink)" stroke-width="1.5"/>
-                      <circle cx="40" cy="32" r="6" fill="var(--tb-terracota)"/>
+                      <circle cx="40" cy="32" r="10" fill="#D4A14A" stroke="#1C1512" stroke-width="1.5"/>
+                      <circle cx="40" cy="32" r="6" fill="#C85A3A"/>
                     </>
                   )}
                   {i === 1 && (
                     <>
                       {/* SVG: claqueta de cine */}
-                      <rect x="18" y="26" width="44" height="32" rx="2" fill="var(--tb-ink)" stroke="var(--tb-ink)" stroke-width="1.5"/>
-                      <rect x="20" y="28" width="40" height="12" fill="var(--tb-paper)"/>
-                      <line x1="20" y1="32" x2="60" y2="32" stroke="var(--tb-ink)" stroke-width="1"/>
-                      <line x1="20" y1="36" x2="60" y2="36" stroke="var(--tb-ink)" stroke-width="1"/>
-                      <rect x="20" y="42" width="40" height="14" fill="var(--tb-gold)"/>
-                      <polygon points="22,44 34,50 22,56" fill="var(--tb-ink)" opacity="0.3"/>
-                      <path d="M 14 24 L 22 28 L 14 32 Z" fill="var(--tb-ink)"/>
+                      <rect x="18" y="26" width="44" height="32" rx="2" fill="#1C1512" stroke="#1C1512" stroke-width="1.5"/>
+                      <rect x="20" y="28" width="40" height="12" fill="#FFF5E6"/>
+                      <line x1="20" y1="32" x2="60" y2="32" stroke="#1C1512" stroke-width="1"/>
+                      <line x1="20" y1="36" x2="60" y2="36" stroke="#1C1512" stroke-width="1"/>
+                      <rect x="20" y="42" width="40" height="14" fill="#D4A14A"/>
+                      <polygon points="22,44 34,50 22,56" fill="#1C1512" opacity="0.3"/>
+                      <path d="M 14 24 L 22 28 L 14 32 Z" fill="#1C1512"/>
                     </>
                   )}
                   {i === 2 && (
                     <>
                       {/* SVG: estrella/telescopio */}
-                      <circle cx="32" cy="30" r="2" fill="var(--tb-gold)"/>
-                      <circle cx="52" cy="24" r="1.5" fill="var(--tb-gold)"/>
-                      <circle cx="44" cy="16" r="2" fill="var(--tb-gold)"/>
-                      <circle cx="28" cy="18" r="1" fill="var(--tb-gold)"/>
-                      <circle cx="58" cy="38" r="1" fill="var(--tb-gold)"/>
-                      <circle cx="40" cy="40" r="10" fill="var(--tb-sky)" stroke="var(--tb-ink)" stroke-width="1.5"/>
-                      <path d="M 40 30 L 64 70 L 58 72 L 36 34 Z" fill="var(--tb-ink)"/>
-                      <circle cx="44" cy="38" r="4" fill="var(--tb-sky)" stroke="var(--tb-ink)" stroke-width="1"/>
+                      <circle cx="32" cy="30" r="2" fill="#D4A14A"/>
+                      <circle cx="52" cy="24" r="1.5" fill="#D4A14A"/>
+                      <circle cx="44" cy="16" r="2" fill="#D4A14A"/>
+                      <circle cx="28" cy="18" r="1" fill="#D4A14A"/>
+                      <circle cx="58" cy="38" r="1" fill="#D4A14A"/>
+                      <circle cx="40" cy="40" r="10" fill="#2C4C6B" stroke="#1C1512" stroke-width="1.5"/>
+                      <path d="M 40 30 L 64 70 L 58 72 L 36 34 Z" fill="#1C1512"/>
+                      <circle cx="44" cy="38" r="4" fill="#2C4C6B" stroke="#1C1512" stroke-width="1"/>
                     </>
                   )}
                   {i === 3 && (
                     <>
                       {/* SVG: estrella sheriff */}
-                      <polygon points="40,18 44,30 56,30 46,38 50,50 40,42 30,50 34,38 24,30 36,30" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1.5" stroke-linejoin="round"/>
-                      <circle cx="40" cy="36" r="3" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1"/>
+                      <polygon points="40,18 44,30 56,30 46,38 50,50 40,42 30,50 34,38 24,30 36,30" fill="#D4A14A" stroke="#1C1512" stroke-width="1.5" stroke-linejoin="round"/>
+                      <circle cx="40" cy="36" r="3" fill="#5A7A5A" stroke="#1C1512" stroke-width="1"/>
                     </>
                   )}
                 </svg>
@@ -403,7 +423,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DESIERTO — FLAGSHIP SECTION                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-desert-section">
+    <section class="tb-desert-section" id="patrimonio">
       <div class="container-brutal">
         <div class="tb-desert-grid">
 
@@ -512,7 +532,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PLATÓ — HOLLYWOOD ALMERIENSE                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-cine-section">
+    <section class="tb-cine-section" id="cine">
       <div class="container-brutal">
 
         <span class="text-meta tb-cine-chapter">Cap. 04 / Spaghetti Western</span>
@@ -537,36 +557,36 @@ const jsonLdSchemas = [
                 <svg viewBox="0 0 60 60" width="100%" height="100%">
                   {i === 0 && (
                     <>
-                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
-                      <path d="M 20 34 Q 30 28 40 34" fill="none" stroke="var(--tb-terracota)" stroke-width="2"/>
-                      <circle cx="25" cy="40" r="2" fill="var(--tb-gold)"/>
-                      <circle cx="35" cy="40" r="2" fill="var(--tb-gold)"/>
-                      <circle cx="30" cy="22" r="5" fill="var(--tb-gold)"/>
+                      <circle cx="30" cy="30" r="28" fill="#FFF5E6" stroke="#1C1512" stroke-width="2"/>
+                      <path d="M 20 34 Q 30 28 40 34" fill="none" stroke="#C85A3A" stroke-width="2"/>
+                      <circle cx="25" cy="40" r="2" fill="#D4A14A"/>
+                      <circle cx="35" cy="40" r="2" fill="#D4A14A"/>
+                      <circle cx="30" cy="22" r="5" fill="#D4A14A"/>
                     </>
                   )}
                   {i === 1 && (
                     <>
-                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
-                      <path d="M 18 34 L 24 26 L 30 30 L 36 24 L 42 34 Z" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1.5"/>
-                      <rect x="22" y="36" width="16" height="10" rx="2" fill="var(--tb-ink)"/>
+                      <circle cx="30" cy="30" r="28" fill="#FFF5E6" stroke="#1C1512" stroke-width="2"/>
+                      <path d="M 18 34 L 24 26 L 30 30 L 36 24 L 42 34 Z" fill="#D4A14A" stroke="#1C1512" stroke-width="1.5"/>
+                      <rect x="22" y="36" width="16" height="10" rx="2" fill="#1C1512"/>
                     </>
                   )}
                   {i === 2 && (
                     <>
-                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
-                      <circle cx="30" cy="24" r="6" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
-                      <path d="M 18 42 Q 24 34 30 42 Q 36 34 42 42" fill="none" stroke="var(--tb-sage)" stroke-width="2"/>
-                      <circle cx="26" cy="22" r="1.5" fill="var(--tb-ink)"/>
+                      <circle cx="30" cy="30" r="28" fill="#FFF5E6" stroke="#1C1512" stroke-width="2"/>
+                      <circle cx="30" cy="24" r="6" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
+                      <path d="M 18 42 Q 24 34 30 42 Q 36 34 42 42" fill="none" stroke="#5A7A5A" stroke-width="2"/>
+                      <circle cx="26" cy="22" r="1.5" fill="#1C1512"/>
                     </>
                   )}
                   {i === 3 && (
                     <>
-                      <circle cx="30" cy="30" r="28" fill="var(--tb-paper)" stroke="var(--tb-ink)" stroke-width="2"/>
+                      <circle cx="30" cy="30" r="28" fill="#FFF5E6" stroke="#1C1512" stroke-width="2"/>
                       <path d="M 22 34 Q 30 28 38 34" fill="none" stroke="#C85A3A" stroke-width="1.5"/>
-                      <circle cx="30" cy="26" r="10" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1"/>
+                      <circle cx="30" cy="26" r="10" fill="#D4A14A" stroke="#1C1512" stroke-width="1"/>
                       <circle cx="30" cy="26" r="4" fill="#C85A3A"/>
-                      <line x1="30" y1="26" x2="30" y2="14" stroke="var(--tb-ink)" stroke-width="1.5"/>
-                      <line x1="30" y1="26" x2="42" y2="20" stroke="var(--tb-ink)" stroke-width="1.5"/>
+                      <line x1="30" y1="26" x2="30" y2="14" stroke="#1C1512" stroke-width="1.5"/>
+                      <line x1="30" y1="26" x2="42" y2="20" stroke="#1C1512" stroke-width="1.5"/>
                     </>
                   )}
                 </svg>
@@ -584,7 +604,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* SECTORES — 6 MERCADOS                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-sec-section">
+    <section class="tb-sec-section" id="sectores">
       <div class="container-brutal">
 
         <span class="text-meta tb-sec-chapter">Cap. 05 / Oportunidades</span>
@@ -624,7 +644,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA                                                */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-map-section">
+    <section class="tb-map-section" id="mapa">
       <div class="container-brutal">
         <div class="tb-map-head">
           <div class="tb-map-head__inner">
@@ -648,15 +668,15 @@ const jsonLdSchemas = [
         {/* Estrella decorativa TL */}
         <div class="tb-map-icon tb-map-icon--tl" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="100%" height="100%">
-            <polygon points="30,6 34,20 48,20 36,28 40,42 30,34 20,42 24,28 12,20 26,20" fill="var(--tb-gold)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+            <polygon points="30,6 34,20 48,20 36,28 40,42 30,34 20,42 24,28 12,20 26,20" fill="#D4A14A" stroke="#1C1512" stroke-width="1.5"/>
           </svg>
         </div>
         {/* Cactus decorativo BR */}
         <div class="tb-map-icon tb-map-icon--br" aria-hidden="true">
           <svg viewBox="0 0 60 60" width="100%" height="100%">
-            <rect x="27" y="10" width="6" height="40" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
-            <path d="M 27 22 L 16 22 L 16 16 L 14 16 L 14 26 L 27 26" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
-            <path d="M 33 32 L 44 32 L 44 26 L 46 26 L 46 36 L 33 36" fill="var(--tb-sage)" stroke="var(--tb-ink)" stroke-width="1.5"/>
+            <rect x="27" y="10" width="6" height="40" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
+            <path d="M 27 22 L 16 22 L 16 16 L 14 16 L 14 26 L 27 26" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
+            <path d="M 33 32 L 44 32 L 44 26 L 46 26 L 46 36 L 33 36" fill="#5A7A5A" stroke="#1C1512" stroke-width="1.5"/>
           </svg>
         </div>
         <div class="tb-map-wrap">
@@ -675,7 +695,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES — 4 RAZONES                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-dif-section">
+    <section class="tb-dif-section" id="porque">
       <div class="container-brutal">
 
         <span class="text-meta tb-dif-chapter">Cap. 07 / Diferencial</span>
@@ -701,7 +721,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO — 4 PASOS                                  */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-proc-section">
+    <section class="tb-proc-section" id="metodo">
       <div class="container-brutal">
 
         <span class="text-meta tb-proc-chapter">Cap. 08 / Método</span>
@@ -731,7 +751,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS — 3                                  */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-quote-section">
+    <section class="tb-quote-section" id="testimonios">
       <div class="container-brutal">
 
         <span class="text-meta tb-quote-chapter">Cap. 09 / Resultados</span>
@@ -792,7 +812,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ — 8 PREGUNTAS                                  */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-faq-section">
+    <section class="tb-faq-section" id="faq">
       <div class="container-brutal">
 
         <span class="text-meta tb-faq-chapter">Cap. 10 / FAQ</span>
@@ -802,7 +822,7 @@ const jsonLdSchemas = [
           <span class="heading-display-block">de dudas.</span>
         </h2>
 
-        <dl class="tb-faq">
+        <div class="tb-faq">
           {faq.map((f, i) => (
             <div class="tb-faq__item">
               <details class="tb-faq__det" open={i === 0}>
@@ -823,7 +843,7 @@ const jsonLdSchemas = [
               </details>
             </div>
           ))}
-        </dl>
+        </div>
 
       </div>
     </section>
@@ -832,7 +852,7 @@ const jsonLdSchemas = [
     {/* PUEBLOS VECINOS                                    */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosTabernas.length > 0 && (
-      <section class="tb-vecinos-section">
+      <section class="tb-vecinos-section" id="comarca">
         <div class="container-brutal">
 
           <span class="text-meta tb-vecinos-chapter">Cap. 11 / Comarca</span>
@@ -841,7 +861,7 @@ const jsonLdSchemas = [
             <em class="heading-editorial">al completo.</em>
           </h2>
 
-          <ul class="tb-vecinos">
+          <div class="tb-vecinos">
             {pueblosTabernas.slice(0, 8).map((p, i) => (
               <a href={`/diseno-web/${p.slug}/`} class={`tb-vecino tb-vecino--${i}`}>
                 <span class="tb-vecino__n">{String(i+1).padStart(2,'0')}</span>
@@ -850,17 +870,21 @@ const jsonLdSchemas = [
                 <span class="tb-vecino__arrow" aria-hidden="true">→</span>
               </a>
             ))}
-          </ul>
+          </div>
 
         </div>
       </section>
     )}
 
     {/* ════════════════════════════════════════════════ */}
-    <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
+    <div class="tb-todos">
+      <div class="container-brutal">
+        <a href="/diseno-web/">Ver todos los municipios con diseño web en Almería →</a>
+      </div>
+    </div>
     {/* CTA FINAL                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="tb-final">
+    <section class="tb-final" id="empezar">
       <div class="container-brutal">
         <div class="tb-final__grid">
 
@@ -968,18 +992,74 @@ const jsonLdSchemas = [
   /* TABERNAS DESIGN SYSTEM                          */
   /* ═══════════════════════════════════════════════ */
 
-  :root {
-    --tb-paper:    #FFF5E6;
-    --tb-paper-2:  #F0E2CC;
-    --tb-sand:     #E3CDA4;
-    --tb-ink:      #1C1512;
-    --tb-terracota:#C85A3A;
+  /* Fase 2 · consola. La paleta vivía en :root y se sale de la página: pasa
+     a .tb. paper hacía de fondo y de tinta clara a la vez, e ink de borde,
+     sombra, fondo y texto: cada uno se reparte, y el #1C1512 sobrevive como
+     fondo hondo. La arena solo era fondo y pasa a panel. El cielo era un
+     azul noche usado como texto (2,2:1 sobre oscuro) y sube, igual que
+     terracota y salvia. Las ilustraciones del SVG llevan hex literal. */
+  .tb {
+    --tb-paper:    var(--color-cdm-panel);
+    --tb-paper-2:  var(--color-cdm-panel-2);
+    --tb-sand:     var(--color-cdm-panel-2);
+    --tb-suelo:    var(--color-cdm-suelo);
+    --tb-tinta:    var(--color-cdm-texto);
+    --tb-tenue:    var(--color-cdm-tenue);
+    --tb-ink:      var(--color-cdm-regla-2);
+    --tb-hondo:    #1C1512;       /* solo fondo */
+    --tb-terracota:#DC7250;       /* aclarada para leer */
     --tb-gold:     #D4A14A;
-    --tb-sky:      #2C4C6B;
-    --tb-sage:     #5A7A5A;
+    --tb-sky:      #7FA6CC;       /* cielo, aclarado para leer */
+    --tb-sage:     #86A886;       /* salvia, aclarada */
     --tb-sun:      #E8732E;
     --tb-rose:     #8C3A5A;
-    --tb-shadow:   8px 8px 0 var(--tb-ink);
+    --tb-shadow:   8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--tb-suelo);
+    color: var(--tb-tinta);
+  }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .tb :global(.brutal-section-head__title) { color: var(--tb-tinta); }
+  .tb :global(.brutal-section-head__title em) { color: var(--tb-terracota); }
+  .tb :global(.brutal-section-head__lead) { color: var(--tb-tenue); }
+  .tb :global(:where(.text-meta)) { color: var(--tb-tenue); } /* :where: sin especificidad, para que el color propio de cada capítulo mande */
+  .tb :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  .tb section[id] { scroll-margin-top: 96px; }
+
+  /* El enlace al índice de municipios estaba suelto y con estilos inline,
+     fuera de todo contenedor: se iba a sangre. */
+  .tb-todos { background: var(--tb-suelo); padding: 2.5rem 1.5rem; text-align: center; }
+  .tb-todos a { font-weight: 700; font-size: 1.05rem; color: var(--tb-gold); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .tb :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .tb :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .tb-map-frame { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .tb :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--tb-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .tb :global(.cdm-indice__titulo),
+    .tb :global(.cdm-indice__lista),
+    .tb :global(.cdm-indice__coord) { display: none; }
+    .tb :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
 
   .tb-pulse {
@@ -1012,7 +1092,7 @@ const jsonLdSchemas = [
     background:
       radial-gradient(circle at 75% 30%, rgba(200,90,58,0.10), transparent 50%),
       radial-gradient(circle at 25% 75%, rgba(212,161,74,0.08), transparent 50%),
-      var(--tb-paper);
+      var(--tb-suelo);
     border-bottom: 3px solid var(--tb-ink);
     position: relative;
     overflow: hidden;
@@ -1051,7 +1131,7 @@ const jsonLdSchemas = [
   .tb-hero__title em { color: var(--tb-sky); font-style: italic; }
   .tb-hero__title-stamp {
     display: inline-block;
-    color: var(--tb-paper);
+    color: var(--tb-suelo);
     background: var(--tb-terracota);
     padding: 0 .2em;
     transform: rotate(-1deg);
@@ -1059,10 +1139,10 @@ const jsonLdSchemas = [
   .tb-hero__lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--tb-tenue);
     max-width: 54ch;
   }
-  .tb-hero__lead strong { color: var(--tb-ink); font-weight: 700; }
+  .tb-hero__lead strong { color: var(--tb-tinta); font-weight: 700; }
   .tb-hero__lead em { color: var(--tb-terracota); font-style: italic; font-weight: 600; }
   .tb-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
 
@@ -1079,7 +1159,7 @@ const jsonLdSchemas = [
   }
   .tb-btn--primary {
     background: var(--tb-terracota);
-    color: var(--tb-paper);
+    color: var(--tb-suelo);
     box-shadow: 6px 6px 0 var(--tb-ink);
   }
   .tb-btn--primary:hover {
@@ -1089,11 +1169,11 @@ const jsonLdSchemas = [
   }
   .tb-btn--ghost {
     background: transparent;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     box-shadow: 6px 6px 0 var(--tb-gold);
   }
   .tb-btn--ghost:hover {
-    background: var(--tb-ink);
+    background: var(--tb-hondo);
     color: var(--tb-gold);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--tb-gold);
@@ -1125,10 +1205,10 @@ const jsonLdSchemas = [
     .tb-kpi:nth-last-child(-n+2)  { border-bottom: 2px solid var(--tb-ink); }
     .tb-kpi:nth-last-child(-n+4)  { border-bottom: none; }
   }
-  .tb-kpi--terracota  { background: var(--tb-terracota); color: var(--tb-paper); }
-  .tb-kpi--gold       { background: var(--tb-gold); color: var(--tb-ink); }
-  .tb-kpi--sky        { background: var(--tb-sky); color: var(--tb-paper); }
-  .tb-kpi--ink        { background: var(--tb-ink); color: var(--tb-paper); }
+  .tb-kpi--terracota  { background: var(--tb-terracota); color: var(--tb-suelo); }
+  .tb-kpi--gold       { background: var(--tb-gold); color: var(--tb-suelo); }
+  .tb-kpi--sky        { background: var(--tb-sky); color: var(--tb-suelo); }
+  .tb-kpi--ink        { background: var(--tb-hondo); color: var(--tb-tinta); }
   .tb-kpi--ink .tb-kpi__v { color: var(--tb-gold); }
   .tb-kpi__v { font-size: clamp(1.65rem, 3.8vw, 2.25rem); font-weight: 800; line-height: 1; }
   .tb-kpi__v small { font-size: .55em; opacity: .8; }
@@ -1154,8 +1234,8 @@ const jsonLdSchemas = [
     display: flex; justify-content: space-between; flex-wrap: wrap;
     gap: .5rem;
     padding: .65rem 1rem;
-    background: var(--tb-ink);
-    color: var(--tb-paper);
+    background: var(--tb-hondo);
+    color: var(--tb-tinta);
     font-size: .58rem;
     letter-spacing: .15em;
     border-bottom: 2px solid var(--tb-ink);
@@ -1190,7 +1270,7 @@ const jsonLdSchemas = [
     position: absolute;
     bottom: 12px; left: 12px;
     background: var(--tb-paper);
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     padding: .4rem .75rem;
     font-size: .65rem;
     font-weight: 800;
@@ -1207,16 +1287,16 @@ const jsonLdSchemas = [
   .tb-postcard__data-row {
     display: flex; justify-content: space-between; align-items: center;
     padding-bottom: .35rem;
-    border-bottom: 1px dashed rgba(28,21,18,0.15);
+    border-bottom: 1px dashed rgba(230,237,242,0.16);
     font-size: .68rem;
   }
   .tb-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
   .tb-postcard__data-row > span:first-child { color: var(--tb-sky); letter-spacing: .2em; font-weight: 800; }
-  .tb-postcard__data-v { color: var(--tb-ink); font-weight: 700; letter-spacing: .05em; }
+  .tb-postcard__data-v { color: var(--tb-tinta); font-weight: 700; letter-spacing: .05em; }
 
   /* Marquee */
   .tb-marquee {
-    background: var(--tb-ink);
+    background: var(--tb-hondo);
     color: var(--tb-gold);
     overflow: hidden;
     padding: .9rem 0;
@@ -1238,7 +1318,7 @@ const jsonLdSchemas = [
 
   /* ICONOS */
   .tb-iconos-section {
-    background: var(--tb-paper-2);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
     position: relative;
@@ -1300,7 +1380,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.2rem, 2.2vw, 1.5rem);
     line-height: 1;
     letter-spacing: -.025em;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     margin: 0;
   }
   .tb-icono__sub {
@@ -1313,12 +1393,12 @@ const jsonLdSchemas = [
   .tb-icono--gold .tb-icono__sub   { color: var(--tb-gold); }
   .tb-icono--sky .tb-icono__sub    { color: var(--tb-sky); }
   .tb-icono--sage .tb-icono__sub   { color: var(--tb-sage); }
-  .tb-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--brutal-text-secondary); margin: 0; flex: 1; }
+  .tb-icono__desc { font-size: .82rem; line-height: 1.45; color: var(--tb-tenue); margin: 0; flex: 1; }
   .tb-icono__dato {
     font-family: var(--font-display);
     font-size: 1.15rem;
     font-weight: 800;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     border-top: 2px dashed var(--tb-ink);
     padding-top: .5rem;
     width: 100%;
@@ -1358,11 +1438,12 @@ const jsonLdSchemas = [
   .tb-desert-lead {
     font-size: 1.05rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--tb-tenue);
     margin-bottom: 1rem;
     max-width: 54ch;
   }
-  .tb-desert-lead strong { color: var(--tb-terracota-d, #A04020); font-weight: 700; }
+  /* --tb-terracota-d nunca existió: caía siempre en #A04020, 3:1 sobre oscuro. */
+  .tb-desert-lead strong { color: var(--tb-terracota); font-weight: 700; }
   .tb-desert-lead em { color: var(--tb-sky); font-style: italic; }
 
   .tb-desert-facts {
@@ -1387,7 +1468,7 @@ const jsonLdSchemas = [
     .tb-desert-facts li:last-child { border-bottom: none; }
   }
   .tb-desert-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--tb-sky); font-weight: 800; }
-  .tb-desert-facts__v { font-size: .9rem; color: var(--tb-ink); font-weight: 600; line-height: 1.35; }
+  .tb-desert-facts__v { font-size: .9rem; color: var(--tb-tinta); font-weight: 600; line-height: 1.35; }
 
   .tb-desert__r {
     width: 100%;
@@ -1398,7 +1479,7 @@ const jsonLdSchemas = [
 
   /* CINE / PLATÓ SECTION */
   .tb-cine-section {
-    background: var(--tb-paper);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
   }
@@ -1413,11 +1494,11 @@ const jsonLdSchemas = [
   .tb-cine-lead {
     font-size: 1.05rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--tb-tenue);
     margin-bottom: 2rem;
     max-width: 64ch;
   }
-  .tb-cine-lead strong { color: var(--tb-ink); font-weight: 700; }
+  .tb-cine-lead strong { color: var(--tb-tinta); font-weight: 700; }
 
   .tb-cine-list {
     list-style: none; padding: 0; margin: 0;
@@ -1445,13 +1526,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.1rem, 2vw, 1.4rem);
     line-height: 1;
     letter-spacing: -.02em;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     margin: .5rem 0 0;
   }
   .tb-cine-card__desc {
     font-size: .82rem;
     line-height: 1.4;
-    color: var(--brutal-text-secondary);
+    color: var(--tb-tenue);
     margin: 0;
     flex: 1;
   }
@@ -1463,7 +1544,7 @@ const jsonLdSchemas = [
 
   /* SECTORES */
   .tb-sec-section {
-    background: var(--tb-paper-2);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
   }
@@ -1506,7 +1587,7 @@ const jsonLdSchemas = [
   .tb-sec__card--sky       { color: var(--tb-sky); }
   .tb-sec__card--sage      { color: var(--tb-sage); }
   .tb-sec__card--sun       { color: var(--tb-sun); }
-  .tb-sec__card--ink       { color: var(--tb-ink); }
+  .tb-sec__card--ink       { color: var(--tb-tinta); }
   .tb-sec__head {
     display: flex; justify-content: space-between; align-items: center;
     padding-bottom: .5rem;
@@ -1515,7 +1596,7 @@ const jsonLdSchemas = [
   }
   .tb-sec__num { font-size: 1.5rem; font-weight: 800; color: currentColor; line-height: 1; }
   .tb-sec__stat-box {
-    background: var(--tb-ink); color: var(--tb-paper);
+    background: var(--tb-suelo); color: var(--tb-tinta);
     padding: .35rem .65rem;
     display: flex; flex-direction: column;
     border: 1.5px solid currentColor;
@@ -1527,13 +1608,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.15rem, 2vw, 1.4rem);
     line-height: 1.1;
     letter-spacing: -.02em;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     margin: 0;
   }
   .tb-sec__desc {
     font-size: .88rem;
     line-height: 1.5;
-    color: var(--brutal-text-secondary);
+    color: var(--tb-tenue);
     flex: 1;
   }
   .tb-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
@@ -1541,7 +1622,7 @@ const jsonLdSchemas = [
     display: flex; align-items: flex-start; gap: .35rem;
     font-size: .78rem;
     line-height: 1.35;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
   }
   .tb-sec__tag span { color: currentColor; font-weight: 800; }
   .tb-sec__foot {
@@ -1583,7 +1664,7 @@ const jsonLdSchemas = [
   .tb-map-title em { color: var(--tb-sky); }
   .tb-map-coords {
     background: var(--tb-terracota);
-    color: var(--tb-paper);
+    color: var(--tb-suelo);
     padding: 1rem 1.25rem;
     border: 2px solid var(--tb-ink);
     box-shadow: 5px 5px 0 var(--tb-gold);
@@ -1595,7 +1676,7 @@ const jsonLdSchemas = [
     position: relative;
     border-top: 3px solid var(--tb-ink);
     border-bottom: 3px solid var(--tb-ink);
-    background: var(--tb-ink);
+    background: var(--tb-suelo);
   }
   .tb-map-icon {
     position: absolute;
@@ -1616,7 +1697,7 @@ const jsonLdSchemas = [
 
   /* DIFERENCIALES */
   .tb-dif-section {
-    background: var(--tb-paper);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
   }
@@ -1653,21 +1734,25 @@ const jsonLdSchemas = [
   .tb-dif__item--1 { background: var(--tb-paper); }
   .tb-dif__item--2 { background: var(--tb-sand); }
   .tb-dif__item--3 { background: var(--tb-paper); }
-  .tb-dif__item:hover { background: var(--tb-gold); }
+  /* El oro es un fondo claro: el texto heredado se invierte entero. */
+  .tb-dif__item:hover { background: var(--tb-gold); color: var(--tb-suelo); }
+  .tb-dif__item:hover .tb-dif__num,
+  .tb-dif__item:hover .tb-dif__t,
+  .tb-dif__item:hover .tb-dif__desc { color: var(--tb-suelo); }
   .tb-dif__num { font-size: .85rem; color: var(--tb-terracota); font-weight: 800; letter-spacing: .15em; }
   .tb-dif__t {
     font-size: clamp(1.3rem, 2.2vw, 1.65rem);
     line-height: 1.05;
     letter-spacing: -.025em;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     margin: 0;
   }
-  .tb-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--brutal-text-secondary); margin: 0; }
+  .tb-dif__desc { font-size: .92rem; line-height: 1.5; color: var(--tb-tenue); margin: 0; }
 
   /* PROCESO */
   .tb-proc-section {
-    background: var(--tb-ink);
-    color: var(--tb-paper);
+    background: var(--tb-hondo);
+    color: var(--tb-tinta);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
     position: relative;
@@ -1699,7 +1784,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .tb-proc { grid-template-columns: repeat(4, 1fr); } }
   .tb-proc__step {
     background: rgba(255,245,230,0.05);
-    border: 2px solid var(--tb-paper);
+    border: 2px solid rgba(230,237,242,0.28);
     padding: 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .25s, transform .25s;
@@ -1712,7 +1797,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.1rem, 1.8vw, 1.3rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--tb-paper);
+    color: var(--tb-tinta);
     margin: .25rem 0 0;
   }
   .tb-proc__body { font-size: .85rem; line-height: 1.45; color: rgba(255,245,230,0.75); flex: 1; }
@@ -1727,7 +1812,7 @@ const jsonLdSchemas = [
 
   /* TESTIMONIOS */
   .tb-quote-section {
-    background: var(--tb-paper-2);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
   }
@@ -1760,20 +1845,20 @@ const jsonLdSchemas = [
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.3;
     margin: 0 0 1.5rem;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     max-width: 56ch;
   }
   .tb-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--tb-ink); }
   .tb-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--tb-terracota); color: var(--tb-paper);
+    background: var(--tb-terracota); color: var(--tb-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-size: 1.35rem; font-weight: 800;
     border-radius: 50%;
   }
   .tb-pull__cap div { display: flex; flex-direction: column; }
-  .tb-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--tb-ink); }
+  .tb-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--tb-tinta); }
   .tb-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
 
   .tb-quotes {
@@ -1804,11 +1889,11 @@ const jsonLdSchemas = [
     color: var(--tb-terracota);
     opacity: .45;
   }
-  .tb-quote p { font-size: .92rem; line-height: 1.5; color: var(--tb-ink); flex: 1; margin: 0; }
+  .tb-quote p { font-size: .92rem; line-height: 1.5; color: var(--tb-tinta); flex: 1; margin: 0; }
   .tb-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--tb-ink); }
   .tb-quote__avatar {
     width: 36px; height: 36px;
-    background: var(--tb-sky); color: var(--tb-paper);
+    background: var(--tb-sky); color: var(--tb-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -1821,7 +1906,7 @@ const jsonLdSchemas = [
 
   /* FAQ */
   .tb-faq-section {
-    background: var(--tb-paper);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
   }
@@ -1855,21 +1940,21 @@ const jsonLdSchemas = [
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     font-weight: 700;
   }
   .tb-faq__toggle {
     width: 40px; height: 40px;
     border: 2px solid var(--tb-ink);
     background: var(--tb-paper);
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s, color .2s;
   }
-  .tb-faq__det[open] .tb-faq__toggle { transform: rotate(180deg); background: var(--tb-terracota); color: var(--tb-paper); }
+  .tb-faq__det[open] .tb-faq__toggle { transform: rotate(180deg); background: var(--tb-terracota); color: var(--tb-suelo); }
   .tb-faq__ans {
     padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
+    color: var(--tb-tenue);
     font-size: .98rem;
     line-height: 1.55;
     max-width: 70ch;
@@ -1881,7 +1966,7 @@ const jsonLdSchemas = [
 
   /* PUEBLOS VECINOS */
   .tb-vecinos-section {
-    background: var(--tb-paper-2);
+    background: var(--tb-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--tb-ink);
   }
@@ -1909,7 +1994,7 @@ const jsonLdSchemas = [
     gap: .35rem;
     padding: 1.5rem;
     background: var(--tb-paper);
-    color: var(--tb-ink);
+    color: var(--tb-tinta);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
@@ -1919,17 +2004,17 @@ const jsonLdSchemas = [
   .tb-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .tb-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .tb-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--tb-terracota); font-size: 1.3rem; transition: transform .25s; }
-  .tb-vecino:hover { background: var(--tb-terracota); color: var(--tb-paper); }
+  .tb-vecino:hover { background: var(--tb-terracota); color: var(--tb-suelo); }
   .tb-vecino:hover .tb-vecino__sub, .tb-vecino:hover .tb-vecino__n { opacity: .85; }
-  .tb-vecino:hover .tb-vecino__arrow { color: var(--tb-paper); transform: translateX(4px); }
-  .tb-vecino--1:hover { background: var(--tb-sky); color: var(--tb-paper); }
-  .tb-vecino--2:hover { background: var(--tb-gold); color: var(--tb-ink); }
-  .tb-vecino--3:hover { background: var(--tb-sage); color: var(--tb-paper); }
+  .tb-vecino:hover .tb-vecino__arrow { color: var(--tb-suelo); transform: translateX(4px); }
+  .tb-vecino--1:hover { background: var(--tb-sky); color: var(--tb-suelo); }
+  .tb-vecino--2:hover { background: var(--tb-gold); color: var(--tb-suelo); }
+  .tb-vecino--3:hover { background: var(--tb-sage); color: var(--tb-suelo); }
 
   /* CTA FINAL */
   .tb-final {
     background: #2A1A0A;
-    color: var(--tb-paper);
+    color: var(--tb-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -1955,7 +2040,7 @@ const jsonLdSchemas = [
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--tb-paper);
+    color: var(--tb-tinta);
     margin: 1rem 0;
   }
   .tb-final__title em { color: var(--tb-terracota); font-style: italic; display: block; }
@@ -1978,22 +2063,22 @@ const jsonLdSchemas = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
   }
   .tb-final__btn--primary {
-    background: var(--tb-terracota); color: var(--tb-paper); border-color: var(--tb-terracota);
+    background: var(--tb-terracota); color: var(--tb-suelo); border-color: var(--tb-terracota);
     box-shadow: 6px 6px 0 var(--tb-gold);
   }
   .tb-final__btn--primary:hover {
-    background: var(--tb-gold); color: var(--tb-ink); border-color: var(--tb-gold);
+    background: var(--tb-gold); color: var(--tb-suelo); border-color: var(--tb-gold);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--tb-terracota);
   }
   .tb-final__btn--ghost {
-    background: transparent; color: var(--tb-paper); border-color: var(--tb-paper);
-    box-shadow: 6px 6px 0 var(--tb-paper);
+    background: transparent; color: var(--tb-tinta); border-color: var(--tb-tinta);
+    box-shadow: 6px 6px 0 var(--tb-tinta);
   }
   .tb-final__btn--ghost:hover {
-    background: var(--tb-paper); color: var(--tb-ink);
+    background: var(--tb-tinta); color: var(--tb-suelo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--tb-paper);
+    box-shadow: 11px 11px 0 var(--tb-tinta);
   }
   .tb-final__trust {
     display: flex; flex-wrap: wrap;
@@ -2011,7 +2096,7 @@ const jsonLdSchemas = [
 
   .tb-final__marquee {
     background: var(--tb-terracota);
-    color: var(--tb-paper);
+    color: var(--tb-suelo);
     overflow: hidden;
     padding: .85rem 0;
     border-top: 3px solid var(--tb-ink);

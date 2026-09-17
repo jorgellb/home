@@ -6,9 +6,12 @@ interface BreadcrumbItem {
 
 interface Props {
   items: BreadcrumbItem[];
+  /* 'papel' es el de siempre y sigue siendo el predeterminado: las páginas
+     de las fases 3 y 4 aún son claras. 'consola' lo piden las ya migradas. */
+  tono?: 'papel' | 'consola';
 }
 
-const { items } = Astro.props;
+const { items, tono = 'papel' } = Astro.props;
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
@@ -22,7 +25,7 @@ const breadcrumbSchema = {
 };
 ---
 
-<nav aria-label="Breadcrumb" class="breadcrumb-brutal">
+<nav aria-label="Breadcrumb" class:list={['breadcrumb-brutal', tono === 'consola' && 'breadcrumb-brutal--consola']}>
   <div class="container-brutal breadcrumb-brutal__inner">
     <ol class="breadcrumb-brutal__list">
       {items.map((item, index) => (
@@ -60,6 +63,18 @@ const breadcrumbSchema = {
   .breadcrumb-brutal__link { color: var(--brutal-text-secondary); text-decoration: none; transition: color .15s; }
   .breadcrumb-brutal__link:hover { color: var(--brutal-accent-ink); }
   .breadcrumb-brutal__current { color: var(--brutal-ink); font-weight: 700; }
+
+  /* Tono consola: solo donde se pide, para no oscurecer el breadcrumb de
+     las páginas que siguen en papel. */
+  .breadcrumb-brutal--consola {
+    background: var(--color-cdm-suelo);
+    border-bottom-color: var(--color-cdm-regla);
+  }
+  /* Sin la opacidad .55 del tono papel: el tenue a medias quedaba en 2,6:1 (axe lo mide aunque sea aria-hidden). */
+  .breadcrumb-brutal--consola .breadcrumb-brutal__sep { color: var(--color-cdm-tenue); opacity: 1; }
+  .breadcrumb-brutal--consola .breadcrumb-brutal__link { color: var(--color-cdm-tenue); }
+  .breadcrumb-brutal--consola .breadcrumb-brutal__link:hover { color: var(--color-cdm-senal); }
+  .breadcrumb-brutal--consola .breadcrumb-brutal__current { color: var(--color-cdm-texto); }
 </style>
 
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

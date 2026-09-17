@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumb from '../components/common/Breadcrumb.astro';
+import Boton from '../components/cdm/Boton.astro';
 
 const title = 'Mantenimiento Web en Almería desde 39 €/mes';
 const description = 'Mantenimiento web en Almería para WordPress, PrestaShop y WooCommerce. Actualizaciones, seguridad y backups. Planes desde 39€/mes sin permanencia.';
@@ -106,7 +107,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   jsonLd={jsonLd}
 >
   <Header />
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Mantenimiento Web' }]} />
+  <Breadcrumb tono="consola" items={[{ label: 'Inicio', href: '/' }, { label: 'Mantenimiento Web' }]} />
 
   <main id="main-content" class="sp">
 
@@ -145,14 +146,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
             </p>
 
             <div class="sp-hero__cta">
-              <a href="#planes" class="sp-btn sp-btn--primary">
-                <span>Ver planes</span>
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </a>
-              <a href="tel:+34657085019" class="sp-btn sp-btn--ghost">
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span>657 085 019</span>
-              </a>
+              <Boton href="#planes">Ver planes</Boton>
+              <Boton href="tel:+34657085019" variante="linea">657 085 019</Boton>
             </div>
 
             {/* KPIs */}
@@ -313,14 +308,14 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
       <div class="container-brutal">
         <header class="sp-noc-head">
           <div>
-            <span class="text-meta sp-noc-head__lbl">★ NOC · ESTADO EN VIVO</span>
+            <span class="text-meta sp-noc-head__lbl">★ NOC · Panel de ejemplo</span>
             <h2 class="heading-display sp-noc-head__title">
               Tu web vigilada
               <em class="heading-editorial">cada segundo.</em>
             </h2>
             <p class="sp-noc-head__lead">
-              Mientras lees esto, nuestro sistema está revisando tu infraestructura.
-              Estos son los indicadores que monitorizamos en cada cliente.
+              Estos son los indicadores que monitorizamos en cada cliente. Las
+              cifras de este panel son una demo, no datos de una web real.
             </p>
           </div>
 
@@ -332,6 +327,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
           </div>
         </header>
 
+        <div class="sp-noc-demo" data-panel="demo">
+          <span class="sp-noc-demo__etq text-mono" data-panel-etiqueta="demo">demo</span>
         <div class="sp-noc-grid">
           {noc.map((r, i) => (
             <article class={`sp-noc-card sp-noc-card--${r.tone}`}>
@@ -346,6 +343,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
               </footer>
             </article>
           ))}
+        </div>
         </div>
       </div>
     </section>
@@ -1004,7 +1002,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     --sp-cream:    #F0E9D7;
     --sp-ink:      #0E0D0B;
     --sp-green:    #00B85C;
-    --sp-green-d:  #0A8F4A;
+    --sp-green-d:  #12A85A;
     --sp-mint:     #C8F2D6;
     --sp-blue:     #003B7A;
     --sp-blue-l:   #005FB8;
@@ -1014,8 +1012,30 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     --sp-orange:   #FF6B35;
     --sp-red:      #DC1B2C;
     --sp-yellow:   #FFD600;
-    --sp-shadow:   8px 8px 0 0 var(--sp-ink);
-    --sp-shadow-s: 4px 4px 0 0 var(--sp-ink);
+    --sp-shadow:   8px 8px 0 0 var(--sp-regla2);
+    --sp-shadow-s: 4px 4px 0 0 var(--sp-regla2);
+    /* Tono consola (fase 4): tinta y papel se reparten por propiedad. */
+    --sp-suelo:   var(--color-cdm-suelo);
+    --sp-panel:   var(--color-cdm-panel);
+    --sp-panel-2: var(--color-cdm-panel-2);
+    --sp-hondo:   var(--color-cdm-panel-2);
+    --sp-regla2:  var(--color-cdm-regla-2);
+    --sp-tinta:   var(--color-cdm-texto);
+    --sp-tenue:   var(--color-cdm-tenue);
+    color-scheme: dark;
+    background: var(--sp-suelo);
+    color: var(--sp-tinta);
+    --sp-azul-texto: #6FA8E8;
+    /* Utilitarios globales dentro: paleta brutal en oscuro. */
+    --brutal-bg: var(--color-cdm-suelo);
+    --brutal-bg-alt: var(--color-cdm-panel-2);
+    --brutal-card: var(--color-cdm-panel);
+    --brutal-ink: var(--color-cdm-texto);
+    --brutal-text: var(--color-cdm-texto);
+    --brutal-text-secondary: #b9c5cf;
+    --brutal-text-muted: var(--color-cdm-tenue);
+    --brutal-accent-ink: var(--color-cdm-senal);
+    --brutal-border-soft: var(--color-cdm-regla);
   }
 
   /* Pulse dot */
@@ -1028,6 +1048,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     animation: sp-pulse 1.8s ease-out infinite;
     vertical-align: middle;
     margin-right: .35rem;
+    color: var(--sp-suelo);
   }
   @keyframes sp-pulse {
     0%   { box-shadow: 0 0 0 0 rgba(0,184,92,0.55); }
@@ -1044,8 +1065,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     background:
       radial-gradient(circle at 70% 20%, rgba(0,184,92,0.06), transparent 50%),
       radial-gradient(circle at 10% 80%, rgba(0,59,122,0.04), transparent 50%),
-      var(--sp-paper);
-    border-bottom: 3px solid var(--sp-ink);
+      var(--sp-panel);
+    border-bottom: 3px solid var(--sp-regla2);
     position: relative;
     overflow: hidden;
   }
@@ -1077,7 +1098,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   @media (min-width: 1024px) { .sp-hero__grid { grid-template-columns: 1.15fr 1fr; align-items: center; gap: 4rem; } }
 
   .sp-hero__intro { display: flex; flex-direction: column; gap: 1.25rem; }
-  .sp-hero__chapter { color: var(--sp-blue); }
+  .sp-hero__chapter { color: var(--sp-azul-texto); }
   .sp-hero__title {
     font-size: clamp(2.75rem, 8.5vw, 6.5rem);
     line-height: .9;
@@ -1087,8 +1108,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-hero__title em { color: var(--sp-green); font-style: italic; display: inline-block; margin: 0 .15em; }
   .sp-hero__title-stamp {
     display: inline-block;
-    color: var(--sp-blue);
-    border-bottom: 6px solid var(--sp-blue);
+    color: var(--sp-azul-texto);
+    border-bottom: 6px solid var(--sp-azul-texto);
     padding: 0 .1em;
     transform: rotate(-1deg);
   }
@@ -1109,49 +1130,18 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     color: var(--brutal-text-secondary);
     max-width: 56ch;
   }
-  .sp-hero__lead strong { color: var(--sp-ink); font-weight: 700; }
+  .sp-hero__lead strong { color: var(--sp-tinta); font-weight: 700; }
   .sp-hero__lead-strong {
     display: inline-block;
     background: var(--sp-lime);
-    color: var(--sp-ink);
+    color: var(--sp-suelo);
     padding: 0 .35em;
     font-weight: 800;
-    border: 1.5px solid var(--sp-ink);
+    border: 1.5px solid var(--sp-regla2);
     margin-left: .35em;
   }
 
   .sp-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
-  .sp-btn {
-    display: inline-flex; align-items: center; gap: .75rem;
-    padding: 1.1rem 1.85rem;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.05rem;
-    border: 2.5px solid var(--sp-ink);
-    text-decoration: none;
-    transition: transform .2s, box-shadow .2s;
-    cursor: pointer;
-  }
-  .sp-btn--primary {
-    background: var(--sp-green);
-    color: var(--sp-ink);
-    box-shadow: 6px 6px 0 var(--sp-ink);
-  }
-  .sp-btn--primary:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--sp-ink);
-  }
-  .sp-btn--ghost {
-    background: transparent;
-    color: var(--sp-ink);
-    box-shadow: 6px 6px 0 var(--sp-blue);
-  }
-  .sp-btn--ghost:hover {
-    background: var(--sp-blue);
-    color: var(--sp-paper);
-    transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--sp-blue);
-  }
 
   /* KPIs */
   .sp-hero__kpis {
@@ -1159,28 +1149,28 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     grid-template-columns: repeat(2, 1fr);
     gap: 0;
     margin-top: 1.5rem;
-    border: 2.5px solid var(--sp-ink);
-    background: var(--sp-ink);
+    border: 2.5px solid var(--sp-regla2);
+    background: var(--sp-hondo);
   }
   @media (min-width: 768px) { .sp-hero__kpis { grid-template-columns: repeat(4, 1fr); } }
   .sp-kpi {
-    background: var(--sp-paper);
+    background: var(--sp-panel);
     padding: 1.25rem;
     display: flex; flex-direction: column; gap: .35rem;
-    border-right: 2px solid var(--sp-ink);
-    border-bottom: 2px solid var(--sp-ink);
+    border-right: 2px solid var(--sp-regla2);
+    border-bottom: 2px solid var(--sp-regla2);
   }
   .sp-kpi:nth-child(2n) { border-right: none; }
   .sp-kpi:nth-last-child(-n+2) { border-bottom: none; }
   @media (min-width: 768px) {
-    .sp-kpi:nth-child(2n)      { border-right: 2px solid var(--sp-ink); }
+    .sp-kpi:nth-child(2n)      { border-right: 2px solid var(--sp-regla2); }
     .sp-kpi:nth-child(4n)      { border-right: none; }
-    .sp-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--sp-ink); }
+    .sp-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--sp-regla2); }
     .sp-kpi:nth-last-child(-n+4) { border-bottom: none; }
   }
-  .sp-kpi--green { background: var(--sp-mint); }
-  .sp-kpi--gold  { background: var(--sp-gold); color: var(--sp-ink); }
-  .sp-kpi--ink   { background: var(--sp-ink); color: var(--sp-paper); }
+  .sp-kpi--green { background: var(--sp-panel-2); }
+  .sp-kpi--gold  { background: var(--sp-gold); color: var(--sp-suelo); }
+  .sp-kpi--ink   { background: var(--sp-hondo); color: var(--sp-tinta); }
   .sp-kpi--ink   .sp-kpi__val { color: var(--sp-lime); }
   .sp-kpi__val {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
@@ -1248,9 +1238,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 0;
-    background: var(--sp-ink);
-    color: var(--sp-paper);
-    border-top: 3px solid var(--sp-ink);
+    background: var(--sp-hondo);
+    color: var(--sp-tinta);
+    border-top: 3px solid var(--sp-regla2);
   }
   .sp-ecg__lbl {
     display: flex; align-items: center; gap: .5rem;
@@ -1261,7 +1251,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     color: var(--sp-green);
     white-space: nowrap;
   }
-  .sp-ecg__lbl .sp-pulse-dot { background: var(--sp-green); margin: 0; }
+  .sp-ecg__lbl .sp-pulse-dot { background: var(--sp-green); margin: 0; color: var(--sp-suelo); }
   .sp-ecg__monitor {
     height: 80px;
     overflow: hidden;
@@ -1281,7 +1271,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
     padding: 1rem 1.5rem;
     border-left: 2px solid var(--sp-green);
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
   }
   .sp-ecg__bpm span:first-child { font-size: .55rem; letter-spacing: .2em; opacity: .6; }
   .sp-ecg__bpm-val { font-size: 1.5rem; font-weight: 800; color: var(--sp-green); letter-spacing: -.01em; }
@@ -1295,9 +1285,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* NOC LIVE STATUS                                         */
   /* ═══════════════════════════════════════════════════════ */
   .sp-noc-section {
-    background: var(--sp-paper);
+    background: var(--sp-panel);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
     position: relative;
   }
   .sp-noc-head {
@@ -1317,8 +1307,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-noc-head__lead { color: var(--brutal-text-secondary); max-width: 56ch; }
 
   .sp-noc-now {
-    background: var(--sp-ink);
-    color: var(--sp-paper);
+    background: var(--sp-hondo);
+    color: var(--sp-tinta);
     padding: 1rem 1.25rem;
     display: flex; flex-direction: column; gap: 4px;
     border: 2px solid var(--sp-green);
@@ -1335,33 +1325,37 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     margin: 2px 0;
   }
 
+  /* Simulación: marco discontinuo y etiqueta «demo», como cdm/Panel. */
+  .sp-noc-demo { position: relative; padding: 2rem .75rem .75rem; border: 1px dashed #3a4c5c; }
+  .sp-noc-demo__etq { position: absolute; top: .5rem; right: .75rem; padding: .05rem .4rem; border: 1px dashed currentColor; font-size: .68rem; color: var(--color-cdm-tenue); }
   .sp-noc-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1px;
-    background: var(--sp-ink);
-    border: 2.5px solid var(--sp-ink);
+    background: var(--sp-hondo);
+    border: 2.5px solid var(--sp-regla2);
   }
   @media (min-width: 768px)  { .sp-noc-grid { grid-template-columns: repeat(3, 1fr); } }
   @media (min-width: 1280px) { .sp-noc-grid { grid-template-columns: repeat(6, 1fr); } }
 
   .sp-noc-card {
-    background: var(--sp-paper);
+    background: var(--sp-panel);
     padding: 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     position: relative;
     transition: background .25s;
   }
-  .sp-noc-card:hover { background: var(--sp-mint); }
+  .sp-noc-card:hover { background: var(--sp-panel-2); }
   .sp-noc-card__head { display: flex; justify-content: space-between; align-items: center; }
   .sp-noc-card__id {
-    font-size: .62rem; letter-spacing: .2em; color: var(--sp-blue); opacity: .7;
+    font-size: .62rem; letter-spacing: .2em; color: var(--sp-azul-texto);
   }
   .sp-noc-card__dot {
     width: 10px; height: 10px;
     background: var(--sp-green);
     border-radius: 50%;
     position: relative;
+    color: var(--sp-suelo);
   }
   .sp-noc-card__dot span {
     position: absolute; inset: -3px;
@@ -1377,7 +1371,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-family: var(--font-display);
     font-size: .92rem;
     font-weight: 700;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     line-height: 1.2;
   }
   .sp-noc-card__v {
@@ -1398,18 +1392,19 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     height: 100%;
     background: var(--sp-green);
     transition: width .5s;
+    color: var(--sp-suelo);
   }
   .sp-noc-card--warn .sp-noc-card__dot,
-  .sp-noc-card--warn .sp-noc-card__bar span { background: var(--sp-orange); }
+  .sp-noc-card--warn .sp-noc-card__bar span { background: var(--sp-orange); color: var(--sp-suelo); }
   .sp-noc-card--warn .sp-noc-card__v { color: var(--sp-orange); }
 
   /* ═══════════════════════════════════════════════════════ */
   /* SERVICIOS BENTO                                         */
   /* ═══════════════════════════════════════════════════════ */
   .sp-svc-section {
-    background: var(--sp-paper-2);
+    background: var(--sp-panel-2);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
     position: relative;
   }
   .sp-svc-section::before {
@@ -1433,8 +1428,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   @media (min-width: 1024px) { .sp-bento { grid-template-columns: repeat(4, 1fr); gap: 1.5rem; } }
 
   .sp-svc-card {
-    background: var(--sp-paper);
-    border: 2.5px solid var(--sp-ink);
+    background: var(--sp-panel);
+    border: 2.5px solid var(--sp-regla2);
     box-shadow: var(--sp-shadow);
     padding: 1.75rem 1.5rem 1.5rem;
     display: flex; flex-direction: column; gap: .85rem;
@@ -1450,10 +1445,10 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   }
   .sp-svc-card:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 14px 14px 0 var(--sp-ink);
+    box-shadow: 14px 14px 0 var(--sp-regla2);
   }
   .sp-svc-card--green  { color: var(--sp-green); }
-  .sp-svc-card--blue   { color: var(--sp-blue); }
+  .sp-svc-card--blue   { color: var(--sp-azul-texto); }
   .sp-svc-card--gold   { color: var(--sp-gold); }
   .sp-svc-card--orange { color: var(--sp-orange); }
 
@@ -1465,19 +1460,19 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     display: flex; justify-content: space-between; align-items: baseline;
     gap: .5rem;
     padding-bottom: .5rem;
-    border-bottom: 2px dashed var(--sp-ink);
+    border-bottom: 2px dashed var(--sp-regla2);
   }
   .sp-svc-card__num {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     line-height: 1;
   }
   .sp-svc-card__kicker {
     font-size: .58rem;
     letter-spacing: .15em;
     text-transform: uppercase;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     opacity: .65;
     text-align: right;
   }
@@ -1485,7 +1480,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-size: clamp(1.3rem, 2vw, 1.55rem);
     line-height: 1;
     letter-spacing: -.025em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     margin: .25rem 0 0;
   }
   .sp-svc-card__desc {
@@ -1500,14 +1495,14 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-svc-card__features li {
     display: flex; align-items: flex-start; gap: .5rem;
     font-size: .85rem;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     line-height: 1.35;
   }
   .sp-svc-card__features svg { color: currentColor; flex-shrink: 0; margin-top: 3px; }
   .sp-svc-card__foot {
     display: flex; justify-content: space-between; align-items: flex-end;
     padding-top: .85rem;
-    border-top: 2px solid var(--sp-ink);
+    border-top: 2px solid var(--sp-regla2);
     margin-top: auto;
   }
   .sp-svc-card__figure { display: flex; flex-direction: column; }
@@ -1522,7 +1517,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-size: .55rem;
     text-transform: uppercase;
     letter-spacing: .15em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     opacity: .65;
     margin-top: 4px;
   }
@@ -1532,9 +1527,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: .15em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     text-decoration: none;
-    border-bottom: 2px solid var(--sp-ink);
+    border-bottom: 2px solid var(--sp-regla2);
     padding-bottom: 2px;
   }
   .sp-svc-card__cta:hover { color: currentColor; border-bottom-color: currentColor; }
@@ -1543,10 +1538,10 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* BACKUP TIMELINE                                         */
   /* ═══════════════════════════════════════════════════════ */
   .sp-backup-section {
-    background: var(--sp-ink);
-    color: var(--sp-paper);
+    background: var(--sp-hondo);
+    color: var(--sp-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
     position: relative;
     overflow: hidden;
   }
@@ -1570,7 +1565,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: .95;
     letter-spacing: -.035em;
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
     margin: 1rem 0 .75rem;
   }
   .sp-backup-title em { color: var(--sp-lime); }
@@ -1579,8 +1574,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     max-width: 56ch;
   }
   .sp-backup-aside {
-    background: var(--sp-paper);
-    color: var(--sp-ink);
+    background: var(--sp-panel);
+    color: var(--sp-tinta);
     padding: 1.25rem 1.5rem;
     border: 2.5px solid var(--sp-gold);
     box-shadow: 6px 6px 0 var(--sp-gold);
@@ -1592,7 +1587,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     border-bottom: 1px dashed rgba(14,13,11,0.18);
   }
   .sp-backup-aside__row:last-child { border-bottom: none; padding-bottom: 0; }
-  .sp-backup-aside__row span:first-child { font-size: .6rem; letter-spacing: .15em; color: var(--sp-blue); opacity: .8; }
+  .sp-backup-aside__row span:first-child { font-size: .6rem; letter-spacing: .15em; color: var(--sp-azul-texto); opacity: .8; }
   .sp-backup-aside__v { font-size: .85rem; font-weight: 800; color: var(--sp-green-d); }
 
   /* Disc timeline */
@@ -1621,12 +1616,12 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-tape__lbl {
     font-size: .75rem; font-weight: 800;
     letter-spacing: .15em;
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
     text-transform: uppercase;
   }
   .sp-tape__date {
     font-size: .9rem;
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
     opacity: .8;
   }
   .sp-tape__status {
@@ -1637,7 +1632,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     text-transform: uppercase;
   }
   .sp-tape__disc--today .sp-tape__status {
-    background: var(--sp-lime); color: var(--sp-ink); border-color: var(--sp-lime);
+    background: var(--sp-lime); color: var(--sp-suelo); border-color: var(--sp-lime);
   }
   .sp-tape-foot {
     display: flex; flex-wrap: wrap;
@@ -1656,9 +1651,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* PLATAFORMAS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .sp-plat-section {
-    background: var(--sp-paper);
+    background: var(--sp-panel);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
   }
   .sp-plat-grid {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1674,9 +1669,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     grid-template-columns: 60px 1fr auto;
     gap: 1rem;
     align-items: center;
-    background: var(--sp-paper);
-    border: 2px solid var(--sp-ink);
-    box-shadow: 5px 5px 0 var(--sp-ink);
+    background: var(--sp-panel);
+    border: 2px solid var(--sp-regla2);
+    box-shadow: 5px 5px 0 var(--sp-regla2);
     padding: 1.25rem;
     transition: transform .2s, box-shadow .2s;
   }
@@ -1691,7 +1686,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-size: 1.1rem;
     font-weight: 700;
     letter-spacing: -.015em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     margin: 0;
   }
   .sp-plat__v {
@@ -1708,9 +1703,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* PLANES                                                  */
   /* ═══════════════════════════════════════════════════════ */
   .sp-plans-section {
-    background: var(--sp-paper-2);
+    background: var(--sp-panel-2);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
   }
   .sp-plans {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1722,8 +1717,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
 
   .sp-plan {
     position: relative;
-    background: var(--sp-paper);
-    border: 3px solid var(--sp-ink);
+    background: var(--sp-panel);
+    border: 3px solid var(--sp-regla2);
     box-shadow: var(--sp-shadow);
     padding: 2.5rem 1.75rem 2rem;
     display: flex; flex-direction: column; gap: 1rem;
@@ -1731,8 +1726,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   }
   .sp-plan:hover { transform: translateY(-4px); }
   .sp-plan--popular {
-    background: var(--sp-ink);
-    color: var(--sp-paper);
+    background: var(--sp-hondo);
+    color: var(--sp-tinta);
     border-color: var(--sp-lime);
     box-shadow: 12px 12px 0 var(--sp-lime);
     transform: scale(1.02);
@@ -1746,14 +1741,14 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     top: -16px; left: 50%;
     transform: translateX(-50%);
     background: var(--sp-lime);
-    color: var(--sp-ink);
+    color: var(--sp-suelo);
     padding: .35rem 1.25rem;
     font-family: var(--font-mono);
     font-size: .7rem;
     font-weight: 800;
     letter-spacing: .2em;
-    border: 2px solid var(--sp-ink);
-    box-shadow: 3px 3px 0 var(--sp-ink);
+    border: 2px solid var(--sp-regla2);
+    box-shadow: 3px 3px 0 var(--sp-regla2);
     white-space: nowrap;
   }
 
@@ -1833,25 +1828,25 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   }
   .sp-plan__cta:hover {
     background: currentColor;
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
     transform: translateY(-2px);
   }
   .sp-plan__cta--primary {
     background: var(--sp-lime);
-    color: var(--sp-ink);
+    color: var(--sp-suelo);
     border-color: var(--sp-lime);
   }
   .sp-plan__cta--primary:hover {
-    background: var(--sp-paper);
-    color: var(--sp-ink);
-    border-color: var(--sp-paper);
+    background: var(--sp-panel);
+    color: var(--sp-tinta);
+    border-color: var(--sp-regla2);
   }
 
   /* Garantía */
   .sp-guarantee {
     margin-top: 3rem;
-    background: var(--sp-cream);
-    border: 3px solid var(--sp-ink);
+    background: var(--sp-panel-2);
+    border: 3px solid var(--sp-regla2);
     box-shadow: var(--sp-shadow);
     padding: 2rem;
     display: grid;
@@ -1881,10 +1876,10 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* CERTIFICACIONES                                         */
   /* ═══════════════════════════════════════════════════════ */
   .sp-cert-section {
-    background: var(--sp-blue);
-    color: var(--sp-paper);
+    background: var(--sp-hondo);
+    color: var(--sp-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
     position: relative;
     overflow: hidden;
   }
@@ -1907,10 +1902,10 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
 
   .sp-cert {
     position: relative;
-    background: var(--sp-paper);
-    color: var(--sp-blue);
-    border: 2.5px solid var(--sp-ink);
-    box-shadow: 6px 6px 0 var(--sp-ink);
+    background: var(--sp-panel);
+    color: var(--sp-azul-texto);
+    border: 2.5px solid var(--sp-regla2);
+    box-shadow: 6px 6px 0 var(--sp-regla2);
     padding: 1.6rem 1.4rem 1.4rem;
     display: flex;
     flex-direction: column;
@@ -1926,7 +1921,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     transform: translate(-3px, -3px);
     box-shadow: 10px 10px 0 var(--sp-lime);
   }
-  .sp-cert--blue   { color: var(--sp-blue); }
+  .sp-cert--blue   { color: var(--sp-azul-texto); }
   .sp-cert--green  { color: var(--sp-green-d); }
   .sp-cert--gold   { color: var(--sp-gold); }
   .sp-cert--orange { color: var(--sp-orange); }
@@ -1972,7 +1967,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     letter-spacing: -.02em;
     line-height: 1.05;
     margin: 0 0 .45rem;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
   }
   .sp-cert__desc {
     font-size: .85rem;
@@ -1993,9 +1988,9 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* PROCESO                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .sp-proc-section {
-    background: var(--sp-paper);
+    background: var(--sp-panel);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
   }
   .sp-proc {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -2008,8 +2003,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
 
   .sp-proc__step {
     position: relative;
-    background: var(--sp-paper);
-    border: 2.5px solid var(--sp-ink);
+    background: var(--sp-panel);
+    border: 2.5px solid var(--sp-regla2);
     box-shadow: var(--sp-shadow-s);
     padding: 1.5rem;
     display: flex; flex-direction: column; gap: .75rem;
@@ -2023,12 +2018,12 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   }
   .sp-proc__step:hover {
     transform: translate(-3px, -3px);
-    box-shadow: 7px 7px 0 var(--sp-ink);
+    box-shadow: 7px 7px 0 var(--sp-regla2);
   }
-  .sp-proc__step--blue  { color: var(--sp-blue); }
+  .sp-proc__step--blue  { color: var(--sp-azul-texto); }
   .sp-proc__step--gold  { color: var(--sp-gold); }
   .sp-proc__step--green { color: var(--sp-green); }
-  .sp-proc__step--ink   { color: var(--sp-ink); background: var(--sp-mint); }
+  .sp-proc__step--ink   { color: var(--sp-tinta); background: var(--sp-panel-2); }
 
   .sp-proc__head {
     display: flex; justify-content: space-between;
@@ -2045,14 +2040,14 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-proc__eta {
     font-size: .62rem;
     letter-spacing: .15em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     opacity: .65;
   }
   .sp-proc__title {
     font-size: clamp(1.2rem, 2vw, 1.4rem);
     line-height: 1;
     letter-spacing: -.02em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     margin: .25rem 0 0;
   }
   .sp-proc__body {
@@ -2062,19 +2057,19 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     flex: 1;
   }
   .sp-proc__foot {
-    border-top: 1.5px solid var(--sp-ink);
+    border-top: 1.5px solid var(--sp-regla2);
     padding-top: .65rem;
     margin-top: .5rem;
   }
   .sp-proc__deliv-lbl {
     font-size: .55rem;
     letter-spacing: .2em;
-    color: var(--sp-blue);
+    color: var(--sp-azul-texto);
     opacity: .75;
   }
   .sp-proc__deliv {
     font-size: .82rem;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     font-weight: 600;
     margin: 4px 0 0;
   }
@@ -2089,14 +2084,14 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* TESTIMONIOS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .sp-quote-section {
-    background: var(--sp-paper-2);
+    background: var(--sp-panel-2);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
   }
   .sp-pull {
     position: relative;
-    background: var(--sp-mint);
-    border: 3px solid var(--sp-ink);
+    background: var(--sp-panel-2);
+    border: 3px solid var(--sp-regla2);
     box-shadow: var(--sp-shadow);
     padding: 3rem 2rem 2rem;
     margin: 2rem 0;
@@ -2114,16 +2109,16 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     letter-spacing: -.015em;
     margin: 0 0 1.5rem;
     max-width: 56ch;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
   }
   .sp-pull__cap {
     display: flex; align-items: center; gap: 1rem;
     padding-top: 1.25rem;
-    border-top: 2px dashed var(--sp-ink);
+    border-top: 2px dashed var(--sp-regla2);
   }
   .sp-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--sp-ink);
+    background: var(--sp-hondo);
     color: var(--sp-lime);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
@@ -2132,8 +2127,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     border-radius: 50%;
   }
   .sp-pull__cap div { display: flex; flex-direction: column; }
-  .sp-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--sp-ink); }
-  .sp-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; color: var(--sp-ink); opacity: .65; text-transform: uppercase; }
+  .sp-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--sp-tinta); }
+  .sp-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; color: var(--sp-tinta); opacity: .65; text-transform: uppercase; }
 
   .sp-quotes {
     list-style: none; padding: 0; margin: 0;
@@ -2144,17 +2139,17 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   @media (min-width: 768px) { .sp-quotes { grid-template-columns: repeat(3, 1fr); } }
   .sp-quote {
     position: relative;
-    background: var(--sp-paper);
-    border: 2px solid var(--sp-ink);
-    box-shadow: 5px 5px 0 var(--sp-ink);
+    background: var(--sp-panel);
+    border: 2px solid var(--sp-regla2);
+    box-shadow: 5px 5px 0 var(--sp-regla2);
     padding: 1.75rem 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: 1rem;
     transition: transform .25s;
   }
   .sp-quote:hover { transform: translateY(-3px); }
-  .sp-quote--0 { background: var(--sp-paper); }
-  .sp-quote--1 { background: var(--sp-sky); }
-  .sp-quote--2 { background: var(--sp-cream); }
+  .sp-quote--0 { background: var(--sp-panel); }
+  .sp-quote--1 { background: var(--sp-panel-2); }
+  .sp-quote--2 { background: var(--sp-panel-2); }
   .sp-quote__mark {
     position: absolute;
     top: -8px; left: 14px;
@@ -2167,19 +2162,19 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-quote p {
     font-size: .92rem;
     line-height: 1.5;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     flex: 1;
     margin: 0;
   }
   .sp-quote footer {
     display: flex; align-items: center; gap: .75rem;
     padding-top: .85rem;
-    border-top: 1.5px dashed var(--sp-ink);
+    border-top: 1.5px dashed var(--sp-regla2);
   }
   .sp-quote__avatar {
     width: 36px; height: 36px;
     background: var(--sp-blue);
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -2194,16 +2189,16 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* FAQ                                                     */
   /* ═══════════════════════════════════════════════════════ */
   .sp-faq-section {
-    background: var(--sp-paper);
+    background: var(--sp-panel);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--sp-ink);
+    border-bottom: 3px solid var(--sp-regla2);
   }
   .sp-faq {
     list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--sp-ink);
+    border-top: 2.5px solid var(--sp-regla2);
   }
   .sp-faq__item {
-    border-bottom: 2px solid var(--sp-ink);
+    border-bottom: 2px solid var(--sp-regla2);
   }
   .sp-faq__det summary { list-style: none; cursor: pointer; }
   .sp-faq__det summary::-webkit-details-marker { display: none; }
@@ -2215,7 +2210,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     padding: 1.5rem 0;
     transition: padding .2s, background .2s;
   }
-  .sp-faq__sum:hover { padding-inline: 1rem; background: var(--sp-paper-2); }
+  .sp-faq__sum:hover { padding-inline: 1rem; background: var(--sp-panel-2); }
   .sp-faq__num {
     font-size: 1rem;
     font-weight: 800;
@@ -2227,18 +2222,18 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--sp-ink);
+    color: var(--sp-tinta);
     font-weight: 700;
   }
   .sp-faq__toggle {
     width: 40px; height: 40px;
-    border: 2px solid var(--sp-ink);
-    background: var(--sp-paper);
-    color: var(--sp-ink);
+    border: 2px solid var(--sp-regla2);
+    background: var(--sp-panel);
+    color: var(--sp-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s;
   }
-  .sp-faq__det[open] .sp-faq__toggle { transform: rotate(180deg); background: var(--sp-green); color: var(--sp-paper); }
+  .sp-faq__det[open] .sp-faq__toggle { transform: rotate(180deg); background: var(--sp-green); color: var(--sp-suelo); }
   .sp-faq__ans {
     padding: 0 0 1.5rem 76px;
     color: var(--brutal-text-secondary);
@@ -2255,8 +2250,8 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   /* CTA FINAL                                               */
   /* ═══════════════════════════════════════════════════════ */
   .sp-final {
-    background: var(--sp-ink);
-    color: var(--sp-paper);
+    background: var(--sp-hondo);
+    color: var(--sp-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -2283,7 +2278,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--sp-paper);
+    color: var(--sp-tinta);
     margin: 1rem 0;
   }
   .sp-final__title em { color: var(--sp-lime); font-style: italic; display: block; }
@@ -2297,7 +2292,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   .sp-final__btn {
     display: inline-flex; align-items: center; gap: .75rem;
     background: var(--sp-lime);
-    color: var(--sp-ink);
+    color: var(--sp-suelo);
     padding: 1.15rem 1.85rem;
     font-family: var(--font-display);
     font-weight: 800;
@@ -2313,14 +2308,14 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
   }
   .sp-final__btn--ghost {
     background: transparent;
-    color: var(--sp-paper);
-    border-color: var(--sp-paper);
-    box-shadow: 6px 6px 0 var(--sp-paper);
+    color: var(--sp-tinta);
+    border-color: var(--sp-regla2);
+    box-shadow: 6px 6px 0 var(--sp-regla2);
   }
   .sp-final__btn--ghost:hover {
-    background: var(--sp-paper);
-    color: var(--sp-ink);
-    box-shadow: 11px 11px 0 var(--sp-paper);
+    background: var(--sp-panel);
+    color: var(--sp-tinta);
+    box-shadow: 11px 11px 0 var(--sp-regla2);
   }
   .sp-final__trust {
     display: flex; flex-wrap: wrap;
@@ -2332,7 +2327,7 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
     text-transform: uppercase;
     margin-top: 1.5rem;
   }
-  .sp-final__trust .sp-pulse-dot { background: var(--sp-lime); margin: 0 .25rem 0 0; }
+  .sp-final__trust .sp-pulse-dot { background: var(--sp-lime); margin: 0 .25rem 0 0; color: var(--sp-suelo); }
 
   .sp-final__shield {
     position: relative;
@@ -2362,10 +2357,10 @@ const backupDays = Array.from({length: 7}).map((_, i) => {
 
   .sp-final__marquee {
     background: var(--sp-lime);
-    color: var(--sp-ink);
+    color: var(--sp-suelo);
     overflow: hidden;
     padding: .85rem 0;
-    border-top: 3px solid var(--sp-ink);
+    border-top: 3px solid var(--sp-regla2);
     margin: 0 -1.5rem;
   }
   .sp-final__marquee-track {

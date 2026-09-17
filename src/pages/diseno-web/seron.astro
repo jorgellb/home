@@ -3,7 +3,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'jamon',       etiqueta: 'Jamón de Serón' },
+  { id: 'menas',       etiqueta: 'Las Menas' },
+  { id: 'mapa',        etiqueta: 'Cartografía' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'porque',      etiqueta: 'Por qué Serón' },
+  { id: 'metodo',      etiqueta: 'Método' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'comarca',     etiqueta: 'El Almanzora' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const pueblosValle = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'seron');
 
@@ -72,6 +88,8 @@ const jsonLdSchemas = [
   <Header />
 
   <main id="main-content" class="sn">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.344° N · 2.509° W · 800 m" class="sn-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — PUEBLO BLANCO + JAMÓN                     */}
@@ -254,6 +272,7 @@ const jsonLdSchemas = [
                   alt="Serón, pueblo blanco del Valle del Almanzora"
                   width="640" height="320"
                   loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                   class="sn-postcard__img"
                 />
@@ -423,7 +442,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* LAS MENAS — minería + naturaleza                  */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-minas-section">
+    <section class="sn-minas-section" id="menas">
       <div class="container-brutal">
         <div class="sn-minas-grid">
 
@@ -548,7 +567,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA                                               */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-map-section">
+    <section class="sn-map-section" id="mapa">
       <header class="sn-map-head">
         <div class="container-brutal sn-map-head__inner">
           <div>
@@ -634,12 +653,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-dif-section">
+    <section class="sn-dif-section" id="porque">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--sn-oro)">Cap. 06 / Por qué Serón</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--sn-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--sn-tinta)">
               Un pueblo
               <em class="heading-editorial" style="color:var(--sn-oro)">con sello propio.</em>
             </h2>
@@ -665,12 +684,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-proc-section">
+    <section class="sn-proc-section" id="metodo">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--sn-oro)">Cap. 07 / Método</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--sn-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--sn-tinta)">
               Cuatro pasos
               <em class="heading-editorial" style="color:var(--sn-tierra)">a tu web en Serón.</em>
             </h2>
@@ -700,7 +719,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-quote-section">
+    <section class="sn-quote-section" id="testimonios">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -755,7 +774,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-faq-section">
+    <section class="sn-faq-section" id="faq">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -794,7 +813,7 @@ const jsonLdSchemas = [
     {/* PUEBLOS VECINOS — Valle del Almanzora              */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosValle.length > 0 && (
-      <section class="sn-vecinos-section">
+      <section class="sn-vecinos-section" id="comarca">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
@@ -827,10 +846,14 @@ const jsonLdSchemas = [
     )}
 
     {/* ════════════════════════════════════════════════ */}
-    <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
+    <div class="sn-todos">
+      <div class="container-brutal">
+        <a href="/diseno-web/">Ver todos los municipios con diseño web en Almería →</a>
+      </div>
+    </div>
     {/* CTA FINAL                                        */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="sn-final">
+    <section class="sn-final" id="empezar">
       <div class="container-brutal">
         <div class="sn-final__grid">
 
@@ -927,19 +950,76 @@ const jsonLdSchemas = [
   /* ═══════════════════════════════════════════════════════ */
   /* PALETA · SERÓN · SIERRA                                 */
   /* ═══════════════════════════════════════════════════════ */
+  /* Fase 2 · consola. paper hacía de fondo y de tinta clara a la vez, e ink
+     de borde, sombra, fondo y texto: cada uno se reparte, y el #0E0D0B
+     sobrevive como fondo hondo. Tierra, bosque, barro y pino no llegaban a
+     4,5:1 como texto y suben. Tierra honda y bosque hondo quedan solo como
+     fondo y bajan: el oro encima no pasaba de 3,6:1 ya en el original. */
   .sn {
-    --sn-paper:    #FFFCF6;
-    --sn-paper-2:  #F0E9D7;
-    --sn-ink:      #0E0D0B;
-    --sn-tierra:   #B86E4A;
-    --sn-tierra-d: #7A4A30;
+    --sn-paper:    var(--color-cdm-panel);
+    --sn-paper-2:  var(--color-cdm-panel-2);
+    --sn-suelo:    var(--color-cdm-suelo);
+    --sn-tinta:    var(--color-cdm-texto);
+    --sn-tenue:    var(--color-cdm-tenue);
+    --sn-ink:      var(--color-cdm-regla-2);
+    --sn-hondo:    #0E0D0B;       /* solo fondo */
+    --sn-tierra:   #CC8560;       /* aclarada para leer */
+    --sn-tierra-d: #4A2C1C;       /* tierra honda: solo fondo */
     --sn-oro:      #D4A76A;
     --sn-oro-d:    #B8894A;
-    --sn-bosque:   #5A7A4A;
-    --sn-bosque-d: #3A5A2A;
-    --sn-barro:    #8B6F4A;
-    --sn-pino:     #4A6A3A;
-    --sn-shadow:   8px 8px 0 var(--sn-ink);
+    --sn-bosque:   #7FA06C;       /* aclarado para leer */
+    --sn-bosque-d: #1F3317;       /* bosque hondo: solo fondo */
+    --sn-barro:    #B09470;       /* aclarado */
+    --sn-pino:     #7A9A66;       /* aclarado */
+    --sn-shadow:   8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--sn-suelo);
+    color: var(--sn-tinta);
+  }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .sn :global(.brutal-section-head__title) { color: var(--sn-tinta); }
+  .sn :global(.brutal-section-head__title em) { color: var(--sn-tierra); }
+  .sn :global(.brutal-section-head__lead) { color: var(--sn-tenue); }
+  .sn :global(:where(.text-meta)) { color: var(--sn-tenue); } /* :where: sin especificidad, para que el color propio de cada capítulo mande */
+  .sn :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  .sn section[id] { scroll-margin-top: 96px; }
+
+  /* El enlace al índice de municipios estaba suelto y con estilos inline,
+     fuera de todo contenedor: se iba a sangre. */
+  .sn-todos { background: var(--sn-suelo); padding: 2.5rem 1.5rem; text-align: center; }
+  .sn-todos a { font-weight: 700; font-size: 1.05rem; color: var(--sn-oro); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .sn :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .sn :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .sn-marquee,
+    .sn-map-frame,
+    .sn-final__marquee { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .sn :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--sn-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .sn :global(.cdm-indice__titulo),
+    .sn :global(.cdm-indice__lista),
+    .sn :global(.cdm-indice__coord) { display: none; }
+    .sn :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
 
   .sn-pulse {
@@ -969,7 +1049,7 @@ const jsonLdSchemas = [
     background:
       radial-gradient(circle at 80% 20%, rgba(184,110,74,0.10), transparent 50%),
       radial-gradient(circle at 10% 80%, rgba(90,122,74,0.08), transparent 50%),
-      var(--sn-paper);
+      var(--sn-suelo);
     border-bottom: 3px solid var(--sn-ink);
     position: relative;
     overflow: hidden;
@@ -1009,7 +1089,7 @@ const jsonLdSchemas = [
   .sn-hero__title em { color: var(--sn-tierra); font-style: italic; }
   .sn-hero__title-stamp {
     color: var(--sn-oro);
-    background: var(--sn-ink);
+    background: var(--sn-hondo);
     padding: 0 .15em;
     display: inline-block;
   }
@@ -1017,16 +1097,16 @@ const jsonLdSchemas = [
   .sn-hero__lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--sn-tenue);
     max-width: 54ch;
   }
-  .sn-hero__lead strong { color: var(--sn-ink); font-weight: 700; }
+  .sn-hero__lead strong { color: var(--sn-tinta); font-weight: 700; }
   .sn-hero__lead em { color: var(--sn-tierra); font-style: italic; font-weight: 600; }
   .sn-hero__lead-bold {
     display: block;
     margin-top: .75rem;
     background: var(--sn-bosque);
-    color: var(--sn-paper);
+    color: var(--sn-suelo);
     padding: .25rem .55rem;
     font-weight: 800;
     border: 2px solid var(--sn-ink);
@@ -1048,7 +1128,7 @@ const jsonLdSchemas = [
   }
   .sn-btn--primary {
     background: var(--sn-tierra);
-    color: var(--sn-paper);
+    color: var(--sn-suelo);
     box-shadow: 6px 6px 0 var(--sn-ink);
   }
   .sn-btn--primary:hover {
@@ -1058,11 +1138,11 @@ const jsonLdSchemas = [
   }
   .sn-btn--ghost {
     background: transparent;
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     box-shadow: 6px 6px 0 var(--sn-tierra);
   }
   .sn-btn--ghost:hover {
-    background: var(--sn-ink);
+    background: var(--sn-hondo);
     color: var(--sn-oro);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--sn-tierra);
@@ -1094,10 +1174,10 @@ const jsonLdSchemas = [
     .sn-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--sn-ink); }
     .sn-kpi:nth-last-child(-n+4) { border-bottom: none; }
   }
-  .sn-kpi--tierra { background: var(--sn-tierra); color: var(--sn-paper); }
-  .sn-kpi--oro { background: var(--sn-oro); color: var(--sn-ink); }
-  .sn-kpi--bosque { background: var(--sn-bosque); color: var(--sn-paper); }
-  .sn-kpi--ink { background: var(--sn-ink); color: var(--sn-paper); }
+  .sn-kpi--tierra { background: var(--sn-tierra); color: var(--sn-suelo); }
+  .sn-kpi--oro { background: var(--sn-oro); color: var(--sn-suelo); }
+  .sn-kpi--bosque { background: var(--sn-bosque); color: var(--sn-suelo); }
+  .sn-kpi--ink { background: var(--sn-hondo); color: var(--sn-tinta); }
   .sn-kpi--ink .sn-kpi__v { color: var(--sn-oro); }
   .sn-kpi__v { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1; }
   .sn-kpi__v small { font-size: .5em; opacity: .8; }
@@ -1125,7 +1205,7 @@ const jsonLdSchemas = [
     gap: .5rem;
     padding: .75rem 1rem;
     background: var(--sn-tierra);
-    color: var(--sn-paper);
+    color: var(--sn-suelo);
     font-size: .58rem;
     letter-spacing: .15em;
     border-bottom: 2px solid var(--sn-ink);
@@ -1160,7 +1240,7 @@ const jsonLdSchemas = [
     position: absolute;
     bottom: 12px; left: 12px;
     background: var(--sn-oro);
-    color: var(--sn-ink);
+    color: var(--sn-suelo);
     padding: .4rem .75rem;
     font-size: .65rem;
     font-weight: 800;
@@ -1177,17 +1257,17 @@ const jsonLdSchemas = [
   .sn-postcard__data-row {
     display: flex; justify-content: space-between; align-items: center;
     padding-bottom: .35rem;
-    border-bottom: 1px dashed rgba(14,13,11,0.15);
+    border-bottom: 1px dashed rgba(230,237,242,0.16);
     font-size: .68rem;
   }
   .sn-postcard__data-row:last-child { border-bottom: none; padding-bottom: 0; }
   .sn-postcard__data-row > span:first-child {
-    color: var(--sn-tierra-d);
+    color: var(--sn-tierra);
     letter-spacing: .2em;
     font-weight: 800;
   }
   .sn-postcard__data-v {
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     font-weight: 700;
     letter-spacing: .05em;
   }
@@ -1195,7 +1275,7 @@ const jsonLdSchemas = [
   /* Marquee */
   .sn-marquee {
     background: var(--sn-tierra);
-    color: var(--sn-paper);
+    color: var(--sn-suelo);
     overflow: hidden;
     padding: .9rem 0;
     border-top: 3px solid var(--sn-ink);
@@ -1219,7 +1299,7 @@ const jsonLdSchemas = [
   /* ═══════════════════════════════════════════════════════ */
   .sn-jamon-section {
     padding: 6rem 1.5rem;
-    background: var(--sn-paper);
+    background: var(--sn-suelo);
     border-bottom: 3px solid var(--sn-ink);
     position: relative;
     overflow: hidden;
@@ -1252,9 +1332,9 @@ const jsonLdSchemas = [
   .sn-jamon-lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--sn-tenue);
   }
-  .sn-jamon-lead strong { color: var(--sn-ink); font-weight: 700; }
+  .sn-jamon-lead strong { color: var(--sn-tinta); font-weight: 700; }
 
   .sn-jamon-facts {
     list-style: none; padding: 0; margin: 0;
@@ -1275,7 +1355,7 @@ const jsonLdSchemas = [
   .sn-jamon-facts li:nth-child(even) { border-right: none; }
   .sn-jamon-facts li:nth-last-child(-n+2) { border-bottom: none; }
   .sn-jamon-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--sn-tierra); font-weight: 800; }
-  .sn-jamon-facts__v { font-size: .85rem; color: var(--sn-ink); font-weight: 600; line-height: 1.35; }
+  .sn-jamon-facts__v { font-size: .85rem; color: var(--sn-tinta); font-weight: 600; line-height: 1.35; }
 
   .sn-jamon-r {
     width: 100%;
@@ -1289,8 +1369,8 @@ const jsonLdSchemas = [
   /* ═══════════════════════════════════════════════════════ */
   .sn-minas-section {
     padding: 6rem 1.5rem;
-    background: var(--sn-ink);
-    color: var(--sn-paper);
+    background: var(--sn-hondo);
+    color: var(--sn-tinta);
     border-bottom: 3px solid var(--sn-ink);
     position: relative;
     overflow: hidden;
@@ -1325,7 +1405,7 @@ const jsonLdSchemas = [
     line-height: 1.55;
     color: rgba(255,252,246,0.78);
   }
-  .sn-minas-lead strong { color: var(--sn-paper); font-weight: 700; }
+  .sn-minas-lead strong { color: var(--sn-tinta); font-weight: 700; }
 
   .sn-minas-facts {
     list-style: none; padding: 0; margin: 0;
@@ -1344,7 +1424,7 @@ const jsonLdSchemas = [
   .sn-minas-facts li:nth-child(even) { border-right: none; }
   .sn-minas-facts li:nth-last-child(-n+2) { border-bottom: none; }
   .sn-minas-facts__k { font-size: .58rem; letter-spacing: .2em; color: var(--sn-oro); font-weight: 800; }
-  .sn-minas-facts__v { font-size: .82rem; color: var(--sn-paper); font-weight: 500; line-height: 1.35; }
+  .sn-minas-facts__v { font-size: .82rem; color: var(--sn-tinta); font-weight: 500; line-height: 1.35; }
 
   .sn-minas-r {
     width: 100%;
@@ -1377,7 +1457,7 @@ const jsonLdSchemas = [
   }
   .sn-map-title em { color: var(--sn-tierra); }
   .sn-map-coords {
-    background: var(--sn-ink);
+    background: var(--sn-hondo);
     color: var(--sn-oro);
     padding: 1rem 1.25rem;
     border: 2px solid var(--sn-oro);
@@ -1391,7 +1471,7 @@ const jsonLdSchemas = [
     position: relative;
     border-top: 3px solid var(--sn-ink);
     border-bottom: 3px solid var(--sn-ink);
-    background: var(--sn-ink);
+    background: var(--sn-suelo);
   }
   .sn-map-frame__corner {
     position: absolute;
@@ -1407,7 +1487,7 @@ const jsonLdSchemas = [
   .sn-map-frame__label {
     position: absolute;
     z-index: 5;
-    background: var(--sn-ink);
+    background: var(--sn-hondo);
     color: var(--sn-oro);
     padding: .25rem .55rem;
     font-family: var(--font-mono);
@@ -1435,7 +1515,7 @@ const jsonLdSchemas = [
   /* SECTORES                                                */
   /* ═══════════════════════════════════════════════════════ */
   .sn-sec-section {
-    background: var(--sn-paper-2);
+    background: var(--sn-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--sn-ink);
   }
@@ -1472,7 +1552,7 @@ const jsonLdSchemas = [
   .sn-sec__card--oro     { color: var(--sn-oro); }
   .sn-sec__card--barro   { color: var(--sn-barro); }
   .sn-sec__card--pino    { color: var(--sn-pino); }
-  .sn-sec__card--ink     { color: var(--sn-ink); }
+  .sn-sec__card--ink     { color: var(--sn-tinta); }
 
   .sn-sec__head {
     display: flex; justify-content: space-between; align-items: baseline;
@@ -1487,13 +1567,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.2rem, 2vw, 1.45rem);
     line-height: 1.1;
     letter-spacing: -.02em;
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     margin: 0;
   }
   .sn-sec__desc {
     font-size: .9rem;
     line-height: 1.5;
-    color: var(--brutal-text-secondary);
+    color: var(--sn-tenue);
     flex: 1;
   }
   .sn-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
@@ -1501,7 +1581,7 @@ const jsonLdSchemas = [
     display: flex; align-items: flex-start; gap: .35rem;
     font-size: .8rem;
     line-height: 1.35;
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
   }
   .sn-sec__tag span { color: currentColor; font-weight: 800; }
   .sn-sec__foot {
@@ -1525,7 +1605,7 @@ const jsonLdSchemas = [
   /* ═══════════════════════════════════════════════════════ */
   .sn-dif-section {
     background: var(--sn-tierra-d);
-    color: var(--sn-paper);
+    color: var(--sn-tinta);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--sn-ink);
     position: relative;
@@ -1549,7 +1629,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .sn-dif { grid-template-columns: repeat(4, 1fr); } }
   .sn-dif__item {
     background: rgba(255,252,246,0.05);
-    border: 2px solid var(--sn-paper);
+    border: 2px solid rgba(230,237,242,0.28);
     padding: 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .25s, transform .25s;
@@ -1560,7 +1640,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.15rem, 2vw, 1.35rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--sn-paper);
+    color: var(--sn-tinta);
     margin: 0;
   }
   .sn-dif__desc { font-size: .85rem; line-height: 1.45; color: rgba(255,252,246,0.75); margin: 0; }
@@ -1610,7 +1690,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.2rem, 2.2vw, 1.5rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--sn-paper);
+    color: var(--sn-tinta);
     margin: 0;
   }
   .sn-proc__body { font-size: .85rem; line-height: 1.5; color: rgba(255,252,246,0.7); flex: 1; }
@@ -1626,7 +1706,7 @@ const jsonLdSchemas = [
   /* TESTIMONIOS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .sn-quote-section {
-    background: var(--sn-paper);
+    background: var(--sn-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--sn-ink);
   }
@@ -1651,20 +1731,20 @@ const jsonLdSchemas = [
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.3;
     margin: 0 0 1.5rem;
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     max-width: 56ch;
   }
   .sn-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--sn-ink); }
   .sn-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--sn-tierra); color: var(--sn-paper);
+    background: var(--sn-tierra); color: var(--sn-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-size: 1.35rem; font-weight: 800;
     border-radius: 50%;
   }
   .sn-pull__cap div { display: flex; flex-direction: column; }
-  .sn-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--sn-ink); }
+  .sn-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--sn-tinta); }
   .sn-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
 
   .sn-quotes {
@@ -1685,7 +1765,7 @@ const jsonLdSchemas = [
   }
   .sn-quote:hover { transform: translateY(-3px); }
   .sn-quote--0 { background: var(--sn-paper-2); }
-  .sn-quote--1 { background: #EAE0C8; }
+  .sn-quote--1 { background: var(--sn-paper-2); }
   .sn-quote--2 { background: var(--sn-paper); }
   .sn-quote__mark {
     position: absolute;
@@ -1696,11 +1776,11 @@ const jsonLdSchemas = [
     color: var(--sn-tierra);
     opacity: .45;
   }
-  .sn-quote p { font-size: .92rem; line-height: 1.5; color: var(--sn-ink); flex: 1; margin: 0; }
+  .sn-quote p { font-size: .92rem; line-height: 1.5; color: var(--sn-tinta); flex: 1; margin: 0; }
   .sn-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--sn-ink); }
   .sn-quote__avatar {
     width: 36px; height: 36px;
-    background: var(--sn-bosque); color: var(--sn-paper);
+    background: var(--sn-bosque); color: var(--sn-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -1715,7 +1795,7 @@ const jsonLdSchemas = [
   /* FAQ                                                     */
   /* ═══════════════════════════════════════════════════════ */
   .sn-faq-section {
-    background: var(--sn-paper-2);
+    background: var(--sn-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--sn-ink);
   }
@@ -1735,27 +1815,27 @@ const jsonLdSchemas = [
     transition: padding .2s, background .2s;
   }
   .sn-faq__sum:hover { padding-inline: 1rem; background: var(--sn-paper); }
-  .sn-faq__num { font-size: 1rem; font-weight: 800; color: var(--sn-tierra-d); letter-spacing: .1em; }
+  .sn-faq__num { font-size: 1rem; font-weight: 800; color: var(--sn-tierra); letter-spacing: .1em; }
   .sn-faq__q {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     font-weight: 700;
   }
   .sn-faq__toggle {
     width: 40px; height: 40px;
     border: 2px solid var(--sn-ink);
     background: var(--sn-paper);
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s, color .2s;
   }
-  .sn-faq__det[open] .sn-faq__toggle { transform: rotate(180deg); background: var(--sn-tierra); color: var(--sn-paper); }
+  .sn-faq__det[open] .sn-faq__toggle { transform: rotate(180deg); background: var(--sn-tierra); color: var(--sn-suelo); }
   .sn-faq__ans {
     padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
+    color: var(--sn-tenue);
     font-size: .98rem;
     line-height: 1.55;
     max-width: 70ch;
@@ -1769,7 +1849,7 @@ const jsonLdSchemas = [
   /* PUEBLOS VECINOS                                         */
   /* ═══════════════════════════════════════════════════════ */
   .sn-vecinos-section {
-    background: var(--sn-paper);
+    background: var(--sn-suelo);
     padding: 5rem 1.5rem;
     border-bottom: 3px solid var(--sn-ink);
   }
@@ -1789,7 +1869,7 @@ const jsonLdSchemas = [
     gap: .35rem;
     padding: 1.5rem;
     background: var(--sn-paper);
-    color: var(--sn-ink);
+    color: var(--sn-tinta);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
@@ -1799,20 +1879,20 @@ const jsonLdSchemas = [
   .sn-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .sn-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .sn-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--sn-tierra); font-size: 1.3rem; transition: transform .25s; }
-  .sn-vecino:hover { background: var(--sn-tierra); color: var(--sn-paper); }
+  .sn-vecino:hover { background: var(--sn-tierra); color: var(--sn-suelo); }
   .sn-vecino:hover .sn-vecino__sub, .sn-vecino:hover .sn-vecino__n { opacity: .85; }
-  .sn-vecino:hover .sn-vecino__arrow { color: var(--sn-paper); transform: translateX(4px); }
-  .sn-vecino--1:hover { background: var(--sn-bosque); color: var(--sn-paper); }
-  .sn-vecino--2:hover { background: var(--sn-ink); color: var(--sn-oro); }
+  .sn-vecino:hover .sn-vecino__arrow { color: var(--sn-suelo); transform: translateX(4px); }
+  .sn-vecino--1:hover { background: var(--sn-bosque); color: var(--sn-suelo); }
+  .sn-vecino--2:hover { background: var(--sn-hondo); color: var(--sn-oro); }
   .sn-vecino--2:hover .sn-vecino__arrow { color: var(--sn-oro); }
-  .sn-vecino--3:hover { background: var(--sn-oro); color: var(--sn-ink); }
+  .sn-vecino--3:hover { background: var(--sn-oro); color: var(--sn-suelo); }
 
   /* ═══════════════════════════════════════════════════════ */
   /* CTA FINAL                                               */
   /* ═══════════════════════════════════════════════════════ */
   .sn-final {
-    background: var(--sn-ink);
-    color: var(--sn-paper);
+    background: var(--sn-hondo);
+    color: var(--sn-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -1838,7 +1918,7 @@ const jsonLdSchemas = [
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--sn-paper);
+    color: var(--sn-tinta);
     margin: 1rem 0;
   }
   .sn-final__title em { color: var(--sn-oro); font-style: italic; display: block; }
@@ -1861,22 +1941,22 @@ const jsonLdSchemas = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
   }
   .sn-final__btn--primary {
-    background: var(--sn-tierra); color: var(--sn-paper); border-color: var(--sn-tierra);
+    background: var(--sn-tierra); color: var(--sn-suelo); border-color: var(--sn-tierra);
     box-shadow: 6px 6px 0 var(--sn-oro);
   }
   .sn-final__btn--primary:hover {
-    background: var(--sn-oro); color: var(--sn-ink); border-color: var(--sn-oro);
+    background: var(--sn-oro); color: var(--sn-suelo); border-color: var(--sn-oro);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--sn-tierra);
   }
   .sn-final__btn--ghost {
-    background: transparent; color: var(--sn-paper); border-color: var(--sn-paper);
-    box-shadow: 6px 6px 0 var(--sn-paper);
+    background: transparent; color: var(--sn-tinta); border-color: var(--sn-tinta);
+    box-shadow: 6px 6px 0 var(--sn-tinta);
   }
   .sn-final__btn--ghost:hover {
-    background: var(--sn-paper); color: var(--sn-ink);
+    background: var(--sn-tinta); color: var(--sn-suelo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--sn-paper);
+    box-shadow: 11px 11px 0 var(--sn-tinta);
   }
   .sn-final__trust {
     display: flex; flex-wrap: wrap;
@@ -1895,7 +1975,7 @@ const jsonLdSchemas = [
 
   .sn-final__marquee {
     background: var(--sn-oro);
-    color: var(--sn-ink);
+    color: var(--sn-suelo);
     overflow: hidden;
     padding: .85rem 0;
     border-top: 3px solid var(--sn-ink);

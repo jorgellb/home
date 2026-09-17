@@ -1,0 +1,73 @@
+---
+/* Rejilla de enlaces de la columna de lectura: pueblos de una comarca,
+   cobertura in situ, municipios vecinos. Reglas por celda (sin bloque gris
+   en la última fila). El elemento actual va sin enlace y con aria-current. */
+export interface Enlace {
+  href: string;
+  label: string;
+  sub?: string;
+  destacado?: boolean;
+  actual?: boolean;
+}
+
+interface Props {
+  items: Enlace[];
+  columnas?: 2 | 3 | 4;
+}
+
+const { items, columnas = 2 } = Astro.props;
+---
+
+<ul class:list={['cdm-enlaces', `cdm-enlaces--${columnas}`]}>
+  {items.map((e) => (
+    <li>
+      {e.actual ? (
+        <span class="cdm-enlace is-actual" aria-current="page">
+          <span class="cdm-enlace__label">{e.label}</span>
+          {e.sub && <span class="cdm-enlace__sub">{e.sub}</span>}
+        </span>
+      ) : (
+        <a class:list={['cdm-enlace', { 'is-destacado': e.destacado }]} href={e.href}>
+          <span class="cdm-enlace__label">{e.label}</span>
+          {e.sub && <span class="cdm-enlace__sub">{e.sub}</span>}
+        </a>
+      )}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .cdm-enlaces {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border-top: 1px solid var(--color-cdm-regla);
+    border-left: 1px solid var(--color-cdm-regla);
+  }
+  .cdm-enlaces > li { border-right: 1px solid var(--color-cdm-regla); border-bottom: 1px solid var(--color-cdm-regla); }
+  @media (min-width: 560px) { .cdm-enlaces--3, .cdm-enlaces--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 640px) { .cdm-enlaces--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .cdm-enlaces--3, .cdm-enlaces--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1200px) { .cdm-enlaces--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .cdm-enlace {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    height: 100%;
+    padding: 0.85rem 1.05rem;
+    background: var(--color-cdm-panel);
+    color: var(--color-cdm-texto);
+    text-decoration: none;
+    transition: background-color 0.15s;
+  }
+  a.cdm-enlace:hover { background: var(--color-cdm-panel-2); }
+  a.cdm-enlace:hover .cdm-enlace__label { color: var(--color-cdm-senal); }
+  a.cdm-enlace:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: -2px; }
+  .cdm-enlace__label { font-weight: 600; font-size: 0.98rem; line-height: 1.25; transition: color 0.15s; }
+  .is-destacado .cdm-enlace__label::after { content: ' ★'; color: var(--color-cdm-senal); }
+  .cdm-enlace__sub { font-family: var(--font-mono); font-size: 0.7rem; line-height: 1.35; color: var(--color-cdm-tenue); }
+  .cdm-enlace.is-actual { background: var(--color-cdm-panel-2); }
+  .cdm-enlace.is-actual .cdm-enlace__label::before { content: '● '; color: var(--color-cdm-senal); }
+</style>

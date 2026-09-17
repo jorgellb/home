@@ -1,0 +1,164 @@
+---
+/* Plantilla de lectura del centro de mando (variante B aprobada por el
+   usuario): la interfaz es consola, pero el texto largo se lee tranquilo.
+   La usan las landings de pueblo, el hub de diseño web y, en la fase 3,
+   Sistemas IT y el Plan 360. */
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import IndiceLateral from '../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice, Cifra } from '../components/cdm/tipos';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  type?: 'website' | 'article' | 'product' | 'service';
+  keywords?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /* Migas visibles y su BreadcrumbList: las páginas que llegan aquí ya lo
+     tenían y la auditoría SEO lo exige. */
+  migas?: { label: string; href?: string }[];
+  /* Cabecera de consola */
+  ruta?: string;
+  h1: string;
+  /* H2 de la cabecera: algunas páginas lo traían en su hero y es el primer
+     H2 que fija la auditoría. */
+  subtitulo?: string;
+  entradilla?: string;
+  datos?: Cifra[];
+  /* Raíl lateral */
+  secciones: SeccionIndice[];
+  coordenadas?: string;
+}
+
+const {
+  title, description, canonical, image, imageAlt, noindex, type, keywords, jsonLd,
+  migas, ruta, h1, subtitulo, entradilla, datos = [], secciones, coordenadas,
+} = Astro.props;
+/* slot «lateral»: panel a la derecha de la cabecera (radar, ficha…).
+   Astro.slots.has() da true aunque el contenido sea condicional y salga
+   vacío, así que se renderiza y se mira si queda algo. */
+const lateral = Astro.slots.has('lateral') ? (await Astro.slots.render('lateral')).trim() : '';
+const conLateral = lateral.length > 0;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  image={image}
+  imageAlt={imageAlt}
+  noindex={noindex}
+  type={type}
+  keywords={keywords}
+  jsonLd={jsonLd}
+>
+  <Header />
+  {migas && <Breadcrumb tono="consola" items={migas} />}
+
+  <main id="main-content" class="lec">
+    <header class="lec__cab">
+      <div class:list={['lec__dentro', { 'lec__rejilla': conLateral }]}>
+        <div class="lec__texto">
+          {ruta && <p class="lec__ruta">{ruta}</p>}
+          <h1 class="lec__h1">{h1}</h1>
+          {subtitulo && <h2 class="lec__h2">{subtitulo}</h2>}
+          {entradilla && <p class="lec__entradilla">{entradilla}</p>}
+          {Astro.slots.has('acciones') && <div class="lec__acciones"><slot name="acciones" /></div>}
+          {datos.length > 0 && (
+            <dl class="lec__datos">
+              {datos.map((d) => (
+                <div>
+                  <dt>{d.etiqueta}</dt>
+                  <dd>{d.prefijo ?? ''}{d.valor}{d.sufijo ?? ''}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+        {conLateral && <div class="lec__lateral" set:html={lateral} />}
+      </div>
+    </header>
+
+    <div class="lec__cuerpo lec__dentro">
+      <IndiceLateral secciones={secciones} coordenadas={coordenadas} />
+      <div class="lec__columna">
+        <slot />
+      </div>
+    </div>
+
+    <slot name="cierre" />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .lec { background: var(--color-cdm-suelo); color: var(--color-cdm-texto); }
+  .lec__dentro { max-width: var(--container-max); margin-inline: auto; padding-inline: var(--container-gutter); }
+
+  .lec__cab {
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background-color: var(--color-cdm-suelo);
+    background-image:
+      linear-gradient(var(--color-cdm-regla) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-cdm-regla) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+  }
+  .lec__ruta { margin: 0 0 0.9rem; font-family: var(--font-mono); font-size: 0.76rem; color: var(--color-cdm-tenue); }
+  .lec__h1 {
+    margin: 0;
+    max-width: 20ch;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 760;
+    font-size: clamp(2.6rem, 6.5vw, 5rem);
+    line-height: 0.94;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+  .lec__rejilla { display: grid; gap: 2.5rem; align-items: center; }
+  @media (min-width: 1024px) { .lec__rejilla { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 3.5rem; } }
+  .lec__texto { min-width: 0; }
+  .lec__lateral { min-width: 0; }
+  .lec__h2 {
+    margin: 1rem 0 0;
+    max-width: 34ch;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
+    line-height: 1.35;
+    color: var(--color-cdm-texto);
+  }
+  .lec__acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
+  .lec__entradilla { max-width: 56ch; margin: 1.25rem 0 0; font-size: 1.1rem; line-height: 1.6; color: #b9c5cf; }
+  .lec__datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 2rem 0 0;
+    background: var(--color-cdm-regla);
+    border: 1px solid var(--color-cdm-regla);
+  }
+  @media (min-width: 900px) { .lec__datos { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  /* Con panel lateral la columna de texto es estrecha: cuatro cifras en fila
+     partían las etiquetas y descuadraban los valores. */
+  @media (min-width: 900px) { .lec__rejilla .lec__datos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .lec__datos > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 0.2rem; padding: 0.9rem 1.1rem; background: var(--color-cdm-suelo); }
+  .lec__datos dt { font-size: 0.78rem; color: var(--color-cdm-tenue); }
+  .lec__datos dd { margin: 0; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.6rem; letter-spacing: -0.02em; }
+
+  .lec__cuerpo { display: grid; gap: 2rem; padding-block: clamp(2rem, 5vw, 3.5rem); }
+  @media (min-width: 1024px) { .lec__cuerpo { grid-template-columns: 180px minmax(0, 1fr); gap: 3rem; } }
+  .lec__columna { min-width: 0; }
+  /* Columna de lectura: el texto largo no pasa de 68 caracteres por línea. */
+  .lec__columna :global(p),
+  .lec__columna :global(li) { max-width: 68ch; }
+</style>

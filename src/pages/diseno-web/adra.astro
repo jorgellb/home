@@ -3,7 +3,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). La banda
+   de hitos no entra: es una tira de datos, no una sección navegable. */
+const secciones: SeccionIndice[] = [
+  { id: 'iconos',      etiqueta: 'Señas de identidad' },
+  { id: 'puerto',      etiqueta: 'El puerto' },
+  { id: 'albuferas',   etiqueta: 'Las Albuferas' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'mapa',        etiqueta: 'Situación' },
+  { id: 'porque',      etiqueta: 'Por qué Adra' },
+  { id: 'metodo',      etiqueta: 'Proceso' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'comarca',     etiqueta: 'El Poniente' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const pueblosPoniente = getPueblosByComarca('Poniente Almeriense').filter(p => p.slug !== 'adra');
 
@@ -89,6 +107,8 @@ const jsonLdSchemas = [
   <Header />
 
   <main id="main-content" class="ad">
+
+    <IndiceLateral secciones={secciones} coordenadas="36.749° N · 3.021° W · 25.000 hab" class="ad-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — PUERTO · ABDERA · INVERNADEROS             */}
@@ -287,6 +307,7 @@ const jsonLdSchemas = [
                   alt="Adra — puerto pesquero y costa del Poniente almeriense"
                   width="640" height="320"
                   loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                   class="ad-postcard__img"
                 />
@@ -331,7 +352,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* ICONOS — 4 SEÑAS DE IDENTIDAD                     */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-ico-section">
+    <section class="ad-ico-section" id="iconos">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
@@ -363,12 +384,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PUERTO — FLAGSHIP SECTION                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-port-section">
+    <section class="ad-port-section" id="puerto">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
           <span class="text-meta ad-chapter" style="color:var(--ad-sand)">Cap. 03 / El puerto</span>
-          <h2 class="heading-display brutal-section-head__title" style="color:var(--ad-paper)">
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--ad-tinta)">
             La lonja abre de
             <em class="heading-editorial">madrugada.</em>
             <span class="heading-display-block">Google, todo el día.</span>
@@ -511,7 +532,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* ALBUFERAS — RESERVA NATURAL                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-alb-section">
+    <section class="ad-alb-section" id="albuferas">
       <div class="container-brutal">
 
         <div class="ad-alb__grid">
@@ -674,7 +695,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-map-section">
+    <section class="ad-map-section" id="mapa">
       <div class="container-brutal">
         <div class="brutal-section-head">
           <span class="text-meta ad-chapter">Cap. 06 / Situación</span>
@@ -700,7 +721,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES — 4 RAZONES                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-dif-section">
+    <section class="ad-dif-section" id="porque">
       <div class="container-brutal">
 
         <span class="text-meta ad-dif-chapter">Cap. 07 / Diferencial</span>
@@ -726,12 +747,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO — 4 PASOS                                 */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-proc-section">
+    <section class="ad-proc-section" id="metodo">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
           <span class="text-meta ad-chapter" style="color:var(--ad-sand)">Cap. 08 / Proceso</span>
-          <h2 class="heading-display brutal-section-head__title" style="color:var(--ad-paper)">
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--ad-tinta)">
             De la primera visita
             <em class="heading-editorial">al</em>
             <span class="heading-display-block">sitio publicado.</span>
@@ -760,7 +781,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-tst-section">
+    <section class="ad-tst-section" id="testimonios">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
@@ -791,7 +812,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ — 8 PREGUNTAS                                 */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-faq-section">
+    <section class="ad-faq-section" id="faq">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
@@ -820,7 +841,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PUEBLOS VECINOS                                   */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-vec-section">
+    <section class="ad-vec-section" id="comarca">
       <div class="container-brutal">
 
         <span class="text-meta ad-chapter">Cap. 11 / Comarca</span>
@@ -849,7 +870,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* CTA FINAL                                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="ad-final">
+    <section class="ad-final" id="empezar">
       <div class="container-brutal">
         <div class="ad-final__box">
 
@@ -890,18 +911,67 @@ const jsonLdSchemas = [
   /* ADRA DESIGN SYSTEM — puerto, sal y plástico      */
   /* ═══════════════════════════════════════════════ */
 
-  :root {
-    --ad-paper:   #F2EFE6;
-    --ad-paper-2: #E3DDCE;
-    --ad-ink:     #1A1816;
-    --ad-sea:     #1B6C7D;
-    --ad-sea-2:   #2E90A3;
-    --ad-deep:    #0E2A33;
-    --ad-accent:  #E2703A;
-    --ad-sand:    #E0CFA8;
-    --ad-green:   #3E7A55;
-    --ad-plastic: #CBD8D5;
-    --ad-shadow:  8px 8px 0 var(--ad-ink);
+  /* Fase 2 · consola. La paleta estaba en :root, que Astro no scopea: se
+     filtraba a todo el sitio. Pasa a .ad, que es el <main> de esta página.
+     paper hacía de fondo y de tinta clara a la vez, e ink de borde, sombra,
+     fondo y texto: cada uno se reparte. El mar y el verde no llegaban a
+     4,5:1 sobre suelo y suben; el azul de madrugada se queda como fondo. */
+  .ad {
+    --ad-paper:     var(--color-cdm-panel);
+    --ad-paper-2:   var(--color-cdm-panel-2);
+    --ad-suelo:     var(--color-cdm-suelo);
+    --ad-tinta:     var(--color-cdm-texto);
+    --ad-tenue:     var(--color-cdm-tenue);
+    --ad-ink:       var(--color-cdm-regla-2);
+    --ad-sea:       #3FB4C9;      /* mar, aclarado para leer */
+    --ad-sea-2:     #2E90A3;
+    --ad-sea-hondo: #0B3A45;      /* mar hondo: solo fondo */
+    --ad-deep:      #0E2A33;      /* madrugada en el puerto: solo fondo */
+    --ad-accent:    #E2703A;
+    --ad-sand:      #E0CFA8;
+    --ad-green:     #5FB07E;      /* verde de albufera, aclarado */
+    --ad-plastic:   #CBD8D5;
+    --ad-shadow:    8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--ad-suelo);
+    color: var(--ad-tinta);
+  }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .ad :global(.brutal-section-head__title) { color: var(--ad-tinta); }
+  .ad :global(.brutal-section-head__title em) { color: var(--ad-sea); }
+  .ad :global(.brutal-section-head__lead) { color: var(--ad-tenue); }
+  .ad :global(:where(.text-meta)) { color: var(--ad-tenue); } /* :where: sin especificidad, para que el color propio de cada capítulo mande */
+  .ad :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  .ad section[id] { scroll-margin-top: 96px; }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .ad :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .ad :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+  }
+  @media (max-width: 1279px) {
+    .ad :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--ad-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .ad :global(.cdm-indice__titulo),
+    .ad :global(.cdm-indice__lista),
+    .ad :global(.cdm-indice__coord) { display: none; }
+    .ad :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
 
   .ad-pulse {
@@ -927,7 +997,7 @@ const jsonLdSchemas = [
     background:
       radial-gradient(circle at 70% 25%, rgba(27,108,125,0.10), transparent 52%),
       radial-gradient(circle at 25% 75%, rgba(226,112,58,0.08), transparent 52%),
-      var(--ad-paper);
+      var(--ad-suelo);
     border-bottom: 3px solid var(--ad-ink);
     position: relative;
     overflow: hidden;
@@ -974,7 +1044,7 @@ const jsonLdSchemas = [
   .ad-kpi--sea .ad-kpi__v { color: var(--ad-sea); }
   .ad-kpi--accent .ad-kpi__v { color: var(--ad-accent); }
   .ad-kpi--green .ad-kpi__v { color: var(--ad-green); }
-  .ad-kpi--ink .ad-kpi__v { color: var(--ad-ink); }
+  .ad-kpi--ink .ad-kpi__v { color: var(--ad-tinta); }
 
   /* ── POSTAL ── */
   .ad-postcard {
@@ -1013,20 +1083,20 @@ const jsonLdSchemas = [
   }
   .ad-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ad-ink); }
   .ad-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--ad-ink); }
-  .ad-btn--primary { background: var(--ad-sea); color: var(--ad-paper); }
-  .ad-btn--ghost { background: transparent; color: var(--ad-ink); }
-  .ad-btn--sand { background: var(--ad-sand); color: var(--ad-ink); }
+  .ad-btn--primary { background: var(--ad-sea); color: var(--ad-suelo); }
+  .ad-btn--ghost { background: transparent; color: var(--ad-tinta); }
+  .ad-btn--sand { background: var(--ad-sand); color: var(--ad-suelo); }
   .ad-btn--lg { padding: 1.05rem 1.9rem; font-size: 1.02rem; }
 
   /* ── HITOS ── */
-  .ad-hitos-section { background: var(--ad-ink); padding: 1.6rem 0; }
+  .ad-hitos-section { background: var(--ad-deep); padding: 1.6rem 0; }
   .ad-hitos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem 1.6rem; list-style: none; padding: 0; margin: 0; }
   .ad-hito { display: flex; flex-direction: column; gap: .15rem; }
   .ad-hito__k { font-size: .62rem; letter-spacing: .12em; color: var(--ad-accent); }
-  .ad-hito__v { font-size: .84rem; color: var(--ad-paper); }
+  .ad-hito__v { font-size: .84rem; color: var(--ad-tinta); }
 
   /* ── ICONOS ── */
-  .ad-ico-section { background: var(--ad-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-ico-section { background: var(--ad-suelo); padding: 4.5rem 0; border-bottom: 3px solid var(--ad-ink); }
   .ad-chapter { color: var(--ad-accent); display: block; margin-bottom: .7rem; }
   .ad-ico { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
   @media (min-width: 768px) { .ad-ico { grid-template-columns: repeat(2, 1fr); } }
@@ -1045,15 +1115,15 @@ const jsonLdSchemas = [
     display: grid; place-items: center;
     font-size: 1.2rem; font-weight: 800;
     border: 2px solid var(--ad-ink);
-    color: var(--ad-paper);
+    color: var(--ad-suelo);
   }
   .ad-ico__item--sea     .ad-ico__code { background: var(--ad-sea); }
   .ad-ico__item--accent  .ad-ico__code { background: var(--ad-accent); }
   .ad-ico__item--green   .ad-ico__code { background: var(--ad-green); }
-  .ad-ico__item--plastic .ad-ico__code { background: var(--ad-plastic); color: var(--ad-ink); }
+  .ad-ico__item--plastic .ad-ico__code { background: var(--ad-plastic); color: var(--ad-suelo); }
   .ad-ico__sub { font-size: .6rem; color: var(--ad-sea); }
   .ad-ico__name { font-size: 1.35rem; margin: .2rem 0 .5rem; line-height: 1.1; }
-  .ad-ico__desc { font-size: .9rem; line-height: 1.6; margin: 0 0 .7rem; }
+  .ad-ico__desc { font-size: .9rem; line-height: 1.6; margin: 0 0 .7rem; color: var(--ad-tenue); }
   .ad-ico__dato { font-size: .68rem; color: var(--ad-accent); font-weight: 700; }
 
   /* ── PUERTO ── */
@@ -1062,12 +1132,12 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .ad-port__grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 3.5rem; } }
   .ad-port__svg-wrap { border: 3px solid var(--ad-ink); box-shadow: var(--ad-shadow); overflow: hidden; aspect-ratio: 600 / 340; background: var(--ad-deep); }
   .ad-port__lead { font-size: 1.15rem; line-height: 1.6; color: var(--ad-sand); margin: 0 0 1.1rem; font-weight: 600; }
-  .ad-port__lead em { font-style: italic; color: var(--ad-paper); }
+  .ad-port__lead em { font-style: italic; color: var(--ad-tinta); }
   .ad-port__text { font-size: .95rem; line-height: 1.7; color: rgba(242,239,230,0.82); margin: 0 0 1.3rem; }
   .ad-port__list { list-style: none; padding: 0; margin: 0 0 1.8rem; display: grid; gap: .6rem; }
   .ad-port__list li { font-size: .9rem; line-height: 1.55; color: rgba(242,239,230,0.9); padding-left: 1.4rem; position: relative; }
   .ad-port__list li::before { content: '▸'; position: absolute; left: 0; color: var(--ad-accent); font-weight: 800; }
-  .ad-port__list strong { color: var(--ad-paper); }
+  .ad-port__list strong { color: var(--ad-tinta); }
 
   /* ── ALBUFERAS ── */
   .ad-alb-section { background: var(--ad-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
@@ -1075,13 +1145,14 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .ad-alb__grid { grid-template-columns: .9fr 1.1fr; align-items: center; gap: 3.5rem; } }
   .ad-alb__title { font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1; margin: 0 0 1.2rem; }
   .ad-alb__title em { display: block; color: var(--ad-green); }
-  .ad-alb__text { font-size: .96rem; line-height: 1.7; margin: 0 0 1rem; }
+  .ad-alb__text { font-size: .96rem; line-height: 1.7; margin: 0 0 1rem; color: var(--ad-tenue); }
+  .ad-alb__text strong { color: var(--ad-tinta); }
   .ad-alb__tags { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 1.4rem 0 0; }
   .ad-alb__tags li { font-size: .66rem; padding: .35rem .7rem; border: 2px solid var(--ad-ink); background: var(--ad-paper); letter-spacing: .05em; }
   .ad-alb__svg-wrap { border: 3px solid var(--ad-ink); box-shadow: var(--ad-shadow); overflow: hidden; aspect-ratio: 560 / 300; }
 
   /* ── SECTORES ── */
-  .ad-svc-section { background: var(--ad-paper); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); scroll-margin-top: 5rem; }
+  .ad-svc-section { background: var(--ad-suelo); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); scroll-margin-top: 5rem; }
   .ad-svc { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
   @media (min-width: 700px)  { .ad-svc { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1100px) { .ad-svc { grid-template-columns: repeat(3, 1fr); } }
@@ -1095,12 +1166,12 @@ const jsonLdSchemas = [
   }
   .ad-svc__item:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--ad-ink); }
   .ad-svc__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .9rem; }
-  .ad-svc__num { font-size: 2rem; font-weight: 800; color: var(--ad-paper-2); line-height: 1; }
+  .ad-svc__num { font-size: 2rem; font-weight: 800; color: var(--color-cdm-tenue); line-height: 1; }
   .ad-svc__stat { text-align: right; display: flex; flex-direction: column; }
   .ad-svc__stat b { font-size: 1.15rem; color: var(--ad-sea); line-height: 1; }
   .ad-svc__stat small { font-size: .6rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
   .ad-svc__name { font-size: 1.2rem; line-height: 1.15; margin: 0 0 .6rem; }
-  .ad-svc__desc { font-size: .88rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; }
+  .ad-svc__desc { font-size: .88rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; color: var(--ad-tenue); }
   .ad-svc__tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
   .ad-svc__tags li { font-size: .6rem; padding: .28rem .55rem; background: var(--ad-paper-2); border: 1px solid var(--ad-ink); }
 
@@ -1109,7 +1180,7 @@ const jsonLdSchemas = [
   .ad-map-wrap { margin-top: 2.5rem; }
 
   /* ── DIFERENCIALES ── */
-  .ad-dif-section { background: var(--ad-paper); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-dif-section { background: var(--ad-suelo); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
   .ad-dif-chapter { color: var(--ad-accent); display: block; margin-bottom: .7rem; }
   .ad-dif-title { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: .98; margin: 0 0 2.5rem; }
   .ad-dif-title em { display: block; color: var(--ad-sea); }
@@ -1121,10 +1192,10 @@ const jsonLdSchemas = [
   .ad-dif__item--3 { border-left-color: var(--ad-sand); }
   .ad-dif__num { font-size: .68rem; color: var(--ad-accent); font-weight: 800; letter-spacing: .1em; }
   .ad-dif__t { font-size: 1.15rem; margin: .3rem 0 .5rem; line-height: 1.2; }
-  .ad-dif__desc { font-size: .9rem; line-height: 1.65; margin: 0; }
+  .ad-dif__desc { font-size: .9rem; line-height: 1.65; margin: 0; color: var(--ad-tenue); }
 
   /* ── PROCESO ── */
-  .ad-proc-section { background: var(--ad-sea); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-proc-section { background: var(--ad-sea-hondo); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
   .ad-proc { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1.2rem; }
   @media (min-width: 900px) { .ad-proc { grid-template-columns: repeat(2, 1fr); } }
   .ad-proc__step {
@@ -1138,11 +1209,11 @@ const jsonLdSchemas = [
   .ad-proc__head { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
   .ad-proc__t { font-size: 1.15rem; margin: 0; line-height: 1.2; }
   .ad-proc__eta { font-size: .64rem; color: var(--ad-sea); background: var(--ad-paper-2); padding: .2rem .5rem; border: 1px solid var(--ad-ink); }
-  .ad-proc__desc { font-size: .88rem; line-height: 1.6; margin: .55rem 0 .7rem; }
+  .ad-proc__desc { font-size: .88rem; line-height: 1.6; margin: .55rem 0 .7rem; color: var(--ad-tenue); }
   .ad-proc__deliv { font-size: .66rem; color: var(--ad-green); font-weight: 700; }
 
   /* ── TESTIMONIOS ── */
-  .ad-tst-section { background: var(--ad-paper); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-tst-section { background: var(--ad-suelo); padding: 5rem 0; border-bottom: 3px solid var(--ad-ink); }
   .ad-tst { display: grid; grid-template-columns: 1fr; gap: 1.5rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
   @media (min-width: 768px) { .ad-tst { grid-template-columns: repeat(2, 1fr); } }
   .ad-tst__item {
@@ -1178,10 +1249,10 @@ const jsonLdSchemas = [
   .ad-faq__icon::before { top: 8px; left: 0; width: 18px; height: 2.5px; }
   .ad-faq__icon::after  { left: 8px; top: 0; width: 2.5px; height: 18px; }
   .ad-faq__item[open] .ad-faq__icon::after { transform: scaleY(0); }
-  .ad-faq__a { padding: 0 1.3rem 1.2rem; font-size: .89rem; line-height: 1.7; margin: 0; }
+  .ad-faq__a { padding: 0 1.3rem 1.2rem; font-size: .89rem; line-height: 1.7; margin: 0; color: var(--ad-tenue); }
 
   /* ── VECINOS ── */
-  .ad-vec-section { background: var(--ad-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--ad-ink); }
+  .ad-vec-section { background: var(--ad-suelo); padding: 4.5rem 0; border-bottom: 3px solid var(--ad-ink); }
   .ad-vec-title { font-size: clamp(1.7rem, 3.5vw, 2.6rem); line-height: 1; margin: 0 0 2rem; }
   .ad-vec-title em { color: var(--ad-sea); }
   .ad-vec { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .8rem; list-style: none; padding: 0; margin: 0; }
@@ -1193,12 +1264,12 @@ const jsonLdSchemas = [
     background: var(--ad-paper);
     transition: background .2s, transform .2s;
   }
-  .ad-vecino:hover { background: var(--ad-sea); color: var(--ad-paper); transform: translateY(-3px); }
+  .ad-vecino:hover { background: var(--ad-sea); color: var(--ad-suelo); transform: translateY(-3px); }
   .ad-vecino__n { font-weight: 700; font-size: .95rem; }
   .ad-vecino__p { font-size: .64rem; opacity: .75; }
 
   /* ── CTA FINAL ── */
-  .ad-final { background: var(--ad-ink); padding: 5rem 0; }
+  .ad-final { background: var(--ad-suelo); padding: 5rem 0; }
   .ad-final__box {
     border: 3px solid var(--ad-sea);
     background: var(--ad-deep);
@@ -1207,11 +1278,11 @@ const jsonLdSchemas = [
     box-shadow: 10px 10px 0 var(--ad-sea);
   }
   .ad-final__meta { color: var(--ad-accent); display: block; margin-bottom: 1rem; }
-  .ad-final__title { font-size: clamp(2rem, 5vw, 3.6rem); line-height: .98; color: var(--ad-paper); margin: 0 0 1.2rem; }
+  .ad-final__title { font-size: clamp(2rem, 5vw, 3.6rem); line-height: .98; color: var(--ad-tinta); margin: 0 0 1.2rem; }
   .ad-final__title em { display: block; color: var(--ad-sand); }
   .ad-final__lead { font-size: 1rem; line-height: 1.65; color: rgba(242,239,230,0.82); max-width: 52ch; margin: 0 auto 2rem; }
   .ad-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
-  .ad-final__cta .ad-btn--ghost { color: var(--ad-paper); border-color: var(--ad-sand); box-shadow: 4px 4px 0 var(--ad-sand); }
+  .ad-final__cta .ad-btn--ghost { color: var(--ad-tinta); border-color: var(--ad-sand); box-shadow: 4px 4px 0 var(--ad-sand); }
   .ad-final__cta .ad-btn--ghost:hover { box-shadow: 7px 7px 0 var(--ad-sand); }
 
   @media (prefers-reduced-motion: reduce) {

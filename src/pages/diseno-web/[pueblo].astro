@@ -1,33 +1,26 @@
 ---
-/* Plantilla única de las landings de diseño web por municipio (brutal tech).
-   El contenido propio de cada pueblo sale de src/data/landings.ts, que une
-   las antiguas páginas hechas a mano con los datos base. La indexación sigue
-   gobernada por pueblos-indexables.ts. */
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/layout/Header.astro';
-import Footer from '../../components/layout/Footer.astro';
-import Breadcrumb from '../../components/common/Breadcrumb.astro';
+/* Plantilla única de las landings de diseño web por municipio sin página
+   propia (centro de mando, spec §6.3): plantilla de lectura con índice
+   lateral y, si el pueblo sale en el mapa, el radar de cobertura con el
+   pueblo resaltado. El contenido propio de cada pueblo sale de
+   src/data/landings.ts; la indexación sigue en pueblos-indexables.ts. */
+import LecturaLayout from '../../layouts/LecturaLayout.astro';
+import Boton from '../../components/cdm/Boton.astro';
+import Fichas from '../../components/cdm/Fichas.astro';
+import ListaEnlaces from '../../components/cdm/ListaEnlaces.astro';
+import Plan360Panel from '../../components/cdm/Plan360Panel.astro';
+import Preguntas from '../../components/cdm/Preguntas.astro';
+import RadarCobertura from '../../components/cdm/RadarCobertura.astro';
+import SeccionLectura from '../../components/cdm/SeccionLectura.astro';
 import Contact from '../../components/sections/Contact.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
-import BlueprintHero from '../../components/brutal/BlueprintHero.astro';
-import Ticker from '../../components/brutal/Ticker.astro';
-import LugaresBento from '../../components/brutal/LugaresBento.astro';
-import FichaDatos from '../../components/brutal/FichaDatos.astro';
-import SectoresGrid from '../../components/brutal/SectoresGrid.astro';
-import ItemsLista from '../../components/brutal/ItemsLista.astro';
-import Testimonios from '../../components/brutal/Testimonios.astro';
-import Pasos from '../../components/brutal/Pasos.astro';
-import PueblosLinks from '../../components/brutal/PueblosLinks.astro';
-import ItSection from '../../components/it/ItSection.astro';
-import SectionHead from '../../components/it/SectionHead.astro';
-import BloquesGrid from '../../components/it/BloquesGrid.astro';
-import FaqList from '../../components/it/FaqList.astro';
-import Plan360Teaser from '../../components/it/Plan360Teaser.astro';
+import type { Cifra, SeccionIndice } from '../../components/cdm/tipos';
 import { pueblos, getPueblosByComarca, type Pueblo } from '../../data/pueblos-almeria';
 import { esPuebloIndexable } from '../../data/pueblos-indexables';
 import { getLanding } from '../../data/landings';
 import { getPuebloIT, HUB_IT } from '../../data/servicios-it';
+import { dentroDeCaja } from '../../data/cobertura';
 import { SITE, PROVEEDOR } from '../../data/negocio';
 
 export function getStaticPaths() {
@@ -54,6 +47,8 @@ const canonical = `${SITE}/diseno-web/${l.slug}/`;
 
 const fmtCoord = (v: number) => Math.abs(v).toFixed(4).replace('.', ',');
 const coords = l.coords ? `${fmtCoord(l.coords[1])} N · ${fmtCoord(l.coords[0])} O` : undefined;
+/* l.coords va en [lon, lat], como lo pide el mapa interactivo. */
+const enRadar = l.coords ? dentroDeCaja(l.coords[1], l.coords[0]) : false;
 
 const pasos = [
   { t: 'Llamada de 30 minutos', d: `Nos cuentas tu negocio en ${n} y qué quieres conseguir. Sin compromiso.` },
@@ -65,21 +60,33 @@ const pasos = [
 const it = getPuebloIT(l.slug);
 
 // Primero los municipios indexables: son los que merece la pena enlazar.
-const vecinos = getPueblosByComarca(l.comarca)
+const deComarca = getPueblosByComarca(l.comarca);
+const vecinos = deComarca
   .filter((p) => p.slug !== l.slug)
   .sort((a, b) => Number(esPuebloIndexable(b.slug)) - Number(esPuebloIndexable(a.slug)))
   .slice(0, 10)
   .map((p) => ({ href: `/diseno-web/${p.slug}/`, label: `Diseño web en ${p.nombre}` }));
 
-const ticker = [
-  ...(l.sectores.length > 0 ? l.sectores.map((s) => s.nombre) : l.caracteristicas),
-  'Web desde 500 €',
-  'Presupuesto en 24 horas',
-  'Sin permanencia',
+const datosCabecera: Cifra[] = [
+  { etiqueta: 'Web profesional, desde', valor: 500, sufijo: ' €' },
+  { etiqueta: 'Tienda online, desde', valor: 700, sufijo: ' €' },
+  { etiqueta: 'Presupuesto cerrado', valor: 24, sufijo: ' h' },
+  { etiqueta: 'Municipios de la comarca', valor: deComarca.length },
 ];
 
-let lamina = 0;
-const siguienteLamina = () => `Lámina ${String(++lamina).padStart(2, '0')}`;
+const secciones: SeccionIndice[] = [
+  l.lugares.length > 0 ? { id: 'lugares', etiqueta: 'Lugares' } : { id: 'panorama', etiqueta: 'Panorama' },
+  ...(l.datos.length > 0 ? [{ id: 'datos', etiqueta: 'En datos' }] : []),
+  ...(l.coords ? [{ id: 'mapa', etiqueta: 'Mapa' }] : []),
+  ...(l.sectores.length > 0 ? [{ id: 'sectores', etiqueta: 'Sectores' }] : []),
+  ...l.extras.map((e) => ({ id: `extra-${e.key}`, etiqueta: e.titulo })),
+  { id: 'porque', etiqueta: 'Por qué una web' },
+  { id: 'metodo', etiqueta: 'Método' },
+  ...(l.testimonios.length > 0 ? [{ id: 'testimonios', etiqueta: 'Testimonios' }] : []),
+  ...(it ? [{ id: 'informatica', etiqueta: 'Web e informática' }] : []),
+  ...(l.faq.length > 0 ? [{ id: 'faq', etiqueta: 'Preguntas' }] : []),
+  ...(vecinos.length > 0 ? [{ id: 'comarca', etiqueta: l.comarca }] : []),
+];
 
 const jsonLd = [
   {
@@ -103,7 +110,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout
+<LecturaLayout
   title={l.title}
   description={l.description}
   noindex={!l.indexable}
@@ -111,143 +118,143 @@ const jsonLd = [
   image="/imagenes/equipo-diseno-mantenimiento-web.jpg"
   imageAlt={`Diseño web en ${n} por Platanito Rico`}
   jsonLd={jsonLd}
+  migas={[{ label: 'Inicio', href: '/' }, { label: 'Diseño web en Almería', href: '/diseno-web/' }, { label: n }]}
+  h1={l.h1}
+  subtitulo={`Páginas web que traen clientes a negocios de ${n}`}
+  entradilla={l.lead}
+  datos={datosCabecera}
+  secciones={secciones}
+  coordenadas={coords}
 >
-  <Header />
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño web en Almería', href: '/diseno-web/' }, { label: n }]} />
+  <Fragment slot="acciones">
+    <Boton href="/contacto/?servicio=web#contacto">Pedir presupuesto</Boton>
+    <Boton href="tel:+34657085019" variante="linea">Llamar al 657 085 019</Boton>
+  </Fragment>
 
-  <main id="main-content">
-    <BlueprintHero
-      size="compact"
-      h1Lines={[l.h1]}
-      h2={`Páginas web que traen clientes a negocios de ${n}`}
-      lead={l.lead}
-      primary={{ href: '/contacto/?servicio=web#contacto', label: 'Pedir presupuesto' }}
-      secondary={{ href: 'tel:+34657085019', label: 'Llamar al 657 085 019' }}
-      place={`${n}, ${l.comarca}`}
-      coords={coords}
-      proyecto={`Diseño web en ${n}`}
-      lamina="DW"
-      specs={[
-        { k: 'Web profesional', v: 'Desde 500 €' },
-        { k: 'Tienda online', v: 'Desde 700 €' },
-        { k: 'Presupuesto', v: 'En 24 horas' },
-        { k: 'Comarca', v: l.comarca },
-      ]}
-    />
-    <Ticker label={`Diseño web para negocios de ${n}`} items={ticker} />
+  {enRadar && l.coords && (
+    <RadarCobertura slot="lateral" pueblo={{ slug: l.slug, nombre: n, lat: l.coords[1], lon: l.coords[0] }} />
+  )}
 
-    {l.lugares.length > 0 ? (
-      <ItSection tone="bone" labelledby="dw-lugares">
-        <SectionHead id="dw-lugares" kicker={siguienteLamina()} title={l.cabeceras.lugares.h2} lead={l.cabeceras.lugares.lead || undefined} />
-        <LugaresBento items={l.lugares} />
-      </ItSection>
-    ) : (
-      <ItSection tone="bone" labelledby="dw-panorama">
-        <div class="dw-panorama">
+  {l.lugares.length > 0 ? (
+    <SeccionLectura id="lugares" titulo={l.cabeceras.lugares.h2} lead={l.cabeceras.lugares.lead || undefined}>
+      <Fichas items={l.lugares.map((lugar) => ({ titulo: lugar.name, subtitulo: lugar.sub, texto: lugar.desc, dato: lugar.dato }))} />
+    </SeccionLectura>
+  ) : (
+    <SeccionLectura id="panorama" titulo={`El tejido de ${n} en internet`}>
+      {l.panorama.length > 0
+        ? l.panorama.map((p) => <p class="dw-texto">{p}</p>)
+        : <p class="dw-texto">{l.lead}</p>}
+      <ul class="dw-chips">
+        {l.caracteristicas.map((c) => <li>{c}</li>)}
+      </ul>
+    </SeccionLectura>
+  )}
+
+  {l.datos.length > 0 && (
+    <SeccionLectura id="datos" titulo={l.cabeceras.datos.h2} lead={l.cabeceras.datos.lead || undefined}>
+      <dl class="dw-datos">
+        {l.datos.map((d) => (
           <div>
-            <SectionHead id="dw-panorama" kicker={siguienteLamina()} title={`El tejido de ${n} en internet`} />
-            {l.panorama.length > 0
-              ? l.panorama.map((p) => <p class="dw-panorama__p">{p}</p>)
-              : <p class="dw-panorama__p">{l.lead}</p>}
+            <dt>{d.k}</dt>
+            <dd>{d.v}</dd>
           </div>
-          <ul class="dw-chips">
-            {l.caracteristicas.map((c) => <li>{c}</li>)}
-          </ul>
-        </div>
-      </ItSection>
-    )}
+        ))}
+      </dl>
+    </SeccionLectura>
+  )}
 
-    {l.datos.length > 0 && (
-      <ItSection tone="paper" labelledby="dw-datos">
-        <SectionHead id="dw-datos" kicker={siguienteLamina()} title={l.cabeceras.datos.h2} lead={l.cabeceras.datos.lead || undefined} />
-        <FichaDatos items={l.datos} />
-      </ItSection>
-    )}
-
-    {l.coords && (
-      <section class="dw-map" aria-label={`Mapa de ${n}`}>
+  {l.coords && (
+    <SeccionLectura id="mapa" etiqueta={`Mapa de ${n}`}>
+      <div class="dw-mapa">
         <InteractiveMap center={l.coords} zoom={13} pitch={25} bearing={-15} label={n} themeColor="#FF5A00" themeColorDark="#0E0D0B" townInitial={n.charAt(0)} />
-      </section>
-    )}
+      </div>
+    </SeccionLectura>
+  )}
 
-    {l.sectores.length > 0 && (
-      <ItSection tone="bone" labelledby="dw-sectores">
-        <SectionHead id="dw-sectores" kicker={siguienteLamina()} title={l.cabeceras.sectores.h2} lead={l.cabeceras.sectores.lead || undefined} />
-        <SectoresGrid items={l.sectores} />
-      </ItSection>
-    )}
+  {l.sectores.length > 0 && (
+    <SeccionLectura id="sectores" titulo={l.cabeceras.sectores.h2} lead={l.cabeceras.sectores.lead || undefined}>
+      <Fichas items={l.sectores.map((sec) => ({ cifra: sec.stat, titulo: sec.nombre, texto: sec.desc, chips: sec.tags }))} />
+    </SeccionLectura>
+  )}
 
-    {l.extras.map((e, i) => (
-      <ItSection tone={i % 2 === 0 ? 'night' : 'paper'} labelledby={`dw-extra-${e.key}`}>
-        <SectionHead id={`dw-extra-${e.key}`} kicker={siguienteLamina()} title={e.titulo} lead={e.lead || undefined} />
-        <ItemsLista items={e.items} />
-      </ItSection>
-    ))}
+  {l.extras.map((e) => (
+    <SeccionLectura id={`extra-${e.key}`} titulo={e.titulo} lead={e.lead || undefined}>
+      <Fichas items={e.items.map((item) => ({ titulo: item.t, subtitulo: item.meta, texto: item.d }))} />
+    </SeccionLectura>
+  ))}
 
-    <ItSection tone="paper" labelledby="dw-diferenciales">
-      <SectionHead id="dw-diferenciales" kicker={siguienteLamina()} title={l.cabeceras.diferenciales.h2} lead={l.cabeceras.diferenciales.lead || undefined} />
-      <BloquesGrid items={l.diferenciales} columns={2} />
-    </ItSection>
+  <SeccionLectura id="porque" titulo={l.cabeceras.diferenciales.h2} lead={l.cabeceras.diferenciales.lead || undefined}>
+    <Fichas items={l.diferenciales.map((d) => ({ titulo: d.t, texto: d.d }))} />
+  </SeccionLectura>
 
-    <ItSection tone="bone" labelledby="dw-proceso">
-      <SectionHead id="dw-proceso" kicker={siguienteLamina()} title={`Cómo hacemos tu página web en ${n}`} />
-      <Pasos items={pasos} />
-    </ItSection>
+  <SeccionLectura id="metodo" titulo={`Cómo hacemos tu página web en ${n}`}>
+    <Fichas numeradas items={pasos.map((p) => ({ titulo: p.t, texto: p.d }))} />
+  </SeccionLectura>
 
-    {l.testimonios.length > 0 && (
-      <ItSection tone="night" labelledby="dw-testimonios">
-        <SectionHead id="dw-testimonios" kicker={siguienteLamina()} title={l.cabeceras.testimonios.h2} lead={l.cabeceras.testimonios.lead || undefined} />
-        <Testimonios items={l.testimonios} />
-      </ItSection>
-    )}
+  {l.testimonios.length > 0 && (
+    <SeccionLectura id="testimonios" titulo={l.cabeceras.testimonios.h2} lead={l.cabeceras.testimonios.lead || undefined}>
+      <ul class="dw-voces">
+        {l.testimonios.map((t) => (
+          <li>
+            <figure>
+              <blockquote>{t.texto}</blockquote>
+              <figcaption><strong>{t.nombre}</strong> · {t.negocio}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </SeccionLectura>
+  )}
 
-    {it && (
-      <ItSection tone="paper" labelledby="dw-it">
-        <SectionHead
-          id="dw-it"
-          kicker={siguienteLamina()}
-          title={`Web e informática en ${n}, en una sola cuota`}
-          lead={`En ${n} también mantenemos ordenadores, redes y copias de seguridad, con técnico en tu empresa el mismo día.`}
-        />
-        <Plan360Teaser />
-        <p class="dw-it-link"><a href={`${HUB_IT}${it.slug}/`}>Mantenimiento informático en {n}</a></p>
-      </ItSection>
-    )}
+  {it && (
+    <SeccionLectura
+      id="informatica"
+      titulo={`Web e informática en ${n}, en una sola cuota`}
+      lead={`En ${n} también mantenemos ordenadores, redes y copias de seguridad, con técnico en tu empresa el mismo día.`}
+    >
+      <Plan360Panel extra={{ href: `${HUB_IT}${it.slug}/`, label: `Mantenimiento informático en ${n}` }} />
+    </SeccionLectura>
+  )}
 
-    {l.faq.length > 0 && (
-      <ItSection tone="bone" labelledby="dw-faq">
-        <SectionHead id="dw-faq" kicker={siguienteLamina()} title={l.cabeceras.faq.h2} lead={l.cabeceras.faq.lead || undefined} />
-        <FaqList items={l.faq} />
-      </ItSection>
-    )}
+  {l.faq.length > 0 && (
+    <SeccionLectura id="faq" titulo={l.cabeceras.faq.h2} lead={l.cabeceras.faq.lead || undefined}>
+      <Preguntas items={l.faq} />
+    </SeccionLectura>
+  )}
 
-    {vecinos.length > 0 && (
-      <ItSection tone="paper" labelledby="dw-vecinos">
-        <SectionHead
-          id="dw-vecinos"
-          kicker={siguienteLamina()}
-          title={`Diseño web en ${l.comarca}`}
-          lead="Otros municipios de la comarca donde trabajamos. Si el tuyo no aparece, escríbenos: cubrimos toda la provincia."
-        />
-        <PueblosLinks items={[...vecinos, { href: '/diseno-web/', label: 'Todos los municipios de Almería' }]} />
-      </ItSection>
-    )}
+  {vecinos.length > 0 && (
+    <SeccionLectura
+      id="comarca"
+      titulo={`Diseño web en ${l.comarca}`}
+      lead="Otros municipios de la comarca donde trabajamos. Si el tuyo no aparece, escríbenos: cubrimos toda la provincia."
+    >
+      <ListaEnlaces items={[...vecinos, { href: '/diseno-web/', label: 'Todos los municipios de Almería' }]} />
+    </SeccionLectura>
+  )}
 
+  <Fragment slot="cierre">
     <ServiciosPueblo pueblo={n} />
-    <Contact />
-  </main>
-
-  <Footer />
-</BaseLayout>
+    <Contact tono="consola" />
+  </Fragment>
+</LecturaLayout>
 
 <style>
-  .dw-panorama { display: grid; gap: 2rem; }
-  @media (min-width: 1024px) { .dw-panorama { grid-template-columns: 1.5fr 1fr; gap: 4rem; align-items: start; } }
-  .dw-panorama__p { margin: 0 0 1.1rem; max-width: 64ch; font-size: 1.08rem; line-height: 1.65; }
-  .dw-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; align-content: start; }
-  .dw-chips li { padding: .45rem .8rem; font-family: var(--font-mono); font-size: .82rem; background: var(--color-plano-lima); border: 2px solid var(--color-plano-tinta); }
-  .dw-map { height: clamp(360px, 50vh, 520px); border-bottom: 3px solid var(--color-plano-tinta); }
-  .dw-map > :global(*) { width: 100%; height: 100%; }
-  .dw-it-link { margin: 1.75rem 0 0; font-family: var(--font-mono); font-weight: 800; }
-  .dw-it-link a { color: var(--it-accent); text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .dw-texto { max-width: 68ch; margin: 1.1rem 0 0; font-size: 1.06rem; line-height: 1.65; color: #b9c5cf; }
+  .dw-chips { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .dw-chips li { padding: 0.35rem 0.7rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); background: var(--color-cdm-panel-2); }
+
+  .dw-datos { margin: 1.75rem 0 0; display: grid; border-top: 1px solid var(--color-cdm-regla); border-left: 1px solid var(--color-cdm-regla); }
+  @media (min-width: 640px) { .dw-datos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .dw-datos > div { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.9rem 1.1rem; background: var(--color-cdm-panel); border-right: 1px solid var(--color-cdm-regla); border-bottom: 1px solid var(--color-cdm-regla); }
+  .dw-datos dt { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-cdm-tenue); }
+  .dw-datos dd { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--color-cdm-texto); }
+
+  .dw-mapa { height: clamp(360px, 50vh, 520px); border: 1px solid var(--color-cdm-regla-2); }
+  .dw-mapa > :global(*) { width: 100%; height: 100%; }
+
+  .dw-voces { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1rem; }
+  .dw-voces figure { margin: 0; padding: 1.3rem 1.4rem; background: var(--color-cdm-panel); border-left: 2px solid var(--color-cdm-senal); }
+  .dw-voces blockquote { margin: 0; max-width: 68ch; font-size: 1.02rem; line-height: 1.6; color: var(--color-cdm-texto); }
+  .dw-voces figcaption { margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
+  .dw-voces figcaption strong { color: var(--color-cdm-texto); font-weight: 600; }
 </style>

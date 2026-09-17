@@ -5,9 +5,26 @@ import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import Postal from '../../components/cdm/Postal.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
 
 const pueblosLevante = getPueblosByComarca('Levante Almeriense').filter(p => p.slug !== 'vera');
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). El hero
+   no entra: es la cabecera, no un destino. */
+const secciones: SeccionIndice[] = [
+  { id: 'nucleos',     etiqueta: 'Los 3 núcleos' },
+  { id: 'mapa',        etiqueta: 'Dónde estamos' },
+  { id: 'estudio',     etiqueta: 'El estudio' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'porque',      etiqueta: 'Por qué Vera' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'levante',     etiqueta: 'El Levante' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const title = 'Diseño Web en Vera | Tu agencia local';
 const description = 'Agencia de diseño web y SEO en Vera (nuestra sede), Vera Playa y Puerto Rey. Webs rápidas, tiendas online y marketing local. Presupuesto en 24h.';
@@ -73,9 +90,11 @@ const jsonLdSchemas = [
 >
   <Header />
 
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Vera" }]} />
+  <Breadcrumb tono="consola" items={[{ label: 'Inicio', href: '/' }, { label: 'Diseño Web', href: '/diseno-web/' }, { label: "Vera" }]} />
 
   <main id="main-content" class="vp">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.2471° N · 1.8673° W · Ctra. de Ronda 82" class="vp-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — SEDE NUESTRA · IMAGEN + POSTAL            */}
@@ -163,6 +182,7 @@ const jsonLdSchemas = [
                   alt="Vera, Almería — sede de Platanito Rico"
                   width="640" height="400"
                   loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                   class="vp-postal__img"
                 />
@@ -226,11 +246,11 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* 3 NÚCLEOS — A · B · C                            */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="vp-nucleos-section">
+    <section class="vp-nucleos-section" id="nucleos">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
-            <span class="text-meta" style="color:var(--vp-sea-d)">Cap. 02 / Los 3 núcleos</span>
+            <span class="text-meta" style="color:var(--vp-sea)">Cap. 02 / Los 3 núcleos</span>
             <h2 class="heading-display brutal-section-head__title">
               Tres mercados,
               <em class="heading-editorial">una sola web.</em>
@@ -249,7 +269,8 @@ const jsonLdSchemas = [
               <div class="vp-nucleo__code">{n.code}</div>
 
               {/* Icono SVG por núcleo */}
-              <div class="vp-nucleo__icon" aria-hidden="true">
+              <Postal class="vp-nucleo__postal">
+                <div class="vp-nucleo__icon" aria-hidden="true">
                 {n.icon === 'town' && (
                   <svg viewBox="0 0 100 100" width="100%" height="100%">
                     {/* Iglesia + casas pueblo */}
@@ -308,7 +329,8 @@ const jsonLdSchemas = [
                     <text x="50" y="80" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6" letter-spacing="2">PUERTO REY</text>
                   </svg>
                 )}
-              </div>
+                </div>
+              </Postal>
 
               <h3 class="vp-nucleo__name heading-display">{n.name}</h3>
               <span class="text-mono vp-nucleo__sub">{n.sub}</span>
@@ -332,7 +354,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA INTERACTIVO MEJORADO                        */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="vp-map-section">
+    <section class="vp-map-section" id="mapa">
       <header class="vp-map-head">
         <div class="container-brutal vp-map-head__inner">
           <div>
@@ -470,12 +492,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="vp-dif-section">
+    <section class="vp-dif-section" id="porque">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
             <span class="text-meta" style="color:var(--vp-foam)">Cap. 06 / Por qué Vera</span>
-            <h2 class="heading-display brutal-section-head__title" style="color:var(--vp-paper)">
+            <h2 class="heading-display brutal-section-head__title" style="color:var(--vp-tinta)">
               El municipio más
               <em class="heading-editorial" style="color:var(--vp-sun)">completo del Levante.</em>
             </h2>
@@ -501,7 +523,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="vp-quote-section">
+    <section class="vp-quote-section" id="testimonios">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -556,7 +578,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="vp-faq-section">
+    <section class="vp-faq-section" id="faq">
       <div class="container-brutal">
         <header class="brutal-section-head">
           <div class="brutal-section-head__col">
@@ -595,7 +617,7 @@ const jsonLdSchemas = [
     {/* OTROS PUEBLOS LEVANTE                            */}
     {/* ════════════════════════════════════════════════ */}
     {pueblosLevante.length > 0 && (
-      <section class="vp-vecinos-section">
+      <section class="vp-vecinos-section" id="levante">
         <div class="container-brutal">
           <header class="brutal-section-head">
             <div class="brutal-section-head__col">
@@ -631,7 +653,7 @@ const jsonLdSchemas = [
     <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
     {/* CTA FINAL                                        */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="vp-final">
+    <section class="vp-final" id="empezar">
       <div class="container-brutal">
         <div class="vp-final__grid">
 
@@ -723,23 +745,72 @@ const jsonLdSchemas = [
 
 <style>
   /* ═══════════════════════════════════════════════════════ */
-  /* PALETA · VERA · MEDITERRÁNEA                            */
+  /* PALETA · VERA · CONSOLA (fase 2)                        */
+  /* El papel pasa a panel y la tinta a regla. El mar y el   */
+  /* oliva se aclaran para llegar a 4,5:1 sobre suelo; sol,  */
+  /* sunset, coral y espuma se conservan tal cual: son la    */
+  /* identidad de Vera y sobre oscuro lucen más.             */
   /* ═══════════════════════════════════════════════════════ */
   .vp {
-    --vp-paper:    #FFFCF6;
-    --vp-paper-2:  #F0E9D7;
+    --vp-paper:    var(--color-cdm-panel);
+    --vp-paper-2:  var(--color-cdm-panel-2);
+    --vp-suelo:    var(--color-cdm-suelo);
+    --vp-tinta:    var(--color-cdm-texto);
+    --vp-tenue:    var(--color-cdm-tenue);
+    --vp-ink:      var(--color-cdm-regla-2);
     --vp-sand:     #E6D6A8;
     --vp-cream:    #ECE1C2;
-    --vp-ink:      #0E0D0B;
-    --vp-sea:      #0078FF;
-    --vp-sea-d:    #005299;
+    --vp-sea:      #2E9BFF;
+    --vp-sea-d:    #0B2B45;
     --vp-foam:     #B8E4F0;
     --vp-sun:      #FFB833;
     --vp-sunset:   #FF6B35;
     --vp-lime:     #D6FF44;
     --vp-coral:    #FF5A52;
-    --vp-olive:    #768A4F;
-    --vp-shadow:   8px 8px 0 var(--vp-ink);
+    --vp-olive:    #9DB56A;
+    --vp-shadow:   8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--vp-suelo);
+    color: var(--vp-tinta);
+  }
+
+  /* Globales heredados que venían en tinta oscura sobre papel claro y que
+     sobre suelo quedarían ilegibles. */
+  .vp :global(.brutal-section-head__title) { color: var(--vp-tinta); }
+  .vp :global(.brutal-section-head__title em) { color: var(--vp-sun); }
+  .vp :global(.brutal-section-head__lead) { color: var(--vp-tenue); }
+  .vp :global(:where(.text-meta)) { color: var(--vp-tenue); } /* :where: sin especificidad, para que el color propio de cada capítulo mande */
+  .vp :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  /* Raíl del índice. A partir de 1280 px vive en la banda izquierda, fuera
+     de la caja de contenido; por debajo es solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .vp :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .vp :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+    .vp-map-frame,
+    .vp-marquee,
+    .vp-final__marquee { padding-left: 208px; }
+  }
+  @media (max-width: 1279px) {
+    .vp :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--vp-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .vp :global(.cdm-indice__titulo),
+    .vp :global(.cdm-indice__lista),
+    .vp :global(.cdm-indice__coord) { display: none; }
+    .vp :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
 
   .vp-pulse {
@@ -767,10 +838,10 @@ const jsonLdSchemas = [
     padding-top: 3rem;
     padding-bottom: 0;
     background:
-      radial-gradient(circle at 80% 20%, rgba(0,120,255,0.10), transparent 50%),
-      radial-gradient(circle at 10% 80%, rgba(255,184,51,0.10), transparent 50%),
-      var(--vp-paper);
-    border-bottom: 3px solid var(--vp-ink);
+      radial-gradient(circle at 80% 20%, rgba(46,155,255,0.16), transparent 55%),
+      radial-gradient(circle at 10% 80%, rgba(255,184,51,0.12), transparent 55%),
+      var(--vp-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -778,7 +849,7 @@ const jsonLdSchemas = [
     content: '';
     position: absolute; inset: 0;
     background-image:
-      repeating-linear-gradient(135deg, transparent 0 24px, rgba(0,120,255,0.04) 24px 25px);
+      repeating-linear-gradient(135deg, transparent 0 24px, rgba(46,155,255,0.05) 24px 25px);
     pointer-events: none;
   }
   .vp-hero > * { position: relative; }
@@ -814,10 +885,10 @@ const jsonLdSchemas = [
     display: inline-block;
     transform: rotate(-1deg);
   }
-  .vp-hero__title-and { color: var(--vp-ink); margin: 0 .15em; }
+  .vp-hero__title-and { color: var(--vp-tinta); margin: 0 .15em; }
   .vp-hero__title-sun {
     color: var(--vp-sun);
-    background: var(--vp-ink);
+    background: var(--color-cdm-panel-2);
     padding: 0 .15em;
     display: inline-block;
   }
@@ -825,20 +896,22 @@ const jsonLdSchemas = [
   .vp-hero__lead {
     font-size: 1.1rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--vp-tenue);
     max-width: 54ch;
   }
-  .vp-hero__lead strong { color: var(--vp-ink); font-weight: 700; }
+  .vp-hero__lead strong { color: var(--vp-tinta); font-weight: 700; }
   .vp-hero__lead em { color: var(--vp-sunset); font-style: italic; font-weight: 600; }
+  /* Chip de sede: naranja, que es lo que significa «sede» (spec §3.3.2).
+     Antes era lima, reservada ahora a «ok/verificado». */
   .vp-hero__lead-bold {
     display: block;
     margin-top: .75rem;
-    background: var(--vp-lime);
-    color: var(--vp-ink);
+    background: var(--color-cdm-senal);
+    color: var(--color-cdm-suelo);
     padding: .25rem .55rem;
     font-weight: 800;
-    border: 2px solid var(--vp-ink);
-    box-shadow: 3px 3px 0 var(--vp-ink);
+    border: 2px solid var(--color-cdm-senal);
+    box-shadow: 3px 3px 0 var(--color-cdm-regla-2);
   }
 
   .vp-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
@@ -856,21 +929,22 @@ const jsonLdSchemas = [
   }
   .vp-btn--primary {
     background: var(--vp-sea);
-    color: var(--vp-paper);
-    box-shadow: 6px 6px 0 var(--vp-ink);
+    color: var(--vp-suelo);
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
   }
   .vp-btn--primary:hover {
     background: var(--vp-sunset);
+    color: #1a0a02;
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--vp-ink);
+    box-shadow: 11px 11px 0 var(--color-cdm-regla-2);
   }
   .vp-btn--ghost {
     background: transparent;
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     box-shadow: 6px 6px 0 var(--vp-sea);
   }
   .vp-btn--ghost:hover {
-    background: var(--vp-ink);
+    background: var(--color-cdm-panel-2);
     color: var(--vp-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--vp-sea);
@@ -902,9 +976,9 @@ const jsonLdSchemas = [
     .vp-kpi:nth-last-child(-n+2) { border-bottom: 2px solid var(--vp-ink); }
     .vp-kpi:nth-last-child(-n+4) { border-bottom: none; }
   }
-  .vp-kpi--sea { background: var(--vp-sea); color: var(--vp-paper); }
-  .vp-kpi--sun { background: var(--vp-sun); color: var(--vp-ink); }
-  .vp-kpi--ink { background: var(--vp-ink); color: var(--vp-paper); }
+  .vp-kpi--sea { background: var(--vp-sea); color: var(--vp-suelo); }
+  .vp-kpi--sun { background: var(--vp-sun); color: var(--vp-suelo); }
+  .vp-kpi--ink { background: var(--color-cdm-panel-2); color: var(--vp-tinta); }
   .vp-kpi--ink .vp-kpi__v { color: var(--vp-lime); }
   .vp-kpi__v { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1; }
   .vp-kpi__v small { font-size: .5em; opacity: .8; }
@@ -917,10 +991,13 @@ const jsonLdSchemas = [
     margin: 0 auto;
     filter: drop-shadow(0 14px 30px rgba(14,13,11,0.18));
   }
+  /* La postal conserva su papel claro original (spec §3.3.6): es pieza a
+     mano, no interfaz. Por eso lleva valores literales y no los tokens
+     remapeados. */
   .vp-postal {
-    background: var(--vp-paper);
-    border: 3px solid var(--vp-ink);
-    box-shadow: var(--vp-shadow);
+    background: #FFFCF6;
+    border: 3px solid #0E0D0B;
+    box-shadow: 8px 8px 0 var(--color-cdm-regla-2);
     overflow: hidden;
     position: relative;
     transform: rotate(-1deg);
@@ -931,17 +1008,17 @@ const jsonLdSchemas = [
     display: flex; justify-content: space-between; flex-wrap: wrap;
     gap: .5rem;
     padding: .75rem 1rem;
-    background: var(--vp-sea);
-    color: var(--vp-paper);
+    background: #0068E0;
+    color: #FFFCF6;
     font-size: .58rem;
     letter-spacing: .15em;
-    border-bottom: 2px solid var(--vp-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .vp-postal__img-wrap {
     position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-bottom: 2px solid var(--vp-ink);
+    border-bottom: 2px solid #0E0D0B;
   }
   .vp-postal__img {
     width: 100%; height: 100%;
@@ -957,22 +1034,24 @@ const jsonLdSchemas = [
     transform: rotate(-12deg);
     filter: drop-shadow(0 4px 10px rgba(255,107,53,0.4));
   }
+  /* Naranja, no lima: la lima significa «ok/verificado» (spec §3.3.2) y
+     esto es la sede. */
   .vp-postal__sede {
     position: absolute;
     bottom: 12px; left: 12px;
-    background: var(--vp-lime);
-    color: var(--vp-ink);
+    background: var(--color-cdm-senal);
+    color: #0E0D0B;
     padding: .4rem .75rem;
     font-size: .65rem;
     font-weight: 800;
     letter-spacing: .2em;
-    border: 2px solid var(--vp-ink);
-    box-shadow: 3px 3px 0 var(--vp-ink);
+    border: 2px solid #0E0D0B;
+    box-shadow: 3px 3px 0 #0E0D0B;
     transform: rotate(-2deg);
   }
   .vp-postal__data {
     padding: 1rem 1.25rem;
-    background: var(--vp-paper-2);
+    background: #F0E9D7;
     display: grid; gap: .35rem;
   }
   .vp-postal__data-row {
@@ -983,12 +1062,12 @@ const jsonLdSchemas = [
   }
   .vp-postal__data-row:last-child { border-bottom: none; padding-bottom: 0; }
   .vp-postal__data-row > span:first-child {
-    color: var(--vp-sea-d);
+    color: #005299;
     letter-spacing: .2em;
     font-weight: 800;
   }
   .vp-postal__data-v {
-    color: var(--vp-ink);
+    color: #0E0D0B;
     font-weight: 700;
     letter-spacing: .05em;
   }
@@ -996,10 +1075,10 @@ const jsonLdSchemas = [
   /* Marquee */
   .vp-marquee {
     background: var(--vp-sea);
-    color: var(--vp-paper);
+    color: var(--vp-suelo);
     overflow: hidden;
     padding: .9rem 0;
-    border-top: 3px solid var(--vp-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .vp-marquee__track {
     display: flex; gap: 3rem; width: max-content;
@@ -1019,9 +1098,9 @@ const jsonLdSchemas = [
   /* 3 NÚCLEOS                                               */
   /* ═══════════════════════════════════════════════════════ */
   .vp-nucleos-section {
-    background: var(--vp-paper);
+    background: var(--vp-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .vp-nucleos {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1033,7 +1112,7 @@ const jsonLdSchemas = [
   .vp-nucleo {
     position: relative;
     background: var(--vp-paper);
-    border: 3px solid var(--vp-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--vp-shadow);
     padding: 1.75rem 1.5rem;
     display: flex; flex-direction: column; gap: .85rem;
@@ -1046,8 +1125,8 @@ const jsonLdSchemas = [
   .vp-nucleo__code {
     position: absolute;
     top: -16px; right: 20px;
-    background: var(--vp-ink);
-    color: var(--vp-lime);
+    background: var(--color-cdm-panel-2);
+    color: var(--vp-sun);
     width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
@@ -1059,15 +1138,17 @@ const jsonLdSchemas = [
   .vp-nucleo__icon {
     width: 100%;
     aspect-ratio: 1;
-    max-width: 200px;
     margin: 0 auto;
     color: currentColor;
   }
+  /* La ilustración va en postal: conserva su papel claro y sus trazos
+     negros, que sobre el panel oscuro se perderían (spec §6.3.4). */
+  .vp-nucleo__postal { max-width: 220px; margin: 0 auto; }
   .vp-nucleo__name {
     font-size: clamp(1.5rem, 2.8vw, 1.85rem);
     line-height: 1;
     letter-spacing: -.025em;
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     margin: .5rem 0 0;
     text-align: center;
   }
@@ -1087,15 +1168,15 @@ const jsonLdSchemas = [
     margin-top: auto;
   }
   .vp-nucleo__stats > div { display: flex; flex-direction: column; gap: 2px; }
-  .vp-nucleo__stat-l { font-size: .55rem; letter-spacing: .2em; color: var(--vp-sea-d); opacity: .75; }
-  .vp-nucleo__stat-v { font-size: .85rem; color: var(--vp-ink); font-weight: 700; line-height: 1.3; }
+  .vp-nucleo__stat-l { font-size: .55rem; letter-spacing: .2em; color: var(--vp-tenue); }
+  .vp-nucleo__stat-v { font-size: .85rem; color: var(--vp-tinta); font-weight: 700; line-height: 1.3; }
 
   /* ═══════════════════════════════════════════════════════ */
   /* MAPA                                                    */
   /* ═══════════════════════════════════════════════════════ */
   .vp-map-section {
-    background: var(--vp-paper-2);
-    border-bottom: 3px solid var(--vp-ink);
+    background: var(--vp-suelo);
+    border-bottom: 1px solid var(--color-cdm-regla);
     padding-bottom: 0;
   }
   .vp-map-head {
@@ -1116,7 +1197,7 @@ const jsonLdSchemas = [
   }
   .vp-map-title em { color: var(--vp-sea); }
   .vp-map-coords {
-    background: var(--vp-ink);
+    background: var(--color-cdm-panel-2);
     color: var(--vp-sun);
     padding: 1rem 1.25rem;
     border: 2px solid var(--vp-sun);
@@ -1128,9 +1209,9 @@ const jsonLdSchemas = [
 
   .vp-map-frame {
     position: relative;
-    border-top: 3px solid var(--vp-ink);
-    border-bottom: 3px solid var(--vp-ink);
-    background: var(--vp-ink);
+    border-top: 1px solid var(--color-cdm-regla);
+    border-bottom: 1px solid var(--color-cdm-regla);
+    background: var(--color-cdm-panel-2);
   }
   .vp-map-frame__corner {
     position: absolute;
@@ -1146,7 +1227,7 @@ const jsonLdSchemas = [
   .vp-map-frame__label {
     position: absolute;
     z-index: 5;
-    background: var(--vp-ink);
+    background: var(--color-cdm-panel-2);
     color: var(--vp-sun);
     padding: .25rem .55rem;
     font-family: var(--font-mono);
@@ -1174,9 +1255,9 @@ const jsonLdSchemas = [
   /* ESTUDIO                                                 */
   /* ═══════════════════════════════════════════════════════ */
   .vp-studio-section {
-    background: var(--vp-paper);
+    background: var(--vp-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .vp-studio {
     display: grid;
@@ -1196,27 +1277,27 @@ const jsonLdSchemas = [
   .vp-studio__lead {
     font-size: 1.05rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: var(--vp-tenue);
     margin-bottom: 1.5rem;
   }
-  .vp-studio__lead strong { color: var(--vp-ink); font-weight: 700; }
+  .vp-studio__lead strong { color: var(--vp-tinta); font-weight: 700; }
 
   .vp-studio__data {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0;
     margin: 0 0 1.5rem;
-    border: 2px solid var(--vp-ink);
-    background: var(--vp-paper-2);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--vp-paper);
   }
   @media (min-width: 640px) { .vp-studio__data { grid-template-columns: 1fr 1fr; } }
   .vp-studio__data > div {
     padding: .85rem 1rem;
     display: flex; flex-direction: column; gap: 2px;
-    border-bottom: 1px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   @media (min-width: 640px) {
-    .vp-studio__data > div:nth-child(odd) { border-right: 1px solid var(--vp-ink); }
+    .vp-studio__data > div:nth-child(odd) { border-right: 1px solid var(--color-cdm-regla); }
     .vp-studio__data > div:nth-last-child(-n+2) { border-bottom: none; }
   }
   @media (max-width: 639px) {
@@ -1225,17 +1306,16 @@ const jsonLdSchemas = [
   .vp-studio__data dt {
     font-size: .58rem;
     letter-spacing: .2em;
-    color: var(--vp-sea-d);
-    opacity: .8;
+    color: var(--vp-tenue);
   }
   .vp-studio__data dd {
     font-size: .88rem;
     line-height: 1.4;
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     margin: 0;
   }
   .vp-link {
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     text-decoration: underline;
     text-decoration-color: var(--vp-sunset);
     text-underline-offset: 3px;
@@ -1246,7 +1326,7 @@ const jsonLdSchemas = [
   .vp-studio__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
   .vp-studio__r {
     position: relative;
-    border: 3px solid var(--vp-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--vp-shadow);
     overflow: hidden;
     aspect-ratio: 4 / 3;
@@ -1262,22 +1342,22 @@ const jsonLdSchemas = [
   .vp-studio__caption {
     position: absolute;
     bottom: 0; left: 0;
-    background: var(--vp-ink);
-    color: var(--vp-lime);
+    background: var(--color-cdm-panel-2);
+    color: var(--vp-tinta);
     padding: .55rem 1rem;
     font-size: .65rem;
     letter-spacing: .2em;
-    border-top: 2px solid var(--vp-ink);
-    border-right: 2px solid var(--vp-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
+    border-right: 1px solid var(--color-cdm-regla-2);
   }
 
   /* ═══════════════════════════════════════════════════════ */
   /* SECTORES                                                */
   /* ═══════════════════════════════════════════════════════ */
   .vp-sec-section {
-    background: var(--vp-paper-2);
+    background: var(--vp-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .vp-sec {
     list-style: none; padding: 0; margin: 2rem 0 0;
@@ -1289,7 +1369,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .vp-sec { grid-template-columns: repeat(3, 1fr); } }
   .vp-sec__card {
     background: var(--vp-paper);
-    border: 2.5px solid var(--vp-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     box-shadow: var(--vp-shadow);
     padding: 1.5rem;
     display: flex; flex-direction: column; gap: .75rem;
@@ -1325,13 +1405,13 @@ const jsonLdSchemas = [
     font-size: clamp(1.2rem, 2vw, 1.45rem);
     line-height: 1.1;
     letter-spacing: -.02em;
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     margin: 0;
   }
   .vp-sec__desc {
     font-size: .9rem;
     line-height: 1.5;
-    color: var(--brutal-text-secondary);
+    color: var(--vp-tenue);
     flex: 1;
   }
   .vp-sec__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: .3rem; }
@@ -1339,12 +1419,12 @@ const jsonLdSchemas = [
     display: flex; align-items: flex-start; gap: .35rem;
     font-size: .8rem;
     line-height: 1.35;
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
   }
   .vp-sec__tag span { color: currentColor; font-weight: 800; }
   .vp-sec__foot {
     padding-top: .65rem;
-    border-top: 2px solid var(--vp-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .vp-sec__cta {
     font-family: var(--font-mono);
@@ -1363,9 +1443,9 @@ const jsonLdSchemas = [
   /* ═══════════════════════════════════════════════════════ */
   .vp-dif-section {
     background: var(--vp-sea-d);
-    color: var(--vp-paper);
+    color: var(--vp-tinta);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
     position: relative;
     overflow: hidden;
   }
@@ -1387,7 +1467,7 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .vp-dif { grid-template-columns: repeat(4, 1fr); } }
   .vp-dif__item {
     background: rgba(255,252,246,0.05);
-    border: 2px solid var(--vp-paper);
+    border: 1px solid rgba(255,252,246,0.35);
     padding: 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: .65rem;
     transition: background .25s, transform .25s;
@@ -1398,7 +1478,7 @@ const jsonLdSchemas = [
     font-size: clamp(1.15rem, 2vw, 1.35rem);
     line-height: 1.05;
     letter-spacing: -.02em;
-    color: var(--vp-paper);
+    color: var(--vp-tinta);
     margin: 0;
   }
   .vp-dif__desc { font-size: .85rem; line-height: 1.45; color: rgba(255,252,246,0.75); margin: 0; }
@@ -1407,14 +1487,18 @@ const jsonLdSchemas = [
   /* TESTIMONIOS                                             */
   /* ═══════════════════════════════════════════════════════ */
   .vp-quote-section {
-    background: var(--vp-paper);
+    background: var(--vp-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
+  /* La cita grande conserva su espuma clara: es el único acento de papel
+     de la sección, como una postal. Por eso su tinta sigue siendo oscura. */
+  /* Recorte claro: su texto va en tinta literal, no hereda la clara de la consola. */
   .vp-pull {
     position: relative;
+    color: #0E0D0B;
     background: var(--vp-foam);
-    border: 3px solid var(--vp-ink);
+    border: 3px solid #0E0D0B;
     box-shadow: var(--vp-shadow);
     padding: 3rem 2rem 2rem;
     margin: 2rem 0;
@@ -1432,20 +1516,20 @@ const jsonLdSchemas = [
     font-size: clamp(1.35rem, 2.4vw, 2rem);
     line-height: 1.3;
     margin: 0 0 1.5rem;
-    color: var(--vp-ink);
+    color: #0E0D0B;
     max-width: 56ch;
   }
-  .vp-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed var(--vp-ink); }
+  .vp-pull__cap { display: flex; align-items: center; gap: 1rem; padding-top: 1.25rem; border-top: 2px dashed rgba(14,13,11,0.35); }
   .vp-pull__avatar {
     width: 48px; height: 48px;
-    background: var(--vp-sea); color: var(--vp-paper);
+    background: #0078FF; color: #FFFCF6;
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-size: 1.35rem; font-weight: 800;
     border-radius: 50%;
   }
   .vp-pull__cap div { display: flex; flex-direction: column; }
-  .vp-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--vp-ink); }
+  .vp-pull__name { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: #0E0D0B; }
   .vp-pull__role { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; opacity: .65; text-transform: uppercase; }
 
   .vp-quotes {
@@ -1458,16 +1542,18 @@ const jsonLdSchemas = [
   .vp-quote {
     position: relative;
     background: var(--vp-paper);
-    border: 2px solid var(--vp-ink);
-    box-shadow: 5px 5px 0 var(--vp-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    box-shadow: 5px 5px 0 var(--color-cdm-regla-2);
     padding: 1.75rem 1.5rem 1.25rem;
     display: flex; flex-direction: column; gap: 1rem;
     transition: transform .25s;
   }
   .vp-quote:hover { transform: translateY(-3px); }
-  .vp-quote--0 { background: var(--vp-sand); }
-  .vp-quote--1 { background: var(--vp-foam); }
-  .vp-quote--2 { background: var(--vp-paper); }
+  /* Las tres en panel: mezclar dos claras y una oscura rompía la sección.
+     El acento claro se concentra en la cita grande de arriba. */
+  .vp-quote--0 { border-top: 3px solid var(--vp-sand); }
+  .vp-quote--1 { border-top: 3px solid var(--vp-foam); }
+  .vp-quote--2 { border-top: 3px solid var(--vp-sun); }
   .vp-quote__mark {
     position: absolute;
     top: -8px; left: 14px;
@@ -1477,11 +1563,11 @@ const jsonLdSchemas = [
     color: var(--vp-sea);
     opacity: .45;
   }
-  .vp-quote p { font-size: .92rem; line-height: 1.5; color: var(--vp-ink); flex: 1; margin: 0; }
-  .vp-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1.5px dashed var(--vp-ink); }
+  .vp-quote p { font-size: .92rem; line-height: 1.5; color: var(--vp-tinta); flex: 1; margin: 0; }
+  .vp-quote footer { display: flex; align-items: center; gap: .75rem; padding-top: .85rem; border-top: 1px solid var(--color-cdm-regla); }
   .vp-quote__avatar {
     width: 36px; height: 36px;
-    background: var(--vp-sunset); color: var(--vp-paper);
+    background: var(--vp-sunset); color: var(--vp-suelo);
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-display);
     font-weight: 800;
@@ -1496,15 +1582,15 @@ const jsonLdSchemas = [
   /* FAQ                                                     */
   /* ═══════════════════════════════════════════════════════ */
   .vp-faq-section {
-    background: var(--vp-paper-2);
+    background: var(--vp-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .vp-faq {
     list-style: none; padding: 0; margin: 2rem 0 0;
-    border-top: 2.5px solid var(--vp-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
   }
-  .vp-faq__item { border-bottom: 2px solid var(--vp-ink); }
+  .vp-faq__item { border-bottom: 1px solid var(--color-cdm-regla); }
   .vp-faq__det summary { list-style: none; cursor: pointer; }
   .vp-faq__det summary::-webkit-details-marker { display: none; }
   .vp-faq__sum {
@@ -1516,27 +1602,27 @@ const jsonLdSchemas = [
     transition: padding .2s, background .2s;
   }
   .vp-faq__sum:hover { padding-inline: 1rem; background: var(--vp-paper); }
-  .vp-faq__num { font-size: 1rem; font-weight: 800; color: var(--vp-sea-d); letter-spacing: .1em; }
+  .vp-faq__num { font-size: 1rem; font-weight: 800; color: var(--vp-sea); letter-spacing: .1em; }
   .vp-faq__q {
     font-family: var(--font-display);
     font-size: clamp(1.05rem, 1.8vw, 1.25rem);
     line-height: 1.3;
     letter-spacing: -.015em;
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     font-weight: 700;
   }
   .vp-faq__toggle {
     width: 40px; height: 40px;
-    border: 2px solid var(--vp-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     background: var(--vp-paper);
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     display: flex; align-items: center; justify-content: center;
     transition: transform .3s, background .2s, color .2s;
   }
-  .vp-faq__det[open] .vp-faq__toggle { transform: rotate(180deg); background: var(--vp-sea); color: var(--vp-paper); }
+  .vp-faq__det[open] .vp-faq__toggle { transform: rotate(180deg); background: var(--vp-sea); color: var(--vp-suelo); }
   .vp-faq__ans {
     padding: 0 0 1.5rem 76px;
-    color: var(--brutal-text-secondary);
+    color: var(--vp-tenue);
     font-size: .98rem;
     line-height: 1.55;
     max-width: 70ch;
@@ -1550,16 +1636,16 @@ const jsonLdSchemas = [
   /* PUEBLOS VECINOS                                         */
   /* ═══════════════════════════════════════════════════════ */
   .vp-vecinos-section {
-    background: var(--vp-paper);
+    background: var(--vp-suelo);
     padding: 5rem 1.5rem;
-    border-bottom: 3px solid var(--vp-ink);
+    border-bottom: 1px solid var(--color-cdm-regla);
   }
   .vp-vecinos {
     list-style: none; padding: 0; margin: 2rem 0 0;
     display: grid; gap: 0;
     grid-template-columns: 1fr;
-    border: 2px solid var(--vp-ink);
-    background: var(--vp-ink);
+    border: 1px solid var(--color-cdm-regla-2);
+    background: var(--color-cdm-regla);
   }
   @media (min-width: 640px)  { .vp-vecinos { grid-template-columns: repeat(2, 1fr); gap: 2px; } }
   @media (min-width: 1024px) { .vp-vecinos { grid-template-columns: repeat(4, 1fr); } }
@@ -1570,7 +1656,7 @@ const jsonLdSchemas = [
     gap: .35rem;
     padding: 1.5rem;
     background: var(--vp-paper);
-    color: var(--vp-ink);
+    color: var(--vp-tinta);
     text-decoration: none;
     min-height: 160px;
     transition: background .25s, color .25s;
@@ -1580,20 +1666,20 @@ const jsonLdSchemas = [
   .vp-vecino__name { grid-area: name; font-size: clamp(1.4rem, 2.5vw, 1.8rem); line-height: .95; letter-spacing: -.025em; }
   .vp-vecino__sub { grid-area: sub; font-size: .58rem; letter-spacing: .15em; opacity: .55; text-transform: uppercase; }
   .vp-vecino__arrow { grid-area: arrow; align-self: start; font-family: var(--font-mono); color: var(--vp-sunset); font-size: 1.3rem; transition: transform .25s; }
-  .vp-vecino:hover { background: var(--vp-sunset); color: var(--vp-paper); }
+  .vp-vecino:hover { background: var(--vp-sunset); color: var(--vp-suelo); }
   .vp-vecino:hover .vp-vecino__sub, .vp-vecino:hover .vp-vecino__n { opacity: .85; }
-  .vp-vecino:hover .vp-vecino__arrow { color: var(--vp-paper); transform: translateX(4px); }
-  .vp-vecino--1:hover { background: var(--vp-sea); color: var(--vp-paper); }
-  .vp-vecino--2:hover { background: var(--vp-ink); color: var(--vp-lime); }
-  .vp-vecino--2:hover .vp-vecino__arrow { color: var(--vp-lime); }
-  .vp-vecino--3:hover { background: var(--vp-sun); color: var(--vp-ink); }
+  .vp-vecino:hover .vp-vecino__arrow { color: var(--vp-suelo); transform: translateX(4px); }
+  .vp-vecino--1:hover { background: var(--vp-sea); color: var(--vp-suelo); }
+  .vp-vecino--2:hover { background: var(--color-cdm-panel-2); color: var(--vp-sun); }
+  .vp-vecino--2:hover .vp-vecino__arrow { color: var(--vp-sun); }
+  .vp-vecino--3:hover { background: var(--vp-sun); color: var(--vp-suelo); }
 
   /* ═══════════════════════════════════════════════════════ */
   /* CTA FINAL                                               */
   /* ═══════════════════════════════════════════════════════ */
   .vp-final {
-    background: var(--vp-ink);
-    color: var(--vp-paper);
+    background: var(--color-cdm-panel);
+    color: var(--vp-tinta);
     padding: 6rem 1.5rem 0;
     position: relative;
     overflow: hidden;
@@ -1619,7 +1705,7 @@ const jsonLdSchemas = [
     font-size: clamp(2.5rem, 7vw, 5.5rem);
     line-height: .9;
     letter-spacing: -.045em;
-    color: var(--vp-paper);
+    color: var(--vp-tinta);
     margin: 1rem 0;
   }
   .vp-final__title em { color: var(--vp-sun); font-style: italic; display: block; }
@@ -1642,22 +1728,22 @@ const jsonLdSchemas = [
     transition: transform .2s, box-shadow .2s, background .2s, color .2s;
   }
   .vp-final__btn--primary {
-    background: var(--vp-sunset); color: var(--vp-paper); border-color: var(--vp-sunset);
+    background: var(--vp-sunset); color: #1a0a02; border-color: var(--vp-sunset);
     box-shadow: 6px 6px 0 var(--vp-sun);
   }
   .vp-final__btn--primary:hover {
-    background: var(--vp-sun); color: var(--vp-ink); border-color: var(--vp-sun);
+    background: var(--vp-sun); color: var(--vp-suelo); border-color: var(--vp-sun);
     transform: translate(-3px, -3px);
     box-shadow: 11px 11px 0 var(--vp-sunset);
   }
   .vp-final__btn--ghost {
-    background: transparent; color: var(--vp-paper); border-color: var(--vp-paper);
-    box-shadow: 6px 6px 0 var(--vp-paper);
+    background: transparent; color: var(--vp-tinta); border-color: var(--color-cdm-regla-2);
+    box-shadow: 6px 6px 0 var(--color-cdm-regla-2);
   }
   .vp-final__btn--ghost:hover {
-    background: var(--vp-paper); color: var(--vp-ink);
+    background: var(--vp-tinta); color: var(--vp-suelo);
     transform: translate(-3px, -3px);
-    box-shadow: 11px 11px 0 var(--vp-paper);
+    box-shadow: 11px 11px 0 var(--color-cdm-regla-2);
   }
   .vp-final__trust {
     display: flex; flex-wrap: wrap;
@@ -1676,10 +1762,10 @@ const jsonLdSchemas = [
 
   .vp-final__marquee {
     background: var(--vp-sun);
-    color: var(--vp-ink);
+    color: var(--vp-suelo);
     overflow: hidden;
     padding: .85rem 0;
-    border-top: 3px solid var(--vp-ink);
+    border-top: 1px solid var(--color-cdm-regla);
     margin: 0 -1.5rem;
   }
   .vp-final__marquee-track {

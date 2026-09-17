@@ -1,18 +1,17 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/layout/Header.astro';
-import Footer from '../../components/layout/Footer.astro';
-import Breadcrumb from '../../components/common/Breadcrumb.astro';
+/* Hub de Sistemas IT (centro de mando, spec §6.4): plantilla de lectura con
+   el radar de cobertura in situ en la cabecera. */
+import LecturaLayout from '../../layouts/LecturaLayout.astro';
+import Boton from '../../components/cdm/Boton.astro';
+import Fichas from '../../components/cdm/Fichas.astro';
+import ListaEnlaces from '../../components/cdm/ListaEnlaces.astro';
+import Plan360Panel from '../../components/cdm/Plan360Panel.astro';
+import Preguntas from '../../components/cdm/Preguntas.astro';
+import RadarCobertura from '../../components/cdm/RadarCobertura.astro';
+import SeccionLectura from '../../components/cdm/SeccionLectura.astro';
+import ServiciosIT from '../../components/cdm/ServiciosIT.astro';
 import Contact from '../../components/sections/Contact.astro';
-import BlueprintHero from '../../components/brutal/BlueprintHero.astro';
-import Ticker from '../../components/brutal/Ticker.astro';
-import ItSection from '../../components/it/ItSection.astro';
-import SectionHead from '../../components/it/SectionHead.astro';
-import ServiciosGrid from '../../components/it/ServiciosGrid.astro';
-import BloquesGrid from '../../components/it/BloquesGrid.astro';
-import FaqList from '../../components/it/FaqList.astro';
-import CoberturaList from '../../components/it/CoberturaList.astro';
-import Plan360Teaser from '../../components/it/Plan360Teaser.astro';
+import type { Cifra, SeccionIndice } from '../../components/cdm/tipos';
 import { serviciosIT, pueblosIT, plan360, getServicioIT, HUB_IT, type Bloque, type Faq } from '../../data/servicios-it';
 import { SITE, PROVEEDOR } from '../../data/negocio';
 
@@ -38,6 +37,21 @@ const faq: Faq[] = [
   const item = getServicioIT(slug as string)?.faq[i as number];
   return item ? [item] : [];
 });
+
+const datos: Cifra[] = [
+  { etiqueta: 'Pueblos con visita el mismo día', valor: pueblosIT.length },
+  { etiqueta: 'Servicios informáticos', valor: serviciosIT.length },
+  { etiqueta: 'Plan 360 al mes, + IVA', valor: plan360.precio, sufijo: ' €' },
+  { etiqueta: 'Meses de permanencia', valor: 0 },
+];
+
+const secciones: SeccionIndice[] = [
+  { id: 'servicios', etiqueta: 'Servicios' },
+  { id: 'plan-360', etiqueta: 'Plan 360' },
+  { id: 'metodo', etiqueta: 'Método' },
+  { id: 'cobertura', etiqueta: 'Cobertura' },
+  { id: 'faq', etiqueta: 'Preguntas' },
+];
 
 const jsonLd = [
   {
@@ -69,65 +83,59 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
-  <Header />
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Sistemas IT' }]} />
+<LecturaLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  jsonLd={jsonLd}
+  migas={[{ label: 'Inicio', href: '/' }, { label: 'Sistemas IT' }]}
+  h1="Mantenimiento informático para empresas en Almería"
+  subtitulo="Tu departamento IT en el Levante y el Almanzora, con visita el mismo día"
+  entradilla="Visita in situ el mismo día, helpdesk remoto ilimitado, copias de seguridad verificadas cada mes y antivirus gestionado. Sin permanencia."
+  datos={datos}
+  secciones={secciones}
+  coordenadas="Sistemas IT · base en Vera"
+>
+  <Fragment slot="acciones">
+    <Boton href="/contacto/?servicio=sistemas-it#contacto">Pedir presupuesto</Boton>
+    <Boton href={plan360.href} variante="linea">Ver el Plan 360</Boton>
+  </Fragment>
 
-  <main id="main-content">
-    <BlueprintHero
-      size="compact"
-      h1Lines={['Mantenimiento informático', 'para empresas en Almería']}
-      h2="Tu departamento IT en el Levante y el Almanzora, con visita el mismo día"
-      primary={{ href: '/contacto/?servicio=sistemas-it#contacto', label: 'Pedir presupuesto' }}
-      secondary={{ href: plan360.href, label: 'Ver el Plan 360' }}
-      proyecto="Sistemas IT"
-      lamina="IT"
-      specs={[{ k: 'Visita in situ', v: 'El mismo día' }, { k: 'Helpdesk', v: 'Remoto ilimitado' }, { k: 'Cobertura', v: 'Levante y Almanzora' }, { k: 'Permanencia', v: 'Ninguna' }]}
-    />
-    <Ticker label="Compromisos de Sistemas IT" items={['Visita in situ el mismo día en el Levante y el Almanzora', 'Helpdesk remoto ilimitado', 'Copias de seguridad verificadas cada mes', 'Antivirus gestionado', 'Plan 360: web e informática por 400 € + IVA al mes', 'Sin permanencia']} />
+  <RadarCobertura slot="lateral" />
 
-    <ItSection tone="bone" labelledby="it-servicios">
-      <SectionHead
-        id="it-servicios"
-        kicker="Cap. 01 / Servicios"
-        title="Servicios informáticos para empresas"
-        lead="Nuestro equipo de sistemas se ocupa de todo lo que hace funcionar tu oficina: ordenadores, red, servidores, copias y seguridad. Un solo interlocutor y una sola factura."
-      />
-      <ServiciosGrid />
-    </ItSection>
+  <SeccionLectura
+    id="servicios"
+    titulo="Servicios informáticos para empresas"
+    lead="Nuestro equipo de sistemas se ocupa de todo lo que hace funcionar tu oficina: ordenadores, red, servidores, copias y seguridad. Un solo interlocutor y una sola factura."
+  >
+    <ServiciosIT />
+  </SeccionLectura>
 
-    <ItSection tone="night" labelledby="it-360">
-      <SectionHead
-        id="it-360"
-        kicker="Cap. 02 / Pase especial"
-        title="Web e informática en una sola cuota"
-        lead="Para pymes de hasta 10 puestos: tu web, tus equipos, el servidor, la red y las copias por un precio fijo al mes."
-      />
-      <Plan360Teaser />
-    </ItSection>
+  <SeccionLectura
+    id="plan-360"
+    titulo="Web e informática en una sola cuota"
+    lead={`Para pymes de hasta ${plan360.puestos} puestos: tu web, tus equipos, el servidor, la red y las copias por un precio fijo al mes.`}
+  >
+    <Plan360Panel />
+  </SeccionLectura>
 
-    <ItSection tone="paper" labelledby="it-proceso">
-      <SectionHead id="it-proceso" kicker="Cap. 03 / Método" title="Cómo empezamos a cuidar tu informática" />
-      <BloquesGrid items={proceso} columns={2} />
-    </ItSection>
+  <SeccionLectura id="metodo" titulo="Cómo empezamos a cuidar tu informática">
+    <Fichas numeradas items={proceso.map((p) => ({ titulo: p.t, texto: p.d }))} />
+  </SeccionLectura>
 
-    <ItSection tone="bone" labelledby="it-cobertura">
-      <SectionHead
-        id="it-cobertura"
-        kicker="Cap. 04 / Cobertura"
-        title="Técnico informático in situ en el Levante y el Almanzora"
-        lead="Si una incidencia no se resuelve en remoto, vamos a tu empresa el mismo día. En el resto de la provincia damos soporte remoto y visitas programadas."
-      />
-      <CoberturaList />
-    </ItSection>
+  <SeccionLectura
+    id="cobertura"
+    titulo="Técnico informático in situ en el Levante y el Almanzora"
+    lead="Si una incidencia no se resuelve en remoto, vamos a tu empresa el mismo día. En el resto de la provincia damos soporte remoto y visitas programadas."
+  >
+    <ListaEnlaces columnas={3} items={pueblosIT.map((p) => ({ href: `${HUB_IT}${p.slug}/`, label: `Informático en ${p.nombre}`, sub: p.comarca }))} />
+  </SeccionLectura>
 
-    <ItSection tone="paper" labelledby="it-faq">
-      <SectionHead id="it-faq" kicker="Cap. 05 / Preguntas" title="Preguntas frecuentes sobre mantenimiento informático" />
-      <FaqList items={faq} />
-    </ItSection>
+  <SeccionLectura id="faq" titulo="Preguntas frecuentes sobre mantenimiento informático">
+    <Preguntas items={faq} />
+  </SeccionLectura>
 
-    <Contact />
-  </main>
-
-  <Footer />
-</BaseLayout>
+  <Fragment slot="cierre">
+    <Contact tono="consola" />
+  </Fragment>
+</LecturaLayout>

@@ -12,6 +12,12 @@ export interface LineaRegistro {
   estado?: 'ok' | 'aviso';
 }
 
+export interface SeccionIndice {
+  /* id del <section> al que salta el raíl lateral */
+  id: string;
+  etiqueta: string;
+}
+
 export interface Cifra {
   etiqueta: string;
   valor: number;

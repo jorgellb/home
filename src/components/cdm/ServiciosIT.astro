@@ -1,0 +1,66 @@
+---
+/* Servicios de Sistemas IT como módulos de consola enlazados. Sustituye a
+   it/ServiciosGrid en las páginas ya migradas. Los iconos son trazo en
+   currentColor, sin fondo propio: se leen igual sobre oscuro. */
+import { serviciosIT, HUB_IT, type IconoIT } from '../../data/servicios-it';
+
+interface Props {
+  exclude?: string;
+}
+
+const { exclude } = Astro.props;
+const items = serviciosIT.filter((s) => s.slug !== exclude);
+
+const ATTRS = 'viewBox="0 0 32 32" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"';
+const ICONOS: Record<IconoIT, string> = {
+  helpdesk: `<svg ${ATTRS}><path d="M6 18v-3a10 10 0 0 1 20 0v3"/><rect x="4" y="18" width="5" height="8"/><rect x="23" y="18" width="5" height="8"/><path d="M26 26c0 2-2 3-5 3h-3"/></svg>`,
+  red: `<svg ${ATTRS}><rect x="14" y="23" width="4" height="4"/><path d="M10.5 19.5a8 8 0 0 1 11 0"/><path d="M6 15a14 14 0 0 1 20 0"/><path d="M2 10.5a20 20 0 0 1 28 0"/></svg>`,
+  servidor: `<svg ${ATTRS}><rect x="5" y="4" width="22" height="10"/><rect x="5" y="18" width="22" height="10"/><path d="M10 9h1M10 23h1M15 9h7M15 23h7"/></svg>`,
+  equipo: `<svg ${ATTRS}><rect x="3" y="5" width="26" height="17"/><path d="M12 27h8M16 22v5"/></svg>`,
+  escudo: `<svg ${ATTRS}><path d="M16 3 5 7v8c0 7 5 12 11 14 6-2 11-7 11-14V7z"/><path d="m11 16 4 4 7-8"/></svg>`,
+};
+---
+
+<ul class="cdm-svc">
+  {items.map((s) => (
+    <li>
+      <a class="cdm-svc__card" href={`${HUB_IT}${s.slug}/`}>
+        <span class="cdm-svc__icono"><Fragment set:html={ICONOS[s.icon]} /></span>
+        <h3 class="cdm-svc__titulo">{s.nav}</h3>
+        <p class="cdm-svc__texto">{s.resumen}</p>
+        <span class="cdm-svc__mas">Ver servicio</span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .cdm-svc {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: grid;
+    border-top: 1px solid var(--color-cdm-regla);
+    border-left: 1px solid var(--color-cdm-regla);
+  }
+  @media (min-width: 720px) { .cdm-svc { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .cdm-svc > li { display: flex; border-right: 1px solid var(--color-cdm-regla); border-bottom: 1px solid var(--color-cdm-regla); }
+  .cdm-svc__card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.35rem 1.4rem 1.4rem;
+    background: var(--color-cdm-panel);
+    color: var(--color-cdm-texto);
+    text-decoration: none;
+    transition: background-color 0.15s;
+  }
+  .cdm-svc__card:hover { background: var(--color-cdm-panel-2); }
+  .cdm-svc__card:hover .cdm-svc__titulo { color: var(--color-cdm-senal); }
+  .cdm-svc__card:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: -2px; }
+  .cdm-svc__icono { color: var(--color-cdm-senal); line-height: 0; }
+  .cdm-svc__titulo { margin: 0.2rem 0 0; font-family: var(--font-display); font-stretch: 88%; font-weight: 680; font-size: 1.2rem; line-height: 1.15; transition: color 0.15s; }
+  .cdm-svc__texto { flex: 1; margin: 0; font-size: 0.96rem; line-height: 1.55; color: #b9c5cf; }
+  .cdm-svc__mas { margin-top: 0.4rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-cdm-senal); text-decoration: underline; text-underline-offset: 4px; }
+</style>

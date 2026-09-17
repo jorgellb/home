@@ -5,6 +5,9 @@ import ChatWidget from '../components/asistente/ChatWidget.astro';
 // Precarga del subconjunto latino de Bricolage (titulares): evita el salto
 // de fuente en el H1, que es el LCP de casi todas las páginas.
 import bricolageLatino from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wdth-normal.woff2?url';
+/* El texto de cuerpo suele ser el LCP en móvil (la entradilla del hero): sin
+   precarga, la fuente llegaba tras el CSS y el LCP esperaba a su intercambio. */
+import dmSansLatino from '@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -82,6 +85,7 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#070B10" />
     <link rel="preload" href={bricolageLatino} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={dmSansLatino} as="font" type="font/woff2" crossorigin />
     <meta name="generator" content={Astro.generator} />
 
     {preload.map(resource => (

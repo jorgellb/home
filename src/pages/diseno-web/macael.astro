@@ -3,7 +3,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). */
+const secciones: SeccionIndice[] = [
+  { id: 'iconos',      etiqueta: 'Prontuario' },
+  { id: 'marmol',      etiqueta: 'El mármol blanco' },
+  { id: 'museo',       etiqueta: 'Museo del Mármol' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'mapa',        etiqueta: 'Cartografía' },
+  { id: 'porque',      etiqueta: 'Por qué Macael' },
+  { id: 'metodo',      etiqueta: 'Método' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'comarca',     etiqueta: 'El Almanzora' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const pueblosAlmanzora = getPueblosByComarca('Valle del Almanzora').filter(p => p.slug !== 'macael');
 
@@ -88,6 +105,8 @@ const jsonLdSchemas = [
   <Header />
 
   <main id="main-content" class="mc">
+
+    <IndiceLateral secciones={secciones} coordenadas="37.343° N · 2.320° W · 6.000 hab" class="mc-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO                                              */}
@@ -201,7 +220,7 @@ const jsonLdSchemas = [
               </div>
 
               <div class="mc-postcard__img-wrap">
-                <img src="/imagenes/diseno-web-seo-macael.jpg" alt="Macael — mármol blanco y exportación mundial" width="640" height="320" loading="eager" decoding="async" class="mc-postcard__img"/>
+                <img src="/imagenes/diseno-web-seo-macael.jpg" alt="Macael — mármol blanco y exportación mundial" width="640" height="320" loading="eager" fetchpriority="low" decoding="async" class="mc-postcard__img"/>
                 <div class="mc-postcard__gem" aria-hidden="true">
                   <svg viewBox="0 0 80 80" width="100%" height="100%">
                     <circle cx="40" cy="40" r="38" fill="#C4A44A" stroke="#1A1816" stroke-width="2"/>
@@ -238,7 +257,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* ICONOS                                            */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-iconos-section">
+    <section class="mc-iconos-section" id="iconos">
       <div class="container-brutal">
         <span class="text-meta mc-iconos-chapter">Cap. 02 / Prontuario</span>
         <h2 class="mc-iconos-title heading-display">Cuatro pilares del <em class="heading-editorial">mármol</em><span class="heading-display-block">que mueve el mundo.</span></h2>
@@ -247,12 +266,12 @@ const jsonLdSchemas = [
             <li class={`mc-icono mc-icono--${ico.color}`}>
               <div class="mc-icono__code">
                 <svg viewBox="0 0 80 80" width="100%" height="100%">
-                  <circle cx="40" cy="40" r="38" fill="var(--mc-ink)" stroke="var(--mc-ink)" stroke-width="2"/>
-                  <circle cx="40" cy="40" r="32" fill="var(--mc-paper)" stroke="var(--mc-ink)" stroke-width="2"/>
-                  {i === 0 && <><rect x="20" y="26" width="40" height="30" rx="2" fill="var(--mc-marble)" stroke="var(--mc-ink)" stroke-width="1.5"/><line x1="26" y1="32" x2="54" y2="32" stroke="var(--mc-ink)" stroke-width="0.8" opacity="0.3"/><line x1="26" y1="38" x2="54" y2="38" stroke="var(--mc-ink)" stroke-width="0.8" opacity="0.3"/><line x1="26" y1="44" x2="54" y2="44" stroke="var(--mc-ink)" stroke-width="0.8" opacity="0.3"/></>}
-                  {i === 1 && <><path d="M 16 56 L 24 28 L 32 26 L 40 28 L 48 30 L 56 34 L 64 56 Z" fill="var(--mc-stone)" stroke="var(--mc-ink)" stroke-width="1.5"/><rect x="36" y="44" width="8" height="14" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></>}
-                  {i === 2 && <><circle cx="40" cy="40" r="16" fill="var(--mc-blue)" stroke="var(--mc-ink)" stroke-width="1.5"/><circle cx="40" cy="40" r="10" fill="none" stroke="var(--mc-gold)" stroke-width="1.5"/><circle cx="40" cy="40" r="4" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></>}
-                  {i === 3 && <><rect x="22" y="24" width="36" height="32" rx="2" fill="var(--mc-stone)" stroke="var(--mc-ink)" stroke-width="1.5"/><rect x="26" y="28" width="28" height="10" fill="var(--mc-paper-2)" stroke="var(--mc-ink)" stroke-width="1"/><rect x="22" y="22" width="36" height="4" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></>}
+                  <circle cx="40" cy="40" r="38" fill="#1A1816" stroke="#1A1816" stroke-width="2"/>
+                  <circle cx="40" cy="40" r="32" fill="#FAF7F0" stroke="#1A1816" stroke-width="2"/>
+                  {i === 0 && <><rect x="20" y="26" width="40" height="30" rx="2" fill="#E8E4D8" stroke="#1A1816" stroke-width="1.5"/><line x1="26" y1="32" x2="54" y2="32" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/><line x1="26" y1="38" x2="54" y2="38" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/><line x1="26" y1="44" x2="54" y2="44" stroke="#1A1816" stroke-width="0.8" opacity="0.3"/></>}
+                  {i === 1 && <><path d="M 16 56 L 24 28 L 32 26 L 40 28 L 48 30 L 56 34 L 64 56 Z" fill="#D6D0C4" stroke="#1A1816" stroke-width="1.5"/><rect x="36" y="44" width="8" height="14" fill="#C4A44A" stroke="#1A1816" stroke-width="1"/></>}
+                  {i === 2 && <><circle cx="40" cy="40" r="16" fill="#4A6A8A" stroke="#1A1816" stroke-width="1.5"/><circle cx="40" cy="40" r="10" fill="none" stroke="#C4A44A" stroke-width="1.5"/><circle cx="40" cy="40" r="4" fill="#C4A44A" stroke="#1A1816" stroke-width="1"/></>}
+                  {i === 3 && <><rect x="22" y="24" width="36" height="32" rx="2" fill="#D6D0C4" stroke="#1A1816" stroke-width="1.5"/><rect x="26" y="28" width="28" height="10" fill="#EDE8DC" stroke="#1A1816" stroke-width="1"/><rect x="22" y="22" width="36" height="4" fill="#C4A44A" stroke="#1A1816" stroke-width="1"/></>}
                 </svg>
               </div>
               <span class="mc-icono__letter">{ico.code}</span>
@@ -314,16 +333,16 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MUSEO DEL MÁRMOL                                    */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-museum-section">
+    <section class="mc-museum-section" id="museo">
       <div class="container-brutal">
         <span class="text-meta mc-museum-chapter">Cap. 04 / Patrimonio industrial</span>
         <h2 class="mc-museum-title heading-display">Un museo entero <em class="heading-editorial">dedicado a la piedra</em><span class="heading-display-block">que construye el mundo.</span></h2>
         <p class="mc-museum-lead">El <strong>Museo del Mármol de Macael</strong> es el único en España dedicado íntegramente a la piedra natural. Sus salas recorren la historia de la extracción desde la época romana, con herramientas originales, maquetas de canteras y una reproducción en mármol blanco de la Alhambra tallada por artesanos locales.</p>
         <div class="mc-museum-grid">
-          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">1</text></svg></span><h3>Herramientas romanas</h3><p>Martillos, cuñas y picos de la época romana usados para extraer mármol hace 2.000 años.</p></div>
-          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">2</text></svg></span><h3>Maquetas de cantera</h3><p>Reproducciones a escala de los sistemas de extracción tradicionales y modernos.</p></div>
-          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">3</text></svg></span><h3>Alhambra en miniatura</h3><p>Reproducción tallada en mármol blanco Macael de los palacios nazaríes.</p></div>
-          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="var(--mc-ink)" font-weight="800" font-size="16">4</text></svg></span><h3>Piezas contemporáneas</h3><p>Obras de artistas y diseñadores actuales que trabajan el mármol como lienzo.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="#1A1816" font-weight="800" font-size="16">1</text></svg></span><h3>Herramientas romanas</h3><p>Martillos, cuñas y picos de la época romana usados para extraer mármol hace 2.000 años.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="#1A1816" font-weight="800" font-size="16">2</text></svg></span><h3>Maquetas de cantera</h3><p>Reproducciones a escala de los sistemas de extracción tradicionales y modernos.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="#1A1816" font-weight="800" font-size="16">3</text></svg></span><h3>Alhambra en miniatura</h3><p>Reproducción tallada en mármol blanco Macael de los palacios nazaríes.</p></div>
+          <div class="mc-museum-card"><span class="mc-museum-card__icon"><svg viewBox="0 0 40 40" width="40" height="40"><circle cx="20" cy="20" r="18" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" fill="#1A1816" font-weight="800" font-size="16">4</text></svg></span><h3>Piezas contemporáneas</h3><p>Obras de artistas y diseñadores actuales que trabajan el mármol como lienzo.</p></div>
         </div>
       </div>
     </section>
@@ -331,7 +350,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* SECTORES                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-sec-section">
+    <section class="mc-sec-section" id="sectores">
       <div class="container-brutal">
         <span class="text-meta mc-sec-chapter">Cap. 05 / Oportunidades</span>
         <h2 class="mc-sec-title heading-display">Seis sectores para <em class="heading-editorial">exportar</em><span class="heading-display-block">tu presencia digital.</span></h2>
@@ -352,11 +371,11 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA                                               */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-map-section">
+    <section class="mc-map-section" id="mapa">
       <div class="container-brutal"><div class="mc-map-head"><div class="mc-map-head__inner"><div><span class="text-meta mc-map-chapter">Cap. 06 / Cartografía</span><h2 class="mc-map-title heading-display">Macael en el <em class="heading-editorial">mapa.</em></h2></div><div class="mc-map-coords"><span class="text-mono">37.343° N · 2.320° W</span><span class="text-mono">04867 · Macael · Valle del Almanzora</span><span class="text-mono">Capital mundial del mármol blanco</span></div></div></div></div>
       <div class="mc-map-frame">
-        <div class="mc-map-icon mc-map-icon--tl" aria-hidden="true"><svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="14" y="14" width="32" height="32" rx="4" fill="var(--mc-marble)" stroke="var(--mc-ink)" stroke-width="2"/><rect x="18" y="18" width="10" height="10" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/><rect x="32" y="18" width="10" height="20" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1.5"/></svg></div>
-        <div class="mc-map-icon mc-map-icon--br" aria-hidden="true"><svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="12" y="22" width="36" height="20" rx="3" fill="var(--mc-stone)" stroke="var(--mc-ink)" stroke-width="2"/><rect x="16" y="26" width="28" height="6" fill="var(--mc-gold)" stroke="var(--mc-ink)" stroke-width="1"/></svg></div>
+        <div class="mc-map-icon mc-map-icon--tl" aria-hidden="true"><svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="14" y="14" width="32" height="32" rx="4" fill="#E8E4D8" stroke="#1A1816" stroke-width="2"/><rect x="18" y="18" width="10" height="10" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/><rect x="32" y="18" width="10" height="20" fill="#C4A44A" stroke="#1A1816" stroke-width="1.5"/></svg></div>
+        <div class="mc-map-icon mc-map-icon--br" aria-hidden="true"><svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="12" y="22" width="36" height="20" rx="3" fill="#D6D0C4" stroke="#1A1816" stroke-width="2"/><rect x="16" y="26" width="28" height="6" fill="#C4A44A" stroke="#1A1816" stroke-width="1"/></svg></div>
         <div class="mc-map-wrap"><InteractiveMap center={[-2.3197, 37.3431]} zoom={11} pueblos={[{slug:"macael",nombre:"Macael",poblacion:6000,descripcion:"Capital mundial del mármol blanco",destacado:true,coords:[-2.3197,37.3431]},{slug:"olula-del-rio",nombre:"Olula del Río",poblacion:7000,descripcion:"Capital mundial del mármol",coords:[-1.8633,37.3867]},{slug:"fines",nombre:"Fines",poblacion:2500,descripcion:"Transformación del mármol",coords:[-1.8433,37.3558]},{slug:"albox",nombre:"Albox",poblacion:12000,descripcion:"Capital comercial del Almanzora",coords:[-2.1433,37.3833]}]}/></div>
       </div>
     </section>
@@ -364,7 +383,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES                                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-dif-section">
+    <section class="mc-dif-section" id="porque">
       <div class="container-brutal">
         <span class="text-meta mc-dif-chapter">Cap. 07 / Diferencial</span>
         <h2 class="mc-dif-title heading-display">Por qué Macael <em class="heading-editorial">es único</em><span class="heading-display-block">en el mundo de la piedra.</span></h2>
@@ -375,7 +394,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO                                            */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-proc-section">
+    <section class="mc-proc-section" id="metodo">
       <div class="container-brutal">
         <span class="text-meta mc-proc-chapter">Cap. 08 / Método</span>
         <h2 class="mc-proc-title heading-display">Así creamos tu web <em class="heading-editorial">en</em><span class="heading-display-block">el taller de lo digital.</span></h2>
@@ -386,7 +405,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-quote-section">
+    <section class="mc-quote-section" id="testimonios">
       <div class="container-brutal">
         <span class="text-meta mc-quote-chapter">Cap. 09 / Resultados</span>
         <h2 class="mc-quote-title heading-display">Lo que dicen <em class="heading-editorial">los que</em><span class="heading-display-block">exportan su marca al mundo.</span></h2>
@@ -398,24 +417,28 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ                                                */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-faq-section">
+    <section class="mc-faq-section" id="faq">
       <div class="container-brutal">
         <span class="text-meta mc-faq-chapter">Cap. 10 / FAQ</span>
         <h2 class="mc-faq-title heading-display">Respuestas para <em class="heading-editorial">el mármol</em><span class="heading-display-block">de tus dudas.</span></h2>
-        <dl class="mc-faq">{faq.map((f,i) => (<div class="mc-faq__item"><details class="mc-faq__det" open={i===0}><summary><div class="mc-faq__sum"><span class="mc-faq__num text-mono">{String(i+1).padStart(2,'0')}</span><span class="mc-faq__q">{f.q}</span><span class="mc-faq__toggle" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></summary><div class="mc-faq__ans">{f.a}</div></details></div>))}</dl>
+        <div class="mc-faq">{faq.map((f,i) => (<div class="mc-faq__item"><details class="mc-faq__det" open={i===0}><summary><div class="mc-faq__sum"><span class="mc-faq__num text-mono">{String(i+1).padStart(2,'0')}</span><span class="mc-faq__q">{f.q}</span><span class="mc-faq__toggle" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></summary><div class="mc-faq__ans">{f.a}</div></details></div>))}</div>
       </div>
     </section>
 
     {/* ════════════════════════════════════════════════ */}
     {/* PUEBLOS VECINOS                                     */}
     {/* ════════════════════════════════════════════════ */}
-    {pueblosAlmanzora.length > 0 && (<section class="mc-vecinos-section"><div class="container-brutal"><span class="text-meta mc-vecinos-chapter">Cap. 11 / Comarca</span><h2 class="mc-vecinos-title heading-display">Valle del Almanzora <em class="heading-editorial">al completo.</em></h2><ul class="mc-vecinos">{pueblosAlmanzora.slice(0,8).map((p,i) => (<a href={`/diseno-web/${p.slug}/`} class={`mc-vecino mc-vecino--${i}`}><span class="mc-vecino__n">{String(i+1).padStart(2,'0')}</span><span class="mc-vecino__name">{p.nombre}</span><span class="mc-vecino__sub">{p.descripcion}</span><span class="mc-vecino__arrow" aria-hidden="true">→</span></a>))}</ul></div></section>)}
+    {pueblosAlmanzora.length > 0 && (<section class="mc-vecinos-section" id="comarca"><div class="container-brutal"><span class="text-meta mc-vecinos-chapter">Cap. 11 / Comarca</span><h2 class="mc-vecinos-title heading-display">Valle del Almanzora <em class="heading-editorial">al completo.</em></h2><div class="mc-vecinos">{pueblosAlmanzora.slice(0,8).map((p,i) => (<a href={`/diseno-web/${p.slug}/`} class={`mc-vecino mc-vecino--${i}`}><span class="mc-vecino__n">{String(i+1).padStart(2,'0')}</span><span class="mc-vecino__name">{p.nombre}</span><span class="mc-vecino__sub">{p.descripcion}</span><span class="mc-vecino__arrow" aria-hidden="true">→</span></a>))}</div></div></section>)}
 
     {/* ════════════════════════════════════════════════ */}
-    <div style="margin-top:2rem;text-align:center"><a href="/diseno-web/" style="font-weight:700;font-size:1.05rem;text-decoration:underline;text-underline-offset:3px">Ver todos los municipios con diseño web en Almería →</a></div>
+    <div class="mc-todos">
+      <div class="container-brutal">
+        <a href="/diseno-web/">Ver todos los municipios con diseño web en Almería →</a>
+      </div>
+    </div>
     {/* CTA FINAL                                          */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mc-final">
+    <section class="mc-final" id="empezar">
       <div class="container-brutal">
         <div class="mc-final__grid">
           <div>
@@ -444,7 +467,37 @@ const jsonLdSchemas = [
 </BaseLayout>
 
 <style>
-  :root{--mc-paper:#FAF7F0;--mc-paper-2:#EDE8DC;--mc-stone:#D6D0C4;--mc-ink:#1A1816;--mc-marble:#E8E4D8;--mc-gold:#C4A44A;--mc-accent:#8A7A5A;--mc-blue:#4A6A8A;--mc-shadow:8px 8px 0 var(--mc-ink)}
+  /* Fase 2 · consola. La paleta estaba en :root, que Astro no scopea: pasa a
+     .mc, el <main> de esta página. paper hacía de fondo y de tinta clara a la
+     vez, e ink de borde, sombra, fondo y texto: cada uno se reparte, y el
+     #1A1816 sobrevive como fondo hondo. El azul no llegaba a 4,5:1 sobre
+     suelo y sube. Las ilustraciones llevan sus hex literales (§3.3.6). */
+  .mc{--mc-paper:var(--color-cdm-panel);--mc-paper-2:var(--color-cdm-panel-2);--mc-suelo:var(--color-cdm-suelo);--mc-tinta:var(--color-cdm-texto);--mc-tenue:var(--color-cdm-tenue);--mc-ink:var(--color-cdm-regla-2);--mc-hondo:#1A1816;--mc-stone:#D6D0C4;--mc-marble:#E8E4D8;--mc-gold:#C4A44A;--mc-accent:#A8966F;--mc-blue:#7BA8CE;--mc-shadow:8px 8px 0 var(--color-cdm-regla-2);background:var(--mc-suelo);color:var(--mc-tinta)}
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .mc :global(.brutal-section-head__title){color:var(--mc-tinta)}
+  .mc :global(.brutal-section-head__lead){color:var(--mc-tenue)}
+  .mc :global(:where(.text-meta)){color:var(--mc-tenue)} /* :where: sin especificidad, para que el color propio de cada capítulo mande */
+  .mc :global(.divider-brutal){background:var(--color-cdm-regla)}
+  .mc section[id]{scroll-margin-top:96px}
+
+  /* El enlace al índice de municipios estaba suelto y con estilos inline,
+     fuera de todo contenedor: se iba a sangre. */
+  .mc-todos{background:var(--mc-suelo);padding:2.5rem 1.5rem;text-align:center}
+  .mc-todos a{font-weight:700;font-size:1.05rem;color:var(--mc-gold);text-decoration:underline;text-underline-offset:3px}
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media(min-width:1280px){
+    .mc :global(.cdm-indice){position:fixed;top:96px;left:0;width:208px;padding-inline:clamp(1rem,2vw,1.75rem) 1rem;z-index:30}
+    .mc :global(.container-brutal){padding-left:calc(var(--container-gutter) + 208px)}
+    .mc-map-frame{padding-left:208px}
+  }
+  @media(max-width:1279px){
+    .mc :global(.cdm-indice){display:block;position:sticky;top:64px;z-index:40;background:var(--mc-suelo);border-bottom:1px solid var(--color-cdm-regla)}
+    .mc :global(.cdm-indice__titulo),.mc :global(.cdm-indice__lista),.mc :global(.cdm-indice__coord){display:none}
+    .mc :global(.cdm-indice__progreso){height:3px;background:transparent}
+  }
   .mc-pulse{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--mc-gold);box-shadow:0 0 0 0 rgba(196,164,74,0.55);animation:mc-pulse 1.8s ease-out infinite;vertical-align:middle;margin-right:.35rem}
   @keyframes mc-pulse{0%{box-shadow:0 0 0 0 rgba(196,164,74,0.6)}70%{box-shadow:0 0 0 10px rgba(196,164,74,0)}100%{box-shadow:0 0 0 0 rgba(196,164,74,0)}}
   .mc-pull__spin{transform-origin:50% 50%;animation:mc-spin 24s linear infinite}
@@ -452,7 +505,7 @@ const jsonLdSchemas = [
   .mc-final-gem{transform-origin:50% 50%;animation:mc-float 4s ease-in-out infinite}
   @keyframes mc-float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
 
-  .mc-hero{padding-top:3rem;padding-bottom:0;background:radial-gradient(circle at 70% 30%,rgba(196,164,74,0.08),transparent 50%),radial-gradient(circle at 20% 70%,rgba(74,106,138,0.08),transparent 50%),var(--mc-paper);border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-hero{padding-top:3rem;padding-bottom:0;background:radial-gradient(circle at 70% 30%,rgba(196,164,74,0.08),transparent 50%),radial-gradient(circle at 20% 70%,rgba(74,106,138,0.08),transparent 50%),var(--mc-suelo);border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
   .mc-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(45deg,transparent 0 22px,rgba(196,164,74,0.05) 22px 23px,transparent 23px 44px),linear-gradient(-45deg,transparent 0 22px,rgba(196,164,74,0.05) 22px 23px,transparent 23px 44px);pointer-events:none}
   .mc-hero>*{position:relative}
   .mc-hero__top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding-bottom:1rem}
@@ -463,15 +516,15 @@ const jsonLdSchemas = [
   .mc-hero__chapter{color:var(--mc-blue)}
   .mc-hero__title{font-size:clamp(2.5rem,7vw,5rem);line-height:.92;letter-spacing:-.04em;margin:.25rem 0}
   .mc-hero__title em{color:var(--mc-blue);font-style:italic}
-  .mc-hero__title-stamp{display:inline-block;color:var(--mc-paper);background:var(--mc-gold);padding:0 .2em;transform:rotate(-1deg)}
-  .mc-hero__lead{font-size:1.1rem;line-height:1.55;color:var(--brutal-text-secondary);max-width:54ch}
-  .mc-hero__lead strong{color:var(--mc-ink);font-weight:700}
+  .mc-hero__title-stamp{display:inline-block;color:var(--mc-suelo);background:var(--mc-gold);padding:0 .2em;transform:rotate(-1deg)}
+  .mc-hero__lead{font-size:1.1rem;line-height:1.55;color:var(--mc-tenue);max-width:54ch}
+  .mc-hero__lead strong{color:var(--mc-tinta);font-weight:700}
   .mc-hero__lead em{color:var(--mc-gold);font-style:italic;font-weight:600}
   .mc-hero__cta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.5rem}
   .mc-btn{display:inline-flex;align-items:center;gap:.75rem;padding:1.1rem 1.85rem;font-family:var(--font-display);font-weight:800;font-size:1.05rem;border:2.5px solid var(--mc-ink);text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s,color .2s;cursor:pointer}
-  .mc-btn--primary{background:var(--mc-gold);color:var(--mc-ink);box-shadow:6px 6px 0 var(--mc-ink)}
-  .mc-btn--primary:hover{background:var(--mc-blue);color:var(--mc-paper);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-ink)}
-  .mc-btn--ghost{background:transparent;color:var(--mc-ink);box-shadow:6px 6px 0 var(--mc-blue)}
+  .mc-btn--primary{background:var(--mc-gold);color:var(--mc-suelo);box-shadow:6px 6px 0 var(--mc-ink)}
+  .mc-btn--primary:hover{background:var(--mc-blue);color:var(--mc-suelo);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-ink)}
+  .mc-btn--ghost{background:transparent;color:var(--mc-tinta);box-shadow:6px 6px 0 var(--mc-blue)}
   .mc-btn--ghost:hover{background:var(--mc-ink);color:var(--mc-gold);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-blue)}
   .mc-kpis{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:1.5rem;border:2.5px solid var(--mc-ink);background:var(--mc-ink)}
   @media(min-width:768px){.mc-kpis{grid-template-columns:repeat(4,1fr)}}
@@ -479,26 +532,26 @@ const jsonLdSchemas = [
   .mc-kpi:nth-child(2n){border-right:none}
   .mc-kpi:nth-last-child(-n+2){border-bottom:none}
   @media(min-width:768px){.mc-kpi:nth-child(2n){border-right:2px solid var(--mc-ink)}.mc-kpi:nth-child(4n){border-right:none}.mc-kpi:nth-last-child(-n+2){border-bottom:2px solid var(--mc-ink)}.mc-kpi:nth-last-child(-n+4){border-bottom:none}}
-  .mc-kpi--marble{background:var(--mc-marble);color:var(--mc-ink)}.mc-kpi--gold{background:var(--mc-gold);color:var(--mc-ink)}.mc-kpi--blue{background:var(--mc-blue);color:var(--mc-paper)}.mc-kpi--ink{background:var(--mc-ink);color:var(--mc-paper)}.mc-kpi--ink .mc-kpi__v{color:var(--mc-gold)}
+  .mc-kpi--marble{background:var(--mc-marble);color:var(--mc-suelo)}.mc-kpi--gold{background:var(--mc-gold);color:var(--mc-suelo)}.mc-kpi--blue{background:var(--mc-blue);color:var(--mc-suelo)}.mc-kpi--ink{background:var(--mc-hondo);color:var(--mc-tinta)}.mc-kpi--ink .mc-kpi__v{color:var(--mc-gold)}
   .mc-kpi__v{font-size:clamp(1.65rem,3.8vw,2.25rem);font-weight:800;line-height:1}
   .mc-kpi__v small{font-size:.55em;opacity:.8}
   .mc-kpi__l{font-family:var(--font-mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.15em;opacity:.85}
   .mc-hero__postcard{width:100%;max-width:540px;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(26,24,22,0.18))}
   .mc-postcard{background:var(--mc-paper);border:3px solid var(--mc-ink);box-shadow:var(--mc-shadow);overflow:hidden;transform:rotate(1deg);transition:transform .35s}
   .mc-postcard:hover{transform:rotate(0)}
-  .mc-postcard__head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.65rem 1rem;background:var(--mc-ink);color:var(--mc-paper);font-size:.58rem;letter-spacing:.15em;border-bottom:2px solid var(--mc-ink)}
+  .mc-postcard__head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding:.65rem 1rem;background:var(--mc-ink);color:var(--mc-tinta);font-size:.58rem;letter-spacing:.15em;border-bottom:2px solid var(--mc-ink)}
   .mc-postcard__profile{width:100%;aspect-ratio:540/220;border-bottom:2px solid var(--mc-ink);overflow:hidden}
   .mc-postcard__img-wrap{position:relative;aspect-ratio:16/9;overflow:hidden;border-bottom:2px solid var(--mc-ink)}
   .mc-postcard__img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05)saturate(1.1);transition:transform .6s cubic-bezier(.16,1,.3,1)}
   .mc-postcard:hover .mc-postcard__img{transform:scale(1.05)}
   .mc-postcard__gem{position:absolute;top:12px;right:12px;width:80px;height:80px;transform:rotate(-8deg);filter:drop-shadow(0 4px 10px rgba(196,164,74,0.5))}
-  .mc-postcard__tag{position:absolute;bottom:12px;left:12px;background:var(--mc-paper);color:var(--mc-ink);padding:.4rem .75rem;font-size:.65rem;font-weight:800;letter-spacing:.2em;border:2px solid var(--mc-ink);box-shadow:3px 3px 0 var(--mc-gold);transform:rotate(2deg)}
+  .mc-postcard__tag{position:absolute;bottom:12px;left:12px;background:var(--mc-paper);color:var(--mc-tinta);padding:.4rem .75rem;font-size:.65rem;font-weight:800;letter-spacing:.2em;border:2px solid var(--mc-ink);box-shadow:3px 3px 0 var(--mc-gold);transform:rotate(2deg)}
   .mc-postcard__data{padding:1rem 1.25rem;background:var(--mc-paper-2);display:grid;gap:.35rem}
-  .mc-postcard__data-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:.35rem;border-bottom:1px dashed rgba(26,24,22,0.15);font-size:.68rem}
+  .mc-postcard__data-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:.35rem;border-bottom:1px dashed rgba(230,237,242,0.16);font-size:.68rem}
   .mc-postcard__data-row:last-child{border-bottom:none;padding-bottom:0}
   .mc-postcard__data-row>span:first-child{color:var(--mc-blue);letter-spacing:.2em;font-weight:800}
-  .mc-postcard__data-v{color:var(--mc-ink);font-weight:700;letter-spacing:.05em}
-  .mc-marquee{background:var(--mc-ink);color:var(--mc-gold);overflow:hidden;padding:.9rem 0;border-top:3px solid var(--mc-ink)}
+  .mc-postcard__data-v{color:var(--mc-tinta);font-weight:700;letter-spacing:.05em}
+  .mc-marquee{background:var(--mc-hondo);color:var(--mc-gold);overflow:hidden;padding:.9rem 0;border-top:3px solid var(--mc-ink)}
   .mc-marquee__track{display:flex;gap:3rem;width:max-content;animation:mc-marquee 40s linear infinite;font-family:var(--font-mono);font-size:.82rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
   @keyframes mc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   .mc-iconos-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
@@ -512,16 +565,16 @@ const jsonLdSchemas = [
   @media(min-width:1024px){.mc-iconos{grid-template-columns:repeat(4,1fr)}}
   .mc-icono{display:flex;flex-direction:column;gap:.5rem;padding:2rem 1.5rem;background:var(--mc-paper);border:2.5px solid var(--mc-ink);box-shadow:var(--mc-shadow);align-items:center;text-align:center;transition:transform .25s,box-shadow .25s}
   .mc-icono:hover{transform:translate(-4px,-4px)}
-  .mc-icono--marble:hover{box-shadow:12px 12px 0 var(--mc-marble)}.mc-icono--gold:hover{box-shadow:12px 12px 0 var(--mc-gold)}.mc-icono--blue:hover{box-shadow:12px 12px 0 var(--mc-blue)}.mc-icono--ink:hover{box-shadow:12px 12px 0 var(--mc-ink)}
+  .mc-icono--marble:hover{box-shadow:12px 12px 0 var(--mc-marble)}.mc-icono--gold:hover{box-shadow:12px 12px 0 var(--mc-gold)}.mc-icono--blue:hover{box-shadow:12px 12px 0 var(--mc-blue)}.mc-icono--ink:hover{box-shadow:12px 12px 0 var(--mc-accent)}
   .mc-icono__code{width:80px;height:80px;flex-shrink:0}
   .mc-icono__letter{font-family:var(--font-display);font-size:2.5rem;font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--mc-gold)}
-  .mc-icono--marble .mc-icono__letter{color:var(--mc-marble)}.mc-icono--blue .mc-icono__letter{color:var(--mc-blue)}.mc-icono--ink .mc-icono__letter{color:var(--mc-ink)}
-  .mc-icono__name{font-size:clamp(1.2rem,2.2vw,1.5rem);line-height:1;letter-spacing:-.025em;color:var(--mc-ink);margin:0}
+  .mc-icono--marble .mc-icono__letter{color:var(--mc-marble)}.mc-icono--blue .mc-icono__letter{color:var(--mc-blue)}.mc-icono--ink .mc-icono__letter{color:var(--mc-accent)}
+  .mc-icono__name{font-size:clamp(1.2rem,2.2vw,1.5rem);line-height:1;letter-spacing:-.025em;color:var(--mc-tinta);margin:0}
   .mc-icono__sub{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.2em;color:var(--mc-gold);font-weight:800}
-  .mc-icono--marble .mc-icono__sub{color:var(--mc-marble)}.mc-icono--blue .mc-icono__sub{color:var(--mc-blue)}.mc-icono--ink .mc-icono__sub{color:var(--mc-ink)}
-  .mc-icono__desc{font-size:.82rem;line-height:1.45;color:var(--brutal-text-secondary);margin:0;flex:1}
-  .mc-icono__dato{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--mc-ink);border-top:2px dashed var(--mc-ink);padding-top:.5rem;width:100%}
-  .mc-marble-section{background:var(--mc-stone);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-icono--marble .mc-icono__sub{color:var(--mc-marble)}.mc-icono--blue .mc-icono__sub{color:var(--mc-blue)}.mc-icono--ink .mc-icono__sub{color:var(--mc-accent)}
+  .mc-icono__desc{font-size:.82rem;line-height:1.45;color:var(--mc-tenue);margin:0;flex:1}
+  .mc-icono__dato{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--mc-tinta);border-top:2px dashed var(--mc-ink);padding-top:.5rem;width:100%}
+  .mc-marble-section{background:var(--mc-hondo);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
   .mc-marble-section::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.04) 1.2px,transparent 1.2px);background-size:22px 22px;pointer-events:none}
   .mc-marble-section>*{position:relative}
   .mc-marble-grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center}
@@ -529,7 +582,7 @@ const jsonLdSchemas = [
   .mc-marble-chapter{color:var(--mc-blue)}
   .mc-marble-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
   .mc-marble-title em{color:var(--mc-blue);font-style:italic}
-  .mc-marble-lead{font-size:1.05rem;line-height:1.55;color:var(--brutal-text-secondary);margin-bottom:1rem;max-width:54ch}
+  .mc-marble-lead{font-size:1.05rem;line-height:1.55;color:var(--mc-tenue);margin-bottom:1rem;max-width:54ch}
   .mc-marble-lead strong{color:var(--mc-accent);font-weight:800}
   .mc-marble-lead em{color:var(--mc-blue);font-style:italic}
   .mc-marble-facts{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr;gap:0;border:2px solid var(--mc-ink);background:var(--mc-paper)}
@@ -538,13 +591,13 @@ const jsonLdSchemas = [
   @media(min-width:640px){.mc-marble-facts li:nth-child(odd){border-right:1px solid var(--mc-ink)}.mc-marble-facts li:nth-last-child(-n+2){border-bottom:none}}
   @media(max-width:639px){.mc-marble-facts li:last-child{border-bottom:none}}
   .mc-marble-facts__k{font-size:.58rem;letter-spacing:.2em;color:var(--mc-blue);font-weight:800}
-  .mc-marble-facts__v{font-size:.9rem;color:var(--mc-ink);font-weight:600;line-height:1.35}
+  .mc-marble-facts__v{font-size:.9rem;color:var(--mc-tinta);font-weight:600;line-height:1.35}
   .mc-marble__r{width:100%;max-width:360px;margin:0 auto;filter:drop-shadow(0 14px 30px rgba(0,0,0,0.3))}
-  .mc-museum-section{background:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-museum-section{background:var(--mc-suelo);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
   .mc-museum-chapter{color:var(--mc-gold)}
   .mc-museum-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
   .mc-museum-title em{color:var(--mc-gold);font-style:italic}
-  .mc-museum-lead{font-size:1.05rem;line-height:1.55;color:var(--brutal-text-secondary);margin-bottom:2rem;max-width:64ch}
+  .mc-museum-lead{font-size:1.05rem;line-height:1.55;color:var(--mc-tenue);margin-bottom:2rem;max-width:64ch}
   .mc-museum-lead strong{color:var(--mc-accent);font-weight:700}
   .mc-museum-grid{display:grid;grid-template-columns:1fr;gap:1.25rem}
   @media(min-width:640px){.mc-museum-grid{grid-template-columns:repeat(2,1fr)}}
@@ -552,8 +605,8 @@ const jsonLdSchemas = [
   .mc-museum-card{background:var(--mc-paper-2);border:2.5px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-ink);padding:1.75rem 1.25rem;display:flex;flex-direction:column;gap:.65rem;transition:transform .25s,box-shadow .25s}
   .mc-museum-card:hover{transform:translate(-3px,-3px);box-shadow:8px 8px 0 var(--mc-gold)}
   .mc-museum-card__icon{margin-bottom:.25rem}
-  .mc-museum-card h3{font-size:clamp(1.1rem,1.8vw,1.25rem);line-height:1.05;letter-spacing:-.02em;color:var(--mc-ink);margin:0}
-  .mc-museum-card p{font-size:.82rem;line-height:1.45;color:var(--brutal-text-secondary);margin:0;flex:1}
+  .mc-museum-card h3{font-size:clamp(1.1rem,1.8vw,1.25rem);line-height:1.05;letter-spacing:-.02em;color:var(--mc-tinta);margin:0}
+  .mc-museum-card p{font-size:.82rem;line-height:1.45;color:var(--mc-tenue);margin:0;flex:1}
   .mc-sec-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
   .mc-sec-chapter{color:var(--mc-blue)}
   .mc-sec-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
@@ -564,34 +617,34 @@ const jsonLdSchemas = [
   .mc-sec__card{background:var(--mc-paper);border:2.5px solid var(--mc-ink);box-shadow:var(--mc-shadow);padding:1.5rem;display:flex;flex-direction:column;gap:.75rem;transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden}
   .mc-sec__card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:currentColor}
   .mc-sec__card:hover{transform:translate(-3px,-3px);box-shadow:12px 12px 0 currentColor}
-  .mc-sec__card--marble{color:var(--mc-marble)}.mc-sec__card--gold{color:var(--mc-gold)}.mc-sec__card--blue{color:var(--mc-blue)}.mc-sec__card--stone{color:var(--mc-stone)}.mc-sec__card--accent{color:var(--mc-accent)}.mc-sec__card--ink{color:var(--mc-ink)}
+  .mc-sec__card--marble{color:var(--mc-marble)}.mc-sec__card--gold{color:var(--mc-gold)}.mc-sec__card--blue{color:var(--mc-blue)}.mc-sec__card--stone{color:var(--mc-stone)}.mc-sec__card--accent{color:var(--mc-accent)}.mc-sec__card--ink{color:var(--mc-stone)}
   .mc-sec__head{display:flex;justify-content:space-between;align-items:center;padding-bottom:.5rem;border-bottom:2px dashed currentColor;gap:.5rem}
   .mc-sec__num{font-size:1.5rem;font-weight:800;color:currentColor;line-height:1}
-  .mc-sec__stat-box{background:var(--mc-ink);color:var(--mc-paper);padding:.35rem .65rem;display:flex;flex-direction:column;border:1.5px solid currentColor;text-align:right}
+  .mc-sec__stat-box{background:var(--mc-suelo);color:var(--mc-tinta);padding:.35rem .65rem;display:flex;flex-direction:column;border:1.5px solid currentColor;text-align:right}
   .mc-sec__stat-v{font-size:.95rem;font-weight:800;color:currentColor;line-height:1}
   .mc-sec__stat-l{font-size:.5rem;letter-spacing:.12em;opacity:.85;text-transform:uppercase}
-  .mc-sec__title{font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.1;letter-spacing:-.02em;color:var(--mc-ink);margin:0}
-  .mc-sec__desc{font-size:.88rem;line-height:1.5;color:var(--brutal-text-secondary);flex:1}
+  .mc-sec__title{font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.1;letter-spacing:-.02em;color:var(--mc-tinta);margin:0}
+  .mc-sec__desc{font-size:.88rem;line-height:1.5;color:var(--mc-tenue);flex:1}
   .mc-sec__tags{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.3rem}
-  .mc-sec__tag{display:flex;align-items:flex-start;gap:.35rem;font-size:.78rem;line-height:1.35;color:var(--mc-ink)}
+  .mc-sec__tag{display:flex;align-items:flex-start;gap:.35rem;font-size:.78rem;line-height:1.35;color:var(--mc-tinta)}
   .mc-sec__tag span{color:currentColor;font-weight:800}
   .mc-sec__foot{padding-top:.65rem;border-top:2px solid var(--mc-ink)}
   .mc-sec__cta{font-family:var(--font-mono);font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:currentColor;text-decoration:none;border-bottom:2px solid currentColor;padding-bottom:2px}
-  .mc-map-section{background:var(--mc-stone);border-bottom:3px solid var(--mc-ink)}
+  .mc-map-section{background:var(--mc-suelo);border-bottom:3px solid var(--mc-ink)}
   .mc-map-head{padding:4rem 0 2rem}
   .mc-map-head__inner{display:grid;grid-template-columns:1fr;gap:1rem;align-items:end}
   @media(min-width:768px){.mc-map-head__inner{grid-template-columns:1.5fr 1fr}}
   .mc-map-chapter{color:var(--mc-blue)}
   .mc-map-title{font-size:clamp(2.25rem,5vw,3.5rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0 0}
   .mc-map-title em{color:var(--mc-blue)}
-  .mc-map-coords{background:var(--mc-gold);color:var(--mc-ink);padding:1rem 1.25rem;border:2px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-blue);display:flex;flex-direction:column;gap:.35rem;font-size:.7rem;letter-spacing:.15em}
-  .mc-map-frame{position:relative;border-top:3px solid var(--mc-ink);border-bottom:3px solid var(--mc-ink);background:var(--mc-ink)}
+  .mc-map-coords{background:var(--mc-gold);color:var(--mc-suelo);padding:1rem 1.25rem;border:2px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-blue);display:flex;flex-direction:column;gap:.35rem;font-size:.7rem;letter-spacing:.15em}
+  .mc-map-frame{position:relative;border-top:3px solid var(--mc-ink);border-bottom:3px solid var(--mc-ink);background:var(--mc-suelo)}
   .mc-map-icon{position:absolute;width:60px;height:60px;z-index:5;pointer-events:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.45));opacity:.85}
   .mc-map-icon--tl{top:16px;left:16px}
   .mc-map-icon--br{bottom:16px;right:16px}
   .mc-map-wrap{width:100%;height:clamp(420px,60vh,600px);overflow:hidden}
   .mc-map-wrap>*{width:100%;height:100%}
-  .mc-dif-section{background:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-dif-section{background:var(--mc-suelo);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
   .mc-dif-chapter{color:var(--mc-gold)}
   .mc-dif-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
   .mc-dif-title em{color:var(--mc-gold)}
@@ -600,12 +653,14 @@ const jsonLdSchemas = [
   .mc-dif__item{padding:1.75rem 1.5rem;border-bottom:1px solid var(--mc-ink);display:flex;flex-direction:column;gap:.65rem;transition:background .2s}
   @media(min-width:768px){.mc-dif__item:nth-child(odd){border-right:1px solid var(--mc-ink)}.mc-dif__item:nth-last-child(-n+2){border-bottom:none}}
   @media(max-width:767px){.mc-dif__item:last-child{border-bottom:none}}
-  .mc-dif__item--0{background:var(--mc-paper-2)}.mc-dif__item--1{background:var(--mc-paper)}.mc-dif__item--2{background:var(--mc-stone)}.mc-dif__item--3{background:var(--mc-paper)}
-  .mc-dif__item:hover{background:var(--mc-gold)}
+  .mc-dif__item--0{background:var(--mc-paper-2)}.mc-dif__item--1{background:var(--mc-paper)}.mc-dif__item--2{background:var(--mc-paper-2)}.mc-dif__item--3{background:var(--mc-paper)}
+  /* El oro es un fondo claro: el texto heredado se invierte entero. */
+  .mc-dif__item:hover{background:var(--mc-gold);color:var(--mc-suelo)}
+  .mc-dif__item:hover .mc-dif__num,.mc-dif__item:hover .mc-dif__t,.mc-dif__item:hover .mc-dif__desc{color:var(--mc-suelo)}
   .mc-dif__num{font-size:.85rem;color:var(--mc-gold);font-weight:800;letter-spacing:.15em}
-  .mc-dif__t{font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.05;letter-spacing:-.025em;color:var(--mc-ink);margin:0}
-  .mc-dif__desc{font-size:.92rem;line-height:1.5;color:var(--brutal-text-secondary);margin:0}
-  .mc-proc-section{background:var(--mc-ink);color:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
+  .mc-dif__t{font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.05;letter-spacing:-.025em;color:var(--mc-tinta);margin:0}
+  .mc-dif__desc{font-size:.92rem;line-height:1.5;color:var(--mc-tenue);margin:0}
+  .mc-proc-section{background:var(--mc-hondo);color:var(--mc-tinta);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink);position:relative;overflow:hidden}
   .mc-proc-section::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.08) 1.2px,transparent 1.2px);background-size:22px 22px;pointer-events:none}
   .mc-proc-section>*{position:relative}
   .mc-proc-chapter{color:var(--mc-gold)}
@@ -614,39 +669,39 @@ const jsonLdSchemas = [
   .mc-proc{list-style:none;padding:0;margin:2rem 0 0;display:grid;gap:1.25rem}
   @media(min-width:768px){.mc-proc{grid-template-columns:repeat(2,1fr)}}
   @media(min-width:1024px){.mc-proc{grid-template-columns:repeat(4,1fr)}}
-  .mc-proc__step{background:rgba(250,247,240,0.05);border:2px solid var(--mc-paper);padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:.65rem;transition:background .25s,transform .25s}
+  .mc-proc__step{background:rgba(250,247,240,0.05);border:2px solid rgba(230,237,242,0.28);padding:1.5rem 1.25rem;display:flex;flex-direction:column;gap:.65rem;transition:background .25s,transform .25s}
   .mc-proc__step:hover{background:rgba(196,164,74,0.12);transform:translateY(-3px)}
   .mc-proc__head{display:flex;justify-content:space-between;padding-bottom:.35rem;border-bottom:1.5px dashed rgba(250,247,240,0.25)}
   .mc-proc__num{font-size:1.5rem;font-weight:800;color:var(--mc-gold);line-height:1}
   .mc-proc__eta{font-size:.6rem;letter-spacing:.15em;color:var(--mc-gold)}
-  .mc-proc__t{font-size:clamp(1.1rem,1.8vw,1.3rem);line-height:1.05;letter-spacing:-.02em;color:var(--mc-paper);margin:.25rem 0 0}
+  .mc-proc__t{font-size:clamp(1.1rem,1.8vw,1.3rem);line-height:1.05;letter-spacing:-.02em;color:var(--mc-tinta);margin:.25rem 0 0}
   .mc-proc__body{font-size:.85rem;line-height:1.45;color:rgba(250,247,240,0.75);flex:1}
   .mc-proc__foot{font-size:.58rem;letter-spacing:.2em;color:var(--mc-gold);font-weight:800;padding-top:.5rem;border-top:1.5px solid rgba(250,247,240,0.25)}
   .mc-quote-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
   .mc-quote-chapter{color:var(--mc-blue)}
   .mc-quote-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
   .mc-quote-title em{color:var(--mc-gold)}
-  .mc-pull{position:relative;background:var(--mc-stone);border:3px solid var(--mc-ink);box-shadow:var(--mc-shadow);padding:3rem 2rem 2rem;margin:2rem 0}
+  .mc-pull{position:relative;background:var(--mc-paper);border:3px solid var(--mc-ink);box-shadow:var(--mc-shadow);padding:3rem 2rem 2rem;margin:2rem 0}
   .mc-pull__seal{position:absolute;top:-30px;right:30px;width:90px;aspect-ratio:1;transform:rotate(-10deg);filter:drop-shadow(0 4px 8px rgba(196,164,74,0.4))}
-  .mc-pull__q{font-family:var(--font-display);font-style:italic;font-size:clamp(1.35rem,2.4vw,2rem);line-height:1.3;margin:0 0 1.5rem;color:var(--mc-ink);max-width:56ch}
+  .mc-pull__q{font-family:var(--font-display);font-style:italic;font-size:clamp(1.35rem,2.4vw,2rem);line-height:1.3;margin:0 0 1.5rem;color:var(--mc-tinta);max-width:56ch}
   .mc-pull__cap{display:flex;align-items:center;gap:1rem;padding-top:1.25rem;border-top:2px dashed var(--mc-ink)}
-  .mc-pull__avatar{width:48px;height:48px;background:var(--mc-gold);color:var(--mc-ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.35rem;font-weight:800;border-radius:50%}
+  .mc-pull__avatar{width:48px;height:48px;background:var(--mc-gold);color:var(--mc-suelo);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.35rem;font-weight:800;border-radius:50%}
   .mc-pull__cap div{display:flex;flex-direction:column}
-  .mc-pull__name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--mc-ink)}
+  .mc-pull__name{font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--mc-tinta)}
   .mc-pull__role{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.12em;opacity:.65;text-transform:uppercase}
   .mc-quotes{list-style:none;padding:0;margin:0;display:grid;gap:1.5rem}
   @media(min-width:768px){.mc-quotes{grid-template-columns:repeat(2,1fr)}}
   .mc-quote{position:relative;background:var(--mc-paper);border:2px solid var(--mc-ink);box-shadow:5px 5px 0 var(--mc-ink);padding:1.75rem 1.5rem 1.25rem;display:flex;flex-direction:column;gap:1rem;transition:transform .25s}
   .mc-quote:hover{transform:translateY(-3px)}
-  .mc-quote--0{background:var(--mc-paper)}.mc-quote--1{background:var(--mc-stone)}
+  .mc-quote--0{background:var(--mc-paper)}.mc-quote--1{background:var(--mc-paper-2)}
   .mc-quote__mark{position:absolute;top:-8px;left:14px;font-family:serif;font-size:4rem;line-height:1;color:var(--mc-gold);opacity:.45}
-  .mc-quote p{font-size:.92rem;line-height:1.5;color:var(--mc-ink);flex:1;margin:0}
+  .mc-quote p{font-size:.92rem;line-height:1.5;color:var(--mc-tinta);flex:1;margin:0}
   .mc-quote footer{display:flex;align-items:center;gap:.75rem;padding-top:.85rem;border-top:1.5px dashed var(--mc-ink)}
-  .mc-quote__avatar{width:36px;height:36px;background:var(--mc-blue);color:var(--mc-paper);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;border-radius:50%;flex-shrink:0}
+  .mc-quote__avatar{width:36px;height:36px;background:var(--mc-blue);color:var(--mc-suelo);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;border-radius:50%;flex-shrink:0}
   .mc-quote footer div{display:flex;flex-direction:column}
   .mc-quote__name{font-family:var(--font-display);font-weight:700;font-size:.9rem}
   .mc-quote__role{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;opacity:.65;text-transform:uppercase}
-  .mc-faq-section{background:var(--mc-paper);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
+  .mc-faq-section{background:var(--mc-suelo);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
   .mc-faq-chapter{color:var(--mc-blue)}
   .mc-faq-title{font-size:clamp(2.25rem,5vw,3.75rem);line-height:.95;letter-spacing:-.035em;margin:1rem 0}
   .mc-faq-title em{color:var(--mc-gold)}
@@ -657,10 +712,10 @@ const jsonLdSchemas = [
   .mc-faq__sum{display:grid;grid-template-columns:60px 1fr 40px;gap:1rem;align-items:center;padding:1.5rem 0;transition:padding .2s,background .2s}
   .mc-faq__sum:hover{padding-inline:1rem;background:var(--mc-paper-2)}
   .mc-faq__num{font-size:1rem;font-weight:800;color:var(--mc-blue);letter-spacing:.1em}
-  .mc-faq__q{font-family:var(--font-display);font-size:clamp(1.05rem,1.8vw,1.25rem);line-height:1.3;letter-spacing:-.015em;color:var(--mc-ink);font-weight:700}
-  .mc-faq__toggle{width:40px;height:40px;border:2px solid var(--mc-ink);background:var(--mc-paper);color:var(--mc-ink);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .2s,color .2s}
-  .mc-faq__det[open] .mc-faq__toggle{transform:rotate(180deg);background:var(--mc-gold);color:var(--mc-ink)}
-  .mc-faq__ans{padding:0 0 1.5rem 76px;color:var(--brutal-text-secondary);font-size:.98rem;line-height:1.55;max-width:70ch}
+  .mc-faq__q{font-family:var(--font-display);font-size:clamp(1.05rem,1.8vw,1.25rem);line-height:1.3;letter-spacing:-.015em;color:var(--mc-tinta);font-weight:700}
+  .mc-faq__toggle{width:40px;height:40px;border:2px solid var(--mc-ink);background:var(--mc-paper);color:var(--mc-tinta);display:flex;align-items:center;justify-content:center;transition:transform .3s,background .2s,color .2s}
+  .mc-faq__det[open] .mc-faq__toggle{transform:rotate(180deg);background:var(--mc-gold);color:var(--mc-suelo)}
+  .mc-faq__ans{padding:0 0 1.5rem 76px;color:var(--mc-tenue);font-size:.98rem;line-height:1.55;max-width:70ch}
   @media(max-width:640px){.mc-faq__sum{grid-template-columns:40px 1fr 32px;gap:.5rem}.mc-faq__ans{padding-left:48px}}
   .mc-vecinos-section{background:var(--mc-paper-2);padding:5rem 1.5rem;border-bottom:3px solid var(--mc-ink)}
   .mc-vecinos-chapter{color:var(--mc-blue)}
@@ -669,37 +724,37 @@ const jsonLdSchemas = [
   .mc-vecinos{list-style:none;padding:0;margin:2rem 0 0;display:grid;gap:0;grid-template-columns:1fr;border:2px solid var(--mc-ink);background:var(--mc-ink)}
   @media(min-width:640px){.mc-vecinos{grid-template-columns:repeat(2,1fr);gap:2px}}
   @media(min-width:1024px){.mc-vecinos{grid-template-columns:repeat(4,1fr)}}
-  .mc-vecino{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;gap:.35rem;padding:1.5rem;background:var(--mc-paper);color:var(--mc-ink);text-decoration:none;min-height:160px;transition:background .25s,color .25s;grid-template-areas:'n arrow' 'name name' 'sub sub'}
+  .mc-vecino{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;gap:.35rem;padding:1.5rem;background:var(--mc-paper);color:var(--mc-tinta);text-decoration:none;min-height:160px;transition:background .25s,color .25s;grid-template-areas:'n arrow' 'name name' 'sub sub'}
   .mc-vecino__n{grid-area:n;font-size:.58rem;letter-spacing:.2em;opacity:.55}
   .mc-vecino__name{grid-area:name;font-size:clamp(1.4rem,2.5vw,1.8rem);line-height:.95;letter-spacing:-.025em}
   .mc-vecino__sub{grid-area:sub;font-size:.58rem;letter-spacing:.15em;opacity:.55;text-transform:uppercase}
   .mc-vecino__arrow{grid-area:arrow;align-self:start;font-family:var(--font-mono);color:var(--mc-gold);font-size:1.3rem;transition:transform .25s}
-  .mc-vecino:hover{background:var(--mc-gold);color:var(--mc-ink)}
+  .mc-vecino:hover{background:var(--mc-gold);color:var(--mc-suelo)}
   .mc-vecino:hover .mc-vecino__sub,.mc-vecino:hover .mc-vecino__n{opacity:.85}
-  .mc-vecino:hover .mc-vecino__arrow{color:var(--mc-ink);transform:translateX(4px)}
-  .mc-vecino--1:hover{background:var(--mc-blue);color:var(--mc-paper)}
-  .mc-vecino--2:hover{background:var(--mc-stone);color:var(--mc-ink)}
-  .mc-vecino--3:hover{background:var(--mc-accent);color:var(--mc-paper)}
-  .mc-final{background:#1A1A18;color:var(--mc-paper);padding:6rem 1.5rem 0;position:relative;overflow:hidden}
+  .mc-vecino:hover .mc-vecino__arrow{color:var(--mc-suelo);transform:translateX(4px)}
+  .mc-vecino--1:hover{background:var(--mc-blue);color:var(--mc-suelo)}
+  .mc-vecino--2:hover{background:var(--mc-stone);color:var(--mc-suelo)}
+  .mc-vecino--3:hover{background:var(--mc-accent);color:var(--mc-suelo)}
+  .mc-final{background:#1A1A18;color:var(--mc-tinta);padding:6rem 1.5rem 0;position:relative;overflow:hidden}
   .mc-final::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(196,164,74,0.06) 1.2px,transparent 1.2px);background-size:24px 24px;pointer-events:none}
   .mc-final>*{position:relative}
   .mc-final__grid{display:grid;grid-template-columns:1fr;gap:3rem;align-items:center;padding-bottom:4rem}
   @media(min-width:1024px){.mc-final__grid{grid-template-columns:1.3fr 1fr;gap:4rem}}
   .mc-final-chapter{color:var(--mc-gold)}
-  .mc-final__title{font-size:clamp(2.5rem,7vw,5.5rem);line-height:.9;letter-spacing:-.045em;color:var(--mc-paper);margin:1rem 0}
+  .mc-final__title{font-size:clamp(2.5rem,7vw,5.5rem);line-height:.9;letter-spacing:-.045em;color:var(--mc-tinta);margin:1rem 0}
   .mc-final__title em{color:var(--mc-gold);font-style:italic;display:block}
   .mc-final__lead{font-size:1.05rem;line-height:1.55;color:rgba(250,247,240,0.75);max-width:52ch}
   .mc-final__lead strong{color:var(--mc-gold)}
   .mc-final__cta{display:flex;flex-wrap:wrap;gap:1rem;margin:1.75rem 0 1.5rem}
   .mc-final__btn{display:inline-flex;align-items:center;gap:.75rem;padding:1.15rem 1.85rem;font-family:var(--font-display);font-weight:800;font-size:1.05rem;border:2.5px solid;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
-  .mc-final__btn--primary{background:var(--mc-gold);color:var(--mc-ink);border-color:var(--mc-gold);box-shadow:6px 6px 0 var(--mc-blue)}
-  .mc-final__btn--primary:hover{background:var(--mc-blue);color:var(--mc-paper);border-color:var(--mc-blue);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-gold)}
-  .mc-final__btn--ghost{background:transparent;color:var(--mc-paper);border-color:var(--mc-paper);box-shadow:6px 6px 0 var(--mc-paper)}
-  .mc-final__btn--ghost:hover{background:var(--mc-paper);color:var(--mc-ink);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-paper)}
+  .mc-final__btn--primary{background:var(--mc-gold);color:var(--mc-suelo);border-color:var(--mc-gold);box-shadow:6px 6px 0 var(--mc-blue)}
+  .mc-final__btn--primary:hover{background:var(--mc-blue);color:var(--mc-suelo);border-color:var(--mc-blue);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-gold)}
+  .mc-final__btn--ghost{background:transparent;color:var(--mc-tinta);border-color:var(--mc-tinta);box-shadow:6px 6px 0 var(--mc-tinta)}
+  .mc-final__btn--ghost:hover{background:var(--mc-tinta);color:var(--mc-suelo);transform:translate(-3px,-3px);box-shadow:11px 11px 0 var(--mc-tinta)}
   .mc-final__trust{display:flex;flex-wrap:wrap;gap:1rem 1.75rem;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.15em;color:rgba(250,247,240,0.55);text-transform:uppercase;margin-top:1.5rem}
   .mc-final__trust .mc-pulse{background:var(--mc-gold);margin:0 .25rem 0 0;box-shadow:0 0 0 0 rgba(196,164,74,0.55)}
   .mc-final__r{display:flex;align-items:center;justify-content:center;max-width:360px;margin:0 auto}
   .mc-final-svg{display:block;width:100%;height:100%;filter:drop-shadow(0 12px 36px rgba(196,164,74,0.25))}
-  .mc-final__marquee{background:var(--mc-gold);color:var(--mc-ink);overflow:hidden;padding:.85rem 0;border-top:3px solid var(--mc-ink);margin:0 -1.5rem}
+  .mc-final__marquee{background:var(--mc-gold);color:var(--mc-suelo);overflow:hidden;padding:.85rem 0;border-top:3px solid var(--mc-ink);margin:0 -1.5rem}
   .mc-final__marquee-track{display:flex;gap:3rem;width:max-content;animation:mc-marquee 36s linear infinite;font-family:var(--font-mono);font-size:.85rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
 </style>

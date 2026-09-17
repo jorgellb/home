@@ -1,0 +1,49 @@
+---
+/* Marco para las ilustraciones hechas a mano. Sobre fondo oscuro conservan su
+   papel claro original: nunca se les cambia el color, son parte de la
+   identidad de cada pueblo. */
+interface Props {
+  pie?: string;
+  nota?: string;
+  class?: string;
+}
+
+const { pie, nota, class: clase } = Astro.props;
+---
+
+<figure class:list={['cdm-postal', clase]}>
+  <div class="cdm-postal__lamina"><slot /></div>
+  {(pie || nota) && (
+    <figcaption class="cdm-postal__pie">
+      {pie && <span>{pie}</span>}
+      {nota && <span class="cdm-postal__nota">{nota}</span>}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .cdm-postal {
+    margin: 0;
+    background: var(--color-cdm-panel);
+    border: 1px solid var(--color-cdm-regla-2);
+  }
+  .cdm-postal__lamina {
+    /* Papel de la ilustración: los SVG a mano se dibujaron sobre este tono. */
+    background: #f5f1ea;
+    padding: 0.5rem;
+  }
+  .cdm-postal__lamina :global(svg),
+  .cdm-postal__lamina :global(img) { display: block; width: 100%; height: auto; }
+  .cdm-postal__pie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.5rem 0.7rem;
+    border-top: 1px solid var(--color-cdm-regla);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-cdm-texto);
+  }
+  .cdm-postal__nota { color: var(--color-cdm-tenue); }
+</style>

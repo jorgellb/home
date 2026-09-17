@@ -3,7 +3,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
+import IndiceLateral from '../../components/cdm/IndiceLateral.astro';
+import type { SeccionIndice } from '../../components/cdm/tipos';
 import { getPueblosByComarca } from '../../data/pueblos-almeria';
+
+/* Raíl lateral con las secciones reales de la página (spec §6.3.2). La banda
+   de hitos no entra: es una tira de datos, no una sección navegable. */
+const secciones: SeccionIndice[] = [
+  { id: 'iconos',      etiqueta: 'Señas de identidad' },
+  { id: 'poligono',    etiqueta: 'El polígono' },
+  { id: 'frio',        etiqueta: 'Cadena de frío' },
+  { id: 'sectores',    etiqueta: 'Sectores' },
+  { id: 'mapa',        etiqueta: 'Situación' },
+  { id: 'porque',      etiqueta: 'Por qué aquí' },
+  { id: 'metodo',      etiqueta: 'Proceso' },
+  { id: 'testimonios', etiqueta: 'Testimonios' },
+  { id: 'faq',         etiqueta: 'Preguntas' },
+  { id: 'comarca',     etiqueta: 'El Poniente' },
+  { id: 'empezar',     etiqueta: 'Empezar' },
+];
 
 const pueblosPoniente = getPueblosByComarca('Poniente Almeriense').filter(p => p.slug !== 'la-mojonera');
 
@@ -89,6 +107,8 @@ const jsonLdSchemas = [
   <Header />
 
   <main id="main-content" class="mj">
+
+    <IndiceLateral secciones={secciones} coordenadas="36.805° N · 2.712° W · 9.000 hab" class="mj-rail" />
 
     {/* ════════════════════════════════════════════════ */}
     {/* HERO — EL TALLER DEL MAR DE PLÁSTICO              */}
@@ -269,6 +289,7 @@ const jsonLdSchemas = [
                   alt="La Mojonera — invernaderos y polígono agroindustrial del Poniente"
                   width="640" height="320"
                   loading="eager"
+                  fetchpriority="low"
                   decoding="async"
                   class="mj-postcard__img"
                 />
@@ -313,7 +334,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* ICONOS — 4 SEÑAS DE IDENTIDAD                     */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-ico-section">
+    <section class="mj-ico-section" id="iconos">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
@@ -345,12 +366,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* POLÍGONO — FLAGSHIP SECTION                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-pol-section">
+    <section class="mj-pol-section" id="poligono">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
           <span class="text-meta mj-chapter" style="color:var(--mj-amber)">Cap. 03 / El polígono</span>
-          <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-paper)">
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-tinta)">
             Tu catálogo es
             <em class="heading-editorial">tu comercial</em>
             <span class="heading-display-block">que no duerme.</span>
@@ -503,7 +524,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* CADENA DE FRÍO — EXPORTACIÓN                      */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-frio-section">
+    <section class="mj-frio-section" id="frio">
       <div class="container-brutal">
 
         <div class="mj-frio__grid">
@@ -663,7 +684,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* MAPA                                              */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-map-section">
+    <section class="mj-map-section" id="mapa">
       <div class="container-brutal">
         <div class="brutal-section-head">
           <span class="text-meta mj-chapter">Cap. 06 / Situación</span>
@@ -688,7 +709,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* DIFERENCIALES — 4 RAZONES                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-dif-section">
+    <section class="mj-dif-section" id="porque">
       <div class="container-brutal">
 
         <span class="text-meta mj-dif-chapter">Cap. 07 / Diferencial</span>
@@ -714,12 +735,12 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PROCESO — 4 PASOS                                 */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-proc-section">
+    <section class="mj-proc-section" id="metodo">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
           <span class="text-meta mj-chapter" style="color:var(--mj-amber)">Cap. 08 / Proceso</span>
-          <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-paper)">
+          <h2 class="heading-display brutal-section-head__title" style="color:var(--mj-tinta)">
             De la nave
             <em class="heading-editorial">al</em>
             <span class="heading-display-block">catálogo indexado.</span>
@@ -748,7 +769,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* TESTIMONIOS                                       */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-tst-section">
+    <section class="mj-tst-section" id="testimonios">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
@@ -779,7 +800,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* FAQ — 8 PREGUNTAS                                 */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-faq-section">
+    <section class="mj-faq-section" id="faq">
       <div class="container-brutal">
 
         <div class="brutal-section-head">
@@ -808,7 +829,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* PUEBLOS VECINOS                                   */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-vec-section">
+    <section class="mj-vec-section" id="comarca">
       <div class="container-brutal">
 
         <span class="text-meta mj-chapter">Cap. 11 / Comarca</span>
@@ -837,7 +858,7 @@ const jsonLdSchemas = [
     {/* ════════════════════════════════════════════════ */}
     {/* CTA FINAL                                         */}
     {/* ════════════════════════════════════════════════ */}
-    <section class="mj-final">
+    <section class="mj-final" id="empezar">
       <div class="container-brutal">
         <div class="mj-final__box">
 
@@ -878,18 +899,67 @@ const jsonLdSchemas = [
   /* LA MOJONERA DESIGN SYSTEM — plástico y acero     */
   /* ═══════════════════════════════════════════════ */
 
-  :root {
-    --mj-paper:   #F2F1EC;
-    --mj-paper-2: #E3E0D5;
-    --mj-ink:     #1A1816;
-    --mj-green:   #2F7D4F;
-    --mj-green-2: #1B4F31;
-    --mj-steel:   #5C6B77;
-    --mj-deep:    #22282C;
-    --mj-amber:   #E0A32E;
+  /* Fase 2 · consola. La paleta estaba en :root, que Astro no scopea: pasa
+     a .mj, el <main> de esta página. paper hacía de fondo y de tinta clara a
+     la vez, e ink de borde, sombra, fondo y texto: cada uno se reparte. El
+     verde y el acero no llegaban a 4,5:1 sobre suelo y suben; green-2, que
+     estaba declarado y sin usar en CSS, recoge el fondo a sangre que antes
+     hacía el verde claro. Las ilustraciones ya traen sus hex literales. */
+  .mj {
+    --mj-paper:   var(--color-cdm-panel);
+    --mj-paper-2: var(--color-cdm-panel-2);
+    --mj-suelo:   var(--color-cdm-suelo);
+    --mj-tinta:   var(--color-cdm-texto);
+    --mj-tenue:   var(--color-cdm-tenue);
+    --mj-ink:     var(--color-cdm-regla-2);
+    --mj-green:   #4FB07A;       /* Verde agro, aclarado para leer */
+    --mj-green-2: #1B4F31;       /* Verde hondo: solo fondo */
+    --mj-steel:   #93A6B4;       /* Acero, aclarado para leer */
+    --mj-deep:    #22282C;       /* Nave industrial: solo fondo */
+    --mj-amber:   #E8B04B;
     --mj-cold:    #4C8FB8;
     --mj-plastic: #C7D6D2;
-    --mj-shadow:  8px 8px 0 var(--mj-ink);
+    --mj-shadow:  8px 8px 0 var(--color-cdm-regla-2);
+
+    background: var(--mj-suelo);
+    color: var(--mj-tinta);
+  }
+
+  /* Globales heredados, que venían en tinta oscura sobre papel. */
+  .mj :global(.brutal-section-head__title) { color: var(--mj-tinta); }
+  .mj :global(.brutal-section-head__title em) { color: var(--mj-amber); }
+  .mj :global(.brutal-section-head__lead) { color: var(--mj-tenue); }
+  .mj :global(:where(.text-meta)) { color: var(--mj-tenue); } /* :where: sin especificidad, para que el color propio de cada capítulo mande */
+  .mj :global(.divider-brutal) { background: var(--color-cdm-regla); }
+
+  .mj section[id] { scroll-margin-top: 96px; }
+
+  /* Raíl del índice: banda izquierda a partir de 1280 px, fuera de la caja
+     de contenido; por debajo, solo la barra de progreso. */
+  @media (min-width: 1280px) {
+    .mj :global(.cdm-indice) {
+      position: fixed;
+      top: 96px;
+      left: 0;
+      width: 208px;
+      padding-inline: clamp(1rem, 2vw, 1.75rem) 1rem;
+      z-index: 30;
+    }
+    .mj :global(.container-brutal) { padding-left: calc(var(--container-gutter) + 208px); }
+  }
+  @media (max-width: 1279px) {
+    .mj :global(.cdm-indice) {
+      display: block;
+      position: sticky;
+      top: 64px;
+      z-index: 40;
+      background: var(--mj-suelo);
+      border-bottom: 1px solid var(--color-cdm-regla);
+    }
+    .mj :global(.cdm-indice__titulo),
+    .mj :global(.cdm-indice__lista),
+    .mj :global(.cdm-indice__coord) { display: none; }
+    .mj :global(.cdm-indice__progreso) { height: 3px; background: transparent; }
   }
 
   .mj-pulse {
@@ -915,7 +985,7 @@ const jsonLdSchemas = [
     background:
       radial-gradient(circle at 72% 28%, rgba(47,125,79,0.10), transparent 52%),
       radial-gradient(circle at 22% 78%, rgba(224,163,46,0.10), transparent 52%),
-      var(--mj-paper);
+      var(--mj-suelo);
     border-bottom: 3px solid var(--mj-ink);
     position: relative;
     overflow: hidden;
@@ -938,7 +1008,8 @@ const jsonLdSchemas = [
   .mj-hero__title { font-size: clamp(2.5rem, 6.2vw, 4.8rem); line-height: .95; margin: 0 0 1.5rem; }
   .mj-hero__title em { display: block; color: var(--mj-green); }
   .mj-hero__title-stamp { display: block; }
-  .mj-hero__lead { font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; max-width: 46ch; margin-bottom: 2rem; }
+  .mj-hero__lead { font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; max-width: 46ch; margin-bottom: 2rem; color: var(--mj-tenue); }
+  .mj-hero__lead strong { color: var(--mj-tinta); }
   .mj-hero__lead em { color: var(--mj-green); font-style: italic; }
   .mj-hero__cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.5rem; }
 
@@ -957,7 +1028,7 @@ const jsonLdSchemas = [
   .mj-kpi--green .mj-kpi__v { color: var(--mj-green); }
   .mj-kpi--amber .mj-kpi__v { color: var(--mj-amber); }
   .mj-kpi--cold  .mj-kpi__v { color: var(--mj-cold); }
-  .mj-kpi--ink   .mj-kpi__v { color: var(--mj-ink); }
+  .mj-kpi--ink   .mj-kpi__v { color: var(--mj-tinta); }
 
   /* ── POSTAL ── */
   .mj-postcard {
@@ -996,20 +1067,20 @@ const jsonLdSchemas = [
   }
   .mj-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--mj-ink); }
   .mj-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--mj-ink); }
-  .mj-btn--primary { background: var(--mj-green); color: var(--mj-paper); }
-  .mj-btn--ghost { background: transparent; color: var(--mj-ink); }
-  .mj-btn--amber { background: var(--mj-amber); color: var(--mj-ink); }
+  .mj-btn--primary { background: var(--mj-green); color: var(--mj-suelo); }
+  .mj-btn--ghost { background: transparent; color: var(--mj-tinta); }
+  .mj-btn--amber { background: var(--mj-amber); color: var(--mj-suelo); }
   .mj-btn--lg { padding: 1.05rem 1.9rem; font-size: 1.02rem; }
 
   /* ── HITOS ── */
-  .mj-hitos-section { background: var(--mj-ink); padding: 1.6rem 0; }
+  .mj-hitos-section { background: var(--mj-deep); padding: 1.6rem 0; }
   .mj-hitos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem 1.6rem; list-style: none; padding: 0; margin: 0; }
   .mj-hito { display: flex; flex-direction: column; gap: .15rem; }
   .mj-hito__k { font-size: .62rem; letter-spacing: .12em; color: var(--mj-amber); }
-  .mj-hito__v { font-size: .84rem; color: var(--mj-paper); }
+  .mj-hito__v { font-size: .84rem; color: var(--mj-tinta); }
 
   /* ── ICONOS ── */
-  .mj-ico-section { background: var(--mj-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-ico-section { background: var(--mj-suelo); padding: 4.5rem 0; border-bottom: 3px solid var(--mj-ink); }
   .mj-chapter { color: var(--mj-amber); display: block; margin-bottom: .7rem; }
   .mj-ico { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
   @media (min-width: 768px) { .mj-ico { grid-template-columns: repeat(2, 1fr); } }
@@ -1028,15 +1099,15 @@ const jsonLdSchemas = [
     display: grid; place-items: center;
     font-size: 1.2rem; font-weight: 800;
     border: 2px solid var(--mj-ink);
-    color: var(--mj-paper);
+    color: var(--mj-suelo);
   }
   .mj-ico__item--green   .mj-ico__code { background: var(--mj-green); }
   .mj-ico__item--steel   .mj-ico__code { background: var(--mj-steel); }
   .mj-ico__item--cold    .mj-ico__code { background: var(--mj-cold); }
-  .mj-ico__item--plastic .mj-ico__code { background: var(--mj-plastic); color: var(--mj-ink); }
+  .mj-ico__item--plastic .mj-ico__code { background: var(--mj-plastic); color: var(--mj-suelo); }
   .mj-ico__sub { font-size: .6rem; color: var(--mj-green); }
   .mj-ico__name { font-size: 1.35rem; margin: .2rem 0 .5rem; line-height: 1.1; }
-  .mj-ico__desc { font-size: .9rem; line-height: 1.6; margin: 0 0 .7rem; }
+  .mj-ico__desc { font-size: .9rem; line-height: 1.6; margin: 0 0 .7rem; color: var(--mj-tenue); }
   .mj-ico__dato { font-size: .68rem; color: var(--mj-amber); font-weight: 700; }
 
   /* ── POLÍGONO ── */
@@ -1045,12 +1116,12 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .mj-pol__grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 3.5rem; } }
   .mj-pol__svg-wrap { border: 3px solid var(--mj-ink); box-shadow: var(--mj-shadow); overflow: hidden; aspect-ratio: 600 / 340; background: var(--mj-deep); }
   .mj-pol__lead { font-size: 1.15rem; line-height: 1.6; color: var(--mj-amber); margin: 0 0 1.1rem; font-weight: 600; }
-  .mj-pol__lead em { font-style: italic; color: var(--mj-paper); }
+  .mj-pol__lead em { font-style: italic; color: var(--mj-tinta); }
   .mj-pol__text { font-size: .95rem; line-height: 1.7; color: rgba(242,241,236,0.82); margin: 0 0 1.3rem; }
   .mj-pol__list { list-style: none; padding: 0; margin: 0 0 1.8rem; display: grid; gap: .6rem; }
   .mj-pol__list li { font-size: .9rem; line-height: 1.55; color: rgba(242,241,236,0.9); padding-left: 1.4rem; position: relative; }
   .mj-pol__list li::before { content: '▸'; position: absolute; left: 0; color: var(--mj-amber); font-weight: 800; }
-  .mj-pol__list strong { color: var(--mj-paper); }
+  .mj-pol__list strong { color: var(--mj-tinta); }
 
   /* ── CADENA DE FRÍO ── */
   .mj-frio-section { background: var(--mj-paper-2); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
@@ -1058,13 +1129,14 @@ const jsonLdSchemas = [
   @media (min-width: 1024px) { .mj-frio__grid { grid-template-columns: .9fr 1.1fr; align-items: center; gap: 3.5rem; } }
   .mj-frio__title { font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1; margin: 0 0 1.2rem; }
   .mj-frio__title em { display: block; color: var(--mj-cold); }
-  .mj-frio__text { font-size: .96rem; line-height: 1.7; margin: 0 0 1rem; }
+  .mj-frio__text { font-size: .96rem; line-height: 1.7; margin: 0 0 1rem; color: var(--mj-tenue); }
+  .mj-frio__text strong { color: var(--mj-tinta); }
   .mj-frio__tags { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: 1.4rem 0 0; }
   .mj-frio__tags li { font-size: .66rem; padding: .35rem .7rem; border: 2px solid var(--mj-ink); background: var(--mj-paper); letter-spacing: .05em; }
   .mj-frio__svg-wrap { border: 3px solid var(--mj-ink); box-shadow: var(--mj-shadow); overflow: hidden; aspect-ratio: 560 / 300; }
 
   /* ── SECTORES ── */
-  .mj-svc-section { background: var(--mj-paper); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); scroll-margin-top: 5rem; }
+  .mj-svc-section { background: var(--mj-suelo); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); scroll-margin-top: 5rem; }
   .mj-svc { display: grid; grid-template-columns: 1fr; gap: 1.4rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
   @media (min-width: 700px)  { .mj-svc { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 1100px) { .mj-svc { grid-template-columns: repeat(3, 1fr); } }
@@ -1078,12 +1150,12 @@ const jsonLdSchemas = [
   }
   .mj-svc__item:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--mj-ink); }
   .mj-svc__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: .9rem; }
-  .mj-svc__num { font-size: 2rem; font-weight: 800; color: var(--mj-paper-2); line-height: 1; }
+  .mj-svc__num { font-size: 2rem; font-weight: 800; color: var(--color-cdm-tenue); line-height: 1; }
   .mj-svc__stat { text-align: right; display: flex; flex-direction: column; }
   .mj-svc__stat b { font-size: 1.15rem; color: var(--mj-green); line-height: 1; }
   .mj-svc__stat small { font-size: .6rem; text-transform: uppercase; letter-spacing: .06em; opacity: .7; }
   .mj-svc__name { font-size: 1.2rem; line-height: 1.15; margin: 0 0 .6rem; }
-  .mj-svc__desc { font-size: .88rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; }
+  .mj-svc__desc { font-size: .88rem; line-height: 1.6; margin: 0 0 1rem; flex: 1; color: var(--mj-tenue); }
   .mj-svc__tags { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 0; }
   .mj-svc__tags li { font-size: .6rem; padding: .28rem .55rem; background: var(--mj-paper-2); border: 1px solid var(--mj-ink); }
 
@@ -1092,7 +1164,7 @@ const jsonLdSchemas = [
   .mj-map-wrap { margin-top: 2.5rem; }
 
   /* ── DIFERENCIALES ── */
-  .mj-dif-section { background: var(--mj-paper); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-dif-section { background: var(--mj-suelo); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
   .mj-dif-chapter { color: var(--mj-amber); display: block; margin-bottom: .7rem; }
   .mj-dif-title { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: .98; margin: 0 0 2.5rem; }
   .mj-dif-title em { display: block; color: var(--mj-green); }
@@ -1104,10 +1176,10 @@ const jsonLdSchemas = [
   .mj-dif__item--3 { border-left-color: var(--mj-steel); }
   .mj-dif__num { font-size: .68rem; color: var(--mj-amber); font-weight: 800; letter-spacing: .1em; }
   .mj-dif__t { font-size: 1.15rem; margin: .3rem 0 .5rem; line-height: 1.2; }
-  .mj-dif__desc { font-size: .9rem; line-height: 1.65; margin: 0; }
+  .mj-dif__desc { font-size: .9rem; line-height: 1.65; margin: 0; color: var(--mj-tenue); }
 
   /* ── PROCESO ── */
-  .mj-proc-section { background: var(--mj-green); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-proc-section { background: var(--mj-green-2); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
   .mj-proc { list-style: none; padding: 0; margin: 2.5rem 0 0; display: grid; gap: 1.2rem; }
   @media (min-width: 900px) { .mj-proc { grid-template-columns: repeat(2, 1fr); } }
   .mj-proc__step {
@@ -1121,11 +1193,11 @@ const jsonLdSchemas = [
   .mj-proc__head { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; flex-wrap: wrap; }
   .mj-proc__t { font-size: 1.15rem; margin: 0; line-height: 1.2; }
   .mj-proc__eta { font-size: .64rem; color: var(--mj-green); background: var(--mj-paper-2); padding: .2rem .5rem; border: 1px solid var(--mj-ink); }
-  .mj-proc__desc { font-size: .88rem; line-height: 1.6; margin: .55rem 0 .7rem; }
+  .mj-proc__desc { font-size: .88rem; line-height: 1.6; margin: .55rem 0 .7rem; color: var(--mj-tenue); }
   .mj-proc__deliv { font-size: .66rem; color: var(--mj-cold); font-weight: 700; }
 
   /* ── TESTIMONIOS ── */
-  .mj-tst-section { background: var(--mj-paper); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-tst-section { background: var(--mj-suelo); padding: 5rem 0; border-bottom: 3px solid var(--mj-ink); }
   .mj-tst { display: grid; grid-template-columns: 1fr; gap: 1.5rem; list-style: none; padding: 0; margin: 2.5rem 0 0; }
   @media (min-width: 768px) { .mj-tst { grid-template-columns: repeat(2, 1fr); } }
   .mj-tst__item {
@@ -1161,10 +1233,10 @@ const jsonLdSchemas = [
   .mj-faq__icon::before { top: 8px; left: 0; width: 18px; height: 2.5px; }
   .mj-faq__icon::after  { left: 8px; top: 0; width: 2.5px; height: 18px; }
   .mj-faq__item[open] .mj-faq__icon::after { transform: scaleY(0); }
-  .mj-faq__a { padding: 0 1.3rem 1.2rem; font-size: .89rem; line-height: 1.7; margin: 0; }
+  .mj-faq__a { padding: 0 1.3rem 1.2rem; font-size: .89rem; line-height: 1.7; margin: 0; color: var(--mj-tenue); }
 
   /* ── VECINOS ── */
-  .mj-vec-section { background: var(--mj-paper); padding: 4.5rem 0; border-bottom: 3px solid var(--mj-ink); }
+  .mj-vec-section { background: var(--mj-suelo); padding: 4.5rem 0; border-bottom: 3px solid var(--mj-ink); }
   .mj-vec-title { font-size: clamp(1.7rem, 3.5vw, 2.6rem); line-height: 1; margin: 0 0 2rem; }
   .mj-vec-title em { color: var(--mj-green); }
   .mj-vec { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .8rem; list-style: none; padding: 0; margin: 0; }
@@ -1176,12 +1248,12 @@ const jsonLdSchemas = [
     background: var(--mj-paper);
     transition: background .2s, transform .2s;
   }
-  .mj-vecino:hover { background: var(--mj-green); color: var(--mj-paper); transform: translateY(-3px); }
+  .mj-vecino:hover { background: var(--mj-green); color: var(--mj-suelo); transform: translateY(-3px); }
   .mj-vecino__n { font-weight: 700; font-size: .95rem; }
   .mj-vecino__p { font-size: .64rem; opacity: .75; }
 
   /* ── CTA FINAL ── */
-  .mj-final { background: var(--mj-ink); padding: 5rem 0; }
+  .mj-final { background: var(--mj-suelo); padding: 5rem 0; }
   .mj-final__box {
     border: 3px solid var(--mj-green);
     background: var(--mj-deep);
@@ -1190,11 +1262,11 @@ const jsonLdSchemas = [
     box-shadow: 10px 10px 0 var(--mj-green);
   }
   .mj-final__meta { color: var(--mj-amber); display: block; margin-bottom: 1rem; }
-  .mj-final__title { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: .98; color: var(--mj-paper); margin: 0 0 1.2rem; }
+  .mj-final__title { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: .98; color: var(--mj-tinta); margin: 0 0 1.2rem; }
   .mj-final__title em { display: block; color: var(--mj-amber); }
   .mj-final__lead { font-size: 1rem; line-height: 1.65; color: rgba(242,241,236,0.82); max-width: 52ch; margin: 0 auto 2rem; }
   .mj-final__cta { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
-  .mj-final__cta .mj-btn--ghost { color: var(--mj-paper); border-color: var(--mj-amber); box-shadow: 4px 4px 0 var(--mj-amber); }
+  .mj-final__cta .mj-btn--ghost { color: var(--mj-tinta); border-color: var(--mj-amber); box-shadow: 4px 4px 0 var(--mj-amber); }
   .mj-final__cta .mj-btn--ghost:hover { box-shadow: 7px 7px 0 var(--mj-amber); }
 
   @media (prefers-reduced-motion: reduce) {
