@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumb from '../components/common/Breadcrumb.astro';
+import Boton from '../components/cdm/Boton.astro';
 import Configurador3D from '../components/config3d/Configurador3D.tsx';
 
 const title = 'Configurador 3D y Realidad Aumentada';
@@ -47,7 +48,7 @@ const jsonLd = [
 >
   <Header />
 
-  <Breadcrumb items={[
+  <Breadcrumb tono="consola" items={[
     { label: 'Inicio', href: '/' },
     { label: 'Laboratorio de IA', href: '/laboratorio-ia/' },
     { label: 'Configurador 3D + AR' },
@@ -103,8 +104,8 @@ const jsonLd = [
           experiencia que recuerda. Muebles, decoración, moda, joyería… lo llevamos a 3D.
         </p>
         <div class="cf-cta__btns">
-          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero 3D en mi tienda →</a>
-          <a href="/laboratorio-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Ver más demos</a>
+          <Boton href="/contacto/">Quiero 3D en mi tienda</Boton>
+          <Boton href="/laboratorio-ia/" variante="linea">Ver más demos</Boton>
         </div>
       </div>
     </section>
@@ -114,14 +115,14 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  .cf { background: #05070b; color: #e8edf5; }
+  .cf { background: var(--color-cdm-suelo); color: var(--color-cdm-texto); }
   .cf-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #18e0ff; }
-  .cf-eyebrow--dark { color: #FF6B35; }
+  .cf-eyebrow--dark { color: #B83E0B; }
 
   .cf-hero {
     padding: 4rem 0 2.5rem;
-    background: radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.18) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
-    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.18) 0%, transparent 60%), linear-gradient(180deg, var(--color-cdm-panel), var(--color-cdm-suelo));
+    border-bottom: 1px solid var(--color-cdm-regla); position: relative; overflow: hidden;
   }
   .cf-hero::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -129,31 +130,31 @@ const jsonLd = [
     background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
   }
   .cf-hero__inner { position: relative; }
-  .cf-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .cf-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: var(--color-cdm-texto); }
   .cf-hero__title em { font-style: normal; color: #18e0ff; }
-  .cf-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 62ch; margin: 0 0 1.5rem; }
-  .cf-hero__lead strong { color: #fff; }
+  .cf-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c5cf; max-width: 62ch; margin: 0 0 1.5rem; }
+  .cf-hero__lead strong { color: var(--color-cdm-texto); }
   .cf-hero__chips { display: flex; flex-wrap: wrap; gap: .6rem; }
-  .cf-hero__chips span { font-family: var(--font-mono, monospace); font-size: .72rem; padding: .45rem .8rem; border: 1px solid #232a38; border-radius: 999px; color: #cdd7e6; background: #0c111b; }
+  .cf-hero__chips span { font-family: var(--font-mono, monospace); font-size: .72rem; padding: .45rem .8rem; border: 1px solid var(--color-cdm-regla); border-radius: 0; color: #b9c5cf; background: var(--color-cdm-panel-2); }
 
-  .cf-feats { padding: 2.5rem 0; background: #080c14; border-bottom: 1px solid #1a2233; }
+  .cf-feats { padding: 2.5rem 0; background: var(--color-cdm-panel); border-bottom: 1px solid var(--color-cdm-regla); }
   .cf-feats__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: .8rem; }
   @media (min-width: 560px) { .cf-feats__grid { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 980px) { .cf-feats__grid { grid-template-columns: repeat(4, 1fr); } }
-  .cf-feat { background: #0c111b; border: 1.5px solid #1f2735; border-radius: 14px; padding: 1.1rem 1rem; }
+  .cf-feat { background: var(--color-cdm-panel-2); border: 1.5px solid var(--color-cdm-regla); border-radius: 0; padding: 1.1rem 1rem; }
   .cf-feat__ico { font-size: 1.5rem; }
-  .cf-feat b { display: block; margin: .5rem 0 .3rem; color: #fff; font-size: .98rem; }
-  .cf-feat span { font-size: .8rem; line-height: 1.4; color: #aeb9c9; }
+  .cf-feat b { display: block; margin: .5rem 0 .3rem; color: var(--color-cdm-texto); font-size: .98rem; }
+  .cf-feat span { font-size: .8rem; line-height: 1.4; color: #b9c5cf; }
 
-  .cf-demo { padding: 3.5rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  /* Placa clara: la isla está diseñada sobre papel y su lógica no se toca. */
+  .cf-demo { padding: 3.5rem 0; background: #F5F1EA; color: #0E0D0B; border-block: 1px solid var(--color-cdm-regla-2); }
   .cf-noscript { text-align: center; color: #6a6258; margin-top: 1.5rem; }
   .cf-sec-head { text-align: center; max-width: 60ch; margin: 0 auto 2rem; }
   .cf-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
 
-  .cf-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(24,224,255,0.16) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .cf-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(24,224,255,0.16) 0%, transparent 60%), var(--color-cdm-suelo); border-top: 1px solid var(--color-cdm-regla); }
   .cf-cta__inner { max-width: 720px; }
-  .cf-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
-  .cf-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .cf-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: var(--color-cdm-texto); }
+  .cf-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c5cf; margin: 0 0 2rem; }
   .cf-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
-  .cf-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
 </style>

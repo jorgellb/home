@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import Breadcrumb from '../components/common/Breadcrumb.astro';
+import Boton from '../components/cdm/Boton.astro';
 import VozAsistente from '../components/asistente/VozAsistente.tsx';
 
 const title = 'Asistente de Voz IA · Habla con la IA | Platanito Rico';
@@ -53,7 +54,7 @@ const jsonLd = [
 >
   <Header />
 
-  <Breadcrumb items={[
+  <Breadcrumb tono="consola" items={[
     { label: 'Inicio', href: '/' },
     { label: 'Diseño Web', href: '/desarrollo-web/' },
     { label: 'Asistente de Voz' },
@@ -111,8 +112,8 @@ const jsonLd = [
           Atienden, resuelven y captan clientes por ti.
         </p>
         <div class="av-cta__btns">
-          <a href="/contacto/" class="btn-brutal btn-brutal--lg">Quiero un agente de voz →</a>
-          <a href="/asistente-ia/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">Probar el chat</a>
+          <Boton href="/contacto/">Quiero un agente de voz</Boton>
+          <Boton href="/asistente-ia/" variante="linea">Probar el chat</Boton>
         </div>
       </div>
     </section>
@@ -122,14 +123,14 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  .av { background: #05070b; color: #e8edf5; }
+  .av { background: var(--color-cdm-suelo); color: var(--color-cdm-texto); }
   .av-eyebrow { display: inline-block; font-family: var(--font-mono, monospace); font-size: .66rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: #18e0ff; }
   .av-eyebrow--dark { color: #FF6B35; }
 
   .av-hero {
     padding: 4rem 0 2rem;
-    background: radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.18) 0%, transparent 60%), linear-gradient(180deg, #0a0f18, #05070b);
-    border-bottom: 1px solid #1a2233; position: relative; overflow: hidden; text-align: center;
+    background: radial-gradient(90% 60% at 50% -10%, rgba(24,224,255,0.18) 0%, transparent 60%), linear-gradient(180deg, var(--color-cdm-panel), var(--color-cdm-suelo));
+    border-bottom: 1px solid var(--color-cdm-regla); position: relative; overflow: hidden; text-align: center;
   }
   .av-hero::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -137,29 +138,28 @@ const jsonLd = [
     background-size: 30px 30px; mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 75%);
   }
   .av-hero__inner { position: relative; }
-  .av-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: #fff; }
+  .av-hero__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; margin: 1rem 0; color: var(--color-cdm-texto); }
   .av-hero__title em { font-style: normal; color: #18e0ff; }
-  .av-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c4d4; max-width: 56ch; margin: 0 auto; }
-  .av-hero__lead strong { color: #fff; }
+  .av-hero__lead { font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.5; color: #b9c5cf; max-width: 56ch; margin: 0 auto; }
+  .av-hero__lead strong { color: var(--color-cdm-texto); }
 
-  .av-demo { padding: 3rem 0 3.5rem; background: linear-gradient(180deg, #05070b, #080c14); }
-  .av-noscript { text-align: center; color: #9aa7ba; margin-top: 1.5rem; }
+  .av-demo { padding: 3rem 0 3.5rem; background: linear-gradient(180deg, var(--color-cdm-suelo), var(--color-cdm-panel)); }
+  .av-noscript { text-align: center; color: #b9c5cf; margin-top: 1.5rem; }
 
-  .av-features { padding: 4rem 0; background: var(--brutal-bg, #F5F1EA); color: var(--brutal-ink, #0E0D0B); border-top: 3px solid var(--brutal-ink, #0E0D0B); border-bottom: 3px solid var(--brutal-ink, #0E0D0B); }
+  .av-features { padding: 4rem 0; background: var(--color-cdm-panel); color: var(--color-cdm-texto); border-block: 1px solid var(--color-cdm-regla); }
   .av-sec-head { max-width: 60ch; margin-bottom: 2rem; }
   .av-h2 { font-family: var(--font-display, sans-serif); font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; margin: .6rem 0 0; }
   .av-features__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; }
   @media (min-width: 560px) { .av-features__grid { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 980px) { .av-features__grid { grid-template-columns: repeat(4, 1fr); } }
-  .av-feature { background: #fff; border: 2.5px solid var(--brutal-ink, #0E0D0B); box-shadow: 5px 5px 0 var(--brutal-ink, #0E0D0B); padding: 1.4rem 1.25rem; }
+  .av-feature { background: var(--color-cdm-panel-2); border: 1px solid var(--color-cdm-regla-2); box-shadow: 5px 5px 0 var(--color-cdm-regla-2); padding: 1.4rem 1.25rem; }
   .av-feature__ico { font-size: 1.7rem; }
   .av-feature b { display: block; font-family: var(--font-display, sans-serif); font-size: 1.05rem; margin: .5rem 0 .35rem; }
-  .av-feature p { margin: 0; font-size: .85rem; line-height: 1.45; color: #4a453f; }
+  .av-feature p { margin: 0; font-size: .85rem; line-height: 1.45; color: #b9c5cf; }
 
-  .av-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(24,224,255,0.12) 0%, transparent 60%), #05070b; border-top: 1px solid #1a2233; }
+  .av-cta { padding: 4.5rem 0; background: radial-gradient(80% 100% at 50% 0%, rgba(24,224,255,0.12) 0%, transparent 60%), var(--color-cdm-suelo); border-top: 1px solid var(--color-cdm-regla); }
   .av-cta__inner { max-width: 720px; }
-  .av-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: #fff; }
-  .av-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c4d4; margin: 0 0 2rem; }
+  .av-cta__title { font-family: var(--font-display, sans-serif); font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: .95; margin: .6rem 0 1rem; color: var(--color-cdm-texto); }
+  .av-cta__text { font-size: 1.05rem; line-height: 1.55; color: #b9c5cf; margin: 0 0 2rem; }
   .av-cta__btns { display: flex; flex-wrap: wrap; gap: 1rem; }
-  .av-cta .btn-brutal--ghost { background: transparent; color: #fff; border-color: #2a3445; }
 </style>
