@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/BaseLayout.astro';
+import Boton from '../components/cdm/Boton.astro';
 ---
 
 <Layout
@@ -11,7 +12,7 @@ import Layout from '../layouts/BaseLayout.astro';
     <div class="container-brutal success-page__inner">
       <header class="success-page__head">
         <span class="text-meta">N.º 200 / OK · Acuse de recibo</span>
-        <span class="text-meta"><span class="live-dot" style="background:var(--brutal-lime)"></span> Mensaje recibido</span>
+        <span class="text-meta"><span class="live-dot" style="background:var(--color-cdm-ok)"></span> Mensaje recibido</span>
       </header>
 
       <div class="divider-brutal-thick"></div>
@@ -41,19 +42,31 @@ import Layout from '../layouts/BaseLayout.astro';
       </dl>
 
       <div class="success-page__cta">
-        <a href="/" class="btn-brutal btn-brutal--lg">
-          ← Volver al inicio
-        </a>
-        <a href="/blog/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-          Mientras tanto · Blog
-        </a>
+        <Boton href="/">Volver al inicio</Boton>
+        <Boton href="/blog/" variante="linea">Mientras tanto, el blog</Boton>
       </div>
     </div>
   </main>
 </Layout>
 
 <style>
-  .success-page { background: var(--brutal-bg); min-height: 80vh; padding: 3rem 0 6rem; }
+  .success-page {
+    /* Utilitarios globales (text-meta, spec-list, link-brutal) en tono consola.
+       Aquí ink es sobre todo texto (spec-v, link-brutal): va en claro, y el
+       separador grueso se devuelve a regla abajo. */
+    --brutal-ink: var(--color-cdm-texto);
+    --brutal-text: var(--color-cdm-texto);
+    --brutal-text-muted: var(--color-cdm-tenue);
+    --brutal-text-secondary: #b9c5cf;
+    --brutal-accent-ink: var(--color-cdm-senal);
+    --brutal-border-soft: var(--color-cdm-regla);
+    background: var(--color-cdm-suelo);
+    color: var(--color-cdm-texto);
+    color-scheme: dark;
+    min-height: 80vh;
+    padding: 3rem 0 6rem;
+  }
+  .success-page :global(.divider-brutal-thick) { background: var(--color-cdm-regla-2); }
   .success-page__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
   .success-page__hero { padding: 3rem 0; display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; }
   .success-page__check {
@@ -62,13 +75,13 @@ import Layout from '../layouts/BaseLayout.astro';
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--brutal-lime);
-    border: 2px solid var(--brutal-ink);
-    box-shadow: 6px 6px 0 0 var(--brutal-accent);
+    background: var(--color-cdm-ok);
+    border: 1px solid var(--color-cdm-ok);
+    box-shadow: 6px 6px 0 0 var(--color-cdm-senal);
     font-family: var(--font-display);
     font-size: 3.5rem;
     line-height: 1;
-    color: var(--brutal-ink);
+    color: var(--color-cdm-suelo);
     transform: rotate(-3deg);
   }
   .success-page__title {
@@ -77,9 +90,9 @@ import Layout from '../layouts/BaseLayout.astro';
     letter-spacing: -.045em;
     margin: 0;
   }
-  .success-page__title em { color: var(--brutal-accent-ink); font-style: italic; }
-  .success-page__lead { font-size: 1.1rem; line-height: 1.6; color: var(--brutal-text-secondary); max-width: 50ch; }
-  .success-page__lead strong { color: var(--brutal-ink); }
+  .success-page__title em { color: var(--color-cdm-senal); font-style: italic; }
+  .success-page__lead { font-size: 1.1rem; line-height: 1.6; color: #b9c5cf; max-width: 50ch; }
+  .success-page__lead strong { color: var(--color-cdm-texto); }
   .success-page__specs { max-width: 640px; margin: 1rem 0 3rem; }
   .success-page__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
 </style>

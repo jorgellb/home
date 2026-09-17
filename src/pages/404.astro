@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
+import Boton from '../components/cdm/Boton.astro';
 
 const title = "404 — Página no encontrada";
 const description = "La página que buscas no existe. Vuelve al inicio.";
@@ -49,12 +50,8 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
       </ul>
 
       <div class="not-found__cta">
-        <a href="/" class="btn-brutal btn-brutal--lg">
-          Volver al inicio →
-        </a>
-        <a href="/contacto/" class="btn-brutal btn-brutal--ghost btn-brutal--lg">
-          Cuéntame qué buscabas
-        </a>
+        <Boton href="/">Volver al inicio</Boton>
+        <Boton href="/contacto/" variante="linea">Cuéntame qué buscabas</Boton>
       </div>
     </div>
 
@@ -73,8 +70,14 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
 
 <style>
   .not-found {
-    background: var(--brutal-bg);
-    border-bottom: 3px solid var(--brutal-ink);
+    /* Utilitarios globales (text-meta, divider-brutal-thick) en tono consola. */
+    --brutal-ink: var(--color-cdm-regla-2);
+    --brutal-text-muted: var(--color-cdm-tenue);
+    --brutal-text-secondary: #b9c5cf;
+    --brutal-accent-ink: var(--color-cdm-senal);
+    background: var(--color-cdm-suelo);
+    color: var(--color-cdm-texto);
+    border-bottom: 1px solid var(--color-cdm-regla);
     padding-top: 3rem;
   }
   .not-found__inner { padding-bottom: 5rem; }
@@ -91,14 +94,15 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
     font-size: clamp(8rem, 22vw, 18rem);
     line-height: .85;
     letter-spacing: -.06em;
-    color: var(--brutal-ink);
+    color: var(--color-cdm-texto);
     user-select: none;
   }
   .not-found__zero {
     color: transparent;
-    -webkit-text-stroke: 4px var(--brutal-accent);
+    -webkit-text-stroke: 4px var(--color-cdm-senal);
     animation: blink 2.5s steps(2) infinite;
   }
+  @media (prefers-reduced-motion: reduce) { .not-found__zero { animation: none; } }
   .not-found__title {
     font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: .95;
@@ -106,11 +110,11 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
     max-width: 22ch;
     margin: 0;
   }
-  .not-found__title em { color: var(--brutal-accent-ink); font-style: italic; }
+  .not-found__title em { color: var(--color-cdm-senal); font-style: italic; }
   .not-found__lead {
     font-size: 1.05rem;
     line-height: 1.55;
-    color: var(--brutal-text-secondary);
+    color: #b9c5cf;
     max-width: 50ch;
   }
 
@@ -118,16 +122,16 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
     list-style: none;
     padding: 0;
     margin: 2rem 0 3rem;
-    border-top: 2px solid var(--brutal-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
   }
-  .not-found__links li { border-bottom: 1px solid var(--brutal-border-soft); }
+  .not-found__links li { border-bottom: 1px solid var(--color-cdm-regla); }
   .not-found__links a {
     display: flex;
     gap: 1.5rem;
     align-items: center;
     padding: 1rem 0;
     text-decoration: none;
-    color: var(--brutal-ink);
+    color: var(--color-cdm-texto);
     font-family: var(--font-display);
     font-weight: 700;
     font-size: clamp(1.5rem, 3vw, 2rem);
@@ -136,19 +140,20 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
   }
   .not-found__links a:hover {
     padding-left: 1rem;
-    background: var(--brutal-lime-soft);
-    color: var(--brutal-accent-ink);
+    background: var(--color-cdm-panel-2);
+    color: var(--color-cdm-senal);
   }
-  .not-found__links .text-mono { color: var(--brutal-text-muted); font-size: .85rem; font-weight: 400; min-width: 32px; }
+  .not-found__links a:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: 2px; }
+  .not-found__links .text-mono { color: var(--color-cdm-tenue); font-size: .85rem; font-weight: 400; min-width: 32px; }
 
   .not-found__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
 
   .not-found__marquee {
-    background: var(--brutal-ink);
-    color: var(--brutal-accent-ink);
+    background: var(--color-cdm-panel);
+    color: var(--color-cdm-senal);
     overflow: hidden;
     padding: 1.5rem 0;
-    border-top: 2px solid var(--brutal-ink);
+    border-top: 1px solid var(--color-cdm-regla);
   }
   .not-found__marquee-track {
     display: flex; gap: 3rem;
@@ -160,4 +165,5 @@ const description = "La página que buscas no existe. Vuelve al inicio.";
     text-transform: uppercase;
     letter-spacing: .2em;
   }
+  @media (prefers-reduced-motion: reduce) { .not-found__marquee-track { animation: none; } }
 </style>
