@@ -2,13 +2,16 @@
 interface Props {
   href: string;
   variante?: 'senal' | 'linea';
+  /* Para enlaces que abren otra pestaña (WhatsApp, webs externas). */
+  target?: '_blank';
+  rel?: string;
   class?: string;
 }
 
-const { href, variante = 'senal', class: clase } = Astro.props;
+const { href, variante = 'senal', target, rel, class: clase } = Astro.props;
 ---
 
-<a href={href} class:list={['cdm-boton', `cdm-boton--${variante}`, clase]}><slot /></a>
+<a href={href} target={target} rel={target === '_blank' ? (rel ?? 'noopener noreferrer') : rel} class:list={['cdm-boton', `cdm-boton--${variante}`, clase]}><slot /></a>
 
 <style>
   .cdm-boton {

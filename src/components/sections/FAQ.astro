@@ -9,7 +9,7 @@ const faqs = [
 ];
 ---
 
-<section class="section-brutal" id="faq" style="background:var(--brutal-bg-alt);border-top:2px solid var(--brutal-ink);">
+<section class="section-brutal faq-seccion" id="faq">
   <div class="container-brutal">
     <header class="brutal-section-head">
       <div class="brutal-section-head__col">
@@ -54,9 +54,7 @@ const faqs = [
             Respondemos en menos de 24 horas. Si no podemos hacer algo,
             te lo decimos a la cara y te recomendamos a quien sí pueda.
           </p>
-          <a href="/contacto/" class="btn-brutal btn-brutal--ink">
-            Hablemos →
-          </a>
+          <a href="/contacto/" class="faq-aside__cta">Hablemos</a>
         </div>
         <div class="faq-aside__chips">
           <span class="tag-brutal">★ Sin permanencia</span>
@@ -70,6 +68,23 @@ const faqs = [
 </section>
 
 <style>
+  /* Tono consola (fase 4). Solo lo usa /contacto/. Se reasigna la paleta
+     brutal dentro de la sección, como en Contact, para que los utilitarios
+     globales (text-meta, tag-brutal, cabecera de sección) salgan en oscuro. */
+  .faq-seccion {
+    --brutal-bg: var(--color-cdm-suelo);
+    --brutal-bg-alt: var(--color-cdm-panel-2);
+    --brutal-card: var(--color-cdm-panel);
+    --brutal-ink: var(--color-cdm-texto);
+    --brutal-text-secondary: #b9c5cf;
+    --brutal-text-muted: var(--color-cdm-tenue);
+    --brutal-accent-ink: var(--color-cdm-senal);
+    --brutal-border-soft: var(--color-cdm-regla);
+    color-scheme: dark;
+    background: var(--color-cdm-suelo);
+    color: var(--color-cdm-texto);
+    border-top: 1px solid var(--color-cdm-regla);
+  }
   .brutal-section-head { display: grid; gap: 2rem; grid-template-columns: 1fr; margin-bottom: 3rem; }
   @media (min-width: 1024px) { .brutal-section-head { grid-template-columns: 1.4fr 1fr; align-items: end; gap: 4rem; } }
   .brutal-section-head__col { display: flex; flex-direction: column; gap: 1rem; }
@@ -88,9 +103,9 @@ const faqs = [
   /* Lista */
   .faq-list {
     list-style: none; padding: 0; margin: 0;
-    border-top: 2px solid var(--brutal-ink);
+    border-top: 1px solid var(--color-cdm-regla-2);
   }
-  .faq-item { border-bottom: 1px solid var(--brutal-ink); background: var(--brutal-card); }
+  .faq-item { border-bottom: 1px solid var(--color-cdm-regla); background: var(--brutal-card); }
   .faq-item:has(details[open]) { background: var(--brutal-bg-alt); }
 
   .faq-details { padding: 1.25rem 1.5rem; }
@@ -123,7 +138,7 @@ const faqs = [
     align-items: center;
     justify-content: center;
     background: var(--brutal-card);
-    border: 2px solid var(--brutal-ink);
+    border: 1px solid var(--color-cdm-regla-2);
     font-family: var(--font-mono);
     font-size: 1.2rem;
     font-weight: 700;
@@ -131,8 +146,8 @@ const faqs = [
     transition: transform .25s, background .15s, color .15s;
   }
   details[open] .faq-toggle {
-    background: var(--brutal-accent);
-    color: var(--brutal-bg);
+    background: var(--color-cdm-senal);
+    color: #120600;
     transform: rotate(45deg);
   }
   .faq-answer {
@@ -150,17 +165,35 @@ const faqs = [
 
   /* Aside */
   .faq-aside { display: flex; flex-direction: column; gap: 1rem; }
+  /* Tarjeta en lima: todo su texto va en oscuro. */
   .faq-aside__card {
-    background: var(--brutal-lime);
-    border: 2px solid var(--brutal-ink);
+    background: var(--color-cdm-ok);
+    color: var(--color-cdm-suelo);
+    border: 1px solid var(--color-cdm-ok);
     padding: 2rem;
-    box-shadow: 6px 6px 0 0 var(--brutal-ink);
+    box-shadow: 6px 6px 0 0 var(--color-cdm-regla-2);
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
   .faq-aside__title { font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: .92; letter-spacing: -.03em; margin: 0; }
-  .faq-aside__title em { color: var(--brutal-ink); }
-  .faq-aside__text { font-size: .95rem; color: var(--brutal-ink); line-height: 1.5; opacity: .85; }
+  .faq-aside__card .text-meta { color: var(--color-cdm-suelo); }
+  .faq-aside__title { color: var(--color-cdm-suelo); }
+  .faq-aside__title em { color: var(--color-cdm-suelo); }
+  .faq-aside__text { font-size: .95rem; color: var(--color-cdm-suelo); line-height: 1.5; }
+  .faq-aside__cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.9rem;
+    padding: 0.7rem 1.15rem;
+    background: var(--color-cdm-suelo);
+    color: var(--color-cdm-texto);
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid var(--color-cdm-suelo);
+  }
+  .faq-aside__cta:hover { background: var(--color-cdm-panel-2); }
+  .faq-aside__cta:focus-visible { outline: 2px solid var(--color-cdm-suelo); outline-offset: 3px; }
   .faq-aside__chips { display: flex; flex-wrap: wrap; gap: .4rem; }
 </style>
