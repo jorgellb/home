@@ -5,6 +5,8 @@
    SEO: `title` va sin la marca (BaseLayout añade « | Platanito Rico», 17
    caracteres) y debe quedarse en ≤43; `description` entre 120 y 160. */
 
+import type { LineaRegistro } from '../components/cdm/tipos';
+
 export interface Faq {
   q: string;
   a: string;
@@ -197,6 +199,17 @@ export const serviciosIT: ServicioIT[] = [
 export function getServicioIT(slug: string): ServicioIT | undefined {
   return serviciosIT.find((s) => s.slug === slug);
 }
+
+/* Registro simulado del panel del Plan 360 (portada, precios y /plan-360/).
+   Siempre dentro de un panel «demo»: no son datos de ningún cliente. */
+export const registroPlan360: LineaRegistro[] = [
+  { hora: '09:41', texto: 'Copia del servidor completada, 128 GB', estado: 'ok' },
+  { hora: '09:44', texto: 'Parches instalados en 8 de 10 puestos' },
+  { hora: '09:46', texto: 'Disco de recepción al 91 %', estado: 'aviso' },
+  { hora: '09:47', texto: 'Ticket 0412, impresora de recepción', estado: 'ok' },
+  { hora: '09:49', texto: 'Certificado de la web renovado', estado: 'ok' },
+  { hora: '09:50', texto: 'Técnico en camino a Garrucha' },
+];
 
 /* ─── Plan 360 ─────────────────────────────────────────────────────────── */
 

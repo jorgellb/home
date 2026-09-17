@@ -6,7 +6,12 @@
    src/data/landings.ts; la indexación sigue en pueblos-indexables.ts. */
 import LecturaLayout from '../../layouts/LecturaLayout.astro';
 import Boton from '../../components/cdm/Boton.astro';
+import Fichas from '../../components/cdm/Fichas.astro';
+import ListaEnlaces from '../../components/cdm/ListaEnlaces.astro';
+import Plan360Panel from '../../components/cdm/Plan360Panel.astro';
+import Preguntas from '../../components/cdm/Preguntas.astro';
 import RadarCobertura from '../../components/cdm/RadarCobertura.astro';
+import SeccionLectura from '../../components/cdm/SeccionLectura.astro';
 import Contact from '../../components/sections/Contact.astro';
 import ServiciosPueblo from '../../components/sections/ServiciosPueblo.astro';
 import InteractiveMap from '../../components/sections/InteractiveMap.astro';
@@ -14,7 +19,7 @@ import type { Cifra, SeccionIndice } from '../../components/cdm/tipos';
 import { pueblos, getPueblosByComarca, type Pueblo } from '../../data/pueblos-almeria';
 import { esPuebloIndexable } from '../../data/pueblos-indexables';
 import { getLanding } from '../../data/landings';
-import { getPuebloIT, HUB_IT, plan360 } from '../../data/servicios-it';
+import { getPuebloIT, HUB_IT } from '../../data/servicios-it';
 import { dentroDeCaja } from '../../data/cobertura';
 import { SITE, PROVEEDOR } from '../../data/negocio';
 
@@ -131,36 +136,22 @@ const jsonLd = [
   )}
 
   {l.lugares.length > 0 ? (
-    <section class="dw-sec" id="lugares" aria-labelledby="dw-lugares">
-      <h2 class="dw-h2" id="dw-lugares">{l.cabeceras.lugares.h2}</h2>
-      {l.cabeceras.lugares.lead && <p class="dw-lead">{l.cabeceras.lugares.lead}</p>}
-      <ul class="dw-rejilla">
-        {l.lugares.map((lugar) => (
-          <li class="dw-ficha">
-            <h3 class="dw-h3">{lugar.name}</h3>
-            <p class="dw-meta">{lugar.sub}</p>
-            <p class="dw-texto">{lugar.desc}</p>
-            <p class="dw-dato">{lugar.dato}</p>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <SeccionLectura id="lugares" titulo={l.cabeceras.lugares.h2} lead={l.cabeceras.lugares.lead || undefined}>
+      <Fichas items={l.lugares.map((lugar) => ({ titulo: lugar.name, subtitulo: lugar.sub, texto: lugar.desc, dato: lugar.dato }))} />
+    </SeccionLectura>
   ) : (
-    <section class="dw-sec" id="panorama" aria-labelledby="dw-panorama">
-      <h2 class="dw-h2" id="dw-panorama">{`El tejido de ${n} en internet`}</h2>
+    <SeccionLectura id="panorama" titulo={`El tejido de ${n} en internet`}>
       {l.panorama.length > 0
-        ? l.panorama.map((p) => <p class="dw-texto dw-texto--largo">{p}</p>)
-        : <p class="dw-texto dw-texto--largo">{l.lead}</p>}
+        ? l.panorama.map((p) => <p class="dw-texto">{p}</p>)
+        : <p class="dw-texto">{l.lead}</p>}
       <ul class="dw-chips">
         {l.caracteristicas.map((c) => <li>{c}</li>)}
       </ul>
-    </section>
+    </SeccionLectura>
   )}
 
   {l.datos.length > 0 && (
-    <section class="dw-sec" id="datos" aria-labelledby="dw-datos">
-      <h2 class="dw-h2" id="dw-datos">{l.cabeceras.datos.h2}</h2>
-      {l.cabeceras.datos.lead && <p class="dw-lead">{l.cabeceras.datos.lead}</p>}
+    <SeccionLectura id="datos" titulo={l.cabeceras.datos.h2} lead={l.cabeceras.datos.lead || undefined}>
       <dl class="dw-datos">
         {l.datos.map((d) => (
           <div>
@@ -169,141 +160,76 @@ const jsonLd = [
           </div>
         ))}
       </dl>
-    </section>
+    </SeccionLectura>
   )}
 
   {l.coords && (
-    <section class="dw-sec" id="mapa" aria-label={`Mapa de ${n}`}>
+    <SeccionLectura id="mapa" etiqueta={`Mapa de ${n}`}>
       <div class="dw-mapa">
         <InteractiveMap center={l.coords} zoom={13} pitch={25} bearing={-15} label={n} themeColor="#FF5A00" themeColorDark="#0E0D0B" townInitial={n.charAt(0)} />
       </div>
-    </section>
+    </SeccionLectura>
   )}
 
   {l.sectores.length > 0 && (
-    <section class="dw-sec" id="sectores" aria-labelledby="dw-sectores">
-      <h2 class="dw-h2" id="dw-sectores">{l.cabeceras.sectores.h2}</h2>
-      {l.cabeceras.sectores.lead && <p class="dw-lead">{l.cabeceras.sectores.lead}</p>}
-      <ul class="dw-rejilla">
-        {l.sectores.map((s) => (
-          <li class="dw-ficha">
-            <p class="dw-cifra">{s.stat}</p>
-            <h3 class="dw-h3">{s.nombre}</h3>
-            <p class="dw-texto">{s.desc}</p>
-            {s.tags.length > 0 && (
-              <ul class="dw-chips dw-chips--pequenas">
-                {s.tags.map((t) => <li>{t}</li>)}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
+    <SeccionLectura id="sectores" titulo={l.cabeceras.sectores.h2} lead={l.cabeceras.sectores.lead || undefined}>
+      <Fichas items={l.sectores.map((sec) => ({ cifra: sec.stat, titulo: sec.nombre, texto: sec.desc, chips: sec.tags }))} />
+    </SeccionLectura>
   )}
 
   {l.extras.map((e) => (
-    <section class="dw-sec" id={`extra-${e.key}`} aria-labelledby={`dw-extra-${e.key}`}>
-      <h2 class="dw-h2" id={`dw-extra-${e.key}`}>{e.titulo}</h2>
-      {e.lead && <p class="dw-lead">{e.lead}</p>}
-      <ul class="dw-lista">
-        {e.items.map((item) => (
-          <li>
-            {item.meta && <p class="dw-meta">{item.meta}</p>}
-            <h3 class="dw-h3">{item.t}</h3>
-            <p class="dw-texto">{item.d}</p>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <SeccionLectura id={`extra-${e.key}`} titulo={e.titulo} lead={e.lead || undefined}>
+      <Fichas items={e.items.map((item) => ({ titulo: item.t, subtitulo: item.meta, texto: item.d }))} />
+    </SeccionLectura>
   ))}
 
-  <section class="dw-sec" id="porque" aria-labelledby="dw-porque">
-    <h2 class="dw-h2" id="dw-porque">{l.cabeceras.diferenciales.h2}</h2>
-    {l.cabeceras.diferenciales.lead && <p class="dw-lead">{l.cabeceras.diferenciales.lead}</p>}
-    <ul class="dw-rejilla">
-      {l.diferenciales.map((d) => (
-        <li class="dw-ficha">
-          <h3 class="dw-h3">{d.t}</h3>
-          <p class="dw-texto">{d.d}</p>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <SeccionLectura id="porque" titulo={l.cabeceras.diferenciales.h2} lead={l.cabeceras.diferenciales.lead || undefined}>
+    <Fichas items={l.diferenciales.map((d) => ({ titulo: d.t, texto: d.d }))} />
+  </SeccionLectura>
 
-  <section class="dw-sec" id="metodo" aria-labelledby="dw-metodo">
-    <h2 class="dw-h2" id="dw-metodo">{`Cómo hacemos tu página web en ${n}`}</h2>
-    <ol class="dw-pasos">
-      {pasos.map((p) => (
-        <li>
-          <h3 class="dw-h3">{p.t}</h3>
-          <p class="dw-texto">{p.d}</p>
-        </li>
-      ))}
-    </ol>
-  </section>
+  <SeccionLectura id="metodo" titulo={`Cómo hacemos tu página web en ${n}`}>
+    <Fichas numeradas items={pasos.map((p) => ({ titulo: p.t, texto: p.d }))} />
+  </SeccionLectura>
 
   {l.testimonios.length > 0 && (
-    <section class="dw-sec" id="testimonios" aria-labelledby="dw-testimonios">
-      <h2 class="dw-h2" id="dw-testimonios">{l.cabeceras.testimonios.h2}</h2>
-      {l.cabeceras.testimonios.lead && <p class="dw-lead">{l.cabeceras.testimonios.lead}</p>}
+    <SeccionLectura id="testimonios" titulo={l.cabeceras.testimonios.h2} lead={l.cabeceras.testimonios.lead || undefined}>
       <ul class="dw-voces">
         {l.testimonios.map((t) => (
           <li>
             <figure>
-              <blockquote class="dw-texto">{t.texto}</blockquote>
+              <blockquote>{t.texto}</blockquote>
               <figcaption><strong>{t.nombre}</strong> · {t.negocio}</figcaption>
             </figure>
           </li>
         ))}
       </ul>
-    </section>
+    </SeccionLectura>
   )}
 
   {it && (
-    <section class="dw-sec" id="informatica" aria-labelledby="dw-it">
-      <h2 class="dw-h2" id="dw-it">{`Web e informática en ${n}, en una sola cuota`}</h2>
-      <p class="dw-lead">{`En ${n} también mantenemos ordenadores, redes y copias de seguridad, con técnico en tu empresa el mismo día.`}</p>
-      <div class="dw-plan">
-        <p class="dw-plan__titulo">Plan 360 <span>400 € + IVA al mes</span></p>
-        <p class="dw-texto">
-          Tu web, hasta {plan360.puestos} puestos, servidor, red, copias y ciberseguridad, con técnico en tu
-          empresa el mismo día. Sin permanencia ni alta.
-        </p>
-        <div class="dw-plan__enlaces">
-          <Boton href={plan360.href}>Ver el Plan 360</Boton>
-          <Boton href={`${HUB_IT}${it.slug}/`} variante="linea">Mantenimiento informático en {n}</Boton>
-        </div>
-      </div>
-    </section>
+    <SeccionLectura
+      id="informatica"
+      titulo={`Web e informática en ${n}, en una sola cuota`}
+      lead={`En ${n} también mantenemos ordenadores, redes y copias de seguridad, con técnico en tu empresa el mismo día.`}
+    >
+      <Plan360Panel extra={{ href: `${HUB_IT}${it.slug}/`, label: `Mantenimiento informático en ${n}` }} />
+    </SeccionLectura>
   )}
 
   {l.faq.length > 0 && (
-    <section class="dw-sec" id="faq" aria-labelledby="dw-faq">
-      <h2 class="dw-h2" id="dw-faq">{l.cabeceras.faq.h2}</h2>
-      {l.cabeceras.faq.lead && <p class="dw-lead">{l.cabeceras.faq.lead}</p>}
-      <ul class="dw-faq">
-        {l.faq.map((f, i) => (
-          <li>
-            <details open={i === 0}>
-              <summary>{f.q}</summary>
-              <p class="dw-texto">{f.a}</p>
-            </details>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <SeccionLectura id="faq" titulo={l.cabeceras.faq.h2} lead={l.cabeceras.faq.lead || undefined}>
+      <Preguntas items={l.faq} />
+    </SeccionLectura>
   )}
 
   {vecinos.length > 0 && (
-    <section class="dw-sec" id="comarca" aria-labelledby="dw-comarca">
-      <h2 class="dw-h2" id="dw-comarca">{`Diseño web en ${l.comarca}`}</h2>
-      <p class="dw-lead">Otros municipios de la comarca donde trabajamos. Si el tuyo no aparece, escríbenos: cubrimos toda la provincia.</p>
-      <ul class="dw-enlaces">
-        {[...vecinos, { href: '/diseno-web/', label: 'Todos los municipios de Almería' }].map((v) => (
-          <li><a href={v.href}>{v.label}</a></li>
-        ))}
-      </ul>
-    </section>
+    <SeccionLectura
+      id="comarca"
+      titulo={`Diseño web en ${l.comarca}`}
+      lead="Otros municipios de la comarca donde trabajamos. Si el tuyo no aparece, escríbenos: cubrimos toda la provincia."
+    >
+      <ListaEnlaces items={[...vecinos, { href: '/diseno-web/', label: 'Todos los municipios de Almería' }]} />
+    </SeccionLectura>
   )}
 
   <Fragment slot="cierre">
@@ -313,90 +239,22 @@ const jsonLd = [
 </LecturaLayout>
 
 <style>
-  .dw-sec { scroll-margin-top: 96px; }
-  .dw-sec + .dw-sec { margin-top: clamp(3rem, 6vw, 4.5rem); padding-top: clamp(2.5rem, 5vw, 3.5rem); border-top: 1px solid var(--color-cdm-regla); }
-
-  .dw-h2 {
-    margin: 0;
-    max-width: 26ch;
-    font-family: var(--font-display);
-    font-stretch: 82%;
-    font-weight: 720;
-    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--color-cdm-texto);
-  }
-  .dw-lead { margin: 0.9rem 0 0; font-size: 1.05rem; line-height: 1.6; color: var(--color-cdm-tenue); }
-  .dw-h3 { margin: 0; font-family: var(--font-display); font-stretch: 88%; font-weight: 680; font-size: 1.2rem; line-height: 1.15; color: var(--color-cdm-texto); }
-  .dw-texto { margin: 0.55rem 0 0; font-size: 0.98rem; line-height: 1.6; color: #b9c5cf; }
-  .dw-texto--largo { font-size: 1.06rem; margin-top: 1.1rem; }
-  .dw-meta { margin: 0 0 0.35rem; font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-cdm-tenue); }
-  .dw-dato { margin: 0.9rem 0 0; padding-top: 0.7rem; border-top: 1px dashed var(--color-cdm-regla-2); font-family: var(--font-mono); font-size: 0.82rem; color: var(--color-cdm-senal); }
-  .dw-cifra { margin: 0 0 0.5rem; font-family: var(--font-mono); font-size: 1.35rem; font-weight: 700; color: var(--color-cdm-senal); }
-
-  .dw-rejilla { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 720px) {
-    .dw-rejilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    /* Con un número impar, la última ficha ocupa la fila: si no, el hueco
-       vacío enseña el color de la regla como un bloque. */
-    .dw-rejilla > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
-  }
-  .dw-ficha { padding: 1.35rem 1.4rem 1.5rem; background: var(--color-cdm-panel); }
-
+  .dw-texto { max-width: 68ch; margin: 1.1rem 0 0; font-size: 1.06rem; line-height: 1.65; color: #b9c5cf; }
   .dw-chips { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .dw-chips li { padding: 0.35rem 0.7rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); background: var(--color-cdm-panel-2); }
-  .dw-chips--pequenas { margin-top: 1rem; }
-  .dw-chips--pequenas li { font-size: 0.7rem; padding: 0.25rem 0.55rem; }
 
-  .dw-datos { margin: 1.75rem 0 0; display: grid; gap: 1px; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 640px) {
-    .dw-datos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .dw-datos > div:last-child:nth-child(odd) { grid-column: 1 / -1; }
-  }
-  .dw-datos > div { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.9rem 1.1rem; background: var(--color-cdm-panel); }
+  .dw-datos { margin: 1.75rem 0 0; display: grid; border-top: 1px solid var(--color-cdm-regla); border-left: 1px solid var(--color-cdm-regla); }
+  @media (min-width: 640px) { .dw-datos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .dw-datos > div { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.9rem 1.1rem; background: var(--color-cdm-panel); border-right: 1px solid var(--color-cdm-regla); border-bottom: 1px solid var(--color-cdm-regla); }
   .dw-datos dt { font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-cdm-tenue); }
   .dw-datos dd { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--color-cdm-texto); }
 
   .dw-mapa { height: clamp(360px, 50vh, 520px); border: 1px solid var(--color-cdm-regla-2); }
   .dw-mapa > :global(*) { width: 100%; height: 100%; }
 
-  .dw-lista { list-style: none; margin: 1.5rem 0 0; padding: 0; }
-  .dw-lista > li { padding: 1.1rem 0; border-bottom: 1px solid var(--color-cdm-regla); }
-  .dw-lista > li:first-child { border-top: 1px solid var(--color-cdm-regla); }
-
-  /* Los pasos son una secuencia de verdad: aquí sí va numeración. */
-  .dw-pasos { list-style: none; counter-reset: paso; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 720px) { .dw-pasos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .dw-pasos > li { counter-increment: paso; padding: 1.3rem 1.4rem; background: var(--color-cdm-panel); }
-  .dw-pasos > li::before { content: counter(paso, decimal-leading-zero); display: block; margin-bottom: 0.6rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-cdm-senal); }
-
   .dw-voces { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1rem; }
   .dw-voces figure { margin: 0; padding: 1.3rem 1.4rem; background: var(--color-cdm-panel); border-left: 2px solid var(--color-cdm-senal); }
-  .dw-voces blockquote { margin: 0; font-size: 1.02rem; color: var(--color-cdm-texto); }
+  .dw-voces blockquote { margin: 0; max-width: 68ch; font-size: 1.02rem; line-height: 1.6; color: var(--color-cdm-texto); }
   .dw-voces figcaption { margin-top: 0.8rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
   .dw-voces figcaption strong { color: var(--color-cdm-texto); font-weight: 600; }
-
-  .dw-plan { margin-top: 1.75rem; padding: 1.4rem 1.5rem 1.5rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); }
-  .dw-plan__titulo { margin: 0; font-family: var(--font-display); font-stretch: 88%; font-weight: 700; font-size: 1.35rem; color: var(--color-cdm-texto); }
-  .dw-plan__titulo span { margin-left: 0.5rem; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; color: var(--color-cdm-ok); }
-  .dw-plan__enlaces { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
-
-  .dw-faq { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--color-cdm-regla); }
-  .dw-faq > li { border-bottom: 1px solid var(--color-cdm-regla); }
-  .dw-faq summary { display: flex; justify-content: space-between; gap: 1rem; padding: 1.05rem 0; cursor: pointer; list-style: none; font-weight: 600; font-size: 1.02rem; line-height: 1.4; color: var(--color-cdm-texto); }
-  .dw-faq summary::-webkit-details-marker { display: none; }
-  .dw-faq summary::after { content: '+'; flex: none; font-family: var(--font-mono); color: var(--color-cdm-senal); }
-  .dw-faq details[open] summary::after { content: '−'; }
-  .dw-faq summary:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: 3px; }
-  .dw-faq details p { margin: 0 0 1.2rem; }
-
-  .dw-enlaces { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 640px) {
-    .dw-enlaces { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .dw-enlaces > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
-  }
-  .dw-enlaces a { display: block; padding: 0.85rem 1.1rem; background: var(--color-cdm-panel); color: var(--color-cdm-texto); text-decoration: none; transition: background-color 0.15s, color 0.15s; }
-  .dw-enlaces a:hover { background: var(--color-cdm-panel-2); color: var(--color-cdm-senal); }
-  .dw-enlaces a:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: -2px; }
 </style>

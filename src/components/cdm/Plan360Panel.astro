@@ -1,0 +1,33 @@
+---
+/* Resumen del Plan 360 para la columna de lectura (landings de pueblo,
+   Sistemas IT). Precio y puestos salen de los datos, no del copy. */
+import Boton from './Boton.astro';
+import { plan360 } from '../../data/servicios-it';
+
+interface Props {
+  /* Segundo botón opcional, p. ej. la landing IT del pueblo. */
+  extra?: { href: string; label: string };
+}
+
+const { extra } = Astro.props;
+---
+
+<div class="cdm-p360">
+  <p class="cdm-p360__titulo">Plan 360 <span>{plan360.precio} € + IVA al mes</span></p>
+  <p class="cdm-p360__texto">
+    Tu web, hasta {plan360.puestos} puestos, servidor, red, copias y ciberseguridad, con técnico en tu
+    empresa el mismo día. Sin permanencia ni alta.
+  </p>
+  <div class="cdm-p360__botones">
+    <Boton href={plan360.href}>Ver el Plan 360</Boton>
+    {extra && <Boton href={extra.href} variante="linea">{extra.label}</Boton>}
+  </div>
+</div>
+
+<style>
+  .cdm-p360 { margin-top: 1.75rem; padding: 1.4rem 1.5rem 1.5rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); }
+  .cdm-p360__titulo { margin: 0; font-family: var(--font-display); font-stretch: 88%; font-weight: 700; font-size: 1.35rem; color: var(--color-cdm-texto); }
+  .cdm-p360__titulo span { margin-left: 0.5rem; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 500; color: var(--color-cdm-ok); }
+  .cdm-p360__texto { max-width: 62ch; margin: 0.55rem 0 0; font-size: 0.98rem; line-height: 1.6; color: #b9c5cf; }
+  .cdm-p360__botones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+</style>

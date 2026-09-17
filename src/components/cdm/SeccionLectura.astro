@@ -1,0 +1,46 @@
+---
+/* Sección de la columna de lectura de LecturaLayout: H2, entradilla y
+   contenido. El id es el destino del índice lateral; dos secciones seguidas
+   se separan con una regla. */
+interface Props {
+  id: string;
+  titulo?: string;
+  /* Sin título visible (un mapa, por ejemplo): nombre accesible. */
+  etiqueta?: string;
+  lead?: string;
+  /* Línea corta en mono encima del título. */
+  meta?: string;
+}
+
+const { id, titulo, etiqueta, lead, meta } = Astro.props;
+const idTitulo = `${id}-titulo`;
+---
+
+<section class="lec-sec" id={id} aria-labelledby={titulo ? idTitulo : undefined} aria-label={titulo ? undefined : etiqueta}>
+  {meta && <p class="lec-sec__meta">{meta}</p>}
+  {titulo && <h2 class="lec-sec__h2" id={idTitulo}>{titulo}</h2>}
+  {lead && <p class="lec-sec__lead">{lead}</p>}
+  <slot />
+</section>
+
+<style>
+  .lec-sec { scroll-margin-top: 96px; }
+  .lec-sec + .lec-sec {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--color-cdm-regla);
+  }
+  .lec-sec__meta { margin: 0 0 0.6rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
+  .lec-sec__h2 {
+    margin: 0;
+    max-width: 26ch;
+    font-family: var(--font-display);
+    font-stretch: 82%;
+    font-weight: 720;
+    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-cdm-texto);
+  }
+  .lec-sec__lead { margin: 0.9rem 0 0; font-size: 1.05rem; line-height: 1.6; color: var(--color-cdm-tenue); }
+</style>

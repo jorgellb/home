@@ -5,7 +5,11 @@
    /diseno-web/#<comarca>. */
 import LecturaLayout from '../../layouts/LecturaLayout.astro';
 import Boton from '../../components/cdm/Boton.astro';
+import Fichas from '../../components/cdm/Fichas.astro';
+import ListaEnlaces from '../../components/cdm/ListaEnlaces.astro';
+import Preguntas from '../../components/cdm/Preguntas.astro';
 import RadarCobertura from '../../components/cdm/RadarCobertura.astro';
+import SeccionLectura from '../../components/cdm/SeccionLectura.astro';
 import type { Cifra, SeccionIndice } from '../../components/cdm/tipos';
 import { pueblos, comarcas, getPueblosByComarca, comarcaSlug } from '../../data/pueblos-almeria';
 
@@ -168,140 +172,64 @@ const jsonLd = [
 
   <RadarCobertura slot="lateral" />
 
-  <section class="hub-sec" id="por-que" aria-labelledby="hub-por-que">
-    <h2 class="hub-h2" id="hub-por-que">Una web pensada para vender en tu zona.</h2>
-    <p class="hub-lead">
-      No hacemos plantillas genéricas. Cada negocio de Almería compite por un
-      cliente concreto —el vecino que busca en Google, el turista que reserva
-      desde otro país, el distribuidor que busca proveedor— y cada web que
-      diseñamos está construida para ganar esa búsqueda.
-    </p>
-    <ul class="hub-valores">
-      {valores.map((v) => (
-        <li>
-          <h3 class="hub-h3">{v.t}</h3>
-          <p class="hub-texto">{v.d}</p>
-          <a href={v.href}>{v.enlace}</a>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <SeccionLectura
+    id="por-que"
+    titulo="Una web pensada para vender en tu zona."
+    lead="No hacemos plantillas genéricas. Cada negocio de Almería compite por un cliente concreto —el vecino que busca en Google, el turista que reserva desde otro país, el distribuidor que busca proveedor— y cada web que diseñamos está construida para ganar esa búsqueda."
+  >
+    <Fichas items={valores.map((v) => ({ titulo: v.t, texto: v.d, href: v.href, enlace: v.enlace }))} />
+  </SeccionLectura>
 
   {comarcasConPueblos.map(({ comarca, lista }) => {
     const info = comarcaInfo[comarca];
-    const id = comarcaSlug(comarca);
     return (
-      <section class="hub-sec" id={id} aria-labelledby={`hub-${id}`}>
-        <p class="hub-meta">{lista.length} municipios</p>
-        <h2 class="hub-h2" id={`hub-${id}`}>{comarca}</h2>
-        <p class="hub-lead">
-          {info?.intro ?? `Municipios donde trabajamos en ${comarca}. Cada pueblo tiene su propia página con SEO local optimizado.`}
-        </p>
+      <SeccionLectura
+        id={comarcaSlug(comarca)}
+        meta={`${lista.length} municipios`}
+        titulo={comarca}
+        lead={info?.intro ?? `Municipios donde trabajamos en ${comarca}. Cada pueblo tiene su propia página con SEO local optimizado.`}
+      >
         {info?.sectores && (
           <ul class="hub-chips">
-            {info.sectores.map((s) => <li>{s}</li>)}
+            {info.sectores.map((sector) => <li>{sector}</li>)}
           </ul>
         )}
-        <ul class="hub-atlas">
-          {lista.map((p) => (
-            <li>
-              <a href={`/diseno-web/${p.slug}/`} class:list={['hub-pueblo', { 'hub-pueblo--destacado': p.destacado }]}>
-                <span class="hub-pueblo__nombre">{p.nombre}</span>
-                <span class="hub-pueblo__sub">
-                  {p.sectorPrincipal ?? (p.poblacion ? `${p.poblacion.toLocaleString('es-ES')} hab.` : comarca)}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <ListaEnlaces
+          columnas={4}
+          items={lista.map((p) => ({
+            href: `/diseno-web/${p.slug}/`,
+            label: p.nombre,
+            sub: p.sectorPrincipal ?? (p.poblacion ? `${p.poblacion.toLocaleString('es-ES')} hab.` : comarca),
+            destacado: p.destacado,
+          }))}
+        />
+      </SeccionLectura>
     );
   })}
 
-  <section class="hub-sec" id="faq" aria-labelledby="hub-faq">
-    <h2 class="hub-h2" id="hub-faq">Lo que todo negocio pregunta.</h2>
-    <p class="hub-lead">
-      Resolvemos las dudas más habituales sobre diseño web, SEO local y
-      presupuestos para negocios de la provincia de Almería.
-    </p>
-    <ul class="hub-faq">
-      {faqs.map((f, i) => (
-        <li>
-          <details open={i === 0}>
-            <summary>{f.q}</summary>
-            <p class="hub-texto">{f.a}</p>
-          </details>
-        </li>
-      ))}
-    </ul>
-  </section>
+  <SeccionLectura
+    id="faq"
+    titulo="Lo que todo negocio pregunta."
+    lead="Resolvemos las dudas más habituales sobre diseño web, SEO local y presupuestos para negocios de la provincia de Almería."
+  >
+    <Preguntas items={faqs} />
+  </SeccionLectura>
 
-  <section class="hub-sec" id="empezar" aria-labelledby="hub-empezar">
-    <p class="hub-meta">¿No encuentras tu municipio?</p>
-    <h2 class="hub-h2" id="hub-empezar">Cubrimos toda Almería.</h2>
-    <p class="hub-lead">
-      Si tu pueblo no está en el atlas, escríbenos. Trabajamos con cualquier
-      localidad de la provincia y te hacemos presupuesto personalizado para tu zona.
-    </p>
+  <SeccionLectura
+    id="empezar"
+    meta="¿No encuentras tu municipio?"
+    titulo="Cubrimos toda Almería."
+    lead="Si tu pueblo no está en el atlas, escríbenos. Trabajamos con cualquier localidad de la provincia y te hacemos presupuesto personalizado para tu zona."
+  >
     <div class="hub-acciones">
       <Boton href="/contacto/">Consulta gratuita</Boton>
       <Boton href="tel:+34657085019" variante="linea">Llamar al 657 085 019</Boton>
     </div>
-  </section>
+  </SeccionLectura>
 </LecturaLayout>
 
 <style>
-  .hub-sec { scroll-margin-top: 96px; }
-  .hub-sec + .hub-sec { margin-top: clamp(3rem, 6vw, 4.5rem); padding-top: clamp(2.5rem, 5vw, 3.5rem); border-top: 1px solid var(--color-cdm-regla); }
-
-  .hub-meta { margin: 0 0 0.6rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
-  .hub-h2 {
-    margin: 0;
-    max-width: 26ch;
-    font-family: var(--font-display);
-    font-stretch: 82%;
-    font-weight: 720;
-    font-size: clamp(1.75rem, 3.4vw, 2.5rem);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--color-cdm-texto);
-  }
-  .hub-lead { margin: 0.9rem 0 0; font-size: 1.05rem; line-height: 1.6; color: var(--color-cdm-tenue); }
-  .hub-h3 { margin: 0; font-family: var(--font-display); font-stretch: 88%; font-weight: 680; font-size: 1.15rem; line-height: 1.15; color: var(--color-cdm-texto); }
-  .hub-texto { margin: 0.55rem 0 0; font-size: 0.96rem; line-height: 1.6; color: #b9c5cf; }
-
-  .hub-valores { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1px; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 720px) { .hub-valores { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .hub-valores > li { display: flex; flex-direction: column; padding: 1.35rem 1.4rem 1.4rem; background: var(--color-cdm-panel); }
-  .hub-valores .hub-texto { flex: 1; }
-  .hub-valores a { margin-top: 1rem; align-self: flex-start; font-family: var(--font-mono); font-size: 0.82rem; color: var(--color-cdm-senal); text-underline-offset: 4px; }
-
   .hub-chips { list-style: none; margin: 1.25rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .hub-chips li { padding: 0.3rem 0.65rem; font-family: var(--font-mono); font-size: 0.74rem; color: var(--color-cdm-texto); border: 1px solid var(--color-cdm-regla-2); background: var(--color-cdm-panel-2); }
-
-  /* Reglas por celda y no con gap sobre fondo: así la última fila incompleta
-     no enseña un bloque del color de la regla. */
-  .hub-atlas { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--color-cdm-regla); border-left: 1px solid var(--color-cdm-regla); }
-  .hub-atlas > li { border-right: 1px solid var(--color-cdm-regla); border-bottom: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 720px) { .hub-atlas { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  @media (min-width: 1200px) { .hub-atlas { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .hub-pueblo { display: flex; flex-direction: column; gap: 0.3rem; height: 100%; padding: 0.85rem 1rem; background: var(--color-cdm-panel); color: var(--color-cdm-texto); text-decoration: none; transition: background-color 0.15s; }
-  .hub-pueblo:hover { background: var(--color-cdm-panel-2); }
-  .hub-pueblo:hover .hub-pueblo__nombre { color: var(--color-cdm-senal); }
-  .hub-pueblo:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: -2px; }
-  .hub-pueblo__nombre { font-weight: 600; font-size: 0.98rem; line-height: 1.2; transition: color 0.15s; }
-  /* Destacado: los pueblos principales de cada comarca (campo `destacado` de los datos). */
-  .hub-pueblo--destacado .hub-pueblo__nombre::after { content: ' ★'; color: var(--color-cdm-senal); }
-  .hub-pueblo__sub { font-family: var(--font-mono); font-size: 0.7rem; line-height: 1.35; color: var(--color-cdm-tenue); }
-
-  .hub-faq { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--color-cdm-regla); }
-  .hub-faq > li { border-bottom: 1px solid var(--color-cdm-regla); }
-  .hub-faq summary { display: flex; justify-content: space-between; gap: 1rem; padding: 1.05rem 0; cursor: pointer; list-style: none; font-weight: 600; font-size: 1.02rem; line-height: 1.4; color: var(--color-cdm-texto); }
-  .hub-faq summary::-webkit-details-marker { display: none; }
-  .hub-faq summary::after { content: '+'; flex: none; font-family: var(--font-mono); color: var(--color-cdm-senal); }
-  .hub-faq details[open] summary::after { content: '−'; }
-  .hub-faq summary:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: 3px; }
-  .hub-faq details p { margin: 0 0 1.2rem; }
-
   .hub-acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
 </style>
