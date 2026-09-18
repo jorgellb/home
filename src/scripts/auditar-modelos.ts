@@ -43,9 +43,10 @@ function revisar(
     }
     console.log(`  ✓ ${id}`);
   }
-  /* Con menos de tres, una saturación puntual del gratuito tumba la demo. */
+  /* Con uno solo no hay reserva si lo retiran. Más de dos tampoco interesa: el
+     cupo gratuito es por cuenta, no por modelo (ver modelos-openrouter.ts). */
   const vivos = lista.length - fallos.length;
-  if (vivos < 3) fallos.push(`${nombre}: solo quedan ${vivos} modelos vivos, hacen falta 3 como mínimo`);
+  if (vivos < 2) fallos.push(`${nombre}: solo queda ${vivos} modelo vivo, hacen falta 2`);
   return fallos;
 }
 

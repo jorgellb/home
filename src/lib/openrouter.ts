@@ -139,52 +139,59 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
 
 /** Llamada NO-streaming con cadena de modelos: devuelve el texto completo
  *  (útil cuando se espera JSON). Pasa VISION_MODELS para análisis de imagen. */
-/* El tramo gratuito de OpenRouter va con cola: responde 429 o 503 cuando hay
-   mucha demanda y a veces un modelo se queda colgado sin contestar nunca. Con
-   una sola pasada eso se traduce en que una de cada cuatro peticiones muere.
-   Por eso: cada modelo tiene su propio plazo, y si la cadena entera cae por
-   causas pasajeras se repite una vez tras una espera corta, que suele bastar
-   para que la cola se despeje. Todo ello dentro de un presupuesto total, para
-   no dejar a nadie esperando indefinidamente. */
+/* IMPORTANTE: el tramo gratuito de OpenRouter se limita POR CUENTA Y POR DÍA,
+   no por modelo: 50 peticiones diarias (1.000 si alguna vez se compran 10 $ de
+   crédito) y 20 por minuto. El contador se reinicia a medianoche UTC.
+
+   Eso da la vuelta a la intuición de siempre: cada modelo de reserva que se
+   prueba gasta una petición del mismo cupo, así que una cadena larga no da más
+   aguante, lo agota antes. Con cinco modelos, una sola visita podía gastar
+   cinco de las cincuenta del día. Por eso la cadena es CORTA a propósito: dos
+   modelos. Antes de añadir un tercero, recuerda que se paga en demos que otro
+   visitante ya no podrá hacer.
+
+   Del mismo modo, reintentar a ciegas duplica el consumo justo cuando escasea.
+   Solo se reintenta si el propio OpenRouter dice que la espera es corta, que es
+   el tope por minuto; contra el tope diario esperar no sirve de nada y se corta
+   al momento para no quemar el cupo que quede. */
 const PLAZO_MODELO_MS = 22_000;
-const PRESUPUESTO_MS = 70_000;
-const ESPERA_REINTENTO_MS = 1_800;
-/* Estados que merece la pena reintentar: la cola está llena o el proveedor
-   tiene un mal momento. Un 400 o un 401 no mejoran esperando. */
-const PASAJEROS = new Set([408, 409, 425, 429, 500, 502, 503, 504]);
+const PRESUPUESTO_MS = 55_000;
+/* Por encima de esto ya no es el tope por minuto: es el diario. */
+const ESPERA_MAXIMA_MS = 5_000;
+/* Fallos del proveedor, no del cupo: el siguiente modelo puede funcionar. */
+const PASAJEROS = new Set([408, 409, 425, 500, 502, 503, 504]);
+
+export type MotivoFallo = 'cupo-diario' | 'saturado' | 'error';
+
+/** Cuánto pide esperar OpenRouter, en ms, o null si no lo dice. */
+function esperaPedida(res: Response): number | null {
+  const reset = res.headers.get('x-ratelimit-reset');
+  if (reset) {
+    /* Viene en epoch de milisegundos. */
+    const ms = Number(reset) - Date.now();
+    if (Number.isFinite(ms) && ms > 0) return ms;
+  }
+  const retry = res.headers.get('retry-after');
+  if (retry) {
+    const s = Number(retry);
+    if (Number.isFinite(s) && s > 0) return s * 1000;
+  }
+  return null;
+}
+
+export type ResultadoTexto =
+  | { ok: true; text: string }
+  | { ok: false; status: number; detail: string; motivo: MotivoFallo };
 
 export async function chatText(
   opts: Opts,
   models: string[] = FREE_MODELS,
-): Promise<{ ok: true; text: string } | { ok: false; status: number; detail: string }> {
+): Promise<ResultadoTexto> {
   const limite = Date.now() + PRESUPUESTO_MS;
   let lastStatus = 0;
   let lastDetail = '';
+  let esperado = false;
 
-  for (let vuelta = 0; vuelta < 2; vuelta++) {
-    if (vuelta > 0) {
-      if (!PASAJEROS.has(lastStatus) || Date.now() + ESPERA_REINTENTO_MS >= limite) break;
-      console.warn(`[openrouter] (json) toda la cadena falló (${lastStatus}); se reintenta una vez`);
-      await new Promise((r) => setTimeout(r, ESPERA_REINTENTO_MS));
-    }
-    const r = await unaPasada(opts, models, limite, vuelta);
-    if (r.ok) return r;
-    lastStatus = r.status;
-    lastDetail = r.detail;
-  }
-
-  console.error('[openrouter] (json) todos los modelos fallaron', lastStatus, lastDetail);
-  return { ok: false, status: lastStatus, detail: lastDetail };
-}
-
-async function unaPasada(
-  opts: Opts,
-  models: string[],
-  limite: number,
-  vuelta: number,
-): Promise<{ ok: true; text: string } | { ok: false; status: number; detail: string }> {
-  let lastStatus = 0;
-  let lastDetail = '';
   for (const model of models) {
     if (Date.now() >= limite) {
       lastDetail = 'se agotó el tiempo disponible';
@@ -237,8 +244,29 @@ async function unaPasada(
     }
     lastStatus = res.status;
     lastDetail = (await res.text().catch(() => '')).slice(0, 200);
+
+    if (res.status === 429) {
+      const espera = esperaPedida(res);
+      /* Sin dato o con una espera larga, es el tope diario de la cuenta: probar
+         otro modelo gastaría cupo para nada, porque el límite es de la cuenta
+         entera. Se corta aquí y se dice por qué. */
+      if (espera === null || espera > ESPERA_MAXIMA_MS) {
+        console.error('[openrouter] (json) cupo diario del tramo gratuito agotado');
+        return { ok: false, status: 429, detail: lastDetail, motivo: 'cupo-diario' };
+      }
+      /* Espera corta: es el tope por minuto y sí se despeja. Se espera una sola
+         vez en toda la llamada, no una por modelo. */
+      if (!esperado && Date.now() + espera < limite) {
+        esperado = true;
+        console.warn(`[openrouter] (json) tope por minuto; esperando ${Math.round(espera)} ms`);
+        await new Promise((r) => setTimeout(r, espera));
+        continue;
+      }
+    }
     console.warn(`[openrouter] (json) ${model} → ${res.status}, siguiente…`);
   }
-  if (vuelta === 0) console.warn('[openrouter] (json) primera pasada sin suerte');
-  return { ok: false, status: lastStatus, detail: lastDetail };
+
+  console.error('[openrouter] (json) todos los modelos fallaron', lastStatus, lastDetail);
+  const motivo: MotivoFallo = PASAJEROS.has(lastStatus) ? 'saturado' : 'error';
+  return { ok: false, status: lastStatus, detail: lastDetail, motivo };
 }

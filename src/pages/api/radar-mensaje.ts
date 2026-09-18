@@ -50,7 +50,12 @@ Escribe el mensaje de contacto en JSON.`;
     apiKey, title: 'Radar · Mensaje', temperature: 0.7, maxTokens: 600,
     messages: [{ role: 'system', content: SYSTEM }, { role: 'user', content: userPrompt }],
   });
-  if (!result.ok) return json({ error: 'La IA está saturada ahora mismo. Inténtalo de nuevo.' }, 502);
+  if (!result.ok) {
+    if (result.motivo === 'cupo-diario') {
+      return json({ error: 'La IA ha alcanzado su límite de pruebas por hoy. Se restablece a medianoche.' }, 429);
+    }
+    return json({ error: 'La IA está saturada ahora mismo. Inténtalo de nuevo.' }, 502);
+  }
 
   let raw = result.text.trim();
   const fence = raw.match(/```(?:json)?\s*([\s\S]*?)```/i);

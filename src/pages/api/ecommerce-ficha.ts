@@ -123,6 +123,15 @@ export const POST: APIRoute = async ({ request }) => {
   }, VISION_MODELS);
 
   if (!result.ok) {
+    /* Decir "inténtalo en unos segundos" cuando el cupo diario está agotado es
+       mentir: no vuelve hasta medianoche UTC. Cada caso, su mensaje. */
+    if (result.motivo === 'cupo-diario') {
+      return jsonError(
+        'El analizador ha alcanzado su límite de pruebas por hoy. Se restablece a medianoche; '
+        + 'si quieres verlo antes, escríbenos y te lo enseñamos en directo.',
+        429,
+      );
+    }
     return jsonError('El analizador de imágenes está saturado ahora mismo. Inténtalo de nuevo en unos segundos.', 502);
   }
 
