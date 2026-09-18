@@ -1,0 +1,38 @@
+---
+/* Cierre de página con enlaces contextuales a lo que sigue.
+   Existe para que ninguna página sea un callejón sin salida: reparte
+   relevancia hacia las páginas de negocio y da al visitante el paso lógico. */
+import ListaEnlaces from './ListaEnlaces.astro';
+import type { Enlace } from './ListaEnlaces.astro';
+
+interface Props {
+  titulo?: string;
+  items: Enlace[];
+  columnas?: 2 | 3 | 4;
+}
+
+const { titulo = 'Sigue por aquí', items, columnas = 3 } = Astro.props;
+---
+
+<section class="cdm-relacionados" aria-labelledby="cdm-relacionados-tit">
+  <div class="container-brutal">
+    <h2 id="cdm-relacionados-tit" class="cdm-relacionados__titulo">{titulo}</h2>
+    <ListaEnlaces items={items} columnas={columnas} />
+  </div>
+</section>
+
+<style>
+  .cdm-relacionados {
+    background: var(--color-cdm-suelo);
+    color: var(--color-cdm-texto);
+    border-top: 1px solid var(--color-cdm-regla);
+    padding: 3.5rem 0;
+  }
+  .cdm-relacionados__titulo {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    letter-spacing: -0.025em;
+    margin: 0 0 1.25rem;
+    color: var(--color-cdm-texto);
+  }
+</style>

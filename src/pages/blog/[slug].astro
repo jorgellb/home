@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { getCollection, render } from 'astro:content';
 import LecturaLayout from '../../layouts/LecturaLayout.astro';
 import Boton from '../../components/cdm/Boton.astro';
+import ListaEnlaces from '../../components/cdm/ListaEnlaces.astro';
+import { enlacesPorPost } from '../../data/enlaces-post';
 import type { SeccionIndice } from '../../components/cdm/tipos';
 
 export async function getStaticPaths() {
@@ -32,6 +34,9 @@ const secciones: SeccionIndice[] = headings
   .map((h) => ({ id: h.slug, etiqueta: h.text }));
 if (secciones.length === 0) secciones.push({ id: 'articulo', etiqueta: 'Artículo' });
 const url = `https://platanitorico.com/blog/${post.data.slug}/`;
+
+/* Enlaces a los servicios que resuelven lo que cuenta el artículo. */
+const relacionados = enlacesPorPost[post.data.slug] ?? [];
 
 /* La imagen destacada es el LCP del artículo: si existen sus versiones
    ligeras (npm run optimizar:imagenes, 800 px) se sirven en un <picture>. */
@@ -112,7 +117,8 @@ const articleSchema = {
     </ul>
   </div>
 
-  <section slot="cierre" class="post-cta">
+  <Fragment slot="cierre">
+  <section class="post-cta">
     <div class="post-cta__dentro">
       <h2 class="post-cta__titulo">¿Te ha resonado? Hablemos.</h2>
       <p class="post-cta__texto">
@@ -125,9 +131,25 @@ const articleSchema = {
       </div>
     </div>
   </section>
+
+  {/* Enlaces a lo que resuelve el artículo. Van tras el CTA para no adelantar
+      al primer H2 de la página, que es el del cierre. */}
+  {relacionados.length > 0 && (
+    <section class="post-relacionados" aria-labelledby="post-relacionados-tit">
+      <div class="post-relacionados__dentro">
+        <h2 id="post-relacionados-tit" class="post-relacionados__titulo">Si esto te toca de cerca</h2>
+        <ListaEnlaces items={relacionados} columnas={3} />
+      </div>
+    </section>
+  )}
+  </Fragment>
 </LecturaLayout>
 
 <style>
+  .post-relacionados { background: var(--color-cdm-suelo); border-top: 1px solid var(--color-cdm-regla); padding: 3rem 1.25rem; }
+  .post-relacionados__dentro { max-width: var(--container-max); margin: 0 auto; }
+  .post-relacionados__titulo { font-family: var(--font-display); font-size: 1.25rem; letter-spacing: -0.02em; margin: 0 0 0.9rem; color: var(--color-cdm-texto); }
+
   .post-imagen { margin: 0; border: 1px solid var(--color-cdm-regla-2); background: var(--color-cdm-panel); }
   .post-imagen img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
   .post-imagen figcaption { padding: 0.55rem 0.8rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-cdm-tenue); border-top: 1px solid var(--color-cdm-regla); }
