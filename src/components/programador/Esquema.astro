@@ -1,0 +1,231 @@
+---
+/* Un esquema por tecnología. Cada uno dibuja QUÉ TOCA esa tecnología dentro de
+   un sistema que ya existe, que es la pregunta que trae quien llega. No son
+   iconos: si se cambia el de WordPress por el de Node.js, la página deja de
+   ser cierta.
+ *
+ * Todos comparten gramática para que se lean como una serie: lo que ya existe
+ * en gris con trazo continuo, lo que aportamos en lima, lo que hoy duele en
+ * rojo, y el trazo discontinuo para lo que va y viene.
+ *
+ * El `<title>` de cada SVG no es opcional: es lo que oye quien no lo ve. */
+import type { SlugTecnologia } from '../../data/tecnologias';
+interface Props { tecnologia: SlugTecnologia; class?: string }
+const { tecnologia, class: clase } = Astro.props;
+
+const TITULOS: Record<SlugTecnologia, string> = {
+  wordpress: 'El núcleo de WordPress se queda intacto; lo propio se acopla al lado y es lo que habla con el programa de gestión.',
+  astro: 'De todo el JavaScript que hoy se envía, solo queda encendido lo que de verdad se usa.',
+  react: 'Una pantalla con estado: lo que se toca a la izquierda cambia lo que se ve a la derecha, sin recargar.',
+  nextjs: 'El mismo proyecto partido en dos: la mitad pública que Google lee y la mitad privada tras la puerta.',
+  nodejs: 'Dos programas que hoy no se hablan y una persona haciendo de puente; el puente pasa a ser automático.',
+  javascript: 'La web sigue siendo la misma y solo se rellena el hueco que faltaba.',
+  apps: 'El móvil trabaja sin cobertura y vuelca lo acumulado cuando vuelve a tenerla.',
+};
+---
+
+<figure class:list={['esq', clase]}>
+  <div class="esq__marco pw-tram">
+    <span class="esq__esq esq__esq--ai" aria-hidden="true"></span>
+    <span class="esq__esq esq__esq--ad" aria-hidden="true"></span>
+    <span class="esq__esq esq__esq--bi" aria-hidden="true"></span>
+    <span class="esq__esq esq__esq--bd" aria-hidden="true"></span>
+
+    <svg class="esq__svg" viewBox="4 18 332 160" fill="none" role="img" aria-labelledby={`esq-${tecnologia}`}>
+      <title id={`esq-${tecnologia}`}>{TITULOS[tecnologia]}</title>
+
+      {tecnologia === 'wordpress' && (
+        <g>
+          <rect x="18" y="48" width="120" height="94" class="e-base" />
+          <text x="78" y="40" class="e-tag" text-anchor="middle">lo que ya hay</text>
+          <text x="78" y="88" class="e-lbl" text-anchor="middle">núcleo</text>
+          <text x="78" y="106" class="e-lbl" text-anchor="middle">y contenido</text>
+          <line x1="38" y1="120" x2="118" y2="120" class="e-base" />
+          <line x1="38" y1="130" x2="98" y2="130" class="e-base" />
+
+          <rect x="158" y="66" width="78" height="58" class="e-nuevo" />
+          <text x="197" y="58" class="e-tag e-tag--nuevo" text-anchor="middle">a medida</text>
+          <text x="197" y="92" class="e-lbl e-lbl--nuevo" text-anchor="middle">plugin</text>
+          <text x="197" y="108" class="e-lbl e-lbl--nuevo" text-anchor="middle">propio</text>
+          <line x1="138" y1="95" x2="158" y2="95" class="e-nuevo" />
+
+          <rect x="254" y="66" width="68" height="58" class="e-base" />
+          <text x="288" y="90" class="e-lbl" text-anchor="middle">programa</text>
+          <text x="288" y="106" class="e-lbl" text-anchor="middle">de gestión</text>
+          <path d="M236 95 H254" class="e-nuevo e-flujo" />
+          <path d="M248 91 l6 4 -6 4" class="e-nuevo" />
+        </g>
+      )}
+
+      {tecnologia === 'astro' && (
+        <g>
+          <text x="20" y="34" class="e-tag">lo que se envía hoy</text>
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <rect x={20 + i * 26} y="46" width="18" height="52" class="e-hoy" />
+          ))}
+          <text x="20" y="118" class="e-lbl e-lbl--hoy">6 bloques, se usa 1</text>
+
+          <path d="M186 72 H214" class="e-nuevo e-flujo" />
+          <path d="M208 68 l6 4 -6 4" class="e-nuevo" />
+
+          <text x="232" y="34" class="e-tag e-tag--nuevo">después</text>
+          <rect x="232" y="46" width="18" height="52" class="e-nuevo" />
+          {[1, 2, 3, 4].map((i) => (
+            <rect x={232 + i * 22} y="46" width="18" height="52" class="e-fuera" />
+          ))}
+          <text x="232" y="118" class="e-lbl e-lbl--nuevo">1 isla encendida</text>
+
+          <line x1="20" y1="146" x2="320" y2="146" class="e-base" />
+          <text x="20" y="165" class="e-lbl">el contenido no se toca: se sirve ya montado</text>
+        </g>
+      )}
+
+      {tecnologia === 'react' && (
+        <g>
+          <rect x="18" y="34" width="304" height="126" class="e-base" />
+          <line x1="18" y1="58" x2="322" y2="58" class="e-base" />
+          <circle cx="32" cy="46" r="3.5" class="e-base-f" />
+          <circle cx="44" cy="46" r="3.5" class="e-base-f" />
+
+          <rect x="34" y="74" width="96" height="20" class="e-nuevo" />
+          <text x="82" y="88" class="e-lbl e-lbl--nuevo" text-anchor="middle">filtro activo</text>
+          <rect x="34" y="102" width="96" height="14" class="e-base" />
+          <rect x="34" y="122" width="96" height="14" class="e-base" />
+          <text x="34" y="150" class="e-tag">se toca aquí</text>
+
+          <path d="M142 95 H176" class="e-nuevo e-flujo" />
+          <path d="M170 91 l6 4 -6 4" class="e-nuevo" />
+
+          {[0, 1, 2].map((i) => (
+            <rect x="192" y={74 + i * 22} width="112" height="16" class={i === 0 ? 'e-nuevo' : 'e-base'} />
+          ))}
+          <text x="192" y="150" class="e-tag">cambia aquí, sin recargar</text>
+        </g>
+      )}
+
+      {tecnologia === 'nextjs' && (
+        <g>
+          <rect x="18" y="38" width="304" height="120" class="e-base" />
+          <line x1="170" y1="38" x2="170" y2="158" class="e-base e-corte" />
+
+          <text x="42" y="62" class="e-tag e-tag--nuevo">pública</text>
+          {[0, 1, 2].map((i) => (
+            <rect x="42" y={74 + i * 20} width="104" height="12" class="e-nuevo" />
+          ))}
+          <text x="42" y="146" class="e-lbl e-lbl--nuevo">la lee Google</text>
+
+          <text x="194" y="62" class="e-tag">privada</text>
+          <rect x="194" y="74" width="104" height="52" class="e-base" />
+          <rect x="234" y="92" width="24" height="18" class="e-base" />
+          <path d="M240 92 v-6 a6 6 0 0 1 12 0 v6" class="e-base" />
+          <text x="194" y="146" class="e-lbl">tras identificarse</text>
+
+          <text x="170" y="174" class="e-tag" text-anchor="middle">un solo proyecto</text>
+        </g>
+      )}
+
+      {tecnologia === 'nodejs' && (
+        <g>
+          <rect x="18" y="52" width="104" height="70" class="e-base" />
+          <text x="70" y="44" class="e-tag" text-anchor="middle">sistema A</text>
+          <line x1="36" y1="78" x2="104" y2="78" class="e-base" />
+          <line x1="36" y1="92" x2="88" y2="92" class="e-base" />
+
+          <rect x="218" y="52" width="104" height="70" class="e-base" />
+          <text x="270" y="44" class="e-tag" text-anchor="middle">sistema B</text>
+          <line x1="236" y1="78" x2="304" y2="78" class="e-base" />
+          <line x1="236" y1="92" x2="288" y2="92" class="e-base" />
+
+          <g class="e-hoy-g">
+            <circle cx="170" cy="66" r="9" class="e-hoy" />
+            <path d="M170 76 v16 M162 84 h16 M170 92 l-6 12 M170 92 l6 12" class="e-hoy" />
+            <text x="170" y="122" class="e-lbl e-lbl--hoy" text-anchor="middle">a mano, cada día</text>
+          </g>
+
+          <path d="M122 150 H218" class="e-nuevo e-flujo" />
+          <path d="M212 146 l6 4 -6 4" class="e-nuevo" />
+          <text x="170" y="170" class="e-lbl e-lbl--nuevo" text-anchor="middle">integración automática</text>
+        </g>
+      )}
+
+      {tecnologia === 'javascript' && (
+        <g>
+          <rect x="18" y="30" width="304" height="134" class="e-base" />
+          <line x1="18" y1="54" x2="322" y2="54" class="e-base" />
+          <text x="32" y="47" class="e-tag">la web que ya tienes</text>
+
+          {[0, 1].map((i) => (
+            <rect x="34" y={70 + i * 18} width="150" height="10" class="e-base" />
+          ))}
+          <rect x="34" y="124" width="200" height="10" class="e-base" />
+          <rect x="34" y="142" width="120" height="10" class="e-base" />
+
+          <rect x="208" y="66" width="98" height="44" class="e-nuevo" />
+          <text x="257" y="84" class="e-lbl e-lbl--nuevo" text-anchor="middle">la pieza</text>
+          <text x="257" y="98" class="e-lbl e-lbl--nuevo" text-anchor="middle">que faltaba</text>
+          <path d="M257 126 v-12" class="e-nuevo e-flujo" />
+          <path d="M253 120 l4 -6 4 6" class="e-nuevo" />
+        </g>
+      )}
+
+      {tecnologia === 'apps' && (
+        <g>
+          <rect x="28" y="34" width="116" height="128" rx="9" class="e-base" />
+          <line x1="28" y1="56" x2="144" y2="56" class="e-base" />
+          {/* Señal tachada: el móvil está fuera de cobertura y sigue sirviendo. */}
+          <path d="M74 50 l6 -8 6 8" class="e-hoy" />
+          <path d="M70 42 l20 12" class="e-hoy" />
+          <text x="86" y="74" class="e-tag e-tag--hoy" text-anchor="middle">sin cobertura</text>
+          {[0, 1, 2].map((i) => (
+            <rect x="46" y={86 + i * 18} width="80" height="12" class="e-nuevo" />
+          ))}
+          <text x="86" y="152" class="e-lbl e-lbl--nuevo" text-anchor="middle">sigue apuntando</text>
+
+          <path d="M154 96 H206" class="e-nuevo e-flujo" />
+          <path d="M200 92 l6 4 -6 4" class="e-nuevo" />
+          <text x="180" y="84" class="e-tag e-tag--nuevo" text-anchor="middle">al volver</text>
+
+          <rect x="216" y="60" width="106" height="72" class="e-base" />
+          <text x="269" y="92" class="e-lbl" text-anchor="middle">servidor</text>
+          <text x="269" y="108" class="e-lbl" text-anchor="middle">ya al día</text>
+        </g>
+      )}
+
+    </svg>
+  </div>
+</figure>
+
+<style>
+  .esq { margin: 0; }
+  .esq__marco {
+    position: relative;
+    border: 1px solid var(--pw-regla-2);
+    background: var(--pw-panel);
+    padding: clamp(.75rem, 2.5vw, 1.25rem);
+  }
+  .esq__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
+  .esq__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .esq__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+  .esq__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+  .esq__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+  .esq__svg { display: block; width: 100%; height: auto; }
+
+  /* Gramática compartida por los siete dibujos. */
+  .esq__svg :global(.e-base) { stroke: var(--pw-regla-2); stroke-width: 1.25; fill: none; }
+  .esq__svg :global(.e-base-f) { fill: var(--pw-regla-2); stroke: none; }
+  .esq__svg :global(.e-nuevo) { stroke: var(--pw-luego); stroke-width: 1.5; fill: none; }
+  .esq__svg :global(.e-hoy) { stroke: var(--pw-hoy); stroke-width: 1.5; fill: none; }
+  .esq__svg :global(.e-fuera) { stroke: var(--pw-regla); stroke-width: 1; fill: none; opacity: .5; stroke-dasharray: 3 3; }
+  .esq__svg :global(.e-flujo) { stroke-dasharray: 5 4; }
+  .esq__svg :global(.e-corte) { stroke-dasharray: 4 4; }
+
+  .esq__svg :global(.e-tag) {
+    font-family: var(--font-mono, monospace); font-size: 8.5px;
+    letter-spacing: .1em; fill: var(--pw-tenue);
+  }
+  .esq__svg :global(.e-tag--nuevo) { fill: var(--pw-luego); }
+  .esq__svg :global(.e-tag--hoy) { fill: var(--pw-hoy); }
+  .esq__svg :global(.e-lbl) { font-family: var(--font-mono, monospace); font-size: 9.5px; fill: var(--pw-suave); }
+  .esq__svg :global(.e-lbl--nuevo) { fill: var(--pw-luego); }
+  .esq__svg :global(.e-lbl--hoy) { fill: var(--pw-hoy); }
+</style>

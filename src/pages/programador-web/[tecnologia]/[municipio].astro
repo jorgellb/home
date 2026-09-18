@@ -15,6 +15,8 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../../components/common/Breadcrumb.astro';
 import Seccion from '../../../components/programador/Seccion.astro';
+import Marco from '../../../components/programador/Marco.astro';
+import Esquema from '../../../components/programador/Esquema.astro';
 import Enlaces from '../../../components/programador/Enlaces.astro';
 import Faq from '../../../components/programador/Faq.astro';
 import Cta from '../../../components/programador/Cta.astro';
@@ -142,6 +144,7 @@ const description = veredicto.encajes.length
   noindex={!indexable}
   jsonLd={jsonLd}
 >
+  <Marco>
   <Breadcrumb items={[
     { label: 'Inicio', href: '/' },
     { label: 'Programador web', href: '/programador-web/' },
@@ -149,17 +152,22 @@ const description = veredicto.encajes.length
     { label: n },
   ]} />
 
-  <section class="pwl-hero">
-    <div class="container-brutal">
-      <h1 class="pwl-hero__h1">
-        {t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo con ${t.nombre}`} en {n}
-      </h1>
-      <p class="pwl-hero__lead">{entradillaLocal}</p>
+  <section class="hero">
+    <div class="container-brutal hero__in">
+      <div>
+        <p class="pw-ref">{`${tecnologia} · ${municipio}`}</p>
+        <h1 class="hero__h1">
+          {t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo con ${t.nombre}`} en {n}
+        </h1>
+        <p class="hero__lead">{entradillaLocal}</p>
+      </div>
+      <Esquema tecnologia={tecnologia} />
     </div>
   </section>
 
   {veredicto.encajes.length > 0 && (
     <Seccion
+      ref="01 · aquí"
       titulo={`Qué pide el tejido de ${n}`}
       lead={`Los sectores que aparecen aquí son los que ya tenemos documentados de ${n}, no una lista genérica. Si tu caso no está, sigue encajando: son ejemplos, no un catálogo cerrado.`}
       tono="panel"
@@ -175,7 +183,7 @@ const description = veredicto.encajes.length
     </Seccion>
   )}
 
-  <Seccion titulo={`Cómo damos servicio en ${n}`} tono="panel">
+  <Seccion ref="02 · cobertura" titulo={`Cómo damos servicio en ${n}`} tono="panel">
     {cobertura.map((f) => <p class="pwl-cob">{f}</p>)}
     <Enlaces columnas={2} enlaces={[
       ...(esPuebloIndexable(municipio)
@@ -186,7 +194,7 @@ const description = veredicto.encajes.length
   </Seccion>
 
   {(hermanas.length > 0 || vecinos.length > 0) && (
-    <Seccion titulo="Seguir por aquí">
+    <Seccion ref="03 · alrededor" titulo="Seguir por aquí">
       {hermanas.length > 0 && (
         <>
           <h3 class="pwl-sub">Otras tecnologías en {n}</h3>
@@ -210,7 +218,7 @@ const description = veredicto.encajes.length
     </Seccion>
   )}
 
-  <Seccion titulo="Preguntas frecuentes" tono="panel">
+  <Seccion ref="04 · dudas" titulo="Preguntas frecuentes" tono="panel">
     <Faq faq={faqLocal} />
   </Seccion>
 
@@ -219,29 +227,31 @@ const description = veredicto.encajes.length
     texto={`Si tienes una empresa en ${n} y algo de lo de arriba te suena, con describirlo suele bastar para saber si tiene arreglo y cuánto trabajo es.`}
     servicio={`Desarrollo ${t.etiqueta}`}
   />
+  </Marco>
 </BaseLayout>
 
 <style>
-  .pwl-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
-  .pwl-hero__h1 {
-    font-family: var(--font-display, sans-serif);
-    font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800;
-    letter-spacing: -.04em; line-height: 1.04; margin: 0 0 1.2rem;
-    color: var(--color-cdm-texto);
-  }
-  .pwl-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.05rem; line-height: 1.65; margin: 0; }
+  .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
+  .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
+  .hero__h1 { font-size: clamp(1.85rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.05; margin: .4rem 0 1.1rem; }
+  .hero__lead { max-width: 54ch; font-size: 1.04rem; line-height: 1.65; margin: 0; }
+  @media (min-width: 960px) { .hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, .95fr); } }
 
-  .pwl-enc { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
-  .pwl-enc__item {
-    display: grid; gap: .25rem; padding: 1rem 1.1rem;
-    border: 1px solid var(--color-cdm-regla); background: var(--color-cdm-panel-2);
-    border-left: 3px solid var(--color-cdm-ok);
+  /* Los encajes son el contenido propio del municipio: van marcados en lima
+     porque son lo que esta página aporta y el hub no tiene. */
+  /* auto-fit y no un número fijo de columnas: los encajes son 3, 4 o 5 según
+     el municipio, y una rejilla fija deja huecos que parecen un fallo. */
+  .pwl-enc {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 1px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    background: var(--pw-regla); border: 1px solid var(--pw-regla-2);
   }
-  .pwl-enc__sec { color: var(--color-cdm-ok); font-family: var(--font-mono, monospace); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; }
-  .pwl-enc__nec { color: var(--color-cdm-texto); line-height: 1.5; }
-  @media (min-width: 800px) { .pwl-enc { grid-template-columns: repeat(2, 1fr); } }
+  .pwl-enc__item { display: grid; gap: .3rem; padding: 1.05rem 1.1rem; background: var(--pw-panel); border-left: 2px solid var(--pw-luego); }
+  .pwl-enc__sec { color: var(--pw-luego); font-family: var(--font-mono, monospace); font-size: .7rem; letter-spacing: .1em; }
+  .pwl-enc__nec { color: var(--pw-texto); line-height: 1.5; }
 
-  .pwl-cob { color: #b9c5cf; line-height: 1.65; max-width: 68ch; margin: 0 0 1rem; }
-  .pwl-sub { color: var(--color-cdm-texto); font-size: 1.05rem; margin: 1.6rem 0 .8rem; }
+  .pwl-cob { line-height: 1.7; max-width: 68ch; margin: 0 0 1rem; }
+  .pwl-sub { font-size: 1rem; margin: 1.8rem 0 .8rem; color: var(--pw-texto); }
   .pwl-sub:first-child { margin-top: 0; }
 </style>

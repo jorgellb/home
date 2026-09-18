@@ -2,19 +2,36 @@
 interface Props { faq: { q: string; a: string }[] }
 const { faq } = Astro.props;
 ---
-<div class="pw-faq">
+<div class="faq">
   {faq.map((f) => (
-    <details class="pw-faq__item">
-      <summary class="pw-faq__q">{f.q}</summary>
-      <p class="pw-faq__a">{f.a}</p>
+    <details class="faq__i">
+      <summary class="faq__q">
+        <span>{f.q}</span>
+        <span class="faq__s" aria-hidden="true"></span>
+      </summary>
+      <p class="faq__a">{f.a}</p>
     </details>
   ))}
 </div>
 
 <style>
-  .pw-faq { display: grid; gap: .6rem; max-width: 76ch; }
-  .pw-faq__item { border: 1px solid var(--color-cdm-regla); background: var(--color-cdm-panel-2); }
-  .pw-faq__q { cursor: pointer; padding: 1rem 1.2rem; color: var(--color-cdm-texto); font-weight: 600; line-height: 1.4; }
-  .pw-faq__q:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: -2px; }
-  .pw-faq__a { margin: 0; padding: 0 1.2rem 1.1rem; color: #b9c5cf; line-height: 1.65; }
+  .faq { max-width: 78ch; border-top: 1px solid var(--pw-regla-2); }
+  .faq__i { border-bottom: 1px solid var(--pw-regla); }
+  .faq__q {
+    cursor: pointer; list-style: none;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+    padding: 1.05rem .25rem; color: var(--pw-texto); font-weight: 600; line-height: 1.45;
+  }
+  .faq__q::-webkit-details-marker { display: none; }
+  .faq__q:focus-visible { outline: 2px solid var(--pw-marca); outline-offset: -2px; }
+  /* Signo de apertura: un más que se vuelve menos, coherente con el diff. */
+  .faq__s { position: relative; flex: 0 0 12px; height: 12px; margin-top: .3rem; }
+  .faq__s::before, .faq__s::after {
+    content: ''; position: absolute; background: var(--pw-marca);
+    transition: transform .18s var(--pw-curva), opacity .18s var(--pw-curva);
+  }
+  .faq__s::before { inset: 5px 0 auto 0; height: 1px; }
+  .faq__s::after { inset: 0 5px auto auto; width: 1px; height: 11px; }
+  .faq__i[open] .faq__s::after { transform: scaleY(0); opacity: 0; }
+  .faq__a { margin: 0; padding: 0 .25rem 1.15rem; line-height: 1.7; }
 </style>

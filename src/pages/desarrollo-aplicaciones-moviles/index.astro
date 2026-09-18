@@ -10,7 +10,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Seccion from '../../components/programador/Seccion.astro';
-import Situaciones from '../../components/programador/Situaciones.astro';
+import Marco from '../../components/programador/Marco.astro';
+import Esquema from '../../components/programador/Esquema.astro';
+import Diff from '../../components/programador/Diff.astro';
 import Servicios from '../../components/programador/Servicios.astro';
 import Enlaces from '../../components/programador/Enlaces.astro';
 import Faq from '../../components/programador/Faq.astro';
@@ -45,27 +47,34 @@ const jsonLd = [
 ---
 
 <BaseLayout title={t.title} description={t.description} canonical={canonical} jsonLd={jsonLd}>
+  <Marco>
   <Breadcrumb items={[
     { label: 'Inicio', href: '/' },
     { label: 'Aplicaciones móviles' },
   ]} />
 
-  <section class="pw-hero">
-    <div class="container-brutal">
-      <h1 class="pw-hero__h1">{t.h1}</h1>
-      <p class="pw-hero__lead">{t.entradilla}</p>
+  <section class="hero">
+    <div class="container-brutal hero__in">
+      <div>
+        <p class="pw-ref">tec.apps</p>
+        <h1 class="hero__h1">{t.h1}</h1>
+        <p class="hero__lead">{t.entradilla}</p>
+        <p class="hero__para">Para <strong>{t.distintivo}</strong>.</p>
+      </div>
+      <Esquema tecnologia="apps" />
     </div>
   </section>
 
-  <Seccion titulo="Cómo suelen llegar los encargos" tono="panel">
-    <Situaciones situaciones={t.situaciones} />
+  <Seccion ref="01 · encargos" titulo="Cómo suelen llegar" tono="panel"
+    lead="Descritos por lo que hace hoy el equipo, no por la tecnología que quieren.">
+    <Diff situaciones={t.situaciones} />
   </Seccion>
 
-  <Seccion titulo="Qué desarrollamos">
+  <Seccion ref="02 · repertorio" titulo="Qué desarrollamos">
     <Servicios servicios={t.servicios} />
   </Seccion>
 
-  <Seccion titulo="Antes de encargar una app" tono="panel">
+  <Seccion ref="03 · antes" titulo="Antes de encargar una app" tono="panel">
     <p class="pw-p">
       Una app publicada es un compromiso que no acaba el día de la entrega: las tiendas
       cambian sus requisitos y una app que lleva dos años sin adaptarse acaba retirada.
@@ -78,7 +87,7 @@ const jsonLd = [
     </p>
   </Seccion>
 
-  <Seccion titulo="Con qué se combina">
+  <Seccion ref="04 · alrededor" titulo="Con qué se combina">
     <Enlaces columnas={2} enlaces={[
       ...relacionadas.map((r) => ({
         href: rutaTecnologia(r.slug),
@@ -89,7 +98,7 @@ const jsonLd = [
     ]} />
   </Seccion>
 
-  <Seccion titulo="Preguntas frecuentes" tono="panel">
+  <Seccion ref="05 · dudas" titulo="Preguntas frecuentes" tono="panel">
     <Faq faq={t.faq} />
   </Seccion>
 
@@ -98,16 +107,16 @@ const jsonLd = [
     texto="Con saber quién la va a usar y en qué momento del día suele bastar para decir si hace falta una app o basta con una web instalable."
     servicio="Aplicaciones móviles"
   />
+  </Marco>
 </BaseLayout>
 
 <style>
-  .pw-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
-  .pw-hero__h1 {
-    font-family: var(--font-display, sans-serif);
-    font-size: clamp(2rem, 5.5vw, 3.3rem); font-weight: 800;
-    letter-spacing: -.04em; line-height: 1.02; margin: 0 0 1.2rem;
-    color: var(--color-cdm-texto);
-  }
-  .pw-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.08rem; line-height: 1.65; margin: 0; }
-  .pw-p { color: #b9c5cf; line-height: 1.7; max-width: 68ch; margin: 0 0 1rem; }
+  .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
+  .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
+  .hero__h1 { font-size: clamp(2rem, 5.2vw, 3.2rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.02; margin: .4rem 0 1.1rem; }
+  .hero__lead { max-width: 52ch; font-size: 1.07rem; line-height: 1.65; margin: 0 0 .9rem; }
+  .hero__para { margin: 0; color: var(--pw-tenue); font-size: .95rem; }
+  .hero__para strong { color: var(--pw-luego); font-weight: 600; }
+  .pw-p { line-height: 1.7; max-width: 68ch; margin: 0 0 1rem; }
+  @media (min-width: 960px) { .hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); } }
 </style>

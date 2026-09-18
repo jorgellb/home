@@ -9,7 +9,9 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../../components/common/Breadcrumb.astro';
 import Seccion from '../../../components/programador/Seccion.astro';
-import Situaciones from '../../../components/programador/Situaciones.astro';
+import Marco from '../../../components/programador/Marco.astro';
+import Esquema from '../../../components/programador/Esquema.astro';
+import Diff from '../../../components/programador/Diff.astro';
 import Servicios from '../../../components/programador/Servicios.astro';
 import Enlaces from '../../../components/programador/Enlaces.astro';
 import Faq from '../../../components/programador/Faq.astro';
@@ -29,15 +31,23 @@ const { tecnologia } = Astro.params as { tecnologia: SlugTecnologia };
 const t = TECNOLOGIAS[tecnologia];
 const canonical = `${SITE}${rutaTecnologia(tecnologia)}`;
 
-/* Solo se enlazan las locales que el control de calidad ha dejado indexables.
-   Las demás existen como noindex y se alcanzan desde su municipio, no desde
-   aquí: enlazar 25 municipios desde el hub sería el listado gigante que
-   convierte un hub en un índice sin valor. */
-const locales = matriz()
-  .filter((c) => c.tecnologia === tecnologia && c.veredicto.estado === 'index')
-  .map((c) => territorioDe(c.municipio))
-  .filter((m): m is NonNullable<typeof m> => m !== null)
-  .sort((a, b) => (a.kmDesdeBase ?? 9999) - (b.kmDesdeBase ?? 9999));
+/* Se enlazan TODAS las locales que existen, indexables o no. Una página
+   generada que nadie enlaza es una huérfana: no la encuentra ni una persona ni
+   un rastreador, y entonces no hay motivo para haberla generado. Que estén en
+   noindex no las hace inútiles para quien navega; solo las saca del índice.
+   Se ordenan por cercanía a la base y se marcan las que tienen materia propia,
+   que son las que de verdad merecen la visita. */
+const veredictos = new Map(
+  matriz()
+    .filter((c) => c.tecnologia === tecnologia)
+    .map((c) => [c.municipio, c.veredicto]),
+);
+const locales = [...veredictos.keys()]
+  .map((slug) => ({ t: territorioDe(slug), v: veredictos.get(slug)! }))
+  .filter((x): x is { t: NonNullable<ReturnType<typeof territorioDe>>; v: typeof x.v } => x.t !== null)
+  /* La capital no tiene local: su página es este mismo hub. */
+  .filter((x) => x.t.slug !== 'almeria')
+  .sort((a, b) => (a.t.kmDesdeBase ?? 9999) - (b.t.kmDesdeBase ?? 9999));
 
 const relacionadas = t.relacionadas.map((r) => TECNOLOGIAS[r]);
 
@@ -64,46 +74,56 @@ const jsonLd = [
 ---
 
 <BaseLayout title={t.title} description={t.description} canonical={canonical} jsonLd={jsonLd}>
+  <Marco>
   <Breadcrumb items={[
     { label: 'Inicio', href: '/' },
     { label: 'Programador web', href: '/programador-web/' },
     { label: t.etiqueta },
   ]} />
 
-  <section class="pw-hero">
-    <div class="container-brutal">
-      <h1 class="pw-hero__h1">{t.h1}</h1>
-      <p class="pw-hero__lead">{t.entradilla}</p>
+  <section class="hero">
+    <div class="container-brutal hero__in">
+      <div class="hero__txt">
+        <p class="pw-ref">{`tec.${tecnologia}`}</p>
+        <h1 class="hero__h1">{t.h1}</h1>
+        <p class="hero__lead">{t.entradilla}</p>
+        <p class="hero__para">Para <strong>{t.distintivo}</strong>.</p>
+      </div>
+      <Esquema tecnologia={tecnologia} class="hero__esq" />
     </div>
   </section>
 
   <Seccion
-    titulo="Cómo suelen llegar los encargos"
-    lead="Redactados como problemas, no como especificaciones técnicas."
+    ref="01 · encargos"
+    titulo="Cómo suelen llegar"
+    lead="Redactados como problemas, no como especificaciones. Arriba lo que pasa hoy; debajo, en qué queda."
     tono="panel"
   >
-    <Situaciones situaciones={t.situaciones} />
+    <Diff situaciones={t.situaciones} />
   </Seccion>
 
-  <Seccion titulo={`Qué desarrollamos con ${t.nombre}`}>
+  <Seccion ref="02 · repertorio" titulo={`Qué desarrollamos con ${t.nombre}`}>
     <Servicios servicios={t.servicios} />
   </Seccion>
 
   {locales.length > 0 && (
     <Seccion
+      ref="03 · zona"
       titulo={`${t.etiqueta} por municipio`}
-      lead={`Solo los municipios donde hay algo concreto que contar sobre ${t.nombre}. En el resto de la provincia damos el mismo servicio; lo que no hay es una página distinta que escribir.`}
+      lead={`Damos servicio en toda la provincia desde Vera. Bajo cada municipio está lo que allí se mueve y encaja con ${t.nombre}.`}
       tono="panel"
     >
       <Enlaces enlaces={locales.map((m) => ({
-        href: rutaLocal(tecnologia, m.slug),
-        texto: `${t.etiqueta} en ${m.nombre}`,
-        sub: m.comarca,
+        href: rutaLocal(tecnologia, m.t.slug),
+        texto: m.t.nombre,
+        sub: m.v.encajes.length
+          ? m.v.encajes.map((e) => e.sector.toLowerCase()).slice(0, 2).join(' · ')
+          : m.t.comarca,
       }))} />
     </Seccion>
   )}
 
-  <Seccion titulo="Tecnologías relacionadas" lead="Con lo que se combina de verdad, no con todo lo que suene parecido.">
+  <Seccion ref="04 · alrededor" titulo="Tecnologías relacionadas" lead="Con lo que se combina de verdad, no con todo lo que suene parecido.">
     <Enlaces columnas={2} enlaces={[
       ...relacionadas.map((r) => ({
         href: rutaTecnologia(r.slug),
@@ -123,7 +143,7 @@ const jsonLd = [
     ]} />
   </Seccion>
 
-  <Seccion titulo="Preguntas frecuentes" tono="panel">
+  <Seccion ref="05 · dudas" titulo="Preguntas frecuentes" tono="panel">
     <Faq faq={t.faq} />
   </Seccion>
 
@@ -133,15 +153,20 @@ const jsonLd = [
       + ' — si tu caso se parece a eso, con describirlo suele bastar para saber si tiene arreglo y cuánto trabajo es.'}
     servicio={`Desarrollo ${t.etiqueta}`}
   />
+  </Marco>
 </BaseLayout>
 
 <style>
-  .pw-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
-  .pw-hero__h1 {
-    font-family: var(--font-display, sans-serif);
-    font-size: clamp(2rem, 5.5vw, 3.3rem); font-weight: 800;
-    letter-spacing: -.04em; line-height: 1.02; margin: 0 0 1.2rem;
-    color: var(--color-cdm-texto);
+  .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
+  .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
+  .hero__h1 {
+    font-size: clamp(2rem, 5.2vw, 3.2rem); font-weight: 800;
+    letter-spacing: -.04em; line-height: 1.02; margin: .4rem 0 1.1rem;
   }
-  .pw-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.08rem; line-height: 1.65; margin: 0; }
+  .hero__lead { max-width: 52ch; font-size: 1.07rem; line-height: 1.65; margin: 0 0 .9rem; }
+  .hero__para { margin: 0; color: var(--pw-tenue); font-size: .95rem; }
+  .hero__para strong { color: var(--pw-luego); font-weight: 600; }
+  @media (min-width: 960px) {
+    .hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+  }
 </style>

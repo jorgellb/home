@@ -1,18 +1,21 @@
 ---
 /* Enlazado interno del clúster. Todo enlace pasa por aquí para que ninguna
-   página pueda apuntar a una URL que no existe: el componente recibe rutas ya
-   resueltas por quien las genera y nunca las construye a partir de suposiciones. */
+   página apunte a una URL inexistente: recibe rutas ya resueltas por quien las
+   genera y nunca las construye a partir de suposiciones.
+   La flecha es un elemento de la caja, no un carácter pegado al texto: «texto →»
+   dentro del enlace es el tic más reconocible de una página generada. */
 interface Enlace { href: string; texto: string; sub?: string }
 interface Props { enlaces: Enlace[]; columnas?: 2 | 3 }
 const { enlaces, columnas = 3 } = Astro.props;
 ---
 {enlaces.length > 0 && (
-  <ul class="pw-enl" data-cols={columnas}>
+  <ul class="enl" data-cols={columnas}>
     {enlaces.map((e) => (
-      <li class="pw-enl__item">
-        <a class="pw-enl__a" href={e.href}>
-          <span class="pw-enl__t">{e.texto}</span>
-          {e.sub && <span class="pw-enl__s">{e.sub}</span>}
+      <li>
+        <a class="enl__a" href={e.href}>
+          <span class="enl__t">{e.texto}</span>
+          {e.sub && <span class="enl__s">{e.sub}</span>}
+          <span class="enl__marca" aria-hidden="true"></span>
         </a>
       </li>
     ))}
@@ -20,16 +23,27 @@ const { enlaces, columnas = 3 } = Astro.props;
 )}
 
 <style>
-  .pw-enl { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
-  .pw-enl__a {
-    display: block; padding: .85rem 1rem; text-decoration: none;
-    border: 1px solid var(--color-cdm-regla); background: var(--color-cdm-panel-2);
-    transition: border-color .15s, background .15s;
+  .enl { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--pw-regla); border: 1px solid var(--pw-regla-2); }
+  .enl__a {
+    position: relative; display: block; height: 100%;
+    padding: 1rem 1.9rem 1.05rem 1rem;
+    text-decoration: none; background: var(--pw-panel);
+    transition: background .18s var(--pw-curva);
   }
-  .pw-enl__a:hover, .pw-enl__a:focus-visible { border-color: var(--color-cdm-senal); background: var(--color-cdm-panel); }
-  .pw-enl__t { display: block; color: var(--color-cdm-texto); font-weight: 600; font-size: .96rem; }
-  .pw-enl__s { display: block; color: #8494a2; font-size: .84rem; margin-top: .2rem; line-height: 1.4; }
-  @media (min-width: 640px) { .pw-enl[data-cols="2"] { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 640px) { .pw-enl[data-cols="3"] { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1000px) { .pw-enl[data-cols="3"] { grid-template-columns: repeat(3, 1fr); } }
+  .enl__a:hover, .enl__a:focus-visible { background: var(--pw-panel-2); }
+  .enl__a:focus-visible { outline: 2px solid var(--pw-marca); outline-offset: -2px; }
+  .enl__t { display: block; color: var(--pw-texto); font-weight: 600; font-size: .96rem; line-height: 1.35; }
+  .enl__s { display: block; color: var(--pw-tenue); font-size: .82rem; margin-top: .25rem; line-height: 1.45; }
+  /* Escuadra de encuadre que se completa al pasar por encima. */
+  .enl__marca {
+    position: absolute; right: .8rem; top: 1.15rem;
+    width: 8px; height: 8px;
+    border-top: 1px solid var(--pw-regla-2); border-right: 1px solid var(--pw-regla-2);
+    transition: border-color .18s var(--pw-curva), transform .18s var(--pw-curva);
+  }
+  .enl__a:hover .enl__marca, .enl__a:focus-visible .enl__marca {
+    border-color: var(--pw-marca); transform: translateX(2px);
+  }
+  @media (min-width: 640px) { .enl[data-cols="2"], .enl[data-cols="3"] { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .enl[data-cols="3"] { grid-template-columns: repeat(3, 1fr); } }
 </style>

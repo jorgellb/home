@@ -1,0 +1,105 @@
+---
+/* Las situaciones, leídas como un diff.
+ *
+ * El encargo llega descrito como lo que pasa hoy —alguien copiando datos a
+ * mano, una web que no carga— y la respuesta es el estado en el que queda. Esa
+ * es literalmente la forma de un diff, así que se pinta como tal: menos en rojo
+ * lo de ahora, más en lima lo de después.
+ *
+ * El signo va marcado como aria-hidden y cada lado lleva su propia etiqueta
+ * visible, porque un lector de pantalla que anuncie «menos» y «más» sueltos no
+ * comunica nada.
+ */
+import type { Situacion } from '../../data/tecnologias';
+interface Props { situaciones: Situacion[]; referencia?: string }
+const { situaciones, referencia } = Astro.props;
+---
+
+<div class="dif">
+  {referencia && <p class="pw-ref dif__ref">{referencia}</p>}
+  <ol class="dif__lista">
+    {situaciones.map((s) => (
+      <li class="dif__caso pw-tram">
+        <p class="dif__linea dif__linea--hoy">
+          <span class="dif__signo" aria-hidden="true">−</span>
+          <span class="dif__etq">Hoy</span>
+          <span class="dif__txt">{s.encargo}</span>
+        </p>
+        <p class="dif__linea dif__linea--luego">
+          <span class="dif__signo" aria-hidden="true">+</span>
+          <span class="dif__etq">Después</span>
+          <span class="dif__txt">{s.respuesta}</span>
+        </p>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .dif__ref { margin: 0 0 .9rem; }
+  .dif__lista {
+    list-style: none; margin: 0; padding: 0;
+    counter-reset: dif;
+    border: 1px solid var(--pw-regla-2);
+    background: var(--pw-panel);
+  }
+  .dif__caso {
+    counter-increment: dif;
+    position: relative;
+    padding: 1.4rem 1.3rem 1.4rem 3.4rem;
+    border-bottom: 1px solid var(--pw-regla);
+  }
+  .dif__caso:last-child { border-bottom: 0; }
+  /* El número de caso, en la canaleta, como en el margen de un editor. */
+  .dif__caso::before {
+    content: counter(dif, decimal-leading-zero);
+    position: absolute; left: 0; top: 1.5rem;
+    width: 2.5rem; text-align: right;
+    font-family: var(--font-mono, monospace);
+    font-size: .7rem; color: var(--pw-tenue); opacity: .6;
+  }
+
+  .dif__linea {
+    display: grid;
+    grid-template-columns: 1.1rem auto;
+    grid-template-areas: 'signo etq' 'signo txt';
+    gap: 0 .6rem;
+    margin: 0;
+    padding: .55rem .7rem;
+    border-left: 2px solid transparent;
+  }
+  .dif__linea + .dif__linea { margin-top: .5rem; }
+
+  .dif__signo {
+    grid-area: signo;
+    font-family: var(--font-mono, monospace);
+    font-size: 1rem; line-height: 1.3; font-weight: 700;
+  }
+  .dif__etq {
+    grid-area: etq;
+    font-family: var(--font-mono, monospace);
+    font-size: .64rem; letter-spacing: .14em; text-transform: uppercase;
+    opacity: .9;
+  }
+  .dif__txt { grid-area: txt; line-height: 1.6; }
+
+  .dif__linea--hoy {
+    background: color-mix(in srgb, var(--pw-hoy) 7%, transparent);
+    border-left-color: var(--pw-hoy);
+  }
+  .dif__linea--hoy .dif__signo, .dif__linea--hoy .dif__etq { color: var(--pw-hoy); }
+  /* Cursiva porque son palabras del cliente, no nuestras. */
+  .dif__linea--hoy .dif__txt { color: var(--pw-texto); font-style: italic; }
+
+  .dif__linea--luego {
+    background: color-mix(in srgb, var(--pw-luego) 6%, transparent);
+    border-left-color: var(--pw-luego);
+  }
+  .dif__linea--luego .dif__signo, .dif__linea--luego .dif__etq { color: var(--pw-luego); }
+  .dif__linea--luego .dif__txt { color: var(--pw-suave); }
+
+  @media (max-width: 560px) {
+    .dif__caso { padding-left: 2.6rem; }
+    .dif__caso::before { width: 1.9rem; }
+  }
+</style>

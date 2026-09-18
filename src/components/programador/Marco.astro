@@ -1,0 +1,113 @@
+---
+/* Envoltorio del clúster de desarrollo: aporta los tokens y los patrones
+   comunes para que cada página no los repita.
+ *
+ * DIRECCIÓN DE ARTE — «el parche»
+ * Este clúster no vende webs nuevas: vende intervenciones sobre algo que ya
+ * funciona. Eso ya tiene una forma visual propia y conocida por cualquiera que
+ * haya visto un control de versiones: el diff. Lo que hay hoy en rojo con un
+ * menos, lo que queda después en lima con un más.
+ *
+ * Por eso el color aquí SIGNIFICA algo y no decora:
+ *   rojo  (--pw-hoy)   lo que pasa hoy: el trabajo manual, lo que falla
+ *   lima  (--pw-luego) lo que queda después de la intervención
+ *   naranja (--pw-marca) la voz del estudio: acentos y llamadas
+ * Si algún día se usa el rojo por bonito, este sistema deja de leerse.
+ *
+ * La numeración de las láminas tampoco es adorno: las intervenciones tienen
+ * orden y la canaleta de la izquierda es la del editor donde se lee el código.
+ */
+---
+
+<div class="pw">
+  <slot />
+</div>
+
+<style is:global>
+  .pw {
+    --pw-suelo: var(--color-cdm-suelo);
+    --pw-panel: var(--color-cdm-panel);
+    --pw-panel-2: var(--color-cdm-panel-2);
+    --pw-regla: var(--color-cdm-regla);
+    --pw-regla-2: var(--color-cdm-regla-2);
+    --pw-texto: var(--color-cdm-texto);
+    --pw-tenue: var(--color-cdm-tenue);
+    --pw-suave: #b9c5cf;
+    --pw-marca: var(--color-cdm-senal);
+    --pw-hoy: #ff6b6b;
+    --pw-luego: var(--color-cdm-ok);
+    --pw-reticula: rgb(230 237 242 / 0.035);
+    --pw-curva: cubic-bezier(.2,.8,.2,1);
+
+    background: var(--pw-suelo);
+    color: var(--pw-texto);
+  }
+
+  /* ---- Tipografía común ---------------------------------------------- */
+  .pw h1, .pw h2, .pw h3 {
+    font-family: var(--font-display, sans-serif);
+    letter-spacing: -.03em;
+    color: var(--pw-texto);
+  }
+  .pw p { color: var(--pw-suave); }
+
+  /* Referencia técnica: la etiqueta monoespaciada de las láminas. Va en
+     minúsculas, no en versales: la mayúscula sostenida es el tic de cabecera
+     que sale en cualquier página generada. */
+  .pw-ref {
+    font-family: var(--font-mono, monospace);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    color: var(--pw-tenue);
+  }
+
+  /* ---- Canaleta ------------------------------------------------------- */
+  /* Numera de verdad: cada elemento es un paso o una pieza identificable. */
+  .pw-canal {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: pwc;
+    border-left: 1px solid var(--pw-regla-2);
+  }
+  .pw-canal > li {
+    counter-increment: pwc;
+    position: relative;
+    padding: 1.15rem 0 1.15rem 3.25rem;
+    border-bottom: 1px solid var(--pw-regla);
+  }
+  .pw-canal > li:last-child { border-bottom: 0; }
+  .pw-canal > li::before {
+    content: counter(pwc, decimal-leading-zero);
+    position: absolute;
+    left: 0; top: 1.2rem;
+    width: 2.4rem;
+    text-align: right;
+    font-family: var(--font-mono, monospace);
+    font-size: .72rem;
+    color: var(--pw-tenue);
+    opacity: .65;
+  }
+
+  /* ---- Retícula de lámina --------------------------------------------- */
+  .pw-tram {
+    background-image:
+      linear-gradient(var(--pw-reticula) 1px, transparent 1px),
+      linear-gradient(90deg, var(--pw-reticula) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+
+  /* ---- Enlaces de texto ----------------------------------------------- */
+  .pw a:not([class]) {
+    color: var(--pw-marca);
+    text-underline-offset: .22em;
+    text-decoration-thickness: 1px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw *, .pw *::before, .pw *::after {
+      animation-duration: .001ms !important;
+      transition-duration: .001ms !important;
+    }
+  }
+</style>

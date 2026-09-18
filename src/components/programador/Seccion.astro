@@ -1,36 +1,35 @@
 ---
-/* Envoltorio de sección del clúster. Centraliza el ritmo vertical y los tonos
-   alternos para que las páginas no tengan que repetir estilos. */
+/* Envoltorio de sección. La referencia monoespaciada de la izquierda no es un
+   "eyebrow" decorativo: numera la sección dentro de la página, igual que la
+   canaleta de un editor numera las líneas, y sirve para citarla. */
 interface Props {
   id?: string;
+  ref?: string;
   titulo: string;
   lead?: string;
   tono?: 'suelo' | 'panel';
   nivel?: 2 | 3;
 }
-const { id, titulo, lead, tono = 'suelo', nivel = 2 } = Astro.props;
+const { id, ref, titulo, lead, tono = 'suelo', nivel = 2 } = Astro.props;
 const Titulo = `h${nivel}` as 'h2' | 'h3';
 ---
-<section id={id} class:list={['pw-sec', `pw-sec--${tono}`]}>
+<section id={id} class:list={['sec', `sec--${tono}`]}>
   <div class="container-brutal">
-    <header class="pw-sec__head">
-      <Titulo class="pw-sec__t">{titulo}</Titulo>
-      {lead && <p class="pw-sec__lead">{lead}</p>}
+    <header class="sec__head">
+      {ref && <p class="pw-ref sec__ref">{ref}</p>}
+      <Titulo class="sec__t">{titulo}</Titulo>
+      {lead && <p class="sec__lead">{lead}</p>}
     </header>
     <slot />
   </div>
 </section>
 
 <style>
-  .pw-sec { padding: 3.5rem 0; border-block-start: 1px solid var(--color-cdm-regla); }
-  .pw-sec--suelo { background: var(--color-cdm-suelo); }
-  .pw-sec--panel { background: var(--color-cdm-panel); }
-  .pw-sec__head { max-width: 62ch; margin-bottom: 2rem; }
-  .pw-sec__t {
-    font-family: var(--font-display, sans-serif);
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    font-weight: 800; letter-spacing: -.03em; line-height: 1.05;
-    color: var(--color-cdm-texto); margin: 0;
-  }
-  .pw-sec__lead { margin: .75rem 0 0; color: #b9c5cf; font-size: 1.02rem; line-height: 1.6; }
+  .sec { padding: clamp(2.5rem, 6vw, 4rem) 0; border-block-start: 1px solid var(--pw-regla); }
+  .sec--suelo { background: var(--pw-suelo); }
+  .sec--panel { background: var(--pw-panel-2); }
+  .sec__head { max-width: 64ch; margin-bottom: clamp(1.5rem, 3vw, 2.25rem); }
+  .sec__ref { margin: 0 0 .5rem; }
+  .sec__t { font-size: clamp(1.55rem, 3.6vw, 2.3rem); font-weight: 800; line-height: 1.08; margin: 0; }
+  .sec__lead { margin: .8rem 0 0; font-size: 1.02rem; line-height: 1.65; }
 </style>

@@ -6,6 +6,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/common/Breadcrumb.astro';
 import Seccion from '../../components/programador/Seccion.astro';
+import Marco from '../../components/programador/Marco.astro';
 import Enlaces from '../../components/programador/Enlaces.astro';
 import Cta from '../../components/programador/Cta.astro';
 import Faq from '../../components/programador/Faq.astro';
@@ -75,46 +76,74 @@ const jsonLd = [
   canonical={canonical}
   jsonLd={jsonLd}
 >
+  <Marco>
   <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Programador web' }]} />
 
-  <section class="pw-hero">
-    <div class="container-brutal">
-      <h1 class="pw-hero__h1">Programador web en Almería</h1>
-      <p class="pw-hero__lead">
-        Casi ningún encargo llega diciendo qué tecnología quiere. Llega diciendo que alguien
-        dedica dos horas al día a copiar datos de un sitio a otro, que la web tarda en cargar
-        o que el equipo sigue apuntando los partes en papel. La tecnología es la consecuencia,
-        no el punto de partida.
-      </p>
-      <p class="pw-hero__lead">
-        Esta sección es para quien <strong>ya tiene algo</strong> y necesita cambiarlo,
-        integrarlo o construir encima. Si lo que buscas es una web desde cero, la sección
-        de <a href="/diseno-web/">diseño web por municipio</a> encaja mejor.
-      </p>
+  <section class="hero">
+    <div class="container-brutal hero__in">
+      <div class="hero__col">
+        <p class="pw-ref">desarrollo · provincia de almería</p>
+        {/* El titular tiene que seguir diciendo qué es esta página: es la única
+            del clúster que aspira a la consulta provincial genérica. Un titular
+            solo ingenioso la dejaría sin el término por el que existe. */}
+        <h1 class="hero__h1">Programador web en Almería<br /><span class="hero__h1b">para lo que ya tienes montado</span></h1>
+        <p class="hero__lead">
+          Casi ningún encargo llega diciendo qué tecnología quiere. Llega diciendo que alguien
+          dedica dos horas al día a copiar datos de un sitio a otro, que la web tarda en cargar
+          o que el equipo sigue apuntando los partes en papel. La tecnología es la consecuencia,
+          no el punto de partida.
+        </p>
+        <p class="hero__lead hero__lead--sec">
+          Si lo que buscas es una web desde cero, <a href="/diseno-web/">diseño web por
+          municipio</a> encaja mejor que esta sección.
+        </p>
+      </div>
+
+      {/* No es decoración: son las tres frases con las que más veces empieza una
+          conversación aquí, y sirven para que alguien se reconozca antes de
+          tener que elegir una tecnología que no conoce. */}
+      <aside class="sint pw-tram" aria-label="Señales de que esta sección es la tuya">
+        <p class="pw-ref sint__ref">si te suena alguna, es aquí</p>
+        <ul class="sint__l">
+          <li><span class="sint__s" aria-hidden="true">−</span>«Eso lo pasamos a mano todos los días.»</li>
+          <li><span class="sint__s" aria-hidden="true">−</span>«La hizo alguien que ya no está y nadie la toca.»</li>
+          <li><span class="sint__s" aria-hidden="true">−</span>«Va lenta y hemos probado de todo.»</li>
+        </ul>
+      </aside>
     </div>
   </section>
 
   <Seccion
-    titulo="Qué resuelve cada tecnología"
-    lead="Están aquí porque cada una cubre una situación que las demás no cubren. Si dos hicieran lo mismo, sobraría una."
+    ref="01 · reparto"
+    titulo="Empieza por el problema, no por la herramienta"
+    lead="Cada tecnología está aquí porque cubre una situación que las demás no cubren. Si dos hicieran lo mismo, sobraría una."
     tono="panel"
   >
-    <ul class="pw-tec">
+    <ul class="ind">
       {tecnologias.map((t) => (
-        <li class="pw-tec__item">
-          <h3 class="pw-tec__t"><a href={rutaTecnologia(t.slug)}>{t.etiqueta}</a></h3>
-          <p class="pw-tec__d">{t.intencion}</p>
-          <p class="pw-tec__x">Para <strong>{t.distintivo}</strong>.</p>
+        <li class="ind__i">
+          <a class="ind__a" href={rutaTecnologia(t.slug)}>
+            <span class="ind__lado">
+              <span class="pw-ref ind__ref">{t.slug}</span>
+              <span class="ind__n">{t.etiqueta}</span>
+            </span>
+            <span class="ind__cuerpo">
+              <span class="ind__int">{t.intencion}</span>
+              <span class="ind__para">Para {t.distintivo}.</span>
+            </span>
+            <span class="ind__marca" aria-hidden="true"></span>
+          </a>
         </li>
       ))}
     </ul>
   </Seccion>
 
   <Seccion
+    ref="02 · método"
     titulo="Cómo trabajamos"
-    lead="El mismo proceso para los siete casos, porque lo que cambia es la herramienta, no la forma de trabajar."
+    lead="El mismo orden para los siete casos, porque lo que cambia es la herramienta, no la forma de trabajar."
   >
-    <ol class="pw-proc">
+    <ol class="pw-canal">
       <li><strong>Entender el problema.</strong> Qué se hace hoy a mano, qué falla y cuánto cuesta que siga así.</li>
       <li><strong>Decidir con criterio.</strong> Si la solución más simple es no programar nada, se dice.</li>
       <li><strong>Presupuesto cerrado.</strong> Alcance escrito antes de empezar, para que no haya sorpresas por ninguna de las dos partes.</li>
@@ -124,8 +153,9 @@ const jsonLd = [
   </Seccion>
 
   <Seccion
+    ref="03 · zona"
     titulo="Dónde damos servicio"
-    lead="El estudio está en Vera. El desarrollo se trabaja en remoto y nos desplazamos para arrancar un proyecto o cerrar una entrega. No hay oficina en cada municipio, hay una y cobertura provincial."
+    lead="El estudio está en Vera. El desarrollo se trabaja en remoto y nos desplazamos para arrancar un proyecto o cerrar una entrega. No hay oficina en cada municipio: hay una, y cobertura provincial."
     tono="panel"
   >
     <Enlaces
@@ -137,7 +167,7 @@ const jsonLd = [
     />
   </Seccion>
 
-  <Seccion titulo="Preguntas frecuentes">
+  <Seccion ref="04 · dudas" titulo="Preguntas frecuentes">
     <Faq faq={faq} />
   </Seccion>
 
@@ -146,31 +176,61 @@ const jsonLd = [
     texto="Con saber qué sistema usáis y qué se hace hoy a mano suele bastar para decir si tiene arreglo, cuánto trabajo es y si merece la pena."
     servicio="Desarrollo a medida"
   />
+  </Marco>
 </BaseLayout>
 
 <style>
-  .pw-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
-  .pw-hero__h1 {
-    font-family: var(--font-display, sans-serif);
-    font-size: clamp(2.1rem, 6vw, 3.6rem); font-weight: 800;
-    letter-spacing: -.04em; line-height: 1; margin: 0 0 1.2rem;
-    color: var(--color-cdm-texto);
+  .hero { padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(2rem, 4vw, 3rem); }
+  .hero__in { display: grid; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
+  @media (min-width: 1000px) { .hero__in { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
+
+  .sint { border: 1px solid var(--pw-regla-2); background: var(--pw-panel); padding: 1.4rem 1.5rem 1.5rem; }
+  .sint__ref { margin: 0 0 1rem; }
+  .sint__l { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
+  .sint__l li {
+    display: grid; grid-template-columns: 1.2rem 1fr; gap: .6rem;
+    color: var(--pw-texto); font-style: italic; line-height: 1.5;
   }
-  .pw-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.08rem; line-height: 1.65; margin: 0 0 1rem; }
-  .pw-hero__lead strong { color: var(--color-cdm-texto); }
-  .pw-hero__lead a { color: var(--color-cdm-senal); }
+  .sint__s { font-family: var(--font-mono, monospace); color: var(--pw-hoy); font-weight: 700; font-style: normal; }
+  .hero__h1 {
+    font-size: clamp(2.2rem, 6.5vw, 4rem); font-weight: 800;
+    letter-spacing: -.045em; line-height: .98; margin: .5rem 0 1.4rem;
+    max-width: 18ch;
+  }
+  .hero__h1b { color: var(--pw-tenue); font-weight: 700; }
+  .hero__lead { max-width: 60ch; font-size: 1.1rem; line-height: 1.65; margin: 0 0 1rem; }
+  .hero__lead--sec { color: var(--pw-tenue); font-size: 1rem; }
 
-  .pw-tec { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
-  .pw-tec__item { border: 1px solid var(--color-cdm-regla); padding: 1.2rem; background: var(--color-cdm-panel-2); }
-  .pw-tec__t { margin: 0 0 .5rem; font-size: 1.15rem; }
-  .pw-tec__t a { color: var(--color-cdm-senal); text-decoration: none; }
-  .pw-tec__t a:hover { text-decoration: underline; }
-  .pw-tec__d { margin: 0 0 .5rem; color: #b9c5cf; line-height: 1.55; font-size: .95rem; }
-  .pw-tec__x { margin: 0; color: #8494a2; font-size: .9rem; }
-  .pw-tec__x strong { color: var(--color-cdm-texto); font-weight: 600; }
-  @media (min-width: 700px) { .pw-tec { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1050px) { .pw-tec { grid-template-columns: repeat(3, 1fr); } }
+  /* Índice de intenciones: se lee por el problema, no por el nombre de la
+     herramienta. La columna izquierda fija el nombre y la derecha dice cuándo
+     toca, para poder barrer con la vista sin leerlo todo. */
+  .ind { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--pw-regla-2); }
+  .ind__i { border-bottom: 1px solid var(--pw-regla); }
+  .ind__a {
+    position: relative; display: grid; gap: .5rem 2rem;
+    padding: 1.35rem 2rem 1.45rem .2rem;
+    text-decoration: none;
+    transition: background .18s var(--pw-curva), padding-left .18s var(--pw-curva);
+  }
+  .ind__a:hover, .ind__a:focus-visible { background: var(--pw-panel); padding-left: .7rem; }
+  .ind__a:focus-visible { outline: 2px solid var(--pw-marca); outline-offset: -2px; }
+  .ind__lado { display: flex; flex-direction: column; gap: .15rem; }
+  .ind__ref { opacity: .75; }
+  .ind__n { font-family: var(--font-display, sans-serif); font-size: 1.3rem; font-weight: 700; color: var(--pw-texto); letter-spacing: -.02em; }
+  .ind__cuerpo { display: flex; flex-direction: column; gap: .3rem; }
+  .ind__int { color: var(--pw-suave); line-height: 1.55; font-size: .97rem; }
+  .ind__para { color: var(--pw-luego); font-size: .88rem; }
+  .ind__marca {
+    position: absolute; right: .3rem; top: 1.7rem;
+    width: 9px; height: 9px;
+    border-top: 1px solid var(--pw-regla-2); border-right: 1px solid var(--pw-regla-2);
+    transition: border-color .18s var(--pw-curva), transform .18s var(--pw-curva);
+  }
+  .ind__a:hover .ind__marca, .ind__a:focus-visible .ind__marca { border-color: var(--pw-marca); transform: translateX(3px); }
+  @media (min-width: 820px) {
+    .ind__a { grid-template-columns: 13rem minmax(0, 1fr); align-items: start; }
+  }
 
-  .pw-proc { margin: 0; padding-left: 1.3rem; display: grid; gap: .8rem; max-width: 72ch; color: #b9c5cf; line-height: 1.6; }
-  .pw-proc strong { color: var(--color-cdm-texto); }
+  .pw-canal > li strong { color: var(--pw-texto); }
+  .pw-canal > li { color: var(--pw-suave); line-height: 1.6; }
 </style>
