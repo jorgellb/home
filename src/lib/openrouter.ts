@@ -139,16 +139,65 @@ export async function streamChatResponse(opts: Opts): Promise<Response> {
 
 /** Llamada NO-streaming con cadena de modelos: devuelve el texto completo
  *  (útil cuando se espera JSON). Pasa VISION_MODELS para análisis de imagen. */
+/* El tramo gratuito de OpenRouter va con cola: responde 429 o 503 cuando hay
+   mucha demanda y a veces un modelo se queda colgado sin contestar nunca. Con
+   una sola pasada eso se traduce en que una de cada cuatro peticiones muere.
+   Por eso: cada modelo tiene su propio plazo, y si la cadena entera cae por
+   causas pasajeras se repite una vez tras una espera corta, que suele bastar
+   para que la cola se despeje. Todo ello dentro de un presupuesto total, para
+   no dejar a nadie esperando indefinidamente. */
+const PLAZO_MODELO_MS = 22_000;
+const PRESUPUESTO_MS = 70_000;
+const ESPERA_REINTENTO_MS = 1_800;
+/* Estados que merece la pena reintentar: la cola está llena o el proveedor
+   tiene un mal momento. Un 400 o un 401 no mejoran esperando. */
+const PASAJEROS = new Set([408, 409, 425, 429, 500, 502, 503, 504]);
+
 export async function chatText(
   opts: Opts,
   models: string[] = FREE_MODELS,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number; detail: string }> {
+  const limite = Date.now() + PRESUPUESTO_MS;
+  let lastStatus = 0;
+  let lastDetail = '';
+
+  for (let vuelta = 0; vuelta < 2; vuelta++) {
+    if (vuelta > 0) {
+      if (!PASAJEROS.has(lastStatus) || Date.now() + ESPERA_REINTENTO_MS >= limite) break;
+      console.warn(`[openrouter] (json) toda la cadena falló (${lastStatus}); se reintenta una vez`);
+      await new Promise((r) => setTimeout(r, ESPERA_REINTENTO_MS));
+    }
+    const r = await unaPasada(opts, models, limite, vuelta);
+    if (r.ok) return r;
+    lastStatus = r.status;
+    lastDetail = r.detail;
+  }
+
+  console.error('[openrouter] (json) todos los modelos fallaron', lastStatus, lastDetail);
+  return { ok: false, status: lastStatus, detail: lastDetail };
+}
+
+async function unaPasada(
+  opts: Opts,
+  models: string[],
+  limite: number,
+  vuelta: number,
+): Promise<{ ok: true; text: string } | { ok: false; status: number; detail: string }> {
   let lastStatus = 0;
   let lastDetail = '';
   for (const model of models) {
+    if (Date.now() >= limite) {
+      lastDetail = 'se agotó el tiempo disponible';
+      break;
+    }
+    /* Ni el plazo del modelo ni lo que queda de presupuesto, lo que antes se
+       acabe: así el último modelo de la lista todavía tiene su oportunidad. */
+    const plazo = Math.min(PLAZO_MODELO_MS, limite - Date.now());
+    const corte = AbortSignal.timeout(plazo);
     let res: Response;
     try {
       res = await fetch(OPENROUTER_URL, {
+        signal: corte,
         method: 'POST',
         headers: {
           Authorization: `Bearer ${opts.apiKey}`,
@@ -164,7 +213,13 @@ export async function chatText(
           messages: opts.messages,
         }),
       });
-    } catch (err) { lastDetail = String(err); continue; }
+    } catch (err) {
+      /* Un corte por plazo cuenta como pasajero: el modelo estaba colgado. */
+      const cortado = err instanceof Error && (err.name === 'TimeoutError' || err.name === 'AbortError');
+      lastStatus = cortado ? 504 : lastStatus;
+      lastDetail = cortado ? `${model} no contestó en ${Math.round(plazo / 1000)} s` : String(err);
+      continue;
+    }
 
     if (res.ok) {
       const data = await res.json().catch(() => null);
@@ -184,6 +239,6 @@ export async function chatText(
     lastDetail = (await res.text().catch(() => '')).slice(0, 200);
     console.warn(`[openrouter] (json) ${model} → ${res.status}, siguiente…`);
   }
-  console.error('[openrouter] (json) todos los modelos fallaron', lastStatus, lastDetail);
+  if (vuelta === 0) console.warn('[openrouter] (json) primera pasada sin suerte');
   return { ok: false, status: lastStatus, detail: lastDetail };
 }
