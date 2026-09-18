@@ -70,6 +70,23 @@ async function principal(): Promise<void> {
   const ahora = new Date();
   const anterior = leerAnterior();
 
+  /* En un despliegue no se mide. Esto corre como `prebuild`, así que antes de
+     compilar salía a pedir una decena de webs de clientes y la API de
+     PageSpeed: red de terceros en la ruta crítica de cada despliegue, con
+     hasta 90 s de presupuesto y todo lo que puede salir mal en la salida de
+     red de una máquina de build.
+     Además siempre se ejecutaba, aunque el argumento sea `--si-caduca`: el
+     fichero versionado lleva `medidoEl: null` —y lo seguirá llevando, porque
+     el diff de la remedición no se commitea nunca— así que `caducada()`
+     devuelve true en todas las builds.
+     Medir es una acción deliberada, no un efecto secundario de publicar:
+     se hace en local con `npm run medir`, o forzando `--en-ci`. */
+  const enCi = process.env.CI === '1' || process.env.CI === 'true' || Boolean(process.env.VERCEL);
+  if (enCi && !process.argv.includes('--en-ci')) {
+    console.log('[medir] Build en CI: no se mide, se usan las medidas del repositorio.');
+    return;
+  }
+
   if (process.argv.includes('--si-caduca') && !caducada(anterior, ahora)) {
     console.log(`[medir] Las medidas del ${anterior?.medidoEl} siguen vigentes; no se vuelve a medir.`);
     return;
