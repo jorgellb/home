@@ -1,0 +1,781 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import Boton from '../components/cdm/Boton.astro';
+import Relacionados from '../components/cdm/Relacionados.astro';
+import IndiceLateral from '../components/cdm/IndiceLateral.astro';
+import Lamina from '../components/ia/Lamina.astro';
+import FlujoEncargo from '../components/ia/FlujoEncargo.astro';
+import MapaSistemas from '../components/ia/MapaSistemas.astro';
+import CapaIntegracion from '../components/ia/CapaIntegracion.astro';
+import ZonasEjecucion from '../components/ia/ZonasEjecucion.astro';
+import SelectorDepartamento from '../components/ia/SelectorDepartamento.astro';
+import NivelesControl from '../components/ia/NivelesControl.astro';
+import CalculadoraROI from '../components/ia/CalculadoraROI.astro';
+import VisorAR from '../components/ia/VisorAR.astro';
+import { soluciones, sectores, metodo, servicios, faqIA } from '../data/ia-empresas';
+import type { SeccionIndice } from '../components/cdm/tipos';
+
+const title = 'IA para empresas: agentes y automatización | Platanito Rico';
+const description =
+  'Diseñamos agentes y automatizaciones de IA conectados con tu CRM, tu ERP y tus documentos para atender clientes, procesar papeles y preparar propuestas, con aprobación humana.';
+const canonical = 'https://platanitorico.com/ia-empresas/';
+
+const secciones: SeccionIndice[] = [
+  { id: 'problema', etiqueta: 'El problema' },
+  { id: 'departamentos', etiqueta: 'Por dónde empezar' },
+  { id: 'soluciones', etiqueta: 'Qué construimos' },
+  { id: 'anatomia', etiqueta: 'Cómo trabaja' },
+  { id: 'integraciones', etiqueta: 'Integraciones' },
+  { id: 'control', etiqueta: 'Control humano' },
+  { id: 'seguridad', etiqueta: 'Seguridad' },
+  { id: 'metodo', etiqueta: 'Metodología' },
+  { id: 'sectores', etiqueta: 'Sectores' },
+  { id: 'servicios', etiqueta: 'Servicios' },
+  { id: 'roi', etiqueta: 'Diagnóstico' },
+  { id: 'laboratorio', etiqueta: 'Pruébalo' },
+  { id: 'faq', etiqueta: 'Preguntas' },
+  { id: 'diagnostico', etiqueta: 'Empezar' },
+];
+
+const pasosHero = [
+  { hora: '09:42', tipo: 'entrada' as const, titulo: 'Entra un correo con un PDF adjunto' },
+  { hora: '09:42', tipo: 'agente' as const, titulo: 'El agente se pone a trabajar', detalles: ['identifica la empresa', 'consulta el CRM', 'recupera el histórico', 'aplica la tarifa vigente'] },
+  { hora: '09:44', tipo: 'puerta' as const, titulo: 'Aprobación de una persona' },
+  { hora: '09:51', tipo: 'salida' as const, titulo: 'Propuesta enviada · CRM actualizado' },
+];
+
+const pasosAnatomia = [
+  { hora: '09:42', tipo: 'entrada' as const, titulo: 'Entrada', detalles: ['correo del cliente con solicitud y PDF'] },
+  { hora: '09:42', tipo: 'agente' as const, titulo: 'Lectura', detalles: ['extrae referencias, cantidades y plazo'] },
+  { hora: '09:43', tipo: 'agente' as const, titulo: 'Consulta', detalles: ['CRM: ficha y condiciones del cliente', 'ERP: stock y tarifa vigente'] },
+  { hora: '09:43', tipo: 'agente' as const, titulo: 'Comprobación', detalles: ['el descuento supera el límite habitual'] },
+  { hora: '09:44', tipo: 'puerta' as const, titulo: 'Aprobación' },
+  { hora: '09:51', tipo: 'salida' as const, titulo: 'Respuesta y registro', detalles: ['responde al cliente con la propuesta', 'registra la oportunidad y el seguimiento'] },
+];
+
+const controles = [
+  ['Permisos', 'El sistema accede solo a lo que su tarea necesita, con credenciales propias y revocables.'],
+  ['Registro', 'Queda anotado qué se consultó, qué se generó y quién aprobó.'],
+  ['Trazabilidad', 'Cada respuesta puede señalar de qué documento o campo salió.'],
+  ['Retención', 'Se decide qué se guarda, dónde y durante cuánto tiempo.'],
+  ['Evaluación', 'Antes de producción se prueba contra casos reales tuyos y se mide el acierto.'],
+  ['Errores', 'Qué pasa cuando falla, a quién avisa y cómo se revierte.'],
+  ['Marco legal', 'RGPD y AI Act como criterios de diseño desde la primera reunión.'],
+  ['Salida', 'Tus datos y tu documentación son tuyos y te los llevas.'],
+];
+
+const demos = [
+  { t: 'Probador virtual AR', d: 'Pruébate gafas o gorras desde la cámara del móvil, sin instalar nada. Lo mismo que puede ir en la ficha de tu tienda.', href: '/probador-virtual-ar/', destacada: true },
+  { t: 'De una foto a una ficha que vende', d: 'Sube la foto de un producto y mira cómo sale la ficha completa: descripción, atributos, SEO y traducciones.', href: '/soluciones/ecommerce/#commerce-ai' },
+  { t: 'Un asistente que atiende por ti', d: 'Pregúntale por servicios, precios o plazos como lo haría un cliente tuyo.', href: '/asistente-ia/' },
+  { t: 'Habla con la IA', d: 'Habla por el micrófono y te responde con voz. Es la base de un agente que coge el teléfono.', href: '/asistente-voz/' },
+];
+
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'Service', name: 'Sistemas de IA generativa para empresas', serviceType: 'Inteligencia artificial aplicada a procesos de empresa', provider: { '@type': 'ProfessionalService', name: 'Platanito Rico', url: 'https://platanitorico.com', telephone: '+34657085019', address: { '@type': 'PostalAddress', addressLocality: 'Vera', addressRegion: 'Almería', addressCountry: 'ES' } }, areaServed: { '@type': 'AdministrativeArea', name: 'Almería' }, url: canonical, description },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqIA.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
+];
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} type="website" lang="es" keywords="ia para empresas, agentes de ia, automatización de procesos, inteligencia artificial almería, procesamiento de documentos, asistente ia empresa" jsonLd={jsonLd}>
+  <Header />
+  <Breadcrumb tono="consola" items={[{ label: 'Inicio', href: '/' }, { label: 'IA para empresas' }]} />
+
+  <main id="main-content" class="ia">
+    <IndiceLateral secciones={secciones} coordenadas="Vera · Almería · sistemas en producción" class="ia-rail" />
+
+    <!-- 01 · HERO -->
+    <section class="ia-hero">
+      <div class="container-brutal ia-hero__rejilla">
+        <div class="ia-hero__texto">
+          <span class="ia-eyebrow">IA generativa para empresas</span>
+          <h1 class="ia-h1">IA que trabaja <em>dentro</em> de tu empresa.</h1>
+          <p class="ia-lead">
+            Diseñamos agentes y automatizaciones conectados con tus datos y tus herramientas para
+            atender clientes, procesar documentos, preparar propuestas y ejecutar trabajo real.
+            <strong>Una persona sigue aprobando lo que importa.</strong>
+          </p>
+          <div class="ia-hero__cta">
+            <Boton href="#diagnostico">Analizar mis procesos</Boton>
+            <Boton href="#soluciones" variante="linea">Ver soluciones</Boton>
+          </div>
+          <p class="ia-hero__micro">
+            Cuéntanos un proceso repetitivo. Te diremos qué parte puede automatizarse y cuál
+            debería seguir en manos de una persona.
+          </p>
+        </div>
+        <Lamina
+          referencia="LÁM. 01"
+          titulo="Flujo de un encargo"
+          chip="ejemplo"
+          descripcion="Un correo con un PDF entra a las 09:42; el agente identifica la empresa, consulta el CRM, recupera el histórico y aplica la tarifa; a las 09:44 espera la aprobación de una persona; a las 09:51 la propuesta sale enviada y el CRM queda actualizado."
+          leyenda={[{ color: 'maquina', texto: 'máquina' }, { color: 'persona', texto: 'persona' }, { color: 'verificado', texto: 'completado' }]}
+          class="ia-hero__lamina"
+        >
+          <FlujoEncargo pasos={pasosHero} id="flujo-hero" arranque={true} />
+        </Lamina>
+      </div>
+    </section>
+
+    <!-- 02 · PROBLEMA -->
+    <section class="ia-seccion" id="problema">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 01 / Dónde se va el tiempo</span>
+          <h2 class="ia-h2">Tus datos ya existen. El problema es el trabajo que hay <em>entre ellos</em>.</h2>
+          <p class="ia-parrafo">
+            El pedido llega por correo, el precio está en el ERP, el histórico en el CRM, el contrato
+            en Drive y la conversación en WhatsApp. Ninguna de esas herramientas habla con la
+            siguiente, así que alguien de tu equipo hace de puente: copia, pega, reenvía y recuerda.
+            Ese puente es el trabajo que se puede automatizar.
+          </p>
+        </header>
+        <Lamina
+          referencia="LÁM. 02"
+          titulo="Herramientas sin capa que las una"
+          descripcion="Seis herramientas habituales —correo, ERP, CRM, WhatsApp, PDF y Drive— sin conexión entre ellas: el trabajo manual de copiar, pegar, reenviar y recordar lo hace una persona del equipo."
+          leyenda={[{ color: 'atencion', texto: 'trabajo manual' }, { color: 'regla', texto: 'sistemas' }]}
+        >
+          <MapaSistemas />
+        </Lamina>
+        <ul class="ia-apuntes">
+          <li><strong>No es un problema de software.</strong> Cada herramienta hace bien su trabajo; lo que falta es quien las coordine.</li>
+          <li><strong>No se arregla con un chat.</strong> Un asistente que no puede consultar ni escribir en tus sistemas solo te da texto.</li>
+          <li><strong>Se arregla con una capa que ejecuta.</strong> Recibe, consulta, decide, prepara y actúa; y se para donde tú digas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 03 · DEPARTAMENTOS -->
+    <section class="ia-seccion ia-seccion--panel" id="departamentos">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 02 / Por dónde empezar</span>
+          <h2 class="ia-h2">¿Dónde te está costando más tiempo?</h2>
+          <p class="ia-parrafo">
+            Elige un área y verás los procesos que solemos automatizar primero, porque se repiten
+            mucho y se miden fácil.
+          </p>
+        </header>
+        <SelectorDepartamento />
+      </div>
+    </section>
+
+    <!-- 04 · SOLUCIONES -->
+    <section class="ia-seccion" id="soluciones">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 03 / Qué construimos</span>
+          <h2 class="ia-h2">Sistemas con un trabajo asignado.</h2>
+          <p class="ia-parrafo">
+            No vendemos «IA». Construimos piezas que hacen una tarea concreta dentro de tu operación,
+            con sus permisos, sus registros y su punto de control. Si vienes de
+            <span data-eco-departamento>ventas</span>, empezaríamos por lo que más se repite.
+          </p>
+        </header>
+
+        <article class="ia-destacada">
+          <div class="ia-destacada__texto">
+            <h3 class="ia-h3">Agentes para procesos</h3>
+            <p>
+              Completan encargos de varios pasos usando tus herramientas: reciben una solicitud,
+              consultan lo que necesitan, preparan el resultado, esperan aprobación si se lo pides y
+              actualizan el sistema que corresponda.
+            </p>
+            <ul class="ia-chips">
+              <li>multi-paso</li><li>con herramientas</li><li>con registro de todo</li>
+            </ul>
+          </div>
+          <Lamina
+            referencia="LÁM. 03"
+            titulo="Anatomía de un agente"
+            descripcion="El agente recibe una solicitud, consulta el CRM y el ERP, comprueba una condición, prepara el resultado, espera aprobación humana y registra la acción."
+            class="ia-destacada__lamina"
+          >
+            <FlujoEncargo pasos={pasosAnatomia.slice(0, 4)} id="flujo-agente" />
+          </Lamina>
+        </article>
+
+        <article class="ia-destacada ia-destacada--inversa">
+          <div class="ia-destacada__texto">
+            <h3 class="ia-h3">Comercio: probador virtual y ficha automática</h3>
+            <p>
+              Tu cliente se prueba el producto desde la cámara del móvil, sin instalar nada, y tu
+              catálogo se completa solo a partir de una foto: nombre, descripción, atributos, SEO y
+              traducciones.
+            </p>
+            <ul class="ia-chips">
+              <li>menos devoluciones por expectativa</li><li>catálogo listo antes</li>
+            </ul>
+            <p class="ia-destacada__enlaces">
+              <a href="/probador-virtual-ar/">Probar el probador virtual</a>
+              <a href="/soluciones/ecommerce/">Ver tiendas online</a>
+            </p>
+          </div>
+          <Lamina
+            referencia="LÁM. 07"
+            titulo="Probador virtual"
+            descripcion="El móvil sigue la cara con seis ejes de libertad, el producto se coloca sobre ella y queda ocluido por la cabeza, y el cliente cambia de modelo desde el catálogo, todo en el navegador y sin instalar nada."
+            leyenda={[{ color: 'maquina', texto: 'seguimiento' }, { color: 'verificado', texto: 'producto colocado' }]}
+          >
+            <VisorAR />
+          </Lamina>
+        </article>
+
+        <ul class="ia-soluciones">
+          {soluciones.map((s) => (
+            <li class="ia-solucion">
+              <h3 class="ia-solucion__t">{s.titulo}</h3>
+              <p class="ia-solucion__d">{s.texto}</p>
+              {s.href && <a class="ia-solucion__a" href={s.href}>{s.enlace}</a>}
+            </li>
+          ))}
+        </ul>
+
+        <div class="ia-centro"><Boton href="#diagnostico">Analizar mis procesos</Boton></div>
+      </div>
+    </section>
+
+    <!-- 05 · ANATOMÍA -->
+    <section class="ia-seccion ia-seccion--panel" id="anatomia">
+      <div class="container-brutal ia-dos">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 04 / Cómo trabaja por dentro</span>
+          <h2 class="ia-h2">Nueve minutos, paso a paso.</h2>
+          <p class="ia-parrafo">
+            Esto es lo que ocurre entre que entra un correo y sale una propuesta. Cada línea queda
+            registrada: qué hizo el sistema, qué consultó y quién aprobó.
+          </p>
+          <p class="ia-nota">
+            Si algo no cuadra —falta un dato, el precio se sale de rango, el documento es ilegible—
+            el sistema no improvisa: lo marca y lo deja en manos de una persona.
+          </p>
+        </header>
+        <Lamina
+          referencia="LÁM. 04"
+          titulo="Registro de un encargo"
+          chip="ejemplo"
+          descripcion="Registro con seis entradas: entrada del correo, lectura del documento, consulta a CRM y ERP, comprobación de una condición, aprobación humana y envío con registro en el CRM."
+          leyenda={[{ color: 'maquina', texto: 'máquina' }, { color: 'persona', texto: 'persona' }]}
+        >
+          <FlujoEncargo pasos={pasosAnatomia} id="flujo-anatomia" />
+        </Lamina>
+      </div>
+    </section>
+
+    <!-- 06 · INTEGRACIONES -->
+    <section class="ia-seccion" id="integraciones">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 05 / Con lo que ya tienes</span>
+          <h2 class="ia-h2">La IA no sustituye tus herramientas. <em>Trabaja con ellas.</em></h2>
+          <p class="ia-parrafo">
+            Nadie va a cambiar de ERP para poner IA. La capa que construimos se conecta a lo que ya
+            usáis y deja los datos donde estaban.
+          </p>
+        </header>
+        <Lamina
+          referencia="LÁM. 05"
+          titulo="Capa de integración"
+          descripcion="Los sistemas de la empresa (CRM, ERP, correo y archivos) alimentan una capa de agentes con permisos y registro, que devuelve documentos, registros y respuestas, con un punto de aprobación humana."
+          leyenda={[{ color: 'maquina', texto: 'flujo automático' }, { color: 'persona', texto: 'aprobación' }]}
+        >
+          <CapaIntegracion />
+        </Lamina>
+        <div class="ia-tres">
+          <div><h3 class="ia-h4">Por API</h3><p>Cuando el fabricante la ofrece: es la vía limpia y la primera que miramos.</p></div>
+          <div><h3 class="ia-h4">Por fichero o base de datos</h3><p>Cuando no hay API: exportaciones, carpetas vigiladas o lectura directa.</p></div>
+          <div><h3 class="ia-h4">Por interfaz</h3><p>Último recurso y solo si es estable: el sistema hace lo que haría una persona.</p></div>
+        </div>
+        <p class="ia-aviso">
+          No publicamos una lista de integraciones «compatibles». Cada programa tiene su versión, su
+          licencia y sus permisos, así que la conexión se confirma en el diagnóstico, no en una
+          página web.
+        </p>
+      </div>
+    </section>
+
+    <!-- 07 · CONTROL -->
+    <section class="ia-seccion ia-seccion--panel" id="control">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 06 / Quién manda</span>
+          <h2 class="ia-h2">Automatiza sin perder el control.</h2>
+          <p class="ia-parrafo">
+            El nivel de autonomía lo decides paso a paso, no de golpe. Empezar por lo conservador y
+            subir cuando el sistema se ha ganado la confianza es lo normal, no un fracaso.
+          </p>
+        </header>
+        <NivelesControl />
+      </div>
+    </section>
+
+    <!-- 08 · SEGURIDAD -->
+    <section class="ia-seccion" id="seguridad">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 07 / Datos</span>
+          <h2 class="ia-h2">IA útil. <em>Datos bajo control.</em></h2>
+          <p class="ia-parrafo">
+            Poner IA en producción es bastante más que conectar una API. Esto es lo que definimos en
+            cada proyecto, por escrito, antes de encender nada.
+          </p>
+        </header>
+        <div class="ia-dos ia-dos--seguridad">
+          <dl class="ia-controles">
+            {controles.map(([k, v]) => (<div><dt>{k}</dt><dd>{v}</dd></div>))}
+          </dl>
+          <div>
+            <Lamina
+              referencia="LÁM. 06"
+              titulo="Dónde se ejecuta cada cosa"
+              descripcion="Tres zonas: en tu red se quedan el ERP, el CRM, los archivos y las copias; en nuestro servidor viven la lógica, los permisos y el registro; al proveedor del modelo solo llega el texto necesario para resolver cada paso."
+              leyenda={[{ color: 'verificado', texto: 'tu red' }, { color: 'maquina', texto: 'nuestro servidor' }, { color: 'regla', texto: 'proveedor' }]}
+            >
+              <ZonasEjecucion />
+            </Lamina>
+            <p class="ia-aviso">
+              Qué proveedor de modelo se usa, con qué condiciones de tratamiento y qué datos salen de
+              tu red se decide y se documenta en el diagnóstico. No firmamos garantías genéricas en
+              una web.
+            </p>
+            <p><a class="ia-enlace-tecnico" href="/contacto/">Hablar con el equipo técnico</a> — si eres responsable de sistemas y quieres la conversación técnica, sáltate el formulario.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 · METODOLOGÍA -->
+    <section class="ia-seccion ia-seccion--panel" id="metodo">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 08 / Cómo trabajamos</span>
+          <h2 class="ia-h2">Empezamos pequeño, medimos y crecemos.</h2>
+        </header>
+        <ol class="ia-metodo">
+          {metodo.map((m) => (
+            <li class="ia-etapa">
+              <span class="ia-etapa__n">{m.n}</span>
+              <h3 class="ia-etapa__t">{m.etapa}</h3>
+              <p class="ia-etapa__d">{m.hace}</p>
+              <p class="ia-etapa__e"><span>Recibes</span>{m.recibe}</p>
+              <p class="ia-etapa__dur">{m.dura}</p>
+            </li>
+          ))}
+        </ol>
+        <p class="ia-aviso">Las duraciones son orientativas: dependen del estado de tus datos y de los permisos que haya que pedir.</p>
+      </div>
+    </section>
+
+    <!-- 10 · SECTORES -->
+    <section class="ia-seccion" id="sectores">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 09 / En tu sector</span>
+          <h2 class="ia-h2">Ejemplos de aplicación.</h2>
+          <p class="ia-parrafo">
+            Procesos reales de empresas como las de aquí. Los rotulamos como ejemplos porque son
+            escenarios de trabajo, no casos de clientes.
+          </p>
+        </header>
+        <ul class="ia-sectores">
+          {sectores.map((s) => (
+            <li class="ia-sector">
+              <span class="ia-sector__chip">ejemplo</span>
+              <h3 class="ia-sector__t">{s.sector}</h3>
+              <p class="ia-sector__d">{s.proceso}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 11 · SERVICIOS -->
+    <section class="ia-seccion ia-seccion--panel" id="servicios">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 10 / Cómo se contrata</span>
+          <h2 class="ia-h2">Cuatro formas de empezar, según lo lejos que quieras llegar.</h2>
+        </header>
+        <div class="ia-servicios">
+          {servicios.map((s) => (
+            <article class:list={['ia-servicio', s.recurrente && 'ia-servicio--rec']}>
+              <h3 class="ia-servicio__t">{s.nombre}</h3>
+              {s.recurrente && <span class="ia-servicio__chip">recurrente</span>}
+              <p class="ia-servicio__quien">{s.quien}</p>
+              <p class="ia-servicio__hace">{s.hace}</p>
+              <p class="ia-servicio__recibe"><span>Qué recibes</span>{s.recibe}</p>
+              <p class="ia-servicio__precio">{s.precio}</p>
+            </article>
+          ))}
+        </div>
+        <p class="ia-aviso">
+          Lo que ninguno incluye: licencias de terceros, cambios en tus programas que dependan de su
+          fabricante, ni el consumo de modelos, que se factura aparte y se estima en el diagnóstico.
+        </p>
+      </div>
+    </section>
+
+    <!-- 12 · ROI -->
+    <section class="ia-seccion" id="roi">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 11 / Los números</span>
+          <h2 class="ia-h2">Calcula qué te está costando hacerlo a mano.</h2>
+        </header>
+        <CalculadoraROI />
+      </div>
+    </section>
+
+    <!-- 13 · LABORATORIO -->
+    <section class="ia-seccion ia-seccion--panel" id="laboratorio">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 12 / Pruébalo</span>
+          <h2 class="ia-h2">Ahora pruébalo.</h2>
+          <p class="ia-parrafo">
+            No son maquetas ni vídeos: son sistemas funcionando, construidos por nosotros. Lo que
+            vendemos es esto mismo, conectado a tus datos.
+          </p>
+        </header>
+        <ul class="ia-demos">
+          {demos.map((d) => (
+            <li class:list={['ia-demo', d.destacada && 'ia-demo--destacada']}>
+              <span class="ia-demo__chip">demo · en vivo</span>
+              <h3 class="ia-demo__t">{d.t}</h3>
+              <p class="ia-demo__d">{d.d}</p>
+              <a class="ia-demo__a" href={d.href}>Probar</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 14 · FAQ -->
+    <section class="ia-seccion" id="faq">
+      <div class="container-brutal">
+        <header class="ia-cab">
+          <span class="ia-cap">Cap. 13 / Preguntas</span>
+          <h2 class="ia-h2">Lo que preguntan antes de decidir.</h2>
+        </header>
+        <div class="ia-faq">
+          {faqIA.map((f, i) => (
+            <details class="ia-faq__item" open={i === 0}>
+              <summary><span>{f.q}</span><i aria-hidden="true">+</i></summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 15 · CIERRE -->
+    <section class="ia-seccion ia-cierre" id="diagnostico">
+      <div class="container-brutal ia-dos">
+        <div>
+          <span class="ia-cap">Cap. 14 / Empezar</span>
+          <h2 class="ia-h2">Encuentra el primer proceso que merece la pena automatizar.</h2>
+          <p class="ia-parrafo">
+            Cuéntanos dónde pierde tiempo tu equipo. Analizamos el proceso, los datos y las
+            herramientas implicadas y te proponemos una forma concreta de aplicar IA — o te decimos
+            que no merece la pena, que también pasa.
+          </p>
+          <ul class="ia-despues">
+            <li>Lo lee una persona del equipo</li>
+            <li>Te respondemos en menos de 24 horas laborables</li>
+            <li>Si encaja, agendamos 30 minutos para verlo en detalle</li>
+            <li>Sin compromiso ni permanencia</li>
+          </ul>
+          <p><a class="ia-enlace-tecnico" href="tel:+34657085019">O llama al 657 085 019</a></p>
+        </div>
+
+        <form class="ia-form" method="POST" action="/api/contact">
+          <input type="hidden" name="service" value="IA para empresas" />
+          <input type="hidden" name="timing" value="" data-campo-departamento />
+          <p class="ia-hp"><label>No rellenar<input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label></p>
+          <div class="ia-form__campo">
+            <label for="f-empresa">Empresa</label>
+            <input id="f-empresa" name="company" type="text" required placeholder="Distribuciones del Levante S.L." />
+          </div>
+          <div class="ia-form__campo">
+            <label for="f-nombre">Tu nombre</label>
+            <input id="f-nombre" name="name" type="text" required placeholder="María López" />
+          </div>
+          <div class="ia-form__dos">
+            <div class="ia-form__campo">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" required placeholder="maria@empresa.com" />
+            </div>
+            <div class="ia-form__campo">
+              <label for="f-tel">Teléfono <span>(opcional)</span></label>
+              <input id="f-tel" name="phone" type="tel" placeholder="600 000 000" />
+            </div>
+          </div>
+          <div class="ia-form__campo">
+            <label for="f-proceso">¿Qué proceso quieres mejorar?</label>
+            <textarea id="f-proceso" name="message" rows="4" required data-campo-proceso
+              placeholder="Cada mañana metemos a mano los pedidos que llegan por correo al ERP"></textarea>
+            <span class="ia-form__ayuda">Con dos líneas nos vale.</span>
+          </div>
+          <button class="ia-form__enviar" type="submit">Analizar un proceso</button>
+          <p class="ia-form__legal">
+            Usamos tus datos solo para responderte. Ni newsletter ni cesión a terceros. Puedes leer la
+            <a href="/privacidad/">política de privacidad</a>.
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <Relacionados titulo="Sigue por aquí" columnas={3} items={[
+      { href: '/laboratorio-ia/', label: 'Laboratorio de IA', sub: 'Las demos, funcionando' },
+      { href: '/informatica-empresas/', label: 'Sistemas IT', sub: 'La base sobre la que corre todo' },
+      { href: '/soluciones/empresa/', label: 'Soluciones para empresas', sub: 'Web, integraciones y SLA' },
+      { href: '/plan-360/', label: 'Plan 360', sub: 'Web, soporte e informática por cuota' },
+      { href: '/soporte/', label: 'Mantenimiento', sub: 'Quien mantiene lo que construimos' },
+      { href: '/blog/astro-vs-nextjs-vs-sveltekit-2026/', label: 'Con qué construimos', sub: 'Criterio técnico, sin modas' },
+    ]} />
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ═══════════════════════════════════════════════════════════
+     IA PARA EMPRESAS — tono consola, capa de instrumento.
+     El color significa quién hace qué: cian máquina, naranja
+     persona, lima verificado, rojo trabajo manual o error.
+     ═══════════════════════════════════════════════════════════ */
+  .ia {
+    --ia-suelo: var(--color-cdm-suelo);
+    --ia-panel: var(--color-cdm-panel);
+    --ia-panel-2: var(--color-cdm-panel-2);
+    --ia-regla: var(--color-cdm-regla);
+    --ia-regla-2: var(--color-cdm-regla-2);
+    --ia-texto: var(--color-cdm-texto);
+    --ia-tenue: var(--color-cdm-tenue);
+    --ia-maquina: #18e0ff;
+    --ia-persona: var(--color-cdm-senal);
+    --ia-verificado: var(--color-cdm-ok);
+    --ia-atencion: #ff6b6b;
+    --ia-reticula: rgb(230 237 242 / 0.04);
+    --ia-curva: cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Utilitarios globales dentro, en oscuro. */
+    --brutal-ink: var(--color-cdm-texto);
+    --brutal-text: var(--color-cdm-texto);
+    --brutal-text-secondary: #b9c5cf;
+    --brutal-text-muted: var(--color-cdm-tenue);
+    --brutal-accent-ink: var(--color-cdm-senal);
+    --brutal-border-soft: var(--color-cdm-regla);
+    background: var(--ia-suelo);
+    color: var(--ia-texto);
+    color-scheme: dark;
+    position: relative;
+  }
+  /* El raíl solo aparece cuando hay margen libre de sobra: en pantallas más
+     estrechas competiría con las bandas a sangre. */
+  .ia :global(.ia-rail) { display: none; }
+  @media (min-width: 1560px) {
+    .ia :global(.ia-rail) {
+      display: block;
+      position: fixed;
+      top: 7rem;
+      left: 2rem;
+      width: 180px;
+      z-index: 5;
+      color: var(--ia-tenue);
+    }
+  }
+
+  /* ── Tipografía de sección ── */
+  .ia-eyebrow, .ia-cap {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ia-maquina);
+  }
+  .ia-cap { color: var(--ia-tenue); }
+  .ia-h1 {
+    font-family: var(--font-display);
+    font-weight: 760;
+    font-stretch: 82%;
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    line-height: .94;
+    letter-spacing: -.035em;
+    margin: 1rem 0 1.25rem;
+    text-wrap: balance;
+  }
+  .ia-h1 em { font-style: normal; color: var(--ia-maquina); }
+  .ia-h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 82%;
+    font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+    line-height: 1.02;
+    letter-spacing: -.03em;
+    margin: .6rem 0 1rem;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .ia-h2 em { font-style: normal; color: var(--ia-maquina); }
+  .ia-h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.4rem; letter-spacing: -.02em; margin: 0 0 .6rem; }
+  .ia-h4 { font-family: var(--font-mono); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-maquina); margin: 0 0 .4rem; }
+  .ia-lead { font-size: clamp(1.02rem, 1.7vw, 1.15rem); line-height: 1.6; color: #b9c5cf; max-width: 52ch; margin: 0 0 1.75rem; }
+  .ia-lead strong { color: var(--ia-texto); }
+  .ia-parrafo { font-size: 1rem; line-height: 1.65; color: #b9c5cf; max-width: 62ch; margin: 0; }
+  .ia-nota { margin: 1rem 0 0; padding-left: .9rem; border-left: 2px solid var(--ia-persona); font-size: .92rem; line-height: 1.55; color: #b9c5cf; max-width: 52ch; }
+  .ia-aviso {
+    margin: 1.25rem 0 0; padding: .85rem 1rem;
+    border: 1px dashed var(--ia-regla-2); background: var(--ia-panel);
+    font-size: .86rem; line-height: 1.55; color: #b9c5cf; max-width: 74ch;
+  }
+  .ia-centro { display: flex; justify-content: center; margin-top: 2.5rem; }
+
+  /* ── Bandas ── */
+  .ia-seccion { padding: clamp(3.5rem, 7vw, 5.5rem) 0; border-top: 1px solid var(--ia-regla); }
+  .ia-seccion--panel { background: var(--ia-panel-2); }
+  .ia-cab { margin-bottom: 2.25rem; max-width: 64ch; }
+  .ia-dos { display: grid; gap: 2.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 1024px) { .ia-dos { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .ia-tres { display: grid; gap: 1.25rem; grid-template-columns: 1fr; margin-top: 1.75rem; }
+  @media (min-width: 768px) { .ia-tres { grid-template-columns: repeat(3, 1fr); } }
+  .ia-tres p { margin: 0; font-size: .92rem; line-height: 1.55; color: #b9c5cf; }
+
+  /* ── Hero ── */
+  .ia-hero { padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 4.5rem); }
+  .ia-hero__rejilla { display: grid; gap: 2.5rem; grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 1024px) { .ia-hero__rejilla { grid-template-columns: 1.05fr .95fr; gap: 3.5rem; } }
+  .ia-hero__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-bottom: 1.25rem; }
+  .ia-hero__micro { margin: 0; font-family: var(--font-mono); font-size: .76rem; line-height: 1.6; color: var(--ia-tenue); max-width: 46ch; }
+
+  /* ── Apuntes del problema ── */
+  .ia-apuntes { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .ia-apuntes { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+  .ia-apuntes li { padding-top: .9rem; border-top: 1px solid var(--ia-regla-2); font-size: .94rem; line-height: 1.55; color: #b9c5cf; }
+  .ia-apuntes strong { display: block; color: var(--ia-texto); }
+
+  /* ── Soluciones ── */
+  .ia-destacada { display: grid; gap: 2rem; grid-template-columns: 1fr; margin-bottom: 2.5rem; align-items: center; }
+  @media (min-width: 1024px) { .ia-destacada { grid-template-columns: 1fr 1fr; gap: 3rem; } }
+  .ia-destacada--inversa .ia-destacada__texto { order: 2; }
+  .ia-destacada p { font-size: 1rem; line-height: 1.6; color: #b9c5cf; margin: 0 0 1rem; max-width: 52ch; }
+  .ia-chips { list-style: none; display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; }
+  .ia-chips li {
+    font-family: var(--font-mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase;
+    border: 1px solid var(--ia-regla-2); padding: .2rem .5rem; color: var(--ia-tenue);
+  }
+  .ia-destacada__enlaces { display: flex; flex-wrap: wrap; gap: 1.25rem; margin-top: 1.25rem; }
+  .ia-destacada__enlaces a { color: var(--ia-maquina); text-decoration: none; border-bottom: 1px solid currentColor; font-weight: 600; font-size: .95rem; }
+  .ia-destacada__hueco {
+    border: 1px dashed var(--ia-regla-2); background: var(--ia-panel);
+    min-height: 260px; display: grid; place-content: center; gap: .5rem; text-align: center;
+  }
+  .ia-hueco__marca { font-family: var(--font-display); font-weight: 800; font-size: 3rem; color: var(--ia-regla-2); }
+  .ia-hueco__nota { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-tenue); }
+  .ia-soluciones { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; gap: 0; grid-template-columns: 1fr; border-top: 1px solid var(--ia-regla); }
+  @media (min-width: 768px) { .ia-soluciones { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1200px) { .ia-soluciones { grid-template-columns: repeat(4, 1fr); } }
+  .ia-solucion { padding: 1.4rem 1.25rem 1.6rem; border-bottom: 1px solid var(--ia-regla); border-right: 1px solid var(--ia-regla); }
+  .ia-solucion__t { font-family: var(--font-display); font-weight: 700; font-size: 1.08rem; letter-spacing: -.015em; margin: 0 0 .5rem; color: var(--ia-texto); }
+  .ia-solucion__d { margin: 0; font-size: .9rem; line-height: 1.55; color: #b9c5cf; }
+  .ia-solucion__a { display: inline-block; margin-top: .75rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ia-maquina); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  /* ── Seguridad ── */
+  .ia-controles { margin: 0; display: grid; gap: 0; }
+  .ia-controles div { padding: .9rem 0; border-bottom: 1px solid var(--ia-regla); }
+  .ia-controles dt { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-maquina); }
+  .ia-controles dd { margin: .25rem 0 0; font-size: .94rem; line-height: 1.55; color: #b9c5cf; }
+  .ia-enlace-tecnico { color: var(--ia-texto); border-bottom: 1px solid var(--ia-persona); text-decoration: none; font-weight: 600; }
+
+  /* ── Metodología ── */
+  .ia-metodo { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; grid-template-columns: 1fr; border-top: 1px solid var(--ia-regla-2); }
+  @media (min-width: 768px) { .ia-metodo { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1200px) { .ia-metodo { grid-template-columns: repeat(4, 1fr); } }
+  .ia-etapa { padding: 1.4rem 1.25rem 1.5rem; border-bottom: 1px solid var(--ia-regla); border-right: 1px solid var(--ia-regla); position: relative; }
+  .ia-etapa__n { font-family: var(--font-mono); font-size: .8rem; color: var(--ia-maquina); font-variant-numeric: tabular-nums; }
+  .ia-etapa__t { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; margin: .3rem 0 .5rem; letter-spacing: -.02em; }
+  .ia-etapa__d { margin: 0 0 .75rem; font-size: .9rem; line-height: 1.5; color: #b9c5cf; }
+  .ia-etapa__e { margin: 0; font-size: .85rem; line-height: 1.45; color: var(--ia-texto); }
+  .ia-etapa__e span { display: block; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-verificado); margin-bottom: .15rem; }
+  .ia-etapa__dur { margin: .75rem 0 0; font-family: var(--font-mono); font-size: .68rem; color: var(--ia-tenue); }
+
+  /* ── Sectores ── */
+  .ia-sectores { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; grid-template-columns: 1fr; background: var(--ia-regla); border: 1px solid var(--ia-regla); }
+  @media (min-width: 700px) { .ia-sectores { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .ia-sectores { grid-template-columns: repeat(3, 1fr); } }
+  .ia-sector { background: var(--ia-suelo); padding: 1.3rem 1.25rem 1.5rem; position: relative; }
+  .ia-sector__chip { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-tenue); border: 1px dashed var(--ia-regla-2); padding: .1rem .35rem; }
+  .ia-sector__t { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; margin: .6rem 0 .4rem; letter-spacing: -.02em; }
+  .ia-sector__d { margin: 0; font-size: .9rem; line-height: 1.55; color: #b9c5cf; }
+
+  /* ── Servicios ── */
+  .ia-servicios { display: grid; gap: 1px; grid-template-columns: 1fr; background: var(--ia-regla); border: 1px solid var(--ia-regla-2); }
+  @media (min-width: 700px) { .ia-servicios { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1200px) { .ia-servicios { grid-template-columns: repeat(4, 1fr); } }
+  .ia-servicio { background: var(--ia-panel); padding: 1.5rem 1.35rem 1.75rem; display: grid; align-content: start; gap: .6rem; position: relative; }
+  .ia-servicio--rec { background: var(--ia-suelo); box-shadow: inset 0 2px 0 var(--ia-verificado); }
+  .ia-servicio__t { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; letter-spacing: -.02em; margin: 0; }
+  .ia-servicio__chip { position: absolute; top: 1.5rem; right: 1.35rem; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-verificado); border: 1px solid currentColor; padding: .1rem .35rem; }
+  .ia-servicio__quien { margin: 0; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ia-maquina); }
+  .ia-servicio__hace, .ia-servicio__recibe { margin: 0; font-size: .9rem; line-height: 1.5; color: #b9c5cf; }
+  .ia-servicio__recibe span { display: block; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-tenue); margin-bottom: .15rem; }
+  .ia-servicio__precio { margin: .5rem 0 0; padding-top: .75rem; border-top: 1px solid var(--ia-regla); font-family: var(--font-mono); font-size: .8rem; color: var(--ia-texto); }
+
+  /* ── Demos ── */
+  .ia-demos { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; grid-template-columns: 1fr; background: var(--ia-regla); border: 1px solid var(--ia-regla); }
+  @media (min-width: 900px) { .ia-demos { grid-template-columns: repeat(3, 1fr); } .ia-demo--destacada { grid-column: 1 / -1; } }
+  .ia-demo { background: var(--ia-suelo); padding: 1.4rem 1.3rem 1.6rem; display: grid; align-content: start; gap: .5rem; }
+  .ia-demo--destacada { background: var(--ia-panel); }
+  .ia-demo__chip { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-maquina); justify-self: start; border: 1px solid currentColor; padding: .1rem .35rem; }
+  .ia-demo__t { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em; margin: .2rem 0 0; }
+  .ia-demo--destacada .ia-demo__t { font-size: clamp(1.4rem, 3vw, 2rem); }
+  .ia-demo__d { margin: 0; font-size: .92rem; line-height: 1.55; color: #b9c5cf; max-width: 56ch; }
+  .ia-demo__a { justify-self: start; margin-top: .5rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ia-maquina); text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  /* ── FAQ ── */
+  .ia-faq { display: grid; gap: 0; grid-template-columns: 1fr; border-top: 1px solid var(--ia-regla-2); }
+  @media (min-width: 900px) { .ia-faq { grid-template-columns: repeat(2, 1fr); column-gap: 3rem; } }
+  .ia-faq__item { border-bottom: 1px solid var(--ia-regla); }
+  .ia-faq__item summary {
+    display: flex; justify-content: space-between; gap: 1rem; align-items: center;
+    padding: 1rem 0; cursor: pointer; list-style: none;
+    font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--ia-texto);
+  }
+  .ia-faq__item summary::-webkit-details-marker { display: none; }
+  .ia-faq__item summary i { font-family: var(--font-mono); font-style: normal; color: var(--ia-maquina); }
+  .ia-faq__item[open] summary i { transform: rotate(45deg); }
+  .ia-faq__item p { margin: 0 0 1.1rem; font-size: .93rem; line-height: 1.65; color: #b9c5cf; max-width: 62ch; }
+
+  /* ── Cierre y formulario ── */
+  .ia-cierre { background: var(--ia-panel-2); }
+  .ia-despues { list-style: none; margin: 1.5rem 0; padding: 0; display: grid; gap: .5rem; }
+  .ia-despues li { position: relative; padding-left: 1.2rem; font-size: .94rem; color: #b9c5cf; }
+  .ia-despues li::before { content: ''; position: absolute; left: 0; top: .6em; width: 8px; height: 1.5px; background: var(--ia-verificado); }
+  .ia-form { background: var(--ia-panel); border: 1px solid var(--ia-regla-2); padding: clamp(1.25rem, 3vw, 2rem); display: grid; gap: 1rem; }
+  .ia-form__campo { display: grid; gap: .35rem; }
+  .ia-form__dos { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 560px) { .ia-form__dos { grid-template-columns: 1fr 1fr; } }
+  .ia-form label { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-tenue); }
+  .ia-form label span { text-transform: none; letter-spacing: 0; }
+  .ia-form input, .ia-form textarea {
+    background: var(--ia-suelo); border: 1px solid var(--ia-regla-2); color: var(--ia-texto);
+    font: inherit; font-size: .95rem; padding: .7rem .8rem; min-height: 2.9rem; width: 100%;
+  }
+  .ia-form textarea { min-height: 7rem; resize: vertical; }
+  .ia-form input::placeholder, .ia-form textarea::placeholder { color: var(--ia-tenue); opacity: .8; }
+  .ia-form input:focus-visible, .ia-form textarea:focus-visible { outline: 2px solid var(--ia-verificado); outline-offset: 2px; border-color: var(--ia-maquina); }
+  .ia-form__ayuda { font-family: var(--font-mono); font-size: .68rem; color: var(--ia-tenue); }
+  .ia-form__enviar {
+    min-height: 3rem; background: var(--ia-persona); border: 1px solid var(--ia-persona); color: #120600;
+    font-family: var(--font-body); font-weight: 600; font-size: .98rem; cursor: pointer;
+  }
+  .ia-form__enviar:hover { background: #ff7a33; border-color: #ff7a33; }
+  .ia-form__enviar:focus-visible { outline: 2px solid var(--ia-verificado); outline-offset: 3px; }
+  .ia-form__legal { margin: 0; font-size: .78rem; line-height: 1.5; color: var(--ia-tenue); }
+  .ia-form__legal a { color: var(--ia-texto); text-decoration: underline; text-underline-offset: 2px; }
+  .ia-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+</style>

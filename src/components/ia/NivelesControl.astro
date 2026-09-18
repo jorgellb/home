@@ -1,0 +1,76 @@
+---
+/* Tres niveles de autonomía sobre el MISMO encargo del hero: en vez de contar
+   que hay control humano, se enseña moviendo la puerta de aprobación. */
+import FlujoEncargo from './FlujoEncargo.astro';
+
+const niveles = [
+  { id: 'recomienda', titulo: 'Recomienda', texto: 'Prepara una sugerencia y la persona decide y ejecuta. Es por donde solemos empezar.' },
+  { id: 'prepara', titulo: 'Prepara', texto: 'Deja el trabajo hecho y esperando. La persona revisa y envía.' },
+  { id: 'ejecuta', titulo: 'Ejecuta con autorización', texto: 'Actúa solo, salvo en los pasos que marques como aprobación obligatoria.' },
+];
+
+const pasos = [
+  { hora: '09:42', tipo: 'entrada' as const, titulo: 'Entra una solicitud de presupuesto' },
+  { hora: '09:43', tipo: 'agente' as const, titulo: 'El sistema prepara la propuesta', detalles: ['consulta condiciones del cliente', 'aplica la tarifa vigente'] },
+  { hora: '09:44', tipo: 'puerta' as const, titulo: 'Aprobación' },
+  { hora: '09:51', tipo: 'salida' as const, titulo: 'Propuesta enviada y registrada' },
+];
+---
+
+<div class="niv" data-niveles>
+  <div class="niv__opciones" role="radiogroup" aria-label="Nivel de autonomía">
+    {niveles.map((n) => (
+      <label class="niv__op">
+        <input type="radio" name="nivel-control" value={n.id} checked={n.id === 'prepara'} />
+        <span class="niv__op-tit">{n.titulo}</span>
+        <span class="niv__op-txt">{n.texto}</span>
+      </label>
+    ))}
+  </div>
+  <div class="niv__flujo">
+    <FlujoEncargo pasos={pasos} id="flujo-control" nivel="prepara" />
+    <p class="niv__pie" aria-live="polite" data-niveles-aviso>
+      Con este nivel, la propuesta se prepara sola y una persona la revisa antes de enviarla.
+    </p>
+  </div>
+</div>
+
+<script>
+  const raiz = document.querySelector('[data-niveles]');
+  if (raiz) {
+    const flujo = document.getElementById('flujo-control');
+    const aviso = raiz.querySelector<HTMLElement>('[data-niveles-aviso]');
+    const textos: Record<string, string> = {
+      recomienda: 'Con este nivel, el sistema propone y una persona ejecuta cada paso.',
+      prepara: 'Con este nivel, la propuesta se prepara sola y una persona la revisa antes de enviarla.',
+      ejecuta: 'Con este nivel, el encargo se completa solo. Los pasos marcados como críticos siguen pidiendo aprobación.',
+    };
+    raiz.querySelectorAll<HTMLInputElement>('input[name="nivel-control"]').forEach((r) => {
+      r.addEventListener('change', () => {
+        if (!r.checked || !flujo) return;
+        flujo.dataset.nivel = r.value;
+        if (aviso) aviso.textContent = textos[r.value];
+      });
+    });
+  }
+</script>
+
+<style>
+  .niv { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .niv { grid-template-columns: 1fr 1fr; gap: 2.5rem; } }
+  .niv__opciones { display: grid; gap: .75rem; align-content: start; }
+  .niv__op {
+    display: grid; gap: .25rem; padding: .9rem 1rem;
+    border: 1px solid var(--ia-regla); background: var(--ia-panel); cursor: pointer;
+    transition: border-color .12s, background .12s;
+  }
+  .niv__op:hover { border-color: var(--ia-regla-2); }
+  .niv__op:has(input:checked) { border-color: var(--ia-persona); background: var(--ia-panel-2); }
+  .niv__op:has(input:focus-visible) { outline: 2px solid var(--ia-verificado); outline-offset: 2px; }
+  .niv__op input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .niv__op-tit { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; color: var(--ia-texto); }
+  .niv__op:has(input:checked) .niv__op-tit { color: var(--ia-persona); }
+  .niv__op-txt { font-size: .9rem; line-height: 1.5; color: #b9c5cf; }
+  .niv__flujo { border: 1px solid var(--ia-regla-2); background: var(--ia-panel); padding: clamp(1rem, 3vw, 1.5rem); }
+  .niv__pie { margin: 1rem 0 0; font-family: var(--font-mono); font-size: .72rem; line-height: 1.5; color: var(--ia-persona); }
+</style>

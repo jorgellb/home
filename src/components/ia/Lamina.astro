@@ -1,0 +1,86 @@
+---
+/* Lámina técnica: el marco común de todos los diagramas de /ia-empresas/.
+   Trae su propia descripción de texto porque un diagrama que solo se entiende
+   viéndolo no sirve ni para lectores de pantalla ni para buscadores. */
+interface Props {
+  referencia: string;
+  titulo: string;
+  descripcion: string;
+  chip?: 'ejemplo' | 'real' | 'demo';
+  leyenda?: { color: 'maquina' | 'persona' | 'verificado' | 'atencion' | 'regla'; texto: string }[];
+  class?: string;
+}
+const { referencia, titulo, descripcion, chip, leyenda = [], class: clase } = Astro.props;
+const idT = `lam-${referencia.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const etiquetas = { ejemplo: 'ejemplo', real: 'real', demo: 'demo · en vivo' };
+---
+
+<figure class:list={['lam', clase]}>
+  <div class="lam__marco">
+    <span class="lam__esq lam__esq--ai" aria-hidden="true"></span>
+    <span class="lam__esq lam__esq--ad" aria-hidden="true"></span>
+    <span class="lam__esq lam__esq--bi" aria-hidden="true"></span>
+    <span class="lam__esq lam__esq--bd" aria-hidden="true"></span>
+    {chip && <span class:list={['lam__chip', `lam__chip--${chip}`]}>{etiquetas[chip]}</span>}
+    <div class="lam__cuerpo" role="img" aria-labelledby={idT}><slot /></div>
+  </div>
+  <figcaption class="lam__pie">
+    <span class="lam__ref">{referencia} · {titulo}</span>
+    {leyenda.length > 0 && (
+      <span class="lam__leyenda">
+        {leyenda.map((l) => (
+          <span class="lam__ley"><i class:list={[`lam__punto`, `lam__punto--${l.color}`]} aria-hidden="true"></i>{l.texto}</span>
+        ))}
+      </span>
+    )}
+    <span id={idT} class="lam__desc">{descripcion}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .lam { margin: 0; }
+  .lam__marco {
+    position: relative;
+    background: var(--ia-panel);
+    border: 1px solid var(--ia-regla-2);
+    padding: clamp(1rem, 3vw, 1.75rem);
+    background-image:
+      linear-gradient(var(--ia-reticula) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ia-reticula) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+  .lam__esq { position: absolute; width: 10px; height: 10px; border: 1px solid var(--ia-maquina); opacity: .55; }
+  .lam__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .lam__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+  .lam__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+  .lam__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+  .lam__chip {
+    position: absolute; top: .5rem; right: .5rem;
+    font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .14em;
+    padding: .1rem .4rem; border: 1px solid currentColor; color: var(--ia-tenue);
+  }
+  .lam__chip--ejemplo { border-style: dashed; }
+  .lam__chip--real { color: var(--ia-verificado); }
+  .lam__chip--demo { color: var(--ia-maquina); }
+  .lam__cuerpo { position: relative; }
+  .lam__cuerpo :global(svg) { display: block; width: 100%; height: auto; }
+  .lam__pie {
+    display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; align-items: baseline;
+    padding: .55rem .2rem 0;
+    font-family: var(--font-mono); font-size: .66rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ia-tenue);
+  }
+  .lam__leyenda { display: inline-flex; flex-wrap: wrap; gap: .75rem; }
+  .lam__ley { display: inline-flex; align-items: center; gap: .35rem; }
+  .lam__punto { width: 9px; height: 2px; background: currentColor; display: inline-block; }
+  .lam__punto--maquina { background: var(--ia-maquina); }
+  .lam__punto--persona { background: var(--ia-persona); }
+  .lam__punto--verificado { background: var(--ia-verificado); }
+  .lam__punto--atencion { background: var(--ia-atencion); }
+  .lam__punto--regla { background: var(--ia-regla-2); }
+  .lam__desc {
+    flex: 1 1 100%;
+    font-family: var(--font-body); font-size: .8rem; line-height: 1.5;
+    letter-spacing: 0; text-transform: none; color: #b9c5cf;
+  }
+</style>
