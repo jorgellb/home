@@ -1,0 +1,119 @@
+---
+/* Diagnóstico de ROI. Sin JS muestra la fórmula y un ejemplo; con JS calcula en
+   vivo y arrastra los valores al formulario del cierre. Cifras tabulares para
+   que no bailen al moverse. */
+const campos = [
+  { id: 'personas', label: 'Personas que intervienen', min: 1, max: 20, paso: 1, valor: 2, sufijo: '' },
+  { id: 'horas', label: 'Horas por semana y persona', min: 1, max: 40, paso: 1, valor: 6, sufijo: ' h' },
+  { id: 'coste', label: 'Coste por hora', min: 10, max: 80, paso: 1, valor: 22, sufijo: ' €' },
+  { id: 'auto', label: 'Parte que crees automatizable', min: 10, max: 90, paso: 5, valor: 60, sufijo: ' %' },
+];
+---
+
+<div class="roi" data-roi>
+  <div class="roi__controles">
+    {campos.map((c) => (
+      <div class="roi__campo">
+        <label class="roi__label" for={`roi-${c.id}`}>{c.label}</label>
+        <div class="roi__fila">
+          <input class="roi__rango" type="range" id={`roi-${c.id}`} name={c.id} min={c.min} max={c.max} step={c.paso} value={c.valor} data-roi-campo={c.id} />
+          <input class="roi__numero" type="number" aria-label={`${c.label} (valor)`} min={c.min} max={c.max} step={c.paso} value={c.valor} data-roi-numero={c.id} />
+          <span class="roi__sufijo">{c.sufijo}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="roi__panel">
+    <p class="roi__tit">Estimación anual</p>
+    <dl class="roi__salida">
+      <div><dt>Horas recuperables</dt><dd data-roi-horas>—</dd></div>
+      <div><dt>Coste asociado</dt><dd data-roi-coste>—</dd></div>
+      <div><dt>Equivale a</dt><dd data-roi-jornadas>—</dd></div>
+    </dl>
+    <p class="roi__formula">
+      horas × semanas trabajadas (46) × personas × parte automatizable. Es una
+      <strong>estimación con tus propios supuestos</strong>, no una promesa de resultado.
+    </p>
+    <a class="roi__cta" href="#diagnostico" data-roi-cta>Analizar este proceso con nosotros</a>
+  </div>
+</div>
+
+<script>
+  const encontrada = document.querySelector('[data-roi]');
+  if (encontrada instanceof HTMLElement) {
+    /* Alias no anulable: TypeScript pierde el estrechamiento dentro de las
+       funciones internas si seguimos usando la variable original. */
+    const raiz = encontrada;
+    const leer = (id: string) => Number((raiz.querySelector(`[data-roi-campo="${id}"]`) as HTMLInputElement).value);
+    const salida = {
+      horas: raiz.querySelector<HTMLElement>('[data-roi-horas]')!,
+      coste: raiz.querySelector<HTMLElement>('[data-roi-coste]')!,
+      jornadas: raiz.querySelector<HTMLElement>('[data-roi-jornadas]')!,
+    };
+    const num = new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 });
+
+    function calcular() {
+      const horas = leer('personas') * leer('horas') * 46 * (leer('auto') / 100);
+      const coste = horas * leer('coste');
+      salida.horas.textContent = `${num.format(horas)} h`;
+      salida.coste.textContent = `${num.format(coste)} €`;
+      salida.jornadas.textContent = `${num.format(horas / 8)} jornadas de 8 h`;
+      const cta = raiz.querySelector<HTMLAnchorElement>('[data-roi-cta]');
+      if (cta) cta.dataset.resumen = `${num.format(horas)} h/año · ${num.format(coste)} €`;
+    }
+
+    raiz.querySelectorAll<HTMLInputElement>('[data-roi-campo]').forEach((r) => {
+      const id = r.dataset.roiCampo!;
+      const n = raiz.querySelector<HTMLInputElement>(`[data-roi-numero="${id}"]`)!;
+      r.addEventListener('input', () => { n.value = r.value; calcular(); });
+      n.addEventListener('input', () => {
+        const v = Math.min(Math.max(Number(n.value) || Number(r.min), Number(r.min)), Number(r.max));
+        r.value = String(v); calcular();
+      });
+    });
+
+    /* Al ir al formulario, los números se copian al campo del proceso. */
+    raiz.querySelector('[data-roi-cta]')?.addEventListener('click', () => {
+      const campo = document.querySelector<HTMLTextAreaElement>('[data-campo-proceso]');
+      const resumen = raiz.querySelector<HTMLAnchorElement>('[data-roi-cta]')?.dataset.resumen;
+      if (campo && resumen && !campo.value.includes('Estimación')) {
+        campo.value = `${campo.value}${campo.value ? '\n\n' : ''}Estimación del diagnóstico: ${resumen}`.trim();
+      }
+    });
+
+    calcular();
+  }
+</script>
+
+<style>
+  .roi { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .roi { grid-template-columns: 1fr 1fr; gap: 2.5rem; } }
+  .roi__controles { display: grid; gap: 1.1rem; align-content: start; }
+  .roi__label { display: block; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-tenue); margin-bottom: .4rem; }
+  .roi__fila { display: flex; align-items: center; gap: .75rem; }
+  .roi__rango { flex: 1; accent-color: var(--ia-maquina); min-height: 44px; }
+  .roi__numero {
+    width: 4.5rem; background: var(--ia-panel-2); border: 1px solid var(--ia-regla-2); color: var(--ia-texto);
+    font-family: var(--font-mono); font-size: .9rem; padding: .35rem .5rem; font-variant-numeric: tabular-nums; min-height: 44px;
+  }
+  .roi__numero:focus-visible, .roi__rango:focus-visible { outline: 2px solid var(--ia-verificado); outline-offset: 2px; }
+  .roi__sufijo { font-family: var(--font-mono); font-size: .8rem; color: var(--ia-tenue); min-width: 1.5rem; }
+  .roi__panel { border: 1px solid var(--ia-regla-2); background: var(--ia-panel); padding: clamp(1rem, 3vw, 1.6rem); }
+  .roi__tit { margin: 0 0 1rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ia-tenue); }
+  .roi__salida { margin: 0; display: grid; gap: .9rem; }
+  .roi__salida div { display: grid; gap: .15rem; border-bottom: 1px solid var(--ia-regla); padding-bottom: .7rem; }
+  .roi__salida dt { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ia-tenue); }
+  .roi__salida dd {
+    margin: 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: -.02em; color: var(--ia-verificado); font-variant-numeric: tabular-nums;
+  }
+  .roi__formula { margin: 1rem 0 1.25rem; font-size: .82rem; line-height: 1.55; color: #b9c5cf; }
+  .roi__formula strong { color: var(--ia-texto); }
+  .roi__cta {
+    display: inline-flex; align-items: center; min-height: 2.9rem; padding: .7rem 1.15rem;
+    background: var(--ia-persona); color: #120600; font-weight: 600; text-decoration: none; border: 1px solid var(--ia-persona);
+  }
+  .roi__cta:hover { background: #ff7a33; border-color: #ff7a33; }
+  .roi__cta:focus-visible { outline: 2px solid var(--ia-verificado); outline-offset: 3px; }
+</style>

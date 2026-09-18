@@ -99,7 +99,7 @@ export const POST: APIRoute = async ({ request }) => {
     : `[Vera AI] Lead · ${sectorNombre}${name ? ` · ${name}` : ''}${body.isExample ? ' (ejemplo)' : ''}`;
   const origen = isChat
     ? 'Origen: asistente web (chat) · platanitorico.com/asistente-ia/'
-    : `Demo: platanitorico.com/vera-ai/${body.isExample ? ' · (rellenó tras ver un ejemplo)' : ''}`;
+    : `Demo: platanitorico.com/laboratorio-ia/${body.isExample ? ' · (rellenó tras ver un ejemplo)' : ''}`;
 
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"></head>
 <body style="margin:0;background:#F5F0E6">

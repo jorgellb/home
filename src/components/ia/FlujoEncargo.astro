@@ -1,0 +1,71 @@
+---
+/* Flujo de un encargo: la pieza que explica el producto. Cronología vertical
+   (misma estructura en escritorio y móvil) con un punto de aprobación humana.
+   El nivel de autonomía lo cambia NivelesControl escribiendo data-nivel. */
+interface Paso { hora: string; tipo: 'entrada' | 'agente' | 'puerta' | 'salida'; titulo: string; detalles?: string[] }
+interface Props { pasos: Paso[]; id?: string; nivel?: 'recomienda' | 'prepara' | 'ejecuta'; arranque?: boolean }
+const { pasos, id = 'flujo', nivel = 'prepara', arranque = false } = Astro.props;
+---
+
+<ol class="flu" id={id} data-nivel={nivel} data-arranque={arranque ? 'si' : 'no'}>
+  {pasos.map((p) => (
+    <li class:list={['flu__paso', `flu__paso--${p.tipo}`]}>
+      <span class="flu__hora">{p.hora}</span>
+      <span class="flu__marca" aria-hidden="true"></span>
+      <div class="flu__cuerpo">
+        <span class="flu__titulo">{p.titulo}</span>
+        {p.detalles && (
+          <ul class="flu__detalles">
+            {p.detalles.map((d) => <li>{d}</li>)}
+          </ul>
+        )}
+        {p.tipo === 'puerta' && <span class="flu__espera">Esperando a una persona</span>}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .flu { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .flu__paso {
+    display: grid;
+    grid-template-columns: 3.4rem 18px 1fr;
+    gap: 0 .75rem;
+    padding: .45rem 0 .9rem;
+    position: relative;
+  }
+  /* Traza vertical entre pasos */
+  .flu__paso::before {
+    content: '';
+    position: absolute; left: calc(3.4rem + 8px); top: 1.15rem; bottom: -.2rem;
+    width: 1.5px; background: var(--ia-maquina); opacity: .5;
+  }
+  .flu__paso:last-child::before { display: none; }
+  .flu__paso--puerta::before { background: var(--ia-persona); }
+  .flu__hora { font-family: var(--font-mono); font-size: .68rem; color: var(--ia-tenue); padding-top: .15rem; font-variant-numeric: tabular-nums; }
+  .flu__marca {
+    width: 9px; height: 9px; margin-top: .35rem; justify-self: center;
+    border: 1.5px solid var(--ia-maquina); background: var(--ia-suelo);
+  }
+  .flu__paso--puerta .flu__marca { border-color: var(--ia-persona); transform: rotate(45deg); }
+  .flu__paso--salida .flu__marca { border-color: var(--ia-verificado); background: var(--ia-verificado); }
+  .flu__titulo { display: block; font-size: .92rem; font-weight: 600; color: var(--ia-texto); }
+  .flu__detalles { list-style: none; margin: .3rem 0 0; padding: 0; display: grid; gap: .15rem; }
+  .flu__detalles li { font-family: var(--font-mono); font-size: .72rem; color: #b9c5cf; }
+  .flu__detalles li::before { content: '· '; color: var(--ia-maquina); }
+  .flu__espera { display: inline-block; margin-top: .3rem; font-family: var(--font-mono); font-size: .68rem; color: var(--ia-persona); }
+  /* Niveles de autonomía: la puerta solo existe en «prepara» y «recomienda» */
+  .flu[data-nivel='ejecuta'] .flu__paso--puerta { display: none; }
+  .flu[data-nivel='recomienda'] .flu__paso--salida .flu__titulo::after {
+    content: ' · lo envía una persona'; color: var(--ia-persona); font-weight: 400;
+  }
+  /* Arranque: se dibuja una vez por visita */
+  @media (prefers-reduced-motion: no-preference) {
+    .flu[data-arranque='si']:not([data-hecho]) .flu__paso { animation: flu-entra .5s var(--ia-curva) backwards; }
+    .flu[data-arranque='si']:not([data-hecho]) .flu__paso:nth-child(2) { animation-delay: .18s; }
+    .flu[data-arranque='si']:not([data-hecho]) .flu__paso:nth-child(3) { animation-delay: .36s; }
+    .flu[data-arranque='si']:not([data-hecho]) .flu__paso:nth-child(4) { animation-delay: .54s; }
+    .flu[data-arranque='si']:not([data-hecho]) .flu__paso:nth-child(5) { animation-delay: .72s; }
+  }
+  @keyframes flu-entra { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>

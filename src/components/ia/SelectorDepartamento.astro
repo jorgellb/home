@@ -1,0 +1,149 @@
+---
+/* Pestañas de departamento. La elección viaja hasta el formulario del cierre
+   (campo oculto) y cambia el mini-flujo de la derecha. Sin JS se ven los seis
+   paneles seguidos, así que la página sigue completa. */
+import { departamentos } from '../../data/ia-empresas';
+---
+
+<div class="sel" data-selector-departamento>
+  <div class="sel__tabs" role="tablist" aria-label="Departamentos">
+    {departamentos.map((d, i) => (
+      <button
+        type="button" role="tab" id={`tab-${d.id}`} class="sel__tab"
+        aria-controls={`panel-${d.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}
+        data-depto={d.id}
+      >{d.nombre}</button>
+    ))}
+  </div>
+
+  <div class="sel__campo">
+    <label class="sel__label" for="sel-movil">Departamento</label>
+    <select id="sel-movil" class="sel__select" data-selector-movil>
+      {departamentos.map((d) => <option value={d.id}>{d.nombre}</option>)}
+    </select>
+  </div>
+
+  {departamentos.map((d, i) => (
+    <div class="sel__panel" id={`panel-${d.id}`} role="tabpanel" aria-labelledby={`tab-${d.id}`} tabindex="0" data-panel={d.id} data-inicial={i === 0 ? 'si' : 'no'}>
+      <h3 class="sel__titulo">Procesos de {d.nombre.toLowerCase()}</h3>
+      <div class="sel__rejilla">
+        <ul class="sel__casos">
+          {d.casos.map((c) => <li>{c}</li>)}
+        </ul>
+        <div class="sel__flujo">
+          <span class="sel__flujo-tit">Un caso, de punta a punta</span>
+          <ol class="sel__flujo-lista">
+            <li><span>Entra</span>{d.flujo[0]}</li>
+            <li><span>Consulta</span>{d.flujo[1]}</li>
+            <li><span>Sale</span>{d.flujo[2]}</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  ))}
+  <p class="sel__nota" aria-live="polite" data-selector-aviso>Lo que elijas aquí viaja contigo hasta el formulario del final.</p>
+</div>
+
+<script is:inline>
+  /* Con JavaScript, solo se ve el departamento activo. Sin él, la página
+     muestra los seis: nadie se queda sin leer su área. Va en línea para que
+     ocurra antes del primer pintado. */
+  (() => {
+    const raiz = document.querySelector('[data-selector-departamento]');
+    if (!raiz) return;
+    raiz.dataset.js = 'si';
+    raiz.querySelectorAll('[data-panel]').forEach((p) => {
+      if (p.dataset.inicial !== 'si') p.hidden = true;
+    });
+  })();
+</script>
+
+<script>
+  /* Pestañas accesibles: flechas para moverse, panel anunciado al cambiar y
+     memoria en sessionStorage para el formulario del cierre. */
+  const raiz = document.querySelector('[data-selector-departamento]');
+  if (raiz) {
+    const tabs = [...raiz.querySelectorAll<HTMLButtonElement>('.sel__tab')];
+    const paneles = [...raiz.querySelectorAll<HTMLElement>('[data-panel]')];
+    const movil = raiz.querySelector<HTMLSelectElement>('[data-selector-movil]');
+    const aviso = raiz.querySelector<HTMLElement>('[data-selector-aviso]');
+
+    function activar(id: string, foco = false) {
+      tabs.forEach((t) => {
+        const activo = t.dataset.depto === id;
+        t.setAttribute('aria-selected', String(activo));
+        t.tabIndex = activo ? 0 : -1;
+        if (activo && foco) t.focus();
+      });
+      paneles.forEach((p) => { p.hidden = p.dataset.panel !== id; });
+      if (movil && movil.value !== id) movil.value = id;
+      const nombre = tabs.find((t) => t.dataset.depto === id)?.textContent ?? '';
+      if (aviso) aviso.textContent = `Mostrando procesos de ${nombre.toLowerCase()}. Lo que elijas viaja contigo hasta el formulario del final.`;
+      try { sessionStorage.setItem('ia:depto', id); } catch { /* modo privado */ }
+      const campo = document.querySelector<HTMLInputElement>('[data-campo-departamento]');
+      if (campo) campo.value = nombre;
+      document.querySelectorAll<HTMLElement>('[data-eco-departamento]').forEach((e) => { e.textContent = nombre.toLowerCase(); });
+    }
+
+    tabs.forEach((t) => t.addEventListener('click', () => activar(t.dataset.depto!)));
+    raiz.querySelector('.sel__tabs')?.addEventListener('keydown', (ev) => {
+      const e = ev as KeyboardEvent;
+      const i = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const siguiente = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+        activar(tabs[siguiente].dataset.depto!, true);
+      }
+    });
+    movil?.addEventListener('change', () => activar(movil.value));
+
+    try {
+      const guardado = sessionStorage.getItem('ia:depto');
+      if (guardado && tabs.some((t) => t.dataset.depto === guardado)) activar(guardado);
+      else activar(tabs[0].dataset.depto!);
+    } catch { activar(tabs[0].dataset.depto!); }
+  }
+</script>
+
+<style>
+  .sel { display: grid; gap: 1.25rem; }
+  .sel__tabs { display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--ia-regla-2); }
+  .sel__tab {
+    flex: 1 1 auto; min-height: 2.9rem; padding: .7rem 1rem;
+    background: transparent; border: 0; border-right: 1px solid var(--ia-regla-2);
+    color: #b9c5cf; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+    cursor: pointer; transition: background .12s, color .12s;
+  }
+  .sel__tab:last-child { border-right: 0; }
+  .sel__tab[aria-selected='true'] { background: var(--ia-panel-2); color: var(--ia-maquina); box-shadow: inset 0 -2px 0 var(--ia-maquina); }
+  .sel__tab:hover { color: var(--ia-texto); }
+  .sel__tab:focus-visible { outline: 2px solid var(--ia-verificado); outline-offset: -2px; }
+  .sel__campo { display: none; }
+  .sel__panel { border: 1px solid var(--ia-regla); background: var(--ia-panel); padding: clamp(1rem, 3vw, 1.6rem); }
+  .sel__panel:focus-visible { outline: 2px solid var(--ia-verificado); outline-offset: 2px; }
+  .sel__titulo { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ia-tenue); margin: 0 0 1rem; font-weight: 400; }
+  .sel__rejilla { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .sel__rejilla { grid-template-columns: 1.1fr .9fr; } }
+  .sel__casos { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+  .sel__casos li { position: relative; padding-left: 1.1rem; font-size: .98rem; line-height: 1.45; color: var(--ia-texto); }
+  .sel__casos li::before { content: ''; position: absolute; left: 0; top: .55em; width: 7px; height: 1.5px; background: var(--ia-maquina); }
+  .sel__flujo { border-left: 1px solid var(--ia-regla); padding-left: 1.25rem; }
+  @media (max-width: 899px) { .sel__flujo { border-left: 0; border-top: 1px solid var(--ia-regla); padding: 1rem 0 0; } }
+  .sel__flujo-tit { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ia-tenue); }
+  .sel__flujo-lista { list-style: none; margin: .75rem 0 0; padding: 0; display: grid; gap: .75rem; }
+  .sel__flujo-lista li { font-size: .9rem; line-height: 1.4; color: #b9c5cf; }
+  .sel__flujo-lista span {
+    display: block; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--ia-maquina); margin-bottom: .15rem;
+  }
+  .sel__nota { margin: 0; font-family: var(--font-mono); font-size: .68rem; color: var(--ia-tenue); }
+  @media (max-width: 767px) {
+    .sel__tabs { display: none; }
+    .sel__campo { display: grid; gap: .35rem; }
+    .sel__label { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ia-tenue); }
+    .sel__select {
+      min-height: 2.9rem; background: var(--ia-panel-2); color: var(--ia-texto);
+      border: 1px solid var(--ia-regla-2); padding: .5rem .7rem; font: inherit;
+    }
+  }
+</style>
