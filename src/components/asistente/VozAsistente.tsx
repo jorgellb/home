@@ -109,7 +109,7 @@ export default function VozAsistente() {
     let acc = '';
     try {
       arm();
-      const res = await fetch('/api/asistente', {
+      const res = await fetch('/api/asistente/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history }),

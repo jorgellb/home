@@ -104,7 +104,7 @@ export default function FichaEcommerce() {
     for (const it of queue) {
       setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, status: 'loading' } : p)));
       try {
-        const res = await fetch('/api/ecommerce-ficha', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: it.preview }) });
+        const res = await fetch('/api/ecommerce-ficha/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: it.preview }) });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data?.error || 'No se pudo analizar.');
         setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, status: 'done', ficha: data.ficha } : p)));
@@ -165,7 +165,7 @@ ${en.h1_title_en ? `<h2>English</h2><p><b>${esc(en.h1_title_en)}</b></p><p>${esc
     const f = active?.ficha;
     const ctx = `Producto: ${f?.ficha_ecommerce_es?.h1_title || f?.analisis_visual_ia?.producto_detectado || '—'}. (Interesado en automatizar fichas de catálogo).`;
     try {
-      const res = await fetch('/api/vera-lead', {
+      const res = await fetch('/api/vera-lead/', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: leadName, email: leadEmail, contacto: leadContacto, company_url: leadHp, source: 'ecommerce', proposal: ctx, sector: 'Ecommerce' }),
       });

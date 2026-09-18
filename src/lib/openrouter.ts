@@ -16,26 +16,8 @@ const MUESTRA_CONTROL = 320;
 /* Por debajo de esto no hay respuesta útil (un saludo suelto, un token roto). */
 const MINIMO_RESPUESTA = 40;
 
-/* Modelos gratuitos capaces y multilingües (verificados en la API de OpenRouter).
-   Se prueban en orden hasta que uno responda.
-   NOTA (16-09-2026): `openai/gpt-oss-120b:free` se retiró de la cadena. Escribe
-   en canales (analysis/commentary/final) y varios proveedores de OpenRouter
-   sirven el canal de análisis como contenido normal: el visitante veía el
-   razonamiento del modelo y las instrucciones internas. */
-export const FREE_MODELS = [
-  'meta-llama/llama-3.3-70b-instruct:free',
-  'qwen/qwen3-next-80b-a3b-instruct:free',
-  'google/gemma-4-31b-it:free',
-  'nvidia/nemotron-3-super-120b-a12b:free',
-];
-
-/* Modelos gratuitos con VISIÓN (aceptan imágenes), para análisis multimodal. */
-export const VISION_MODELS = [
-  'google/gemma-4-31b-it:free',
-  'google/gemma-4-26b-a4b-it:free',
-  'nvidia/nemotron-nano-12b-v2-vl:free',
-  'nex-agi/nex-n2-pro:free',
-];
+export { FREE_MODELS, VISION_MODELS } from './modelos-openrouter';
+import { FREE_MODELS } from './modelos-openrouter';
 
 interface ChatMsg { role: 'system' | 'user' | 'assistant'; content: string | unknown[] }
 interface Opts {

@@ -73,7 +73,7 @@ export default function AsistenteChat() {
 
     try {
       arm();
-      const res = await fetch('/api/asistente', {
+      const res = await fetch('/api/asistente/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history }),
@@ -134,7 +134,7 @@ export default function AsistenteChat() {
       .map((m) => `${m.role === 'user' ? 'Cliente' : 'Vera'}: ${m.content}`)
       .join('\n');
     try {
-      const res = await fetch('/api/vera-lead', {
+      const res = await fetch('/api/vera-lead/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

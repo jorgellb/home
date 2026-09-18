@@ -29,7 +29,7 @@ const TEXTO_ESTADO: Partial<Record<EstadoSesion, string>> = {
 
 function contar(evento: string) {
   try {
-    void fetch('/api/track', {
+    void fetch('/api/track/', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ event: evento }),

@@ -174,7 +174,7 @@ export default function EstrategiaMarketing() {
     const ctrl = new AbortController();
     const wd = setTimeout(() => ctrl.abort(), 45000);
     try {
-      const res = await fetch('/api/marketing', {
+      const res = await fetch('/api/marketing/', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sector: sec, tipoNegocio: detail }), signal: ctrl.signal,
       });
