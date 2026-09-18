@@ -24,7 +24,7 @@ import { departamentos } from '../../data/ia-empresas';
   </div>
 
   {departamentos.map((d, i) => (
-    <div class="sel__panel" id={`panel-${d.id}`} role="tabpanel" aria-labelledby={`tab-${d.id}`} tabindex="0" hidden={i !== 0} data-panel={d.id}>
+    <div class="sel__panel" id={`panel-${d.id}`} role="tabpanel" aria-labelledby={`tab-${d.id}`} tabindex="0" data-panel={d.id} data-inicial={i === 0 ? 'si' : 'no'}>
       <h3 class="sel__titulo">Procesos de {d.nombre.toLowerCase()}</h3>
       <div class="sel__rejilla">
         <ul class="sel__casos">
@@ -43,6 +43,20 @@ import { departamentos } from '../../data/ia-empresas';
   ))}
   <p class="sel__nota" aria-live="polite" data-selector-aviso>Lo que elijas aquí viaja contigo hasta el formulario del final.</p>
 </div>
+
+<script is:inline>
+  /* Con JavaScript, solo se ve el departamento activo. Sin él, la página
+     muestra los seis: nadie se queda sin leer su área. Va en línea para que
+     ocurra antes del primer pintado. */
+  (() => {
+    const raiz = document.querySelector('[data-selector-departamento]');
+    if (!raiz) return;
+    raiz.dataset.js = 'si';
+    raiz.querySelectorAll('[data-panel]').forEach((p) => {
+      if (p.dataset.inicial !== 'si') p.hidden = true;
+    });
+  })();
+</script>
 
 <script>
   /* Pestañas accesibles: flechas para moverse, panel anunciado al cambiar y

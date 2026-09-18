@@ -80,10 +80,10 @@ export const metodo = [
 ];
 
 export const servicios = [
-  { id: 'audit', nombre: 'AI Opportunity Audit', quien: 'No sabes por dónde empezar', hace: 'Entrevistas, mapa de procesos, datos y herramientas; priorización.', recibe: 'Informe con oportunidades priorizadas, arquitectura propuesta y hoja de ruta.', precio: 'desde —' },
-  { id: 'piloto', nombre: 'Piloto', quien: 'Ya sabes qué proceso duele', hace: 'Un proceso, alcance cerrado, datos reales.', recibe: 'Sistema funcionando y medición frente al criterio acordado.', precio: 'desde —' },
-  { id: 'sistema', nombre: 'Sistema', quien: 'El piloto funcionó', hace: 'Integraciones, interfaces, permisos, pruebas y formación.', recibe: 'Sistema en producción, documentado y con tu equipo formado.', precio: 'a medida' },
-  { id: 'ops', nombre: 'AI Ops', quien: 'Ya tienes algo en producción', hace: 'Monitorización, evaluación, mejora y nuevos flujos.', recibe: 'Revisión periódica, informes de uso y coste, soporte.', precio: 'cuota mensual', recurrente: true },
+  { id: 'audit', nombre: 'AI Opportunity Audit', quien: 'No sabes por dónde empezar', hace: 'Entrevistas, mapa de procesos, datos y herramientas; priorización.', recibe: 'Informe con oportunidades priorizadas, arquitectura propuesta y hoja de ruta.', precio: 'Se cierra en el diagnóstico' },
+  { id: 'piloto', nombre: 'Piloto', quien: 'Ya sabes qué proceso duele', hace: 'Un proceso, alcance cerrado, datos reales.', recibe: 'Sistema funcionando y medición frente al criterio acordado.', precio: 'Según el proceso y los sistemas' },
+  { id: 'sistema', nombre: 'Sistema', quien: 'El piloto funcionó', hace: 'Integraciones, interfaces, permisos, pruebas y formación.', recibe: 'Sistema en producción, documentado y con tu equipo formado.', precio: 'Presupuesto cerrado por escrito' },
+  { id: 'ops', nombre: 'AI Ops', quien: 'Ya tienes algo en producción', hace: 'Monitorización, evaluación, mejora y nuevos flujos.', recibe: 'Revisión periódica, informes de uso y coste, soporte.', precio: 'Cuota mensual', recurrente: true },
 ];
 
 export const faqIA = [

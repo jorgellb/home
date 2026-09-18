@@ -381,15 +381,14 @@ const jsonLd = [
             escenarios de trabajo, no casos de clientes.
           </p>
         </header>
-        <ul class="ia-sectores">
+        <dl class="ia-sectores">
           {sectores.map((s) => (
-            <li class="ia-sector">
-              <span class="ia-sector__chip">ejemplo</span>
-              <h3 class="ia-sector__t">{s.sector}</h3>
-              <p class="ia-sector__d">{s.proceso}</p>
-            </li>
+            <div class="ia-sector">
+              <dt class="ia-sector__t">{s.sector}</dt>
+              <dd class="ia-sector__d">{s.proceso}</dd>
+            </div>
           ))}
-        </ul>
+        </dl>
       </div>
     </section>
 
@@ -704,13 +703,13 @@ const jsonLd = [
   .ia-etapa__dur { margin: .75rem 0 0; font-family: var(--font-mono); font-size: .68rem; color: var(--ia-tenue); }
 
   /* ── Sectores ── */
-  .ia-sectores { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; grid-template-columns: 1fr; background: var(--ia-regla); border: 1px solid var(--ia-regla); }
-  @media (min-width: 700px) { .ia-sectores { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .ia-sectores { grid-template-columns: repeat(3, 1fr); } }
-  .ia-sector { background: var(--ia-suelo); padding: 1.3rem 1.25rem 1.5rem; position: relative; }
-  .ia-sector__chip { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ia-tenue); border: 1px dashed var(--ia-regla-2); padding: .1rem .35rem; }
-  .ia-sector__t { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; margin: .6rem 0 .4rem; letter-spacing: -.02em; }
-  .ia-sector__d { margin: 0; font-size: .9rem; line-height: 1.55; color: #b9c5cf; }
+  /* Los sectores son una lista de correspondencias, no otra rejilla de
+     tarjetas: sector a la izquierda, proceso a la derecha. */
+  .ia-sectores { margin: 0; display: grid; gap: 0; border-top: 1px solid var(--ia-regla-2); }
+  .ia-sector { display: grid; grid-template-columns: 1fr; gap: .2rem; padding: .95rem 0; border-bottom: 1px solid var(--ia-regla); }
+  @media (min-width: 800px) { .ia-sector { grid-template-columns: 16rem minmax(0, 1fr); gap: 2rem; align-items: baseline; } }
+  .ia-sector__t { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em; color: var(--ia-texto); }
+  .ia-sector__d { margin: 0; font-size: .94rem; line-height: 1.55; color: #b9c5cf; max-width: 68ch; }
 
   /* ── Servicios ── */
   .ia-servicios { display: grid; gap: 1px; grid-template-columns: 1fr; background: var(--ia-regla); border: 1px solid var(--ia-regla-2); }
