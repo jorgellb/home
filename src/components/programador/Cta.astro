@@ -1,0 +1,30 @@
+---
+/* El texto del CTA lo pone quien llama: un "cuéntame qué necesitas" genérico
+   en las siete tecnologías sería otra forma de plantilla. */
+interface Props { titulo: string; texto: string; servicio: string }
+const { titulo, texto, servicio } = Astro.props;
+const href = `/contacto/?servicio=${encodeURIComponent(servicio)}#contacto`;
+---
+<section class="pw-cta">
+  <div class="container-brutal pw-cta__in">
+    <div>
+      <h2 class="pw-cta__t">{titulo}</h2>
+      <p class="pw-cta__p">{texto}</p>
+    </div>
+    <a class="pw-cta__b" href={href}>Contar el proyecto</a>
+  </div>
+</section>
+
+<style>
+  .pw-cta { background: var(--color-cdm-panel-2); border-block: 1px solid var(--color-cdm-regla); padding: 3rem 0; }
+  .pw-cta__in { display: grid; gap: 1.5rem; align-items: center; }
+  .pw-cta__t { margin: 0 0 .5rem; font-family: var(--font-display, sans-serif); font-size: clamp(1.4rem, 3.4vw, 2rem); font-weight: 800; letter-spacing: -.02em; color: var(--color-cdm-texto); }
+  .pw-cta__p { margin: 0; color: #b9c5cf; line-height: 1.6; max-width: 58ch; }
+  .pw-cta__b {
+    justify-self: start; display: inline-block; padding: .9rem 1.6rem;
+    background: var(--color-cdm-senal); color: #0a0a0a; font-weight: 700;
+    text-decoration: none; border: 1px solid var(--color-cdm-senal);
+  }
+  .pw-cta__b:hover { background: transparent; color: var(--color-cdm-senal); }
+  @media (min-width: 900px) { .pw-cta__in { grid-template-columns: 1fr auto; } }
+</style>

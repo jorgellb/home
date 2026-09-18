@@ -1,0 +1,35 @@
+---
+/* Enlazado interno del clúster. Todo enlace pasa por aquí para que ninguna
+   página pueda apuntar a una URL que no existe: el componente recibe rutas ya
+   resueltas por quien las genera y nunca las construye a partir de suposiciones. */
+interface Enlace { href: string; texto: string; sub?: string }
+interface Props { enlaces: Enlace[]; columnas?: 2 | 3 }
+const { enlaces, columnas = 3 } = Astro.props;
+---
+{enlaces.length > 0 && (
+  <ul class="pw-enl" data-cols={columnas}>
+    {enlaces.map((e) => (
+      <li class="pw-enl__item">
+        <a class="pw-enl__a" href={e.href}>
+          <span class="pw-enl__t">{e.texto}</span>
+          {e.sub && <span class="pw-enl__s">{e.sub}</span>}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .pw-enl { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+  .pw-enl__a {
+    display: block; padding: .85rem 1rem; text-decoration: none;
+    border: 1px solid var(--color-cdm-regla); background: var(--color-cdm-panel-2);
+    transition: border-color .15s, background .15s;
+  }
+  .pw-enl__a:hover, .pw-enl__a:focus-visible { border-color: var(--color-cdm-senal); background: var(--color-cdm-panel); }
+  .pw-enl__t { display: block; color: var(--color-cdm-texto); font-weight: 600; font-size: .96rem; }
+  .pw-enl__s { display: block; color: #8494a2; font-size: .84rem; margin-top: .2rem; line-height: 1.4; }
+  @media (min-width: 640px) { .pw-enl[data-cols="2"] { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 640px) { .pw-enl[data-cols="3"] { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .pw-enl[data-cols="3"] { grid-template-columns: repeat(3, 1fr); } }
+</style>

@@ -7,6 +7,7 @@ import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 
 import { PUEBLOS_INDEXABLES } from './src/data/pueblos-indexables.ts';
+import { evaluar } from './src/data/programador-gate.ts';
 
 /** @typedef {import('@astrojs/sitemap').SitemapItem} SitemapItem */
 
@@ -56,6 +57,19 @@ export default defineConfig({
       // El hub /diseno-web/ (sin slug) no coincide y se mantiene.
       const puebloMatch = path.match(/^\/diseno-web\/([^/]+)\/?$/);
       if (puebloMatch) return PUEBLOS_INDEXABLES.has(puebloMatch[1]);
+
+      // Locales de /programador-web/: manda el control de calidad, la misma
+      // función que decide el meta robots de la página. Si alguna vez las dos
+      // decisiones se separan, el sitemap acabaría anunciando noindex.
+      const progMatch = path.match(/^\/programador-web\/([^/]+)\/([^/]+)\/?$/);
+      if (progMatch) {
+        // El slug viene de una URL, así que aquí es un string cualquiera:
+        // `evaluar` ya devuelve 'draft' si la tecnología no existe.
+        return evaluar(
+          /** @type {import('./src/data/tecnologias.ts').SlugTecnologia} */ (progMatch[1]),
+          progMatch[2],
+        ).estado === 'index';
+      }
 
       return true;
     },

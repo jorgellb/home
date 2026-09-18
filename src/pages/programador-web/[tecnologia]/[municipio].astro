@@ -1,0 +1,247 @@
+---
+/* Páginas locales tecnología × municipio.
+ *
+ * Se generan las 150 combinaciones posibles (6 tecnologías × 25 municipios
+ * Tier-1) pero solo se indexan las que el control de calidad aprueba. Las
+ * demás se sirven con noindex,follow: siguen siendo útiles para quien llegue
+ * por un enlace y siguen repartiendo enlace interno, pero no compiten en el
+ * índice con el hub ni entre ellas.
+ *
+ * Lo que hace distinta a una de estas páginas no es el topónimo: son los
+ * encajes, el cruce entre los sectores reales registrados de ese municipio y
+ * lo que esa tecnología resuelve. Si una página se queda sin encajes propios,
+ * el gate la manda a noindex y hace bien.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+import Seccion from '../../../components/programador/Seccion.astro';
+import Enlaces from '../../../components/programador/Enlaces.astro';
+import Faq from '../../../components/programador/Faq.astro';
+import Cta from '../../../components/programador/Cta.astro';
+import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia, rutaLocal, type SlugTecnologia } from '../../../data/tecnologias';
+import { territorioDe, frasesCobertura, municipiosIndexables } from '../../../data/territorio';
+import { evaluar } from '../../../data/programador-gate';
+import { esPuebloIndexable } from '../../../data/pueblos-indexables';
+import { SITE, PROVEEDOR } from '../../../data/negocio';
+
+export function getStaticPaths() {
+  /* La capital queda fuera a propósito: el hub ya se titula "en Almería"
+     porque cubre la provincia, y una local para la ciudad compartiría title y
+     H1 con él. Entre dos páginas que compiten por lo mismo, se queda la que
+     tiene más contenido, que es el hub. */
+  const municipios = municipiosIndexables().filter((m) => m.slug !== 'almeria');
+  return ORDEN_TECNOLOGIAS
+    .filter((t) => t !== 'apps')
+    .flatMap((tecnologia) =>
+      municipios.map((m) => ({ params: { tecnologia, municipio: m.slug } })),
+    );
+}
+
+const { tecnologia, municipio } = Astro.params as { tecnologia: SlugTecnologia; municipio: string };
+const t = TECNOLOGIAS[tecnologia];
+const territorio = territorioDe(municipio)!;
+const veredicto = evaluar(tecnologia, municipio);
+const indexable = veredicto.estado === 'index';
+const canonical = `${SITE}${rutaLocal(tecnologia, municipio)}`;
+const n = territorio.nombre;
+
+const cobertura = frasesCobertura(territorio);
+
+/* La entradilla se construye con los sectores reales del municipio en vez de
+   repetir la del hub. Era la misma frase en 150 páginas y es justo el tipo de
+   bloque que convierte un clúster en una granja: lo primero que lee alguien no
+   puede ser idéntico a lo que ya leyó en otro pueblo. */
+const entradillaLocal = veredicto.encajes.length
+  ? `En ${n} los encargos de ${t.nombre} suelen venir de `
+    + veredicto.encajes.map((e) => e.sector.toLowerCase()).join(', ')
+    + `. Lo que piden no es una web nueva: es ${veredicto.encajes[0].necesidad}`
+    + (veredicto.encajes[1] ? ` o ${veredicto.encajes[1].necesidad}` : '')
+    + ', sobre lo que ya tienen montado.'
+  : `Damos servicio de desarrollo con ${t.nombre} a empresas de ${n}. Todavía no `
+    + 'hay aquí un patrón de encargos distinto del resto de la provincia, así que lo '
+    + `que cuenta esta página está mejor explicado en la página de ${t.etiqueta}.`;
+
+/* Solo la pregunta que de verdad es local. Arrastrar aquí las del hub
+   duplicaba el mismo bloque en 150 páginas y disparaba la similitud sin
+   aportarle nada a nadie: quien quiera esas respuestas tiene el enlace al hub. */
+const faqLocal = [
+  {
+    q: `¿Trabajáis con empresas de ${n} sin tener oficina allí?`,
+    /* No se repiten aquí los párrafos de cobertura: ya están más arriba en esta
+       misma página, y duplicar el mismo texto dos veces no ayuda a nadie. */
+    a: territorio.slug === 'vera'
+      ? 'El estudio está aquí, en Vera, así que sí: reuniones presenciales sin más trámite.'
+      : `Sí. La sede está en Vera y no fingimos tener oficina en ${n}: nos desplazamos `
+        + 'cuando la reunión lo pide y el desarrollo se trabaja en remoto, que es como se '
+        + 'trabaja el código en cualquier caso.',
+  },
+  {
+    q: `¿Qué encargos de ${t.nombre} salen por la zona?`,
+    a: veredicto.encajes.length
+      ? `Los que encajan con lo que ya hay montado en ${n}: `
+        + veredicto.encajes.map((e) => `${e.sector.toLowerCase()}, con ${e.necesidad}`).join('; ')
+        + '. No es una lista cerrada, son los casos que más se repiten.'
+      : `Los mismos que en el resto de la provincia. En ${n} todavía no hay un patrón `
+        + 'propio que merezca contarse aparte.',
+  },
+];
+
+const vecinos = territorio.vecinos
+  .map((slug) => ({ slug, t: territorioDe(slug) }))
+  .filter((v): v is { slug: string; t: NonNullable<ReturnType<typeof territorioDe>> } => v.t !== null)
+  /* Solo se enlaza a vecinos cuya página de esta tecnología sea indexable:
+     mandar tráfico y enlace a una noindex no aporta nada a ninguna de las dos. */
+  .filter((v) => evaluar(tecnologia, v.slug).estado === 'index');
+
+/* Tecnologías hermanas EN ESTE MISMO municipio, solo si allí también pasan el
+   control. Es el enlace horizontal que pide la arquitectura, sin inventar URLs. */
+const hermanas = t.relacionadas
+  .filter((r) => r !== 'apps')
+  .filter((r) => evaluar(r, municipio).estado === 'index')
+  .map((r) => TECNOLOGIAS[r]);
+
+const jsonLd: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': `Desarrollo con ${t.nombre} para empresas de ${n}`,
+    'serviceType': t.intencion,
+    'url': canonical,
+    /* El proveedor es uno y está en Vera. No se declara un LocalBusiness por
+       municipio: sería afirmar una sede que no existe. */
+    'provider': PROVEEDOR,
+    'areaServed': {
+      '@type': 'City',
+      'name': n,
+      'containedInPlace': { '@type': 'AdministrativeArea', 'name': territorio.comarca },
+    },
+  },
+];
+if (indexable) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faqLocal.map((f) => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+    })),
+  });
+}
+
+const title = `${t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo ${t.etiqueta}`} en ${n} | Platanito Rico`;
+const description = veredicto.encajes.length
+  ? `Desarrollo con ${t.nombre} para empresas de ${n}: ${veredicto.encajes.map((e) => e.necesidad).slice(0, 2).join(' y ')}. Estudio en Vera, ${territorio.comarca}.`
+  : `Desarrollo con ${t.nombre} para empresas de ${n}, en ${territorio.comarca}. Trabajamos desde Vera para toda la provincia de Almería.`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  noindex={!indexable}
+  jsonLd={jsonLd}
+>
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Programador web', href: '/programador-web/' },
+    { label: t.etiqueta, href: rutaTecnologia(tecnologia) },
+    { label: n },
+  ]} />
+
+  <section class="pwl-hero">
+    <div class="container-brutal">
+      <h1 class="pwl-hero__h1">
+        {t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo con ${t.nombre}`} en {n}
+      </h1>
+      <p class="pwl-hero__lead">{entradillaLocal}</p>
+    </div>
+  </section>
+
+  {veredicto.encajes.length > 0 && (
+    <Seccion
+      titulo={`Qué pide el tejido de ${n}`}
+      lead={`Los sectores que aparecen aquí son los que ya tenemos documentados de ${n}, no una lista genérica. Si tu caso no está, sigue encajando: son ejemplos, no un catálogo cerrado.`}
+      tono="panel"
+    >
+      <ul class="pwl-enc">
+        {veredicto.encajes.map((e) => (
+          <li class="pwl-enc__item">
+            <span class="pwl-enc__sec">{e.sector}</span>
+            <span class="pwl-enc__nec">{e.necesidad}</span>
+          </li>
+        ))}
+      </ul>
+    </Seccion>
+  )}
+
+  <Seccion titulo={`Cómo damos servicio en ${n}`} tono="panel">
+    {cobertura.map((f) => <p class="pwl-cob">{f}</p>)}
+    <Enlaces columnas={2} enlaces={[
+      ...(esPuebloIndexable(municipio)
+        ? [{ href: `/diseno-web/${municipio}/`, texto: `Diseño web en ${n}`, sub: 'Si lo que hace falta es la web, no el desarrollo' }]
+        : []),
+      { href: rutaTecnologia(tecnologia), texto: `Todo sobre ${t.etiqueta}`, sub: 'La página principal de la tecnología' },
+    ]} />
+  </Seccion>
+
+  {(hermanas.length > 0 || vecinos.length > 0) && (
+    <Seccion titulo="Seguir por aquí">
+      {hermanas.length > 0 && (
+        <>
+          <h3 class="pwl-sub">Otras tecnologías en {n}</h3>
+          <Enlaces columnas={2} enlaces={hermanas.map((h) => ({
+            href: rutaLocal(h.slug, municipio),
+            texto: `${h.etiqueta} en ${n}`,
+            sub: `Para ${h.distintivo}.`,
+          }))} />
+        </>
+      )}
+      {vecinos.length > 0 && (
+        <>
+          <h3 class="pwl-sub">{t.etiqueta} en municipios cercanos</h3>
+          <Enlaces enlaces={vecinos.map((v) => ({
+            href: rutaLocal(tecnologia, v.slug),
+            texto: v.t.nombre,
+            sub: v.t.comarca,
+          }))} />
+        </>
+      )}
+    </Seccion>
+  )}
+
+  <Seccion titulo="Preguntas frecuentes" tono="panel">
+    <Faq faq={faqLocal} />
+  </Seccion>
+
+  <Cta
+    titulo={`Cuéntame qué necesitas hacer con ${t.nombre}`}
+    texto={`Si tienes una empresa en ${n} y algo de lo de arriba te suena, con describirlo suele bastar para saber si tiene arreglo y cuánto trabajo es.`}
+    servicio={`Desarrollo ${t.etiqueta}`}
+  />
+</BaseLayout>
+
+<style>
+  .pwl-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
+  .pwl-hero__h1 {
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(1.9rem, 5vw, 3rem); font-weight: 800;
+    letter-spacing: -.04em; line-height: 1.04; margin: 0 0 1.2rem;
+    color: var(--color-cdm-texto);
+  }
+  .pwl-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.05rem; line-height: 1.65; margin: 0; }
+
+  .pwl-enc { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+  .pwl-enc__item {
+    display: grid; gap: .25rem; padding: 1rem 1.1rem;
+    border: 1px solid var(--color-cdm-regla); background: var(--color-cdm-panel-2);
+    border-left: 3px solid var(--color-cdm-ok);
+  }
+  .pwl-enc__sec { color: var(--color-cdm-ok); font-family: var(--font-mono, monospace); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; }
+  .pwl-enc__nec { color: var(--color-cdm-texto); line-height: 1.5; }
+  @media (min-width: 800px) { .pwl-enc { grid-template-columns: repeat(2, 1fr); } }
+
+  .pwl-cob { color: #b9c5cf; line-height: 1.65; max-width: 68ch; margin: 0 0 1rem; }
+  .pwl-sub { color: var(--color-cdm-texto); font-size: 1.05rem; margin: 1.6rem 0 .8rem; }
+  .pwl-sub:first-child { margin-top: 0; }
+</style>

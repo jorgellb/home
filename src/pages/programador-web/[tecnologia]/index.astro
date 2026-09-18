@@ -1,0 +1,147 @@
+---
+/* Hub de tecnología. Es la página que de verdad tiene demanda: "programador
+   WordPress Almería" es una consulta provincial plausible, mientras que la
+   misma consulta con un municipio de 5.000 habitantes probablemente no se
+   busca nunca. Por eso el hub lleva el contenido sustancial y las locales
+   solo existen donde aportan algo propio.
+   `apps` no entra aquí: vive en /desarrollo-aplicaciones-moviles/ porque su
+   intención no es "programador web". */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+import Seccion from '../../../components/programador/Seccion.astro';
+import Situaciones from '../../../components/programador/Situaciones.astro';
+import Servicios from '../../../components/programador/Servicios.astro';
+import Enlaces from '../../../components/programador/Enlaces.astro';
+import Faq from '../../../components/programador/Faq.astro';
+import Cta from '../../../components/programador/Cta.astro';
+import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia, rutaLocal, type SlugTecnologia } from '../../../data/tecnologias';
+import { territorioDe } from '../../../data/territorio';
+import { matriz } from '../../../data/programador-gate';
+import { SITE, PROVEEDOR } from '../../../data/negocio';
+
+export function getStaticPaths() {
+  return ORDEN_TECNOLOGIAS
+    .filter((t) => t !== 'apps')
+    .map((tecnologia) => ({ params: { tecnologia } }));
+}
+
+const { tecnologia } = Astro.params as { tecnologia: SlugTecnologia };
+const t = TECNOLOGIAS[tecnologia];
+const canonical = `${SITE}${rutaTecnologia(tecnologia)}`;
+
+/* Solo se enlazan las locales que el control de calidad ha dejado indexables.
+   Las demás existen como noindex y se alcanzan desde su municipio, no desde
+   aquí: enlazar 25 municipios desde el hub sería el listado gigante que
+   convierte un hub en un índice sin valor. */
+const locales = matriz()
+  .filter((c) => c.tecnologia === tecnologia && c.veredicto.estado === 'index')
+  .map((c) => territorioDe(c.municipio))
+  .filter((m): m is NonNullable<typeof m> => m !== null)
+  .sort((a, b) => (a.kmDesdeBase ?? 9999) - (b.kmDesdeBase ?? 9999));
+
+const relacionadas = t.relacionadas.map((r) => TECNOLOGIAS[r]);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': `Desarrollo con ${t.nombre}`,
+    'serviceType': t.intencion,
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': t.faq.map((f) => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout title={t.title} description={t.description} canonical={canonical} jsonLd={jsonLd}>
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Programador web', href: '/programador-web/' },
+    { label: t.etiqueta },
+  ]} />
+
+  <section class="pw-hero">
+    <div class="container-brutal">
+      <h1 class="pw-hero__h1">{t.h1}</h1>
+      <p class="pw-hero__lead">{t.entradilla}</p>
+    </div>
+  </section>
+
+  <Seccion
+    titulo="Cómo suelen llegar los encargos"
+    lead="Redactados como problemas, no como especificaciones técnicas."
+    tono="panel"
+  >
+    <Situaciones situaciones={t.situaciones} />
+  </Seccion>
+
+  <Seccion titulo={`Qué desarrollamos con ${t.nombre}`}>
+    <Servicios servicios={t.servicios} />
+  </Seccion>
+
+  {locales.length > 0 && (
+    <Seccion
+      titulo={`${t.etiqueta} por municipio`}
+      lead={`Solo los municipios donde hay algo concreto que contar sobre ${t.nombre}. En el resto de la provincia damos el mismo servicio; lo que no hay es una página distinta que escribir.`}
+      tono="panel"
+    >
+      <Enlaces enlaces={locales.map((m) => ({
+        href: rutaLocal(tecnologia, m.slug),
+        texto: `${t.etiqueta} en ${m.nombre}`,
+        sub: m.comarca,
+      }))} />
+    </Seccion>
+  )}
+
+  <Seccion titulo="Tecnologías relacionadas" lead="Con lo que se combina de verdad, no con todo lo que suene parecido.">
+    <Enlaces columnas={2} enlaces={[
+      ...relacionadas.map((r) => ({
+        href: rutaTecnologia(r.slug),
+        texto: `Desarrollo con ${r.etiqueta}`,
+        sub: `Para ${r.distintivo}.`,
+      })),
+      ...t.serviciosWeb.map((href) => ({
+        href,
+        texto: href === '/soporte/' ? 'Mantenimiento web'
+          : href === '/desarrollo-web/' ? 'Diseño y desarrollo web'
+          : href === '/informatica-empresas/' ? 'Sistemas e informática'
+          : href === '/ia-empresas/' ? 'IA para empresas'
+          : href === '/soluciones/ecommerce/' ? 'Tiendas online'
+          : 'Auditoría web',
+        sub: 'Servicio relacionado',
+      })),
+    ]} />
+  </Seccion>
+
+  <Seccion titulo="Preguntas frecuentes" tono="panel">
+    <Faq faq={t.faq} />
+  </Seccion>
+
+  <Cta
+    titulo={`Cuéntame qué necesitas hacer con ${t.nombre}`}
+    texto={t.situaciones[0].encargo.replace(/\.$/, '')
+      + ' — si tu caso se parece a eso, con describirlo suele bastar para saber si tiene arreglo y cuánto trabajo es.'}
+    servicio={`Desarrollo ${t.etiqueta}`}
+  />
+</BaseLayout>
+
+<style>
+  .pw-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
+  .pw-hero__h1 {
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(2rem, 5.5vw, 3.3rem); font-weight: 800;
+    letter-spacing: -.04em; line-height: 1.02; margin: 0 0 1.2rem;
+    color: var(--color-cdm-texto);
+  }
+  .pw-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.08rem; line-height: 1.65; margin: 0; }
+</style>

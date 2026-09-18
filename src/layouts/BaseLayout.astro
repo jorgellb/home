@@ -58,7 +58,11 @@ const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogIma
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
     <meta name="author" content="Platanito Rico" />
-    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+    {/* `follow` también cuando no se indexa: las ~70 landings de pueblo que no
+        entran al índice siguen siendo parte del enlazado interno y con
+        `nofollow` no transmitían nada de lo que reciben. No indexar una página
+        no es motivo para cortarle los enlaces. */}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
     <link rel="canonical" href={canonicalUrl} />
 
     <meta property="og:type" content={type} />

@@ -1,0 +1,176 @@
+---
+/* Página pilar del clúster de desarrollo.
+   Su trabajo no es posicionar por "programador web" —término demasiado
+   genérico— sino explicar en qué se diferencian las siete tecnologías y
+   repartir a quien llega hacia la que le corresponde. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import Seccion from '../../components/programador/Seccion.astro';
+import Enlaces from '../../components/programador/Enlaces.astro';
+import Cta from '../../components/programador/Cta.astro';
+import Faq from '../../components/programador/Faq.astro';
+import { listaTecnologias, rutaTecnologia } from '../../data/tecnologias';
+import { municipiosIndexables } from '../../data/territorio';
+import { SITE, PROVEEDOR } from '../../data/negocio';
+
+const tecnologias = listaTecnologias();
+const canonical = `${SITE}/programador-web/`;
+
+/* Solo los municipios que ya se indexan: mandar enlaces a páginas noindex no
+   reparte nada y llena la página de ruido. */
+const municipios = municipiosIndexables().slice(0, 8);
+
+const faq = [
+  {
+    q: '¿En qué se diferencia esto del diseño web?',
+    a: 'En el punto de partida. Diseño web es para quien no tiene web y quiere una. '
+      + 'Esta sección es para quien ya tiene algo funcionando —una web, un programa de '
+      + 'gestión, una hoja de cálculo que se quedó pequeña— y necesita modificarlo, '
+      + 'conectarlo con otra cosa o construir encima.',
+  },
+  {
+    q: '¿Cómo sé qué tecnología necesito?',
+    a: 'No hace falta saberlo. Lo normal es describir el problema —«copiamos pedidos a '
+      + 'mano», «la web va lenta», «el equipo apunta los partes en papel»— y que la '
+      + 'elección salga de ahí. Elegir la tecnología antes que el problema suele acabar mal.',
+  },
+  {
+    q: '¿Trabajáis sobre proyectos que empezó otra persona?',
+    a: 'Sí, y es buena parte del trabajo. Se empieza revisando el código y las '
+      + 'dependencias, porque a veces continuar sale a cuenta y a veces no. Esa revisión '
+      + 'se entrega aunque después no se siga.',
+  },
+  {
+    q: '¿El código es nuestro?',
+    a: 'Sí. El código y los accesos son del cliente, sin permanencia. Si un día decide '
+      + 'llevárselo a otro equipo, se lo lleva.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': 'Desarrollo y programación web',
+    'serviceType': 'Desarrollo de software a medida',
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faq.map((f) => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout
+  title="Programador web en Almería: desarrollo a medida | Platanito Rico"
+  description="Desarrollo sobre lo que ya tienes: WordPress, Astro, React, Next.js, Node.js, JavaScript y aplicaciones móviles. Estudio en Vera, cobertura en toda la provincia de Almería."
+  canonical={canonical}
+  jsonLd={jsonLd}
+>
+  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Programador web' }]} />
+
+  <section class="pw-hero">
+    <div class="container-brutal">
+      <h1 class="pw-hero__h1">Programador web en Almería</h1>
+      <p class="pw-hero__lead">
+        Casi ningún encargo llega diciendo qué tecnología quiere. Llega diciendo que alguien
+        dedica dos horas al día a copiar datos de un sitio a otro, que la web tarda en cargar
+        o que el equipo sigue apuntando los partes en papel. La tecnología es la consecuencia,
+        no el punto de partida.
+      </p>
+      <p class="pw-hero__lead">
+        Esta sección es para quien <strong>ya tiene algo</strong> y necesita cambiarlo,
+        integrarlo o construir encima. Si lo que buscas es una web desde cero, la sección
+        de <a href="/diseno-web/">diseño web por municipio</a> encaja mejor.
+      </p>
+    </div>
+  </section>
+
+  <Seccion
+    titulo="Qué resuelve cada tecnología"
+    lead="Están aquí porque cada una cubre una situación que las demás no cubren. Si dos hicieran lo mismo, sobraría una."
+    tono="panel"
+  >
+    <ul class="pw-tec">
+      {tecnologias.map((t) => (
+        <li class="pw-tec__item">
+          <h3 class="pw-tec__t"><a href={rutaTecnologia(t.slug)}>{t.etiqueta}</a></h3>
+          <p class="pw-tec__d">{t.intencion}</p>
+          <p class="pw-tec__x">Para <strong>{t.distintivo}</strong>.</p>
+        </li>
+      ))}
+    </ul>
+  </Seccion>
+
+  <Seccion
+    titulo="Cómo trabajamos"
+    lead="El mismo proceso para los siete casos, porque lo que cambia es la herramienta, no la forma de trabajar."
+  >
+    <ol class="pw-proc">
+      <li><strong>Entender el problema.</strong> Qué se hace hoy a mano, qué falla y cuánto cuesta que siga así.</li>
+      <li><strong>Decidir con criterio.</strong> Si la solución más simple es no programar nada, se dice.</li>
+      <li><strong>Presupuesto cerrado.</strong> Alcance escrito antes de empezar, para que no haya sorpresas por ninguna de las dos partes.</li>
+      <li><strong>Desarrollo por partes.</strong> Nunca sobre el sistema en producción: primero una copia donde probar.</li>
+      <li><strong>Entrega con marcha atrás.</strong> Copia previa y forma de volver al estado anterior si algo sale mal.</li>
+    </ol>
+  </Seccion>
+
+  <Seccion
+    titulo="Dónde damos servicio"
+    lead="El estudio está en Vera. El desarrollo se trabaja en remoto y nos desplazamos para arrancar un proyecto o cerrar una entrega. No hay oficina en cada municipio, hay una y cobertura provincial."
+    tono="panel"
+  >
+    <Enlaces
+      enlaces={municipios.map((m) => ({
+        href: `/diseno-web/${m.slug}/`,
+        texto: m.nombre,
+        sub: m.comarca,
+      }))}
+    />
+  </Seccion>
+
+  <Seccion titulo="Preguntas frecuentes">
+    <Faq faq={faq} />
+  </Seccion>
+
+  <Cta
+    titulo="Cuéntame qué tienes montado y qué falla"
+    texto="Con saber qué sistema usáis y qué se hace hoy a mano suele bastar para decir si tiene arreglo, cuánto trabajo es y si merece la pena."
+    servicio="Desarrollo a medida"
+  />
+</BaseLayout>
+
+<style>
+  .pw-hero { background: var(--color-cdm-suelo); padding: 3rem 0 2.5rem; }
+  .pw-hero__h1 {
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(2.1rem, 6vw, 3.6rem); font-weight: 800;
+    letter-spacing: -.04em; line-height: 1; margin: 0 0 1.2rem;
+    color: var(--color-cdm-texto);
+  }
+  .pw-hero__lead { max-width: 64ch; color: #b9c5cf; font-size: 1.08rem; line-height: 1.65; margin: 0 0 1rem; }
+  .pw-hero__lead strong { color: var(--color-cdm-texto); }
+  .pw-hero__lead a { color: var(--color-cdm-senal); }
+
+  .pw-tec { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .pw-tec__item { border: 1px solid var(--color-cdm-regla); padding: 1.2rem; background: var(--color-cdm-panel-2); }
+  .pw-tec__t { margin: 0 0 .5rem; font-size: 1.15rem; }
+  .pw-tec__t a { color: var(--color-cdm-senal); text-decoration: none; }
+  .pw-tec__t a:hover { text-decoration: underline; }
+  .pw-tec__d { margin: 0 0 .5rem; color: #b9c5cf; line-height: 1.55; font-size: .95rem; }
+  .pw-tec__x { margin: 0; color: #8494a2; font-size: .9rem; }
+  .pw-tec__x strong { color: var(--color-cdm-texto); font-weight: 600; }
+  @media (min-width: 700px) { .pw-tec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1050px) { .pw-tec { grid-template-columns: repeat(3, 1fr); } }
+
+  .pw-proc { margin: 0; padding-left: 1.3rem; display: grid; gap: .8rem; max-width: 72ch; color: #b9c5cf; line-height: 1.6; }
+  .pw-proc strong { color: var(--color-cdm-texto); }
+</style>

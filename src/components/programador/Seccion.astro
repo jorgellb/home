@@ -1,0 +1,36 @@
+---
+/* Envoltorio de sección del clúster. Centraliza el ritmo vertical y los tonos
+   alternos para que las páginas no tengan que repetir estilos. */
+interface Props {
+  id?: string;
+  titulo: string;
+  lead?: string;
+  tono?: 'suelo' | 'panel';
+  nivel?: 2 | 3;
+}
+const { id, titulo, lead, tono = 'suelo', nivel = 2 } = Astro.props;
+const Titulo = `h${nivel}` as 'h2' | 'h3';
+---
+<section id={id} class:list={['pw-sec', `pw-sec--${tono}`]}>
+  <div class="container-brutal">
+    <header class="pw-sec__head">
+      <Titulo class="pw-sec__t">{titulo}</Titulo>
+      {lead && <p class="pw-sec__lead">{lead}</p>}
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .pw-sec { padding: 3.5rem 0; border-block-start: 1px solid var(--color-cdm-regla); }
+  .pw-sec--suelo { background: var(--color-cdm-suelo); }
+  .pw-sec--panel { background: var(--color-cdm-panel); }
+  .pw-sec__head { max-width: 62ch; margin-bottom: 2rem; }
+  .pw-sec__t {
+    font-family: var(--font-display, sans-serif);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800; letter-spacing: -.03em; line-height: 1.05;
+    color: var(--color-cdm-texto); margin: 0;
+  }
+  .pw-sec__lead { margin: .75rem 0 0; color: #b9c5cf; font-size: 1.02rem; line-height: 1.6; }
+</style>

@@ -1,0 +1,22 @@
+---
+import type { Servicio } from '../../data/tecnologias';
+interface Props { servicios: Servicio[] }
+const { servicios } = Astro.props;
+---
+<ul class="pw-srv">
+  {servicios.map((s) => (
+    <li class="pw-srv__item">
+      <h3 class="pw-srv__t">{s.titulo}</h3>
+      <p class="pw-srv__d">{s.descripcion}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .pw-srv { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .pw-srv__item { border: 1px solid var(--color-cdm-regla); border-left: 3px solid var(--color-cdm-senal); padding: 1.1rem 1.2rem; background: var(--color-cdm-panel-2); }
+  .pw-srv__t { margin: 0 0 .35rem; font-size: 1rem; color: var(--color-cdm-texto); font-weight: 700; }
+  .pw-srv__d { margin: 0; color: #b9c5cf; font-size: .94rem; line-height: 1.55; }
+  @media (min-width: 640px) { .pw-srv { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .pw-srv { grid-template-columns: repeat(3, 1fr); } }
+</style>
