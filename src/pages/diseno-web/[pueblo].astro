@@ -59,11 +59,15 @@ const pasos = [
 
 const it = getPuebloIT(l.slug);
 
-// Primero los municipios indexables: son los que merece la pena enlazar.
+/* Solo enlazamos a municipios indexables (Tier 1): las demás landings van con
+   noindex, así que mandarles enlaces internos no aporta nada. Si la comarca
+   tiene pocos, se completa con los indexables del resto de la provincia. */
 const deComarca = getPueblosByComarca(l.comarca);
-const vecinos = deComarca
-  .filter((p) => p.slug !== l.slug)
-  .sort((a, b) => Number(esPuebloIndexable(b.slug)) - Number(esPuebloIndexable(a.slug)))
+const enComarca = deComarca.filter((p) => p.slug !== l.slug && esPuebloIndexable(p.slug));
+const fuera = pueblos.filter(
+  (p) => p.slug !== l.slug && esPuebloIndexable(p.slug) && p.comarca !== l.comarca,
+);
+const vecinos = [...enComarca, ...fuera]
   .slice(0, 10)
   .map((p) => ({ href: `/diseno-web/${p.slug}/`, label: `Diseño web en ${p.nombre}` }));
 
@@ -225,8 +229,8 @@ const jsonLd = [
   {vecinos.length > 0 && (
     <SeccionLectura
       id="comarca"
-      titulo={`Diseño web en ${l.comarca}`}
-      lead="Otros municipios de la comarca donde trabajamos. Si el tuyo no aparece, escríbenos: cubrimos toda la provincia."
+      titulo="Diseño web en otros municipios de Almería"
+      lead={`Municipios de ${l.comarca} y del resto de la provincia con página propia. Si el tuyo no aparece, escríbenos: cubrimos toda Almería.`}
     >
       <ListaEnlaces items={[...vecinos, { href: '/diseno-web/', label: 'Todos los municipios de Almería' }]} />
     </SeccionLectura>

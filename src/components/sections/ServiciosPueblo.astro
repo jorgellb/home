@@ -4,18 +4,29 @@
  * Anchors ricos en keyword para flujo de relevancia temática y PageRank
  * desde cada landing local hacia las páginas de servicio (las "money pages").
  */
+import { pueblosIT } from '../../data/servicios-it';
+
 interface Props {
   pueblo: string;
 }
 const { pueblo } = Astro.props;
 
+/* Si el municipio tiene página de Sistemas IT, el enlace va a la suya; si no,
+   al índice del servicio. Así cada landing alimenta también la línea de
+   informática, que hasta ahora solo recibía enlaces del menú. */
+const it = pueblosIT.find((p) => p.nombre === pueblo);
+
 const servicios = [
-  { n: '01', href: '/desarrollo-web/',          label: 'Diseño y desarrollo web',        desc: `Páginas web a medida para negocios de ${pueblo}, rápidas y optimizadas.` },
+  { n: '01', href: '/desarrollo-web/',          label: `Diseño y desarrollo web en ${pueblo}`, desc: `Páginas web a medida para negocios de ${pueblo}, rápidas y optimizadas.` },
   { n: '02', href: '/soluciones/ecommerce/',    label: 'Tiendas online y e-commerce',    desc: 'WooCommerce con Stripe y Bizum, sin comisiones por venta.' },
-  { n: '03', href: '/marketing/',               label: 'SEO y marketing digital',        desc: `Posicionamiento en Google y captación de clientes en ${pueblo}.` },
+  { n: '03', href: '/marketing/',               label: `SEO y marketing digital en ${pueblo}`, desc: `Posicionamiento en Google y captación de clientes en ${pueblo}.` },
   { n: '04', href: '/audiovisual/',             label: 'Producción audiovisual y dron 4K', desc: 'Vídeo corporativo, reels y fotografía aérea.' },
   { n: '05', href: '/diseno-grafico/',          label: 'Diseño gráfico y branding',      desc: 'Identidad visual, papelería, packaging y editorial.' },
   { n: '06', href: '/soporte/',                 label: 'Mantenimiento y soporte web',    desc: 'Backups, seguridad y soporte 24/7, sin permanencia.' },
+  it
+    ? { n: '07', href: `/informatica-empresas/${it.slug}/`, label: `Mantenimiento informático en ${pueblo}`, desc: 'Técnico en tu oficina el mismo día: equipos, redes, copias y ciberseguridad.' }
+    : { n: '07', href: '/informatica-empresas/',   label: 'Mantenimiento informático para empresas', desc: 'Equipos, redes, copias y ciberseguridad con visita en el Levante y el Almanzora.' },
+  { n: '08', href: '/plan-360/',                label: 'Plan 360: web e informática',    desc: `Web, soporte y sistemas de ${pueblo} en una sola cuota mensual, sin permanencia.` },
 ];
 ---
 
