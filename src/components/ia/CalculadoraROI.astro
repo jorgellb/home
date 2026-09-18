@@ -40,8 +40,11 @@ const campos = [
 </div>
 
 <script>
-  const raiz = document.querySelector('[data-roi]');
-  if (raiz) {
+  const encontrada = document.querySelector('[data-roi]');
+  if (encontrada instanceof HTMLElement) {
+    /* Alias no anulable: TypeScript pierde el estrechamiento dentro de las
+       funciones internas si seguimos usando la variable original. */
+    const raiz = encontrada;
     const leer = (id: string) => Number((raiz.querySelector(`[data-roi-campo="${id}"]`) as HTMLInputElement).value);
     const salida = {
       horas: raiz.querySelector<HTMLElement>('[data-roi-horas]')!,

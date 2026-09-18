@@ -46,11 +46,11 @@ export const enlacesPorPost: Record<string, EnlacePost[]> = {
   ],
   'tecnologias-javascript-ar-web': [
     { href: '/probador-virtual-ar/', label: 'Probador virtual AR', sub: 'La demo de este artículo, funcionando' },
-    { href: '/configurador-3d/', label: 'Configurador 3D', sub: 'Producto configurable en el navegador' },
-    { href: '/desarrollo-web/', label: 'Desarrollo web a medida', sub: 'Lo llevamos a tu producto' },
+    { href: '/soluciones/ecommerce/', label: 'Tiendas online', sub: 'Donde esto se convierte en ventas' },
+    { href: '/ia-empresas/', label: 'IA para empresas', sub: 'Lo mismo, dentro de tu operación' },
   ],
   'web3-descentralizada-mas-alla-del-hype': [
-    { href: '/laboratorio-ia/', label: 'Laboratorio de IA', sub: 'Lo que sí funciona hoy, probándolo' },
+    { href: '/ia-empresas/', label: 'IA para empresas', sub: 'Lo que sí funciona hoy, en producción' },
     { href: '/desarrollo-web/', label: 'Desarrollo web', sub: 'Tecnología elegida por criterio, no por moda' },
     { href: '/soluciones/empresa/', label: 'Proyectos corporativos', sub: 'Integraciones con lo que ya usas' },
   ],
