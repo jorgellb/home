@@ -81,6 +81,10 @@ export interface Tecnologia {
   /** Servicios ya existentes en la web con los que enlaza. Se valida que la
    *  URL exista antes de pintar el enlace. */
   serviciosWeb: string[];
+  /** Láminas extra del hub, para las tecnologías que necesitan explicar más de
+   *  lo que cabe en un esquema. No todas las llevan: ponerlas por simetría
+   *  sería rellenar. */
+  laminas?: { clave: 'pipeline' | 'herramientas' | 'ciencia'; titulo: string; pie: string }[];
 }
 
 export const TECNOLOGIAS: Record<SlugTecnologia, Tecnologia> = {
@@ -549,13 +553,30 @@ export const TECNOLOGIAS: Record<SlugTecnologia, Tecnologia> = {
           'Se preparan y se analizan para responder preguntas concretas. Antes de hablar '
           + 'de predecir nada, conviene saber qué hay.',
       },
+      {
+        encargo: 'Queremos predecir la demanda con inteligencia artificial.',
+        respuesta:
+          'Primero se mira si el histórico da para eso, que es donde se cae la mitad de '
+          + 'estos proyectos. Muchas veces un informe bien hecho de lo que ya pasó decide '
+          + 'igual de bien y cuesta una fracción.',
+      },
+      {
+        encargo: 'La información que necesitamos está en una web y la copiamos a mano.',
+        respuesta:
+          'Se automatiza la extracción, respetando lo que esa web permita en sus condiciones '
+          + 'y sin machacar su servidor. Si no lo permite, se dice y se busca otra vía.',
+      },
     ],
     servicios: [
       { titulo: 'Procesos de datos', descripcion: 'Limpiar, cruzar y transformar lo que hoy se hace a mano.' },
       { titulo: 'Informes automáticos', descripcion: 'Generados y enviados a su hora, sin intervención.' },
       { titulo: 'Lectura de documentos', descripcion: 'Extraer datos de PDF, facturas y listados.' },
       { titulo: 'Extracción de sistemas cerrados', descripcion: 'Sacar lo vuestro de programas sin API.' },
-      { titulo: 'Análisis', descripcion: 'Responder preguntas concretas con los datos que ya hay.' },
+      { titulo: 'Análisis y cuadros de mando', descripcion: 'Responder preguntas concretas con los datos que ya hay.' },
+      { titulo: 'APIs con FastAPI', descripcion: 'Servicios documentados sobre vuestros propios datos.' },
+      { titulo: 'Aplicaciones con Django', descripcion: 'Cuando hace falta administración y usuarios desde el primer día.' },
+      { titulo: 'Extracción web', descripcion: 'Con Playwright, respetando lo que cada sitio permite.' },
+      { titulo: 'Modelos, cuando tocan', descripcion: 'Con scikit-learn y solo si el histórico da para ello.' },
     ],
     faq: [
       {
@@ -574,6 +595,58 @@ export const TECNOLOGIAS: Record<SlugTecnologia, Tecnologia> = {
         q: '¿Dónde se ejecuta eso, hace falta un servidor?',
         a: 'Depende de la frecuencia. Un proceso mensual puede correr en un ordenador de la '
           + 'oficina; uno diario compensa ponerlo en un servidor pequeño con aviso si falla.',
+      },
+      {
+        q: '¿Django o FastAPI para nuestro proyecto?',
+        a: 'FastAPI si lo que hace falta es servir datos a otra aplicación: es ligero y la '
+          + 'documentación sale sola. Django cuando desde el primer día hacen falta usuarios, '
+          + 'permisos y un panel de administración, porque eso ya lo trae y montarlo aparte '
+          + 'cuesta semanas.',
+      },
+      {
+        q: '¿Podéis predecir ventas o demanda con nuestros datos?',
+        a: 'Depende de cuántos años haya, de si están completos y de si el negocio se ha '
+          + 'parecido a sí mismo en ese tiempo. Lo primero es comprobarlo, y esa comprobación '
+          + 'se entrega aunque la respuesta sea que no da. Prometer un modelo antes de mirar '
+          + 'el histórico es cómo empiezan los proyectos de datos que acaban mal.',
+      },
+      {
+        q: '¿Hace falta machine learning para esto?',
+        a: 'Menos veces de lo que parece. La mayoría de los encargos se resuelven sabiendo '
+          + 'qué pasó y por qué, que es análisis descriptivo y sale mucho más barato. El '
+          + 'modelo entra cuando hay que decidir sobre algo que todavía no ha ocurrido.',
+      },
+      {
+        q: '¿Es legal extraer datos de una web?',
+        a: 'Depende de la web y de qué datos. Se mira lo que dicen sus condiciones y su '
+          + 'fichero de robots, se evita cargar su servidor y se descartan los datos '
+          + 'personales. Si un sitio no lo permite, se busca otra fuente en vez de mirar '
+          + 'para otro lado.',
+      },
+    ],
+    laminas: [
+      {
+        clave: 'pipeline',
+        titulo: 'lámina 01 · el proceso',
+        pie: 'Lo que hoy se hace a mano tiene siempre la misma forma: recoger, limpiar, '
+          + 'comprobar y dejar donde haga falta. La parte que más se olvida al automatizar '
+          + 'es la tercera: si nada comprueba, los errores dejan de verse y aparecen meses '
+          + 'después en una factura.',
+      },
+      {
+        clave: 'herramientas',
+        titulo: 'lámina 02 · con qué se hace cada cosa',
+        pie: 'Python no es una herramienta, es un ecosistema, y elegir mal dentro de él '
+          + 'cuesta tanto como elegir mal el lenguaje. Esto es lo que usamos para cada '
+          + 'trabajo y por qué; si tu caso pide otra, se usa otra.',
+      },
+      {
+        clave: 'ciencia',
+        titulo: 'lámina 03 · hasta dónde llega el análisis',
+        pie: 'La conversación sobre datos suele empezar por el final, hablando de predecir. '
+          + 'Las dos primeras preguntas resuelven la mayoría de los encargos y cuestan una '
+          + 'fracción; la tercera solo tiene sentido cuando las dos anteriores ya están '
+          + 'respondidas y el histórico da para ello.',
       },
     ],
     relacionadas: ['nodejs', 'genai'],

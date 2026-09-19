@@ -14,6 +14,7 @@ import Seccion from '../../../components/programador/Seccion.astro';
 import Marco from '../../../components/programador/Marco.astro';
 import Esquema from '../../../components/programador/Esquema.astro';
 import Diff from '../../../components/programador/Diff.astro';
+import Lamina from '../../../components/programador/Lamina.astro';
 import Servicios from '../../../components/programador/Servicios.astro';
 import Enlaces from '../../../components/programador/Enlaces.astro';
 import Faq from '../../../components/programador/Faq.astro';
@@ -109,9 +110,22 @@ const jsonLd = [
     <Servicios servicios={t.servicios} />
   </Seccion>
 
+  {t.laminas && t.laminas.length > 0 && (
+    <Seccion
+      ref="03 · cómo se hace"
+      titulo={`Cómo se trabaja con ${t.nombre}`}
+      lead="Las tres preguntas que salen siempre, respondidas con el dibujo delante."
+      tono="panel"
+    >
+      <div class="laminas">
+        {t.laminas.map((l) => <Lamina clave={l.clave} titulo={l.titulo} pie={l.pie} />)}
+      </div>
+    </Seccion>
+  )}
+
   {locales.length > 0 && (
     <Seccion
-      ref="03 · zona"
+      ref="04 · zona"
       titulo={`${t.etiqueta} por municipio`}
       lead={`Damos servicio en toda la provincia desde Vera. Bajo cada municipio está lo que allí se mueve y encaja con ${t.nombre}.`}
       tono="panel"
@@ -126,7 +140,7 @@ const jsonLd = [
     </Seccion>
   )}
 
-  <Seccion ref="04 · alrededor" titulo="Tecnologías relacionadas" lead="Con lo que se combina de verdad, no con todo lo que suene parecido.">
+  <Seccion ref="05 · alrededor" titulo="Tecnologías relacionadas" lead="Con lo que se combina de verdad, no con todo lo que suene parecido.">
     <Enlaces columnas={2} enlaces={[
       ...relacionadas.map((r) => ({
         href: rutaTecnologia(r.slug),
@@ -146,7 +160,7 @@ const jsonLd = [
     ]} />
   </Seccion>
 
-  <Seccion ref="05 · dudas" titulo="Preguntas frecuentes" tono="panel">
+  <Seccion ref="06 · dudas" titulo="Preguntas frecuentes" tono="panel">
     <Faq faq={t.faq} />
   </Seccion>
 
@@ -161,6 +175,12 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
+  .laminas { display: grid; gap: clamp(1.75rem, 4vw, 2.75rem); }
+  @media (min-width: 1100px) { .laminas { grid-template-columns: repeat(2, 1fr); } }
+  /* Todas del mismo ancho a propósito. Al dar ancho doble a una, su SVG
+     escalaba al doble y con él todo su texto, que se solapaba y se salía del
+     encuadre. Un dibujo pensado a un tamaño no sobrevive al otro. */
+
   .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
   .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
   .hero__h1 {

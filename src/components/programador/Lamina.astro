@@ -1,0 +1,176 @@
+---
+/* Láminas adicionales de un hub de tecnología.
+ *
+ * El esquema del encabezado responde «qué toca esta tecnología». Estas
+ * responden a las preguntas siguientes, que en Python son las que de verdad
+ * trae la gente: cómo es el proceso, con qué herramienta se hace cada cosa y
+ * hasta dónde llega el análisis antes de empezar a prometer predicciones.
+ *
+ * Misma gramática que el resto del clúster: gris lo que ya existe, lima lo que
+ * se aporta, rojo lo que hoy duele, discontinuo lo que va y viene. Y cada una
+ * lleva su descripción en el `<title>`, que es lo que oye quien no la ve.
+ */
+export type ClaveLamina = 'pipeline' | 'herramientas' | 'ciencia';
+
+interface Props { clave: ClaveLamina; titulo: string; pie: string }
+const { clave, titulo, pie } = Astro.props;
+
+const DESCRIPCIONES: Record<ClaveLamina, string> = {
+  pipeline:
+    'Un proceso de datos en cuatro pasos: se recoge de donde esté, se limpia, se comprueba '
+    + 'contra reglas y se deja donde haga falta. Lo que no pasa la comprobación se aparta '
+    + 'para revisarlo a mano en vez de colarse.',
+  herramientas:
+    'Qué herramienta de Python encaja con cada trabajo: pandas o Polars para cruzar datos, '
+    + 'FastAPI para servir una API, Django cuando hace falta administración, Playwright para '
+    + 'sacar datos de una web, y scikit-learn solo cuando de verdad toca un modelo.',
+  ciencia:
+    'Las cuatro preguntas de un proyecto de datos: qué pasó, por qué pasó, qué va a pasar y '
+    + 'qué conviene hacer. La mayoría de los encargos se resuelven en las dos primeras, y '
+    + 'saltar directamente a predecir es el error más caro.',
+};
+const id = `lam-${clave}`;
+---
+
+<figure class="lam">
+  <figcaption class="lam__cab">
+    <span class="pw-ref">{titulo}</span>
+  </figcaption>
+  <div class="lam__marco pw-tram">
+    <span class="lam__esq lam__esq--ai" aria-hidden="true"></span>
+    <span class="lam__esq lam__esq--ad" aria-hidden="true"></span>
+    <span class="lam__esq lam__esq--bi" aria-hidden="true"></span>
+    <span class="lam__esq lam__esq--bd" aria-hidden="true"></span>
+
+    <svg class="lam__svg" viewBox="0 0 372 196" fill="none" role="img" aria-labelledby={id}>
+      <title id={id}>{DESCRIPCIONES[clave]}</title>
+
+      {clave === 'pipeline' && (
+        <g>
+          <text x="14" y="28" class="l-tag">de donde esté</text>
+          {['erp', 'banco', 'hoja'].map((etq, i) => (
+            <g>
+              <rect x="14" y={40 + i * 34} width="54" height="26" class="l-base" />
+              <text x="41" y={57 + i * 34} class="l-lbl" text-anchor="middle">{etq}</text>
+            </g>
+          ))}
+
+          {[0, 1, 2].map((i) => (
+            <path d={`M70 ${53 + i * 34} C88 ${53 + i * 34}, 88 108, 104 108`} class="l-flujo-base" />
+          ))}
+
+          {['limpiar', 'comprobar'].map((etq, i) => (
+            <g>
+              <rect x={108 + i * 86} y="86" width="74" height="44" class="l-nuevo" />
+              <text x={145 + i * 86} y="112" class="l-lbl l-lbl--nuevo" text-anchor="middle">{etq}</text>
+            </g>
+          ))}
+          <path d="M184 108 H192" class="l-nuevo" />
+
+          <path d="M270 108 H302" class="l-nuevo l-flujo" />
+          <path d="M296 104 l6 4 -6 4" class="l-nuevo" />
+          <rect x="306" y="86" width="52" height="44" class="l-nuevo" />
+          <text x="332" y="112" class="l-lbl l-lbl--nuevo" text-anchor="middle">destino</text>
+
+          {/* La rama que importa: lo que no cuadra no se cuela, se aparta. */}
+          <path d="M231 134 V164 H120" class="l-hoy l-flujo" />
+          <path d="M126 160 l-6 4 6 4" class="l-hoy" />
+          <text x="132" y="180" class="l-lbl l-lbl--hoy">a revisar a mano: solo lo que no cuadra</text>
+        </g>
+      )}
+
+      {clave === 'herramientas' && (
+        <g>
+          <text x="14" y="26" class="l-tag">el trabajo</text>
+          <text x="214" y="26" class="l-tag l-tag--nuevo">la herramienta</text>
+          <line x1="14" y1="34" x2="358" y2="34" class="l-regla" />
+          {[
+            ['cruzar y limpiar datos', 'pandas · Polars'],
+            ['servir una API', 'FastAPI'],
+            ['web con administración', 'Django'],
+            ['sacar datos de una web', 'Playwright'],
+            ['tareas a su hora', 'cron · Airflow'],
+            ['un modelo, si hace falta', 'scikit-learn'],
+          ].map(([trabajo, herramienta], i) => (
+            <g>
+              <text x="14" y={54 + i * 23} class="l-lbl">{trabajo}</text>
+              <path d={`M170 ${50 + i * 23} H206`} class="l-flujo-base" />
+              <circle cx="210" cy={50 + i * 23} r="2.6" class="l-punto" />
+              <text x="220" y={54 + i * 23} class="l-lbl l-lbl--nuevo">{herramienta}</text>
+            </g>
+          ))}
+        </g>
+      )}
+
+      {clave === 'ciencia' && (
+        <g>
+          <text x="14" y="26" class="l-tag">las cuatro preguntas de un proyecto de datos</text>
+          {[
+            ['qué pasó', 'informes'],
+            ['por qué', 'cruces'],
+            ['qué pasará', 'modelos'],
+            ['qué hago', 'decisión'],
+          ].map(([q, como], i) => (
+            <g>
+              <rect x={14 + i * 89} y="48" width="76" height="46" class={i < 2 ? 'l-nuevo' : 'l-base'} />
+              <text x={52 + i * 89} y="68" class={i < 2 ? 'l-lbl l-lbl--nuevo' : 'l-lbl'} text-anchor="middle">{q}</text>
+              <text x={52 + i * 89} y="83" class="l-lbl l-lbl--tenue" text-anchor="middle">{como}</text>
+              {i < 3 && <path d={`M${92 + i * 89} 71 H${110 + i * 89}`} class="l-flujo-base" />}
+            </g>
+          ))}
+
+          {/* Las dos reglas marcan hasta dónde llega lo barato y dónde empieza
+              lo caro. Van en líneas separadas porque juntas se solapaban. */}
+          <line x1="14" y1="110" x2="179" y2="110" class="l-nuevo" />
+          <text x="14" y="126" class="l-lbl l-lbl--nuevo">aquí acaba la mayoría</text>
+          <text x="14" y="139" class="l-lbl l-lbl--nuevo">de los encargos</text>
+          <line x1="192" y1="110" x2="358" y2="110" class="l-base" />
+          <text x="192" y="126" class="l-lbl l-lbl--tenue">y aquí se gasta de más</text>
+          <text x="192" y="139" class="l-lbl l-lbl--tenue">si se llega antes de tiempo</text>
+
+          <line x1="14" y1="154" x2="358" y2="154" class="l-regla" />
+          <text x="14" y="172" class="l-lbl">Saltar a predecir sin saber qué pasó</text>
+          <text x="14" y="185" class="l-lbl">es el error más caro de un proyecto de datos.</text>
+        </g>
+      )}
+
+    </svg>
+  </div>
+  <figcaption class="lam__pie">{pie}</figcaption>
+</figure>
+
+<style>
+  .lam { margin: 0; display: flex; flex-direction: column; gap: .6rem; }
+  .lam__cab { order: -1; }
+  .lam__marco {
+    position: relative;
+    border: 1px solid var(--pw-regla-2);
+    background: var(--pw-panel);
+    padding: clamp(.75rem, 2.5vw, 1.15rem);
+  }
+  .lam__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
+  .lam__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .lam__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+  .lam__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+  .lam__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+  .lam__svg { display: block; width: 100%; height: auto; }
+  .lam__pie { color: var(--pw-suave); font-size: .92rem; line-height: 1.6; max-width: 62ch; }
+
+  .lam__svg :global(.l-base) { stroke: var(--pw-regla-2); stroke-width: 1.2; fill: none; }
+  .lam__svg :global(.l-nuevo) { stroke: var(--pw-luego); stroke-width: 1.4; fill: none; }
+  .lam__svg :global(.l-hoy) { stroke: var(--pw-hoy); stroke-width: 1.3; fill: none; }
+  .lam__svg :global(.l-flujo) { stroke-dasharray: 5 4; }
+  .lam__svg :global(.l-flujo-base) { stroke: var(--pw-regla-2); stroke-width: 1; fill: none; stroke-dasharray: 3 3; }
+  .lam__svg :global(.l-regla) { stroke: var(--pw-regla); stroke-width: 1; }
+  .lam__svg :global(.l-punto) { fill: var(--pw-luego); }
+
+  .lam__svg :global(.l-tag) {
+    font-family: var(--font-mono, monospace); font-size: 8.5px;
+    letter-spacing: .1em; fill: var(--pw-tenue);
+  }
+  .lam__svg :global(.l-tag--nuevo) { fill: var(--pw-luego); }
+  .lam__svg :global(.l-lbl) { font-family: var(--font-mono, monospace); font-size: 9px; fill: var(--pw-suave); }
+  .lam__svg :global(.l-lbl--nuevo) { fill: var(--pw-luego); }
+  .lam__svg :global(.l-lbl--hoy) { fill: var(--pw-hoy); }
+  .lam__svg :global(.l-lbl--tenue) { fill: var(--pw-tenue); font-size: 8px; }
+</style>
