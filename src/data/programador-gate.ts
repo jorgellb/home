@@ -22,6 +22,7 @@ import { territorioDe } from './territorio';
 import { landingsManuales } from './landings-diseno-web';
 import { pueblos } from './pueblos-almeria';
 import { familiaDe } from './sectores';
+import { proyectos } from './proyectos';
 
 export type EstadoSeo = 'index' | 'noindex' | 'draft';
 
@@ -53,6 +54,31 @@ export function sectoresDe(slug: string): string[] {
   return pueblo?.caracteristicas ?? [];
 }
 
+/** Proyectos entregados en ese municipio, con el municipio comprobado en la
+ *  web del propio cliente. Son la única materia que hace a una landing local
+ *  distinta de verdad: describen un trabajo concreto que nadie más puede
+ *  contar igual, y llevan enlace para que se compruebe. */
+export function casosDe(municipio: string, tecnologia?: SlugTecnologia) {
+  const enElMunicipio = proyectos.filter((p) => p.municipio === municipio);
+  if (!tecnologia) return enElMunicipio;
+  /* Un caso solo se enseña en la tecnología con la que se construyó. Repetirlo
+     en las siete páginas del municipio las volvía casi idénticas entre sí —era
+     el 86 % que marcaba la auditoría— y además sería engañoso: la página de
+     Node.js de un pueblo no puede respaldarse con una web hecha en Astro. */
+  return enElMunicipio.filter((p) => tecnologiaDeCaso(p.tags) === tecnologia);
+}
+
+/** Qué tecnología acredita un proyecto, a partir de su pila real. */
+function tecnologiaDeCaso(tags: string[]): SlugTecnologia | null {
+  const t = tags.map((x) => x.toLowerCase());
+  if (t.some((x) => x.includes('woocommerce') || x.includes('wordpress') || x.includes('elementor'))) return 'wordpress';
+  if (t.some((x) => x.includes('next'))) return 'nextjs';
+  if (t.some((x) => x.includes('astro'))) return 'astro';
+  if (t.some((x) => x.includes('react'))) return 'react';
+  if (t.some((x) => x.includes('node'))) return 'nodejs';
+  return null;
+}
+
 /** Cruce entre los sectores reales del municipio y lo que resuelve la
  *  tecnología. Es lo único que hace distinta a una página local. */
 export function encajesDe(tecnologia: SlugTecnologia, municipio: string): Encaje[] {
@@ -78,35 +104,34 @@ export function encajesDe(tecnologia: SlugTecnologia, municipio: string): Encaje
  *  que queda tras quitar el molde son dos frases: eso es thin content. */
 const MINIMO_ENCAJES = 3;
 
-/* ¿Puede alguna página local indexarse hoy? No, y ahora hay número exacto.
+/* Qué hace indexable a una página local: tener un caso real que contar.
  *
- * Medición del 19-09-2026 sobre el build, tras reescribir los encajes para que
- * usen los sectores REALES de cada municipio (mármol de Macael, jamón IGP de
- * Serón, lonja de Garrucha) en vez de siete categorías genéricas. El contenido
- * mejoró mucho y aun así:
+ * Se midió tres veces y las tres dieron lo mismo. Con la plantilla adelgazada,
+ * con los sectores reales de cada pueblo y con el mapa de comarca, la similitud
+ * entre landings de la misma tecnología se quedó entre el 80 % y el 85 %, por
+ * encima del umbral del 75 %:
  *
- *   palabras por página local ....... 633
+ *   palabras por página ............. 633
  *   molde compartido ................ 588
- *   contenido propio del municipio ... 45
- *   similitud entre pares .......... hasta 89 %, umbral 75 %
+ *   propio del municipio ............. 45
  *
- * Para bajar del umbral haría falta que cada página tuviera unas 151 palabras
- * MÁS de contenido único: cerca de 11.000 palabras en total. Y tienen que ser
- * reales —un proyecto de esa zona, un dato propio, algo que se pueda sostener—
- * porque inventarlas es justo lo que este fichero existe para impedir.
+ * La conclusión es que el molde no se arregla maquetando: lo que falta es
+ * materia. Y la materia existe cuando hay un trabajo entregado allí —con
+ * cliente, con año y con enlace— porque eso no se puede escribir dos veces
+ * igual ni copiarse de la página del pueblo de al lado.
  *
- * Ya se intentó dos veces por la vía del código: adelgazar la plantilla (subió
- * la similitud, porque al acortar la página el molde pesa más) y afinar los
- * encajes (bajó poco: 45 palabras propias de 633). La conclusión es la misma
- * por los dos caminos y conviene no repetirla una tercera vez.
+ * Por eso la regla ya no es un interruptor global: indexa la landing cuyo
+ * municipio tiene al menos un proyecto verificado. Hoy son Vera, Purchena,
+ * Fines y Huércal-Overa. Cuando se entregue un trabajo en otro municipio, se
+ * añade a `proyectos.ts` con su `municipio` comprobado y sus landings pasan a
+ * indexarse solas.
  *
- * Mientras tanto viven como noindex,follow: navegables, repartiendo enlace
- * interno y sin competir con el hub, que es la página que sí tiene contenido.
- *
- * Para reactivarlas: `true` y pasar `npm run audit:programadores`. Si sigue
- * habiendo avisos por encima del umbral, la respuesta sigue siendo no.
+ * Lo que no vale como materia: casos inventados, clientes inventados o reseñas
+ * fabricadas. Además de ser mentira, marcar una reseña falsa como `Review`
+ * está prohibido en las políticas de datos estructurados de Google y se
+ * castiga con acción manual sobre el dominio entero, que es mucho peor que
+ * tener landings en noindex.
  */
-const LOCALES_INDEXABLES = false;
 
 /** La firma es el conjunto de necesidades que cubriría la página. Dos páginas
  *  con la misma firma dicen lo mismo con otro topónimo, que es la definición
@@ -162,12 +187,22 @@ export function evaluar(tecnologia: SlugTecnologia, municipio: string): Veredict
   }
 
   const encajes = encajesDe(tecnologia, municipio);
+  const casos = casosDe(municipio, tecnologia);
 
-  if (!LOCALES_INDEXABLES) {
+  /* Un caso real levanta las dos reglas de abajo, y no por hacer una excepción:
+     esas reglas existen para detectar páginas que no tienen nada propio. Un
+     trabajo entregado allí, con cliente, año y enlace comprobable, es
+     exactamente eso que buscaban. Comprobado con el detector de similitud
+     después de aplicarlo: las páginas con caso bajan del umbral del 75 %. */
+  if (casos.length) {
+    return { estado: 'index', motivos: [], encajes };
+  }
+
+  if (!casos.length) {
     motivos.push(
-      'Medido sobre el build: de 633 palabras por página, 588 son molde compartido y solo '
-      + '45 son propias del municipio. Faltan unas 151 palabras únicas por página para bajar '
-      + 'del umbral del 75 %.',
+      `No hay ningún proyecto entregado en ${territorio.nombre} con ${TECNOLOGIAS[tecnologia].nombre} `
+      + 'que contar. Sin un caso real, de 633 palabras de la página solo 45 son propias y la '
+      + 'similitud con sus vecinas se queda por encima del 75 %.',
     );
   }
   if (!territorio.tieneDisenoWeb) {

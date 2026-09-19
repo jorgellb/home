@@ -24,7 +24,8 @@ import Faq from '../../../components/programador/Faq.astro';
 import Cta from '../../../components/programador/Cta.astro';
 import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia, rutaLocal, type SlugTecnologia } from '../../../data/tecnologias';
 import { territorioDe, frasesCobertura, municipiosIndexables } from '../../../data/territorio';
-import { evaluar } from '../../../data/programador-gate';
+import { evaluar, casosDe } from '../../../data/programador-gate';
+import CasoReal from '../../../components/programador/CasoReal.astro';
 import { esPuebloIndexable } from '../../../data/pueblos-indexables';
 import { SITE, PROVEEDOR } from '../../../data/negocio';
 
@@ -50,6 +51,7 @@ const canonical = `${SITE}${rutaLocal(tecnologia, municipio)}`;
 const n = territorio.nombre;
 
 const cobertura = frasesCobertura(territorio);
+const casos = casosDe(municipio, tecnologia);
 
 /* La entradilla se construye con los sectores reales del municipio en vez de
    repetir la del hub. Era la misma frase en 150 páginas y es justo el tipo de
@@ -121,6 +123,20 @@ const jsonLd: Record<string, unknown>[] = [
     },
   },
 ];
+/* Los casos entran como obra, no como reseña: no tenemos valoraciones de
+   estos clientes y marcar `Review` sin reseña real está prohibido. */
+if (casos.length) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': `Proyectos entregados en ${n}`,
+    'itemListElement': casos.map((c, i) => ({
+      '@type': 'ListItem',
+      'position': i + 1,
+      'item': { '@type': 'WebSite', 'name': c.cliente, 'url': c.url },
+    })),
+  });
+}
 if (indexable) {
   jsonLd.push({
     '@context': 'https://schema.org',
@@ -186,7 +202,17 @@ const description = veredicto.encajes.length
     </Seccion>
   )}
 
-  <Seccion ref="02 · cobertura" titulo={`Cómo damos servicio en ${n}`} tono="panel">
+  {casos.length > 0 && (
+    <Seccion
+      ref="02 · hecho aquí"
+      titulo={casos.length === 1 ? `Un trabajo entregado en ${n}` : `Trabajos entregados en ${n}`}
+      lead="Con nombre y con enlace, para que se pueda comprobar."
+    >
+      <CasoReal proyectos={casos} municipio={n} />
+    </Seccion>
+  )}
+
+  <Seccion ref="03 · cobertura" titulo={`Cómo damos servicio en ${n}`} tono="panel">
     {cobertura.map((f) => <p class="pwl-cob">{f}</p>)}
     <Enlaces columnas={2} enlaces={[
       ...(esPuebloIndexable(municipio)
@@ -197,7 +223,7 @@ const description = veredicto.encajes.length
   </Seccion>
 
   {(hermanas.length > 0 || vecinos.length > 0) && (
-    <Seccion ref="03 · alrededor" titulo="Seguir por aquí">
+    <Seccion ref="04 · alrededor" titulo="Seguir por aquí">
       {hermanas.length > 0 && (
         <>
           <h3 class="pwl-sub">Otras tecnologías en {n}</h3>
@@ -221,7 +247,7 @@ const description = veredicto.encajes.length
     </Seccion>
   )}
 
-  <Seccion ref="04 · dudas" titulo="Preguntas frecuentes" tono="panel">
+  <Seccion ref="05 · dudas" titulo="Preguntas frecuentes" tono="panel">
     <Faq faq={faqLocal} />
   </Seccion>
 

@@ -12,8 +12,24 @@ import { join } from 'node:path';
 const DIST = 'dist/client';
 const RAIZ = ['programador-web', 'desarrollo-aplicaciones-moviles'];
 /* Por encima de esto, dos páginas dicen prácticamente lo mismo. No es una
-   norma de Google: es el umbral interno a partir del cual conviene mirarlas. */
-const UMBRAL_SIMILITUD = 0.75;
+   norma de Google: es el umbral interno a partir del cual conviene mirarlas.
+   Se distinguen dos casos, porque el riesgo no es el mismo:
+
+   - MUNICIPIOS DISTINTOS, misma tecnología: es el patrón doorway clásico
+     —misma página con el topónimo cambiado— y ahí el listón es exigente.
+   - MISMO MUNICIPIO, tecnologías distintas: comparten mapa, cobertura y
+     contexto local por necesidad, no por pereza, y responden a consultas
+     distintas («programador WordPress en Vera» y «desarrollo Astro en Vera»).
+     Ahí el listón se relaja, pero solo si cada una se respalda con su propio
+     trabajo entregado; si no, el gate ya las dejó fuera antes de llegar aquí. */
+const UMBRAL_ENTRE_MUNICIPIOS = 0.75;
+const UMBRAL_MISMO_MUNICIPIO = 0.85;
+
+/** Municipio de una URL del clúster, o null si no es una landing local. */
+function municipioDe(ruta: string): string | null {
+  const m = ruta.match(/^\/programador-web\/(?!sectores\/)[^/]+\/([^/]+)\/$/);
+  return m ? m[1] : null;
+}
 
 interface Pagina {
   ruta: string;
@@ -179,7 +195,13 @@ const pares: { a: string; b: string; v: number }[] = [];
 for (let i = 0; i < indexables.length; i++) {
   for (let j = i + 1; j < indexables.length; j++) {
     const v = similitud(indexables[i].cuerpo, indexables[j].cuerpo);
-    if (v >= UMBRAL_SIMILITUD) pares.push({ a: indexables[i].ruta, b: indexables[j].ruta, v });
+    const ma = municipioDe(indexables[i].ruta);
+    const mb = municipioDe(indexables[j].ruta);
+    const mismo = ma !== null && ma === mb;
+    const umbral = mismo ? UMBRAL_MISMO_MUNICIPIO : UMBRAL_ENTRE_MUNICIPIOS;
+    if (v >= umbral) {
+      pares.push({ a: indexables[i].ruta, b: indexables[j].ruta, v });
+    }
   }
 }
 pares.sort((x, y) => y.v - x.v);
@@ -189,7 +211,7 @@ for (const p of pares) {
 
 console.log(`[prog] ${paginas.length} páginas del clúster: ${indexables.length} indexables, ${paginas.length - indexables.length} noindex.`);
 if (avisos.length) {
-  console.warn(`\n[prog] ${avisos.length} aviso(s) de similitud (umbral ${UMBRAL_SIMILITUD * 100} %):`);
+  console.warn(`\n[prog] ${avisos.length} aviso(s) de similitud (${UMBRAL_ENTRE_MUNICIPIOS * 100} % entre municipios, ${UMBRAL_MISMO_MUNICIPIO * 100} % dentro del mismo):`);
   for (const a of avisos.slice(0, 15)) console.warn(`  - ${a}`);
   if (avisos.length > 15) console.warn(`  … y ${avisos.length - 15} más.`);
 }

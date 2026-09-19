@@ -1,0 +1,74 @@
+---
+/* Caso real en el municipio.
+ *
+ * Esto es lo único que de verdad hace única a una landing local, y es lo que
+ * faltaba: un trabajo hecho, con nombre y con enlace para que cualquiera lo
+ * compruebe. Los sectores y el mapa describen el sitio; esto describe lo que
+ * hemos hecho ahí, y eso no se puede escribir dos veces igual.
+ *
+ * REGLA: solo entran proyectos con `municipio` comprobado en la web del propio
+ * cliente. Nada de casos sin enlace, nada de «una empresa del sector» cuando el
+ * cliente no ha autorizado que se le nombre, y desde luego nada inventado: si
+ * aquí aparece un nombre, esa web existe y se puede abrir.
+ *
+ * Lo que NO lleva y no debe llevar: marcado de reseña. No tenemos reseñas de
+ * estos clientes; marcar como `Review` algo que no lo es está prohibido en las
+ * políticas de datos estructurados de Google y expone a acción manual. La
+ * valoración real del estudio vive en su ficha de Google, que es donde le
+ * corresponde estar.
+ */
+import type { Proyecto } from '../../data/proyectos';
+interface Props { proyectos: Proyecto[]; municipio: string }
+const { proyectos, municipio } = Astro.props;
+---
+
+{proyectos.length > 0 && (
+  <ul class="caso">
+    {proyectos.map((p) => (
+      <li class="caso__i pw-tram">
+        <div class="caso__cab">
+          <span class="pw-ref caso__ref">trabajo entregado · {p.year}</span>
+          <h3 class="caso__t">{p.cliente}</h3>
+          <p class="caso__sec">{p.sector} · {municipio}</p>
+        </div>
+        <ul class="caso__tags">
+          {p.tags.map((t) => <li class="caso__tag">{t}</li>)}
+        </ul>
+        <a class="caso__a" href={p.url} target="_blank" rel="noopener">
+          Ver la web de {p.cliente}
+          <span class="caso__flecha" aria-hidden="true"></span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .caso { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--pw-regla); border: 1px solid var(--pw-regla-2); }
+  .caso__i {
+    background: var(--pw-panel);
+    padding: 1.35rem 1.4rem 1.4rem;
+    border-left: 2px solid var(--pw-luego);
+    display: flex; flex-direction: column; gap: .9rem;
+  }
+  .caso__ref { display: block; color: var(--pw-luego); margin-bottom: .35rem; }
+  .caso__t { margin: 0; font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; }
+  .caso__sec { margin: .25rem 0 0; color: var(--pw-tenue); font-size: .88rem; }
+  .caso__tags { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .caso__tag {
+    font-family: var(--font-mono, monospace); font-size: .68rem;
+    padding: .25rem .5rem; border: 1px solid var(--pw-regla-2); color: var(--pw-suave);
+  }
+  .caso__a {
+    margin-top: auto; align-self: start;
+    display: inline-flex; align-items: center; gap: .5rem;
+    color: var(--pw-marca); text-decoration: none; font-weight: 600; font-size: .92rem;
+  }
+  .caso__a:hover, .caso__a:focus-visible { text-decoration: underline; text-underline-offset: .22em; }
+  .caso__flecha {
+    width: 7px; height: 7px;
+    border-top: 1px solid currentColor; border-right: 1px solid currentColor;
+    transform: rotate(45deg);
+  }
+  @media (min-width: 760px) { .caso { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); } }
+</style>
