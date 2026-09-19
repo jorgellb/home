@@ -30,6 +30,7 @@ import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia } from '../../../data/te
 import { territorioDe, frasesCobertura, municipiosIndexables } from '../../../data/territorio';
 import { encajesDe, objecionesDe, casosDe, sectoresDe } from '../../../data/programador-gate';
 import { esPuebloIndexable } from '../../../data/pueblos-indexables';
+import { codigoPostalDe } from '../../../data/codigos-postales';
 import { SITE, PROVEEDOR } from '../../../data/negocio';
 
 export function getStaticPaths() {
@@ -55,6 +56,7 @@ const tecnologias = ORDEN_TECNOLOGIAS
 const sectores = sectoresDe(municipio);
 const casos = casosDe(municipio);
 const cobertura = frasesCobertura(territorio);
+const cp = codigoPostalDe(municipio);
 
 const vecinos = territorio.vecinos
   .filter((s) => s !== 'almeria')
@@ -80,6 +82,13 @@ const faq = [
       : `Los mismos que en el resto de la provincia; en ${n} todavía no hay un patrón propio `
         + 'que merezca contarse aparte.',
   },
+  ...(cp ? [{
+    q: `¿El SEO local sirve si mi negocio está en el ${cp}?`,
+    a: `Sirve precisamente por eso. Quien busca desde ${n} o alrededores usa términos con `
+      + 'nombre de pueblo o directamente el mapa, y ahí compite un puñado de negocios, no '
+      + 'toda la provincia. La ficha de Google, las páginas que hablen de lo tuyo y que la '
+      + 'web cargue rápido en el móvil valen más que cualquier truco.',
+  }] : []),
   {
     q: `¿Dais servicio también en ${vecinos.slice(0, 3).map((v) => v.nombre).join(', ')}?`,
     a: `Sí, y en el resto de ${territorio.comarca}. `
@@ -103,6 +112,9 @@ const jsonLd: Record<string, unknown>[] = [
     'areaServed': {
       '@type': 'City',
       'name': n,
+      /* El código postal describe la ZONA atendida, no una sede: la nuestra
+         sigue siendo la de Vera que declara `PROVEEDOR`. */
+      ...(cp ? { 'address': { '@type': 'PostalAddress', 'postalCode': cp, 'addressLocality': n, 'addressRegion': 'Almería', 'addressCountry': 'ES' } } : {}),
       'containedInPlace': { '@type': 'AdministrativeArea', 'name': territorio.comarca },
     },
   },
@@ -206,6 +218,11 @@ const description = tecnologias.length
 
   <Seccion ref="03 · cobertura" titulo={`Cómo damos servicio en ${n}`}>
     {cobertura.map((f) => <p class="cob">{f}</p>)}
+    {cp && (
+      <p class="cob cob--dato">
+        <span class="pw-ref">código postal</span> {cp} · <span class="pw-ref">comarca</span> {territorio.comarca}
+      </p>
+    )}
     <Enlaces columnas={2} enlaces={[
       ...(esPuebloIndexable(municipio)
         ? [{ href: `/diseno-web/${municipio}/`, texto: `Diseño web en ${n}`, sub: 'Si lo que hace falta es la web, no el desarrollo' }]
@@ -265,4 +282,9 @@ const description = tecnologias.length
   @media (min-width: 760px) { .enc { grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); } }
 
   .cob { line-height: 1.7; max-width: 68ch; margin: 0 0 1rem; }
+  .cob--dato {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: baseline;
+    padding-top: .9rem; border-top: 1px solid var(--pw-regla);
+    color: var(--pw-texto);
+  }
 </style>
