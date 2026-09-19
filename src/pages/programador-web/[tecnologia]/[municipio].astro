@@ -19,6 +19,8 @@ import Breadcrumb from '../../../components/common/Breadcrumb.astro';
 import Seccion from '../../../components/programador/Seccion.astro';
 import Marco from '../../../components/programador/Marco.astro';
 import MapaComarca from '../../../components/programador/MapaComarca.astro';
+import EsquemaCuadre from '../../../components/programador/EsquemaCuadre.astro';
+import { fichaDestacada } from '../../../data/fichas-destacadas';
 import Enlaces from '../../../components/programador/Enlaces.astro';
 import Faq from '../../../components/programador/Faq.astro';
 import Cta from '../../../components/programador/Cta.astro';
@@ -54,6 +56,9 @@ const n = territorio.nombre;
 
 const cobertura = frasesCobertura(territorio);
 const casos = casosDe(municipio, tecnologia);
+/* Si existe ficha destacada, esta página deja de ser la plantilla: se escribe
+   entera con su contenido propio. */
+const ficha = fichaDestacada(tecnologia, municipio);
 
 /* La entradilla se construye con los sectores reales del municipio en vez de
    repetir la del hub. Era la misma frase en 150 páginas y es justo el tipo de
@@ -72,7 +77,7 @@ const entradillaLocal = veredicto.encajes.length
 /* Solo la pregunta que de verdad es local. Arrastrar aquí las del hub
    duplicaba el mismo bloque en 150 páginas y disparaba la similitud sin
    aportarle nada a nadie: quien quiera esas respuestas tiene el enlace al hub. */
-const faqLocal = [
+const faqLocal = ficha ? ficha.faq : [
   {
     q: `¿Trabajáis con empresas de ${n} sin tener oficina allí?`,
     /* No se repiten aquí los párrafos de cobertura: ya están más arriba en esta
@@ -158,8 +163,8 @@ if (indexable) {
   });
 }
 
-const title = `${t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo ${t.etiqueta}`} en ${n} | Platanito Rico`;
-const description = veredicto.encajes.length
+const title = ficha ? ficha.title : `${t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo ${t.etiqueta}`} en ${n} | Platanito Rico`;
+const description = ficha ? ficha.description : veredicto.encajes.length
   ? `Desarrollo con ${t.nombre} para empresas de ${n}: ${veredicto.encajes.map((e) => e.necesidad).slice(0, 2).join(' y ')}. Estudio en Vera, ${territorio.comarca}.`
   : `Desarrollo con ${t.nombre} para empresas de ${n}, en ${territorio.comarca}. Trabajamos desde Vera para toda la provincia de Almería.`;
 ---
@@ -185,15 +190,61 @@ const description = veredicto.encajes.length
       <div>
         <p class="pw-ref">{`${tecnologia} · ${municipio}`}</p>
         <h1 class="hero__h1">
-          {t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo con ${t.nombre}`} en {n}
+          {ficha ? ficha.h1 : (t.etiqueta === 'WordPress' ? 'Programador WordPress' : `Desarrollo con ${t.nombre}`) + ` en ${n}`}
         </h1>
-        <p class="hero__lead">{entradillaLocal}</p>
+        {ficha
+          ? ficha.entradilla.map((p) => <p class="hero__lead">{p}</p>)
+          : <p class="hero__lead">{entradillaLocal}</p>}
       </div>
-      <MapaComarca territorio={territorio} encajes={veredicto.encajes} tecnologia={tecnologia} />
+      {ficha ? <EsquemaCuadre /> : <MapaComarca territorio={territorio} encajes={veredicto.encajes} tecnologia={tecnologia} />}
     </div>
   </section>
 
-  {veredicto.encajes.length > 0 && (
+  {ficha && (
+    <>
+      <Seccion ref="01 · informe" titulo={ficha.informe.titulo} lead={ficha.informe.lead} tono="panel">
+        <ol class="pw-canal inf">
+          {ficha.informe.pasos.map((x) => (
+            <li>
+              <h3 class="inf__q">{x.pregunta}</h3>
+              <p class="inf__p">{x.porque}</p>
+              <p class="inf__m"><span class="pw-ref">cómo se mide</span> {x.comoSeMide}</p>
+            </li>
+          ))}
+        </ol>
+        <p class="inf__cierre">{ficha.informe.cierre}</p>
+      </Seccion>
+
+      <Seccion ref="02 · ejemplo" titulo={ficha.ejemplo.titulo} lead={ficha.ejemplo.sector}>
+        <p class="ej__sit">{ficha.ejemplo.situacion}</p>
+        <ol class="ej__pasos">
+          {ficha.ejemplo.pasos.map((x) => (
+            <li class="ej__paso">
+              <span class="pw-ref ej__etq">{x.etiqueta}</span>
+              <p class="ej__txt">{x.texto}</p>
+            </li>
+          ))}
+        </ol>
+        <p class="ej__res">{ficha.ejemplo.resultado}</p>
+        {/* El aviso va dentro del bloque, no en letra pequeña al pie: quien lee
+            el ejemplo tiene que saber en el mismo sitio que es un ejemplo. */}
+        <p class="ej__aviso">{ficha.ejemplo.aviso}</p>
+      </Seccion>
+
+      <Seccion ref="03 · criterio" titulo="Decisiones que tomamos, y por qué" tono="panel">
+        <ul class="dec">
+          {ficha.decisiones.map((d) => (
+            <li class="dec__i">
+              <h3 class="dec__t">{d.titulo}</h3>
+              <p class="dec__p">{d.texto}</p>
+            </li>
+          ))}
+        </ul>
+      </Seccion>
+    </>
+  )}
+
+  {!ficha && veredicto.encajes.length > 0 && (
     <Seccion
       ref="01 · aquí"
       titulo={`Qué pide el tejido de ${n}`}
@@ -270,6 +321,40 @@ const description = veredicto.encajes.length
 </BaseLayout>
 
 <style>
+  /* Estilos de la ficha destacada. Solo se usan cuando existe ficha, pero
+     viven aquí porque Astro deja fuera del build el CSS que no se usa. */
+  .inf > :global(li) { color: var(--pw-suave); }
+  .inf__q { margin: 0 0 .4rem; font-size: 1.02rem; font-weight: 700; color: var(--pw-texto); }
+  .inf__p { margin: 0 0 .55rem; line-height: 1.65; max-width: 66ch; }
+  .inf__m {
+    margin: 0; padding-left: .8rem; border-left: 2px solid var(--pw-luego);
+    color: var(--pw-suave); font-size: .92rem; line-height: 1.55; max-width: 64ch;
+  }
+  .inf__cierre {
+    margin: 1.75rem 0 0; padding: 1.1rem 1.2rem;
+    border: 1px solid var(--pw-regla-2); background: var(--pw-panel);
+    color: var(--pw-texto); line-height: 1.65; max-width: 68ch;
+  }
+
+  .ej__sit { line-height: 1.7; max-width: 68ch; margin: 0 0 1.5rem; }
+  .ej__pasos { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--pw-regla); border: 1px solid var(--pw-regla-2); }
+  .ej__paso { background: var(--pw-panel); padding: 1rem 1.1rem; border-left: 2px solid var(--pw-luego); }
+  .ej__etq { display: block; color: var(--pw-luego); margin-bottom: .3rem; }
+  .ej__txt { margin: 0; line-height: 1.6; }
+  .ej__res { margin: 1.5rem 0 0; line-height: 1.7; max-width: 68ch; color: var(--pw-texto); }
+  .ej__aviso {
+    margin: 1.1rem 0 0; padding: .9rem 1.1rem;
+    border: 1px solid var(--pw-hoy); border-left-width: 2px;
+    color: var(--pw-suave); font-size: .92rem; line-height: 1.6; max-width: 68ch;
+  }
+
+  .dec { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--pw-regla); border: 1px solid var(--pw-regla-2); }
+  .dec__i { background: var(--pw-panel); padding: 1.2rem 1.3rem; }
+  .dec__t { margin: 0 0 .4rem; font-size: 1.02rem; font-weight: 700; }
+  .dec__p { margin: 0; line-height: 1.65; }
+  @media (min-width: 900px) { .dec { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 900px) { .ej__pasos { grid-template-columns: repeat(2, 1fr); } }
+
   .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
   .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
   .hero__h1 { font-size: clamp(1.85rem, 4.6vw, 2.9rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.05; margin: .4rem 0 1.1rem; }

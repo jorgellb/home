@@ -23,6 +23,7 @@ import { landingsManuales } from './landings-diseno-web';
 import { pueblos } from './pueblos-almeria';
 import { familiaDe } from './sectores';
 import { proyectos } from './proyectos';
+import { fichaDestacada } from './fichas-destacadas';
 
 export type EstadoSeo = 'index' | 'noindex' | 'draft';
 
@@ -200,7 +201,15 @@ export function evaluar(tecnologia: SlugTecnologia, municipio: string): Veredict
 
   const encajes = encajesDe(tecnologia, municipio);
 
-  /* Ninguna landing tecnología × municipio se indexa, y no por falta de
+  /* Salvo las fichas destacadas, que dejan de ser plantilla: traen informe
+     propio, ejemplo trabajado y decisiones de arquitectura escritas a mano.
+     El listón para que una entre está en `fichas-destacadas.ts`, y quien
+     comprueba que se cumple es `audit:programadores` sobre el HTML real. */
+  if (fichaDestacada(tecnologia, municipio)) {
+    return { estado: 'index', motivos: [], encajes };
+  }
+
+  /* El resto de landings tecnología × municipio no se indexa, y no por falta de
      contenido: por arquitectura. Las seis de un mismo pueblo daban un 90 % de
      similitud entre ellas —comparten mapa, cobertura, vecinos y las dudas de
      sus sectores, y solo cambia el nombre de la herramienta— y competían entre
