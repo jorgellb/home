@@ -23,6 +23,8 @@ interface Pagina {
   robots: string;
   canonical: string;
   enSitemap: boolean;
+  tieneMenu: boolean;
+  tienePie: boolean;
   /* Texto sustancial: sin cabecera, pie ni navegación, que son iguales en todo
      el sitio y dispararían la similitud de cualquier par de páginas. */
   cuerpo: string;
@@ -61,6 +63,11 @@ function leer(archivo: string, sitemap: Set<string>): Pagina {
     robots: entre(html, /<meta name="robots" content="([^"]*)"/i),
     canonical: entre(html, /<link rel="canonical" href="([^"]*)"/i),
     enSitemap: sitemap.has(`https://platanitorico.com${ruta}`),
+    /* Se comprueba sobre el HTML completo, no sobre `main`: la navegación vive
+       fuera del contenido. Faltaba en las 152 páginas del clúster y no lo vio
+       ninguna comprobación, porque ninguna miraba si estaba. */
+    tieneMenu: /<header[\s>]/i.test(html) && html.includes('cdm-barra__menu'),
+    tienePie: /<\/footer>/i.test(html),
     cuerpo: texto,
     enlacesInternos: [...main.matchAll(/href="(\/[^"#?]*)/g)].map((m) => m[1]),
   };
@@ -118,6 +125,8 @@ for (const p of paginas) {
     errores.push(`${p.ruta}: canonical apunta a ${p.canonical}.`);
   }
   if (!p.description) errores.push(`${p.ruta}: sin meta description.`);
+  if (!p.tieneMenu) errores.push(`${p.ruta}: sin menú de navegación.`);
+  if (!p.tienePie) errores.push(`${p.ruta}: sin pie de página.`);
 }
 
 /* 2. Duplicados de title, H1 y description entre las indexables. En las
