@@ -153,6 +153,9 @@ for (const [campo, saca] of [
 for (const p of paginas) {
   for (const href of new Set(p.enlacesInternos)) {
     if (!href.startsWith('/programador-web/') && !href.startsWith('/desarrollo-aplicaciones-moviles/')) continue;
+    /* Las landings de pueblo viven fuera del clúster y las comprueba el
+       verificador general de enlaces. */
+    if (href.startsWith('/diseno-web/')) continue;
     if (!rutasExistentes.has(href)) errores.push(`${p.ruta}: enlaza a ${href}, que no existe.`);
   }
 }

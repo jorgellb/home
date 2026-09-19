@@ -1,0 +1,149 @@
+---
+/* Hub de sector. Es la parte del clúster que sí se indexa entera, porque el
+   sector es el eje donde el contenido cambia de verdad: lo que necesita una
+   cantera no se parece a lo que necesita una alhóndiga, mientras que lo que
+   necesita una empresa apenas cambia al cruzar el término municipal.
+   Enlaza a los municipios donde ese sector está documentado, usando sus
+   landings de diseño web, que existen y están indexadas. */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/layout/Header.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+import Marco from '../../../components/programador/Marco.astro';
+import Seccion from '../../../components/programador/Seccion.astro';
+import Enlaces from '../../../components/programador/Enlaces.astro';
+import Faq from '../../../components/programador/Faq.astro';
+import Cta from '../../../components/programador/Cta.astro';
+import { SECTOR_HUBS, hubDeSector } from '../../../data/sector-hubs';
+import { TECNOLOGIAS, rutaTecnologia } from '../../../data/tecnologias';
+import { territorioDe } from '../../../data/territorio';
+import { esPuebloIndexable } from '../../../data/pueblos-indexables';
+import { SITE, PROVEEDOR } from '../../../data/negocio';
+
+export function getStaticPaths() {
+  return SECTOR_HUBS.map((s) => ({ params: { sector: s.slug } }));
+}
+
+const { sector } = Astro.params as { sector: string };
+const s = hubDeSector(sector)!;
+const canonical = `${SITE}/programador-web/sectores/${s.slug}/`;
+
+/* Solo municipios que existen y se indexan: enlazar a una noindex no reparte
+   nada, y enlazar a una URL inventada rompe la página. */
+const municipios = s.municipios
+  .map((m) => territorioDe(m))
+  .filter((m): m is NonNullable<typeof m> => m !== null && esPuebloIndexable(m.slug));
+
+const otros = SECTOR_HUBS.filter((o) => o.slug !== s.slug);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': `Desarrollo de software para ${s.nombre}`,
+    'serviceType': 'Desarrollo de software a medida',
+    'url': canonical,
+    'provider': PROVEEDOR,
+    'areaServed': { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': s.faq.map((f) => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+    })),
+  },
+];
+---
+
+<BaseLayout title={s.title} description={s.description} canonical={canonical} jsonLd={jsonLd}>
+  <Header />
+  <Marco>
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Programador web', href: '/programador-web/' },
+    { label: 'Sectores', href: '/programador-web/' },
+    { label: s.etiqueta },
+  ]} />
+
+  <section class="hero">
+    <div class="container-brutal">
+      <p class="pw-ref">{`sector.${s.slug}`}</p>
+      <h1 class="hero__h1">{s.h1}</h1>
+      {s.entrada.map((p) => <p class="hero__lead">{p}</p>)}
+    </div>
+  </section>
+
+  <Seccion
+    ref="01 · dónde duele"
+    titulo="Lo que se repite en este sector"
+    lead="No son supuestos: son las formas en que un mismo problema aparece una y otra vez cuando el negocio es este."
+    tono="panel"
+  >
+    <ol class="pw-canal prob">
+      {s.problemas.map((p) => (
+        <li>
+          <h3 class="prob__t">{p.titulo}</h3>
+          <p class="prob__d">{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </Seccion>
+
+  <Seccion ref="02 · con qué" titulo="Qué encaja aquí, y para qué">
+    <Enlaces columnas={2} enlaces={s.tecnologias.map((t) => ({
+      href: rutaTecnologia(t.slug),
+      texto: TECNOLOGIAS[t.slug].etiqueta,
+      sub: t.porque,
+    }))} />
+  </Seccion>
+
+  {municipios.length > 0 && (
+    <Seccion
+      ref="03 · dónde"
+      titulo="Dónde está este sector en la provincia"
+      lead="Municipios donde lo tenemos documentado. Trabajamos desde Vera para toda la provincia: no hay oficina en cada pueblo."
+      tono="panel"
+    >
+      <Enlaces enlaces={municipios.map((m) => ({
+        href: `/diseno-web/${m.slug}/`,
+        texto: m.nombre,
+        sub: m.comarca,
+      }))} />
+    </Seccion>
+  )}
+
+  <Seccion ref="04 · dudas" titulo="Preguntas frecuentes">
+    <Faq faq={s.faq} />
+  </Seccion>
+
+  <Seccion ref="05 · otros" titulo="Otros sectores" tono="panel">
+    <Enlaces columnas={2} enlaces={otros.map((o) => ({
+      href: `/programador-web/sectores/${o.slug}/`,
+      texto: o.etiqueta,
+      sub: o.problemas[0].titulo,
+    }))} />
+  </Seccion>
+
+  <Cta
+    titulo={`Cuéntame cómo lo lleváis hoy`}
+    texto={`Si algo de lo de arriba te suena, con describir cómo se hace ahora suele bastar para decir si tiene arreglo y cuánto trabajo es.`}
+    servicio={`Desarrollo · ${s.etiqueta}`}
+  />
+  </Marco>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .hero { padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(2rem, 4vw, 3rem); }
+  .hero__h1 {
+    font-size: clamp(2rem, 5.4vw, 3.4rem); font-weight: 800;
+    letter-spacing: -.04em; line-height: 1.02; margin: .5rem 0 1.3rem;
+    max-width: 20ch;
+  }
+  .hero__lead { max-width: 62ch; font-size: 1.07rem; line-height: 1.68; margin: 0 0 1rem; }
+  .prob__t { margin: 0 0 .35rem; font-size: 1.05rem; font-weight: 700; }
+  .prob__d { margin: 0; line-height: 1.65; max-width: 68ch; }
+</style>

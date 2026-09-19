@@ -61,7 +61,11 @@ export default defineConfig({
       // Locales de /programador-web/: manda el control de calidad, la misma
       // función que decide el meta robots de la página. Si alguna vez las dos
       // decisiones se separan, el sitemap acabaría anunciando noindex.
+      // Los hubs de sector comparten forma de URL con tecnología/municipio pero
+      // no pasan por el control de calidad de las locales: tienen contenido
+      // propio y se indexan siempre.
       const progMatch = path.match(/^\/programador-web\/([^/]+)\/([^/]+)\/?$/);
+      if (progMatch && progMatch[1] === 'sectores') return true;
       if (progMatch) {
         // El slug viene de una URL, así que aquí es un string cualquiera:
         // `evaluar` ya devuelve 'draft' si la tecnología no existe.

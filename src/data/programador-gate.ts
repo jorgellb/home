@@ -21,6 +21,7 @@ import { TECNOLOGIAS } from './tecnologias';
 import { territorioDe } from './territorio';
 import { landingsManuales } from './landings-diseno-web';
 import { pueblos } from './pueblos-almeria';
+import { familiaDe } from './sectores';
 
 export type EstadoSeo = 'index' | 'noindex' | 'draft';
 
@@ -40,62 +41,6 @@ export interface Encaje {
   necesidad: string;
 }
 
-/* Qué tipo de encargo cubre cada tecnología, en términos de lo que un negocio
-   hace, no de lo que el programador usa. Es la tabla que cruza el sector real
-   de un municipio con la tecnología, y la que evita que las siete páginas de
-   un mismo pueblo digan lo mismo. */
-const NECESIDADES: Record<SlugTecnologia, { patron: RegExp; necesidad: string }[]> = {
-  wordpress: [
-    { patron: /comercio|tienda|moda|shop/i, necesidad: 'catálogo y venta online sobre la web que ya tienen' },
-    { patron: /restaurant|hostel|bar|gastron/i, necesidad: 'carta, reservas y pedidos integrados en su web actual' },
-    { patron: /hotel|apartament|turis|aloja/i, necesidad: 'motor de reservas y versiones en varios idiomas' },
-    { patron: /inmobil|vivienda/i, necesidad: 'fichas de inmueble sincronizadas con su gestor de cartera' },
-    { patron: /agro|hortofrut|invernader|agríc|agric/i, necesidad: 'catálogo B2B con precios por cliente' },
-    { patron: /mármol|marmol|piedra|cantera|industria/i, necesidad: 'catálogo técnico con fichas descargables' },
-    { patron: /salud|clínic|clinic|dental|fisio/i, necesidad: 'cita previa conectada con su agenda' },
-  ],
-  astro: [
-    { patron: /turis|hotel|aloja|apartament/i, necesidad: 'webs multiidioma que carguen rápido con mala cobertura' },
-    { patron: /agro|hortofrut|invernader|agríc|agric/i, necesidad: 'catálogo de producto que cargue bien desde fuera de España' },
-    { patron: /mármol|marmol|piedra|cantera|industria/i, necesidad: 'catálogo técnico pesado servido sin esperas' },
-    { patron: /comercio|tienda|moda/i, necesidad: 'escaparate rápido enlazado a la tienda' },
-    { patron: /construc|reforma|servicio/i, necesidad: 'web corporativa ligera y fácil de actualizar' },
-  ],
-  react: [
-    { patron: /agro|hortofrut|invernader|agríc|agric/i, necesidad: 'panel de control de partidas, lotes y trazabilidad' },
-    { patron: /inmobil|vivienda/i, necesidad: 'buscador de inmuebles con filtros combinados' },
-    { patron: /mármol|marmol|piedra|cantera|industria/i, necesidad: 'configurador de pedido y control de producción' },
-    { patron: /logíst|logist|transport|puerto|pesca/i, necesidad: 'seguimiento de expediciones en pantalla' },
-    { patron: /hotel|aloja|apartament/i, necesidad: 'panel de ocupación y disponibilidad' },
-  ],
-  nextjs: [
-    { patron: /agro|hortofrut|invernader|agríc|agric/i, necesidad: 'zona privada para clientes y comerciales' },
-    { patron: /inmobil|vivienda/i, necesidad: 'portal con área privada y fichas públicas indexables' },
-    { patron: /hotel|aloja|apartament|turis/i, necesidad: 'reserva directa propia sin comisión de portales' },
-    { patron: /mármol|marmol|piedra|cantera|industria/i, necesidad: 'extranet de pedidos para distribuidores' },
-  ],
-  nodejs: [
-    { patron: /agro|hortofrut|invernader|agríc|agric/i, necesidad: 'integración entre campo, almacén y facturación' },
-    { patron: /logíst|logist|transport|puerto|pesca/i, necesidad: 'sincronización de albaranes y seguimiento' },
-    { patron: /mármol|marmol|piedra|cantera|industria/i, necesidad: 'conexión entre producción y el programa de gestión' },
-    { patron: /comercio|tienda|moda/i, necesidad: 'sincronía de stock entre tienda física y online' },
-    { patron: /hotel|aloja|apartament/i, necesidad: 'sincronización de disponibilidad con portales' },
-  ],
-  javascript: [
-    { patron: /construc|reforma|obra/i, necesidad: 'presupuestador en la web con sus propias tarifas' },
-    { patron: /mármol|marmol|piedra|cantera/i, necesidad: 'calculadora de medidas y material' },
-    { patron: /comercio|tienda|moda/i, necesidad: 'configurador de producto con opciones dependientes' },
-    { patron: /turis|hotel|aloja|apartament/i, necesidad: 'mapa de disponibilidad incrustado en su web' },
-    { patron: /agro|hortofrut|agríc|agric/i, necesidad: 'calculadora de dosis, superficie o rendimiento' },
-  ],
-  apps: [
-    { patron: /agro|hortofrut|invernader|agríc|agric/i, necesidad: 'partes de campo que funcionan sin cobertura' },
-    { patron: /logíst|logist|transport|puerto|pesca/i, necesidad: 'control de entregas desde el móvil' },
-    { patron: /construc|reforma|obra/i, necesidad: 'partes de obra con fotos desde el tajo' },
-    { patron: /mármol|marmol|piedra|cantera|industria/i, necesidad: 'control de producción a pie de nave' },
-  ],
-};
-
 /** Sectores reales del municipio, de donde estén registrados. Nunca inventa:
  *  si un municipio no tiene sectores documentados, devuelve lista vacía y la
  *  página se quedará sin materia con la que justificarse. */
@@ -111,15 +56,20 @@ export function sectoresDe(slug: string): string[] {
 /** Cruce entre los sectores reales del municipio y lo que resuelve la
  *  tecnología. Es lo único que hace distinta a una página local. */
 export function encajesDe(tecnologia: SlugTecnologia, municipio: string): Encaje[] {
-  const sectores = sectoresDe(municipio);
-  const reglas = NECESIDADES[tecnologia];
   const vistos = new Set<string>();
   const encajes: Encaje[] = [];
-  for (const sector of sectores) {
-    const regla = reglas.find((r) => r.patron.test(sector));
-    if (!regla || vistos.has(regla.necesidad)) continue;
-    vistos.add(regla.necesidad);
-    encajes.push({ sector, necesidad: regla.necesidad });
+  for (const sector of sectoresDe(municipio)) {
+    const familia = familiaDe(sector);
+    const necesidad = familia?.necesidades[tecnologia];
+    /* Sin necesidad escrita para esa familia y esa tecnología no hay encaje, y
+       no se inventa uno: que un sector exista en el municipio no significa que
+       esa tecnología tenga algo que hacer por él. */
+    if (!necesidad || vistos.has(necesidad)) continue;
+    vistos.add(necesidad);
+    /* Se guarda el nombre EXACTO del sector tal como está documentado, no el
+       de la familia: «Restaurantes y Marisquerías» dice más de Garrucha que
+       «restauración», y es la diferencia entre una página propia y un molde. */
+    encajes.push({ sector, necesidad });
   }
   return encajes;
 }
@@ -128,26 +78,33 @@ export function encajesDe(tecnologia: SlugTecnologia, municipio: string): Encaje
  *  que queda tras quitar el molde son dos frases: eso es thin content. */
 const MINIMO_ENCAJES = 3;
 
-/* ¿Puede alguna página local indexarse hoy? No.
+/* ¿Puede alguna página local indexarse hoy? No, y ahora hay número exacto.
  *
- * Esto no es una decisión de criterio, es el resultado de una medición hecha
- * el 18-09-2026 con `npm run audit:programadores` sobre el build real. Las 41
- * combinaciones que superaban todo lo demás daban entre un 80 % y un 84 % de
- * contenido común entre sí, muy por encima del umbral del 75 %.
+ * Medición del 19-09-2026 sobre el build, tras reescribir los encajes para que
+ * usen los sectores REALES de cada municipio (mármol de Macael, jamón IGP de
+ * Serón, lonja de Garrucha) en vez de siete categorías genéricas. El contenido
+ * mejoró mucho y aun así:
  *
- * Se intentó arreglar por las bravas —fuera la entradilla del hub, fuera el
- * catálogo de servicios repetido, fuera la FAQ heredada— y el porcentaje SUBIÓ:
- * al acortar las páginas, el molde que queda pesa proporcionalmente más. Esa es
- * la aritmética y no se arregla escribiendo mejor el mismo esqueleto.
+ *   palabras por página local ....... 633
+ *   molde compartido ................ 588
+ *   contenido propio del municipio ... 45
+ *   similitud entre pares .......... hasta 89 %, umbral 75 %
  *
- * Lo que falta no es código: es materia. Un caso real de esa zona, un proyecto
- * que se pueda contar, un dato propio del municipio. Cuando exista para un
- * municipio concreto, se le escribe su página y se la indexa; hasta entonces
- * viven como noindex,follow, que las mantiene navegables y repartiendo enlace
- * sin competir en el índice con el hub, que es la página que sí tiene contenido.
+ * Para bajar del umbral haría falta que cada página tuviera unas 151 palabras
+ * MÁS de contenido único: cerca de 11.000 palabras en total. Y tienen que ser
+ * reales —un proyecto de esa zona, un dato propio, algo que se pueda sostener—
+ * porque inventarlas es justo lo que este fichero existe para impedir.
  *
- * Para reactivarlas: pon esto a `true` y vuelve a pasar la auditoría. Si sigue
- * dando avisos por encima del umbral, la respuesta sigue siendo no.
+ * Ya se intentó dos veces por la vía del código: adelgazar la plantilla (subió
+ * la similitud, porque al acortar la página el molde pesa más) y afinar los
+ * encajes (bajó poco: 45 palabras propias de 633). La conclusión es la misma
+ * por los dos caminos y conviene no repetirla una tercera vez.
+ *
+ * Mientras tanto viven como noindex,follow: navegables, repartiendo enlace
+ * interno y sin competir con el hub, que es la página que sí tiene contenido.
+ *
+ * Para reactivarlas: `true` y pasar `npm run audit:programadores`. Si sigue
+ * habiendo avisos por encima del umbral, la respuesta sigue siendo no.
  */
 const LOCALES_INDEXABLES = false;
 
@@ -208,8 +165,9 @@ export function evaluar(tecnologia: SlugTecnologia, municipio: string): Veredict
 
   if (!LOCALES_INDEXABLES) {
     motivos.push(
-      'Medido sobre el build: las locales comparten entre un 80 % y un 84 % de contenido '
-      + 'entre sí, por encima del umbral del 75 %. Les falta materia propia, no maquetación.',
+      'Medido sobre el build: de 633 palabras por página, 588 son molde compartido y solo '
+      + '45 son propias del municipio. Faltan unas 151 palabras únicas por página para bajar '
+      + 'del umbral del 75 %.',
     );
   }
   if (!territorio.tieneDisenoWeb) {
