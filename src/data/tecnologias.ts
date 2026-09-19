@@ -20,6 +20,8 @@ export type SlugTecnologia =
   | 'astro'
   | 'nextjs'
   | 'javascript'
+  | 'python'
+  | 'genai'
   | 'apps';
 
 /** Bloques de contenido disponibles. Cada tecnología elige los suyos y en su
@@ -503,6 +505,162 @@ export const TECNOLOGIAS: Record<SlugTecnologia, Tecnologia> = {
     serviciosWeb: ['/desarrollo-web/', '/soporte/'],
   },
 
+  python: {
+    slug: 'python',
+    nombre: 'Python',
+    etiqueta: 'Python',
+    distintivo: 'trabajar con datos que hoy se procesan a mano',
+    intencion:
+      'Tiene datos en ficheros, hojas o sistemas distintos y alguien dedica horas '
+      + 'a limpiarlos, cruzarlos o sacar un informe.',
+    noEs: ['una web', 'una pantalla', 'conectar dos programas en tiempo real'],
+    title: 'Programador Python en Almería | Platanito Rico',
+    description:
+      'Desarrollo con Python: procesos de datos, informes automáticos, extracción desde '
+      + 'sistemas cerrados y scripts que sustituyen horas de trabajo manual.',
+    h1: 'Programador Python en Almería',
+    entradilla:
+      'Python aparece cuando el problema es el dato: un fichero del banco que hay que '
+      + 'cuadrar, un listado del proveedor en un formato imposible, un informe que alguien '
+      + 'monta cada lunes copiando de tres sitios. No hace falta una aplicación para eso; '
+      + 'hace falta un proceso que lo haga solo.',
+    situaciones: [
+      {
+        encargo: 'Cada mes alguien cuadra a mano un fichero del banco con nuestras facturas.',
+        respuesta:
+          'Se automatiza el cotejo, dejando aparte lo que no cuadra para revisarlo. El '
+          + 'trabajo pasa de leer todo a mirar solo las excepciones.',
+      },
+      {
+        encargo: 'El proveedor nos manda un listado en un formato que no podemos importar.',
+        respuesta:
+          'Se convierte a lo que vuestro sistema espera, incluso si llega en PDF o en una '
+          + 'hoja con el formato cambiado cada vez.',
+      },
+      {
+        encargo: 'Sacamos el informe del lunes copiando de tres programas distintos.',
+        respuesta:
+          'Se programa para que se genere solo y llegue por correo a su hora, con los '
+          + 'mismos números pero sin la mañana perdida.',
+      },
+      {
+        encargo: 'Tenemos años de datos y nadie sabe qué dicen.',
+        respuesta:
+          'Se preparan y se analizan para responder preguntas concretas. Antes de hablar '
+          + 'de predecir nada, conviene saber qué hay.',
+      },
+    ],
+    servicios: [
+      { titulo: 'Procesos de datos', descripcion: 'Limpiar, cruzar y transformar lo que hoy se hace a mano.' },
+      { titulo: 'Informes automáticos', descripcion: 'Generados y enviados a su hora, sin intervención.' },
+      { titulo: 'Lectura de documentos', descripcion: 'Extraer datos de PDF, facturas y listados.' },
+      { titulo: 'Extracción de sistemas cerrados', descripcion: 'Sacar lo vuestro de programas sin API.' },
+      { titulo: 'Análisis', descripcion: 'Responder preguntas concretas con los datos que ya hay.' },
+    ],
+    faq: [
+      {
+        q: '¿Python o una macro de Excel?',
+        a: 'Si la macro funciona y la entiende alguien de la casa, se queda. Python compensa '
+          + 'cuando el proceso toca varios ficheros o sistemas, tarda demasiado, o la macro '
+          + 'ya la mantiene una sola persona y nadie más se atreve a tocarla.',
+      },
+      {
+        q: '¿Podéis sacar datos de un programa que no tiene API?',
+        a: 'Casi siempre hay una vía: un informe que exporta, una base de datos que se puede '
+          + 'leer, o un fichero que genera. Lo primero es mirar qué ofrece antes de dar nada '
+          + 'por imposible.',
+      },
+      {
+        q: '¿Dónde se ejecuta eso, hace falta un servidor?',
+        a: 'Depende de la frecuencia. Un proceso mensual puede correr en un ordenador de la '
+          + 'oficina; uno diario compensa ponerlo en un servidor pequeño con aviso si falla.',
+      },
+    ],
+    relacionadas: ['nodejs', 'genai'],
+    bloques: ['intro', 'situaciones', 'servicios', 'integraciones', 'proceso', 'cobertura', 'relacionadas', 'faq', 'cta'],
+    serviciosWeb: ['/ia-empresas/', '/informatica-empresas/'],
+  },
+
+  genai: {
+    slug: 'genai',
+    nombre: 'IA generativa',
+    etiqueta: 'IA generativa',
+    distintivo: 'meter un modelo dentro de lo que ya tienes',
+    intencion:
+      'Tiene un sistema o una web funcionando y quiere añadirle un modelo de '
+      + 'lenguaje: que responda sobre sus documentos, redacte o clasifique.',
+    /* Distinción deliberada con /ia-empresas/, que vende sistemas de IA al
+       negocio: allí se decide QUÉ automatizar y cuánto ahorra; aquí ya hay
+       código y la pregunta es cómo se integra el modelo. Si esta página
+       empieza a hablar de departamentos y retorno, está invadiendo la otra. */
+    noEs: ['elegir qué automatizar en la empresa', 'un agente llave en mano', 'calcular el retorno'],
+    title: 'Integración de IA generativa en tu software | Platanito Rico',
+    description:
+      'Desarrollo con modelos de lenguaje sobre sistemas que ya existen: búsqueda sobre '
+      + 'vuestros documentos, clasificación automática y asistentes integrados.',
+    h1: 'Integrar IA generativa en lo que ya tienes',
+    entradilla:
+      'Esta página es la parte técnica: ya hay un sistema y la pregunta es cómo se le mete '
+      + 'un modelo dentro. Si lo que buscas es decidir qué conviene automatizar en tu '
+      + 'empresa y cuánto ahorra, la sección de IA para empresas responde mejor a eso.',
+    situaciones: [
+      {
+        encargo: 'Tenemos cientos de documentos y nadie encuentra nada.',
+        respuesta:
+          'Se monta búsqueda sobre esos documentos: se pregunta en lenguaje normal y la '
+          + 'respuesta cita de dónde sale, para poder comprobarla.',
+      },
+      {
+        encargo: 'Clasificamos correos y pedidos a mano, uno por uno.',
+        respuesta:
+          'El modelo propone la clasificación y una persona confirma lo dudoso. Con revisión '
+          + 'humana donde importa, no automático a ciegas.',
+      },
+      {
+        encargo: 'Probamos un asistente y contestaba cosas que no son ciertas.',
+        respuesta:
+          'Casi siempre es que responde de memoria en vez de con vuestros datos. Se ata a '
+          + 'las fuentes y se le obliga a decir que no sabe cuando no sabe.',
+      },
+    ],
+    servicios: [
+      { titulo: 'Búsqueda sobre documentos', descripcion: 'Preguntar en lenguaje normal, con la fuente citada.' },
+      { titulo: 'Clasificación asistida', descripcion: 'El modelo propone, una persona confirma.' },
+      { titulo: 'Asistentes integrados', descripcion: 'Dentro de vuestra web o vuestro sistema.' },
+      { titulo: 'Extracción de datos', descripcion: 'De facturas, albaranes y documentos sin formato fijo.' },
+      { titulo: 'Control de coste', descripcion: 'Límites, caché y registro de lo que se gasta.' },
+    ],
+    faq: [
+      {
+        q: '¿En qué se diferencia esto de vuestra sección de IA para empresas?',
+        a: 'En el punto de partida. Allí se decide qué conviene automatizar en la empresa y '
+          + 'cuánto ahorra. Aquí ya hay un sistema funcionando y lo que se hace es meterle '
+          + 'el modelo dentro. Si no tienes claro cuál te toca, empieza por la otra.',
+      },
+      {
+        q: '¿Se pueden usar nuestros documentos sin que salgan fuera?',
+        a: 'Se puede trabajar con modelos que se ejecutan en vuestra infraestructura, aunque '
+          + 'cuesta más en servidor. Con modelos de terceros hay que mirar qué contrato '
+          + 'ofrecen sobre retención de datos y decidirlo con los ojos abiertos.',
+      },
+      {
+        q: '¿Cuánto cuesta mantener esto funcionando?',
+        a: 'Depende del uso y del modelo, y varía mucho. Se instrumenta desde el principio '
+          + 'para ver el gasto real y poder ponerle tope: un sistema de IA sin medición de '
+          + 'coste es una factura esperando a sorprender.',
+      },
+      {
+        q: '¿Y si el modelo se equivoca?',
+        a: 'Se parte de que se va a equivocar. Por eso se ata a fuentes que se citan, se deja '
+          + 'revisión humana donde el error cuesta dinero y se registra qué contestó para '
+          + 'poder revisarlo.',
+      },
+    ],
+    relacionadas: ['python', 'nodejs'],
+    bloques: ['intro', 'situaciones', 'servicios', 'arquitectura', 'proceso', 'cobertura', 'relacionadas', 'faq', 'cta'],
+    serviciosWeb: ['/ia-empresas/', '/laboratorio-ia/'],
+  },
+
   apps: {
     slug: 'apps',
     nombre: 'aplicaciones móviles',
@@ -572,7 +730,7 @@ export const TECNOLOGIAS: Record<SlugTecnologia, Tecnologia> = {
 };
 
 export const ORDEN_TECNOLOGIAS: SlugTecnologia[] = [
-  'wordpress', 'astro', 'react', 'nextjs', 'nodejs', 'javascript', 'apps',
+  'wordpress', 'astro', 'react', 'nextjs', 'nodejs', 'python', 'genai', 'javascript', 'apps',
 ];
 
 export const listaTecnologias = (): Tecnologia[] => ORDEN_TECNOLOGIAS.map((s) => TECNOLOGIAS[s]);

@@ -47,6 +47,8 @@ export const FAMILIAS: FamiliaSector[] = [
       nodejs: 'conectar el control de producción con el programa de gestión',
       react: 'un panel de existencias por bloque, calidad y destino',
       apps: 'partes de arranque a pie de cantera, sin depender de la cobertura',
+
+      python: 'cuadrar partes de arranque con lo que llega a báscula',
     },
     objecion: {
       q: 'Ya voy desbordado en la cantera, ¿una web no me dará más papeleo?',
@@ -61,6 +63,8 @@ export const FAMILIAS: FamiliaSector[] = [
       javascript: 'una calculadora de metros, despiece y material para presupuestar en la web',
       react: 'seguimiento de encargos entre corte, pulido y expedición',
       astro: 'un catálogo pesado de piezas que cargue sin esperas desde fuera',
+
+      python: 'sacar el despiece y el desperdicio de cada pedido en un informe',
     },
     objecion: {
       q: 'Cada pieza es distinta, ¿cómo se enseña eso en una web?',
@@ -75,6 +79,9 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'catálogo B2B con precios por cliente y acceso restringido',
       nodejs: 'sincronizar pedidos y stock con el ERP sin pasar nada a mano',
       astro: 'una web en varios idiomas que cargue bien desde otros países',
+
+      python: 'convertir las tarifas y pedidos que llegan en formatos distintos',
+      genai: 'traducir y adaptar fichas técnicas a cada mercado, con revisión',
     },
     objecion: {
       q: 'Vendemos fuera y cada cliente tiene su precio, ¿eso se puede poner online?',
@@ -88,6 +95,8 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'catálogo de máquinas con despiece y recambios localizables',
       react: 'control de qué equipo está alquilado, a quién y hasta cuándo',
       nodejs: 'avisos automáticos de mantenimiento y revisiones por equipo',
+
+      python: 'informe de horas y mantenimientos por equipo',
     },
     objecion: {
       q: 'Tenemos máquinas alquiladas por ahí fuera, ¿se puede controlar desde una pantalla?',
@@ -102,6 +111,9 @@ export const FAMILIAS: FamiliaSector[] = [
       apps: 'partes de campo que funcionan sin cobertura y vuelcan al volver',
       react: 'trazabilidad por partida y lote en una sola pantalla',
       nextjs: 'zona privada para comerciales y clientes con sus liquidaciones',
+
+      python: 'cuadrar partes de campo, entradas de almacén y facturación',
+      genai: 'leer albaranes y partes escritos a mano y sacar los datos',
     },
     objecion: {
       q: 'En el campo no hay cobertura, ¿de qué me sirve una aplicación?',
@@ -115,6 +127,9 @@ export const FAMILIAS: FamiliaSector[] = [
       nodejs: 'integrar la subasta con las liquidaciones a cada socio',
       react: 'ver precios y entradas del día sin esperar al cierre',
       nextjs: 'un área privada donde cada socio consulte lo suyo',
+
+      python: 'liquidaciones por socio a partir de las entradas del día',
+      genai: 'clasificar y resumir las incidencias que llegan por correo',
     },
     objecion: {
       q: 'Los socios llaman todo el día para preguntar lo suyo, ¿eso tiene arreglo?',
@@ -128,6 +143,8 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'venta directa con envío y control de campañas de temporada',
       astro: 'una web de producto que cargue rápido y se actualice en cosecha',
       javascript: 'calculadora de pedido por caja, peso o superficie',
+
+      python: 'informes de campaña con lo vendido, por variedad y calibre',
     },
     objecion: {
       q: 'Vendemos por campaña, ¿no se queda la web desfasada el resto del año?',
@@ -141,6 +158,8 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'carta que cambia con lo que ha entrado hoy en la lonja',
       nodejs: 'pasar la subasta de lonja al sistema de venta sin teclearla',
       apps: 'registrar capturas a bordo y sincronizar en puerto',
+
+      python: 'pasar lo adjudicado en lonja a un formato que entre en el sistema',
     },
     objecion: {
       q: 'El género cambia cada día según la lonja, ¿cómo lo refleja una web?',
@@ -154,6 +173,9 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'tienda con envío refrigerado y la trazabilidad de cada pieza',
       nodejs: 'seguimiento de curación por lote y control de la certificación',
       react: 'panel de bodega: qué hay colgado, desde cuándo y qué sale esta semana',
+
+      python: 'control de curación por lote con avisos de fecha',
+      genai: 'redactar las fichas de producto para tienda a partir de los datos',
     },
     objecion: {
       q: 'Vendemos producto que hay que enviar en frío, ¿eso complica la tienda?',
@@ -167,6 +189,8 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'venta de botella con control de añada y reserva de visita',
       javascript: 'reserva de cata con aforo por franja horaria',
       astro: 'una web de bodega que cargue rápido y se vea en varios idiomas',
+
+      genai: 'redactar notas de cata y textos de añada partiendo de vuestras fichas',
     },
     objecion: {
       q: 'Hacemos visitas con aforo limitado, ¿se puede reservar desde la web?',
@@ -181,6 +205,9 @@ export const FAMILIAS: FamiliaSector[] = [
       nodejs: 'sincronizar disponibilidad con los portales sin dobles reservas',
       wordpress: 'motor de reservas y versiones en los idiomas de sus clientes',
       react: 'panel de ocupación para ver de un vistazo qué queda libre',
+
+      genai: 'responder las preguntas repetidas de huéspedes con vuestras normas',
+      python: 'informe de ocupación cruzando los canales de venta',
     },
     objecion: {
       q: 'Las reservas me entran por los portales, ¿merece la pena tener la mía?',
@@ -194,6 +221,8 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'carta que se edita sin llamar a nadie y reserva de mesa',
       javascript: 'reserva con aforo por turno incrustada en la web actual',
       astro: 'una web que cargue al instante en el móvil de quien busca cerca',
+
+      genai: 'traducir la carta a varios idiomas manteniendo los nombres de plato',
     },
     objecion: {
       q: 'Cambio la carta a menudo, ¿voy a tener que llamar cada vez?',
@@ -208,6 +237,9 @@ export const FAMILIAS: FamiliaSector[] = [
       nodejs: 'sincronizar la cartera con los portales sin republicar a mano',
       nextjs: 'fichas públicas que Google lea y zona privada para propietarios',
       wordpress: 'fichas de inmueble conectadas con el gestor de cartera',
+
+      genai: 'redactar descripciones de inmueble a partir de sus datos reales',
+      python: 'cruzar la cartera con lo publicado en portales y detectar diferencias',
     },
     objecion: {
       q: 'Publicamos la cartera en cuatro portales a mano, ¿se puede automatizar?',
@@ -222,6 +254,8 @@ export const FAMILIAS: FamiliaSector[] = [
       nextjs: 'venta de entradas con pago y control de aforo',
       nodejs: 'cuadrar horarios, guías y material sin hojas de cálculo',
       apps: 'lista de participantes y partes de actividad desde el móvil',
+
+      python: 'cuadrar reservas, guías y material en un solo informe',
     },
     objecion: {
       q: 'Las plazas las llevo por WhatsApp, ¿eso se puede ordenar?',
@@ -235,6 +269,8 @@ export const FAMILIAS: FamiliaSector[] = [
       astro: 'una web de contenido que cargue rápido y se lea en varios idiomas',
       wordpress: 'agenda de visitas y contenido que edita el propio equipo',
       javascript: 'un recorrido o mapa interactivo incrustado en la web actual',
+
+      genai: 'preparar textos de sala en varios idiomas a partir del material propio',
     },
     objecion: {
       q: 'Recibimos visitantes de fuera, ¿hay que traducir toda la web?',
@@ -248,6 +284,9 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'vender online sobre la web que ya tienen, no empezar de cero',
       nodejs: 'que el stock de la tienda física y el de la online sean el mismo',
       javascript: 'configurador de producto con opciones que dependen entre sí',
+
+      python: 'cuadrar el stock de tienda física y online y sacar las diferencias',
+      genai: 'generar descripciones de producto a partir de la ficha del proveedor',
     },
     objecion: {
       q: 'Tengo tienda física, ¿no me va a descuadrar el stock vender online?',
@@ -261,6 +300,8 @@ export const FAMILIAS: FamiliaSector[] = [
       javascript: 'un presupuestador en la web con sus propias tarifas',
       apps: 'partes de obra con fotos desde el tajo, sin papel',
       wordpress: 'catálogo de trabajos hechos que se actualiza sin tocar el código',
+
+      python: 'sacar mediciones y certificaciones de los partes de obra',
     },
     objecion: {
       q: 'Me piden presupuesto por teléfono y se me va la mañana, ¿hay alternativa?',
@@ -274,6 +315,8 @@ export const FAMILIAS: FamiliaSector[] = [
       wordpress: 'cita previa conectada con la agenda que ya usan',
       nextjs: 'área privada donde cada paciente vea lo suyo',
       react: 'agenda de varios profesionales en una sola pantalla',
+
+      genai: 'resumir y clasificar las consultas que entran por formulario',
     },
     objecion: {
       q: 'Las citas las llevamos por teléfono, ¿pasar a cita online es un lío?',
@@ -288,6 +331,9 @@ export const FAMILIAS: FamiliaSector[] = [
       nodejs: 'automatizar lo que hoy se copia de un programa a otro',
       react: 'un panel para dejar de llevar el control en hojas de cálculo',
       astro: 'una web ligera, rápida y fácil de mantener al día',
+
+      python: 'automatizar el informe que hoy se monta copiando de varios sitios',
+      genai: 'buscar dentro de vuestros propios documentos y contratos',
     },
     objecion: {
       q: 'Llevo el control en hojas de cálculo, ¿cuándo toca dar el salto?',

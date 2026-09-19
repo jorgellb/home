@@ -178,47 +178,14 @@ const MINIMO_ENCAJES = 3;
  */
 const MINIMO_ENCAJES_INDEX = 2;
 
-/** La firma es el conjunto de necesidades que cubriría la página. Dos páginas
- *  con la misma firma dicen lo mismo con otro topónimo, que es la definición
- *  operativa de doorway page. Solo sobrevive una por firma. */
-export function firmaDe(encajes: Encaje[]): string {
-  return encajes.map((e) => e.necesidad).sort().join(' | ');
-}
-
-/* Cuando varios municipios comparten firma hay que elegir uno, y la elección
-   debe ser reproducible, no arbitraria: gana el que tenga más materia propia
-   documentada (landing escrita a mano y más sectores) y, a igualdad, el más
-   cercano a la base, que es donde la cobertura es más real. */
-function peso(municipio: string): number {
-  const manual = landingsManuales[municipio];
-  const sectores = sectoresDe(municipio).length;
-  const km = territorioDe(municipio)?.kmDesdeBase ?? 999;
-  return (manual ? 1000 : 0) + sectores * 10 + Math.max(0, 100 - km) / 100;
-}
-
-/* Qué municipio se queda cada firma, por tecnología. Se calcula una vez y lo
-   consultan tanto la generación de páginas como la auditoría. */
-const duenoDeFirma = new Map<string, string>();
-let firmasCalculadas = false;
-
-function calcularFirmas(): void {
-  if (firmasCalculadas) return;
-  firmasCalculadas = true;
-  const grupos = new Map<string, string[]>();
-  for (const tecnologia of Object.keys(TECNOLOGIAS) as SlugTecnologia[]) {
-    for (const p of pueblos) {
-      if (!territorioDe(p.slug)?.tieneDisenoWeb) continue;
-      const encajes = encajesDe(tecnologia, p.slug);
-      if (encajes.length < MINIMO_ENCAJES) continue;
-      const clave = `${tecnologia}::${firmaDe(encajes)}`;
-      grupos.set(clave, [...(grupos.get(clave) ?? []), p.slug]);
-    }
-  }
-  for (const [clave, municipios] of grupos) {
-    const ganador = [...municipios].sort((a, b) => peso(b) - peso(a))[0];
-    duenoDeFirma.set(clave, ganador);
-  }
-}
+/* Aquí vivía la regla de «firma única»: si dos municipios generaban el mismo
+   conjunto de necesidades, solo se indexaba uno. Dejó de hacer falta cuando el
+   contenido pasó a diferenciarse por los sectores reales y sus objeciones, y
+   sobre todo cuando la landing indexable pasó a ser una por municipio en vez
+   de una por tecnología. Se retira entera en lugar de dejarla sin usar: código
+   muerto que parece una salvaguarda es peor que no tenerla, porque el
+   siguiente que lo lea creerá que algo está protegido. Quien vigila ahora es
+   `npm run audit:programadores`, que mide el HTML construido. */
 
 export function evaluar(tecnologia: SlugTecnologia, municipio: string): Veredicto {
   const motivos: string[] = [];
