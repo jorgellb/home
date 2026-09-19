@@ -1,0 +1,268 @@
+---
+/* Una página por municipio, para todo el clúster de desarrollo.
+ *
+ * Es la corrección de un error de arquitectura propio. Teníamos siete páginas
+ * por pueblo, una por tecnología, y la auditoría las medía al 90 % entre sí:
+ * compartían mapa, cobertura, vecinos y las dudas de los sectores locales, y
+ * solo cambiaba el nombre de la herramienta. Siete páginas casi idénticas
+ * compitiendo entre ellas por el mismo pueblo.
+ *
+ * Al estudiar a la competencia que sí posiciona se vio que tiene UNA página
+ * por municipio, no siete. Tiene sentido: quien busca desde Macael no busca
+ * «programador Astro en Macael», busca quién le arregla lo suyo. La tecnología
+ * la decide el encargo, y eso ya se explica en el hub de cada una.
+ *
+ * Así que esta es la landing local del clúster, y las de tecnología × municipio
+ * quedan en noindex como apoyo de navegación y enlazado.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/layout/Header.astro';
+import Footer from '../../../components/layout/Footer.astro';
+import Breadcrumb from '../../../components/common/Breadcrumb.astro';
+import Marco from '../../../components/programador/Marco.astro';
+import Seccion from '../../../components/programador/Seccion.astro';
+import MapaComarca from '../../../components/programador/MapaComarca.astro';
+import CasoReal from '../../../components/programador/CasoReal.astro';
+import Enlaces from '../../../components/programador/Enlaces.astro';
+import Faq from '../../../components/programador/Faq.astro';
+import Cta from '../../../components/programador/Cta.astro';
+import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia } from '../../../data/tecnologias';
+import { territorioDe, frasesCobertura, municipiosIndexables } from '../../../data/territorio';
+import { encajesDe, objecionesDe, casosDe, sectoresDe } from '../../../data/programador-gate';
+import { esPuebloIndexable } from '../../../data/pueblos-indexables';
+import { SITE, PROVEEDOR } from '../../../data/negocio';
+
+export function getStaticPaths() {
+  /* La capital queda fuera: su página es el pilar, que ya se titula "en
+     Almería" porque cubre la provincia. */
+  return municipiosIndexables()
+    .filter((m) => m.slug !== 'almeria')
+    .map((m) => ({ params: { municipio: m.slug } }));
+}
+
+const { municipio } = Astro.params as { municipio: string };
+const territorio = territorioDe(municipio, 6)!;
+const n = territorio.nombre;
+const canonical = `${SITE}/programador-web/zona/${municipio}/`;
+
+/* Qué tecnologías tienen algo concreto que hacer aquí, con el encaje que lo
+   justifica. Se ordenan por número de encajes: primero lo que más se pide. */
+const tecnologias = ORDEN_TECNOLOGIAS
+  .map((slug) => ({ slug, t: TECNOLOGIAS[slug], encajes: encajesDe(slug, municipio) }))
+  .filter((x) => x.encajes.length > 0)
+  .sort((a, b) => b.encajes.length - a.encajes.length);
+
+const sectores = sectoresDe(municipio);
+const casos = casosDe(municipio);
+const cobertura = frasesCobertura(territorio);
+
+const vecinos = territorio.vecinos
+  .filter((s) => s !== 'almeria')
+  .map((s) => territorioDe(s))
+  .filter((v): v is NonNullable<typeof v> => v !== null);
+
+const faq = [
+  ...objecionesDe(municipio, 3),
+  {
+    q: `¿Trabajáis con empresas de ${n} sin tener oficina allí?`,
+    a: territorio.slug === 'vera'
+      ? 'El estudio está aquí, en Vera, así que sí: reuniones presenciales sin más trámite.'
+      : `Sí. La sede está en Vera y no fingimos tener oficina en ${n}: nos desplazamos `
+        + 'cuando la reunión lo pide y el desarrollo se trabaja en remoto, que es como se '
+        + 'trabaja el código en cualquier caso.',
+  },
+  {
+    q: `¿Qué tipo de encargos salen por ${n}?`,
+    a: tecnologias.length
+      ? `Los que encajan con lo que ya hay montado: ${tecnologias.slice(0, 3)
+          .map((x) => `${x.encajes[0].sector.toLowerCase()}, con ${x.encajes[0].necesidad}`)
+          .join('; ')}. No es una lista cerrada, son los casos que más se repiten.`
+      : `Los mismos que en el resto de la provincia; en ${n} todavía no hay un patrón propio `
+        + 'que merezca contarse aparte.',
+  },
+  {
+    q: `¿Dais servicio también en ${vecinos.slice(0, 3).map((v) => v.nombre).join(', ')}?`,
+    a: `Sí, y en el resto de ${territorio.comarca}. `
+      + (territorio.kmDesdeBase !== null
+        ? `Desde Vera hasta ${n} hay unos ${territorio.kmDesdeBase} km en línea recta, así que `
+          + 'la zona entera entra dentro de un desplazamiento razonable cuando hace falta vernos.'
+        : 'Nos desplazamos por la comarca cuando la reunión lo pide.'),
+  },
+];
+
+const jsonLd: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': `Desarrollo y programación web para empresas de ${n}`,
+    'serviceType': 'Desarrollo de software a medida',
+    'url': canonical,
+    /* Un solo proveedor, con su sede real en Vera. No se declara un
+       LocalBusiness por municipio: sería afirmar una oficina que no existe. */
+    'provider': PROVEEDOR,
+    'areaServed': {
+      '@type': 'City',
+      'name': n,
+      'containedInPlace': { '@type': 'AdministrativeArea', 'name': territorio.comarca },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': faq.map((f) => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+    })),
+  },
+];
+if (casos.length) {
+  /* Obra entregada, no reseñas: no tenemos valoraciones de estos clientes y
+     marcar `Review` sin reseña real está prohibido. */
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    'name': `Proyectos entregados en ${n}`,
+    'itemListElement': casos.map((c, i) => ({
+      '@type': 'ListItem',
+      'position': i + 1,
+      'item': { '@type': 'WebSite', 'name': c.cliente, 'url': c.url },
+    })),
+  });
+}
+
+const title = `Programador web en ${n}: desarrollo a medida | Platanito Rico`;
+const description = tecnologias.length
+  ? `Desarrollo sobre lo que ya tienes en ${n}: ${tecnologias.slice(0, 2).map((x) => x.encajes[0].necesidad).join(' y ')}. Estudio en Vera, ${territorio.comarca}.`
+  : `Desarrollo y programación web para empresas de ${n}, en ${territorio.comarca}. Trabajamos desde Vera para toda la provincia de Almería.`;
+---
+
+<BaseLayout title={title} description={description} canonical={canonical} jsonLd={jsonLd}>
+  <Header />
+  <Marco>
+  <Breadcrumb items={[
+    { label: 'Inicio', href: '/' },
+    { label: 'Programador web', href: '/programador-web/' },
+    { label: n },
+  ]} />
+
+  <section class="hero">
+    <div class="container-brutal hero__in">
+      <div>
+        <p class="pw-ref">{`zona.${municipio}`}</p>
+        <h1 class="hero__h1">Programador web en {n}</h1>
+        <p class="hero__lead">
+          {sectores.length
+            ? `En ${n} lo que se mueve es ${sectores.slice(0, 3).map((s) => s.toLowerCase()).join(', ')}. `
+              + 'Los encargos que salen de ahí casi nunca son «hazme una web»: son cambiar algo que '
+              + 'ya funciona, conectarlo con el programa de gestión o construir la pieza que falta.'
+            : `Desarrollo sobre lo que las empresas de ${n} ya tienen montado: cambiarlo, `
+              + 'integrarlo o construir encima.'}
+        </p>
+        <p class="hero__lead hero__lead--sec">
+          Si lo que buscas es una web desde cero, <a href={`/diseno-web/${municipio}/`}>diseño
+          web en {n}</a> encaja mejor que esta página.
+        </p>
+      </div>
+      <MapaComarca territorio={territorio} encajes={tecnologias[0]?.encajes ?? []} tecnologia="zona" />
+    </div>
+  </section>
+
+  {casos.length > 0 && (
+    <Seccion
+      ref="01 · hecho aquí"
+      titulo={casos.length === 1 ? `Un trabajo entregado en ${n}` : `Trabajos entregados en ${n}`}
+      lead="Con nombre y con enlace, para que se pueda comprobar."
+      tono="panel"
+    >
+      <CasoReal proyectos={casos} municipio={n} />
+    </Seccion>
+  )}
+
+  {tecnologias.length > 0 && (
+    <Seccion
+      ref="02 · qué encaja"
+      titulo={`Qué se pide en ${n}, y con qué se resuelve`}
+      lead={`Cruzando los sectores que ya tenemos documentados de ${n} con lo que resuelve cada tecnología. Si tu caso no está, sigue encajando: son los que más se repiten, no un catálogo cerrado.`}
+      tono={casos.length ? 'suelo' : 'panel'}
+    >
+      <ul class="enc">
+        {tecnologias.map((x) => (
+          <li class="enc__i">
+            <div class="enc__cab">
+              <span class="pw-ref enc__sec">{x.encajes[0].sector}</span>
+              <p class="enc__nec">{x.encajes[0].necesidad}</p>
+              {x.encajes[1] && <p class="enc__nec enc__nec--sec">También: {x.encajes[1].necesidad}.</p>}
+            </div>
+            <a class="enc__tec" href={rutaTecnologia(x.slug)}>
+              {x.t.etiqueta}
+              <span class="enc__f" aria-hidden="true"></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Seccion>
+  )}
+
+  <Seccion ref="03 · cobertura" titulo={`Cómo damos servicio en ${n}`}>
+    {cobertura.map((f) => <p class="cob">{f}</p>)}
+    <Enlaces columnas={2} enlaces={[
+      ...(esPuebloIndexable(municipio)
+        ? [{ href: `/diseno-web/${municipio}/`, texto: `Diseño web en ${n}`, sub: 'Si lo que hace falta es la web, no el desarrollo' }]
+        : []),
+      { href: '/programador-web/', texto: 'Todas las tecnologías', sub: 'El mapa completo del clúster' },
+    ]} />
+  </Seccion>
+
+  {vecinos.length > 0 && (
+    <Seccion ref="04 · zona" titulo={`Cerca de ${n}`} tono="panel"
+      lead={`Municipios de la zona donde también damos servicio. Las distancias son en línea recta desde ${n}.`}>
+      <Enlaces enlaces={vecinos.map((v) => ({
+        href: `/programador-web/zona/${v.slug}/`,
+        texto: v.nombre,
+        sub: territorio.distanciaA[v.slug] ? `a ${territorio.distanciaA[v.slug]} km · ${v.comarca}` : v.comarca,
+      }))} />
+    </Seccion>
+  )}
+
+  <Seccion ref="05 · dudas" titulo={`Dudas que salen en ${n}`}>
+    <Faq faq={faq} />
+  </Seccion>
+
+  <Cta
+    titulo={`Cuéntame qué tienes montado en ${n}`}
+    texto="Con saber qué sistema usáis y qué se hace hoy a mano suele bastar para decir si tiene arreglo, cuánto trabajo es y si merece la pena."
+    servicio={`Desarrollo · ${n}`}
+  />
+  </Marco>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
+  .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
+  .hero__h1 { font-size: clamp(2rem, 5.2vw, 3.2rem); font-weight: 800; letter-spacing: -.04em; line-height: 1.02; margin: .4rem 0 1.1rem; }
+  .hero__lead { max-width: 54ch; font-size: 1.05rem; line-height: 1.66; margin: 0 0 .9rem; }
+  .hero__lead--sec { color: var(--pw-tenue); font-size: .97rem; }
+  @media (min-width: 960px) { .hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, .95fr); } }
+
+  .enc { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--pw-regla); border: 1px solid var(--pw-regla-2); }
+  .enc__i {
+    background: var(--pw-panel); padding: 1.15rem 1.2rem 1.2rem;
+    border-left: 2px solid var(--pw-luego);
+    display: flex; flex-direction: column; gap: .8rem;
+  }
+  .enc__sec { display: block; color: var(--pw-luego); margin-bottom: .3rem; }
+  .enc__nec { margin: 0; color: var(--pw-texto); line-height: 1.55; }
+  .enc__nec--sec { color: var(--pw-suave); font-size: .92rem; margin-top: .35rem; }
+  .enc__tec {
+    margin-top: auto; align-self: start;
+    display: inline-flex; align-items: center; gap: .45rem;
+    color: var(--pw-marca); text-decoration: none; font-weight: 600; font-size: .92rem;
+  }
+  .enc__tec:hover, .enc__tec:focus-visible { text-decoration: underline; text-underline-offset: .22em; }
+  .enc__f { width: 7px; height: 7px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+  @media (min-width: 760px) { .enc { grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); } }
+
+  .cob { line-height: 1.7; max-width: 68ch; margin: 0 0 1rem; }
+</style>

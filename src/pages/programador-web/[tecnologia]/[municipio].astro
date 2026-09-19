@@ -24,7 +24,7 @@ import Faq from '../../../components/programador/Faq.astro';
 import Cta from '../../../components/programador/Cta.astro';
 import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia, rutaLocal, type SlugTecnologia } from '../../../data/tecnologias';
 import { territorioDe, frasesCobertura, municipiosIndexables } from '../../../data/territorio';
-import { evaluar, casosDe } from '../../../data/programador-gate';
+import { evaluar, casosDe, objecionesDe } from '../../../data/programador-gate';
 import CasoReal from '../../../components/programador/CasoReal.astro';
 import { esPuebloIndexable } from '../../../data/pueblos-indexables';
 import { SITE, PROVEEDOR } from '../../../data/negocio';
@@ -44,7 +44,9 @@ export function getStaticPaths() {
 
 const { tecnologia, municipio } = Astro.params as { tecnologia: SlugTecnologia; municipio: string };
 const t = TECNOLOGIAS[tecnologia];
-const territorio = territorioDe(municipio)!;
+/* Seis vecinos, no cuatro: es el enlazado de zona que de verdad reparte, y
+   añade texto propio porque el conjunto de vecinos es distinto en cada pueblo. */
+const territorio = territorioDe(municipio, 6)!;
 const veredicto = evaluar(tecnologia, municipio);
 const indexable = veredicto.estado === 'index';
 const canonical = `${SITE}${rutaLocal(tecnologia, municipio)}`;
@@ -81,6 +83,10 @@ const faqLocal = [
         + 'cuando la reunión lo pide y el desarrollo se trabaja en remoto, que es como se '
         + 'trabaja el código en cualquier caso.',
   },
+  /* Las dudas propias de los sectores del municipio. Aquí es donde una página
+     local deja de parecerse a la del pueblo de al lado: quien tiene una cantera
+     no pregunta lo mismo que quien tiene un chiringuito. */
+  ...objecionesDe(municipio, 3),
   {
     q: `¿Qué encargos de ${t.nombre} salen por la zona?`,
     a: veredicto.encajes.length
@@ -93,6 +99,9 @@ const faqLocal = [
 ];
 
 const vecinos = territorio.vecinos
+  /* La capital no tiene landing local —su página es el hub— así que enlazarla
+     aquí produciría una URL que no existe. Lo cazó `audit:programadores`. */
+  .filter((slug) => slug !== 'almeria')
   .map((slug) => ({ slug, t: territorioDe(slug) }))
   .filter((v): v is { slug: string; t: NonNullable<ReturnType<typeof territorioDe>> } => v.t !== null)
   /* Solo se enlaza a vecinos cuya página de esta tecnología sea indexable:

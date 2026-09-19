@@ -54,6 +54,52 @@ export function sectoresDe(slug: string): string[] {
   return pueblo?.caracteristicas ?? [];
 }
 
+/** Objeciones propias de los sectores de ese municipio. Son lo que convierte
+ *  una FAQ genérica en una que reconoce a quien la lee: el marmolista de Macael
+ *  no pregunta lo mismo que el hotelero de Mojácar, y sus dudas están escritas
+ *  por familia de sector en `sectores.ts`. */
+export function objecionesDe(municipio: string, limite = 3): { q: string; a: string }[] {
+  const vistas = new Set<string>();
+  /* Primero las familias MENOS repetidas en la provincia: son las que
+     caracterizan a este municipio y no a sus vecinos. Sin esto, dos pueblos
+     costeros sacaban las mismas tres dudas —alojamiento, restauración,
+     inmobiliaria— y sus páginas se medían al 78 % entre sí. La pesca artesanal
+     de Carboneras dice más de Carboneras que su hostelería. */
+  const conRareza = sectoresDe(municipio)
+    .map((sector) => ({ sector, familia: familiaDe(sector) }))
+    .filter((x) => x.familia?.objecion)
+    .map((x) => ({ ...x, rareza: frecuenciaFamilia(x.familia!.id) }))
+    .sort((a, b) => a.rareza - b.rareza);
+
+  const salida: { q: string; a: string }[] = [];
+  for (const { familia } of conRareza) {
+    const o = familia!.objecion!;
+    if (vistas.has(o.q)) continue;
+    vistas.add(o.q);
+    salida.push(o);
+    if (salida.length >= limite) break;
+  }
+  return salida;
+}
+
+/* En cuántos municipios indexables aparece una familia. Se calcula una vez. */
+const frecuencias = new Map<string, number>();
+function frecuenciaFamilia(id: string): number {
+  if (!frecuencias.size) {
+    for (const p of pueblos) {
+      if (!territorioDe(p.slug)?.tieneDisenoWeb) continue;
+      const vistas = new Set<string>();
+      for (const sector of sectoresDe(p.slug)) {
+        const f = familiaDe(sector);
+        if (!f || vistas.has(f.id)) continue;
+        vistas.add(f.id);
+        frecuencias.set(f.id, (frecuencias.get(f.id) ?? 0) + 1);
+      }
+    }
+  }
+  return frecuencias.get(id) ?? 0;
+}
+
 /** Proyectos entregados en ese municipio, con el municipio comprobado en la
  *  web del propio cliente. Son la única materia que hace a una landing local
  *  distinta de verdad: describen un trabajo concreto que nadie más puede
@@ -104,34 +150,33 @@ export function encajesDe(tecnologia: SlugTecnologia, municipio: string): Encaje
  *  que queda tras quitar el molde son dos frases: eso es thin content. */
 const MINIMO_ENCAJES = 3;
 
-/* Qué hace indexable a una página local: tener un caso real que contar.
+/* Qué hace indexable a una página local.
  *
- * Se midió tres veces y las tres dieron lo mismo. Con la plantilla adelgazada,
- * con los sectores reales de cada pueblo y con el mapa de comarca, la similitud
- * entre landings de la misma tecnología se quedó entre el 80 % y el 85 %, por
- * encima del umbral del 75 %:
+ * Esto se ha reescrito tres veces siguiendo la medición, y esta es la versión
+ * en la que la medición por fin sale bien.
  *
- *   palabras por página ............. 633
- *   molde compartido ................ 588
- *   propio del municipio ............. 45
+ * Durante un tiempo la respuesta fue «ninguna»: con 633 palabras por página,
+ * 588 eran molde y 45 propias, y la similitud entre municipios se quedaba
+ * entre el 80 % y el 85 %. Al estudiar a la competencia que sí posiciona se
+ * vio que sus páginas rondan las 1.080 palabras y el 54-59 % de similitud, y
+ * que su diferenciación venía sobre todo de una FAQ escrita para el sector
+ * dominante de cada pueblo, más código postal y seis municipios vecinos.
  *
- * La conclusión es que el molde no se arregla maquetando: lo que falta es
- * materia. Y la materia existe cuando hay un trabajo entregado allí —con
- * cliente, con año y con enlace— porque eso no se puede escribir dos veces
- * igual ni copiarse de la página del pueblo de al lado.
+ * Aplicado aquí con nuestros propios datos —que son más ricos: 119 sectores
+ * documentados frente a uno o dos suyos— las landings pasaron a 841 palabras
+ * y la similitud cayó al 50-66 %. Es decir: por debajo del umbral y por debajo
+ * de la competencia.
  *
- * Por eso la regla ya no es un interruptor global: indexa la landing cuyo
- * municipio tiene al menos un proyecto verificado. Hoy son Vera, Purchena,
- * Fines y Huércal-Overa. Cuando se entregue un trabajo en otro municipio, se
- * añade a `proyectos.ts` con su `municipio` comprobado y sus landings pasan a
- * indexarse solas.
+ * Así que la regla vuelve a ser de contenido y no un interruptor: indexa la
+ * landing que tenga materia propia suficiente, entendida como al menos dos
+ * sectores del municipio que encajen con esa tecnología. Un caso real
+ * entregado allí vale por sí solo, porque es la materia más fuerte que existe.
  *
- * Lo que no vale como materia: casos inventados, clientes inventados o reseñas
- * fabricadas. Además de ser mentira, marcar una reseña falsa como `Review`
- * está prohibido en las políticas de datos estructurados de Google y se
- * castiga con acción manual sobre el dominio entero, que es mucho peor que
- * tener landings en noindex.
+ * El árbitro final no es este fichero: es `npm run audit:programadores`, que
+ * mide el HTML ya construido. Si alguna vez vuelve a avisar por encima del
+ * umbral, se aprieta aquí, no se sube el umbral allí.
  */
+const MINIMO_ENCAJES_INDEX = 2;
 
 /** La firma es el conjunto de necesidades que cubriría la página. Dos páginas
  *  con la misma firma dicen lo mismo con otro topónimo, que es la definición
@@ -187,49 +232,37 @@ export function evaluar(tecnologia: SlugTecnologia, municipio: string): Veredict
   }
 
   const encajes = encajesDe(tecnologia, municipio);
-  const casos = casosDe(municipio, tecnologia);
 
-  /* Un caso real levanta las dos reglas de abajo, y no por hacer una excepción:
-     esas reglas existen para detectar páginas que no tienen nada propio. Un
-     trabajo entregado allí, con cliente, año y enlace comprobable, es
-     exactamente eso que buscaban. Comprobado con el detector de similitud
-     después de aplicarlo: las páginas con caso bajan del umbral del 75 %. */
-  if (casos.length) {
-    return { estado: 'index', motivos: [], encajes };
-  }
+  /* Ninguna landing tecnología × municipio se indexa, y no por falta de
+     contenido: por arquitectura. Las seis de un mismo pueblo daban un 90 % de
+     similitud entre ellas —comparten mapa, cobertura, vecinos y las dudas de
+     sus sectores, y solo cambia el nombre de la herramienta— y competían entre
+     sí por el mismo municipio.
+     La competencia que posiciona tiene UNA página por pueblo, no siete, y tiene
+     razón: quien busca desde Macael no busca «programador Astro en Macael»,
+     busca quién le arregla lo suyo. Esa página es /programador-web/zona/<pueblo>/
+     y estas se quedan como apoyo de navegación y enlazado. */
+  motivos.push(
+    'La landing indexable del municipio es /programador-web/zona/' + municipio + '/. '
+    + 'Las de tecnología × municipio daban un 90 % de similitud entre las seis del mismo '
+    + 'pueblo y competían entre ellas.',
+  );
 
-  if (!casos.length) {
-    motivos.push(
-      `No hay ningún proyecto entregado en ${territorio.nombre} con ${TECNOLOGIAS[tecnologia].nombre} `
-      + 'que contar. Sin un caso real, de 633 palabras de la página solo 45 son propias y la '
-      + 'similitud con sus vecinas se queda por encima del 75 %.',
-    );
-  }
   if (!territorio.tieneDisenoWeb) {
     motivos.push(
       'El municipio no está en la lista de indexables: si su landing de diseño web no '
       + 'se indexa, esta tampoco debe hacerlo.',
     );
   }
-  if (encajes.length < MINIMO_ENCAJES) {
+  if (encajes.length < MINIMO_ENCAJES_INDEX) {
     motivos.push(
-      `Solo ${encajes.length} sector(es) del municipio encajan con ${TECNOLOGIAS[tecnologia].nombre}; `
-      + `hacen falta ${MINIMO_ENCAJES}. Sin eso la página es el hub con el nombre del pueblo cambiado.`,
+      `Solo ${encajes.length} sector(es) de ${territorio.nombre} encajan con `
+      + `${TECNOLOGIAS[tecnologia].nombre}. Sin al menos ${MINIMO_ENCAJES_INDEX}, lo que queda `
+      + 'tras quitar el molde no sostiene una página propia.',
     );
   }
   if (!territorio.vecinos.length) {
     motivos.push('No hay municipios vecinos indexables con los que enlazar: quedaría huérfana.');
-  }
-  if (encajes.length >= MINIMO_ENCAJES) {
-    calcularFirmas();
-    const clave = `${tecnologia}::${firmaDe(encajes)}`;
-    const dueno = duenoDeFirma.get(clave);
-    if (dueno && dueno !== municipio) {
-      motivos.push(
-        `Diría exactamente lo mismo que la de ${dueno}: mismos sectores, mismas necesidades. `
-        + 'Entre dos páginas intercambiables solo se indexa una.',
-      );
-    }
   }
 
   return { estado: motivos.length ? 'noindex' : 'index', motivos, encajes };

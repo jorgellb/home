@@ -65,7 +65,8 @@ export default defineConfig({
       // no pasan por el control de calidad de las locales: tienen contenido
       // propio y se indexan siempre.
       const progMatch = path.match(/^\/programador-web\/([^/]+)\/([^/]+)\/?$/);
-      if (progMatch && progMatch[1] === 'sectores') return true;
+      // Hubs de sector y landings de zona: contenido propio, se indexan.
+      if (progMatch && (progMatch[1] === 'sectores' || progMatch[1] === 'zona')) return true;
       if (progMatch) {
         // El slug viene de una URL, así que aquí es un string cualquiera:
         // `evaluar` ya devuelve 'draft' si la tecnología no existe.

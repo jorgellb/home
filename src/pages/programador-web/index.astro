@@ -22,7 +22,7 @@ const canonical = `${SITE}/programador-web/`;
 
 /* Solo los municipios que ya se indexan: mandar enlaces a páginas noindex no
    reparte nada y llena la página de ruido. */
-const municipios = municipiosIndexables().slice(0, 8);
+const municipios = municipiosIndexables();
 
 const faq = [
   {
@@ -175,10 +175,10 @@ const jsonLd = [
     tono="panel"
   >
     <Enlaces
-      enlaces={municipios.map((m) => ({
-        href: `/diseno-web/${m.slug}/`,
+      enlaces={municipios.filter((m) => m.slug !== 'almeria').map((m) => ({
+        href: `/programador-web/zona/${m.slug}/`,
         texto: m.nombre,
-        sub: m.comarca,
+        sub: m.kmDesdeBase !== null ? `a ${m.kmDesdeBase} km de Vera · ${m.comarca}` : m.comarca,
       }))}
     />
   </Seccion>
