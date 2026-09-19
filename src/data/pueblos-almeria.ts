@@ -904,7 +904,7 @@ export const pueblos: Pueblo[] = [
     poblacion: 2500,
     descripcion: "Centro productivo de la industria del mármol almeriense con talleres de corte y transformación que abastecen proyectos de construcción en toda España",
     caracteristicas: ["Mármol", "Industria transformadora", "Talleres especializados", "Valle productivo"],
-    coords: [-1.8433, 37.3558],
+    coords: [-2.2769, 37.3706],
     lugarIconico: "Zona industrial marmolera de Fines",
     sectorPrincipal: "Transformación del mármol",
     sectores: [
@@ -929,7 +929,7 @@ export const pueblos: Pueblo[] = [
     poblacion: 7000,
     descripcion: "Capital mundial del mármol blanco, con una industria centenaria que exporta a más de 80 países y ha ornamentado monumentos históricos de todo el mundo",
     caracteristicas: ["Capital del mármol", "Exportación mundial", "Industria centenaria", "80 países"],
-    coords: [-1.8633, 37.3867],
+    coords: [-2.2939, 37.3567],
     lugarIconico: "Museo del Mármol de Olula del Río",
     sectorPrincipal: "Industria del mármol de exportación mundial",
     sectores: [
@@ -954,7 +954,7 @@ export const pueblos: Pueblo[] = [
     poblacion: 2000,
     descripcion: "Antiguo centro histórico del Valle del Almanzora con un casco urbano de gran interés arquitectónico, mercado tradicional y economía de servicios que sirve a toda la comarca alta",
     caracteristicas: ["Centro histórico", "Mercado tradicional", "Arquitectura civil", "Hub comarca alta"],
-    coords: [-2.0917, 37.3267],
+    coords: [-2.3547, 37.3528],
     lugarIconico: "Casco histórico de Purchena",
     sectorPrincipal: "Servicios comarcales y turismo histórico",
     sectores: [
@@ -1016,7 +1016,7 @@ export const pueblos: Pueblo[] = [
     descripcion:
       "Centro comercial del Valle del Almanzora con mercado tradicional",
     caracteristicas: ["Mercado", "Comercio", "Mármol", "Servicios"],
-    coords: [-1.6187, 37.3871],
+    coords: [-2.1436, 37.3871],
   },
   {
     slug: "macael",
@@ -1303,6 +1303,7 @@ export const pueblos: Pueblo[] = [
       "Gastronomía",
       "Sierra de los Filabres",
     ],
+    coords: [-2.5153, 37.3453],
   },
   {
     slug: "tijola",
@@ -1490,6 +1491,7 @@ export const pueblos: Pueblo[] = [
     descripcion:
       "Desierto de Tabernas, escenario de películas del oeste y Hollywood",
     caracteristicas: ["Desierto", "Cine western", "Mini Hollywood", "Turismo"],
+    coords: [-2.3936, 37.0500],
   },
   {
     slug: "sorbas",
@@ -2066,6 +2068,7 @@ export const pueblos: Pueblo[] = [
       "Exportación",
       "Comercio",
     ],
+    coords: [-2.8156, 36.7767],
   },
   {
     slug: "adra",

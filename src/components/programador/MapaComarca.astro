@@ -1,0 +1,244 @@
+---
+/* Mapa de comarca por municipio.
+ *
+ * Aviso de partida, porque importa: un SVG no evita una penalización por
+ * contenido duplicado. Google lee texto, no dibujos. Esto cuenta únicamente
+ * porque lo que dibuja son DATOS REALES de cada municipio —sus coordenadas,
+ * sus vecinos, las distancias entre ellos y sus sectores documentados— y por
+ * tanto sus etiquetas son texto distinto en cada página y además informan de
+ * algo que el resto de la página no cuenta: dónde está esto y qué tiene al
+ * lado. Si algún día alguien lo convierte en una forma bonita generada al
+ * azar, habrá perdido lo único que lo justifica.
+ *
+ * La geometría sale de la proyección de coordenadas reales, así que el dibujo
+ * de Macael y el de Garrucha son distintos porque los pueblos están donde
+ * están, no porque una semilla los mueva.
+ *
+ * Sin coordenadas no hay mapa: se dibuja solo el bloque de sectores. Es
+ * preferible a inventar una posición.
+ */
+import type { MunicipioTerritorio } from '../../data/territorio';
+import { territorioDe, BASE } from '../../data/territorio';
+import type { Encaje } from '../../data/programador-gate';
+import { sectoresDe } from '../../data/programador-gate';
+
+interface Props {
+  territorio: MunicipioTerritorio;
+  encajes: Encaje[];
+  tecnologia: string;
+}
+const { territorio: t, encajes, tecnologia } = Astro.props;
+
+/* --- Sectores: los del municipio, marcando los que encajan con la tecnología */
+const activos = new Set(encajes.map((e) => e.sector));
+const sectores = sectoresDe(t.slug).slice(0, 6).map((nombre) => ({
+  nombre,
+  activo: activos.has(nombre),
+}));
+
+/* --- Mapa: proyección de las coordenadas reales del municipio y sus vecinos */
+const vecinos = t.vecinos
+  .map((slug) => territorioDe(slug))
+  .filter((v): v is MunicipioTerritorio => v !== null && v.coords !== null);
+
+const hayMapa = t.coords !== null && vecinos.length >= 2;
+
+interface Nodo {
+  x: number; y: number; nombre: string; km: number | null; centro: boolean;
+  lx: number; ly: number; anchor: string; kx: number; ky: number;
+}
+let nodos: Nodo[] = [];
+let rumbo = { x: 0, y: 0 };
+
+if (hayMapa && t.coords) {
+  const puntos: [number, number][] = [t.coords, ...vecinos.map((v) => v.coords!)];
+  const lngs = puntos.map((p) => p[0]);
+  const lats = puntos.map((p) => p[1]);
+  const minLng = Math.min(...lngs); const maxLng = Math.max(...lngs);
+  const minLat = Math.min(...lats); const maxLat = Math.max(...lats);
+  /* Se conserva la proporción para que la comarca no salga estirada: un mapa
+     deformado deja de ser un dato y pasa a ser una ilustración. */
+  const anchoGeo = Math.max(maxLng - minLng, 1e-6);
+  const altoGeo = Math.max(maxLat - minLat, 1e-6);
+  const CAJA = { x: 30, y: 52, w: 116, h: 72 };
+  const escala = Math.min(CAJA.w / anchoGeo, CAJA.h / (altoGeo / Math.cos((minLat * Math.PI) / 180)));
+  const proyectar = ([lng, lat]: [number, number]) => ({
+    x: CAJA.x + (CAJA.w - (maxLng - minLng) * escala) / 2 + (lng - minLng) * escala,
+    y: CAJA.y + CAJA.h - (CAJA.h - ((maxLat - minLat) / Math.cos((minLat * Math.PI) / 180)) * escala) / 2
+       - ((lat - minLat) / Math.cos((minLat * Math.PI) / 180)) * escala,
+  });
+
+  const centroXY = proyectar(t.coords);
+  nodos = [
+    { ...centroXY, nombre: t.nombre, km: null, centro: true, lx: centroXY.x, ly: centroXY.y - 13, anchor: 'middle', kx: 0, ky: 0 },
+    ...vecinos.map((v) => {
+      const q = proyectar(v.coords!);
+      /* La etiqueta se empuja hacia fuera siguiendo el radio desde el municipio:
+         colocarlas todas arriba o abajo hacía que las de dos vecinos cercanos se
+         pisaran, que es justo lo que pasaba con Los Gallardos y Mojácar. */
+      const dx = q.x - centroXY.x;
+      const dy = q.y - centroXY.y;
+      const n = Math.hypot(dx, dy) || 1;
+      const ux = dx / n; const uy = dy / n;
+      return {
+        ...q,
+        nombre: v.nombre,
+        km: t.distanciaA[v.slug] ?? null,
+        centro: false,
+        lx: q.x + ux * 7,
+        ly: q.y + uy * 11 + (uy > .2 ? 4 : uy < -.2 ? -2 : 3),
+        anchor: ux > .35 ? 'start' : ux < -.35 ? 'end' : 'middle',
+        /* El kilometraje se aparta perpendicularmente para no caer sobre el trazo. */
+        kx: (centroXY.x + q.x) / 2 - uy * 6,
+        ky: (centroXY.y + q.y) / 2 + ux * 6,
+      };
+    }),
+  ];
+
+  /* Rumbo real a la base, para la flecha: es otro dato verificable y distinto
+     en cada municipio. */
+  if (t.slug !== BASE.slug) {
+    const dx = BASE.coords[0] - t.coords[0];
+    const dy = BASE.coords[1] - t.coords[1];
+    const n = Math.hypot(dx, dy) || 1;
+    rumbo = { x: dx / n, y: -dy / n };
+  }
+}
+
+const centro = nodos.find((n) => n.centro);
+const descripcion = hayMapa
+  ? `Mapa de situación: ${t.nombre} con ${vecinos.map((v) => v.nombre).join(', ')} alrededor, `
+    + `en ${t.comarca}${t.kmDesdeBase !== null && t.slug !== BASE.slug ? `, a unos ${t.kmDesdeBase} km en línea recta del estudio en Vera` : ''}. `
+    + `Sectores documentados: ${sectores.map((s) => s.nombre).join(', ')}.`
+  : `Sectores documentados de ${t.nombre}, en ${t.comarca}: ${sectores.map((s) => s.nombre).join(', ')}.`;
+const idDesc = `mapa-${tecnologia}-${t.slug}`;
+---
+
+<figure class="mc">
+  <div class="mc__marco pw-tram">
+    <span class="mc__esq mc__esq--ai" aria-hidden="true"></span>
+    <span class="mc__esq mc__esq--ad" aria-hidden="true"></span>
+    <span class="mc__esq mc__esq--bi" aria-hidden="true"></span>
+    <span class="mc__esq mc__esq--bd" aria-hidden="true"></span>
+
+    <svg class="mc__svg" viewBox="0 0 340 214" fill="none" role="img" aria-labelledby={idDesc}>
+      <title id={idDesc}>{descripcion}</title>
+
+      {hayMapa && centro && (
+        <g>
+          <text x="18" y="34" class="m-tag">{t.comarca.toLowerCase()}</text>
+
+          {/* Radios del municipio a cada vecino, rotulados con la distancia real */}
+          {nodos.filter((n) => !n.centro).map((n) => (
+            <g>
+              <line x1={centro.x} y1={centro.y} x2={n.x} y2={n.y} class="m-radio" />
+            </g>
+          ))}
+
+          {/* Vecinos: solo el número sobre el mapa; el nombre va en la leyenda,
+              porque con distancias dispares los rótulos se amontonaban. */}
+          {nodos.filter((n) => !n.centro).map((n, i) => (
+            <g>
+              <circle cx={n.x} cy={n.y} r="6" class="m-vec-halo" />
+              <circle cx={n.x} cy={n.y} r="2.4" class="m-vec" />
+              <text x={n.x} y={n.y + 3} class="m-num" text-anchor="middle">{i + 1}</text>
+            </g>
+          ))}
+
+          {/* El municipio */}
+          <circle cx={centro.x} cy={centro.y} r="7" class="m-centro-halo" />
+          <circle cx={centro.x} cy={centro.y} r="4" class="m-centro" />
+
+          {/* Rumbo real al estudio */}
+          {t.slug !== BASE.slug && t.kmDesdeBase !== null && (
+            <line
+              x1={centro.x} y1={centro.y}
+              x2={centro.x + rumbo.x * 22} y2={centro.y + rumbo.y * 22}
+              class="m-rumbo"
+            />
+          )}
+
+          {/* Leyenda: el municipio, sus vecinos con distancia real y la base */}
+          <circle cx="18" cy="137" r="3.5" class="m-centro" />
+          <text x="28" y="140" class="m-leg m-leg--centro">{t.nombre}</text>
+          {nodos.filter((n) => !n.centro).map((n, i) => (
+            <text x="18" y={154 + i * 12} class="m-leg">
+              {i + 1} · {n.nombre}{n.km !== null ? ` · ${n.km} km` : ''}
+            </text>
+          ))}
+          {t.slug !== BASE.slug && t.kmDesdeBase !== null && (
+            <text x="18" y={154 + nodos.filter((n) => !n.centro).length * 12 + 4} class="m-leg m-leg--marca">
+              estudio en Vera · {t.kmDesdeBase} km
+            </text>
+          )}
+        </g>
+      )}
+
+      {/* Sectores documentados; encendidos los que encajan con esta tecnología */}
+      <g>
+        <text x={hayMapa ? 172 : 18} y="34" class="m-tag">sectores documentados</text>
+        {sectores.map((s, i) => (
+          <g>
+            <rect
+              x={hayMapa ? 172 : 18}
+              y={46 + i * 26}
+              width={hayMapa ? 150 : 304}
+              height="19"
+              class={s.activo ? 'm-sec m-sec--on' : 'm-sec'}
+            />
+            <text
+              x={(hayMapa ? 172 : 18) + 8}
+              y={59 + i * 26}
+              class={s.activo ? 'm-slbl m-slbl--on' : 'm-slbl'}
+            >{s.nombre.length > (hayMapa ? 26 : 58) ? s.nombre.slice(0, hayMapa ? 25 : 57) + '…' : s.nombre}</text>
+          </g>
+        ))}
+      </g>
+    </svg>
+  </div>
+  <figcaption class="mc__pie pw-ref">
+    {hayMapa ? `${t.nombre} y su entorno · distancias en línea recta` : `${t.nombre} · ${t.comarca}`}
+  </figcaption>
+</figure>
+
+<style>
+  .mc { margin: 0; }
+  .mc__marco {
+    position: relative;
+    border: 1px solid var(--pw-regla-2);
+    background: var(--pw-panel);
+    padding: clamp(.75rem, 2.5vw, 1.15rem);
+  }
+  .mc__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
+  .mc__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .mc__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+  .mc__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+  .mc__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+  .mc__svg { display: block; width: 100%; height: auto; }
+  .mc__pie { margin: .6rem 0 0; }
+
+  .mc__svg :global(.m-radio) { stroke: var(--pw-regla-2); stroke-width: 1; stroke-dasharray: 3 3; }
+  .mc__svg :global(.m-vec) { fill: var(--pw-regla-2); stroke: none; }
+  .mc__svg :global(.m-centro) { fill: var(--pw-marca); stroke: none; }
+  .mc__svg :global(.m-centro-halo) { fill: none; stroke: var(--pw-marca); stroke-width: 1; opacity: .45; }
+  .mc__svg :global(.m-rumbo) { stroke: var(--pw-marca); stroke-width: 1.2; stroke-dasharray: 2 3; opacity: .8; }
+
+  .mc__svg :global(.m-tag) {
+    font-family: var(--font-mono, monospace); font-size: 8.5px;
+    letter-spacing: .1em; fill: var(--pw-tenue);
+  }
+  .mc__svg :global(.m-km) { font-family: var(--font-mono, monospace); font-size: 7.5px; fill: var(--pw-tenue); opacity: .85; }
+  .mc__svg :global(.m-lbl) { font-family: var(--font-mono, monospace); font-size: 9px; fill: var(--pw-suave); }
+  .mc__svg :global(.m-lbl--centro) { fill: var(--pw-texto); font-size: 10px; }
+  .mc__svg :global(.m-lbl--marca) { fill: var(--pw-marca); font-size: 8.5px; }
+  .mc__svg :global(.m-vec-halo) { fill: var(--pw-panel); stroke: var(--pw-regla-2); stroke-width: 1; }
+  .mc__svg :global(.m-num) { font-family: var(--font-mono, monospace); font-size: 7px; fill: var(--pw-suave); }
+  .mc__svg :global(.m-leg) { font-family: var(--font-mono, monospace); font-size: 8.5px; fill: var(--pw-suave); }
+  .mc__svg :global(.m-leg--centro) { fill: var(--pw-texto); }
+  .mc__svg :global(.m-leg--marca) { fill: var(--pw-marca); }
+
+  .mc__svg :global(.m-sec) { fill: none; stroke: var(--pw-regla-2); stroke-width: 1; }
+  .mc__svg :global(.m-sec--on) { stroke: var(--pw-luego); }
+  .mc__svg :global(.m-slbl) { font-family: var(--font-mono, monospace); font-size: 8.5px; fill: var(--pw-tenue); }
+  .mc__svg :global(.m-slbl--on) { fill: var(--pw-luego); }
+</style>

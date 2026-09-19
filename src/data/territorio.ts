@@ -26,6 +26,12 @@ export interface MunicipioTerritorio {
   vecinos: string[];
   /** ¿Existe `/diseno-web/<slug>/` indexable con la que cruzar enlaces? */
   tieneDisenoWeb: boolean;
+  /** [lng, lat] reales del dataset, o null. Las usa el mapa de comarca: es lo
+   *  único que hace que el dibujo de cada municipio sea distinto de verdad y
+   *  no una variación decorativa. */
+  coords: [number, number] | null;
+  /** Distancia en línea recta a cada vecino, para rotular el mapa. */
+  distanciaA: Record<string, number>;
 }
 
 /** Distancia en km sobre la esfera. Suficiente para decir "a unos 40 km". */
@@ -83,7 +89,15 @@ export function territorioDe(slug: string, maximoVecinos = 4): MunicipioTerritor
     kmDesdeBase: conCoords(pueblo) ? Math.round(distanciaKm(BASE.coords, pueblo.coords)) : null,
     vecinos: calcularVecinos(pueblo, maximoVecinos),
     tieneDisenoWeb: esPuebloIndexable(pueblo.slug),
+    coords: conCoords(pueblo) ? pueblo.coords : null,
+    distanciaA: {},
   };
+  if (conCoords(pueblo)) {
+    for (const slug of t.vecinos) {
+      const v = pueblos.find((p) => p.slug === slug);
+      if (v && conCoords(v)) t.distanciaA[slug] = Math.round(distanciaKm(pueblo.coords, v.coords));
+    }
+  }
   cache.set(clave, t);
   return t;
 }
