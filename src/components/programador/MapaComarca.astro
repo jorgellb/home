@@ -21,6 +21,7 @@ import type { MunicipioTerritorio } from '../../data/territorio';
 import { territorioDe, BASE } from '../../data/territorio';
 import type { Encaje } from '../../data/programador-gate';
 import { sectoresDe } from '../../data/programador-gate';
+import Placa from './Placa.astro';
 
 interface Props {
   territorio: MunicipioTerritorio;
@@ -114,14 +115,7 @@ const descripcion = hayMapa
 const idDesc = `mapa-${tecnologia}-${t.slug}`;
 ---
 
-<figure class="mc">
-  <div class="mc__marco pw-tram">
-    <span class="mc__esq mc__esq--ai" aria-hidden="true"></span>
-    <span class="mc__esq mc__esq--ad" aria-hidden="true"></span>
-    <span class="mc__esq mc__esq--bi" aria-hidden="true"></span>
-    <span class="mc__esq mc__esq--bd" aria-hidden="true"></span>
-
-    <svg class="mc__svg" viewBox="0 0 340 214" fill="none" role="img" aria-labelledby={idDesc}>
+<Placa class="mc" pie={hayMapa ? `${t.nombre} y su entorno · distancias en línea recta` : `${t.nombre} · ${t.comarca}`}><svg class="mc__svg" viewBox="0 0 340 214" fill="none" role="img" aria-labelledby={idDesc}>
       <title id={idDesc}>{descripcion}</title>
 
       {hayMapa && centro && (
@@ -195,27 +189,9 @@ const idDesc = `mapa-${tecnologia}-${t.slug}`;
         ))}
       </g>
     </svg>
-  </div>
-  <figcaption class="mc__pie pw-ref">
-    {hayMapa ? `${t.nombre} y su entorno · distancias en línea recta` : `${t.nombre} · ${t.comarca}`}
-  </figcaption>
-</figure>
+  </Placa>
 
 <style>
-  .mc { margin: 0; }
-  .mc__marco {
-    position: relative;
-    border: 1px solid var(--pw-regla-2);
-    background: var(--pw-panel);
-    padding: clamp(.75rem, 2.5vw, 1.15rem);
-  }
-  .mc__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
-  .mc__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-  .mc__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
-  .mc__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
-  .mc__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
-  .mc__svg { display: block; width: 100%; height: auto; }
-  .mc__pie { margin: .6rem 0 0; }
 
   .mc__svg :global(.m-radio) { stroke: var(--pw-regla-2); stroke-width: 1; stroke-dasharray: 3 3; }
   .mc__svg :global(.m-vec) { fill: var(--pw-regla-2); stroke: none; }

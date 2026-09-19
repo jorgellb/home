@@ -30,19 +30,10 @@ const DESCRIPCIONES: Record<ClaveLamina, string> = {
     + 'saltar directamente a predecir es el error más caro.',
 };
 const id = `lam-${clave}`;
+import Placa from './Placa.astro';
 ---
 
-<figure class="lam">
-  <figcaption class="lam__cab">
-    <span class="pw-ref">{titulo}</span>
-  </figcaption>
-  <div class="lam__marco pw-tram">
-    <span class="lam__esq lam__esq--ai" aria-hidden="true"></span>
-    <span class="lam__esq lam__esq--ad" aria-hidden="true"></span>
-    <span class="lam__esq lam__esq--bi" aria-hidden="true"></span>
-    <span class="lam__esq lam__esq--bd" aria-hidden="true"></span>
-
-    <svg class="lam__svg" viewBox="0 0 372 196" fill="none" role="img" aria-labelledby={id}>
+<Placa class="lam" referencia={titulo} pie={pie} tono="nota"><svg class="lam__svg" viewBox="0 0 372 196" fill="none" role="img" aria-labelledby={id}>
       <title id={id}>{DESCRIPCIONES[clave]}</title>
 
       {clave === 'pipeline' && (
@@ -135,26 +126,9 @@ const id = `lam-${clave}`;
       )}
 
     </svg>
-  </div>
-  <figcaption class="lam__pie">{pie}</figcaption>
-</figure>
+  </Placa>
 
 <style>
-  .lam { margin: 0; display: flex; flex-direction: column; gap: .6rem; }
-  .lam__cab { order: -1; }
-  .lam__marco {
-    position: relative;
-    border: 1px solid var(--pw-regla-2);
-    background: var(--pw-panel);
-    padding: clamp(.75rem, 2.5vw, 1.15rem);
-  }
-  .lam__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
-  .lam__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-  .lam__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
-  .lam__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
-  .lam__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
-  .lam__svg { display: block; width: 100%; height: auto; }
-  .lam__pie { color: var(--pw-suave); font-size: .92rem; line-height: 1.6; max-width: 62ch; }
 
   .lam__svg :global(.l-base) { stroke: var(--pw-regla-2); stroke-width: 1.2; fill: none; }
   .lam__svg :global(.l-nuevo) { stroke: var(--pw-luego); stroke-width: 1.4; fill: none; }

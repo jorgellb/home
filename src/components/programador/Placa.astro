@@ -1,0 +1,61 @@
+---
+/* El marco de las láminas técnicas del clúster.
+ *
+ * Existía copiado en cinco componentes —Esquema, EsquemaCuadre, Lamina,
+ * MapaComarca y TejidoLocal— cada uno con su retícula, sus cuatro esquinas de
+ * encuadre y un bloque de CSS casi igual. Cambiar el color de una esquina
+ * obligaba a tocar cinco ficheros y a acordarse de los cinco, que es la clase
+ * de cosa que se olvida y deja un diagrama desparejado.
+ *
+ * Aquí solo vive el marco. Lo de dentro lo pone cada componente: el dibujo es
+ * lo que los distingue y no debe salir de aquí.
+ */
+interface Props {
+  /** Referencia de la lámina, encima del marco. Opcional: los esquemas del
+   *  encabezado no la llevan porque el H1 ya los sitúa. */
+  referencia?: string;
+  /** Texto al pie. Con `pie` largo se usa como explicación; corto, como rótulo. */
+  pie?: string;
+  /** Tamaño del pie: `rotulo` para una línea técnica, `nota` para prosa. */
+  tono?: 'rotulo' | 'nota';
+  class?: string;
+}
+const { referencia, pie, tono = 'rotulo', class: clase } = Astro.props;
+---
+
+<figure class:list={['plc', clase]}>
+  {referencia && <figcaption class="plc__ref pw-ref">{referencia}</figcaption>}
+  <div class="plc__marco pw-tram">
+    <span class="plc__esq plc__esq--ai" aria-hidden="true"></span>
+    <span class="plc__esq plc__esq--ad" aria-hidden="true"></span>
+    <span class="plc__esq plc__esq--bi" aria-hidden="true"></span>
+    <span class="plc__esq plc__esq--bd" aria-hidden="true"></span>
+    <slot />
+  </div>
+  {pie && <figcaption class:list={['plc__pie', `plc__pie--${tono}`]}>{pie}</figcaption>}
+</figure>
+
+<style>
+  .plc { margin: 0; display: flex; flex-direction: column; gap: .6rem; }
+  .plc__marco {
+    position: relative;
+    border: 1px solid var(--pw-regla-2);
+    background: var(--pw-panel);
+    padding: clamp(.75rem, 2.5vw, 1.2rem);
+  }
+  .plc__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
+  .plc__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .plc__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+  .plc__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+  .plc__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+  .plc__pie--rotulo {
+    font-family: var(--font-mono, monospace); font-size: .68rem;
+    letter-spacing: .08em; color: var(--pw-tenue);
+  }
+  .plc__pie--nota { color: var(--pw-suave); font-size: .92rem; line-height: 1.6; max-width: 62ch; }
+
+  /* El SVG que se le pase ocupa el ancho del marco. Va aquí y no en cada
+     componente porque es del marco, no del dibujo. */
+  .plc__marco :global(svg) { display: block; width: 100%; height: auto; }
+</style>

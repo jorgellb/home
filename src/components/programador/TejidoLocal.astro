@@ -75,17 +75,11 @@ const descripcion = sectores.length
     + sectores.map((s) => `${s.sector} con ${s.tecs.map((t) => TECNOLOGIAS[t].etiqueta).join(' o ')}`).join('; ')
     + '.'
   : `Todavía no hay sectores documentados de ${nombre}.`;
+import Placa from './Placa.astro';
 ---
 
 {sectores.length > 0 && (
-  <figure class="tej">
-    <div class="tej__marco pw-tram">
-      <span class="tej__esq tej__esq--ai" aria-hidden="true"></span>
-      <span class="tej__esq tej__esq--ad" aria-hidden="true"></span>
-      <span class="tej__esq tej__esq--bi" aria-hidden="true"></span>
-      <span class="tej__esq tej__esq--bd" aria-hidden="true"></span>
-
-      <svg class="tej__svg" viewBox={`0 0 392 ${alto}`} fill="none" role="img" aria-labelledby={idDesc}>
+  <Placa class="tej"><svg class="tej__svg" viewBox={`0 0 392 ${alto}`} fill="none" role="img" aria-labelledby={idDesc}>
         <title id={idDesc}>{descripcion}</title>
 
         <text x="14" y="32" class="t-tag">lo que se mueve en {nombre.toLowerCase()}</text>
@@ -118,24 +112,10 @@ const descripcion = sectores.length
           {sectores.length} sectores · {conexiones.length} encajes documentados
         </text>
       </svg>
-    </div>
-  </figure>
+    </Placa>
 )}
 
 <style>
-  .tej { margin: 0; }
-  .tej__marco {
-    position: relative;
-    border: 1px solid var(--pw-regla-2);
-    background: var(--pw-panel);
-    padding: clamp(.8rem, 2.5vw, 1.3rem);
-  }
-  .tej__esq { position: absolute; width: 9px; height: 9px; border: 1px solid var(--pw-marca); opacity: .5; }
-  .tej__esq--ai { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-  .tej__esq--ad { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
-  .tej__esq--bi { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
-  .tej__esq--bd { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
-  .tej__svg { display: block; width: 100%; height: auto; }
 
   .tej__svg :global(.t-regla) { stroke: var(--pw-regla); stroke-width: 1; }
   .tej__svg :global(.t-linea) { stroke: var(--pw-regla-2); stroke-width: 1; fill: none; }
