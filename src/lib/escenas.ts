@@ -36,7 +36,7 @@ export type NombreEscena =
 /* ── Piezas reutilizables ─────────────────────────────────────────── */
 
 /** Plataforma: zócalo verde, tablero blanco y retícula punteada. Devuelve la cota superior. */
-function plataforma(e: Escena, w = 220, d = 220) {
+export function plataforma(e: Escena, w = 220, d = 220) {
   e.sombraCaja(0, 0, -2, w, d, 10, 0.05);
   e.caja({ x: 0, y: 0, w, d, h: 8, m: 'verde', brillo: false });
   e.caja({ x: 0, y: 0, z: 8, w, d, h: 6, m: 'blanco' });
@@ -46,7 +46,7 @@ function plataforma(e: Escena, w = 220, d = 220) {
   return z;
 }
 
-function arbol(e: Escena, x: number, y: number, z: number, escala = 1, retraso = 0) {
+export function arbol(e: Escena, x: number, y: number, z: number, escala = 1, retraso = 0) {
   e.sombra(x + 6, y, z, 14 * escala, 0.07);
   e.cilindro(x, y, z, 7 * escala, 11 * escala, 'arena');
   e.grupo({ clase: 'iso-balanceo', retraso }, (g) => {
@@ -56,7 +56,7 @@ function arbol(e: Escena, x: number, y: number, z: number, escala = 1, retraso =
 }
 
 /** Ventana de navegador de pie, mirando a la izquierda. Devuelve la cota de su cara frontal. */
-function navegador(e: Escena, x: number, y: number, z: number, w: number, h: number, m: 'blanco' | 'tinta' = 'blanco') {
+export function navegador(e: Escena, x: number, y: number, z: number, w: number, h: number, m: 'blanco' | 'tinta' = 'blanco') {
   const d = 8;
   e.caja({ x, y, z, w, d, h, m, sombra: true });
   const f = y + d + 0.01;
@@ -66,7 +66,7 @@ function navegador(e: Escena, x: number, y: number, z: number, w: number, h: num
   return f;
 }
 
-function pin(e: Escena, x: number, y: number, z: number, color = CORAL) {
+export function pin(e: Escena, x: number, y: number, z: number, color = CORAL) {
   e.ondas(x, y, z, 14, color);
   e.sombra(x, y, z, 7, 0.12);
   e.grupo({ clase: 'iso-flota', duracion: 4 }, (g) => {
@@ -77,7 +77,7 @@ function pin(e: Escena, x: number, y: number, z: number, color = CORAL) {
 }
 
 /** Burbuja de aviso que aparece y desaparece (contactos, mensajes). */
-function aviso(e: Escena, x: number, y: number, z: number, color: string, retraso = 0, texto = 2) {
+export function aviso(e: Escena, x: number, y: number, z: number, color: string, retraso = 0, texto = 2) {
   const verde = color === VERDE;
   e.grupo({ clase: 'iso-aparece', retraso, duracion: 6 }, (g) => {
     g.caja({ x, y, z, w: 40, d: 4, h: 18, m: verde ? 'verde' : 'blanco' });
@@ -86,7 +86,7 @@ function aviso(e: Escena, x: number, y: number, z: number, color: string, retras
   });
 }
 
-function movil(e: Escena, x: number, y: number, z: number, pantalla: (cara: number, base: number) => void) {
+export function movil(e: Escena, x: number, y: number, z: number, pantalla: (cara: number, base: number) => void) {
   e.caja({ x, y, z, w: 38, d: 6, h: 74, m: 'tinta' });
   e.caraY(x + 3, y + 6.01, z + 5, 32, 64, BLANCO);
   e.caraY(x + 14, y + 6.02, z + 70, 10, 2, '#3D4339');
@@ -793,7 +793,7 @@ export const ESCENAS = Object.keys(DIBUJOS) as NombreEscena[];
 /* ── Iconos isométricos de servicio ───────────────────────────────────
    Un objeto sobre una baldosa: legibles a 56-72 px, para menús y tarjetas. */
 
-function baldosa(e: Escena) {
+export function baldosa(e: Escena) {
   e.caja({ x: 0, y: 0, w: 60, d: 60, h: 5, m: 'menta', brillo: false });
   return 5;
 }

@@ -360,12 +360,12 @@ export class Escena {
   /** Etiqueta vertical (cartel) que mira al espectador, sin perspectiva. */
   cartel(p: Punto3, contenido: string, { color = '#14160F', fondo = '#fff' }: { color?: string; fondo?: string } = {}) {
     const [x, y] = proyectar(p);
-    const ancho = contenido.length * 5.6 + 14;
+    const ancho = contenido.length * 6.4 + 16;
     this.anotar([[x - ancho / 2, y - 18], [x + ancho / 2, y + 2]]);
     const seguro = contenido.replace(/&/g, '&amp;').replace(/</g, '&lt;');
     this.partes.push(
-      `<g transform="translate(${r(x)} ${r(y)})"><rect x="${r(-ancho / 2)}" y="-18" width="${r(ancho)}" height="15" rx="7.5" fill="${fondo}" stroke="#D7D9CF"/>` +
-        `<text x="0" y="-7.4" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="8.5" font-weight="700" fill="${color}" text-anchor="middle">${seguro}</text></g>`,
+      `<g transform="translate(${r(x)} ${r(y)})"><rect x="${r(-ancho / 2)}" y="-20" width="${r(ancho)}" height="17" rx="8.5" fill="${fondo}" stroke="#D7D9CF"/>` +
+        `<text x="0" y="-8" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="10" font-weight="700" fill="${color}" text-anchor="middle">${seguro}</text></g>`,
     );
     return this;
   }

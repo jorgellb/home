@@ -4,246 +4,627 @@
    genérico— sino explicar en qué se diferencian las nueve tecnologías y
    repartir a quien llega hacia la que le corresponde. */
 import Sitio from '../../layouts/Sitio.astro';
-import Breadcrumb from '../../components/common/Breadcrumb.astro';
-import Seccion from '../../components/programador/Seccion.astro';
-import Marco from '../../components/programador/Marco.astro';
-import Enlaces from '../../components/programador/Enlaces.astro';
-import Cta from '../../components/programador/Cta.astro';
-import Faq from '../../components/programador/Faq.astro';
+import Migas from '../../components/sitio/Migas.astro';
+import Boton from '../../components/sitio/Boton.astro';
+import Icono from '../../components/sitio/Icono.astro';
+import IconoIso from '../../components/sitio/IconoIso.astro';
+import Ilustracion from '../../components/sitio/Ilustracion.astro';
+import Encabezado from '../../components/sitio/Encabezado.astro';
+import Pasos from '../../components/sitio/Pasos.astro';
+import Preguntas from '../../components/sitio/Preguntas.astro';
+import LlamadaFinal from '../../components/sitio/LlamadaFinal.astro';
+import { escenaIntegracion, escenaTecnologia } from '../../lib/escenas-programador';
 import { listaTecnologias, rutaTecnologia } from '../../data/tecnologias';
 import { SECTOR_HUBS } from '../../data/sector-hubs';
 import { municipiosIndexables } from '../../data/territorio';
 import { SITE, PROVEEDOR } from '../../data/negocio';
 
-const tecnologias = listaTecnologias();
+/* Python va primero en el listado: es la tecnología con más situaciones y la
+   que mejor explica qué es «programar sobre lo que ya tienes». */
+const tecnologias = [...listaTecnologias()].sort((a, b) => (a.slug === 'python' ? -1 : b.slug === 'python' ? 1 : 0));
 const canonical = `${SITE}/programador-web/`;
+const municipios = municipiosIndexables().filter((m) => m.slug !== 'almeria');
+const integracion = escenaIntegracion();
+const mini = escenaTecnologia('python');
 
-/* Solo los municipios que ya se indexan: mandar enlaces a páginas noindex no
-   reparte nada y llena la página de ruido. */
-const municipios = municipiosIndexables();
-
-const faq = [
-  {
-    q: '¿En qué se diferencia esto del diseño web?',
-    a: 'En el punto de partida. Diseño web es para quien no tiene web y quiere una. '
-      + 'Esta sección es para quien ya tiene algo funcionando —una web, un programa de '
-      + 'gestión, una hoja de cálculo que se quedó pequeña— y necesita modificarlo, '
-      + 'conectarlo con otra cosa o construir encima.',
-  },
-  {
-    q: '¿Cómo sé qué tecnología necesito?',
-    a: 'No hace falta saberlo. Lo normal es describir el problema —«copiamos pedidos a '
-      + 'mano», «la web va lenta», «el equipo apunta los partes en papel»— y que la '
-      + 'elección salga de ahí. Elegir la tecnología antes que el problema suele acabar mal.',
-  },
-  {
-    q: '¿Trabajáis sobre proyectos que empezó otra persona?',
-    a: 'Sí, y es buena parte del trabajo. Se empieza revisando el código y las '
-      + 'dependencias, porque a veces continuar sale a cuenta y a veces no. Esa revisión '
-      + 'se entrega aunque después no se siga.',
-  },
-  {
-    q: '¿El código es nuestro?',
-    a: 'Sí. El código y los accesos son del cliente, sin permanencia. Si un día decide '
-      + 'llevárselo a otro equipo, se lo lleva.',
-  },
+const sintomas = [
+  { hoy: '«Eso lo pasamos a mano todos los días.»', luego: 'Se automatiza y el dato entra una sola vez.' },
+  { hoy: '«La hizo alguien que ya no está y nadie la toca.»', luego: 'Revisamos el código y te decimos si compensa seguir o rehacer.' },
+  { hoy: '«Va lenta y hemos probado de todo.»', luego: 'Se mide, se encuentra el cuello de botella y se arregla.' },
 ];
 
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    'name': 'Desarrollo y programación web',
-    'serviceType': 'Desarrollo de software a medida',
-    'url': canonical,
-    'provider': PROVEEDOR,
-    'areaServed': { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    'mainEntity': faq.map((f) => ({
-      '@type': 'Question',
-      'name': f.q,
-      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
-    })),
-  },
+const pasos = [
+  { t: 'Entender el problema', d: 'Qué se hace hoy a mano, qué falla y cuánto cuesta que siga así.' },
+  { t: 'Decidir con criterio', d: 'Si la solución más simple es no programar nada, se dice.' },
+  { t: 'Presupuesto cerrado', d: 'Alcance escrito antes de empezar, sin sorpresas para ninguna de las dos partes.' },
+  { t: 'Desarrollo por partes', d: 'Nunca sobre el sistema en producción: primero una copia donde probar.' },
+  { t: 'Entrega con marcha atrás', d: 'Copia previa y forma de volver al estado anterior si algo sale mal.' },
 ];
+
+const preguntas = [
+  { q: '¿En qué se diferencia esto del diseño web?', a: '<p>En el punto de partida. Diseño web es para quien no tiene web y quiere una. Esta sección es para quien ya tiene algo funcionando —una web, un programa de gestión, una hoja de cálculo que se quedó pequeña— y necesita modificarlo, conectarlo con otra cosa o construir encima.</p>' },
+  { q: '¿Cómo sé qué tecnología necesito?', a: '<p>No hace falta saberlo. Lo normal es describir el problema —«copiamos pedidos a mano», «la web va lenta», «el equipo apunta los partes en papel»— y que la elección salga de ahí. Elegir la tecnología antes que el problema suele acabar mal.</p>' },
+  { q: '¿Trabajáis sobre proyectos que empezó otra persona?', a: '<p>Sí, y es buena parte del trabajo. Se empieza revisando el código y las dependencias, porque a veces continuar sale a cuenta y a veces no. Esa revisión se entrega aunque después no se siga.</p>' },
+  { q: '¿El código es nuestro?', a: '<p>Sí. El código y los accesos son del cliente, sin permanencia. Si un día decide llevárselo a otro equipo, se lo lleva.</p>' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Desarrollo y programación web',
+  serviceType: 'Desarrollo de software a medida',
+  url: canonical,
+  provider: PROVEEDOR,
+  areaServed: { '@type': 'AdministrativeArea', name: 'Provincia de Almería' },
+};
 ---
 
 <Sitio
   title="Programador web en Almería: desarrollo a medida | Platanito Rico"
   description="Desarrollo sobre lo que ya tienes: WordPress, Astro, React, Next.js, Node.js, Python, IA generativa, JavaScript y apps. Estudio en Vera, para toda la provincia de Almería."
   canonical={canonical}
+  type="service"
   jsonLd={jsonLd}
 >
-  <Marco>
-  <Breadcrumb items={[{ label: 'Inicio', href: '/' }, { label: 'Programador web' }]} />
-
-  <section class="hero">
-    <div class="container-brutal hero__in">
-      <div class="hero__col">
-        <p class="pw-ref">desarrollo · provincia de almería</p>
-        {/* El titular tiene que seguir diciendo qué es esta página: es la única
-            del clúster que aspira a la consulta provincial genérica. Un titular
-            solo ingenioso la dejaría sin el término por el que existe. */}
-        <h1 class="hero__h1">Programador web en Almería<br /><span class="hero__h1b">para lo que ya tienes montado</span></h1>
-        <p class="hero__lead">
-          Casi ningún encargo llega diciendo qué tecnología quiere. Llega diciendo que alguien
-          dedica dos horas al día a copiar datos de un sitio a otro, que la web tarda en cargar
-          o que el equipo sigue apuntando los partes en papel. La tecnología es la consecuencia,
-          no el punto de partida.
+  <!-- PORTADA -->
+  <section class="portada luces-portada">
+    <div class="contenedor portada__rejilla">
+      <div class="portada__texto">
+        <Migas items={[{ nombre: 'Programador web' }]} />
+        <p class="antetitulo">Programación a medida · Almería</p>
+        {/* El titular dice qué es la página: es la única del clúster que aspira
+            a la consulta provincial genérica. */}
+        <h1>Programador web en Almería <span class="h1b">para lo que ya tienes <span class="subrayado">montado</span></span></h1>
+        <p class="entradilla">
+          Casi ningún encargo llega diciendo qué tecnología quiere. Llega diciendo que alguien dedica dos horas al día a
+          copiar datos de un sitio a otro, que la web tarda en cargar o que el equipo sigue apuntando los partes en papel.
+          La tecnología es la consecuencia, no el punto de partida.
         </p>
-        <p class="hero__lead hero__lead--sec">
-          Si lo que buscas es una web desde cero, <a href="/diseno-web/">diseño web por
-          municipio</a> encaja mejor que esta sección.
+        <div class="portada__acciones">
+          <Boton href="/contacto/?servicio=programador">Cuéntame qué tienes montado</Boton>
+          <Boton href="#tecnologias" variante="secundario" icono="flecha-abajo">Ver tecnologías</Boton>
+        </div>
+        <p class="portada__nota">
+          ¿Buscas una web desde cero? <a href="/diseno-web/">Diseño web por municipio</a> encaja mejor.
         </p>
       </div>
-
-      {/* No es decoración: son las tres frases con las que más veces empieza una
-          conversación aquí, y sirven para que alguien se reconozca antes de
-          tener que elegir una tecnología que no conoce. */}
-      <aside class="sint pw-tram" aria-label="Señales de que esta sección es la tuya">
-        <p class="pw-ref sint__ref">si te suena alguna, es aquí</p>
-        <ul class="sint__l">
-          <li><span class="sint__s" aria-hidden="true">−</span>«Eso lo pasamos a mano todos los días.»</li>
-          <li><span class="sint__s" aria-hidden="true">−</span>«La hizo alguien que ya no está y nadie la toca.»</li>
-          <li><span class="sint__s" aria-hidden="true">−</span>«Va lenta y hemos probado de todo.»</li>
-        </ul>
-      </aside>
+      <div class="portada__escena fondo-iso">
+        <img
+          src="/iso/programador/integracion.svg"
+          alt="Escena isométrica: hoja de cálculo, programa de gestión y base de datos conectados con un motor de código que alimenta la web y la app"
+          width={integracion.ancho}
+          height={integracion.alto}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
     </div>
   </section>
 
-  <Seccion
-    ref="01 · reparto"
-    titulo="Desarrollo web a medida: empieza por el problema, no por la herramienta"
-    lead="Cada tecnología está aquí porque cubre una situación que las demás no cubren. Si dos hicieran lo mismo, sobraría una."
-    tono="panel"
-  >
-    <ul class="ind">
-      {tecnologias.map((t) => (
-        <li class="ind__i">
-          <a class="ind__a" href={rutaTecnologia(t.slug)}>
-            <span class="ind__lado">
-              <span class="pw-ref ind__ref">{t.slug}</span>
-              <span class="ind__n">{t.etiqueta}</span>
-            </span>
-            <span class="ind__cuerpo">
-              <span class="ind__int">{t.intencion}</span>
-              <span class="ind__para">Para {t.distintivo}.</span>
-            </span>
-            <span class="ind__marca" aria-hidden="true"></span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </Seccion>
+  <!-- SÍNTOMAS EN FORMATO DIFF -->
+  <section class="sintomas" aria-labelledby="sintomas-titulo">
+    <div class="contenedor">
+      <h2 id="sintomas-titulo" class="sintomas__titulo">Si te suena alguna de estas frases, es aquí</h2>
+      <ul class="diffs">
+        {sintomas.map((s, i) => (
+          <li class="diff tarjeta-hover" data-aparece style={`transition-delay:${i * 100}ms`}>
+            <p class="diff__hoy"><span aria-hidden="true">−</span><span><span class="solo-lector">Hoy: </span>{s.hoy}</span></p>
+            <p class="diff__luego"><span aria-hidden="true">+</span><span><span class="solo-lector">Después: </span>{s.luego}</span></p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-  <Seccion
-    ref="02 · sectores"
-    titulo="O empieza por tu sector"
-    lead="Lo que necesita una cantera de mármol no se parece a lo que necesita una alhóndiga o un hotel. Estas páginas van por ahí."
-  >
-    <Enlaces columnas={2} enlaces={SECTOR_HUBS.map((x) => ({
-      href: `/programador-web/sectores/${x.slug}/`,
-      texto: x.etiqueta,
-      sub: x.problemas[0].titulo,
-    }))} />
-  </Seccion>
+  <!-- TECNOLOGÍAS -->
+  <section class="seccion" id="tecnologias" aria-labelledby="tecnologias-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="tecnologias-titulo"
+        antetitulo="01 · Tecnologías"
+        titulo="Empieza por el problema, no por la herramienta"
+        entradilla="Cada tecnología está aquí porque cubre una situación que las demás no cubren. Si dos hicieran lo mismo, sobraría una."
+      />
+      <ul class="tecnologias">
+        {tecnologias.map((t, i) => (
+          <li class:list={['tec', { 'tec--grande': i === 0 }]} data-aparece style={`transition-delay:${(i % 3) * 70}ms`}>
+            <a href={rutaTecnologia(t.slug)} class="tec__enlace tarjeta-hover">
+              <img
+                class="tec__escena"
+                src={`/iso/programador/tec-${t.slug}.svg`}
+                alt=""
+                width={mini.ancho}
+                height={mini.alto}
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="tec__ref">{t.slug}</span>
+              <b class="tec__nombre">{t.etiqueta}</b>
+              <span class="tec__int">{t.intencion}</span>
+              <span class="tec__para">Para {t.distintivo}.</span>
+              <span class="tec__ir" aria-hidden="true"><Icono nombre="flecha" tamano={18} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-  <Seccion
-    ref="03 · método"
-    titulo="Cómo trabajamos"
-    lead="el mismo orden para los nueve casos, porque lo que cambia es la herramienta, no la forma de trabajar."
-  >
-    <ol class="pw-canal">
-      <li><strong>Entender el problema.</strong> Qué se hace hoy a mano, qué falla y cuánto cuesta que siga así.</li>
-      <li><strong>Decidir con criterio.</strong> Si la solución más simple es no programar nada, se dice.</li>
-      <li><strong>Presupuesto cerrado.</strong> Alcance escrito antes de empezar, para que no haya sorpresas por ninguna de las dos partes.</li>
-      <li><strong>Desarrollo por partes.</strong> Nunca sobre el sistema en producción: primero una copia donde probar.</li>
-      <li><strong>Entrega con marcha atrás.</strong> Copia previa y forma de volver al estado anterior si algo sale mal.</li>
-    </ol>
-  </Seccion>
+  <!-- SECTORES -->
+  <section class="seccion seccion--tinta sectores-seccion fondo-iso fondo-iso--claro" aria-labelledby="sectores-titulo">
+    <div class="contenedor">
+      <div class="sectores__cabeza">
+        <p class="antetitulo antetitulo--claro">02 · Sectores</p>
+        <h2 id="sectores-titulo">O empieza por tu sector</h2>
+        <p class="entradilla">Lo que necesita una cantera de mármol no se parece a lo que necesita una alhóndiga o un hotel. Estas páginas van por ahí.</p>
+      </div>
+      <ul class="sectores">
+        {SECTOR_HUBS.map((x, i) => (
+          <li data-aparece style={`transition-delay:${i * 80}ms`}>
+            <a href={`/programador-web/sectores/${x.slug}/`} class="sector tarjeta-hover">
+              <img src={`/iso/programador/sector-${x.slug}.svg`} alt="" width="300" height="260" loading="lazy" decoding="async" />
+              <span class="sector__nombre">{x.etiqueta}</span>
+              <span class="sector__problema">«{x.problemas[0].titulo}»</span>
+              <span class="sector__ir">Ver soluciones <Icono nombre="flecha" tamano={16} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-  <Seccion
-    ref="04 · zona"
-    titulo="Empresa de desarrollo web en la provincia de Almería"
-    lead="El estudio está en Vera. El desarrollo se trabaja en remoto y nos desplazamos para arrancar un proyecto o cerrar una entrega. No hay oficina en cada municipio: hay una, y cobertura provincial."
-    tono="panel"
-  >
-    <Enlaces
-      enlaces={municipios.filter((m) => m.slug !== 'almeria').map((m) => ({
-        href: `/programador-web/zona/${m.slug}/`,
-        texto: m.nombre,
-        sub: m.kmDesdeBase !== null ? `a ${m.kmDesdeBase} km de Vera · ${m.comarca}` : m.comarca,
-      }))}
-    />
-  </Seccion>
+  <!-- MÉTODO -->
+  <section class="seccion seccion--blanca" aria-labelledby="metodo-titulo">
+    <div class="contenedor">
+      <div class="metodo__cabeza">
+        <Encabezado
+          id="metodo-titulo"
+          antetitulo="03 · Método"
+          titulo="El mismo orden para los nueve casos"
+          entradilla="Lo que cambia es la herramienta, no la forma de trabajar."
+        />
+        <Ilustracion nombre="proceso" titulo="Recorrido isométrico por los pasos de un proyecto" class="metodo__ilustracion" />
+      </div>
+      <Pasos pasos={pasos} />
+    </div>
+  </section>
 
-  <Seccion ref="05 · dudas" titulo="Preguntas frecuentes">
-    <Faq faq={faq} />
-  </Seccion>
+  <!-- ZONA -->
+  <section class="seccion zona-seccion" aria-labelledby="zona-titulo">
+    <div class="contenedor zona">
+      <div class="zona__texto">
+        <Encabezado
+          id="zona-titulo"
+          antetitulo="04 · Zona"
+          titulo="Empresa de desarrollo web en la provincia de Almería"
+          entradilla="El estudio está en Vera. El desarrollo se trabaja en remoto y nos desplazamos para arrancar un proyecto o cerrar una entrega. No hay oficina en cada municipio: hay una, y cobertura provincial."
+        />
+        <ul class="municipios">
+          {municipios.map((m) => (
+            <li>
+              <a href={`/programador-web/zona/${m.slug}/`}>
+                <span>{m.nombre}</span>
+                {m.kmDesdeBase !== null && <small>{m.slug === 'vera' ? 'estudio' : `${m.kmDesdeBase} km`}</small>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="zona__mapa fondo-iso">
+        <Ilustracion nombre="mapa" titulo="Mapa isométrico de la provincia de Almería con el estudio de Vera conectado a los municipios" />
+      </div>
+    </div>
+  </section>
 
-  <Cta
+  <!-- PREGUNTAS -->
+  <section class="seccion seccion--blanca" aria-labelledby="preguntas-titulo">
+    <div class="contenedor dos-columnas">
+      <div>
+        <IconoIso nombre="codigo" tono="tinta" tamano={84} />
+        <Encabezado id="preguntas-titulo" antetitulo="05 · Dudas" titulo="Preguntas frecuentes" />
+      </div>
+      <Preguntas preguntas={preguntas} />
+    </div>
+  </section>
+
+  <LlamadaFinal
     titulo="Cuéntame qué tienes montado y qué falla"
     texto="Con saber qué sistema usáis y qué se hace hoy a mano suele bastar para decir si tiene arreglo, cuánto trabajo es y si merece la pena."
-    servicio="Desarrollo a medida"
+    servicio="programador"
   />
-  </Marco>
 </Sitio>
 
 <style>
-  .hero { padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(2rem, 4vw, 3rem); }
-  .hero__in { display: grid; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; }
-  @media (min-width: 1000px) { .hero__in { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
-
-  .sint { border: 1px solid var(--pw-regla-2); background: var(--pw-panel); padding: 1.4rem 1.5rem 1.5rem; }
-  .sint__ref { margin: 0 0 1rem; }
-  .sint__l { list-style: none; margin: 0; padding: 0; display: grid; gap: .9rem; }
-  .sint__l li {
-    display: grid; grid-template-columns: 1.2rem 1fr; gap: .6rem;
-    color: var(--pw-texto); font-style: italic; line-height: 1.5;
+  /* Portada */
+  .portada {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(2.5rem, 2rem + 3vw, 4.5rem);
+    overflow: hidden;
   }
-  .sint__s { font-family: var(--font-mono, monospace); color: var(--pw-hoy); font-weight: 700; font-style: normal; }
-  .hero__h1 {
-    font-size: clamp(2.2rem, 6.5vw, 4rem); font-weight: 800;
-    letter-spacing: -.045em; line-height: .98; margin: .5rem 0 1.4rem;
-    max-width: 18ch;
+  .portada__rejilla {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
   }
-  .hero__h1b { color: var(--pw-tenue); font-weight: 700; }
-  .hero__lead { max-width: 60ch; font-size: 1.1rem; line-height: 1.65; margin: 0 0 1rem; }
-  .hero__lead--sec { color: var(--pw-tenue); font-size: 1rem; }
+  .portada__texto {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .portada h1 {
+    font-size: var(--t-4xl);
+  }
+  .h1b {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.48em;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--tinta-2);
+  }
+  .portada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .portada__nota {
+    font-size: var(--t-s);
+    color: var(--tenue);
+  }
+  .portada__nota a {
+    color: var(--verde);
+    font-weight: 650;
+  }
+  .portada__escena {
+    justify-self: center;
+    width: 100%;
+    max-width: 760px;
+  }
+  .portada__escena img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (min-width: 1000px) {
+    .portada__rejilla {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.5rem;
+    }
+    .portada__escena {
+      margin-right: -3rem;
+    }
+  }
 
-  /* Índice de intenciones: se lee por el problema, no por el nombre de la
-     herramienta. La columna izquierda fija el nombre y la derecha dice cuándo
-     toca, para poder barrer con la vista sin leerlo todo. */
-  .ind { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--pw-regla-2); }
-  .ind__i { border-bottom: 1px solid var(--pw-regla); }
-  .ind__a {
-    position: relative; display: grid; gap: .5rem 2rem;
-    padding: 1.35rem 2rem 1.45rem .2rem;
+  /* Síntomas como diff */
+  .sintomas {
+    padding-block: 0 clamp(3rem, 2rem + 3vw, 5rem);
+  }
+  .sintomas__titulo {
+    font-size: var(--t-xl);
+    margin-bottom: 1.25rem;
+  }
+  .diffs {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .diff {
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.9rem;
+  }
+  .diff p {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.25rem;
+    padding: 0.9rem 1.1rem;
+    line-height: 1.5;
+  }
+  .diff__hoy {
+    background: #fdece6;
+    color: #8f2c10;
+  }
+  .diff__hoy > span:first-child {
+    color: #b93a16;
+    font-weight: 800;
+  }
+  .diff__luego {
+    background: var(--verde-suave);
+    color: var(--verde-2);
+    font-weight: 600;
+  }
+  .diff__luego > span:first-child {
+    color: var(--verde);
+    font-weight: 800;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .diff__hoy > span:last-child {
+      background-image: linear-gradient(rgba(185, 58, 22, 0.6), rgba(185, 58, 22, 0.6));
+      background-size: 0% 1.5px;
+      background-position: 0 55%;
+      background-repeat: no-repeat;
+      transition: background-size 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .diff:hover .diff__hoy > span:last-child {
+      background-size: 100% 1.5px;
+    }
+  }
+  @media (min-width: 900px) {
+    .diffs {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Tecnologías */
+  .tecnologias {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .tec__enlace {
+    position: relative;
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    height: 100%;
+    padding: 1.5rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
     text-decoration: none;
-    transition: background .18s var(--pw-curva), padding-left .18s var(--pw-curva);
+    overflow: hidden;
   }
-  .ind__a:hover, .ind__a:focus-visible { background: var(--pw-panel); padding-left: .7rem; }
-  .ind__a:focus-visible { outline: 2px solid var(--pw-marca); outline-offset: -2px; }
-  .ind__lado { display: flex; flex-direction: column; gap: .15rem; }
-  .ind__ref { opacity: .75; }
-  .ind__n { font-family: var(--font-display, sans-serif); font-size: 1.3rem; font-weight: 700; color: var(--pw-texto); letter-spacing: -.02em; }
-  .ind__cuerpo { display: flex; flex-direction: column; gap: .3rem; }
-  .ind__int { color: var(--pw-suave); line-height: 1.55; font-size: .97rem; }
-  .ind__para { color: var(--pw-luego); font-size: .88rem; }
-  .ind__marca {
-    position: absolute; right: .3rem; top: 1.7rem;
-    width: 9px; height: 9px;
-    border-top: 1px solid var(--pw-regla-2); border-right: 1px solid var(--pw-regla-2);
-    transition: border-color .18s var(--pw-curva), transform .18s var(--pw-curva);
+  .tec__escena {
+    width: 92px;
+    height: auto;
+    margin-bottom: 0.75rem;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1.3);
   }
-  .ind__a:hover .ind__marca, .ind__a:focus-visible .ind__marca { border-color: var(--pw-marca); transform: translateX(3px); }
-  @media (min-width: 820px) {
-    .ind__a { grid-template-columns: 13rem minmax(0, 1fr); align-items: start; }
+  .tec__enlace:hover .tec__escena {
+    transform: translateY(-4px) rotate(-3deg) scale(1.05);
+  }
+  .tec__ref {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: var(--t-xs);
+    color: var(--tenue);
+  }
+  .tec__nombre {
+    font-size: var(--t-xl);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .tec__int {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+  }
+  .tec__para {
+    margin-top: 0.4rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--linea-2);
+    font-size: var(--t-s);
+    font-weight: 650;
+    color: var(--verde);
+  }
+  .tec__ir {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--fondo-2);
+    color: var(--verde);
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
+  }
+  .tec__enlace:hover .tec__ir {
+    transform: rotate(-45deg);
+    background: var(--verde);
+    color: #fff;
+  }
+  .tec--grande .tec__enlace {
+    color: #fff;
+    background:
+      radial-gradient(80% 70% at 80% 20%, rgba(255, 207, 63, 0.22), transparent 70%),
+      linear-gradient(160deg, #16724a, var(--verde) 60%, var(--verde-2));
+    border-color: var(--verde-2);
+  }
+  .tec--grande .tec__ref,
+  .tec--grande .tec__int {
+    color: #d5ecdf;
+  }
+  .tec--grande .tec__para {
+    color: var(--platano);
+    border-top-color: rgba(255, 255, 255, 0.2);
+  }
+  .tec--grande .tec__ir {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+  .tec:nth-child(4) .tec__enlace,
+  .tec:nth-child(8) .tec__enlace {
+    background: linear-gradient(160deg, #fff7d6, #fff0bc);
+    border-color: #f3e2a6;
+  }
+  @media (min-width: 700px) {
+    .tecnologias {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .tec--grande {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 1050px) {
+    .tecnologias {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .tec--grande {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .tec--grande .tec__enlace {
+      align-content: end;
+      padding: 2.25rem;
+    }
+    .tec--grande .tec__escena {
+      width: 300px;
+      margin: -0.5rem 0 auto auto;
+    }
+    .tec--grande .tec__nombre {
+      font-size: var(--t-3xl);
+    }
+    .tec--grande .tec__int {
+      font-size: var(--t-l);
+      max-width: 40ch;
+    }
   }
 
-  .pw-canal > li strong { color: var(--pw-texto); }
-  .pw-canal > li { color: var(--pw-suave); line-height: 1.6; }
+  /* Sectores */
+  .sectores-seccion {
+    overflow: hidden;
+  }
+  .sectores__cabeza {
+    display: grid;
+    gap: 1rem;
+    max-width: 46rem;
+    margin-bottom: 2.5rem;
+  }
+  .sectores__cabeza .entradilla {
+    color: #c9ccc2;
+  }
+  .sectores {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .sector {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    height: 100%;
+    padding: 1.25rem 1.25rem 1.5rem;
+    border-radius: var(--radio-l);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #2c3128;
+    color: #fff;
+    text-decoration: none;
+  }
+  .sector:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #3d4339;
+  }
+  .sector img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 14px;
+    background: radial-gradient(70% 70% at 50% 60%, #fff, #f1f0ea);
+  }
+  .sector__nombre {
+    font-weight: 780;
+    font-size: var(--t-l);
+    letter-spacing: -0.02em;
+  }
+  .sector__problema {
+    color: #b4b8ad;
+    font-size: var(--t-s);
+  }
+  .sector__ir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.5rem;
+    color: var(--platano);
+    font-weight: 680;
+    font-size: var(--t-s);
+  }
+  @media (min-width: 640px) {
+    .sectores {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1050px) {
+    .sectores {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* Método */
+  .metodo__cabeza {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .metodo__cabeza :global(.metodo__ilustracion) {
+    max-width: 420px;
+    justify-self: center;
+  }
+  @media (min-width: 900px) {
+    .metodo__cabeza {
+      grid-template-columns: 1fr 440px;
+    }
+  }
+
+  /* Zona */
+  .zona {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .municipios {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .municipios a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--linea-2);
+    background: var(--superficie);
+    font-size: var(--t-s);
+    font-weight: 650;
+    text-decoration: none;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  .municipios a:hover {
+    border-color: var(--verde);
+    background: var(--verde-suave);
+  }
+  .municipios small {
+    font-size: var(--t-xs);
+    font-weight: 600;
+    color: var(--tenue);
+  }
+  .zona__mapa :global(.ilustracion) {
+    max-width: 680px;
+    margin-inline: auto;
+  }
+  @media (min-width: 1000px) {
+    .zona {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 3rem;
+    }
+  }
+
+  .dos-columnas {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 960px) {
+    .dos-columnas {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
 </style>
