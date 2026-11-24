@@ -32,6 +32,7 @@ Rediseño vigente desde noviembre de 2026: ver `docs/rediseno-2026-11.md`.
 - **Servicio × municipio**: `PlantillaPueblo.astro` + `ContenidoPueblo`. Diseño web: `src/data/servicios/pueblo-web.ts` (texto nuevo de los 25 municipios indexables en `src/data/textos-pueblos.ts`; el resto hereda de `landings.ts`). Informática: `pueblo-it.ts`. Todo texto heredado pasa por `sinPrecios()`.
 - Indexación de municipios: `src/data/pueblos-indexables.ts`. Clúster `/programador-web/`: lógica y compuertas en `src/data/tecnologias.ts`, `programador-gate.ts`, `sectores.ts`; sus componentes están en `src/components/programador/` y toman la paleta de `Marco.astro`.
 - Navegación y catálogo de servicios: `src/data/navegacion.ts`.
+- Marca (plátano de vóxeles): `src/lib/marca.ts`. Tras cambiarla, `npx tsx src/scripts/generar-marca.ts` regenera `public/favicon.svg` (también logo de cabecera y pie), `favicon.ico` e `imagenes/icon.png`.
 - Formulario: `Formulario.astro` → `POST /api/contact/` (JSON con JS, redirección a `/success/` sin JS). Exige la casilla `privacidad`.
 
 ## Contenido del blog

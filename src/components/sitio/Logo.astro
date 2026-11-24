@@ -1,19 +1,16 @@
 ---
-/* Marca: cubo isométrico (cara superior plátano, laterales verdes) + nombre. */
+/* Marca: plátano de vóxeles en isométrico (src/lib/marca.ts) + nombre.
+   El plátano se sirve como /favicon.svg: un solo fichero en caché para
+   favicon, cabecera y pie. Al pasar el ratón da un salto «a píxeles». */
 interface Props {
   tamano?: number;
   claro?: boolean;
 }
-const { tamano = 30, claro = false } = Astro.props;
+const { tamano = 34, claro = false } = Astro.props;
 ---
 
 <span class:list={['logo', { 'logo--claro': claro }]}>
-  <svg width={tamano} height={tamano} viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-    <path d="M16 2 29 9.5 16 17 3 9.5Z" fill="#FFCF3F" />
-    <path d="M3 9.5 16 17v13.5L3 23Z" fill="#0E5B3A" />
-    <path d="M29 9.5 16 17v13.5L29 23Z" fill="#0A472D" />
-    <path d="M16 6.2 21.8 9.5 16 12.8 10.2 9.5Z" fill="#FFF4CC" />
-  </svg>
+  <img class="logo__marca" src="/favicon.svg" width={tamano} height={tamano} alt="" decoding="async" />
   <span class="logo__nombre">platanito<b>rico</b></span>
 </span>
 
@@ -21,8 +18,26 @@ const { tamano = 30, claro = false } = Astro.props;
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     color: var(--tinta);
+  }
+  .logo__marca {
+    display: block;
+    flex: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(a:hover) > .logo .logo__marca,
+    .logo:hover .logo__marca {
+      animation: salto-pixel 0.5s steps(4) both;
+    }
+  }
+  @keyframes salto-pixel {
+    40% {
+      transform: translateY(-4px) rotate(-8deg);
+    }
+    70% {
+      transform: translateY(-1px) rotate(3deg);
+    }
   }
   .logo__nombre {
     font-weight: 780;
