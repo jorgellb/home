@@ -30,28 +30,34 @@ const zonas = comarcas
 
     <div class="pie__columnas">
       <nav aria-label="Servicios">
-        <p class="pie__titulo">Servicios</p>
-        <ul>
-          {SERVICIOS.map((s) => <li><a href={s.href}>{s.nombre}</a></li>)}
-          <li><a href="/plan-360/">Plan 360</a></li>
-        </ul>
+        <details class="pie__grupo" open>
+          <summary class="pie__titulo">Servicios <Icono nombre="chevron-abajo" tamano={18} /></summary>
+          <ul>
+            {SERVICIOS.map((s) => <li><a href={s.href}>{s.nombre}</a></li>)}
+            <li><a href="/plan-360/">Plan 360</a></li>
+          </ul>
+        </details>
       </nav>
       {zonas.slice(0, 3).map((z) => (
         <nav aria-label={`Municipios de ${z.comarca}`}>
-          <p class="pie__titulo">{z.comarca}</p>
-          <ul>
-            {z.pueblos.slice(0, 8).map((p) => <li><a href={`/diseno-web/${p.slug}/`}>Diseño web en {p.nombre}</a></li>)}
-          </ul>
+          <details class="pie__grupo" open>
+            <summary class="pie__titulo">{z.comarca} <Icono nombre="chevron-abajo" tamano={18} /></summary>
+            <ul>
+              {z.pueblos.slice(0, 8).map((p) => <li><a href={`/diseno-web/${p.slug}/`}>Diseño web en {p.nombre}</a></li>)}
+            </ul>
+          </details>
         </nav>
       ))}
       <nav aria-label="Estudio">
-        <p class="pie__titulo">Estudio</p>
-        <ul>
-          <li><a href="/diseno-web/">Todas las zonas</a></li>
-          <li><a href="/blog/">Blog</a></li>
-          <li><a href="/marketing/auditoria/">Auditoría gratuita</a></li>
-          <li><a href="/contacto/">Contacto</a></li>
-        </ul>
+        <details class="pie__grupo" open>
+          <summary class="pie__titulo">Estudio <Icono nombre="chevron-abajo" tamano={18} /></summary>
+          <ul>
+            <li><a href="/diseno-web/">Todas las zonas</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/marketing/auditoria/">Auditoría gratuita</a></li>
+            <li><a href="/contacto/">Contacto</a></li>
+          </ul>
+        </details>
       </nav>
     </div>
 
@@ -69,6 +75,21 @@ const zonas = comarcas
     <text x="500" y="150" text-anchor="middle" font-weight="800" font-size="214" letter-spacing="-14" fill="#23281f">platanito<tspan fill="none" stroke="#3a4235" stroke-width="2">rico</tspan></text>
   </svg>
 </footer>
+
+<script>
+  /* En móvil las columnas del pie se pliegan (acordeón); en escritorio van
+     siempre abiertas. Sin JS quedan abiertas: los enlaces están siempre en el HTML. */
+  const grupos = document.querySelectorAll<HTMLDetailsElement>('.pie__grupo');
+  const ancho = window.matchMedia('(min-width: 800px)');
+  const sincronizar = () => grupos.forEach((d) => (d.open = ancho.matches));
+  sincronizar();
+  ancho.addEventListener('change', sincronizar);
+  grupos.forEach((d) =>
+    d.querySelector('summary')?.addEventListener('click', (e) => {
+      if (ancho.matches) e.preventDefault();
+    }),
+  );
+</script>
 
 <style>
   .pie__gigante {
@@ -115,6 +136,11 @@ const zonas = comarcas
     gap: 0.6rem;
     align-content: start;
   }
+  .pie__contacto li {
+    min-height: 2rem;
+    display: flex;
+    align-items: center;
+  }
   .pie__contacto a,
   .pie__contacto span {
     display: inline-flex;
@@ -131,12 +157,64 @@ const zonas = comarcas
     padding-block: 2.5rem;
   }
   .pie__titulo {
-    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     color: #fff;
     font-weight: 700;
+    list-style: none;
+  }
+  .pie__titulo::-webkit-details-marker {
+    display: none;
+  }
+  .pie__titulo :global(.icono) {
+    color: var(--platano);
+    transition: transform 0.25s;
+  }
+  .pie__grupo[open] .pie__titulo :global(.icono) {
+    transform: rotate(180deg);
+  }
+  .pie__grupo ul {
+    padding-top: 0.85rem;
   }
   .pie__columnas li + li {
     margin-top: 0.45rem;
+  }
+  /* Móvil: acordeón con filas táctiles */
+  @media (max-width: 799px) {
+    .pie__columnas {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-block: 1rem 2rem;
+    }
+    .pie__columnas nav {
+      border-bottom: 1px solid #2c3128;
+    }
+    .pie__titulo {
+      min-height: 3.25rem;
+      cursor: pointer;
+    }
+    .pie__grupo ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.2rem 1rem;
+      padding: 0 0 1.25rem;
+    }
+    .pie__columnas li + li {
+      margin-top: 0;
+    }
+    .pie__grupo li a {
+      display: block;
+      padding-block: 0.45rem;
+    }
+  }
+  @media (min-width: 800px) {
+    .pie__titulo :global(.icono) {
+      display: none;
+    }
+    .pie__titulo {
+      cursor: default;
+    }
   }
   .pie__base {
     display: flex;
