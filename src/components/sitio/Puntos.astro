@@ -1,21 +1,38 @@
 ---
-/* Rejilla de tarjetas con icono, título y texto. */
-import Icono from './Icono.astro';
+/* Composición bento: la primera pieza destaca a doble tamaño en verde; el
+   resto lleva numeración editorial y alterna tonos. Iconos isométricos. */
+import IconoIso from './IconoIso.astro';
 import type { Punto } from '../../data/servicios/tipos';
 
 interface Props {
   items: Punto[];
-  /** Fondo de las tarjetas: claro sobre sección blanca, blanco sobre fondo. */
+  /** Fondo de la sección: las tarjetas claras se adaptan para contrastar. */
   sobre?: 'fondo' | 'blanco';
   columnas?: 2 | 3 | 4;
+  /** Sin pieza destacada (listas cortas o muy homogéneas). */
+  plano?: boolean;
 }
-const { items, sobre = 'fondo', columnas = 3 } = Astro.props;
+const { items, sobre = 'fondo', columnas: pedidas = 3, plano = false } = Astro.props;
+/* Elige columnas y forma de la pieza destacada para que la rejilla cuadre sin
+   huecos: 2×2 ocupa n+3 celdas; 2×1, n+1. */
+const n = items.length;
+const opciones = [pedidas, pedidas === 4 ? 3 : 4].flatMap((c) => [
+  { c, forma: 'cuadrada' as const, ok: (n + 3) % c === 0 },
+  { c, forma: 'ancha' as const, ok: (n + 1) % c === 0 },
+]);
+const elegida = plano || n < 4 ? null : (opciones.find((o) => o.ok) ?? null);
+const columnas = elegida?.c ?? pedidas;
+const destacar = Boolean(elegida);
+const tono = (i: number) => (destacar && i === 0 ? 'destacada' : i % 4 === 2 ? 'calida' : 'clara');
 ---
 
-<ul class:list={['puntos', `puntos--${columnas}`, `puntos--sobre-${sobre}`]}>
+<ul class:list={['bento', `bento--${columnas}`, `bento--sobre-${sobre}`, { 'bento--destacada': destacar, [`bento--${elegida?.forma}`]: destacar }]}>
   {items.map((p, i) => (
-    <li class="punto" data-aparece style={`transition-delay:${(i % columnas) * 80}ms`}>
-      {p.icono && <span class="insignia"><Icono nombre={p.icono} tamano={28} /></span>}
+    <li class:list={['pieza', `pieza--${tono(i)}`, 'tarjeta-hover']} data-aparece style={`transition-delay:${(i % columnas) * 70}ms`}>
+      <div class="pieza__cabeza">
+        {p.icono && <IconoIso nombre={p.icono} tamano={tono(i) === 'destacada' ? 92 : 64} tono={tono(i) === 'destacada' ? 'platano' : tono(i) === 'calida' ? 'tinta' : 'verde'} />}
+        <span class="pieza__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+      </div>
       <h3>{p.t}</h3>
       <p set:html={p.d} />
     </li>
@@ -23,46 +40,122 @@ const { items, sobre = 'fondo', columnas = 3 } = Astro.props;
 </ul>
 
 <style>
-  .puntos {
+  .bento {
     list-style: none;
     display: grid;
     gap: 1rem;
   }
-  .punto {
+  .pieza {
+    position: relative;
     display: grid;
-    gap: 0.6rem;
+    gap: 0.7rem;
     align-content: start;
-    padding: 1.6rem;
+    padding: 1.6rem 1.6rem 1.8rem;
     border-radius: var(--radio-l);
     border: 1px solid var(--linea);
-  }
-  .puntos--sobre-fondo .punto {
     background: var(--superficie);
+    overflow: hidden;
   }
-  .puntos--sobre-blanco .punto {
+  .bento--sobre-blanco .pieza--clara {
     background: var(--fondo);
   }
-  .punto h3 {
+  .pieza__cabeza {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+  }
+  .pieza__num {
+    font-weight: 800;
+    font-size: 2.6rem;
+    line-height: 0.85;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1.25px var(--linea-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .pieza h3 {
     font-size: var(--t-l);
   }
-  .punto p {
+  .pieza p {
     color: var(--tinta-2);
     font-size: var(--t-s);
   }
-  .punto p :global(a) {
+  .pieza p :global(a) {
     color: var(--verde);
+    font-weight: 650;
   }
+
+  .pieza--calida {
+    background: linear-gradient(160deg, #fff7d6 0%, #fff1bf 100%);
+    border-color: #f3e2a6;
+  }
+  .pieza--calida .pieza__num {
+    -webkit-text-stroke-color: #e9c95e;
+  }
+
+  .pieza--destacada {
+    color: #fff;
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(255, 207, 63, 0.22), transparent 55%),
+      linear-gradient(160deg, #16724a 0%, var(--verde) 60%, var(--verde-2) 100%);
+    border-color: var(--verde-2);
+    padding: 2rem;
+  }
+  .pieza--destacada h3 {
+    font-size: var(--t-xl);
+    color: #fff;
+  }
+  .pieza--destacada p {
+    color: #d5ecdf;
+    font-size: var(--t-m);
+    max-width: 38ch;
+  }
+  .pieza--destacada p :global(a) {
+    color: var(--platano);
+  }
+  .pieza--destacada .pieza__num {
+    -webkit-text-stroke-color: rgba(255, 255, 255, 0.35);
+    font-size: 4rem;
+  }
+  .pieza--destacada::after {
+    content: '';
+    position: absolute;
+    inset: auto -20% -40% auto;
+    width: 70%;
+    aspect-ratio: 1;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='32' viewBox='0 0 56 32'%3E%3Cpath d='M0 16 28 0l28 16-28 16Z' fill='none' stroke='%23FFFFFF' stroke-opacity='.08'/%3E%3C/svg%3E");
+    background-size: 56px 32px;
+    -webkit-mask-image: radial-gradient(closest-side, #000, transparent);
+    mask-image: radial-gradient(closest-side, #000, transparent);
+    pointer-events: none;
+  }
+
   @media (min-width: 700px) {
-    .puntos {
+    .bento {
       grid-template-columns: repeat(2, 1fr);
+    }
+    .bento--destacada .pieza--destacada {
+      grid-column: 1 / -1;
     }
   }
   @media (min-width: 1000px) {
-    .puntos--3 {
+    .bento--3 {
       grid-template-columns: repeat(3, 1fr);
     }
-    .puntos--4 {
+    .bento--4 {
       grid-template-columns: repeat(4, 1fr);
+    }
+    .bento--destacada .pieza--destacada {
+      grid-column: span 2;
+      align-content: end;
+    }
+    .bento--cuadrada .pieza--destacada {
+      grid-row: span 2;
+    }
+    .bento--destacada .pieza--destacada .pieza__cabeza {
+      margin-bottom: auto;
+      padding-bottom: 2rem;
     }
   }
 </style>

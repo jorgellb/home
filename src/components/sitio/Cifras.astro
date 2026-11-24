@@ -1,0 +1,105 @@
+---
+/* Banda de cifras: números grandes que cuentan al entrar (solo CSS, ver
+   .contador en sitio.css). Solo datos verificables del propio repositorio. */
+import { CIFRAS, aniosEnAlmeria } from '../../data/negocio';
+import { pueblos } from '../../data/pueblos-almeria';
+import { pueblosIT } from '../../data/servicios-it';
+import { ORDEN_TECNOLOGIAS } from '../../data/tecnologias';
+
+interface Props {
+  tono?: 'claro' | 'oscuro';
+}
+const { tono = 'claro' } = Astro.props;
+
+const [entero, decimal] = String(CIFRAS.valoracion).split('.');
+const cifras = [
+  { fin: Number(entero), sufijo: decimal ? `,${decimal}` : '', etiqueta: `de media en ${CIFRAS.numResenas} reseñas de Google`, estrella: true },
+  { fin: aniosEnAlmeria(), sufijo: '', etiqueta: 'años trabajando para negocios de Almería' },
+  { fin: pueblos.length, sufijo: '', etiqueta: 'municipios estudiados uno a uno' },
+  { fin: pueblosIT.length, sufijo: '', etiqueta: 'con técnico en tu empresa el mismo día' },
+  { fin: ORDEN_TECNOLOGIAS.length, sufijo: '', etiqueta: 'tecnologías con las que programamos' },
+  { fin: CIFRAS.respuestaHoras, prefijo: '<', sufijo: ' h', etiqueta: 'para responder a tu mensaje' },
+];
+---
+
+<section class:list={['cifras', `cifras--${tono}`]} aria-label="El estudio en cifras">
+  <div class="contenedor">
+    <ul class="cifras__rejilla">
+      {cifras.map((c) => (
+        <li class="cifra">
+          <p class="cifra__valor">
+            <span class="solo-lector">{c.prefijo ?? ''}{c.fin}{c.sufijo}</span>
+            <span aria-hidden="true">
+              {c.prefijo && <span class="cifra__extra">{c.prefijo}</span>}
+              <span class="contador" style={`--fin:${c.fin}`}></span>
+              {c.sufijo && <span class="cifra__extra">{c.sufijo}</span>}
+              {c.estrella && <span class="cifra__estrella">★</span>}
+            </span>
+          </p>
+          <p class="cifra__etiqueta">{c.etiqueta}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cifras {
+    padding-block: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+  .cifras--oscuro {
+    background: var(--tinta);
+    color: #fff;
+  }
+  .cifras__rejilla {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+  }
+  .cifra {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+    padding-top: 1rem;
+    border-top: 2px solid var(--tinta);
+  }
+  .cifras--oscuro .cifra {
+    border-top-color: var(--platano);
+  }
+  .cifra__valor {
+    font-weight: 800;
+    font-size: clamp(2.6rem, 1.8rem + 3vw, 4.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+  }
+  .cifra__extra {
+    font-size: 0.6em;
+    letter-spacing: -0.03em;
+  }
+  .cifra__estrella {
+    margin-left: 0.15em;
+    font-size: 0.5em;
+    vertical-align: 0.6em;
+    color: #e9a91c;
+  }
+  .cifra__etiqueta {
+    font-size: var(--t-s);
+    color: var(--tinta-2);
+    max-width: 22ch;
+    line-height: 1.4;
+  }
+  .cifras--oscuro .cifra__etiqueta {
+    color: #b4b8ad;
+  }
+  @media (min-width: 760px) {
+    .cifras__rejilla {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1100px) {
+    .cifras__rejilla {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+</style>

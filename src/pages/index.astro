@@ -2,17 +2,20 @@
 import { getCollection } from 'astro:content';
 import Sitio from '../layouts/Sitio.astro';
 import Boton from '../components/sitio/Boton.astro';
-import Icono, { type NombreIcono } from '../components/sitio/Icono.astro';
+import Icono from '../components/sitio/Icono.astro';
+import type { NombreEscena } from '../lib/escenas';
 import Ilustracion from '../components/sitio/Ilustracion.astro';
 import IconoServicio from '../components/sitio/IconoServicio.astro';
+import IconoIso from '../components/sitio/IconoIso.astro';
+import Cifras from '../components/sitio/Cifras.astro';
 import Encabezado from '../components/sitio/Encabezado.astro';
 import Pasos from '../components/sitio/Pasos.astro';
 import Casos from '../components/sitio/Casos.astro';
 import Preguntas from '../components/sitio/Preguntas.astro';
 import Guia from '../components/sitio/Guia.astro';
 import LlamadaFinal from '../components/sitio/LlamadaFinal.astro';
-import { SERVICIOS, GRUPOS } from '../data/navegacion';
-import { CIFRAS, PROVEEDOR, SITE, aniosEnAlmeria } from '../data/negocio';
+import { SERVICIOS } from '../data/navegacion';
+import { CIFRAS, PROVEEDOR, SITE } from '../data/negocio';
 import { comarcas, getPueblosByComarca } from '../data/pueblos-almeria';
 import { esPuebloIndexable } from '../data/pueblos-indexables';
 
@@ -24,11 +27,19 @@ const fecha = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month
 const valoracion = String(CIFRAS.valoracion).replace('.', ',');
 
 /* Problemas que resolvemos: se habla del negocio, no de la tecnología. */
-const problemas: { icono: NombreIcono; t: string; d: string }[] = [
-  { icono: 'buscar', t: 'No te encuentran en Google', d: 'Tu competencia sale antes en búsquedas y en el mapa, aunque tú lo hagas mejor. Casi siempre es cuestión de estructura, ficha de Google y contenido local.' },
-  { icono: 'rayo', t: 'Tu web no convierte', d: 'Recibe visitas, pero no llamadas. Suele fallar lo básico: tarda en cargar en el móvil, no dice claro qué haces o esconde el teléfono.' },
-  { icono: 'servidor', t: 'La informática te frena', d: 'Equipos lentos, copias que nadie comprueba y un wifi que se cae. Son horas de trabajo perdidas cada semana, y nadie las está contando.' },
+const problemas: { t: string; d: string; escena: NombreEscena; solucion: string; href: string }[] = [
+  { t: 'No te encuentran en Google', d: 'Tu competencia sale antes en búsquedas y en el mapa, aunque tú lo hagas mejor. Casi siempre es cuestión de estructura, ficha de Google y contenido local.', escena: 'marketing', solucion: 'SEO local y ficha de Google trabajados a fondo', href: '/marketing/' },
+  { t: 'Tu web no convierte', d: 'Recibe visitas, pero no llamadas. Suele fallar lo básico: tarda en cargar en el móvil, no dice claro qué haces o esconde el teléfono.', escena: 'web', solucion: 'Una web rápida, clara y pensada para que te contacten', href: '/desarrollo-web/' },
+  { t: 'La informática te frena', d: 'Equipos lentos, copias que nadie comprueba y un wifi que se cae. Son horas de trabajo perdidas cada semana, y nadie las está contando.', escena: 'informatica', solucion: 'Mantenimiento con técnico en tu empresa el mismo día', href: '/informatica-empresas/' },
 ];
+
+/* Piezas grandes del bento de servicios (el resto, con su icono isométrico). */
+const GRANDES: Record<string, { forma: 'cuadrada' | 'ancha'; tono: 'verde' | 'calida' | 'tinta' | 'cielo' }> = {
+  web: { forma: 'cuadrada', tono: 'verde' },
+  tienda: { forma: 'ancha', tono: 'calida' },
+  marketing: { forma: 'ancha', tono: 'cielo' },
+  informatica: { forma: 'ancha', tono: 'tinta' },
+};
 
 /* Guía de valor: lo que debe tener cualquier web antes de pagar por ella. */
 const comprobaciones = [
@@ -105,6 +116,7 @@ const jsonLd = [
 >
   <!-- PORTADA -->
   <section class="portada">
+    <div class="portada__luces" aria-hidden="true"></div>
     <div class="contenedor portada__rejilla">
       <div class="portada__texto">
         <p class="antetitulo">Estudio digital en Almería · desde {CIFRAS.anioFundacion}</p>
@@ -117,20 +129,16 @@ const jsonLd = [
           <Boton href="/contacto/">Cuéntanos tu proyecto</Boton>
           <Boton href="#servicios" variante="secundario" icono="flecha-abajo">Ver qué hacemos</Boton>
         </div>
-        <ul class="portada__confianza">
-          <li>
-            <span class="estrellas" aria-hidden="true">★★★★★</span>
-            <span><b>{valoracion}</b> en {CIFRAS.numResenas} reseñas de Google</span>
-          </li>
-          <li><Icono nombre="reloj" tamano={18} /><span>Respuesta en <b>&lt; {CIFRAS.respuestaHoras} h</b></span></li>
-          <li><Icono nombre="ubicacion" tamano={18} /><span><b>{aniosEnAlmeria()} años</b> en Almería</span></li>
-        </ul>
+        <p class="portada__sello">
+          <span class="estrellas" aria-hidden="true">★★★★★</span>
+          <span><b>{valoracion}</b> en {CIFRAS.numResenas} reseñas de Google</span>
+        </p>
       </div>
       <div class="portada__escena fondo-iso">
         <Ilustracion nombre="portada" titulo="Diorama isométrico: el estudio de Vera conectado con una web, un móvil y los clientes que llegan" class="portada__ilustracion" prioridad />
-        <span class="flotante flotante--1"><span class="insignia"><Icono nombre="pincel" tamano={18} /></span>Diseño a medida</span>
-        <span class="flotante flotante--2" style="--retraso:-2.3s"><span class="insignia"><Icono nombre="ubicacion" tamano={18} /></span>SEO local</span>
-        <span class="flotante flotante--3" style="--retraso:-4.6s"><span class="insignia"><Icono nombre="llave" tamano={18} /></span>Todo a tu nombre</span>
+        <span class="flotante flotante--1"><IconoIso nombre="pincel" tono="verde" tamano={34} />Diseño a medida</span>
+        <span class="flotante flotante--2" style="--retraso:-2.3s"><IconoIso nombre="ubicacion" tono="platano" tamano={34} />SEO local</span>
+        <span class="flotante flotante--3" style="--retraso:-4.6s"><IconoIso nombre="llave" tono="tinta" tamano={34} />Todo a tu nombre</span>
       </div>
     </div>
   </section>
@@ -145,6 +153,8 @@ const jsonLd = [
     </ul>
   </div>
 
+  <Cifras />
+
   <!-- PROBLEMAS -->
   <section class="seccion seccion--blanca" aria-labelledby="problemas-titulo">
     <div class="contenedor">
@@ -154,15 +164,25 @@ const jsonLd = [
         titulo="Casi todos llegan con uno de estos tres problemas"
         entradilla="Antes de hablar de tecnología, hablamos de lo que le pasa a tu negocio. Estos son los tres que más vemos en Almería."
       />
-      <ul class="problemas">
+      <ol class="problemas">
         {problemas.map((p, i) => (
-          <li class="problema" data-aparece style={`transition-delay:${i * 90}ms`}>
-            <span class="insignia insignia--verde"><Icono nombre={p.icono} tamano={28} /></span>
-            <h3>{p.t}</h3>
-            <p>{p.d}</p>
+          <li class="problema" data-aparece>
+            <span class="problema__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div class="problema__texto">
+              <h3>{p.t}</h3>
+              <p>{p.d}</p>
+            </div>
+            <a href={p.href} class="problema__solucion tarjeta-hover">
+              <img src={`/iso/${p.escena}.svg`} alt="" width="220" height="180" loading="lazy" decoding="async" />
+              <span>
+                <small>Lo que hacemos</small>
+                <b>{p.solucion}</b>
+              </span>
+              <Icono nombre="flecha" tamano={20} />
+            </a>
           </li>
         ))}
-      </ul>
+      </ol>
     </div>
   </section>
 
@@ -175,25 +195,27 @@ const jsonLd = [
         titulo="Todo lo digital de tu negocio, en un mismo sitio"
         entradilla="Puedes contratar una sola cosa o dejarnos el conjunto. Lo que no cambia es la forma de trabajar: claro, por escrito y sin permanencias."
       />
-      {GRUPOS.map((g) => (
-        <div class="grupo">
-          <h3 class="grupo__titulo">{g.nombre}</h3>
-          <ul class="servicios">
-            {SERVICIOS.filter((s) => s.grupo === g.id).map((s, i) => (
-              <li data-aparece style={`transition-delay:${i * 70}ms`}>
-                <a href={s.href} class="servicio">
-                  <IconoServicio servicio={s.slug} tamano={84} class="servicio__ilustracion" />
-                  <div class="servicio__texto">
-                    <h4>{s.nombre}</h4>
-                    <p>{s.resumen}</p>
-                  </div>
-                  <span class="servicio__ir"><Icono nombre="flecha" tamano={18} /></span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <ul class="bento-servicios">
+        {SERVICIOS.map((s, i) => {
+          const grande = GRANDES[s.slug];
+          return (
+            <li class:list={['tesela', grande ? `tesela--${grande.forma} tesela--${grande.tono}` : 'tesela--simple']} data-aparece style={`transition-delay:${(i % 4) * 70}ms`}>
+              <a href={s.href} class="tesela__enlace tarjeta-hover">
+                {grande ? (
+                  <img class="tesela__escena" src={`/iso/${s.escena}.svg`} alt="" width="320" height="260" loading="lazy" decoding="async" />
+                ) : (
+                  <IconoServicio servicio={s.slug} tamano={72} />
+                )}
+                <span class="tesela__texto">
+                  <b>{s.nombre}</b>
+                  <small>{s.resumen}</small>
+                </span>
+                <span class="tesela__ir" aria-hidden="true"><Icono nombre="flecha" tamano={18} /></span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   </section>
 
@@ -219,7 +241,7 @@ const jsonLd = [
   </section>
 
   <!-- PROCESO -->
-  <section class="seccion seccion--blanca" aria-labelledby="proceso-titulo">
+  <section class="seccion seccion--blanca proceso" aria-labelledby="proceso-titulo">
     <div class="contenedor">
       <div class="proceso__cabeza">
         <Encabezado
@@ -228,28 +250,37 @@ const jsonLd = [
           titulo="Sabrás en todo momento qué pasa con tu proyecto"
           entradilla="Sin presentaciones eternas ni intermediarios. Hablas con quien diseña y programa tu web."
         />
-        <Ilustracion nombre="proceso" class="proceso__ilustracion" />
+        <Ilustracion nombre="proceso" titulo="Recorrido isométrico por los cuatro pasos de un proyecto" class="proceso__ilustracion" />
       </div>
       <Pasos pasos={pasos} />
     </div>
   </section>
 
   <!-- OPINIONES -->
-  <section class="seccion" aria-labelledby="opiniones-titulo">
-    <div class="contenedor">
-      <Encabezado
-        id="opiniones-titulo"
-        antetitulo="Opiniones"
-        titulo={`${valoracion} de media en ${CIFRAS.numResenas} reseñas de Google`}
-        centrado
-      />
-      <ul class="opiniones">
-        {opiniones.map((o, i) => (
-          <li class="opinion" data-aparece style={`transition-delay:${i * 90}ms`}>
+  <section class="seccion opiniones-seccion" aria-labelledby="opiniones-titulo">
+    <div class="contenedor opiniones">
+      <div class="opiniones__nota">
+        <p class="antetitulo">Opiniones</p>
+        <p class="opiniones__media" id="opiniones-titulo">
+          <span class="opiniones__numero">{valoracion}</span>
+          <span class="estrellas" aria-hidden="true">★★★★★</span>
+        </p>
+        <p class="opiniones__base">de media en {CIFRAS.numResenas} reseñas de Google</p>
+      </div>
+      <figure class="cita-grande" data-aparece>
+        <blockquote>«{opiniones[0].texto}»</blockquote>
+        <figcaption>
+          <span class="cita__inicial" aria-hidden="true">{opiniones[0].autor.charAt(0)}</span>
+          <span><b>{opiniones[0].autor}</b><br />{opiniones[0].cargo}</span>
+        </figcaption>
+      </figure>
+      <ul class="citas">
+        {opiniones.slice(1).map((o, i) => (
+          <li class="cita tarjeta-hover" data-aparece style={`transition-delay:${(i + 1) * 90}ms`}>
             <span class="estrellas" aria-label="5 de 5 estrellas">★★★★★</span>
             <blockquote>«{o.texto}»</blockquote>
-            <p class="opinion__autor">
-              <span class="opinion__inicial" aria-hidden="true">{o.autor.charAt(0)}</span>
+            <p class="cita__autor">
+              <span class="cita__inicial" aria-hidden="true">{o.autor.charAt(0)}</span>
               <span><b>{o.autor}</b><br />{o.cargo}</span>
             </p>
           </li>
@@ -259,9 +290,9 @@ const jsonLd = [
   </section>
 
   <!-- ZONAS -->
-  <section class="seccion seccion--blanca" aria-labelledby="zonas-titulo">
-    <div class="contenedor zonas">
-      <div>
+  <section class="seccion seccion--blanca zonas-seccion" aria-labelledby="zonas-titulo">
+    <div class="contenedor">
+      <div class="zonas__cabeza">
         <Encabezado
           id="zonas-titulo"
           antetitulo="Dónde trabajamos"
@@ -270,8 +301,10 @@ const jsonLd = [
         />
         <Boton href="/diseno-web/" variante="secundario">Ver todos los municipios</Boton>
       </div>
-      <div class="zonas__lista">
+      <div class="zonas__mapa fondo-iso">
         <Ilustracion nombre="mapa" titulo="Mapa isométrico de la provincia de Almería con los municipios donde trabajamos y su conexión con el estudio de Vera" class="zonas__ilustracion" />
+      </div>
+      <div class="zonas__lista">
         {zonas.map((z) => (
           <div class="zona">
             <h3>{z.comarca}</h3>
@@ -301,9 +334,10 @@ const jsonLd = [
           <Boton href="/blog/" variante="texto">Todos los artículos</Boton>
         </div>
         <ul class="articulos">
-          {posts.map((p) => (
+          {posts.map((p, i) => (
             <li>
-              <a href={`/blog/${p.data.slug}/`} class="articulo">
+              <a href={`/blog/${p.data.slug}/`} class:list={['articulo', 'tarjeta-hover', `articulo--${i}`]}>
+                <span class="articulo__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 <p class="articulo__meta">{p.data.categories?.[0] ?? 'Artículo'} · <time datetime={p.data.publishedAt.toISOString()}>{fecha(p.data.publishedAt)}</time></p>
                 <h3>{p.data.title}</h3>
                 <p>{p.data.excerpt}</p>
@@ -322,8 +356,19 @@ const jsonLd = [
 <style>
   /* Portada */
   .portada {
-    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5.5rem) clamp(3rem, 2rem + 4vw, 6rem);
+    position: relative;
+    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) clamp(3rem, 2rem + 4vw, 5.5rem);
     overflow: hidden;
+    isolation: isolate;
+  }
+  .portada__luces {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(40% 50% at 78% 38%, rgba(255, 207, 63, 0.28), transparent 70%),
+      radial-gradient(35% 45% at 92% 75%, rgba(58, 154, 107, 0.18), transparent 70%),
+      radial-gradient(30% 40% at 8% 10%, rgba(155, 201, 232, 0.22), transparent 70%);
   }
   .portada__rejilla {
     display: grid;
@@ -335,7 +380,7 @@ const jsonLd = [
     gap: 1.5rem;
   }
   .portada h1 {
-    max-width: 14ch;
+    max-width: 12ch;
   }
   .portada__acciones {
     display: flex;
@@ -343,43 +388,39 @@ const jsonLd = [
     gap: 0.75rem;
     margin-top: 0.5rem;
   }
-  .portada__confianza {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.75rem;
-    margin-top: 1rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--linea);
+  .portada__sello {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    justify-self: start;
+    padding: 0.5rem 1rem 0.5rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--linea);
     font-size: var(--t-s);
     color: var(--tinta-2);
-  }
-  .portada__confianza li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .portada__confianza :global(.icono) {
-    color: var(--verde);
   }
   .portada__escena {
     position: relative;
     justify-self: center;
     width: 100%;
-    max-width: 580px;
+    max-width: 640px;
     padding: 1.5rem 0;
   }
+  .flotante :global(.icono-iso) {
+    margin: -4px 0;
+  }
   .flotante--1 {
-    top: 8%;
+    top: 6%;
     left: -2%;
   }
   .flotante--2 {
-    top: 46%;
+    top: 44%;
     right: -4%;
   }
   .flotante--3 {
     bottom: 4%;
-    left: 8%;
+    left: 6%;
   }
   @media (max-width: 600px) {
     .flotante {
@@ -388,115 +429,222 @@ const jsonLd = [
   }
   @media (min-width: 960px) {
     .portada__rejilla {
-      grid-template-columns: 1.05fr 1fr;
-      gap: 3rem;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 2rem;
     }
   }
 
-  /* Problemas */
+  /* Problemas: filas editoriales */
   .problemas {
     list-style: none;
     display: grid;
-    gap: 1.25rem;
+    padding: 0;
+    border-top: 1px solid var(--linea);
   }
   .problema {
     display: grid;
-    gap: 0.75rem;
-    align-content: start;
-    padding: 1.75rem;
-    border-radius: var(--radio-l);
-    background: var(--fondo);
-    border: 1px solid var(--linea);
+    gap: 1.25rem;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--linea);
   }
-  .problema p {
+  .problema__num {
+    font-weight: 800;
+    font-size: clamp(3.5rem, 2rem + 5vw, 6.5rem);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--verde);
+  }
+  .problema__texto h3 {
+    font-size: var(--t-2xl);
+    letter-spacing: -0.035em;
+  }
+  .problema__texto p {
+    margin-top: 0.75rem;
     color: var(--tinta-2);
+    max-width: 50ch;
   }
-  @media (min-width: 860px) {
-    .problemas {
-      grid-template-columns: repeat(3, 1fr);
+  .problema__solucion {
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.75rem 1.25rem 0.75rem 0.75rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--fondo);
+    text-decoration: none;
+  }
+  .problema__solucion img {
+    width: 110px;
+    height: auto;
+  }
+  .problema__solucion span {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .problema__solucion small {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--verde);
+  }
+  .problema__solucion b {
+    font-size: var(--t-m);
+    line-height: 1.35;
+  }
+  .problema__solucion :global(.icono) {
+    color: var(--verde);
+  }
+  @media (min-width: 960px) {
+    .problema {
+      grid-template-columns: 8rem 1fr 0.85fr;
+      gap: 2.5rem;
+      align-items: center;
     }
   }
 
-  /* Servicios */
-  .grupo + .grupo {
-    margin-top: 3rem;
-  }
-  .grupo__titulo {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-    font-size: var(--t-s);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--tenue);
-  }
-  .grupo__titulo::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--linea);
-  }
-  .servicios {
+  /* Servicios: bento */
+  .bento-servicios {
     list-style: none;
     display: grid;
     gap: 1rem;
+    grid-auto-flow: dense;
   }
-  .servicio {
+  .tesela__enlace {
     position: relative;
     display: grid;
-    grid-template-columns: 84px 1fr;
-    gap: 1.25rem;
-    align-items: center;
+    gap: 1rem;
+    align-content: start;
     height: 100%;
-    padding: 1.25rem;
+    padding: 1.5rem;
     border-radius: var(--radio-l);
-    background: var(--superficie);
     border: 1px solid var(--linea);
+    background: var(--superficie);
     text-decoration: none;
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    overflow: hidden;
   }
-  .servicio:hover {
-    border-color: var(--linea-2);
-    box-shadow: var(--sombra-l);
-    transform: translateY(-2px);
+  .tesela__texto {
+    display: grid;
+    gap: 0.3rem;
   }
-  .servicio h4 {
+  .tesela__texto b {
     font-size: var(--t-l);
+    letter-spacing: -0.02em;
   }
-  .servicio p {
-    margin-top: 0.3rem;
+  .tesela__texto small {
     font-size: var(--t-s);
     color: var(--tinta-2);
     line-height: 1.45;
   }
-  .servicio__ir {
+  .tesela__ir {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.25rem;
+    right: 1.25rem;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--fondo-2);
     color: var(--verde);
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: opacity 0.25s, transform 0.25s;
+    transition: transform 0.3s, background-color 0.3s, color 0.3s;
   }
-  .servicio:hover .servicio__ir {
-    opacity: 1;
-    transform: none;
+  .tesela__enlace:hover .tesela__ir {
+    transform: rotate(-45deg);
+    background: var(--verde);
+    color: #fff;
+  }
+  .tesela__escena {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    justify-self: center;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .tesela__enlace:hover .tesela__escena {
+    transform: translateY(-6px) scale(1.03);
+  }
+  .tesela--verde .tesela__enlace {
+    background:
+      radial-gradient(80% 70% at 70% 30%, rgba(255, 207, 63, 0.2), transparent 70%),
+      linear-gradient(160deg, #16724a, var(--verde) 60%, var(--verde-2));
+    border-color: var(--verde-2);
+  }
+  .tesela--verde .tesela__texto b {
+    color: #fff;
+    font-size: var(--t-2xl);
+  }
+  .tesela--verde .tesela__texto small {
+    color: #d5ecdf;
+    font-size: var(--t-m);
+  }
+  .tesela--verde .tesela__ir {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+  .tesela--calida .tesela__enlace {
+    background: linear-gradient(160deg, #fff7d6, #fff0bc);
+    border-color: #f3e2a6;
+  }
+  .tesela--tinta .tesela__enlace {
+    background:
+      radial-gradient(70% 70% at 80% 20%, rgba(58, 154, 107, 0.3), transparent 70%),
+      var(--tinta);
+    border-color: #2c3128;
+  }
+  .tesela--tinta .tesela__texto b {
+    color: #fff;
+  }
+  .tesela--tinta .tesela__texto small {
+    color: #b4b8ad;
+  }
+  .tesela--tinta .tesela__ir {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--platano);
+  }
+  .tesela--cielo .tesela__enlace {
+    background: linear-gradient(160deg, #eef6fc, #e0eef9);
+    border-color: #cfe3f2;
   }
   @media (min-width: 700px) {
-    .servicios {
+    .bento-servicios {
       grid-template-columns: repeat(2, 1fr);
+    }
+    .tesela--cuadrada {
+      grid-column: 1 / -1;
     }
   }
   @media (min-width: 1080px) {
-    .servicios {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    .bento-servicios {
+      grid-template-columns: repeat(4, 1fr);
     }
-    .servicio {
-      grid-template-columns: 1fr;
-      align-content: start;
-      padding: 1.5rem;
+    .tesela--cuadrada {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .tesela--ancha {
+      grid-column: span 2;
+    }
+    .tesela--cuadrada .tesela__enlace {
+      align-content: space-between;
+      padding: 2rem;
+    }
+    .tesela--cuadrada .tesela__escena {
+      max-width: 420px;
+    }
+    .tesela--ancha .tesela__enlace {
+      grid-template-columns: 1fr 180px;
+      align-items: center;
+    }
+    .tesela--ancha .tesela__escena {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .tesela--ancha .tesela__texto {
+      grid-column: 1;
+      grid-row: 1;
     }
   }
 
@@ -504,86 +652,165 @@ const jsonLd = [
   .proceso__cabeza {
     display: grid;
     gap: 1rem;
-    align-items: end;
+    align-items: center;
+    margin-bottom: 1rem;
   }
   .proceso__cabeza :global(.proceso__ilustracion) {
-    max-width: 380px;
+    max-width: 440px;
     justify-self: center;
-    margin-bottom: 1.5rem;
   }
   @media (min-width: 900px) {
     .proceso__cabeza {
-      grid-template-columns: 1fr 400px;
-      align-items: center;
+      grid-template-columns: 1fr 460px;
     }
   }
 
   /* Opiniones */
+  .opiniones-seccion {
+    background:
+      radial-gradient(50% 60% at 10% 30%, rgba(255, 207, 63, 0.16), transparent 70%),
+      var(--fondo);
+  }
   .opiniones {
+    display: grid;
+    gap: 2rem;
+  }
+  .opiniones__media {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .opiniones__numero {
+    font-weight: 800;
+    font-size: var(--t-5xl);
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+  }
+  .opiniones__media .estrellas {
+    font-size: var(--t-xl);
+  }
+  .opiniones__base {
+    margin-top: 0.75rem;
+    color: var(--tinta-2);
+  }
+  .cita-grande {
+    position: relative;
+    margin: 0;
+    padding: clamp(1.75rem, 1rem + 3vw, 3rem);
+    border-radius: calc(var(--radio-l) * 1.25);
+    background: var(--tinta);
+    color: #fff;
+    overflow: hidden;
+  }
+  .cita-grande::before {
+    content: '«';
+    position: absolute;
+    top: -2.5rem;
+    right: 1.5rem;
+    font-weight: 800;
+    font-size: 14rem;
+    line-height: 1;
+    color: var(--platano);
+    opacity: 0.18;
+  }
+  .cita-grande blockquote {
+    position: relative;
+    margin: 0;
+    font-size: var(--t-xl);
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+  }
+  .cita-grande figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    font-size: var(--t-s);
+    color: #b4b8ad;
+  }
+  .cita-grande figcaption b {
+    color: #fff;
+  }
+  .citas {
     list-style: none;
     display: grid;
-    gap: 1.25rem;
-  }
-  .opinion {
-    display: grid;
     gap: 1rem;
-    align-content: start;
-    padding: 1.75rem;
+  }
+  .cita {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.5rem;
     border-radius: var(--radio-l);
     background: var(--superficie);
     border: 1px solid var(--linea);
   }
-  .opinion blockquote {
+  .cita blockquote {
     margin: 0;
-    font-size: var(--t-l);
     line-height: 1.5;
   }
-  .opinion__autor {
+  .cita__autor {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-top: auto;
     font-size: var(--t-s);
     color: var(--tenue);
     line-height: 1.35;
   }
-  .opinion__autor b {
+  .cita__autor b {
     color: var(--tinta);
   }
-  .opinion__inicial {
+  .cita__inicial {
     display: grid;
     place-items: center;
+    flex: none;
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 50%;
-    background: var(--verde-suave);
-    color: var(--verde);
-    font-weight: 750;
+    background: var(--platano);
+    color: var(--tinta);
+    font-weight: 800;
   }
-  @media (min-width: 900px) {
+  @media (min-width: 1000px) {
     .opiniones {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 0.7fr 1.3fr 1fr;
+      align-items: stretch;
+    }
+    .opiniones__nota {
+      align-self: center;
     }
   }
 
   /* Zonas */
-  .zonas {
-    display: grid;
-    gap: 2rem;
+  .zonas__cabeza {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .zonas__cabeza :global(.encabezado) {
+    margin-bottom: 0;
+  }
+  .zonas__mapa {
+    margin-block: 2rem 3rem;
+  }
+  .zonas :global(.zonas__ilustracion),
+  .zonas__mapa :global(.zonas__ilustracion) {
+    max-width: 1000px;
+    margin-inline: auto;
   }
   .zonas__lista {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.75rem 2rem;
-  }
-  .zonas :global(.zonas__ilustracion) {
-    grid-column: 1 / -1;
-    max-width: 680px;
-    margin-bottom: 1rem;
   }
   .zona h3 {
     font-size: var(--t-m);
     margin-bottom: 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--platano);
   }
   .zona ul {
     list-style: none;
@@ -598,12 +825,6 @@ const jsonLd = [
   .zona a:hover {
     color: var(--verde);
     text-decoration: underline;
-  }
-  @media (min-width: 960px) {
-    .zonas {
-      grid-template-columns: 0.8fr 1.2fr;
-      gap: 4rem;
-    }
   }
 
   /* Preguntas */
@@ -632,6 +853,7 @@ const jsonLd = [
     gap: 1.25rem;
   }
   .articulo {
+    position: relative;
     display: grid;
     gap: 0.75rem;
     height: 100%;
@@ -640,11 +862,22 @@ const jsonLd = [
     background: var(--fondo);
     border: 1px solid var(--linea);
     text-decoration: none;
-    transition: border-color 0.25s, transform 0.25s;
+    overflow: hidden;
   }
-  .articulo:hover {
-    border-color: var(--linea-2);
-    transform: translateY(-2px);
+  .articulo__num {
+    position: absolute;
+    right: 1.25rem;
+    top: 1rem;
+    font-weight: 800;
+    font-size: 3.5rem;
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1.25px var(--linea-2);
+  }
+  .articulo--0 {
+    background: linear-gradient(160deg, #fff7d6, #fff0bc);
+    border-color: #f3e2a6;
   }
   .articulo__meta {
     font-size: var(--t-xs);
@@ -653,6 +886,7 @@ const jsonLd = [
   }
   .articulo h3 {
     font-size: var(--t-l);
+    padding-right: 3rem;
   }
   .articulo p:not(.articulo__meta) {
     color: var(--tinta-2);

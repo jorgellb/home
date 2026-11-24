@@ -1,5 +1,6 @@
 ---
-/* Trabajos publicados: capturas reales dentro de un marco de navegador. */
+/* Trabajos publicados: capturas reales dentro de navegadores inclinados en 3D
+   (solo transform, compuesto en GPU) que se enderezan al pasar el ratón. */
 import Icono from './Icono.astro';
 import { proyectos, type Proyecto } from '../../data/proyectos';
 import { getPuebloBySlug } from '../../data/pueblos-almeria';
@@ -16,30 +17,35 @@ const lista: Proyecto[] = ids
 
 const base = (img: string) => img.replace(/\.jpe?g$/i, '');
 const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
+// Con 3, 6 o 9 trabajos el primero ocupa 2×2 y la rejilla de 3 cuadra.
+const destacar = lista.length >= 3 && lista.length % 3 === 0;
 ---
 
-<ul class="casos">
+<ul class:list={['casos', { 'casos--destacada': destacar }]}>
   {lista.map((p, i) => (
-    <li class="caso" data-aparece style={`transition-delay:${(i % 3) * 80}ms`}>
+    <li class:list={['caso', { 'caso--grande': destacar && i === 0 }]} data-aparece style={`transition-delay:${(i % 3) * 90}ms`}>
       <a href={p.url} target="_blank" rel="noopener" class="caso__enlace">
-        <div class="caso__marco">
-          <div class="caso__barra" aria-hidden="true">
-            <span /><span /><span />
-            <em>{dominio(p.url)}</em>
+        <div class="caso__escenario">
+          <div class:list={['caso__marco', i % 2 ? 'caso__marco--der' : 'caso__marco--izq']}>
+            <div class="caso__barra" aria-hidden="true">
+              <span /><span /><span />
+              <em>{dominio(p.url)}</em>
+            </div>
+            <picture>
+              <source srcset={`${base(p.image)}-680.avif`} type="image/avif" />
+              <source srcset={`${base(p.image)}-680.webp`} type="image/webp" />
+              <img src={p.image} alt={`Web de ${p.cliente}`} width="680" height="460" loading="lazy" decoding="async" />
+            </picture>
           </div>
-          <picture>
-            <source srcset={`${base(p.image)}-680.avif`} type="image/avif" />
-            <source srcset={`${base(p.image)}-680.webp`} type="image/webp" />
-            <img src={p.image} alt={`Web de ${p.cliente}`} width="680" height="460" loading="lazy" decoding="async" />
-          </picture>
+          <span class="caso__resultado">{p.result}</span>
         </div>
         <div class="caso__datos">
           <p class="caso__sector">
             {p.sector}
             {p.municipio && <> · {getPuebloBySlug(p.municipio)?.nombre ?? ''}</>}
+            {' · '}{p.year}
           </p>
           <h3>{p.cliente} <Icono nombre="flecha" tamano={18} /></h3>
-          <p class="caso__resultado">{p.result}</p>
         </div>
       </a>
     </li>
@@ -50,30 +56,64 @@ const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
   .casos {
     list-style: none;
     display: grid;
-    gap: 1.5rem;
+    gap: 2rem 1.5rem;
   }
   .caso__enlace {
     display: grid;
-    gap: 1rem;
+    gap: 1.1rem;
     text-decoration: none;
+  }
+  .caso__escenario {
+    position: relative;
+    perspective: 1400px;
+    padding: 1.25rem 1rem 1.5rem;
+    border-radius: var(--radio-l);
+    background:
+      radial-gradient(90% 80% at 50% 100%, rgba(14, 91, 58, 0.1), transparent 70%),
+      linear-gradient(160deg, #f3f2ec, #ebe9e0);
+    border: 1px solid var(--linea);
+    overflow: hidden;
+  }
+  .caso:nth-child(3n + 2) .caso__escenario {
+    background:
+      radial-gradient(90% 80% at 50% 100%, rgba(255, 207, 63, 0.28), transparent 70%),
+      linear-gradient(160deg, #fff7d6, #fbefc4);
+  }
+  .caso:nth-child(3n) .caso__escenario {
+    background:
+      radial-gradient(90% 80% at 50% 100%, rgba(91, 141, 239, 0.18), transparent 70%),
+      linear-gradient(160deg, #eaf3fa, #dfecf6);
   }
   .caso__marco {
     overflow: hidden;
-    border-radius: var(--radio);
-    border: 1px solid var(--linea);
+    border-radius: 12px;
+    border: 1px solid rgba(20, 22, 15, 0.1);
     background: var(--superficie);
-    box-shadow: var(--sombra);
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+    box-shadow: 0 2px 0 rgba(20, 22, 15, 0.06), 0 40px 60px -30px rgba(20, 22, 15, 0.45);
+    transform-origin: 50% 60%;
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.7s;
   }
-  .caso__enlace:hover .caso__marco {
-    transform: translateY(-4px);
-    box-shadow: var(--sombra-l);
+  .caso__marco--izq {
+    transform: rotateX(10deg) rotateY(-16deg) rotateZ(2deg);
+  }
+  .caso__marco--der {
+    transform: rotateX(10deg) rotateY(16deg) rotateZ(-2deg);
+  }
+  .caso__enlace:hover .caso__marco,
+  .caso__enlace:focus-visible .caso__marco {
+    transform: none;
+    box-shadow: 0 2px 0 rgba(20, 22, 15, 0.06), 0 30px 50px -28px rgba(20, 22, 15, 0.4);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .caso__marco {
+      transition: none;
+    }
   }
   .caso__barra {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.55rem 0.75rem;
+    padding: 0.5rem 0.7rem;
     border-bottom: 1px solid var(--linea);
     background: var(--fondo-2);
   }
@@ -83,10 +123,19 @@ const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
     border-radius: 50%;
     background: var(--linea-2);
   }
+  .caso__barra span:first-child {
+    background: #ff8a68;
+  }
+  .caso__barra span:nth-child(2) {
+    background: #ffd34d;
+  }
+  .caso__barra span:nth-child(3) {
+    background: #3a9a6b;
+  }
   .caso__barra em {
     margin-left: 0.6rem;
     font-style: normal;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--tenue);
   }
   .caso picture img {
@@ -94,6 +143,19 @@ const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
     aspect-ratio: 4 / 3;
     object-fit: cover;
     object-position: top;
+  }
+  .caso__resultado {
+    position: absolute;
+    left: 1.25rem;
+    bottom: 1rem;
+    z-index: 1;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: var(--tinta);
+    color: #fff;
+    font-size: var(--t-xs);
+    font-weight: 700;
+    box-shadow: 0 10px 20px -10px rgba(20, 22, 15, 0.6);
   }
   .caso__sector {
     font-size: var(--t-xs);
@@ -105,24 +167,14 @@ const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
     align-items: center;
     gap: 0.4rem;
     margin-top: 0.25rem;
-    font-size: var(--t-l);
+    font-size: var(--t-xl);
   }
   .caso h3 :global(.icono) {
     color: var(--verde);
     transition: transform 0.25s;
   }
   .caso__enlace:hover h3 :global(.icono) {
-    transform: translate(3px, 0);
-  }
-  .caso__resultado {
-    margin-top: 0.35rem;
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    background: var(--verde-suave);
-    color: var(--verde);
-    font-size: var(--t-xs);
-    font-weight: 700;
+    transform: translateX(4px);
   }
   @media (min-width: 640px) {
     .casos {
@@ -132,7 +184,17 @@ const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
   @media (min-width: 1000px) {
     .casos {
       grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
+      gap: 2.5rem 2rem;
+    }
+    .casos--destacada .caso--grande {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .caso--grande .caso__escenario {
+      padding: 2.5rem 2.5rem 3rem;
+    }
+    .caso--grande h3 {
+      font-size: var(--t-2xl);
     }
   }
 </style>

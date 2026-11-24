@@ -5,6 +5,7 @@ import Boton from './Boton.astro';
 import Icono from './Icono.astro';
 import Ilustracion from './Ilustracion.astro';
 import IconoServicio from './IconoServicio.astro';
+import IconoIso from './IconoIso.astro';
 import Encabezado from './Encabezado.astro';
 import Migas from './Migas.astro';
 import Puntos from './Puntos.astro';
@@ -38,7 +39,7 @@ const jsonLd = {
 ---
 
 <Sitio title={d.seo.title} description={d.seo.description} canonical={url} type="service" jsonLd={jsonLd}>
-  <section class="portada">
+  <section class="portada luces-portada">
     <div class="contenedor portada__rejilla">
       <div class="portada__texto">
         <Migas items={d.migas ?? [{ nombre: d.nombre }]} />
@@ -81,25 +82,21 @@ const jsonLd = {
     <section class="seccion" aria-labelledby="comparativa-titulo">
       <div class="contenedor">
         <Encabezado id="comparativa-titulo" antetitulo="Comparativa" titulo={d.comparativa.titulo} entradilla={d.comparativa.entradilla} />
-        <div class="tabla" role="region" aria-labelledby="comparativa-titulo" tabindex="0">
-          <table>
-            <thead>
-              <tr>
-                <th scope="col"><span class="solo-lector">Aspecto</span></th>
-                <th scope="col" class="tabla__nosotros">{d.comparativa.columnas[0]}</th>
-                <th scope="col">{d.comparativa.columnas[1]}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {d.comparativa.filas.map((f) => (
-                <tr>
-                  <th scope="row">{f.aspecto}</th>
-                  <td class="tabla__nosotros"><Icono nombre="check" tamano={16} /> {f.nosotros}</td>
-                  <td>{f.otros}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div class="duelo">
+          <div class="duelo__cabeza" aria-hidden="true">
+            <span></span>
+            <span class="duelo__nos"><IconoIso nombre="check" tono="verde" tamano={44} /> {d.comparativa.columnas[0]}</span>
+            <span class="duelo__otros">{d.comparativa.columnas[1]}</span>
+          </div>
+          <dl class="duelo__filas">
+            {d.comparativa.filas.map((f, i) => (
+              <div class="duelo__fila" data-aparece style={`transition-delay:${i * 60}ms`}>
+                <dt>{f.aspecto}</dt>
+                <dd class="duelo__nos"><span class="solo-lector">{d.comparativa!.columnas[0]}: </span><Icono nombre="check" tamano={18} /> {f.nosotros}</dd>
+                <dd class="duelo__otros"><span class="solo-lector">{d.comparativa!.columnas[1]}: </span><Icono nombre="cerrar" tamano={16} /> {f.otros}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
@@ -225,52 +222,83 @@ const jsonLd = {
     }
   }
 
-  .tabla {
-    overflow-x: auto;
-    border-radius: var(--radio-l);
-    border: 1px solid var(--linea);
-    background: var(--superficie);
+  .duelo {
+    display: grid;
+    gap: 0.75rem;
   }
-  table {
-    width: 100%;
-    min-width: 560px;
-    border-collapse: collapse;
+  .duelo__cabeza {
+    display: none;
+  }
+  .duelo__filas {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .duelo__fila {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: var(--radio-l);
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+  }
+  .duelo__fila dt {
+    font-weight: 750;
+  }
+  .duelo__fila dd {
+    margin: 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
     font-size: var(--t-s);
   }
-  th,
-  td {
-    padding: 1rem 1.25rem;
-    text-align: left;
-    vertical-align: top;
-    border-bottom: 1px solid var(--linea);
+  .duelo__fila dd :global(.icono) {
+    margin-top: 0.15rem;
   }
-  tbody tr:last-child > * {
-    border-bottom: 0;
+  dd.duelo__nos {
+    background: linear-gradient(160deg, #e9f6ee, var(--verde-suave));
+    color: var(--tinta);
+    font-weight: 650;
   }
-  thead th {
-    font-size: var(--t-xs);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  dd.duelo__nos :global(.icono) {
+    color: var(--verde);
+  }
+  dd.duelo__otros {
+    background: var(--fondo-2);
     color: var(--tenue);
   }
-  tbody th {
-    font-weight: 680;
-    width: 26%;
+  dd.duelo__otros :global(.icono) {
+    color: #b93a16;
   }
-  td {
-    color: var(--tinta-2);
-  }
-  .tabla__nosotros {
-    background: var(--verde-suave);
-    color: var(--tinta);
-  }
-  thead .tabla__nosotros {
-    color: var(--verde);
-  }
-  td.tabla__nosotros :global(.icono) {
-    display: inline-block;
-    vertical-align: -3px;
-    color: var(--verde);
+  @media (min-width: 860px) {
+    .duelo__cabeza {
+      display: grid;
+      grid-template-columns: 0.7fr 1fr 1fr;
+      gap: 0.75rem;
+      align-items: end;
+      padding-inline: 1rem;
+      font-weight: 800;
+      font-size: var(--t-l);
+      letter-spacing: -0.02em;
+    }
+    .duelo__cabeza .duelo__nos {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--verde);
+    }
+    .duelo__cabeza .duelo__otros {
+      color: var(--tenue);
+      padding-bottom: 0.6rem;
+    }
+    .duelo__fila {
+      grid-template-columns: 0.7fr 1fr 1fr;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.6rem 0.6rem 1rem;
+    }
   }
 
   .dos-columnas {

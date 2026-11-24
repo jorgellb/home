@@ -43,8 +43,9 @@
   --t-l: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
   --t-xl: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
   --t-2xl: clamp(1.75rem, 1.4rem + 1.6vw, 2.625rem);
-  --t-3xl: clamp(2rem, 1.55rem + 2.2vw, 3.25rem);
-  --t-4xl: clamp(2.6rem, 1.7rem + 4.4vw, 5.25rem);
+  --t-3xl: clamp(2.2rem, 1.5rem + 3vw, 4rem);
+  --t-4xl: clamp(2.9rem, 1.6rem + 5.6vw, 6.5rem);
+  --t-5xl: clamp(3.4rem, 1.4rem + 8vw, 9rem);
 
   /* Espacio y forma */
   --ancho: 1200px;
@@ -94,7 +95,7 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-weight: 750;
+  font-weight: 780;
   line-height: 1.08;
   letter-spacing: -0.025em;
   text-wrap: balance;
@@ -102,10 +103,14 @@ h4 {
 
 h1 {
   font-size: var(--t-4xl);
-  letter-spacing: -0.035em;
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
 }
 h2 {
   font-size: var(--t-3xl);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
 }
 h3 {
   font-size: var(--t-xl);
@@ -531,4 +536,84 @@ ol {
   to {
     background-size: 100% 100%;
   }
+}
+
+/* ── Grano ─────────────────────────────────────────────────────────
+   Textura de papel casi imperceptible: una capa fija que se pinta una vez. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ── Contadores (solo CSS) ─────────────────────────────────────────
+   Sin soporte muestran el valor final; con animation-timeline cuentan al entrar. */
+@property --n {
+  syntax: '<integer>';
+  initial-value: 0;
+  inherits: false;
+}
+.contador {
+  --n: var(--fin);
+  counter-reset: n var(--n);
+  font-variant-numeric: tabular-nums;
+}
+.contador::after {
+  content: counter(n);
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .contador {
+      animation: contar linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 35%;
+    }
+  }
+}
+@keyframes contar {
+  from {
+    --n: 0;
+  }
+  to {
+    --n: var(--fin);
+  }
+}
+
+/* ── Utilidades de tarjeta ──────────────────────────────────────── */
+.tarjeta-hover {
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s, border-color 0.3s;
+}
+.tarjeta-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 2px 0 var(--linea-2), 0 30px 50px -30px rgba(20, 22, 15, 0.35);
+}
+.numero-gigante {
+  font-weight: 800;
+  font-size: clamp(3.5rem, 2rem + 5vw, 6rem);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--linea-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Luz ambiental de las portadas: gradientes suaves (se pintan una vez). */
+.luces-portada {
+  position: relative;
+  isolation: isolate;
+}
+.luces-portada::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 55% at 80% 40%, rgba(255, 207, 63, 0.24), transparent 70%),
+    radial-gradient(35% 45% at 95% 80%, rgba(58, 154, 107, 0.16), transparent 70%),
+    radial-gradient(30% 40% at 5% 5%, rgba(155, 201, 232, 0.2), transparent 70%);
 }

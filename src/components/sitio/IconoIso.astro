@@ -1,0 +1,96 @@
+---
+/* Icono isométrico: un cubo con el símbolo en relieve sobre su cara frontal.
+   Sustituye a los iconos planos en insignia. El símbolo reutiliza los trazos
+   de iconos.ts proyectados sobre la cara (sin JS, todo en el build). */
+import { TRAZOS, type NombreIcono } from './iconos';
+
+interface Props {
+  nombre: NombreIcono;
+  tamano?: number;
+  tono?: 'verde' | 'platano' | 'claro' | 'tinta';
+  class?: string;
+}
+const { nombre, tamano = 64, tono = 'verde', class: clase } = Astro.props;
+
+const TONOS = {
+  verde: { arriba: '#FFD34D', izq: '#16724A', der: '#0E5B3A', borde: '#0A452C', simbolo: '#FFFFFF', brillo: '#FFE68F' },
+  platano: { arriba: '#FFFFFF', izq: '#FFCF3F', der: '#F0B82A', borde: '#D39C12', simbolo: '#0E5B3A', brillo: '#FFFFFF' },
+  claro: { arriba: '#DDF4E7', izq: '#FFFFFF', der: '#E6E8E0', borde: '#C9CCC0', simbolo: '#0E5B3A', brillo: '#FFFFFF' },
+  tinta: { arriba: '#3A9A6B', izq: '#262A22', der: '#171A13', borde: '#0E100B', simbolo: '#FFCF3F', brillo: '#5FBF8E' },
+} as const;
+const t = TONOS[tono];
+
+const C = Math.cos(Math.PI / 6);
+// Pieza ancha y poco profunda: la cara frontal es grande y el símbolo se lee.
+const W = 34;
+const Dp = 15;
+const H = 30;
+const p = (x: number, y: number, z: number): [number, number] => [(x - y) * C, (x + y) * 0.5 - z];
+const esquinas = [0, W].flatMap((x) => [0, Dp].flatMap((y) => [0, H].map((z) => p(x, y, z))));
+const minX = Math.min(...esquinas.map((e) => e[0]));
+const maxX = Math.max(...esquinas.map((e) => e[0]));
+const minY = Math.min(...esquinas.map((e) => e[1]));
+const maxY = Math.max(...esquinas.map((e) => e[1]));
+const escala = 56 / Math.max(maxX - minX, maxY - minY);
+const ox = 32 - ((minX + maxX) / 2) * escala;
+const oy = 30 - ((minY + maxY) / 2) * escala;
+const pt = (x: number, y: number, z: number) => {
+  const [sx, sy] = p(x, y, z);
+  return `${(sx * escala + ox).toFixed(1)},${(sy * escala + oy).toFixed(1)}`;
+};
+const poli = (...q: [number, number, number][]) => q.map(([x, y, z]) => pt(x, y, z)).join(' ');
+
+const arriba = poli([0, 0, H], [W, 0, H], [W, Dp, H], [0, Dp, H]);
+const izq = poli([0, Dp, 0], [W, Dp, 0], [W, Dp, H], [0, Dp, H]);
+const der = poli([W, 0, 0], [W, Dp, 0], [W, Dp, H], [W, 0, H]);
+const arista = poli([0, Dp, H], [W, Dp, H], [W, 0, H]);
+
+// Símbolo sobre la cara frontal (plano y = Dp): u → (cos30, ½), v → (0, 1).
+const lado = Math.min(W, H) * 0.78;
+const k = lado / 24;
+const [fx, fy] = p((W - lado) / 2, Dp, H - (H - lado) / 2);
+const matriz = `matrix(${(C * k * escala).toFixed(3)} ${(0.5 * k * escala).toFixed(3)} 0 ${(k * escala).toFixed(3)} ${(fx * escala + ox).toFixed(2)} ${(fy * escala + oy).toFixed(2)})`;
+const grosor = (2.4 / (k * escala)).toFixed(2);
+---
+
+<svg
+  class:list={['icono-iso', clase]}
+  width={tamano}
+  height={tamano}
+  viewBox="0 0 64 64"
+  aria-hidden="true"
+  focusable="false"
+>
+  <ellipse cx="34" cy="59" rx="24" ry="4" fill="#14160F" opacity=".08" />
+  <g stroke={t.borde} stroke-width=".8" stroke-linejoin="round">
+    <polygon points={der} fill={t.der} />
+    <polygon points={izq} fill={t.izq} />
+    <polygon points={arriba} fill={t.arriba} />
+  </g>
+  <polyline points={arista} fill="none" stroke={t.brillo} stroke-opacity=".8" stroke-width="1" />
+  <g
+    transform={matriz}
+    fill="none"
+    stroke={t.simbolo}
+    stroke-width={grosor}
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    set:html={TRAZOS[nombre] ?? TRAZOS.chispa}
+  />
+</svg>
+
+<style>
+  .icono-iso {
+    flex: none;
+    overflow: visible;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1.3);
+  }
+  :global(:where(a, li, article, .tarjeta-hover):hover) .icono-iso {
+    transform: translateY(-4px) rotate(-4deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .icono-iso {
+      transition: none;
+    }
+  }
+</style>
