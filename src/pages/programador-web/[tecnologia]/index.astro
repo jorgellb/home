@@ -7,16 +7,19 @@
    `apps` no entra aquí: vive en /desarrollo-aplicaciones-moviles/ porque su
    intención no es "programador web". */
 import Sitio from '../../../layouts/Sitio.astro';
-import Breadcrumb from '../../../components/common/Breadcrumb.astro';
-import Seccion from '../../../components/programador/Seccion.astro';
+import Migas from '../../../components/sitio/Migas.astro';
+import Boton from '../../../components/sitio/Boton.astro';
+import Icono from '../../../components/sitio/Icono.astro';
+import IconoIso from '../../../components/sitio/IconoIso.astro';
+import Encabezado from '../../../components/sitio/Encabezado.astro';
+import Puntos from '../../../components/sitio/Puntos.astro';
+import Preguntas from '../../../components/sitio/Preguntas.astro';
+import LlamadaFinal from '../../../components/sitio/LlamadaFinal.astro';
 import Marco from '../../../components/programador/Marco.astro';
-import Esquema from '../../../components/programador/Esquema.astro';
-import Diff from '../../../components/programador/Diff.astro';
 import Lamina from '../../../components/programador/Lamina.astro';
-import Servicios from '../../../components/programador/Servicios.astro';
-import Enlaces from '../../../components/programador/Enlaces.astro';
-import Faq from '../../../components/programador/Faq.astro';
-import Cta from '../../../components/programador/Cta.astro';
+import type { NombreIcono } from '../../../components/sitio/iconos';
+import { escena } from '../../../lib/escenas';
+import { escenaPython, escenaIntegracion, escenaTecnologia } from '../../../lib/escenas-programador';
 import { TECNOLOGIAS, ORDEN_TECNOLOGIAS, rutaTecnologia, rutaLocal, type SlugTecnologia } from '../../../data/tecnologias';
 import { territorioDe } from '../../../data/territorio';
 import { matriz } from '../../../data/programador-gate';
@@ -32,12 +35,21 @@ const { tecnologia } = Astro.params as { tecnologia: SlugTecnologia };
 const t = TECNOLOGIAS[tecnologia];
 const canonical = `${SITE}${rutaTecnologia(tecnologia)}`;
 
-/* Se enlazan TODAS las locales que existen, indexables o no. Una página
-   generada que nadie enlaza es una huérfana: no la encuentra ni una persona ni
-   un rastreador, y entonces no hay motivo para haberla generado. Que estén en
-   noindex no las hace inútiles para quien navega; solo las saca del índice.
-   Se ordenan por cercanía a la base y se marcan las que tienen materia propia,
-   que son las que de verdad merecen la visita. */
+/* Escena de portada: Python tiene la suya (el pipeline de datos); el resto
+   usa la que mejor cuenta su trabajo. */
+const portadas: Record<string, { src: string; medidas: { ancho: number; alto: number } }> = {
+  python: { src: '/iso/programador/python.svg', medidas: escenaPython() },
+  nodejs: { src: '/iso/programador/integracion.svg', medidas: escenaIntegracion() },
+  genai: { src: '/iso/ia.svg', medidas: escena('ia') },
+  wordpress: { src: '/iso/web.svg', medidas: escena('web') },
+  astro: { src: '/iso/web.svg', medidas: escena('web') },
+};
+const portada = portadas[tecnologia] ?? { src: '/iso/programador.svg', medidas: escena('programador') };
+const mini = escenaTecnologia(tecnologia);
+
+/* Se enlazan TODAS las locales que existen, indexables o no: una página
+   generada que nadie enlaza es una huérfana. Se ordenan por cercanía a la
+   base y se marcan las que tienen materia propia. */
 const veredictos = new Map(
   matriz()
     .filter((c) => c.tecnologia === tecnologia)
@@ -51,142 +63,474 @@ const locales = [...veredictos.keys()]
   .sort((a, b) => (a.t.kmDesdeBase ?? 9999) - (b.t.kmDesdeBase ?? 9999));
 
 const relacionadas = t.relacionadas.map((r) => TECNOLOGIAS[r]);
+const NOMBRES_SERVICIO: Record<string, string> = {
+  '/soporte/': 'Mantenimiento web',
+  '/desarrollo-web/': 'Diseño y desarrollo web',
+  '/informatica-empresas/': 'Informática para empresas',
+  '/ia-empresas/': 'IA para empresas',
+  '/soluciones/ecommerce/': 'Tiendas online',
+  '/marketing/auditoria/': 'Auditoría gratuita',
+};
 
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    'name': `Desarrollo con ${t.nombre}`,
-    'serviceType': t.intencion,
-    'url': canonical,
-    'provider': PROVEEDOR,
-    'areaServed': { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    'mainEntity': t.faq.map((f) => ({
-      '@type': 'Question',
-      'name': f.q,
-      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
-    })),
-  },
+/* Icono de cada servicio según de qué hable. */
+const ICONOS: [RegExp, NombreIcono][] = [
+  [/(informe|cuadro|análisis|analisis|mando)/i, 'grafica'],
+  [/(documento|pdf|lectura|factura)/i, 'documento'],
+  [/(api|servicio|backend|servidor|integra)/i, 'servidor'],
+  [/(extracc|web|scrap|navegador)/i, 'globo'],
+  [/(modelo|ia|inteligencia|lenguaje|asistente|clasific)/i, 'chispa'],
+  [/(django|aplicaci|panel|admin|usuario)/i, 'pantalla'],
+  [/(proceso|dato|limpi|cruz)/i, 'capas'],
+  [/(tienda|woocommerce|pago)/i, 'carrito'],
+  [/(rendimiento|velocidad|lento|rápid|core web)/i, 'rayo'],
+  [/(migra|rescate|heredad|arregl)/i, 'llave'],
+  [/(plugin|componente|pieza|calculadora|configurador)/i, 'codigo'],
+  [/(buscador|filtro|mapa)/i, 'buscar'],
 ];
+const iconoDe = (texto: string): NombreIcono => ICONOS.find(([r]) => r.test(texto))?.[1] ?? 'codigo';
+const servicios = t.servicios.map((s) => ({ icono: iconoDe(`${s.titulo} ${s.descripcion}`), t: s.titulo, d: s.descripcion }));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: `Desarrollo con ${t.nombre}`,
+  serviceType: t.intencion,
+  url: canonical,
+  provider: PROVEEDOR,
+  areaServed: { '@type': 'AdministrativeArea', name: 'Provincia de Almería' },
+};
 ---
 
-<Sitio title={t.title} description={t.description} canonical={canonical} jsonLd={jsonLd}>
-  <Marco>
-  <Breadcrumb items={[
-    { label: 'Inicio', href: '/' },
-    { label: 'Programador web', href: '/programador-web/' },
-    { label: t.etiqueta },
-  ]} />
-
-  <section class="hero">
-    <div class="container-brutal hero__in">
-      <div class="hero__txt">
-        <p class="pw-ref">{`tec.${tecnologia}`}</p>
-        <h1 class="hero__h1">{t.h1}</h1>
-        <p class="hero__lead">{t.entradilla}</p>
-        <p class="hero__para">Para <strong>{t.distintivo}</strong>.</p>
+<Sitio title={t.title} description={t.description} canonical={canonical} type="service" jsonLd={jsonLd}>
+  <!-- PORTADA -->
+  <section class="portada luces-portada">
+    <div class="contenedor portada__rejilla">
+      <div class="portada__texto">
+        <Migas items={[{ nombre: 'Programador web', href: '/programador-web/' }, { nombre: t.etiqueta }]} />
+        <p class="antetitulo">Programación a medida · {t.nombre}</p>
+        <h1>{t.h1}</h1>
+        <p class="entradilla">{t.entradilla}</p>
+        <p class="portada__para">
+          <img src={`/iso/programador/tec-${tecnologia}.svg`} alt="" width={mini.ancho} height={mini.alto} loading="eager" decoding="async" />
+          <span>Para <b>{t.distintivo}</b>.</span>
+        </p>
+        <div class="portada__acciones">
+          <Boton href={`/contacto/?servicio=programador`}>Cuéntame tu caso</Boton>
+          <Boton href="#encargos" variante="secundario" icono="flecha-abajo">Ver ejemplos</Boton>
+        </div>
       </div>
-      <Esquema tecnologia={tecnologia} class="hero__esq" />
+      <div class="portada__escena fondo-iso">
+        <img
+          src={portada.src}
+          alt={tecnologia === 'python'
+            ? 'Escena isométrica: hoja de cálculo, PDF del proveedor, fichero del banco y una web entran en un proceso en Python que genera solo el informe del lunes y un panel'
+            : `Escena isométrica de desarrollo con ${t.nombre}`}
+          width={portada.medidas.ancho}
+          height={portada.medidas.alto}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
     </div>
   </section>
 
-  <Seccion
-    ref="01 · encargos"
-    titulo={`Cómo llegan los encargos de desarrollo ${t.etiqueta}`}
-    lead="Redactados como problemas, no como especificaciones. Arriba lo que pasa hoy; debajo, en qué queda."
-    tono="panel"
-  >
-    <Diff situaciones={t.situaciones} />
-  </Seccion>
+  <!-- ENCARGOS EN FORMATO DIFF -->
+  <section class="seccion seccion--blanca" id="encargos" aria-labelledby="encargos-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="encargos-titulo"
+        antetitulo="01 · Encargos"
+        titulo={`Cómo llegan los encargos de desarrollo ${t.etiqueta}`}
+        entradilla="Redactados como problemas, no como especificaciones. Arriba lo que pasa hoy; debajo, en qué queda."
+      />
+      <ol class="diffs">
+        {t.situaciones.map((s, i) => (
+          <li class="diff tarjeta-hover" data-aparece style={`transition-delay:${(i % 2) * 90}ms`}>
+            <span class="diff__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <p class="diff__hoy"><span aria-hidden="true">−</span><span><span class="solo-lector">Hoy: </span>«{s.encargo}»</span></p>
+            <p class="diff__luego"><span aria-hidden="true">+</span><span><span class="solo-lector">Después: </span>{s.respuesta}</span></p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
 
-  <Seccion ref="02 · repertorio" titulo={`Qué desarrollamos con ${t.nombre}`}>
-    <Servicios servicios={t.servicios} />
-  </Seccion>
+  <!-- REPERTORIO -->
+  <section class="seccion" aria-labelledby="repertorio-titulo">
+    <div class="contenedor">
+      <Encabezado id="repertorio-titulo" antetitulo="02 · Repertorio" titulo={`Qué desarrollamos con ${t.nombre}`} />
+      <Puntos items={servicios} columnas={3} />
+    </div>
+  </section>
 
+  <!-- LÁMINAS (solo las tecnologías que las necesitan) -->
   {t.laminas && t.laminas.length > 0 && (
-    <Seccion
-      ref="03 · cómo se hace"
-      titulo={`Cómo se trabaja con ${t.nombre}`}
-      lead="Las tres preguntas que salen siempre, respondidas con el dibujo delante."
-      tono="panel"
-    >
-      <div class="laminas">
-        {t.laminas.map((l) => <Lamina clave={l.clave} titulo={l.titulo} pie={l.pie} />)}
+    <section class="seccion seccion--tinta laminas-seccion fondo-iso fondo-iso--claro" aria-labelledby="laminas-titulo">
+      <div class="contenedor">
+        <div class="laminas__cabeza">
+          <p class="antetitulo antetitulo--claro">03 · Cómo se hace</p>
+          <h2 id="laminas-titulo">{`Cómo se trabaja con ${t.nombre}`}</h2>
+          <p class="entradilla">Las tres preguntas que salen siempre, respondidas con el dibujo delante.</p>
+        </div>
+        <Marco>
+          <div class="laminas">
+            {t.laminas.map((l) => <div class="lamina-caja"><Lamina clave={l.clave} titulo={l.titulo} pie={l.pie} /></div>)}
+          </div>
+        </Marco>
       </div>
-    </Seccion>
+    </section>
   )}
 
+  <!-- ZONA -->
   {locales.length > 0 && (
-    <Seccion
-      ref="04 · zona"
-      titulo={`${t.etiqueta} por municipio`}
-      lead={`Damos servicio en toda la provincia desde Vera. Bajo cada municipio está lo que allí se mueve y encaja con ${t.nombre}.`}
-      tono="panel"
-    >
-      <Enlaces enlaces={locales.map((m) => ({
-        href: rutaLocal(tecnologia, m.t.slug),
-        texto: m.t.nombre,
-        sub: m.v.encajes.length
-          ? m.v.encajes.map((e) => e.sector.toLowerCase()).slice(0, 2).join(' · ')
-          : m.t.comarca,
-      }))} />
-    </Seccion>
+    <section class="seccion seccion--blanca" aria-labelledby="zona-titulo">
+      <div class="contenedor">
+        <Encabezado
+          id="zona-titulo"
+          antetitulo="04 · Zona"
+          titulo={`${t.etiqueta} por municipio`}
+          entradilla={`Damos servicio en toda la provincia desde Vera. En cada municipio, lo que allí se mueve y encaja con ${t.nombre}.`}
+        />
+        <ul class="locales">
+          {locales.map((m) => (
+            <li>
+              <a href={rutaLocal(tecnologia, m.t.slug)} class:list={['local', 'tarjeta-hover', { 'local--destacada': m.v.estado === 'index' }]}>
+                <span class="local__cabeza">
+                  <b>{m.t.nombre}</b>
+                  <small>{m.t.slug === 'vera' ? 'estudio' : m.t.kmDesdeBase !== null ? `${m.t.kmDesdeBase} km` : m.t.comarca}</small>
+                </span>
+                <span class="local__encaje">
+                  {m.v.encajes.length ? m.v.encajes.map((e) => e.sector.toLowerCase()).slice(0, 2).join(' · ') : m.t.comarca}
+                </span>
+                {m.v.estado === 'index' && <span class="local__sello">Ficha completa</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
   )}
 
-  <Seccion ref="05 · alrededor" titulo="Tecnologías relacionadas" lead="Con lo que se combina de verdad, no con todo lo que suene parecido.">
-    <Enlaces columnas={2} enlaces={[
-      ...relacionadas.map((r) => ({
-        href: rutaTecnologia(r.slug),
-        texto: `Desarrollo con ${r.etiqueta}`,
-        sub: `Para ${r.distintivo}.`,
-      })),
-      ...t.serviciosWeb.map((href) => ({
-        href,
-        texto: href === '/soporte/' ? 'Mantenimiento web'
-          : href === '/desarrollo-web/' ? 'Diseño y desarrollo web'
-          : href === '/informatica-empresas/' ? 'Sistemas e informática'
-          : href === '/ia-empresas/' ? 'IA para empresas'
-          : href === '/soluciones/ecommerce/' ? 'Tiendas online'
-          : 'Auditoría web',
-        sub: 'Servicio relacionado',
-      })),
-    ]} />
-  </Seccion>
+  <!-- RELACIONADAS -->
+  <section class="seccion" aria-labelledby="relacionadas-titulo">
+    <div class="contenedor">
+      <Encabezado id="relacionadas-titulo" antetitulo="05 · Alrededor" titulo="Con lo que se combina de verdad" entradilla="No con todo lo que suene parecido." />
+      <ul class="relacionadas">
+        {relacionadas.map((r) => (
+          <li>
+            <a href={rutaTecnologia(r.slug)} class="relacionada tarjeta-hover">
+              <img src={`/iso/programador/tec-${r.slug}.svg`} alt="" width={mini.ancho} height={mini.alto} loading="lazy" decoding="async" />
+              <span>
+                <b>Desarrollo con {r.etiqueta}</b>
+                <small>Para {r.distintivo}.</small>
+              </span>
+              <Icono nombre="flecha" tamano={18} />
+            </a>
+          </li>
+        ))}
+        {t.serviciosWeb.filter((h) => NOMBRES_SERVICIO[h]).map((href) => (
+          <li>
+            <a href={href} class="relacionada relacionada--servicio tarjeta-hover">
+              <IconoIso nombre="maletin" tono="platano" tamano={56} />
+              <span>
+                <b>{NOMBRES_SERVICIO[href]}</b>
+                <small>Servicio relacionado</small>
+              </span>
+              <Icono nombre="flecha" tamano={18} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 
-  <Seccion ref="06 · dudas" titulo="Preguntas frecuentes" tono="panel">
-    <Faq faq={t.faq} />
-  </Seccion>
+  <!-- PREGUNTAS -->
+  <section class="seccion seccion--blanca" aria-labelledby="preguntas-titulo">
+    <div class="contenedor dos-columnas">
+      <div>
+        <IconoIso nombre="codigo" tono="tinta" tamano={84} />
+        <Encabezado id="preguntas-titulo" antetitulo="06 · Dudas" titulo={`Lo que se pregunta antes de programar con ${t.nombre}`} />
+      </div>
+      <Preguntas preguntas={t.faq.map((f) => ({ q: f.q, a: `<p>${f.a}</p>` }))} />
+    </div>
+  </section>
 
-  <Cta
+  <LlamadaFinal
     titulo={`Cuéntame qué necesitas hacer con ${t.nombre}`}
-    texto={t.situaciones[0].encargo.replace(/\.$/, '')
-      + ' — si tu caso se parece a eso, con describirlo suele bastar para saber si tiene arreglo y cuánto trabajo es.'}
-    servicio={`Desarrollo ${t.etiqueta}`}
+    texto={t.situaciones[0].encargo.replace(/\.$/, '') + '. Si tu caso se parece a eso, con describirlo suele bastar para saber si tiene arreglo y cuánto trabajo es.'}
+    servicio="programador"
   />
-  </Marco>
 </Sitio>
 
 <style>
-  .laminas { display: grid; gap: clamp(1.75rem, 4vw, 2.75rem); }
-  @media (min-width: 1100px) { .laminas { grid-template-columns: repeat(2, 1fr); } }
-  /* Todas del mismo ancho a propósito. Al dar ancho doble a una, su SVG
-     escalaba al doble y con él todo su texto, que se solapaba y se salía del
-     encuadre. Un dibujo pensado a un tamaño no sobrevive al otro. */
-
-  .hero { padding: clamp(2rem, 5vw, 3.25rem) 0 clamp(2.5rem, 5vw, 3.5rem); }
-  .hero__in { display: grid; gap: clamp(1.75rem, 4vw, 3rem); align-items: center; }
-  .hero__h1 {
-    font-size: clamp(2rem, 5.2vw, 3.2rem); font-weight: 800;
-    letter-spacing: -.04em; line-height: 1.02; margin: .4rem 0 1.1rem;
+  /* Portada */
+  .portada {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(3rem, 2rem + 3vw, 5rem);
+    overflow: hidden;
   }
-  .hero__lead { max-width: 52ch; font-size: 1.07rem; line-height: 1.65; margin: 0 0 .9rem; }
-  .hero__para { margin: 0; color: var(--pw-tenue); font-size: .95rem; }
-  .hero__para strong { color: var(--pw-luego); font-weight: 600; }
+  .portada__rejilla {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .portada__texto {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .portada h1 {
+    font-size: var(--t-4xl);
+    max-width: 13ch;
+  }
+  .portada__para {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    justify-self: start;
+    padding: 0.5rem 1.1rem 0.5rem 0.5rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--linea);
+    color: var(--tinta-2);
+    box-shadow: 0 2px 0 var(--linea);
+  }
+  .portada__para img {
+    width: 64px;
+    height: auto;
+    flex: none;
+  }
+  .portada__para b {
+    color: var(--verde);
+  }
+  .portada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .portada__escena {
+    justify-self: center;
+    width: 100%;
+    max-width: 760px;
+  }
+  .portada__escena img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (min-width: 1000px) {
+    .portada__rejilla {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.5rem;
+    }
+    .portada__escena {
+      margin-right: -3rem;
+    }
+  }
+
+  /* Encargos como diff */
+  .diffs {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+    padding: 0;
+  }
+  .diff {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    font-size: 0.95rem;
+  }
+  .diff__num {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.6rem;
+    font-weight: 800;
+    font-size: 3rem;
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1.25px rgba(14, 91, 58, 0.25);
+    pointer-events: none;
+  }
+  .diff p {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    line-height: 1.5;
+  }
+  .diff__hoy {
+    background: #fdece6;
+    color: #8f2c10;
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.88rem;
+  }
+  .diff__hoy > span:first-child {
+    color: #b93a16;
+    font-weight: 800;
+  }
+  .diff__luego {
+    background: var(--verde-suave);
+    color: var(--verde-2);
+    padding-right: 4.5rem !important;
+  }
+  .diff__luego > span:first-child {
+    color: var(--verde);
+    font-weight: 800;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .diff__hoy > span:last-child {
+      background-image: linear-gradient(rgba(185, 58, 22, 0.6), rgba(185, 58, 22, 0.6));
+      background-size: 0% 1.5px;
+      background-position: 0 55%;
+      background-repeat: no-repeat;
+      transition: background-size 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .diff:hover .diff__hoy > span:last-child {
+      background-size: 100% 1.5px;
+    }
+  }
+  @media (min-width: 900px) {
+    .diffs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Láminas */
+  .laminas-seccion {
+    overflow: hidden;
+  }
+  .laminas__cabeza {
+    display: grid;
+    gap: 1rem;
+    max-width: 46rem;
+    margin-bottom: 2.5rem;
+  }
+  .laminas__cabeza .entradilla {
+    color: #c9ccc2;
+  }
+  .laminas-seccion :global(.pw) {
+    background: transparent;
+  }
+  .laminas {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .lamina-caja {
+    padding: 1.25rem;
+    border-radius: var(--radio-l);
+    background: var(--fondo);
+    color: var(--tinta);
+  }
+  @media (min-width: 1100px) {
+    .laminas {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Zona */
+  .locales {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .local {
+    position: relative;
+    display: grid;
+    gap: 0.3rem;
+    height: 100%;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radio);
+    border: 1px solid var(--linea);
+    background: var(--fondo);
+    text-decoration: none;
+  }
+  .local:hover {
+    border-color: var(--verde);
+  }
+  .local__cabeza {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .local__cabeza small {
+    font-size: var(--t-xs);
+    font-weight: 650;
+    color: var(--tenue);
+  }
+  .local__encaje {
+    font-size: var(--t-s);
+    color: var(--tinta-2);
+    line-height: 1.4;
+  }
+  .local--destacada {
+    background: linear-gradient(160deg, #fff7d6, #fff0bc);
+    border-color: #f3e2a6;
+  }
+  .local__sello {
+    justify-self: start;
+    margin-top: 0.3rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--verde);
+    color: #fff;
+    font-size: var(--t-xs);
+    font-weight: 700;
+  }
+
+  /* Relacionadas */
+  .relacionadas {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .relacionada {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    height: 100%;
+    padding: 1rem 1.25rem 1rem 1rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    text-decoration: none;
+  }
+  .relacionada img {
+    width: 72px;
+    height: auto;
+  }
+  .relacionada span {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .relacionada small {
+    color: var(--tenue);
+    font-size: var(--t-s);
+    line-height: 1.4;
+  }
+  .relacionada :global(.icono) {
+    color: var(--verde);
+  }
+  @media (min-width: 800px) {
+    .relacionadas {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .dos-columnas {
+    display: grid;
+    gap: 1.5rem;
+  }
   @media (min-width: 960px) {
-    .hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+    .dos-columnas {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
   }
 </style>

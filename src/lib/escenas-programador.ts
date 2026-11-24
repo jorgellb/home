@@ -187,3 +187,85 @@ export function escenaTecnologia(slug: string, independiente = false) {
 export function escenaSector(slug: string, independiente = false) {
   return escenaPueblo(SECTORES[slug] ?? { semilla: 3 }, undefined, independiente);
 }
+
+/* ── Python: pipeline de datos ────────────────────────────────────── */
+
+function pipelinePython(e: Escena) {
+  const z = plataforma(e, 300, 236);
+
+  // Fuentes: hoja de cálculo, PDF del proveedor, fichero del banco y una web
+  e.caja({ x: 18, y: 18, z, w: 56, d: 6, h: 50, m: 'blanco', sombra: true });
+  for (let f = 0; f < 5; f++) for (let c = 0; c < 4; c++) e.caraY(21 + c * 12.5, 24.01, z + 38 - f * 8, 11, 6, f === 0 ? '#DDF4E7' : (f + c) % 3 === 0 ? '#FFE2D8' : '#F6F5EF');
+
+  [0, 1, 2].forEach((i) => e.caja({ x: 96, y: 14 + i * 3, z: z + i * 5, w: 38, d: 46, h: 4, m: i === 2 ? 'blanco' : 'papel', sombra: i === 0 }));
+  e.losa(100, 22, z + 14.1, 12, 6, CORAL);
+  [0, 1, 2].forEach((i) => e.losa(100, 32 + i * 7, z + 14.1, i ? 26 : 18, 3, i ? GRIS_2 : TINTA));
+
+  e.caja({ x: 160, y: 16, z, w: 42, d: 36, h: 30, m: 'tinta', sombra: true });
+  [0, 1, 2].forEach((i) => e.caraY(165, 52.01, z + 20 - i * 7, 30 - i * 6, 3, i === 0 ? PLATANO : '#5A6153'));
+
+  const fw = navegador(e, 226, 20, z, 56, 46);
+  e.caraY(229, fw, z + 20, 50, 12, CIELO);
+  [0, 1].forEach((i) => e.caraY(232, fw, z + 12 - i * 6, 36 - i * 10, 3, GRIS_2));
+
+  // Lo que entra (desordenado, coral) hacia el proceso
+  e.flujo([[46, 24, z + 0.6], [46, 84, z + 0.6], [112, 84, z + 0.6], [112, 98, z + 0.6]], CORAL, { n: 2, duracion: 3.2, guia: GRIS_2 });
+  e.flujo([[115, 60, z + 0.6], [130, 98, z + 0.6]], CORAL, { n: 2, duracion: 2.2, guia: GRIS_2 });
+  e.flujo([[181, 52, z + 0.6], [181, 84, z + 0.6], [160, 84, z + 0.6], [160, 98, z + 0.6]], CORAL, { n: 2, duracion: 2.6, guia: GRIS_2 });
+  e.flujo([[254, 66, z + 0.6], [254, 90, z + 0.6], [178, 90, z + 0.6], [178, 98, z + 0.6]], CORAL, { n: 2, duracion: 3, guia: GRIS_2 });
+
+  // El proceso en Python (azul y amarillo), con código que corre en su frente
+  const px = 104;
+  const py = 98;
+  e.caja({ x: px, y: py, z, w: 80, d: 56, h: 42, m: 'azul', sombra: true });
+  e.grupo({ clase: 'iso-pulso', duracion: 2.4 }, (g) => g.caja({ x: px + 12, y: py + 10, z: z + 42, w: 56, d: 36, h: 8, m: 'platano' }));
+  const f = py + 56.01;
+  const vista: Punto3[] = [[px + 8, f, z + 6], [px + 72, f, z + 6], [px + 72, f, z + 36], [px + 8, f, z + 36]];
+  e.caraY(px + 8, f - 0.005, z + 6, 64, 30, '#1C2747');
+  const lineas: [number, number, string][] = [[0, 30, PLATANO], [6, 40, '#9BC9E8'], [6, 22, BLANCO], [12, 34, PLATANO], [6, 28, '#7CC4A0'], [0, 38, '#9BC9E8'], [6, 24, PLATANO], [12, 30, BLANCO]];
+  e.recorte(vista, (c) =>
+    c.grupo({ clase: 'iso-desplaza', duracion: 6 }, (g) => lineas.forEach(([x, w, color], i) => g.caraY(px + 12 + x, f, z + 30 - i * 5, w, 2.4, color))),
+  );
+
+  // Sale ordenado (verde) por la cinta hacia el informe y el panel
+  e.losa(130, 156, z + 0.4, 20, 48, '#5A6153');
+  for (let k = 0; k < 6; k++) e.linea([130, 160 + k * 8, z + 0.6], [150, 160 + k * 8, z + 0.6], '#3D4339', 1);
+  e.flujo([[140, 156, z + 2], [140, 202, z + 2]], VERDE, { n: 3, duracion: 1.8, radio: 3.6 });
+  e.flujo([[184, 126, z + 0.6], [214, 126, z + 0.6], [214, 158, z + 0.6]], VERDE, { n: 2, duracion: 2, guia: GRIS_2 });
+
+  // Informe automático con barras que crecen
+  e.caja({ x: 112, y: 206, z, w: 60, d: 6, h: 54, m: 'blanco', sombra: true });
+  e.caraY(116, 212.01, z + 44, 30, 4, TINTA);
+  [18, 28, 38].forEach((h, i) =>
+    e.grupo({ clase: 'iso-crece', retraso: i * 0.3, duracion: 4 }, (g) => g.caraY(118 + i * 15, 212.02, z + 6, 10, h, i === 2 ? VERDE : '#93D0AE')),
+  );
+
+  // Panel con los datos al día
+  const fp = navegador(e, 214, 158, z, 70, 54);
+  [0, 1, 2, 3].forEach((i) => e.grupo({ clase: 'iso-crece', retraso: 0.2 + i * 0.25, duracion: 5 }, (g) => g.caraY(220 + i * 15, fp, z + 4, 10, 12 + i * 7, i === 3 ? VERDE : CIELO)));
+
+  // El informe sale solo por correo
+  e.arco([142, 209, z + 60], [290, 236, z + 26], 46, PLATANO, { n: 2, duracion: 2.8 });
+  e.grupo({ clase: 'iso-flota', duracion: 3 }, (g) => {
+    g.caja({ x: 276, y: 224, z: z + 18, w: 22, d: 16, h: 4, m: 'platano' });
+    g.ruta([[276, 224, z + 22.1], [287, 232, z + 22.1], [298, 224, z + 22.1]], '#D39C12', 1.4);
+  });
+
+  e.persona(22, 104, z, 'verde', 0.95);
+  aviso(e, 30, 90, z + 52, VERDE, 2);
+
+  // Etiquetas al final, para que queden encima de todo
+  e.cartel([46, 21, z + 70], 'Hoja de cálculo');
+  e.cartel([80, 14, z + 40], 'PDF del proveedor');
+  e.cartel([196, 34, z + 34], 'Fichero del banco');
+  e.cartel([254, 24, z + 80], 'Una web');
+  e.cartel([px + 40, py + 28, z + 96], 'Proceso en Python');
+  e.cartel([142, 209, z + 70], 'Informe del lunes');
+  e.cartel([262, 186, z + 60], 'Panel');
+}
+
+export function escenaPython(independiente = false) {
+  const e = new Escena();
+  pipelinePython(e);
+  return e.svg({ clase: 'iso-python', independiente });
+}

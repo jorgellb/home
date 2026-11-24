@@ -1,6 +1,950 @@
 ---
-import PlantillaServicio from '../../components/sitio/PlantillaServicio.astro';
-import { informaticaHub } from '../../data/servicios/informatica';
+/* Hub de informática para empresas. Página de conversión: contacto visible
+   en todo momento, urgencia, confianza con datos reales y formulario en la
+   propia página. SEO: «mantenimiento informático», «servicio técnico
+   informático», «soporte IT» y «empresa de informática» en Almería, con
+   enlazado a los cinco servicios y a los diez municipios de visita presencial. */
+import Sitio from '../../layouts/Sitio.astro';
+import Migas from '../../components/sitio/Migas.astro';
+import Boton from '../../components/sitio/Boton.astro';
+import Icono from '../../components/sitio/Icono.astro';
+import IconoIso from '../../components/sitio/IconoIso.astro';
+import Encabezado from '../../components/sitio/Encabezado.astro';
+import Puntos from '../../components/sitio/Puntos.astro';
+import Pasos from '../../components/sitio/Pasos.astro';
+import Guia from '../../components/sitio/Guia.astro';
+import Formulario from '../../components/sitio/Formulario.astro';
+import Preguntas from '../../components/sitio/Preguntas.astro';
+import type { NombreIcono } from '../../components/sitio/iconos';
+import { escenaIT } from '../../lib/escenas-it';
+import { serviciosIT, pueblosIT, plan360, HUB_IT } from '../../data/servicios-it';
+import { territorioDe } from '../../data/territorio';
+import { CONTACTO } from '../../data/navegacion';
+import { CIFRAS, PROVEEDOR, SITE } from '../../data/negocio';
+
+const canonical = `${SITE}${HUB_IT}`;
+const oficina = escenaIT('oficina');
+const cobertura = escenaIT('cobertura');
+const valoracion = String(CIFRAS.valoracion).replace('.', ',');
+const municipios = pueblosIT.map((p) => ({ ...p, km: territorioDe(p.slug)?.kmDesdeBase ?? null }));
+const nombresMunicipios = pueblosIT.map((p) => p.nombre);
+const listaMunicipios = `${nombresMunicipios.slice(0, -1).join(', ')} y ${nombresMunicipios.at(-1)}`;
+
+const ICONOS: Record<string, NombreIcono> = { helpdesk: 'conversacion', red: 'globo', servidor: 'servidor', equipo: 'pantalla', escudo: 'escudo' };
+
+/* Dolores reales recogidos en los datos de cada servicio. */
+const sintomas = [
+  { hoy: 'Equipos lentos que nadie revisa hasta que se rompen.', luego: 'Revisión preventiva cada mes: el fallo se ve antes de que te pare.' },
+  { hoy: 'Copias de seguridad que nadie ha probado nunca.', luego: 'Copias 3-2-1 con prueba de restauración mensual.' },
+  { hoy: 'Un wifi que se cae en plena jornada.', luego: 'Red profesional con estudio de cobertura y red separada para clientes.' },
+  { hoy: 'Depender del conocido que «sabe de ordenadores».', luego: 'Un responsable con nombre, teléfono y visita el mismo día.' },
+];
+
+const sectores = [
+  { icono: 'maletin' as const, t: 'Gestorías y despachos', d: 'Datos de clientes que no se pueden perder, plazos que no esperan y programas de gestión que tienen que funcionar.' },
+  { icono: 'salud' as const, t: 'Clínicas y centros de salud', d: 'Historias clínicas protegidas, citas que no se caen y equipos de recepción siempre listos.' },
+  { icono: 'sol' as const, t: 'Hoteles, apartamentos y restaurantes', d: 'Wifi para clientes que llega a todas partes, TPV fiables y reservas a salvo en plena temporada.' },
+  { icono: 'fabrica' as const, t: 'Comercios, talleres y almacenes', d: 'Redes que cubren naves, equipos que aguantan el polvo y copias de la facturación.' },
+];
+
+const pasos = [
+  { t: 'Visita de diagnóstico', d: 'Vamos a tu empresa y revisamos equipos, red, copias y seguridad.', cuando: 'Semana 1' },
+  { t: 'Propuesta cerrada', d: 'Qué urge, qué puede esperar y qué cuesta cada cosa, por escrito y sin tecnicismos.', cuando: '2-3 días' },
+  { t: 'Puesta a punto', d: 'Lo crítico primero: copias que no funcionan, equipos sin proteger y redes mal configuradas.', cuando: '1-2 semanas' },
+  { t: 'Mantenimiento continuo', d: 'Preventivo mensual, helpdesk remoto y técnico el mismo día cuando hace falta.', cuando: 'Cada mes' },
+];
+
+const guia = [
+  { t: '¿Cuándo se comprobó por última vez que las copias se pueden restaurar?', d: 'Una copia que nunca se ha restaurado es una esperanza, no una copia. La regla 3-2-1: tres copias, dos soportes, una fuera de la oficina.' },
+  { t: '¿Quién tiene las contraseñas del router, el correo y el dominio?', d: 'Si la respuesta es «el informático de antes» o «no lo sé», cualquier incidencia se convierte en una emergencia.' },
+  { t: '¿Tiene doble factor el correo de la empresa?', d: 'Es la medida más barata y eficaz contra el robo de cuentas. Sin ella, una contraseña filtrada basta para entrar.' },
+  { t: '¿Qué pasa si mañana no arranca el ordenador de facturación?', d: 'Cuánto tardarías en volver a facturar y desde dónde. Ese tiempo es lo que cuesta no tener un plan.' },
+  { t: '¿Tus clientes usan la misma wifi que tus equipos?', d: 'La red de invitados debe ir separada. Si no, cualquiera en la sala de espera está en tu red de trabajo.' },
+];
+
+const comparativa = [
+  { aspecto: 'Coste', plantilla: 'Un sueldo completo con Seguridad Social', avisos: 'Cada visita se paga y es imprevisible', nosotros: 'Cuota mensual cerrada por escrito' },
+  { aspecto: 'Vacaciones y bajas', plantilla: 'Sin cobertura', avisos: 'Depende de si alguien puede venir', nosotros: 'Siempre hay un técnico disponible' },
+  { aspecto: 'Prevención', plantilla: 'Según la persona', avisos: 'Ninguna: solo se arregla lo roto', nosotros: 'Revisión preventiva cada mes' },
+  { aspecto: 'Copias de seguridad', plantilla: 'Según la persona', avisos: 'Nadie las comprueba', nosotros: 'Prueba de restauración mensual' },
+  { aspecto: 'Si algo falla', plantilla: 'Si está en la oficina', avisos: 'Cuando haya hueco', nosotros: 'Remoto en minutos o visita el mismo día' },
+];
+
+const preguntas = [
+  { q: '¿Cuánto cuesta el mantenimiento informático de una empresa?', a: '<p>Depende del número de puestos, servidores y de lo que necesites. Tras la visita de diagnóstico te damos una propuesta cerrada por escrito, sin sorpresas. Para pymes de hasta 10 puestos existe el <a href="/plan-360/">Plan 360</a>, que junta informática y web en una cuota fija.</p>' },
+  { q: '¿Cuánto tarda en llegar el técnico?', a: `<p>Muchas incidencias se resuelven en remoto en minutos. Si hace falta ir, en ${listaMunicipios} vamos el mismo día.</p>` },
+  { q: '¿Qué zonas cubrís con visita presencial?', a: `<p>${listaMunicipios}. En el resto de la provincia de Almería damos soporte remoto y visitas programadas.</p>` },
+  { q: '¿Hay permanencia?', a: '<p>No. El mantenimiento es mes a mes. Si te vas, te entregamos el inventario, las contraseñas y la documentación de tu red.</p>' },
+  { q: '¿Trabajáis con Windows, Mac y Microsoft 365?', a: '<p>Sí. Mantenemos Windows, macOS y Linux, Microsoft 365 y Google Workspace, además de impresoras, TPV, NAS y dispositivos de red.</p>' },
+  { q: '¿Qué hacéis si nos ataca un ransomware?', a: '<p>Se aísla el equipo afectado, se limpia y se restaura desde una copia inmutable, que el ataque no puede cifrar. Con copias bien hechas, la empresa vuelve a trabajar en horas, no en semanas.</p>' },
+  { q: '¿Atendéis a autónomos y empresas pequeñas?', a: '<p>Sí: autónomos, despachos y pymes. No damos servicio a particulares; todo está pensado para que una empresa no se pare.</p>' },
+  { q: '¿Cumplís con el RGPD en las copias?', a: '<p>Las copias en la nube se cifran y se guardan en centros de datos de la Unión Europea, con contrato de encargado del tratamiento.</p>' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Mantenimiento informático para empresas en Almería',
+  serviceType: 'Mantenimiento informático y servicio técnico para empresas',
+  description: 'Mantenimiento informático, redes y wifi, servidores y copias de seguridad, ordenadores y ciberseguridad para empresas de Almería, con técnico in situ el mismo día en el Levante y el Almanzora.',
+  url: canonical,
+  provider: PROVEEDOR,
+  areaServed: [
+    ...pueblosIT.map((p) => ({ '@type': 'City', name: p.nombre })),
+    { '@type': 'AdministrativeArea', name: 'Provincia de Almería' },
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios informáticos para empresas',
+    itemListElement: serviciosIT.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.nav, description: s.resumen, url: `${SITE}${HUB_IT}${s.slug}/` },
+    })),
+  },
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: String(CIFRAS.valoracion), reviewCount: String(CIFRAS.numResenas), bestRating: '5', worstRating: '1' },
+};
 ---
 
-<PlantillaServicio datos={informaticaHub} />
+<Sitio
+  title="Mantenimiento informático para empresas en Almería | Platanito Rico"
+  description={`Servicio técnico informático para empresas: mantenimiento, redes, servidores, copias y ciberseguridad. Técnico in situ el mismo día en Vera y el Levante. Sin permanencia.`}
+  canonical={canonical}
+  type="service"
+  jsonLd={jsonLd}
+>
+  <!-- PORTADA -->
+  <section class="portada luces-portada">
+    <div class="contenedor portada__rejilla">
+      <div class="portada__texto">
+        <Migas items={[{ nombre: 'Informática para empresas' }]} />
+        <p class="antetitulo">Informática para empresas · Levante y Almanzora</p>
+        <h1>Mantenimiento informático para empresas en Almería <span class="h1b">Tu departamento de informática, <span class="subrayado">sin contratarlo</span></span></h1>
+        <p class="entradilla">
+          Nos ocupamos de ordenadores, red, servidores, copias y seguridad para que tu empresa no se pare. Un solo
+          responsable, helpdesk remoto y técnico en tu puerta el mismo día.
+        </p>
+        <ul class="portada__puntos">
+          <li><Icono nombre="check" tamano={18} /> Visita in situ el mismo día en {pueblosIT.length} municipios</li>
+          <li><Icono nombre="check" tamano={18} /> Copias de seguridad verificadas cada mes</li>
+          <li><Icono nombre="check" tamano={18} /> Sin permanencia: mes a mes</li>
+        </ul>
+        <div class="portada__acciones">
+          <Boton href="#contacto">Pide una visita de diagnóstico</Boton>
+          <Boton href={CONTACTO.telefonoHref} variante="secundario" icono="telefono">{CONTACTO.telefono}</Boton>
+        </div>
+        <ul class="portada__confianza">
+          <li><span class="estrellas" aria-hidden="true">★★★★★</span> <b>{valoracion}</b> en {CIFRAS.numResenas} reseñas</li>
+          <li><Icono nombre="reloj" tamano={16} /> Respuesta en <b>&lt; {CIFRAS.respuestaHoras} h</b></li>
+          <li><Icono nombre="ubicacion" tamano={16} /> Base en <b>Vera</b></li>
+        </ul>
+      </div>
+      <div class="portada__escena fondo-iso">
+        <img
+          src="/iso/it/oficina.svg"
+          alt="Oficina isométrica con servidor, copias que suben a una nube cifrada, red wifi, puestos de trabajo protegidos y la furgoneta del técnico llegando"
+          width={oficina.ancho}
+          height={oficina.alto}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- URGENCIA -->
+  <section class="urgencia" aria-labelledby="urgencia-titulo">
+    <div class="contenedor urgencia__caja">
+      <span class="urgencia__pulso" aria-hidden="true"></span>
+      <div>
+        <h2 id="urgencia-titulo">¿Algo ha dejado de funcionar ahora mismo?</h2>
+        <p>Llámanos o escríbenos. Muchas incidencias se resuelven en remoto en minutos y, si hace falta, vamos el mismo día.</p>
+      </div>
+      <div class="urgencia__acciones">
+        <a href={CONTACTO.telefonoHref} class="urgencia__boton urgencia__boton--tel"><Icono nombre="telefono" tamano={20} /> Llamar ahora</a>
+        <a href={`${CONTACTO.whatsapp}?text=${encodeURIComponent('Hola, tenemos un problema informático en la empresa')}`} class="urgencia__boton" target="_blank" rel="noopener"><Icono nombre="whatsapp" tamano={20} /> WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SÍNTOMAS -->
+  <section class="seccion" aria-labelledby="sintomas-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="sintomas-titulo"
+        antetitulo="Lo que vemos cada semana"
+        titulo="Si te pasa alguna de estas cosas, tu empresa depende de la suerte"
+        entradilla="Son los cuatro problemas que más encontramos en las empresas del Levante y el Almanzora, y cómo quedan cuando alguien se ocupa."
+      />
+      <ul class="diffs">
+        {sintomas.map((s, i) => (
+          <li class="diff tarjeta-hover" data-aparece style={`transition-delay:${(i % 2) * 90}ms`}>
+            <p class="diff__hoy"><span aria-hidden="true">−</span><span><span class="solo-lector">Hoy: </span>{s.hoy}</span></p>
+            <p class="diff__luego"><span aria-hidden="true">+</span><span><span class="solo-lector">Con nosotros: </span>{s.luego}</span></p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="seccion seccion--blanca" id="servicios" aria-labelledby="servicios-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="servicios-titulo"
+        antetitulo="Servicios"
+        titulo="Servicio técnico informático para empresas: todo lo que hace funcionar tu oficina"
+        entradilla="Cinco servicios con un solo responsable. Puedes contratar uno o dejarnos toda la informática de la empresa."
+      />
+      <ul class="servicios">
+        {serviciosIT.map((s, i) => (
+          <li class:list={['servicio', { 'servicio--grande': i === 0 }]} data-aparece style={`transition-delay:${(i % 3) * 70}ms`}>
+            <a href={`${HUB_IT}${s.slug}/`} class="servicio__enlace tarjeta-hover">
+              <IconoIso nombre={ICONOS[s.icon] ?? 'servidor'} tono={i === 0 ? 'platano' : i % 2 ? 'verde' : 'tinta'} tamano={i === 0 ? 96 : 68} />
+              <h3>{s.nav}</h3>
+              <p>{s.resumen}</p>
+              <ul class="servicio__incluye">
+                {s.incluye.slice(0, i === 0 ? 6 : 3).map((b) => <li><Icono nombre="check" tamano={15} /> {b.t}</li>)}
+              </ul>
+              <span class="servicio__ir">Ver {s.nav.toLowerCase()} <Icono nombre="flecha" tamano={16} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- COBERTURA -->
+  <section class="seccion cobertura-seccion" aria-labelledby="cobertura-titulo">
+    <div class="contenedor cobertura">
+      <div>
+        <Encabezado
+          id="cobertura-titulo"
+          antetitulo="Cobertura"
+          titulo="Técnico informático in situ el mismo día en el Levante y el Almanzora"
+          entradilla="Salimos cada mañana desde Vera. En estos municipios, si una incidencia no se resuelve en remoto, vamos a tu empresa el mismo día. En el resto de la provincia, soporte remoto y visitas programadas."
+        />
+        <ul class="municipios">
+          {municipios.map((m) => (
+            <li>
+              <a href={`${HUB_IT}${m.slug}/`} class="municipio tarjeta-hover">
+                <span>
+                  <b>Informático en {m.nombre}</b>
+                  <small>{m.comarca}</small>
+                </span>
+                <span class="municipio__km">{m.slug === 'vera' ? 'Base' : `${m.km} km`}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="cobertura__mapa fondo-iso">
+        <img src="/iso/it/cobertura.svg" alt={`Mapa isométrico de los ${pueblosIT.length} municipios con visita el mismo día, conectados con el estudio de Vera`} width={cobertura.ancho} height={cobertura.alto} loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARATIVA -->
+  <section class="seccion seccion--blanca" aria-labelledby="comparativa-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="comparativa-titulo"
+        antetitulo="Comparativa"
+        titulo="Las tres formas de llevar la informática de una empresa"
+        entradilla="Sin cifras inventadas: lo que cambia en el día a día con cada opción."
+      />
+      <div class="tres" role="table" aria-label="Comparativa de opciones">
+        <div class="tres__fila tres__cabeza" role="row">
+          <span role="columnheader"><span class="solo-lector">Aspecto</span></span>
+          <span role="columnheader">Técnico en plantilla</span>
+          <span role="columnheader">Llamar cuando falla</span>
+          <span role="columnheader" class="tres__nos"><IconoIso nombre="check" tono="verde" tamano={40} /> Con nosotros</span>
+        </div>
+        {comparativa.map((f) => (
+          <div class="tres__fila" role="row" data-aparece>
+            <span role="rowheader" class="tres__aspecto">{f.aspecto}</span>
+            <span role="cell" class="tres__otro"><span class="tres__etiqueta">Técnico en plantilla: </span>{f.plantilla}</span>
+            <span role="cell" class="tres__otro"><span class="tres__etiqueta">Llamar cuando falla: </span>{f.avisos}</span>
+            <span role="cell" class="tres__nos"><Icono nombre="check" tamano={16} /> <span><span class="tres__etiqueta">Con nosotros: </span>{f.nosotros}</span></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTORES -->
+  <section class="seccion" aria-labelledby="sectores-titulo">
+    <div class="contenedor">
+      <Encabezado id="sectores-titulo" antetitulo="Para quién" titulo="Empresas que no se pueden permitir parar" />
+      <Puntos items={sectores} columnas={4} plano />
+    </div>
+  </section>
+
+  <!-- GUÍA -->
+  <Guia
+    antetitulo="Revísalo hoy"
+    titulo="Cinco preguntas que deberías poder responder sobre tu informática"
+    entradilla="Si alguna te deja dudando, merece la pena una visita de diagnóstico."
+    bloques={guia}
+    accion={{ href: '#contacto', texto: 'Pedir una visita' }}
+    id="guia-it"
+  />
+
+  <!-- PROCESO -->
+  <section class="seccion seccion--blanca" aria-labelledby="proceso-titulo">
+    <div class="contenedor">
+      <Encabezado id="proceso-titulo" antetitulo="Cómo empezamos" titulo="De la primera visita a tener la informática en orden" />
+      <Pasos pasos={pasos} />
+    </div>
+  </section>
+
+  <!-- PLAN 360 -->
+  <section class="seccion seccion--compacta" aria-labelledby="plan-titulo">
+    <div class="contenedor">
+      <a href={plan360.href} class="plan tarjeta-hover">
+        <IconoIso nombre="capas" tono="platano" tamano={88} />
+        <div>
+          <p class="antetitulo antetitulo--claro">Plan 360</p>
+          <h2 id="plan-titulo">¿Hasta {plan360.puestos} puestos? Web e informática en una sola cuota</h2>
+          <p>Tu web, tus equipos, el servidor, la red y las copias, con una persona responsable y sin permanencia.</p>
+        </div>
+        <span class="plan__ir">Ver el Plan 360 <Icono nombre="flecha" tamano={18} /></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="seccion contacto-seccion" id="contacto" aria-labelledby="contacto-titulo">
+    <div class="contenedor contacto">
+      <div class="contacto__texto">
+        <p class="antetitulo">Visita de diagnóstico</p>
+        <h2 id="contacto-titulo">Cuéntanos cómo trabajáis y te decimos qué urge</h2>
+        <p class="entradilla">Revisamos equipos, red, copias y seguridad en tu empresa y te dejamos por escrito qué conviene hacer primero.</p>
+        <ul class="contacto__canales">
+          <li><a href={CONTACTO.telefonoHref}><IconoIso nombre="telefono" tono="verde" tamano={48} /><span><b>{CONTACTO.telefono}</b><small>De lunes a viernes</small></span></a></li>
+          <li><a href={CONTACTO.whatsapp} target="_blank" rel="noopener"><IconoIso nombre="whatsapp" tono="platano" tamano={48} /><span><b>WhatsApp</b><small>La vía más rápida</small></span></a></li>
+        </ul>
+      </div>
+      <div class="contacto__caja">
+        <Formulario
+          servicio="informatica"
+          boton="Pedir la visita"
+          extra={[{ name: 'puestos', label: 'Número de ordenadores', placeholder: 'Por ejemplo, 6' }]}
+          mensajePlaceholder="Qué usáis (Windows, Mac, servidor, programa de gestión…) y qué os da problemas."
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS -->
+  <section class="seccion seccion--blanca" aria-labelledby="preguntas-titulo">
+    <div class="contenedor dos-columnas">
+      <div>
+        <IconoIso nombre="servidor" tono="tinta" tamano={84} />
+        <Encabezado id="preguntas-titulo" antetitulo="Preguntas frecuentes" titulo="Sobre el mantenimiento informático de tu empresa" />
+      </div>
+      <Preguntas preguntas={preguntas} />
+    </div>
+  </section>
+
+  <!-- BARRA FIJA EN MÓVIL -->
+  <nav class="barra" aria-label="Contacto rápido">
+    <a href={CONTACTO.telefonoHref}><Icono nombre="telefono" tamano={20} /> Llamar</a>
+    <a href={CONTACTO.whatsapp} target="_blank" rel="noopener"><Icono nombre="whatsapp" tamano={20} /> WhatsApp</a>
+    <a href="#contacto" class="barra__principal">Pedir visita</a>
+  </nav>
+</Sitio>
+
+<style>
+  /* Portada */
+  .portada {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(2.5rem, 2rem + 3vw, 4rem);
+    overflow: hidden;
+  }
+  .portada__rejilla {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .portada__texto {
+    display: grid;
+    gap: 1.2rem;
+  }
+  .portada h1 {
+    font-size: clamp(2.4rem, 1.5rem + 3.6vw, 4.6rem);
+  }
+  .h1b {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.5em;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--tinta-2);
+  }
+  .portada__puntos {
+    list-style: none;
+    display: grid;
+    gap: 0.45rem;
+    color: var(--tinta-2);
+    font-weight: 600;
+  }
+  .portada__puntos li {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+  }
+  .portada__puntos :global(.icono) {
+    color: var(--verde);
+  }
+  .portada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .portada__confianza {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.4rem;
+    font-size: var(--t-s);
+    color: var(--tinta-2);
+  }
+  .portada__confianza li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .portada__confianza :global(.icono) {
+    color: var(--verde);
+  }
+  .portada__escena {
+    justify-self: center;
+    width: 100%;
+    max-width: 760px;
+  }
+  .portada__escena img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (min-width: 1000px) {
+    .portada__rejilla {
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 1.5rem;
+    }
+    .portada__escena {
+      margin-right: -3rem;
+    }
+  }
+
+  /* Urgencia */
+  .urgencia__caja {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+    padding: 1.5rem 1.75rem;
+    border-radius: var(--radio-l);
+    background: var(--tinta);
+    color: #fff;
+    overflow: hidden;
+  }
+  .urgencia__pulso {
+    position: absolute;
+    top: 1.6rem;
+    left: 1.75rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--coral);
+    box-shadow: 0 0 0 0 rgba(255, 127, 92, 0.6);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .urgencia__pulso {
+      animation: pulso-urgencia 1.8s ease-out infinite;
+    }
+  }
+  @keyframes pulso-urgencia {
+    to {
+      box-shadow: 0 0 0 14px rgba(255, 127, 92, 0);
+    }
+  }
+  .urgencia h2 {
+    padding-left: 1.5rem;
+    font-size: var(--t-xl);
+    color: #fff;
+  }
+  .urgencia p {
+    margin-top: 0.35rem;
+    color: #c9ccc2;
+  }
+  .urgencia__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .urgencia__boton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .urgencia__boton:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .urgencia__boton--tel {
+    background: var(--platano);
+    border-color: var(--platano);
+    color: var(--tinta);
+  }
+  .urgencia__boton--tel:hover {
+    background: #ffe07a;
+  }
+  @media (min-width: 900px) {
+    .urgencia__caja {
+      grid-template-columns: 1fr auto;
+      padding: 1.75rem 2rem;
+    }
+  }
+
+  /* Diff */
+  .diffs {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .diff {
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+  }
+  .diff p {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    line-height: 1.5;
+  }
+  .diff__hoy {
+    background: #fdece6;
+    color: #8f2c10;
+  }
+  .diff__hoy > span:first-child,
+  .diff__luego > span:first-child {
+    font-weight: 800;
+  }
+  .diff__luego {
+    background: var(--verde-suave);
+    color: var(--verde-2);
+    font-weight: 600;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .diff__hoy > span:last-child {
+      background-image: linear-gradient(rgba(185, 58, 22, 0.6), rgba(185, 58, 22, 0.6));
+      background-size: 0% 1.5px;
+      background-position: 0 55%;
+      background-repeat: no-repeat;
+      transition: background-size 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .diff:hover .diff__hoy > span:last-child {
+      background-size: 100% 1.5px;
+    }
+  }
+  @media (min-width: 900px) {
+    .diffs {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Servicios */
+  .servicios {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .servicio__enlace {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    height: 100%;
+    padding: 1.6rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--fondo);
+    text-decoration: none;
+  }
+  .servicio h3 {
+    margin-top: 0.4rem;
+    font-size: var(--t-xl);
+  }
+  .servicio p {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+  }
+  .servicio__incluye {
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+    margin-top: 0.3rem;
+    font-size: var(--t-s);
+    font-weight: 600;
+  }
+  .servicio__incluye li {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+  }
+  .servicio__incluye :global(.icono) {
+    color: var(--verde);
+    flex: none;
+  }
+  .servicio__ir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    color: var(--verde);
+    font-weight: 700;
+    font-size: var(--t-s);
+  }
+  .servicio--grande .servicio__enlace {
+    color: #fff;
+    background:
+      radial-gradient(80% 70% at 85% 15%, rgba(255, 207, 63, 0.22), transparent 70%),
+      linear-gradient(160deg, #16724a, var(--verde) 60%, var(--verde-2));
+    border-color: var(--verde-2);
+    padding: 2rem;
+  }
+  .servicio--grande h3 {
+    font-size: var(--t-2xl);
+    color: #fff;
+  }
+  .servicio--grande p {
+    color: #d5ecdf;
+    font-size: var(--t-m);
+  }
+  .servicio--grande .servicio__incluye {
+    gap: 0.5rem 1rem;
+    color: #fff;
+  }
+  @media (min-width: 560px) {
+    .servicio--grande .servicio__incluye {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .servicio--grande .servicio__incluye :global(.icono),
+  .servicio--grande .servicio__ir {
+    color: var(--platano);
+  }
+  @media (min-width: 700px) {
+    .servicios {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .servicio--grande {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 1050px) {
+    .servicios {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .servicio--grande {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+  }
+
+  /* Cobertura */
+  .cobertura {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+  }
+  .municipios {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 0.6rem;
+  }
+  .municipio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radio);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    text-decoration: none;
+  }
+  .municipio:hover {
+    border-color: var(--verde);
+  }
+  .municipio span:first-child {
+    display: grid;
+  }
+  .municipio b {
+    font-size: var(--t-s);
+  }
+  .municipio small {
+    font-size: var(--t-xs);
+    color: var(--tenue);
+  }
+  .municipio__km {
+    flex: none;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--verde-suave);
+    color: var(--verde);
+    font-size: var(--t-xs);
+    font-weight: 800;
+  }
+  .cobertura__mapa img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+  @media (min-width: 1000px) {
+    .cobertura {
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+  }
+
+  /* Comparativa a tres */
+  .tres {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .tres__fila {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--fondo);
+  }
+  .tres__cabeza {
+    display: none;
+  }
+  .tres__aspecto {
+    font-weight: 750;
+  }
+  .tres__otro,
+  .tres__nos {
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+    font-size: var(--t-s);
+  }
+  .tres__otro {
+    background: var(--fondo-2);
+    color: var(--tenue);
+  }
+  .tres__nos {
+    display: flex;
+    gap: 0.45rem;
+    align-items: flex-start;
+    background: linear-gradient(160deg, #e9f6ee, var(--verde-suave));
+    color: var(--tinta);
+    font-weight: 650;
+  }
+  .tres__nos :global(.icono) {
+    color: var(--verde);
+    margin-top: 0.15rem;
+    flex: none;
+  }
+  .tres__etiqueta {
+    font-weight: 700;
+  }
+  @media (min-width: 900px) {
+    .tres__fila {
+      grid-template-columns: 0.6fr 1fr 1fr 1.1fr;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.6rem 0.6rem 1rem;
+    }
+    .tres__cabeza {
+      display: grid;
+      border: 0;
+      background: none;
+      font-weight: 800;
+      color: var(--tenue);
+    }
+    .tres__cabeza .tres__nos {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: none;
+      color: var(--verde);
+      font-size: var(--t-l);
+    }
+    .tres__etiqueta {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+  }
+
+  /* Plan 360 */
+  .plan {
+    display: grid;
+    gap: 1.25rem;
+    align-items: center;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-radius: calc(var(--radio-l) * 1.25);
+    background:
+      radial-gradient(70% 90% at 0% 0%, rgba(255, 207, 63, 0.18), transparent 70%),
+      var(--tinta);
+    color: #fff;
+    text-decoration: none;
+  }
+  .plan h2 {
+    margin-top: 0.4rem;
+    font-size: var(--t-2xl);
+    color: #fff;
+  }
+  .plan p:not(.antetitulo) {
+    margin-top: 0.5rem;
+    color: #c9ccc2;
+  }
+  .plan__ir {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--platano);
+    font-weight: 700;
+  }
+  @media (min-width: 900px) {
+    .plan {
+      grid-template-columns: auto 1fr auto;
+      gap: 2rem;
+    }
+  }
+
+  /* Contacto */
+  .contacto-seccion {
+    background:
+      radial-gradient(50% 60% at 0% 30%, rgba(255, 207, 63, 0.16), transparent 70%),
+      var(--fondo);
+  }
+  .contacto {
+    display: grid;
+    gap: 2rem;
+  }
+  .contacto__texto {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .contacto__texto h2 {
+    font-size: var(--t-3xl);
+  }
+  .contacto__canales {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .contacto__canales a {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    text-decoration: none;
+  }
+  .contacto__canales span {
+    display: grid;
+  }
+  .contacto__canales small {
+    color: var(--tenue);
+    font-size: var(--t-xs);
+  }
+  .contacto__caja {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-radius: calc(var(--radio-l) * 1.25);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    box-shadow: 0 2px 0 var(--linea), 0 30px 60px -40px rgba(20, 22, 15, 0.4);
+  }
+  @media (min-width: 1000px) {
+    .contacto {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 3.5rem;
+    }
+    .contacto__texto {
+      position: sticky;
+      top: 6rem;
+    }
+  }
+
+  .dos-columnas {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 960px) {
+    .dos-columnas {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Barra fija en móvil */
+  .barra {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    z-index: 55;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+    gap: 0.4rem;
+    padding: 0.4rem;
+    border-radius: 999px;
+    background: var(--tinta);
+    box-shadow: 0 16px 40px -12px rgba(20, 22, 15, 0.5);
+  }
+  .barra a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-height: 2.75rem;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 700;
+    font-size: var(--t-s);
+    text-decoration: none;
+  }
+  .barra__principal {
+    background: var(--platano);
+    color: var(--tinta) !important;
+  }
+  @media (min-width: 900px) {
+    .barra {
+      display: none;
+    }
+  }
+  @media (max-width: 899px) {
+    :global(.pie) {
+      padding-bottom: 5rem !important;
+    }
+  }
+</style>
