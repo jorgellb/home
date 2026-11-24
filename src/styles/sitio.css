@@ -200,11 +200,9 @@ ol {
 }
 .antetitulo::before {
   content: '';
-  width: 0.6rem;
-  height: 0.6rem;
-  background: var(--platano);
-  transform: rotate(45deg);
-  border-radius: 2px;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2 29 9.5 16 17 3 9.5Z' fill='%23FFCF3F'/%3E%3Cpath d='M3 9.5 16 17v13.5L3 23Z' fill='%230E5B3A'/%3E%3Cpath d='M29 9.5 16 17v13.5L29 23Z' fill='%230A472D'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .entradilla {
@@ -291,56 +289,88 @@ ol {
 }
 
 /* ── Ilustración isométrica ────────────────────────────────────────
-   Solo transform y opacity: compuestas en GPU, sin layout ni paint. */
+   Solo transform, opacity y offset-distance: compuestas en GPU, sin layout
+   ni paint. Cada grupo admite --retraso y --dur desde el SVG. */
 
 .iso {
   overflow: visible;
 }
-.iso g[class^='iso-'] {
+.iso g[class^='iso-'],
+.iso .iso-onda {
   transform-box: fill-box;
   transform-origin: 50% 100%;
+}
+.iso-paquete {
+  offset-rotate: 0deg;
+  offset-distance: 0%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .iso-flota {
-    animation: iso-flota 6s ease-in-out infinite;
+    animation: iso-flota var(--dur, 6s) ease-in-out infinite;
     animation-delay: var(--retraso, 0s);
   }
   .iso-sube {
     animation: iso-sube 1.1s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
     animation-delay: calc(var(--retraso, 0s) + 0.2s);
   }
+  .iso-crece {
+    animation: iso-crece var(--dur, 4s) cubic-bezier(0.5, 0, 0.3, 1) infinite;
+    animation-delay: var(--retraso, 0s);
+  }
   .iso-pulso {
     transform-origin: 50% 50%;
-    animation: iso-pulso 2.8s ease-in-out infinite;
+    animation: iso-pulso var(--dur, 2.8s) ease-in-out infinite;
     animation-delay: var(--retraso, 0s);
   }
   .iso-parpadeo {
-    animation: iso-parpadeo 1.6s steps(2, jump-none) infinite;
+    animation: iso-parpadeo var(--dur, 1.6s) steps(2, jump-none) infinite;
     animation-delay: var(--retraso, 0s);
   }
   .iso-balanceo {
-    animation: iso-balanceo 7s ease-in-out infinite;
+    animation: iso-balanceo var(--dur, 7s) ease-in-out infinite;
     animation-delay: var(--retraso, 0s);
   }
   .iso-gira {
     transform-origin: 50% 50%;
-    animation: iso-flota 4s ease-in-out infinite;
+    animation: iso-gira var(--dur, 0.6s) linear infinite;
+  }
+  .iso-desplaza {
+    animation: iso-desplaza var(--dur, 9s) cubic-bezier(0.6, 0, 0.3, 1) infinite;
+    animation-delay: var(--retraso, 0s);
+  }
+  .iso-aparece {
+    transform-origin: 50% 100%;
+    animation: iso-aparece var(--dur, 6s) cubic-bezier(0.2, 0.9, 0.3, 1.3) infinite;
+    animation-delay: var(--retraso, 0s);
   }
   .iso-ola {
-    animation: iso-ola 5s ease-in-out infinite;
+    animation: iso-ola var(--dur, 5s) ease-in-out infinite;
+    animation-delay: var(--retraso, 0s);
   }
   .iso-traza {
     stroke-dasharray: 6 8;
     animation: iso-traza 1.2s linear infinite;
   }
-  .iso-sombra {
-    transform-box: fill-box;
+  .iso-onda {
     transform-origin: 50% 50%;
+    animation: iso-onda 2.4s ease-out infinite;
+    animation-delay: var(--retraso, 0s);
   }
-  /* Las animaciones que se repiten se pausan fuera de pantalla (ver Ilustracion.astro). */
+  .iso-paquete {
+    animation-name: iso-paquete;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  /* Las animaciones en bucle se pausan fuera de pantalla (ver Sitio.astro). */
   .iso[data-pausa] * {
     animation-play-state: paused !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iso-paquete,
+  .iso-onda {
+    display: none;
   }
 }
 
@@ -361,6 +391,19 @@ ol {
   to {
     transform: scaleY(1);
     opacity: 1;
+  }
+}
+@keyframes iso-crece {
+  0%,
+  12% {
+    transform: scaleY(0.35);
+  }
+  45%,
+  85% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0.35);
   }
 }
 @keyframes iso-pulso {
@@ -388,6 +431,42 @@ ol {
     transform: rotate(2.5deg);
   }
 }
+@keyframes iso-gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes iso-desplaza {
+  0%,
+  18% {
+    transform: translateY(0);
+  }
+  45%,
+  68% {
+    transform: translateY(-34%);
+  }
+  92%,
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes iso-aparece {
+  0%,
+  8% {
+    transform: scale(0.4) translateY(6px);
+    opacity: 0;
+  }
+  16%,
+  70% {
+    transform: none;
+    opacity: 1;
+  }
+  80%,
+  100% {
+    transform: translateY(-6px);
+    opacity: 0;
+  }
+}
 @keyframes iso-ola {
   0%,
   100% {
@@ -400,6 +479,24 @@ ol {
 @keyframes iso-traza {
   to {
     stroke-dashoffset: -28;
+  }
+}
+@keyframes iso-onda {
+  from {
+    transform: scale(0.3);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@keyframes iso-paquete {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
   }
 }
 
@@ -438,4 +535,156 @@ ol {
 .estrellas {
   color: #e9a91c;
   letter-spacing: 0.08em;
+}
+
+/* ── Insignia de icono ──────────────────────────────────────────────
+   Tecla con canto inferior (guiño al isométrico) e icono duotono. */
+.insignia {
+  --icono-relleno: var(--platano);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 16px;
+  color: var(--verde);
+  background: linear-gradient(165deg, #fff 0%, #f6f5ef 100%);
+  border: 1px solid var(--linea);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 3px 0 var(--linea-2),
+    0 12px 20px -14px rgba(14, 91, 58, 0.45);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+}
+.insignia .icono {
+  width: 28px;
+  height: 28px;
+}
+.insignia--verde {
+  --icono-relleno: #3a9a6b;
+  color: #fff;
+  background: linear-gradient(165deg, #16724a 0%, var(--verde) 100%);
+  border-color: var(--verde-2);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 3px 0 var(--verde-2),
+    0 12px 20px -12px rgba(14, 91, 58, 0.6);
+}
+:where(a, li, article):hover > .insignia,
+:where(a, li, article):hover .insignia {
+  transform: translateY(-2px) rotate(-3deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  :where(a, li, article):hover .insignia {
+    transform: none;
+  }
+}
+
+/* ── Retícula isométrica de fondo ─────────────────────────────────── */
+.fondo-iso {
+  position: relative;
+  isolation: isolate;
+}
+.fondo-iso::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='32' viewBox='0 0 56 32'%3E%3Cpath d='M0 16 28 0l28 16-28 16Z' fill='none' stroke='%230E5B3A' stroke-opacity='.09'/%3E%3C/svg%3E");
+  background-size: 56px 32px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 35%, transparent);
+  mask-image: radial-gradient(closest-side, #000 35%, transparent);
+  pointer-events: none;
+}
+.fondo-iso--claro::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='32' viewBox='0 0 56 32'%3E%3Cpath d='M0 16 28 0l28 16-28 16Z' fill='none' stroke='%23FFFFFF' stroke-opacity='.07'/%3E%3C/svg%3E");
+  -webkit-mask-image: linear-gradient(120deg, transparent 10%, #000 70%);
+  mask-image: linear-gradient(120deg, transparent 10%, #000 70%);
+}
+
+/* ── Etiquetas flotantes junto a las ilustraciones ─────────────────── */
+.flotante {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.9rem 0.55rem 0.55rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--linea);
+  box-shadow: 0 2px 0 var(--linea-2), 0 18px 30px -18px rgba(20, 22, 15, 0.35);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  color: var(--tinta);
+  white-space: nowrap;
+}
+.flotante .insignia {
+  width: 2rem;
+  height: 2rem;
+  margin: 0;
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 #fff, 0 2px 0 var(--linea-2);
+}
+.flotante .insignia .icono {
+  width: 18px;
+  height: 18px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .flotante {
+    animation: iso-flota 7s ease-in-out infinite;
+    animation-delay: var(--retraso, 0s);
+  }
+}
+
+/* ── Cinta de municipios ──────────────────────────────────────────── */
+.cinta {
+  overflow: hidden;
+  border-block: 1px solid var(--linea);
+  background: var(--superficie);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.cinta__pista {
+  display: flex;
+  width: max-content;
+  gap: 2.5rem;
+  padding-block: 1rem;
+  list-style: none;
+}
+.cinta__pista li {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5rem;
+  font-weight: 650;
+  color: var(--tinta-2);
+  white-space: nowrap;
+}
+.cinta__pista li::after {
+  content: '';
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--platano);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+.cinta__pista a {
+  color: inherit;
+  text-decoration: none;
+}
+.cinta__pista a:hover {
+  color: var(--verde);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cinta__pista {
+    animation: cinta 60s linear infinite;
+  }
+  .cinta:hover .cinta__pista {
+    animation-play-state: paused;
+  }
+}
+@keyframes cinta {
+  to {
+    transform: translateX(-50%);
+  }
 }

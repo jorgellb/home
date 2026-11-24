@@ -1,0 +1,35 @@
+---
+/* Icono isométrico de un servicio (objeto sobre baldosa), generado en el build. */
+import { escenaIcono } from '../../lib/escenas';
+
+interface Props {
+  servicio: string;
+  tamano?: number;
+  class?: string;
+}
+const { servicio, tamano = 56, class: clase } = Astro.props;
+const { html } = escenaIcono(servicio);
+---
+
+<span
+  class:list={['icono-servicio', clase]}
+  style={`width:${tamano}px;height:${tamano}px`}
+  aria-hidden="true"
+  set:html={html}
+/>
+
+<style>
+  .icono-servicio {
+    display: block;
+    flex: none;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .icono-servicio :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  :global(a:hover) > .icono-servicio,
+  :global(a:hover) .icono-servicio {
+    transform: translateY(-3px);
+  }
+</style>

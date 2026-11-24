@@ -51,3 +51,49 @@ export const TRAZOS = {
 } as const;
 
 export type NombreIcono = keyof typeof TRAZOS;
+
+/* Relleno duotono: la forma principal de cada icono, pintada detrás del trazo
+   y desplazada medio píxel. Solo se ve donde se define --icono-relleno (las
+   insignias); en la navegación los iconos siguen siendo de solo trazo. */
+export const RELLENOS: Partial<Record<NombreIcono, string>> = {
+  telefono: '<path d="M5 4h3.5l1.8 4.6-2.3 1.4a11 11 0 0 0 6 6l1.4-2.3L20 15.5V19a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1Z"/>',
+  email: '<rect x="3" y="5" width="18" height="14" rx="2.5"/>',
+  whatsapp: '<path d="M4 20l1.3-4A8 8 0 1 1 8.2 19Z"/>',
+  ubicacion: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/>',
+  reloj: '<circle cx="12" cy="12" r="8.5"/>',
+  escudo: '<path d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6Z"/>',
+  rayo: '<path d="M13 3 5 13.5h6L10 21l8-10.5h-6Z"/>',
+  buscar: '<circle cx="11" cy="11" r="6.5"/>',
+  grafica: '<rect x="5.5" y="12" width="3" height="4" rx=".6"/><rect x="10.5" y="8" width="3" height="8" rx=".6"/><rect x="15.5" y="5" width="3" height="11" rx=".6"/>',
+  usuario: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0Z"/>',
+  equipo: '<circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0Z"/>',
+  llave: '<circle cx="8" cy="15" r="4"/>',
+  movil: '<rect x="7" y="3" width="10" height="18" rx="2.5"/>',
+  pantalla: '<rect x="3" y="4.5" width="18" height="12" rx="2"/>',
+  carrito: '<path d="M7 7.5h13l-1.8 7H7.7Z"/>',
+  pincel: '<path d="M14.5 4.5 19.5 9.5 11 18l-5 1 1-5Z"/>',
+  camara: '<rect x="3" y="7" width="13" height="11" rx="2"/><path d="m16 11 5-3v9l-5-3Z"/>',
+  servidor: '<rect x="4" y="4" width="16" height="7" rx="1.8"/><rect x="4" y="13" width="16" height="7" rx="1.8"/>',
+  chispa: '<circle cx="12" cy="12" r="3.5"/>',
+  documento: '<path d="M7 3h7l4 4v14H7Z"/>',
+  globo: '<circle cx="12" cy="12" r="8.5"/>',
+  estrella: '<path d="m12 4 2.4 5 5.4.6-4 3.7 1.1 5.4L12 16l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6Z"/>',
+  candado: '<rect x="5" y="10.5" width="14" height="10" rx="2"/>',
+  ruta: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/>',
+  calendario: '<rect x="4" y="5" width="16" height="15" rx="2"/>',
+  conversacion: '<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-4 4v-4a2 2 0 0 1-2-2Z"/>',
+  capas: '<path d="m12 4 8.5 4.5L12 13 3.5 8.5Z"/>',
+  hoja: '<path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15Z"/>',
+  ancla: '<circle cx="12" cy="5.5" r="2"/><path d="M4.5 14a7.5 7.5 0 0 0 15 0Z"/>',
+  tienda: '<path d="M5.5 11.5V20h13v-8.5Z"/><path d="M4 9 5.5 4h13L20 9Z"/>',
+  edificio: '<path d="M5 21V4h10v17Z"/>',
+  salud: '<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10Z"/>',
+  sol: '<circle cx="12" cy="12" r="4"/>',
+  restaurante: '<path d="M17 21V3c-2 1-3 3.5-3 7v3h3Z"/>',
+  fabrica: '<path d="M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17Z"/>',
+  maletin: '<rect x="3" y="7" width="18" height="13" rx="2"/>',
+  casa: '<path d="M4 11 12 4l8 7v9H4Z"/>',
+  matraz: '<path d="M10.5 9 5 19a1.5 1.5 0 0 0 1.3 2h11.4A1.5 1.5 0 0 0 19 19l-5.5-10Z"/>',
+  codigo: '<rect x="3" y="5" width="18" height="14" rx="3"/>',
+  check: '<circle cx="12" cy="12" r="8.5"/>',
+};

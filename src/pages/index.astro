@@ -4,6 +4,7 @@ import Sitio from '../layouts/Sitio.astro';
 import Boton from '../components/sitio/Boton.astro';
 import Icono, { type NombreIcono } from '../components/sitio/Icono.astro';
 import Ilustracion from '../components/sitio/Ilustracion.astro';
+import IconoServicio from '../components/sitio/IconoServicio.astro';
 import Encabezado from '../components/sitio/Encabezado.astro';
 import Pasos from '../components/sitio/Pasos.astro';
 import Casos from '../components/sitio/Casos.astro';
@@ -59,6 +60,8 @@ const preguntas = [
   { q: '¿Trabajáis fuera de Vera?', a: '<p>Trabajamos con negocios de toda la provincia de Almería: el Levante, el Almanzora, la capital y el Poniente. En el Levante y el Almanzora podemos ir en persona el mismo día; en el resto, nos vemos por videollamada o cuando haga falta.</p>' },
   { q: '¿Y después de publicarla?', a: '<p>Puedes llevarla tú (te enseñamos) o dejarla en nuestras manos con el <a href="/soporte/">mantenimiento</a>: copias diarias, actualizaciones de seguridad y cambios cuando los necesites, sin tickets ni esperas.</p>' },
 ];
+
+const cinta = comarcas.flatMap((c) => getPueblosByComarca(c).filter((p) => esPuebloIndexable(p.slug)));
 
 const zonas = comarcas
   .map((c) => ({ comarca: c, pueblos: getPueblosByComarca(c).filter((p) => esPuebloIndexable(p.slug)) }))
@@ -123,9 +126,24 @@ const jsonLd = [
           <li><Icono nombre="ubicacion" tamano={18} /><span><b>{aniosEnAlmeria()} años</b> en Almería</span></li>
         </ul>
       </div>
-      <Ilustracion nombre="web" titulo="Ilustración isométrica de una web, un móvil y una gráfica de crecimiento" class="portada__ilustracion" />
+      <div class="portada__escena fondo-iso">
+        <Ilustracion nombre="web" titulo="Ilustración isométrica de una web, un móvil y una gráfica de crecimiento" class="portada__ilustracion" />
+        <span class="flotante flotante--1"><span class="insignia"><Icono nombre="pincel" tamano={18} /></span>Diseño a medida</span>
+        <span class="flotante flotante--2" style="--retraso:-2.3s"><span class="insignia"><Icono nombre="ubicacion" tamano={18} /></span>SEO local</span>
+        <span class="flotante flotante--3" style="--retraso:-4.6s"><span class="insignia"><Icono nombre="llave" tamano={18} /></span>Todo a tu nombre</span>
+      </div>
     </div>
   </section>
+
+  <div class="cinta" aria-label="Municipios donde trabajamos">
+    <ul class="cinta__pista">
+      {[...cinta, ...cinta].map((p, i) => (
+        <li aria-hidden={i >= cinta.length ? 'true' : undefined}>
+          <a href={`/diseno-web/${p.slug}/`} tabindex={i >= cinta.length ? -1 : undefined}>{p.nombre}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
 
   <!-- PROBLEMAS -->
   <section class="seccion seccion--blanca" aria-labelledby="problemas-titulo">
@@ -139,7 +157,7 @@ const jsonLd = [
       <ul class="problemas">
         {problemas.map((p, i) => (
           <li class="problema" data-aparece style={`transition-delay:${i * 90}ms`}>
-            <span class="problema__icono"><Icono nombre={p.icono} tamano={24} /></span>
+            <span class="insignia insignia--verde"><Icono nombre={p.icono} tamano={28} /></span>
             <h3>{p.t}</h3>
             <p>{p.d}</p>
           </li>
@@ -164,7 +182,7 @@ const jsonLd = [
             {SERVICIOS.filter((s) => s.grupo === g.id).map((s, i) => (
               <li data-aparece style={`transition-delay:${i * 70}ms`}>
                 <a href={s.href} class="servicio">
-                  <Ilustracion nombre={s.escena} class="servicio__ilustracion" />
+                  <IconoServicio servicio={s.slug} tamano={84} class="servicio__ilustracion" />
                   <div class="servicio__texto">
                     <h4>{s.nombre}</h4>
                     <p>{s.resumen}</p>
@@ -344,9 +362,29 @@ const jsonLd = [
   .portada__confianza :global(.icono) {
     color: var(--verde);
   }
-  .portada :global(.portada__ilustracion) {
-    max-width: 560px;
+  .portada__escena {
+    position: relative;
     justify-self: center;
+    width: 100%;
+    max-width: 580px;
+    padding: 1.5rem 0;
+  }
+  .flotante--1 {
+    top: 8%;
+    left: -2%;
+  }
+  .flotante--2 {
+    top: 46%;
+    right: -4%;
+  }
+  .flotante--3 {
+    bottom: 4%;
+    left: 8%;
+  }
+  @media (max-width: 600px) {
+    .flotante {
+      display: none;
+    }
   }
   @media (min-width: 960px) {
     .portada__rejilla {
@@ -369,16 +407,6 @@ const jsonLd = [
     border-radius: var(--radio-l);
     background: var(--fondo);
     border: 1px solid var(--linea);
-  }
-  .problema__icono {
-    display: grid;
-    place-items: center;
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: 0.5rem;
-    border-radius: 14px;
-    background: var(--platano-suave);
-    color: var(--verde);
   }
   .problema p {
     color: var(--tinta-2);
@@ -418,7 +446,7 @@ const jsonLd = [
   .servicio {
     position: relative;
     display: grid;
-    grid-template-columns: 96px 1fr;
+    grid-template-columns: 84px 1fr;
     gap: 1.25rem;
     align-items: center;
     height: 100%;
@@ -469,10 +497,6 @@ const jsonLd = [
       grid-template-columns: 1fr;
       align-content: start;
       padding: 1.5rem;
-    }
-    .servicio :global(.servicio__ilustracion) {
-      max-width: 200px;
-      margin-inline: auto;
     }
   }
 

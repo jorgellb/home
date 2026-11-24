@@ -4,6 +4,7 @@ import Sitio from '../../layouts/Sitio.astro';
 import Boton from './Boton.astro';
 import Icono from './Icono.astro';
 import Ilustracion from './Ilustracion.astro';
+import IconoServicio from './IconoServicio.astro';
 import Encabezado from './Encabezado.astro';
 import Migas from './Migas.astro';
 import Puntos from './Puntos.astro';
@@ -54,7 +55,7 @@ const jsonLd = {
           <Boton href="#incluye" variante="secundario" icono="flecha-abajo">Qué incluye</Boton>
         </div>
       </div>
-      <Ilustracion nombre={d.escena} class="portada__ilustracion" />
+      <div class="portada__escena fondo-iso"><Ilustracion nombre={d.escena} class="portada__ilustracion" /></div>
     </div>
   </section>
 
@@ -156,7 +157,7 @@ const jsonLd = {
           {relacionados.map((s) => (
             <li>
               <a href={s.href} class="relacionado">
-                <Ilustracion nombre={s.escena} class="relacionado__ilustracion" />
+                <IconoServicio servicio={s.slug} tamano={64} />
                 <span>
                   <b>{s.nombre}</b>
                   <small>{s.resumen}</small>
@@ -211,9 +212,11 @@ const jsonLd = {
     gap: 0.75rem;
     margin-top: 0.5rem;
   }
-  .portada :global(.portada__ilustracion) {
-    max-width: 500px;
+  .portada__escena {
     justify-self: center;
+    width: 100%;
+    max-width: 520px;
+    padding: 1rem 0;
   }
   @media (min-width: 960px) {
     .portada__rejilla {
@@ -334,7 +337,7 @@ const jsonLd = {
   }
   .relacionado {
     display: grid;
-    grid-template-columns: 88px 1fr;
+    grid-template-columns: 64px 1fr;
     gap: 1rem;
     align-items: center;
     padding: 1rem 1.25rem;
