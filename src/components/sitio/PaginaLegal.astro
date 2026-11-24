@@ -1,0 +1,96 @@
+---
+/* Páginas legales: texto largo con índice. noindex: no compiten en búsquedas. */
+import Sitio from '../../layouts/Sitio.astro';
+import Migas from './Migas.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  h1: string;
+  actualizado?: string;
+  secciones: { id: string; titulo: string }[];
+}
+const { title, description, h1, actualizado, secciones } = Astro.props;
+---
+
+<Sitio title={title} description={description} noindex>
+  <div class="contenedor legal">
+    <header class="legal__cabeza">
+      <Migas items={[{ nombre: h1 }]} />
+      <h1>{h1}</h1>
+      {actualizado && <p class="legal__fecha">Última actualización: {actualizado}</p>}
+    </header>
+    <div class="legal__rejilla">
+      {secciones.length > 2 && (
+        <nav class="legal__indice" aria-label="Índice">
+          <p>Contenido</p>
+          <ol>
+            {secciones.map((s) => <li><a href={`#${s.id}`}>{s.titulo}</a></li>)}
+          </ol>
+        </nav>
+      )}
+      <div class="prosa legal__texto">
+        <slot />
+      </div>
+    </div>
+  </div>
+</Sitio>
+
+<style>
+  .legal {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) var(--seccion);
+  }
+  .legal__cabeza {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .legal__cabeza h1 {
+    font-size: var(--t-3xl);
+  }
+  .legal__fecha {
+    color: var(--tenue);
+    font-size: var(--t-s);
+  }
+  .legal__rejilla {
+    display: grid;
+    gap: 2rem;
+  }
+  .legal__indice {
+    font-size: var(--t-s);
+  }
+  .legal__indice p {
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  .legal__indice ol {
+    display: grid;
+    gap: 0.45rem;
+    padding-left: 1.2rem;
+    color: var(--tenue);
+  }
+  .legal__indice a {
+    color: var(--tinta-2);
+    text-decoration: none;
+  }
+  .legal__indice a:hover {
+    color: var(--verde);
+  }
+  .legal__texto :global(h2) {
+    scroll-margin-top: 6rem;
+  }
+  .legal__texto :global(h2:first-child) {
+    margin-top: 0;
+  }
+  @media (min-width: 1000px) {
+    .legal__rejilla {
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 4rem;
+    }
+    .legal__indice {
+      position: sticky;
+      top: 6rem;
+      align-self: start;
+    }
+  }
+</style>

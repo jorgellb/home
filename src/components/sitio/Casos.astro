@@ -1,0 +1,138 @@
+---
+/* Trabajos publicados: capturas reales dentro de un marco de navegador. */
+import Icono from './Icono.astro';
+import { proyectos, type Proyecto } from '../../data/proyectos';
+import { getPuebloBySlug } from '../../data/pueblos-almeria';
+
+interface Props {
+  /** Ids a mostrar, en orden. Por defecto, los seis primeros. */
+  ids?: string[];
+  limite?: number;
+}
+const { ids, limite = 6 } = Astro.props;
+const lista: Proyecto[] = ids
+  ? ids.map((id) => proyectos.find((p) => p.id === id)).filter((p): p is Proyecto => Boolean(p))
+  : proyectos.slice(0, limite);
+
+const base = (img: string) => img.replace(/\.jpe?g$/i, '');
+const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '');
+---
+
+<ul class="casos">
+  {lista.map((p, i) => (
+    <li class="caso" data-aparece style={`transition-delay:${(i % 3) * 80}ms`}>
+      <a href={p.url} target="_blank" rel="noopener" class="caso__enlace">
+        <div class="caso__marco">
+          <div class="caso__barra" aria-hidden="true">
+            <span /><span /><span />
+            <em>{dominio(p.url)}</em>
+          </div>
+          <picture>
+            <source srcset={`${base(p.image)}-680.avif`} type="image/avif" />
+            <source srcset={`${base(p.image)}-680.webp`} type="image/webp" />
+            <img src={p.image} alt={`Web de ${p.cliente}`} width="680" height="460" loading="lazy" decoding="async" />
+          </picture>
+        </div>
+        <div class="caso__datos">
+          <p class="caso__sector">
+            {p.sector}
+            {p.municipio && <> · {getPuebloBySlug(p.municipio)?.nombre ?? ''}</>}
+          </p>
+          <h3>{p.cliente} <Icono nombre="flecha" tamano={18} /></h3>
+          <p class="caso__resultado">{p.result}</p>
+        </div>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .casos {
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .caso__enlace {
+    display: grid;
+    gap: 1rem;
+    text-decoration: none;
+  }
+  .caso__marco {
+    overflow: hidden;
+    border-radius: var(--radio);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+    box-shadow: var(--sombra);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+  }
+  .caso__enlace:hover .caso__marco {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra-l);
+  }
+  .caso__barra {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--linea);
+    background: var(--fondo-2);
+  }
+  .caso__barra span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--linea-2);
+  }
+  .caso__barra em {
+    margin-left: 0.6rem;
+    font-style: normal;
+    font-size: 0.75rem;
+    color: var(--tenue);
+  }
+  .caso picture img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top;
+  }
+  .caso__sector {
+    font-size: var(--t-xs);
+    font-weight: 650;
+    color: var(--tenue);
+  }
+  .caso h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+    font-size: var(--t-l);
+  }
+  .caso h3 :global(.icono) {
+    color: var(--verde);
+    transition: transform 0.25s;
+  }
+  .caso__enlace:hover h3 :global(.icono) {
+    transform: translate(3px, 0);
+  }
+  .caso__resultado {
+    margin-top: 0.35rem;
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: var(--verde-suave);
+    color: var(--verde);
+    font-size: var(--t-xs);
+    font-weight: 700;
+  }
+  @media (min-width: 640px) {
+    .casos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .casos {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+  }
+</style>

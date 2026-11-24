@@ -104,7 +104,7 @@ export function getLanding(p: Pueblo): Landing {
     };
   }
 
-  // ≤43 caracteres (BaseLayout añade « | Platanito Rico», 17 más).
+  // ≤43 caracteres (el layout añade « | Platanito Rico», 17 más).
   const title = [
     p.sectorPrincipal ? `Diseño Web en ${n}: ${p.sectorPrincipal}` : '',
     `Diseño Web en ${n} y SEO Local`,

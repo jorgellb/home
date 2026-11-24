@@ -1,0 +1,102 @@
+---
+/* Preguntas frecuentes con <details>: sin JS. Emite su propio FAQPage. */
+interface Props {
+  preguntas: { q: string; a: string }[];
+  /** Emitir JSON-LD FAQPage (desactivar si la página ya lo emite). */
+  esquema?: boolean;
+}
+const { preguntas, esquema = true } = Astro.props;
+const limpio = (html: string) => html.replace(/<[^>]+>/g, '');
+const faqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: preguntas.map((p) => ({
+    '@type': 'Question',
+    name: p.q,
+    acceptedAnswer: { '@type': 'Answer', text: limpio(p.a) },
+  })),
+};
+---
+
+<div class="preguntas">
+  {preguntas.map((p, i) => (
+    <details class="pregunta" open={i === 0}>
+      <summary>
+        <span>{p.q}</span>
+        <span class="pregunta__signo" aria-hidden="true" />
+      </summary>
+      <div class="pregunta__respuesta" set:html={p.a} />
+    </details>
+  ))}
+</div>
+{esquema && preguntas.length > 0 && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqPage)} />}
+
+<style>
+  .preguntas {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .pregunta {
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    transition: border-color 0.2s;
+  }
+  .pregunta[open] {
+    border-color: var(--linea-2);
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.35rem;
+    font-weight: 680;
+    font-size: var(--t-m);
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .pregunta__signo {
+    position: relative;
+    flex: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--fondo-2);
+  }
+  .pregunta__signo::before,
+  .pregunta__signo::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 0.75rem;
+    height: 2px;
+    margin: -1px 0 0 -0.375rem;
+    background: var(--tinta);
+    border-radius: 2px;
+    transition: transform 0.25s;
+  }
+  .pregunta__signo::after {
+    transform: rotate(90deg);
+  }
+  .pregunta[open] .pregunta__signo {
+    background: var(--platano);
+  }
+  .pregunta[open] .pregunta__signo::after {
+    transform: rotate(0);
+  }
+  .pregunta__respuesta {
+    padding: 0 1.35rem 1.25rem;
+    color: var(--tinta-2);
+    max-width: 70ch;
+  }
+  .pregunta__respuesta :global(p + p) {
+    margin-top: 0.8em;
+  }
+  .pregunta__respuesta :global(a) {
+    color: var(--verde);
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+/* Cabeza de sección: antetítulo, título y entradilla. */
+interface Props {
+  antetitulo?: string;
+  titulo: string;
+  entradilla?: string;
+  centrado?: boolean;
+  nivel?: 'h1' | 'h2';
+  id?: string;
+}
+const { antetitulo, titulo, entradilla, centrado = false, nivel = 'h2', id } = Astro.props;
+const Titulo = nivel;
+---
+
+<div class:list={['encabezado', { 'encabezado--centrado': centrado }]}>
+  {antetitulo && <p class="antetitulo">{antetitulo}</p>}
+  <Titulo id={id} set:html={titulo} />
+  {entradilla && <p class="entradilla" set:html={entradilla} />}
+  <slot />
+</div>
+
+<style>
+  .encabezado {
+    display: grid;
+    gap: 1rem;
+    max-width: 46rem;
+    margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  }
+  .encabezado--centrado {
+    margin-inline: auto;
+    text-align: center;
+    justify-items: center;
+  }
+  .encabezado--centrado .entradilla {
+    margin-inline: auto;
+  }
+</style>

@@ -1,24 +1,20 @@
 ---
-/* Una sola ruta dinámica para las páginas de servicio IT y las landings IT
-   por pueblo: comparten nivel de URL (/informatica-empresas/<slug>/) y los
-   slugs no se solapan. Cada tipo tiene su vista. */
-import ServicioITView from '../../components/sistemas-it/ServicioITView.astro';
-import PuebloITView from '../../components/sistemas-it/PuebloITView.astro';
+/* Servicios IT y landings IT por municipio comparten nivel de URL
+   (/informatica-empresas/<slug>/); los slugs no se solapan. */
+import PlantillaServicio from '../../components/sitio/PlantillaServicio.astro';
+import PlantillaPueblo from '../../components/sitio/PlantillaPueblo.astro';
 import { serviciosIT, pueblosIT } from '../../data/servicios-it';
+import { contenidoServicioIT } from '../../data/servicios/informatica';
+import { contenidoITPueblo } from '../../data/servicios/pueblo-it';
 
 export function getStaticPaths() {
   return [
-    ...serviciosIT.map((s) => ({ params: { slug: s.slug }, props: { kind: 'servicio' as const } })),
-    ...pueblosIT.map((p) => ({ params: { slug: p.slug }, props: { kind: 'pueblo' as const } })),
+    ...serviciosIT.map((s) => ({ params: { slug: s.slug }, props: { servicio: contenidoServicioIT(s), pueblo: null } })),
+    ...pueblosIT.map((p) => ({ params: { slug: p.slug }, props: { servicio: null, pueblo: contenidoITPueblo(p) } })),
   ];
 }
 
-interface Props {
-  kind: 'servicio' | 'pueblo';
-}
-
-const { slug } = Astro.params;
-const { kind } = Astro.props;
+const { servicio, pueblo } = Astro.props;
 ---
 
-{kind === 'servicio' ? <ServicioITView slug={slug} /> : <PuebloITView slug={slug} />}
+{servicio ? <PlantillaServicio datos={servicio} /> : pueblo && <PlantillaPueblo datos={pueblo} />}

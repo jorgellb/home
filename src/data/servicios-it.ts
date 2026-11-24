@@ -2,10 +2,15 @@
    presencial. Las páginas de /informatica-empresas/ y /plan-360/ se generan a
    partir de estos datos, así que el copy vive en un solo sitio.
 
-   SEO: `title` va sin la marca (BaseLayout añade « | Platanito Rico», 17
+   SEO: `title` va sin la marca (el layout añade « | Platanito Rico», 17
    caracteres) y debe quedarse en ≤43; `description` entre 120 y 160. */
 
-import type { LineaRegistro } from '../components/cdm/tipos';
+/** Línea del registro simulado del panel del Plan 360. */
+export interface LineaRegistro {
+  hora: string;
+  texto: string;
+  estado?: 'ok' | 'aviso';
+}
 
 export interface Faq {
   q: string;
@@ -64,7 +69,7 @@ export const serviciosIT: ServicioIT[] = [
     ],
     paraQuien: ['Gestorías y asesorías', 'Clínicas, dentistas y centros de estética', 'Hoteles, apartamentos y restaurantes', 'Comercios, talleres y distribuidoras'],
     faq: [
-      { q: '¿Cuánto cuesta el mantenimiento informático de una empresa?', a: 'Depende del número de puestos y servidores. Para una pyme de hasta 10 puestos, el Plan 360 incluye mantenimiento informático, red y web por 400 € + IVA al mes. Si solo necesitas una parte, te preparamos un presupuesto cerrado a medida.' },
+      { q: '¿Cuánto cuesta el mantenimiento informático de una empresa?', a: 'Depende del número de puestos y servidores. Tras una auditoría inicial te damos una propuesta cerrada por escrito. Para pymes de hasta 10 puestos existe el Plan 360, que junta informática, red y web en una cuota fija; si solo necesitas una parte, lo presupuestamos a medida.' },
       { q: '¿Qué zonas cubrís con visita presencial?', a: 'Vamos in situ el mismo día en el Levante y el Almanzora: Vera, Garrucha, Mojácar, Turre, Antas, Cuevas del Almanzora, Pulpí, Huércal-Overa, Albox y Olula del Río. En el resto de la provincia damos soporte remoto y visitas programadas.' },
       { q: '¿Hay permanencia?', a: 'No. El mantenimiento es mes a mes. Si te vas, te entregamos el inventario, las contraseñas y la documentación de tu red.' },
       { q: '¿Trabajáis con Mac y con Windows?', a: 'Sí. Mantenemos Windows, macOS y Linux, además de impresoras, TPV, NAS y dispositivos de red.' },
@@ -215,13 +220,11 @@ export const registroPlan360: LineaRegistro[] = [
 
 export const plan360 = {
   href: '/plan-360/',
-  title: 'Plan 360: Web + Informática por 400 €/mes',
-  description: 'Plan 360 para pymes de Almería: web profesional, mantenimiento informático, red, copias y ciberseguridad por 400 € + IVA al mes. Sin permanencia ni alta.',
-  h1: 'Plan 360: web y mantenimiento informático por 400 € al mes',
+  title: 'Plan 360: web e informática para pymes en una sola cuota',
+  description: 'Plan 360 para pymes de Almería: web profesional, mantenimiento informático, red, copias y ciberseguridad en una cuota fija mensual. Sin permanencia ni alta.',
+  h1: 'Plan 360: tu web y tu informática, en una sola cuota',
   h2: 'Tu departamento de tecnología completo, sin contratarlo y sin permanencia',
-  precio: 400,
   puestos: 10,
-  precioPuestoExtra: 25,
   incluye: [
     { t: 'Web profesional incluida', d: 'Diseño a medida, hosting, SSL, correo y mantenimiento de tu web. Cambios de contenido cuando los necesites.' },
     { t: 'Hasta 10 puestos + servidor', d: 'Ordenadores, portátiles, 1 servidor o NAS y la red de tu oficina, cubiertos por la cuota.' },
@@ -239,15 +242,15 @@ export const plan360 = {
     'Visitas fuera de la zona de cobertura presencial (en el resto de la provincia, soporte remoto).',
   ],
   comparativa: [
-    { concepto: 'Técnico de sistemas en plantilla', coste: 'Desde unos 2.000 €/mes', nota: 'Sueldo y Seguridad Social, y no se encarga de tu web.' },
+    { concepto: 'Técnico de sistemas en plantilla', coste: 'Un sueldo completo', nota: 'Sueldo y Seguridad Social, y no se encarga de tu web.' },
     { concepto: 'Llamar a un técnico cuando algo falla', coste: 'Imprevisible', nota: 'Cada visita se paga y el problema suele volver.' },
-    { concepto: 'Plan 360', coste: '400 € + IVA/mes', nota: 'Web, informática, red, copias y ciberseguridad, con visita el mismo día.', destacado: true },
+    { concepto: 'Plan 360', coste: 'Cuota fija mensual', nota: 'Web, informática, red, copias y ciberseguridad, con visita el mismo día.', destacado: true },
   ],
   salida: 'Sin permanencia y sin cuota de alta. Tu web, tu dominio y tus datos están a tu nombre desde el primer día: si te das de baja, te lo entregamos todo exportado y documentado.',
   faq: [
     { q: '¿Qué incluye exactamente el Plan 360?', a: 'Tu web profesional con hosting y mantenimiento, el mantenimiento informático de hasta 10 puestos y 1 servidor o NAS, la red de la oficina, copias de seguridad verificadas, antivirus gestionado, helpdesk remoto ilimitado y visita el mismo día en el Levante y el Almanzora.' },
-    { q: '¿Tiene permanencia o cuota de alta?', a: 'No. Pagas 400 € + IVA al mes y puedes darte de baja cuando quieras. La web, el dominio y los datos son tuyos desde el primer día.' },
-    { q: '¿Y si tengo más de 10 puestos?', a: 'Cada puesto adicional cuesta 25 € + IVA al mes. Para empresas grandes o con varias sedes preparamos un plan a medida.' },
+    { q: '¿Tiene permanencia o cuota de alta?', a: 'No. Pagas una cuota fija al mes y puedes darte de baja cuando quieras. La web, el dominio y los datos son tuyos desde el primer día.' },
+    { q: '¿Y si tengo más de 10 puestos?', a: 'Los puestos adicionales se suman a la cuota. Para empresas grandes o con varias sedes preparamos un plan a medida.' },
     { q: '¿Ya tengo web, puedo contratar el Plan 360?', a: 'Sí. Revisamos tu web actual: si está en buen estado la mantenemos, y si conviene rehacerla, la nueva va incluida en el plan.' },
     { q: '¿Qué zonas cubre la visita el mismo día?', a: 'Vera, Garrucha, Mojácar, Turre, Antas, Cuevas del Almanzora, Pulpí, Huércal-Overa, Albox y Olula del Río. En el resto de la provincia de Almería damos soporte remoto y visitas programadas.' },
     { q: '¿Cuánto tardáis en poner el plan en marcha?', a: 'Hacemos una auditoría inicial de equipos, red y copias en la primera semana, y a partir de ahí el plan funciona desde el primer día.' },

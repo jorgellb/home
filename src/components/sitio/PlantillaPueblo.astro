@@ -1,0 +1,454 @@
+---
+/* Landing «servicio × municipio». Una sola plantilla para todos los servicios;
+   lo que cambia entre municipios es el contenido propio de cada uno. */
+import Sitio from '../../layouts/Sitio.astro';
+import Boton from './Boton.astro';
+import Icono from './Icono.astro';
+import Encabezado from './Encabezado.astro';
+import Migas from './Migas.astro';
+import Puntos from './Puntos.astro';
+import Pasos from './Pasos.astro';
+import Casos from './Casos.astro';
+import Preguntas from './Preguntas.astro';
+import LlamadaFinal from './LlamadaFinal.astro';
+import { escenaPueblo } from '../../lib/escenas';
+import type { ContenidoPueblo } from '../../data/servicios/tipos-pueblo';
+import { PROVEEDOR, SITE } from '../../data/negocio';
+
+interface Props {
+  datos: ContenidoPueblo;
+}
+const { datos: d } = Astro.props;
+const url = `${SITE}${d.ruta}`;
+const p = d.pueblo;
+const ilustracion = escenaPueblo(p.rasgos, `Ilustración isométrica de ${p.nombre}`);
+const contacto = `/contacto/?servicio=${encodeURIComponent(d.servicio.contacto)}`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${d.servicio.nombre} en ${p.nombre}`,
+    serviceType: d.servicio.nombre,
+    description: d.seo.description,
+    url,
+    provider: PROVEEDOR,
+    areaServed: { '@type': 'City', name: p.nombre, containedInPlace: { '@type': 'AdministrativeArea', name: 'Provincia de Almería' } },
+  },
+  ...(d.jsonLdExtra ?? []),
+];
+---
+
+<Sitio title={d.seo.title} description={d.seo.description} canonical={url} noindex={d.noindex} type="service" jsonLd={jsonLd}>
+  <section class="portada">
+    <div class="contenedor portada__rejilla">
+      <div class="portada__texto">
+        <Migas items={d.migas} />
+        <p class="antetitulo">{d.portada.antetitulo}</p>
+        <h1 set:html={d.portada.h1} />
+        <p class="entradilla" set:html={d.portada.entradilla} />
+        <ul class="portada__puntos">
+          {d.portada.puntos.map((t) => <li><Icono nombre="check" tamano={18} /> <span set:html={t} /></li>)}
+        </ul>
+        <div class="portada__acciones">
+          <Boton href={contacto}>Hablemos de tu negocio</Boton>
+          {d.local && <Boton href="#local" variante="secundario" icono="flecha-abajo">{p.nombre}, de cerca</Boton>}
+        </div>
+      </div>
+      <div class="portada__ilustracion" style={`aspect-ratio:${ilustracion.ancho}/${ilustracion.alto}`} set:html={ilustracion.html} />
+    </div>
+    {d.datos && d.datos.length > 0 && (
+      <div class="contenedor">
+        <dl class="datos">
+          {d.datos.slice(0, 4).map((x) => (
+            <div>
+              <dt>{x.k}</dt>
+              <dd>{x.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    )}
+  </section>
+
+  {d.local && (
+    <section class="seccion seccion--blanca" id="local" aria-labelledby="local-titulo">
+      <div class="contenedor local">
+        <div>
+          <p class="antetitulo">{p.comarca}</p>
+          <h2 id="local-titulo">{d.local.titulo}</h2>
+        </div>
+        <div class="prosa local__texto">
+          {d.local.parrafos.map((t) => <p set:html={t} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {d.sectores && d.sectores.items.length > 0 && (
+    <section class="seccion" aria-labelledby="sectores-titulo">
+      <div class="contenedor">
+        <Encabezado id="sectores-titulo" antetitulo={`Negocios de ${p.nombre}`} titulo={d.sectores.titulo} entradilla={d.sectores.entradilla} />
+        <ul class="sectores">
+          {d.sectores.items.map((s, i) => (
+            <li class="sector" data-aparece style={`transition-delay:${(i % 3) * 80}ms`}>
+              <span class="sector__icono"><Icono nombre={s.icono ?? 'maletin'} tamano={22} /></span>
+              <h3>{s.t}</h3>
+              <p set:html={s.d} />
+              {s.etiquetas && s.etiquetas.length > 0 && (
+                <ul class="etiquetas">{s.etiquetas.map((e) => <li>{e}</li>)}</ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {d.singulares?.map((b, n) => (
+    <section class:list={['seccion', { 'seccion--blanca': n % 2 === 0 }]} aria-labelledby={`singular-${n}`}>
+      <div class="contenedor">
+        <Encabezado id={`singular-${n}`} antetitulo={p.nombre} titulo={b.titulo} entradilla={b.entradilla} />
+        <ul class="singulares">
+          {b.items.map((it) => (
+            <li>
+              {it.meta && <span class="singular__meta">{it.meta}</span>}
+              <h3>{it.t}</h3>
+              <p set:html={it.d} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  {d.incluye && (
+    <section class="seccion" aria-labelledby="incluye-titulo">
+      <div class="contenedor">
+        <Encabezado id="incluye-titulo" antetitulo={d.servicio.nombre} titulo={d.incluye.titulo} entradilla={d.incluye.entradilla} />
+        <Puntos items={d.incluye.items} columnas={d.incluye.items.length % 4 === 0 ? 4 : 3} />
+        <p class="mas"><a href={d.servicio.href}>Todo sobre {d.servicio.nombre.toLowerCase()} <Icono nombre="flecha" tamano={16} /></a></p>
+      </div>
+    </section>
+  )}
+
+  {d.pasos && (
+    <section class="seccion seccion--blanca" aria-labelledby="pasos-titulo">
+      <div class="contenedor">
+        <Encabezado id="pasos-titulo" antetitulo="Cómo trabajamos" titulo={d.pasos.titulo} />
+        <Pasos pasos={d.pasos.items} />
+      </div>
+    </section>
+  )}
+
+  {d.casos && d.casos.length > 0 && (
+    <section class="seccion" aria-labelledby="casos-titulo">
+      <div class="contenedor">
+        <Encabezado id="casos-titulo" antetitulo="Trabajos publicados" titulo="Proyectos que puedes visitar" />
+        <Casos ids={d.casos} />
+      </div>
+    </section>
+  )}
+
+  <section class="seccion seccion--blanca" aria-labelledby="preguntas-titulo">
+    <div class="contenedor dos-columnas">
+      <Encabezado id="preguntas-titulo" antetitulo="Preguntas frecuentes" titulo={`${d.servicio.nombre} en ${p.nombre}: dudas habituales`} />
+      <Preguntas preguntas={d.preguntas} />
+    </div>
+  </section>
+
+  {d.enlaces?.filter((g) => g.items.length > 0).map((g, n) => (
+    <section class="seccion seccion--compacta" aria-labelledby={`enlaces-${n}`}>
+      <div class="contenedor">
+        <h2 id={`enlaces-${n}`} class="enlaces__titulo">{g.titulo}</h2>
+        <ul class="enlaces">
+          {g.items.map((e) => (
+            <li>
+              <a href={e.href}>
+                <span>{e.nombre}</span>
+                {e.d && <small>{e.d}</small>}
+                <Icono nombre="flecha" tamano={16} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <LlamadaFinal
+    titulo={d.llamada?.titulo ?? `¿Tienes un negocio en ${p.nombre}? Cuéntanos qué necesitas`}
+    texto={d.llamada?.texto}
+    servicio={d.servicio.contacto}
+  />
+</Sitio>
+
+<style>
+  .portada {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(3rem, 2rem + 4vw, 5rem);
+    overflow: hidden;
+  }
+  .portada__rejilla {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .portada__texto {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .portada h1 {
+    font-size: var(--t-3xl);
+    max-width: 18ch;
+  }
+  .portada__puntos {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    color: var(--tinta-2);
+  }
+  .portada__puntos li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .portada__puntos :global(.icono) {
+    margin-top: 0.25rem;
+    color: var(--verde);
+  }
+  .portada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .portada__ilustracion {
+    width: 100%;
+    max-width: 500px;
+    justify-self: center;
+  }
+  .portada__ilustracion :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+  @media (min-width: 960px) {
+    .portada__rejilla {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3rem;
+    }
+  }
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    margin: 3rem 0 0;
+    overflow: hidden;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-l);
+    background: var(--linea);
+  }
+  .datos div {
+    display: grid;
+    gap: 0.3rem;
+    align-content: start;
+    padding: 1.25rem 1.4rem;
+    background: var(--superficie);
+  }
+  .datos dt {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+  .datos dd {
+    margin: 0;
+    font-weight: 700;
+    font-size: var(--t-l);
+    line-height: 1.3;
+  }
+
+  .local {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .local h2 {
+    margin-top: 1rem;
+    font-size: var(--t-2xl);
+  }
+  .local__texto {
+    font-size: var(--t-l);
+    line-height: 1.65;
+  }
+  @media (min-width: 960px) {
+    .local {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
+
+  .sectores {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .sector {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: 1.6rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+  }
+  .sector__icono {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0.35rem;
+    border-radius: 12px;
+    background: var(--platano-suave);
+    color: var(--verde);
+  }
+  .sector h3 {
+    font-size: var(--t-l);
+  }
+  .sector p {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+  }
+  .etiquetas {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+  .etiquetas li {
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: var(--fondo-2);
+    font-size: var(--t-xs);
+    font-weight: 600;
+    color: var(--tinta-2);
+  }
+  @media (min-width: 700px) {
+    .sectores {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .sectores {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .singulares {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .singulares li {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 1.5rem;
+    border-left: 4px solid var(--platano);
+    background: var(--fondo);
+    border-radius: 0 var(--radio) var(--radio) 0;
+  }
+  .seccion:not(.seccion--blanca) .singulares li {
+    background: var(--superficie);
+  }
+  .singular__meta {
+    font-size: var(--t-xs);
+    font-weight: 700;
+    color: var(--verde);
+  }
+  .singulares h3 {
+    font-size: var(--t-l);
+  }
+  .singulares p {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+  }
+  @media (min-width: 800px) {
+    .singulares {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1100px) {
+    .singulares {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .mas {
+    margin-top: 1.75rem;
+  }
+  .mas a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--verde);
+    font-weight: 680;
+  }
+
+  .dos-columnas {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 960px) {
+    .dos-columnas {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
+
+  .enlaces__titulo {
+    font-size: var(--t-xl);
+    margin-bottom: 1.25rem;
+  }
+  .enlaces {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .enlaces a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 1rem;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background: var(--superficie);
+    text-decoration: none;
+    font-weight: 650;
+  }
+  .enlaces a:hover {
+    border-color: var(--verde);
+  }
+  .enlaces small {
+    grid-column: 1;
+    font-weight: 400;
+    color: var(--tenue);
+    font-size: var(--t-s);
+  }
+  .enlaces :global(.icono) {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    color: var(--verde);
+  }
+  @media (min-width: 760px) {
+    .enlaces {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .enlaces {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

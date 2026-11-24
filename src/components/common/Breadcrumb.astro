@@ -1,83 +1,21 @@
 ---
-interface BreadcrumbItem {
-  label: string;
-  href?: string;
-}
+/* Compatibilidad: el clúster /programador-web/ sigue pasando items con
+   { label, href } e «Inicio» como primer elemento. Se pintan con Migas. */
+import Migas from '../sitio/Migas.astro';
 
 interface Props {
-  items: BreadcrumbItem[];
-  /* Todo el sitio está en tono consola desde la fase 4; 'papel' se queda por
-     si alguna página futura vuelve a fondo claro. */
-  tono?: 'papel' | 'consola';
-  /* Las landings de pueblo ya declaran el breadcrumb dentro de su WebPage:
-     ahí no hace falta repetir el JSON-LD. */
+  items: { label: string; href?: string }[];
+  tono?: string;
   jsonLd?: boolean;
 }
-
-const { items, tono = 'consola', jsonLd = true } = Astro.props;
-
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": items.map((item, index) => ({
-    "@type": "ListItem",
-    "position": index + 1,
-    "name": item.label,
-    ...(item.href && { "item": `https://platanitorico.com${item.href}` })
-  }))
-};
+const { items } = Astro.props;
+const sinInicio = items.filter((it, i) => !(i === 0 && it.href === '/'));
 ---
 
-<nav aria-label="Breadcrumb" class:list={['breadcrumb-brutal', tono === 'consola' && 'breadcrumb-brutal--consola']}>
-  <div class="container-brutal breadcrumb-brutal__inner">
-    <ol class="breadcrumb-brutal__list">
-      {items.map((item, index) => (
-        <li class="breadcrumb-brutal__item">
-          {index > 0 && (
-            <span class="breadcrumb-brutal__sep" aria-hidden="true">[ / ]</span>
-          )}
-          {item.href ? (
-            <a href={item.href} class="breadcrumb-brutal__link">{item.label}</a>
-          ) : (
-            <span class="breadcrumb-brutal__current" aria-current="page">{item.label}</span>
-          )}
-        </li>
-      ))}
-    </ol>
-  </div>
-</nav>
+<div class="contenedor migas-pw"><Migas items={sinInicio.map((it) => ({ nombre: it.label, href: it.href }))} /></div>
 
 <style>
-  .breadcrumb-brutal {
-    background: var(--brutal-bg);
-    border-bottom: 1px solid var(--brutal-border-soft);
+  .migas-pw {
+    padding-top: 1.5rem;
   }
-  .breadcrumb-brutal__inner { padding-block: 1rem; }
-  .breadcrumb-brutal__list {
-    list-style: none; padding: 0; margin: 0;
-    display: flex; flex-wrap: wrap; gap: .35rem;
-    font-family: var(--font-mono);
-    font-size: .7rem;
-    text-transform: uppercase;
-    letter-spacing: .15em;
-  }
-  .breadcrumb-brutal__item { display: inline-flex; align-items: center; gap: .35rem; }
-  .breadcrumb-brutal__sep { color: var(--brutal-text-muted); opacity: .55; }
-  .breadcrumb-brutal__link { color: var(--brutal-text-secondary); text-decoration: none; transition: color .15s; }
-  .breadcrumb-brutal__link:hover { color: var(--brutal-accent-ink); }
-  .breadcrumb-brutal__current { color: var(--brutal-ink); font-weight: 700; }
-
-  /* Tono consola: solo donde se pide, para no oscurecer el breadcrumb de
-     las páginas que siguen en papel. */
-  .breadcrumb-brutal--consola {
-    background: var(--color-cdm-suelo);
-    border-bottom-color: var(--color-cdm-regla);
-  }
-  /* Sin la opacidad .55 del tono papel: el tenue a medias quedaba en 2,6:1 (axe lo mide aunque sea aria-hidden). */
-  .breadcrumb-brutal--consola .breadcrumb-brutal__sep { color: var(--color-cdm-tenue); opacity: 1; }
-  .breadcrumb-brutal--consola .breadcrumb-brutal__link { color: var(--color-cdm-tenue); }
-  .breadcrumb-brutal--consola .breadcrumb-brutal__link:hover { color: var(--color-cdm-senal); }
-  .breadcrumb-brutal--consola .breadcrumb-brutal__current { color: var(--color-cdm-texto); }
 </style>
-
-{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}

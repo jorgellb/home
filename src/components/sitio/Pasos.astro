@@ -1,0 +1,75 @@
+---
+/* Proceso de trabajo en pasos numerados. */
+interface Props {
+  pasos: { t: string; d: string; cuando?: string }[];
+}
+const { pasos } = Astro.props;
+---
+
+<ol class="pasos">
+  {pasos.map((p, i) => (
+    <li class="paso" data-aparece style={`transition-delay:${i * 80}ms`}>
+      <span class="paso__num">{String(i + 1).padStart(2, '0')}</span>
+      {p.cuando && <span class="paso__cuando">{p.cuando}</span>}
+      <h3>{p.t}</h3>
+      <p>{p.d}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .pasos {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+    counter-reset: paso;
+  }
+  .paso {
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: 1.5rem;
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-l);
+  }
+  .paso__num {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 10px;
+    background: var(--verde);
+    color: #fff;
+    font-weight: 750;
+    font-size: var(--t-s);
+    font-variant-numeric: tabular-nums;
+  }
+  .paso__cuando {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: var(--t-xs);
+    font-weight: 650;
+    color: var(--tenue);
+  }
+  .paso h3 {
+    font-size: var(--t-l);
+  }
+  .paso p {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+  }
+  @media (min-width: 720px) {
+    .pasos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .pasos {
+      grid-template-columns: repeat(var(--columnas, 4), 1fr);
+    }
+  }
+</style>

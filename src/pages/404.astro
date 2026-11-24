@@ -1,169 +1,70 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import Boton from '../components/cdm/Boton.astro';
-
-const title = "404 — Página no encontrada";
-const description = "La página que buscas no existe. Vuelve al inicio.";
+import Sitio from '../layouts/Sitio.astro';
+import Boton from '../components/sitio/Boton.astro';
+import Ilustracion from '../components/sitio/Ilustracion.astro';
+import { SERVICIOS } from '../data/navegacion';
 ---
 
-<BaseLayout title={title} description={description} noindex={true}>
-  <Header />
-
-  <main id="main-content" class="not-found">
-    <div class="container-brutal not-found__inner">
-      <header class="not-found__head">
-        <span class="text-meta">N.º 404 / Página no encontrada</span>
-        <span class="text-meta">Vol. {new Date().getFullYear()} · Almería</span>
-      </header>
-
-      <div class="divider-brutal-thick"></div>
-
-      <div class="not-found__hero">
-        <div class="not-found__number heading-display" aria-hidden="true">
-          <span>4</span>
-          <span class="not-found__zero">0</span>
-          <span>4</span>
-        </div>
-
-        <h1 class="not-found__title heading-display">
-          Esta página
-          <em class="heading-editorial">se perdió</em>
-          por el camino.
-        </h1>
-
-        <p class="not-found__lead">
-          O la moviste tú, o la movimos nosotros, o nunca existió. En cualquier caso,
-          desde aquí no encontramos nada. Estos enlaces sí funcionan:
-        </p>
-      </div>
-
-      <ul class="not-found__links">
-        <li><a href="/"><span class="text-mono">01</span> Inicio</a></li>
-        <li><a href="/desarrollo-web/"><span class="text-mono">02</span> Diseño Web</a></li>
-        <li><a href="/audiovisual/"><span class="text-mono">03</span> Audiovisual</a></li>
-        <li><a href="/marketing/"><span class="text-mono">04</span> Marketing</a></li>
-        <li><a href="/diseno-grafico/"><span class="text-mono">05</span> Diseño Gráfico</a></li>
-        <li><a href="/blog/"><span class="text-mono">06</span> Blog</a></li>
-        <li><a href="/contacto/"><span class="text-mono">07</span> Contacto</a></li>
-      </ul>
-
-      <div class="not-found__cta">
-        <Boton href="/">Volver al inicio</Boton>
-        <Boton href="/contacto/" variante="linea">Cuéntame qué buscabas</Boton>
-      </div>
+<Sitio title="Página no encontrada" description="La página que buscas no existe o ha cambiado de dirección." noindex>
+  <section class="contenedor no-encontrada">
+    <Ilustracion nombre="pueblo" class="no-encontrada__ilustracion" />
+    <p class="antetitulo">Error 404</p>
+    <h1>Esta página se ha perdido por el camino</h1>
+    <p class="entradilla">Puede que la hayamos movido al rediseñar la web. Prueba desde aquí:</p>
+    <div class="no-encontrada__acciones">
+      <Boton href="/">Ir al inicio</Boton>
+      <Boton href="/contacto/" variante="secundario">Escríbenos</Boton>
     </div>
-
-    {/* Marquee */}
-    <div class="not-found__marquee" aria-hidden="true">
-      <div class="not-found__marquee-track">
-        {Array.from({length: 6}).map(() => (
-          <span>★ ERROR 404 — PAGE NOT FOUND ★ ARCHIVO PERDIDO ★ NULL ★</span>
-        ))}
-      </div>
-    </div>
-  </main>
-
-  <Footer />
-</BaseLayout>
+    <ul class="no-encontrada__enlaces">
+      {SERVICIOS.map((s) => <li><a href={s.href}>{s.nombre}</a></li>)}
+      <li><a href="/diseno-web/">Municipios</a></li>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+  </section>
+</Sitio>
 
 <style>
-  .not-found {
-    /* Utilitarios globales (text-meta, divider-brutal-thick) en tono consola. */
-    --brutal-ink: var(--color-cdm-regla-2);
-    --brutal-text-muted: var(--color-cdm-tenue);
-    --brutal-text-secondary: #b9c5cf;
-    --brutal-accent-ink: var(--color-cdm-senal);
-    background: var(--color-cdm-suelo);
-    color: var(--color-cdm-texto);
-    border-bottom: 1px solid var(--color-cdm-regla);
-    padding-top: 3rem;
+  .no-encontrada {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    padding-block: var(--seccion);
+    text-align: center;
   }
-  .not-found__inner { padding-bottom: 5rem; }
-  .not-found__head {
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-    padding-bottom: 1rem;
+  .no-encontrada h1 {
+    font-size: var(--t-3xl);
+    max-width: 18ch;
   }
-
-  .not-found__hero { padding: 3rem 0; display: flex; flex-direction: column; gap: 1.5rem; }
-  .not-found__number {
+  .no-encontrada :global(.no-encontrada__ilustracion) {
+    max-width: 320px;
+  }
+  .no-encontrada__acciones {
     display: flex;
-    align-items: center;
-    gap: .5rem;
-    font-size: clamp(8rem, 22vw, 18rem);
-    line-height: .85;
-    letter-spacing: -.06em;
-    color: var(--color-cdm-texto);
-    user-select: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
   }
-  .not-found__zero {
-    color: transparent;
-    -webkit-text-stroke: 4px var(--color-cdm-senal);
-    animation: blink 2.5s steps(2) infinite;
-  }
-  @media (prefers-reduced-motion: reduce) { .not-found__zero { animation: none; } }
-  .not-found__title {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: .95;
-    letter-spacing: -.03em;
-    max-width: 22ch;
-    margin: 0;
-  }
-  .not-found__title em { color: var(--color-cdm-senal); font-style: italic; }
-  .not-found__lead {
-    font-size: 1.05rem;
-    line-height: 1.55;
-    color: #b9c5cf;
-    max-width: 50ch;
-  }
-
-  .not-found__links {
+  .no-encontrada__enlaces {
     list-style: none;
-    padding: 0;
-    margin: 2rem 0 3rem;
-    border-top: 1px solid var(--color-cdm-regla-2);
-  }
-  .not-found__links li { border-bottom: 1px solid var(--color-cdm-regla); }
-  .not-found__links a {
     display: flex;
-    gap: 1.5rem;
-    align-items: center;
-    padding: 1rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    max-width: 44rem;
+  }
+  .no-encontrada__enlaces a {
+    display: inline-block;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--linea-2);
+    background: var(--superficie);
+    font-size: var(--t-s);
+    font-weight: 600;
     text-decoration: none;
-    color: var(--color-cdm-texto);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    letter-spacing: -.025em;
-    transition: padding .2s, background .15s, color .15s;
   }
-  .not-found__links a:hover {
-    padding-left: 1rem;
-    background: var(--color-cdm-panel-2);
-    color: var(--color-cdm-senal);
+  .no-encontrada__enlaces a:hover {
+    border-color: var(--verde);
+    color: var(--verde);
   }
-  .not-found__links a:focus-visible { outline: 2px solid var(--color-cdm-senal); outline-offset: 2px; }
-  .not-found__links .text-mono { color: var(--color-cdm-tenue); font-size: .85rem; font-weight: 400; min-width: 32px; }
-
-  .not-found__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
-
-  .not-found__marquee {
-    background: var(--color-cdm-panel);
-    color: var(--color-cdm-senal);
-    overflow: hidden;
-    padding: 1.5rem 0;
-    border-top: 1px solid var(--color-cdm-regla);
-  }
-  .not-found__marquee-track {
-    display: flex; gap: 3rem;
-    width: max-content;
-    animation: marquee 35s linear infinite;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: .9rem;
-    text-transform: uppercase;
-    letter-spacing: .2em;
-  }
-  @media (prefers-reduced-motion: reduce) { .not-found__marquee-track { animation: none; } }
 </style>

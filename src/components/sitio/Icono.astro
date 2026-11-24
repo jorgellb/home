@@ -1,0 +1,40 @@
+---
+/* Iconos de interfaz: trazo de 1,75 sobre rejilla de 24, esquinas redondeadas.
+   Inline y sin dependencias (sustituyen a lucide/react-icons). */
+import { TRAZOS, type NombreIcono } from './iconos';
+export type { NombreIcono };
+
+
+interface Props {
+  nombre: NombreIcono;
+  tamano?: number;
+  class?: string;
+  titulo?: string;
+}
+
+const { nombre, tamano = 20, class: clase, titulo } = Astro.props;
+const trazo = TRAZOS[nombre] ?? TRAZOS.chispa;
+---
+
+<svg
+  class:list={['icono', clase]}
+  width={tamano}
+  height={tamano}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={titulo ? 'img' : undefined}
+  aria-label={titulo}
+  aria-hidden={titulo ? undefined : 'true'}
+  focusable="false"
+  set:html={trazo}
+/>
+
+<style>
+  .icono {
+    flex: none;
+  }
+</style>

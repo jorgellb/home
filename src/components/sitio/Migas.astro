@@ -1,0 +1,59 @@
+---
+/* Miga de pan visible + BreadcrumbList. El último elemento es la página actual. */
+import { SITE } from '../../data/negocio';
+
+interface Props {
+  items: { nombre: string; href?: string }[];
+}
+const { items } = Astro.props;
+const todos = [{ nombre: 'Inicio', href: '/' }, ...items];
+const esquema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: todos.map((it, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: it.nombre,
+    ...(it.href ? { item: `${SITE}${it.href}` } : {}),
+  })),
+};
+---
+
+<nav class="migas" aria-label="Miga de pan">
+  <ol>
+    {todos.map((it, i) => (
+      <li>
+        {it.href && i < todos.length - 1 ? <a href={it.href}>{it.nombre}</a> : <span aria-current="page">{it.nombre}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<script is:inline type="application/ld+json" set:html={JSON.stringify(esquema)} />
+
+<style>
+  .migas ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    font-size: var(--t-xs);
+    font-weight: 600;
+    color: var(--tenue);
+  }
+  .migas li + li::before {
+    content: '/';
+    margin-right: 0.5rem;
+    color: var(--linea-2);
+  }
+  .migas a {
+    color: var(--tenue);
+    text-decoration: none;
+  }
+  .migas a:hover {
+    color: var(--verde);
+    text-decoration: underline;
+  }
+  .migas [aria-current] {
+    color: var(--tinta);
+  }
+</style>

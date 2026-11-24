@@ -1,0 +1,78 @@
+---
+/* Rejilla de tarjetas con icono, título y texto. */
+import Icono from './Icono.astro';
+import type { Punto } from '../../data/servicios/tipos';
+
+interface Props {
+  items: Punto[];
+  /** Fondo de las tarjetas: claro sobre sección blanca, blanco sobre fondo. */
+  sobre?: 'fondo' | 'blanco';
+  columnas?: 2 | 3 | 4;
+}
+const { items, sobre = 'fondo', columnas = 3 } = Astro.props;
+---
+
+<ul class:list={['puntos', `puntos--${columnas}`, `puntos--sobre-${sobre}`]}>
+  {items.map((p, i) => (
+    <li class="punto" data-aparece style={`transition-delay:${(i % columnas) * 80}ms`}>
+      {p.icono && <span class="punto__icono"><Icono nombre={p.icono} tamano={22} /></span>}
+      <h3>{p.t}</h3>
+      <p set:html={p.d} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .puntos {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .punto {
+    display: grid;
+    gap: 0.6rem;
+    align-content: start;
+    padding: 1.6rem;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+  }
+  .puntos--sobre-fondo .punto {
+    background: var(--superficie);
+  }
+  .puntos--sobre-blanco .punto {
+    background: var(--fondo);
+  }
+  .punto__icono {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0.35rem;
+    border-radius: 12px;
+    background: var(--platano-suave);
+    color: var(--verde);
+  }
+  .punto h3 {
+    font-size: var(--t-l);
+  }
+  .punto p {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+  }
+  .punto p :global(a) {
+    color: var(--verde);
+  }
+  @media (min-width: 700px) {
+    .puntos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .puntos--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .puntos--4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

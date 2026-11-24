@@ -40,12 +40,12 @@ export const enlacesPorPost: Record<string, EnlacePost[]> = {
     { href: '/soluciones/empresa/', label: 'Webs corporativas', sub: 'Para clínicas y empresas con varias sedes' },
   ],
   'experiencias-inmersivas-3d-webxr': [
-    { href: '/laboratorio-ia/', label: 'Laboratorio de IA', sub: 'Doce demos que puedes probar' },
-    { href: '/probador-virtual-ar/', label: 'Probador virtual AR', sub: 'Producto sobre el cliente, sin instalar nada' },
+    { href: '/programador-web/javascript/', label: 'Desarrollo JavaScript', sub: 'Configuradores y visores dentro de tu web' },
+    { href: '/ia-empresas/', label: 'IA para empresas', sub: 'Tecnología aplicada a procesos reales' },
     { href: '/soluciones/ecommerce/', label: 'Tiendas online', sub: 'Catálogo, pasarela y 3D donde suma' },
   ],
   'tecnologias-javascript-ar-web': [
-    { href: '/probador-virtual-ar/', label: 'Probador virtual AR', sub: 'La demo de este artículo, funcionando' },
+    { href: '/programador-web/javascript/', label: 'Desarrollo JavaScript', sub: 'Piezas interactivas dentro de tu web' },
     { href: '/soluciones/ecommerce/', label: 'Tiendas online', sub: 'Donde esto se convierte en ventas' },
     { href: '/ia-empresas/', label: 'IA para empresas', sub: 'Lo mismo, dentro de tu operación' },
   ],

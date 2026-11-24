@@ -4,7 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap, { ChangeFreqEnum } from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
-import react from '@astrojs/react';
 
 import { PUEBLOS_INDEXABLES } from './src/data/pueblos-indexables.ts';
 import { evaluar } from './src/data/programador-gate.ts';
@@ -133,7 +132,7 @@ export default defineConfig({
       // Resto de páginas - prioridad media
       return { ...item, changefreq: ChangeFreqEnum.MONTHLY, priority: 0.7, lastmod: BUILD_DATE };
     },
-  }), react()],
+  })],
 
   prefetch: {
     prefetchAll: true,

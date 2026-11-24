@@ -1,857 +1,655 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import Contact from '../components/sections/Contact.astro';
-import PortadaConsola from '../components/cdm/PortadaConsola.astro';
-import PreciosConsola from '../components/cdm/PreciosConsola.astro';
-import { PerspectiveCarousel } from '@/components/ui/perspective-carousel';
-import { TestimonialsCard } from '@/components/ui/testimonials-card';
-import { FaqAccordion } from '@/components/ui/faq-accordion';
-import type { TarifaCdm } from '../components/cdm/tipos';
-import { CIFRAS, aniosEnAlmeria } from '../data/negocio';
-import { plan360, registroPlan360 } from '../data/servicios-it';
-import { comarcas, getPueblosByComarca, comarcaSlug } from '../data/pueblos-almeria';
-import { proyectos as casos } from '../data/proyectos';
-import medidasJson from '../data/medidas.json';
-import { fechaCorta, medidasSchema } from '../data/medidas';
+import { getCollection } from 'astro:content';
+import Sitio from '../layouts/Sitio.astro';
+import Boton from '../components/sitio/Boton.astro';
+import Icono, { type NombreIcono } from '../components/sitio/Icono.astro';
+import Ilustracion from '../components/sitio/Ilustracion.astro';
+import Encabezado from '../components/sitio/Encabezado.astro';
+import Pasos from '../components/sitio/Pasos.astro';
+import Casos from '../components/sitio/Casos.astro';
+import Preguntas from '../components/sitio/Preguntas.astro';
+import Guia from '../components/sitio/Guia.astro';
+import LlamadaFinal from '../components/sitio/LlamadaFinal.astro';
+import { SERVICIOS, GRUPOS } from '../data/navegacion';
+import { CIFRAS, PROVEEDOR, SITE, aniosEnAlmeria } from '../data/negocio';
+import { comarcas, getPueblosByComarca } from '../data/pueblos-almeria';
+import { esPuebloIndexable } from '../data/pueblos-indexables';
 
-type Post = CollectionEntry<'posts'>;
-
-// Posts recientes (3 últimos)
-const allPosts = await getCollection('posts', ({ data }: Post) => !data.draft);
-const recentPosts = allPosts
-  .sort((a: Post, b: Post) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
   .slice(0, 3);
+const fecha = (d: Date) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-function formatDateShort(d: Date): string {
-  return d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' });
-}
+const valoracion = String(CIFRAS.valoracion).replace('.', ',');
 
-// ─── DATOS HOME ────────────────────────────────
-
-// Servicios cluster (con preview color por área)
-const servicios = [
-  { num: '01', href: '/desarrollo-web/',  title: 'Diseño Web',       sub: 'Astro · WordPress · Custom', desc: 'Webs que cargan en <2s y aparecen en Google. CWV verde, accesibles, indexables.', icon: 'web',    color: 'green',    metric: '99+', metricLbl: 'Lighthouse' },
-  { num: '02', href: '/audiovisual/',     title: 'Audiovisual',      sub: 'Dron 4K · Vídeo · Foto',     desc: 'Producción con Mavic 3 Pro. Vídeo corporativo, reels, tours 360°, fotografía aérea.', icon: 'cam',    color: 'red',      metric: '4K', metricLbl: 'Resolución' },
-  { num: '03', href: '/marketing/',       title: 'Marketing · SEO',  sub: 'SEM · SEO · Email · RRSS',   desc: 'Tráfico cualificado vía Google Ads, SEO local y email automation. Conversión medida.', icon: 'mkt',    color: 'blue',     metric: '+180%', metricLbl: 'Leads medio' },
-  { num: '04', href: '/diseno-grafico/',  title: 'Diseño Gráfico',   sub: 'Branding · Print · Editorial', desc: 'Identidad visual, papelería corporativa, packaging, catálogos y editorial.', icon: 'art',    color: 'magenta',  metric: '∞', metricLbl: 'Conceptos' },
-  { num: '05', href: '/informatica-empresas/', title: 'Sistemas IT',     sub: 'Redes · Equipos · Copias',  desc: 'Mantenimiento informático, redes wifi, servidores y ciberseguridad. Técnico el mismo día en el Levante.', icon: 'it', color: 'woo', metric: '0 días', metricLbl: 'Espera para visita' },
-  { num: '07', href: '/ia-empresas/',     title: 'IA para empresas', sub: 'Agentes · Documentos · Voz', desc: 'Sistemas de IA que atienden clientes, procesan documentos y preparan propuestas dentro de tus herramientas.', icon: 'ia', color: 'cyan', metric: 'Piloto', metricLbl: 'Para empezar' },
-  { num: '06', href: '/soporte/',         title: 'Mantenimiento',    sub: 'Soporte · Backups · WAF',    desc: 'Vigilancia 24/7, backups diarios, parches de seguridad <24h. Sin permanencia.',      icon: 'shield', color: 'gold',     metric: '99.9%', metricLbl: 'Uptime' },
+/* Problemas que resolvemos: se habla del negocio, no de la tecnología. */
+const problemas: { icono: NombreIcono; t: string; d: string }[] = [
+  { icono: 'buscar', t: 'No te encuentran en Google', d: 'Tu competencia sale antes en búsquedas y en el mapa, aunque tú lo hagas mejor. Casi siempre es cuestión de estructura, ficha de Google y contenido local.' },
+  { icono: 'rayo', t: 'Tu web no convierte', d: 'Recibe visitas, pero no llamadas. Suele fallar lo básico: tarda en cargar en el móvil, no dice claro qué haces o esconde el teléfono.' },
+  { icono: 'servidor', t: 'La informática te frena', d: 'Equipos lentos, copias que nadie comprueba y un wifi que se cae. Son horas de trabajo perdidas cada semana, y nadie las está contando.' },
 ];
 
-// 4 razones diferenciales
-const razones = [
-  { num: '01', t: 'Equipo local en Almería',    s: 'Aquí desde 2018. Tomamos café juntos si quieres. Hablas con quien va a trabajar — sin intermediarios, sin comerciales.' },
-  { num: '02', t: 'Sin permanencia',            s: 'Nadie firma contratos eternos. Pago contra hitos. Si no encajamos, te exportamos todo y te vas. Nuestros clientes se quedan por resultados.' },
-  { num: '03', t: 'Respuesta < 4 horas',        s: 'WhatsApp, email o teléfono. Sin tickets, sin filtros, sin "te derivamos a otro compañero". Personas reales en tiempo real.' },
-  { num: '04', t: 'Cero plantillas',            s: 'Cada web a medida. Diseñamos por TÚ negocio, no por catálogo de Wix. Si quieres una plantilla — hay opciones más baratas en otro sitio.' },
+/* Guía de valor: lo que debe tener cualquier web antes de pagar por ella. */
+const comprobaciones = [
+  { t: 'Carga en menos de 2,5 segundos en un móvil', d: 'Es el límite de Google para considerar buena una página (LCP). Compruébalo gratis en PageSpeed Insights.' },
+  { t: 'El dominio, el hosting y el código son tuyos', d: 'A tu nombre y con acceso total. Si mañana cambias de proveedor, te llevas todo sin pedir permiso.' },
+  { t: 'Se entiende qué haces en 5 segundos', d: 'Servicio, zona y forma de contacto visibles sin bajar. Si hay que buscarlos, el visitante se va.' },
+  { t: 'Tiene una página por servicio y por zona', d: 'Una sola página de inicio no puede posicionar «fontanero en Vera» y «fontanero en Mojácar» a la vez.' },
+  { t: 'Cumple la ley: RGPD, LSSI y accesibilidad', d: 'Aviso legal, privacidad y cookies correctos. Desde 2025 la accesibilidad también obliga a muchos negocios.' },
+  { t: 'Mide lo que pasa', d: 'Cuántas llamadas, formularios y WhatsApp llegan desde la web. Sin ese dato es imposible mejorar.' },
 ];
 
-
-// Proceso 5 pasos
-const proceso = [
-  { num: '01', t: 'Briefing',         body: 'Llamada de 30 min · te escuchamos, sin presentaciones interminables.', eta: 'Día 1' },
-  { num: '02', t: 'Propuesta',         body: 'Presupuesto cerrado por escrito · plan de trabajo · fecha de entrega.', eta: 'Día 3' },
-  { num: '03', t: 'Diseño',            body: 'Mockups + revisiones. Lo apruebas antes de programar nada.',           eta: 'Sem 1–2' },
-  { num: '04', t: 'Desarrollo',        body: 'Construcción real. Acceso a entorno staging para que veas el progreso.', eta: 'Sem 2–4' },
-  { num: '05', t: 'Lanzamiento',       body: 'Migración, monitorización, formación de tu equipo, soporte activo.',    eta: 'Sem 4–6' },
+const pasos = [
+  { t: 'Te escuchamos', d: 'Media hora para entender tu negocio, tus clientes y qué tiene que pasar para que esto merezca la pena.', cuando: 'Día 1' },
+  { t: 'Propuesta por escrito', d: 'Qué haremos, en qué plazo y qué entregamos. Sin letra pequeña ni permanencias.', cuando: 'Día 3' },
+  { t: 'Diseño que apruebas', d: 'Ves el diseño antes de programar y sigues el avance en un entorno de pruebas.', cuando: 'Semanas 1-3' },
+  { t: 'Lanzamiento y seguimiento', d: 'Publicamos, damos de alta tu ficha de Google, te enseñamos a usarla y medimos los resultados.', cuando: 'Semana 4+' },
 ];
 
-// Soluciones por perfil (audience-based)
-const soluciones = [
-  { href: '/soluciones/emprendedor/', code: 'MVP',  name: 'Emprendedores',  sub: 'Lanza tu primera web', desc: 'Pack todo-en-uno con dominio, hosting, correo y SEO. En 14 días vendiendo.', price: 'Desde 350€',   color: 'accent', icon: 'rocket' },
-  { href: '/soluciones/empresa/',     code: 'PRO',  name: 'Empresas',       sub: 'Web corporativa',      desc: 'Audit gratuita, integraciones CRM/ERP, SLA, RGPD + WCAG AA, multilingüe.', price: 'Desde 500€', color: 'navy',   icon: 'building' },
-  { href: '/soluciones/ecommerce/',   code: 'SHOP', name: 'Tienda online',  sub: 'WooCommerce',          desc: '0% comisión por venta. Stripe + Bizum + Redsys. Tienda 100% tuya.',          price: 'Desde 700€', color: 'woo',    icon: 'cart' },
+const opiniones = [
+  { texto: 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y una dedicación excepcionales.', autor: 'Ana Padilla', cargo: 'Directora, Clínica Dental Koral' },
+  { texto: 'Nuestra inmobiliaria en Vera Playa necesitaba captar clientes internacionales. El portal es impecable y recibimos contactos a diario.', autor: 'Javier Ruiz', cargo: 'Inmobiliaria, Vera Playa' },
+  { texto: 'La creación de nuestra web corporativa fue un proceso impecable. El equipo captó a la perfección nuestros valores.', autor: 'Juan Poveda', cargo: 'Empresa, Almería' },
 ];
 
-// Tech stack con SVGs custom — los renderizamos inline en la sección
-const tech = [
-  { id: 'astro',     name: 'Astro',          v: 'Sitios estáticos ultrarrápidos · objetivo Lighthouse 95+',     bg: 'orange' },
-  { id: 'wp',        name: 'WordPress',      v: 'CMS rey · Blog editable · SEO de primer nivel',       bg: 'blue' },
-  { id: 'woo',       name: 'WooCommerce',    v: 'Tiendas online · 0% comisión por venta',              bg: 'woo' },
-  { id: 'stripe',    name: 'Stripe',         v: 'Pasarela líder · Apple/Google Pay · 1,4 % por venta', bg: 'purple' },
-  { id: 'bizum',     name: 'Bizum',          v: 'Pago móvil español · 24 M usuarios · 0,7 %',          bg: 'cyan' },
-  { id: 'vercel',    name: 'Vercel',         v: 'Hosting + Edge Network · SSL · 99,99 % uptime',        bg: 'green' },
-  { id: 'cloudflare',name: 'Cloudflare',     v: 'CDN + WAF · protección DDoS · DNS rápido',            bg: 'orange-d' },
-  { id: 'ga4',       name: 'Analytics + GSC',v: 'GA4 · Search Console · Tag Manager configurados',    bg: 'yellow' },
+const preguntas = [
+  { q: '¿Cuánto cuesta una web?', a: '<p>Depende de lo que necesites que haga: no es lo mismo una web para que te llamen que una tienda con 500 productos. Por eso no damos una cifra a ciegas: tras la primera llamada recibes una propuesta cerrada por escrito, con el plazo y lo que incluye, y sin sorpresas después.</p>' },
+  { q: '¿Cuánto tarda en estar lista?', a: '<p>Una web de servicios suele estar publicada en tres o cuatro semanas. Una tienda online o un proyecto a medida, entre seis y doce. El plazo concreto va en la propuesta y lo cumplimos siempre que las revisiones lleguen a tiempo.</p>' },
+  { q: '¿La web será mía?', a: '<p>Sí, entera: dominio, hosting, código y contenidos, a tu nombre. Si un día decides irte, te lo entregamos todo. Nuestros clientes se quedan porque funciona, no porque estén atados.</p>' },
+  { q: '¿Trabajáis fuera de Vera?', a: '<p>Trabajamos con negocios de toda la provincia de Almería: el Levante, el Almanzora, la capital y el Poniente. En el Levante y el Almanzora podemos ir en persona el mismo día; en el resto, nos vemos por videollamada o cuando haga falta.</p>' },
+  { q: '¿Y después de publicarla?', a: '<p>Puedes llevarla tú (te enseñamos) o dejarla en nuestras manos con el <a href="/soporte/">mantenimiento</a>: copias diarias, actualizaciones de seguridad y cambios cuando los necesites, sin tickets ni esperas.</p>' },
 ];
 
-// Lighthouse real de cada proyecto (src/data/medidas.json). Sin medida → null.
-const medidas = medidasSchema.parse(medidasJson);
-const lighthousePorId = new Map(medidas.webs.map((w) => [w.id, w.lighthouse]));
-const casosMedidos = casos.map((c) => ({ ...c, lighthouse: lighthousePorId.get(c.id) ?? null }));
-const fechaMedidas = fechaCorta(medidas.medidoEl);
-const notaMedidas = fechaMedidas
-  ? `Lighthouse móvil medido el ${fechaMedidas} con PageSpeed Insights.`
-  : 'Estas webs todavía no tienen medida de Lighthouse.';
+const zonas = comarcas
+  .map((c) => ({ comarca: c, pueblos: getPueblosByComarca(c).filter((p) => esPuebloIndexable(p.slug)) }))
+  .filter((z) => z.pueblos.length > 0);
 
-// Testimonios destacados (subset de los del JSON-LD)
-const testimonios = [
-  { text: 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y dedicación excepcionales.',          author: 'Ana Padilla',  role: 'Directora · Almería', metric: '★★★★★ · 2026' },
-  { text: 'Nuestra inmobiliaria en Vera Playa necesitaba captar clientes internacionales. El portal es impecable y recibimos leads diarios.', author: 'Javier Ruiz',  role: 'Vera Playa · Inmo',   metric: '+210% LEADS' },
-  { text: 'La creación de nuestro sitio web corporativo fue un proceso impecable. El equipo capturó a la perfección nuestros valores.',     author: 'Juan Poveda',  role: 'Corporate · Almería', metric: 'TOP 3 GOOGLE' },
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    ...PROVEEDOR,
+    name: 'Platanito Rico',
+    description: 'Estudio digital en Vera (Almería): diseño web, tiendas online, marketing y SEO local, informática para empresas y producción audiovisual.',
+    logo: `${SITE}/favicon.svg`,
+    image: `${SITE}/imagenes/og-platanito-rico.png`,
+    sameAs: ['https://www.instagram.com/platanitorico/', 'https://www.linkedin.com/company/platanitorico/'],
+    geo: { '@type': 'GeoCoordinates', latitude: 37.2471, longitude: -1.8673 },
+    foundingDate: String(CIFRAS.anioFundacion),
+    areaServed: { '@type': 'AdministrativeArea', name: 'Provincia de Almería' },
+    aggregateRating: { '@type': 'AggregateRating', ratingValue: String(CIFRAS.valoracion), reviewCount: String(CIFRAS.numResenas), bestRating: '5', worstRating: '1' },
+    review: opiniones.map((o) => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: o.autor },
+      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+      reviewBody: o.texto,
+    })),
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Servicios',
+      itemListElement: SERVICIOS.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.nombre, description: s.resumen, url: `${SITE}${s.href}` } })),
+    },
+    openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '18:00' },
+  },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Platanito Rico', url: SITE, inLanguage: 'es-ES' },
 ];
-
-// Tarifas de salida: los tres precios de entrada (panel de fichas)
-const tarifas: TarifaCdm[] = [
-  { servicio: 'Página web', desde: '500 €', nota: 'pago único', incluye: ['Diseño a medida, sin plantillas', 'SEO local y ficha de Google', 'Hosting y correo el primer año', 'Plazo de entrega cerrado por escrito'], href: '/contacto/?servicio=web#contacto', cta: 'Pedir presupuesto' },
-  { servicio: 'Tienda online', desde: '700 €', nota: 'pago único', incluye: ['WooCommerce sin comisión por venta', 'Stripe, Bizum y Redsys', 'Catálogo, envíos y stock', 'Formación para gestionarla'], href: '/contacto/?servicio=tienda#contacto', cta: 'Pedir presupuesto' },
-  { servicio: 'Plan 360', desde: '400 €/mes', nota: '+ IVA, web e informática', incluye: ['Web y hasta 10 puestos con servidor', 'Helpdesk ilimitado y visita el mismo día', 'Copias verificadas y ciberseguridad', 'Sin permanencia ni alta'], href: '/plan-360/', cta: 'Ver el Plan 360', destacada: true },
-];
-
-// Retratos SVG de marca para las opiniones (no hay fotos de clientes)
-const monograma = (nombre: string, i: number) => {
-  const fondo = ['#FF5A00', '#D6FF44', '#0E0D0B'][i % 3];
-  const tinta = ['#0E0D0B', '#0E0D0B', '#D6FF44'][i % 3];
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="${fondo}"/><path d="M200 40 L236 150 L352 150 L258 218 L294 330 L200 262 L106 330 L142 218 L48 150 L164 150 Z" fill="none" stroke="${tinta}" stroke-width="6" opacity=".3"/><text x="200" y="262" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="190" fill="${tinta}">${nombre.charAt(0)}</text></svg>`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-};
-
-// FAQ home (resumida)
-const faqHome = [
-  { q: '¿Cuánto cuesta una web profesional en Almería?', a: 'Web corporativa desde 500€. Tienda online WooCommerce desde 700€. Landing page desde 350€. Presupuesto cerrado, sin sorpresas, sin comisiones por venta.' },
-  { q: '¿Cuánto tarda en estar lista?',                   a: 'De 1 semana (lanzamiento exprés) a 14 semanas (corporativa premium multilingüe). Cumplimos plazos siempre que las aprobaciones lleguen a tiempo.' },
-  { q: '¿Hacéis también mantenimiento informático?', a: 'Sí. Nuestro equipo de sistemas mantiene ordenadores, redes, servidores y copias de empresas del Levante y el Almanzora, con visita el mismo día. El Plan 360 junta web e informática por 400 € + IVA al mes.' },
-  { q: '¿Hay permanencia?',                                a: 'No. Sin permanencia. Cancelas cuando quieras. Tu web es 100% tuya, exportable, migrable. Nuestros clientes se quedan por resultados.' },
-  { q: '¿Qué pasa después del primer año (hosting)?',     a: 'Hosting + correo desde 90€/año si sigues con nosotros, o exportas y te vas. Sin extorsión, sin sorpresas. Tú decides cada año.' },
-];
-
-// Localidades destacadas de la sección de cobertura
-const localidadesDestacadas = [
-  { nombre: 'Almería', slug: 'almeria', sub: 'Capital, 200.000 habitantes' },
-  { nombre: 'Vera', slug: 'vera', sub: 'Levante, sede del estudio' },
-  { nombre: 'Mojácar', slug: 'mojacar', sub: 'Levante, turismo' },
-  { nombre: 'Huércal-Overa', slug: 'huercal-overa', sub: 'Almanzora, cabecera comarcal' },
-  { nombre: 'Albox', slug: 'albox', sub: 'Almanzora, centro comercial' },
-  { nombre: 'Garrucha', slug: 'garrucha', sub: 'Costa, puerto pesquero' },
-];
-
 ---
 
-<BaseLayout
-  title="Agencia de Diseño Web en Almería"
-  description="Agencia de diseño web en Almería: webs a medida desde 500 €, tiendas online, mantenimiento informático y Plan 360 web + IT por 400 €/mes. Presupuesto en 24 h."
-  image="/imagenes/hero/cala-cristal-1920.jpg"
-  imageAlt="Costa de Cala Cristal en Carboneras grabada con dron por Platanito Rico, agencia de diseño web en Almería"
-  canonical="https://platanitorico.com/"
-  type="website"
-  lang="es"
-  jsonLd={[
-    {
-      '@context': 'https://schema.org',
-      '@type': 'ProfessionalService',
-      'name': 'Platanito Rico — Agencia de Diseño Web en Almería',
-      'url': 'https://platanitorico.com',
-      'logo': 'https://platanitorico.com/favicon.svg',
-      'image': 'https://platanitorico.com/imagenes/equipo-diseno-mantenimiento-web.jpg',
-      'description': 'Agencia de diseño web, marketing digital y producción audiovisual en Almería. Webs profesionales con hosting gratuito, SEO local y entrega en 1-2 semanas.',
-      'telephone': '+34657085019',
-      'email': 'hola@platanitorico.com',
-      'priceRange': '€€',
-      'sameAs': ['https://www.instagram.com/platanitorico/', 'https://www.linkedin.com/company/platanitorico/'],
-      'address': { '@type': 'PostalAddress', 'streetAddress': 'Ctra de Ronda, 82', 'addressLocality': 'Vera', 'addressRegion': 'Almería', 'postalCode': '04620', 'addressCountry': 'ES' },
-      'geo': { '@type': 'GeoCoordinates', 'latitude': 37.2471, 'longitude': -1.8673 },
-      'areaServed': [
-        { '@type': 'City', 'name': 'Almería' }, { '@type': 'City', 'name': 'Vera' }, { '@type': 'City', 'name': 'Mojácar' },
-        { '@type': 'City', 'name': 'Huércal-Overa' }, { '@type': 'City', 'name': 'Garrucha' },
-        { '@type': 'AdministrativeArea', 'name': 'Provincia de Almería' }
-      ],
-      'aggregateRating': { '@type': 'AggregateRating', 'ratingValue': '4.9', 'reviewCount': '87', 'bestRating': '5', 'worstRating': '1' },
-      'review': [
-        { '@type': 'Review', 'author': { '@type': 'Person', 'name': 'Ana Padilla' }, 'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }, 'reviewBody': 'Desde el diseño de nuestra web hasta su mantenimiento, han demostrado un profesionalismo y dedicación excepcionales. Muy recomendables.' },
-        { '@type': 'Review', 'author': { '@type': 'Person', 'name': 'Juan Poveda' }, 'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }, 'reviewBody': 'La creación de nuestro sitio web corporativo fue un proceso impecable. El equipo capturó a la perfección nuestros valores y visión.' },
-        { '@type': 'Review', 'author': { '@type': 'Person', 'name': 'Javier Ruiz' }, 'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' }, 'reviewBody': 'Nuestra inmobiliaria en Vera Playa necesitaba captar clientes internacionales. El portal web es impecable y recibimos leads diarios.' }
-      ],
-      'offerCatalog': {
-        '@type': 'OfferCatalog',
-        'name': 'Servicios de diseño web y marketing digital',
-        'itemListElement': [
-          { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Diseño web profesional', 'description': 'Páginas web corporativas desde 500€ con hosting gratuito' } },
-          { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Tienda online / E-commerce', 'description': 'Tiendas online desde 700€ con pasarela de pago' } },
-          { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'SEO y posicionamiento local', 'description': 'Estrategias SEO para posicionar en Google' } },
-          { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Producción audiovisual con dron 4K', 'description': 'Vídeo corporativo, reels y fotografía aérea' } },
-          { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Marketing digital', 'description': 'Google Ads, redes sociales y email marketing' } },
-          { '@type': 'Offer', 'itemOffered': { '@type': 'Service', 'name': 'Mantenimiento informático para empresas', 'description': 'Mantenimiento informático, redes, servidores, copias de seguridad y ciberseguridad con visita el mismo día en el Levante y el Almanzora' } },
-          { '@type': 'Offer', 'price': '400', 'priceCurrency': 'EUR', 'priceSpecification': { '@type': 'UnitPriceSpecification', 'price': '400', 'priceCurrency': 'EUR', 'unitText': 'MES', 'valueAddedTaxIncluded': false }, 'itemOffered': { '@type': 'Service', 'name': 'Plan 360: web + mantenimiento informático', 'description': 'Web profesional, mantenimiento de hasta 10 puestos y servidor, red, copias y ciberseguridad por 400 € + IVA al mes, sin permanencia' } }
-        ]
-      },
-      'openingHoursSpecification': { '@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens': '09:00', 'closes': '18:00' }
-    },
-    {
-      '@context': 'https://schema.org', '@type': 'Organization', 'name': 'Platanito Rico', 'url': 'https://platanitorico.com',
-      'logo': { '@type': 'ImageObject', 'url': 'https://platanitorico.com/imagenes/logo.png', 'width': 200, 'height': 60 },
-      'image': 'https://platanitorico.com/imagenes/equipo-diseno-mantenimiento-web.jpg',
-      'description': 'Agencia de diseño web, marketing digital y producción audiovisual con sede en Vera, Almería.',
-      'telephone': '+34657085019', 'email': 'hola@platanitorico.com',
-      'address': { '@type': 'PostalAddress', 'streetAddress': 'Ctra de Ronda, 82', 'addressLocality': 'Vera', 'addressRegion': 'Almería', 'postalCode': '04620', 'addressCountry': 'ES' },
-      'sameAs': ['https://www.instagram.com/platanitorico/', 'https://www.linkedin.com/company/platanitorico/'],
-      'foundingDate': '2018', 'areaServed': { '@type': 'AdministrativeArea', 'name': 'Almería' }
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      'name': 'Platanito Rico',
-      'url': 'https://platanitorico.com',
-      'potentialAction': {
-        '@type': 'SearchAction',
-        'target': { '@type': 'EntryPoint', 'urlTemplate': 'https://platanitorico.com/buscar?q={search_term_string}' },
-        'query-input': 'required name=search_term_string'
-      }
-    },
-    {
-      '@context': 'https://schema.org', '@type': 'FAQPage',
-      'mainEntity': faqHome.map(f => ({ '@type': 'Question', 'name': f.q, 'acceptedAnswer': { '@type': 'Answer', 'text': f.a } }))
-    },
-    {
-      '@context': 'https://schema.org', '@type': 'BreadcrumbList',
-      'itemListElement': [
-        { '@type': 'ListItem', 'position': 1, 'name': 'Platanito Rico — Diseño Web en Almería', 'item': 'https://platanitorico.com/' }
-      ]
-    }
-  ]}
+<Sitio
+  title="Diseño web, marketing e informática en Almería | Platanito Rico"
+  description="Estudio digital en Vera (Almería). Webs a medida que cargan rápido y traen clientes, SEO local, tiendas online e informática para empresas. Hablas con quien hace el trabajo."
+  canonical={`${SITE}/`}
+  jsonLd={jsonLd}
 >
-  <Header />
-
-  <main id="main-content" class="cdm-home">
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* PORTADA — CENTRO DE MANDO                         */}
-    {/* ════════════════════════════════════════════════ */}
-    <PortadaConsola
-      prompt="Diseño web y sistemas IT para empresas de Almería"
-      h1Lineas={['Diseño web', 'en Almería']}
-      frases={['que vende.', 'que posiciona.', 'que impacta.', 'sin plantillas.']}
-      h2="Webs, sistemas informáticos y vídeo con dron que hacen vender a tu empresa"
-      primario={{ href: '/contacto/?servicio=web#contacto', label: 'Pedir presupuesto' }}
-      secundario={{ href: plan360.href, label: 'Ver el Plan 360' }}
-      confianza={[
-        { valor: String(CIFRAS.valoracion).replace('.', ','), texto: `en ${CIFRAS.numResenas} reseñas` },
-        { valor: `< ${CIFRAS.respuestaHoras} h`, texto: 'de respuesta' },
-        { valor: 'Sin permanencia', texto: 'en el Plan 360' },
-      ]}
-      registro={registroPlan360}
-      cifras={[
-        { valor: CIFRAS.websEntregadas, prefijo: '+', etiqueta: 'webs entregadas' },
-        { valor: aniosEnAlmeria(), sufijo: ' años', etiqueta: 'trabajando en Almería' },
-        { valor: CIFRAS.respuestaHoras, prefijo: '< ', sufijo: ' h', etiqueta: 'de respuesta a una incidencia' },
-        { valor: 400, sufijo: ' €', etiqueta: 'al mes el Plan 360, + IVA' },
-      ]}
-    />
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* PRECIOS Y PLAN 360 — VENGEANCE UI (oscuro)        */}
-    {/* ════════════════════════════════════════════════ */}
-    <PreciosConsola
-      h2="Precios de páginas web y del Plan 360 en Almería"
-      lead="Precio de partida claro y presupuesto cerrado por escrito. Web, tienda online o tu tecnología completa por una cuota fija."
-      tarifas={tarifas}
-      registro={registroPlan360}
-    />
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* POR QUÉ NOSOTROS                                  */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-razones">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-razones" class="cdm-cabecera__h2">Por qué somos la agencia web del Levante almeriense.</h2>
-          <p class="cdm-cabecera__lead">
-            En {aniosEnAlmeria()} años en Almería hemos aprendido qué <strong>importa de verdad</strong> cuando contratas un equipo digital. Esto es lo que ofrecemos, y lo que no toleramos.
-          </p>
-        </header>
-        <ul class="h-razones">
-          {razones.map((r) => (
-            <li class="h-razones__item">
-              <h3 class="h-razones__t">{r.t}</h3>
-              <p class="h-razones__s">{r.s}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* SERVICIOS                                         */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" id="servicios" aria-labelledby="h2-servicios">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-servicios" class="cdm-cabecera__h2">Diseño web, sistemas IT y vídeo aéreo bajo el mismo techo.</h2>
-          <p class="cdm-cabecera__lead">
-            Diseño web, sistemas IT, audiovisual, marketing, identidad y mantenimiento. Hechos por el <strong>mismo equipo bajo el mismo techo</strong>, sin descoordinación ni «te derivamos al freelance X».
-          </p>
-        </header>
-        <ul class="h-modulos">
-          {servicios.map((s) => (
-            <li>
-              <a href={s.href} class="h-modulo">
-                <span class={`h-modulo__icono h-tinta--${s.color}`} aria-hidden="true">
-                  {s.icon === 'web'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="10" width="48" height="36" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><line x1="6" y1="18" x2="54" y2="18" stroke="#0E0D0B" stroke-width="2"/><circle cx="11" cy="14" r="1.5" fill="#0E0D0B"/><circle cx="16" cy="14" r="1.5" fill="#0E0D0B"/><circle cx="21" cy="14" r="1.5" fill="#0E0D0B"/><line x1="14" y1="28" x2="46" y2="28" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/><line x1="14" y1="36" x2="38" y2="36" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/></svg>}
-                  {s.icon === 'cam'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="6" y="16" width="38" height="28" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><path d="M 44 24 L 54 18 L 54 42 L 44 36 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><circle cx="22" cy="30" r="7" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="22" cy="30" r="3" fill="#0E0D0B"/><circle cx="38" cy="22" r="2" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
-                  {s.icon === 'mkt'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 6 50 L 18 36 L 30 44 L 42 22 L 54 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="54" cy="10" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="42" cy="22" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="30" cy="44" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="18" cy="36" r="3.5" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><line x1="6" y1="54" x2="54" y2="54" stroke="#0E0D0B" stroke-width="2"/></svg>}
-                  {s.icon === 'art'    && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 30 8 C 18 8 8 18 8 30 C 8 42 18 50 30 50 C 33 50 35 47 35 44 C 35 41 32 41 32 38 C 32 35 35 33 38 33 L 44 33 C 49 33 52 30 52 24 C 52 16 42 8 30 8 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><circle cx="15" cy="24" r="3" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="22" cy="14" r="3" fill="#FFD600" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="38" cy="14" r="3" fill="#00B85C" stroke="#0E0D0B" stroke-width="1.5"/><circle cx="45" cy="24" r="3" fill="#7F54B3" stroke="#0E0D0B" stroke-width="1.5"/></svg>}
-                  {s.icon === 'cart'   && <svg viewBox="0 0 60 60" width="100%" height="100%"><circle cx="22" cy="50" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><circle cx="44" cy="50" r="4" fill="currentColor" stroke="#0E0D0B" stroke-width="2"/><path d="M 4 8 L 12 8 L 18 38 L 48 38 L 54 16 L 16 16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 30 22 L 30 28 M 27 25 L 33 25" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round"/></svg>}
-                  {s.icon === 'shield' && <svg viewBox="0 0 60 60" width="100%" height="100%"><path d="M 30 6 C 22 6 16 9 8 12 L 8 30 C 8 44 30 54 30 54 C 30 54 52 44 52 30 L 52 12 C 44 9 38 6 30 6 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="2.5"/><path d="M 18 30 L 26 38 L 42 22" fill="none" stroke="#0E0D0B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>}
-                  {s.icon === 'ia'     && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="16" y="16" width="28" height="28" rx="1" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><rect x="25" y="25" width="10" height="10" fill="#0E0D0B"/><line x1="22" y1="16" x2="22" y2="6" stroke="#0E0D0B" stroke-width="2.5"/><line x1="30" y1="16" x2="30" y2="6" stroke="#0E0D0B" stroke-width="2.5"/><line x1="38" y1="16" x2="38" y2="6" stroke="#0E0D0B" stroke-width="2.5"/><line x1="22" y1="44" x2="22" y2="54" stroke="#0E0D0B" stroke-width="2.5"/><line x1="30" y1="44" x2="30" y2="54" stroke="#0E0D0B" stroke-width="2.5"/><line x1="38" y1="44" x2="38" y2="54" stroke="#0E0D0B" stroke-width="2.5"/><line x1="16" y1="22" x2="6" y2="22" stroke="#0E0D0B" stroke-width="2.5"/><line x1="16" y1="38" x2="6" y2="38" stroke="#0E0D0B" stroke-width="2.5"/><line x1="44" y1="22" x2="54" y2="22" stroke="#0E0D0B" stroke-width="2.5"/><line x1="44" y1="38" x2="54" y2="38" stroke="#0E0D0B" stroke-width="2.5"/></svg>}
-                  {s.icon === 'it'     && <svg viewBox="0 0 60 60" width="100%" height="100%"><rect x="8" y="6" width="44" height="30" rx="2" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/><line x1="30" y1="36" x2="30" y2="44" stroke="#0E0D0B" stroke-width="3"/><path d="M 12 54 L 30 44 L 48 54" fill="none" stroke="#0E0D0B" stroke-width="2.5" stroke-linejoin="round"/><circle cx="12" cy="54" r="3.5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="30" cy="44" r="3.5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><circle cx="48" cy="54" r="3.5" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/><path d="M 17 26 L 25 16 L 32 22 L 43 12" fill="none" stroke="#0E0D0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>}
-                </span>
-                <span class="h-modulo__sub">{s.sub}</span>
-                <h3 class="h-modulo__titulo">{s.title}</h3>
-                <p class="h-modulo__desc">{s.desc}</p>
-                <span class="h-modulo__dato"><strong>{s.metric}</strong> {s.metricLbl}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* SOLUCIONES POR PERFIL                             */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-soluciones">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-soluciones" class="cdm-cabecera__h2">Soluciones de diseño web para cada tipo de negocio.</h2>
-          <p class="cdm-cabecera__lead">
-            Cada perfil tiene necesidades distintas. Estos son nuestros <strong>3 packs principales</strong> con todo lo que incluyen, precios cerrados y plazos de entrega claros.
-          </p>
-        </header>
-        <ul class="h-packs">
-          {soluciones.map((s) => (
-            <li>
-              <a href={s.href} class="h-pack">
-                <span class={`h-pack__icono h-tinta--${s.color}`} aria-hidden="true">
-                  {s.icon === 'rocket' && (
-                    <svg viewBox="0 0 80 80" width="100%" height="100%">
-                      <path d="M 40 8 L 50 24 L 50 52 L 44 60 L 36 60 L 30 52 L 30 24 Z" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
-                      <circle cx="40" cy="30" r="6" fill="#0E0D0B"/>
-                      <circle cx="40" cy="30" r="3" fill="#FFFCF6"/>
-                      <path d="M 30 44 L 22 56 L 30 56 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/>
-                      <path d="M 50 44 L 58 56 L 50 56 Z" fill="#DC1B2C" stroke="#0E0D0B" stroke-width="2"/>
-                      <path d="M 34 60 L 40 72 L 46 60" fill="#FFD600" stroke="#0E0D0B" stroke-width="2"/>
-                    </svg>
-                  )}
-                  {s.icon === 'building' && (
-                    <svg viewBox="0 0 80 80" width="100%" height="100%">
-                      <rect x="12" y="14" width="56" height="56" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
-                      <rect x="20" y="22" width="10" height="10" fill="#FFFCF6"/>
-                      <rect x="34" y="22" width="10" height="10" fill="#FFFCF6"/>
-                      <rect x="48" y="22" width="10" height="10" fill="#FFFCF6"/>
-                      <rect x="20" y="36" width="10" height="10" fill="#FFFCF6"/>
-                      <rect x="34" y="36" width="10" height="10" fill="#C9A24F"/>
-                      <rect x="48" y="36" width="10" height="10" fill="#FFFCF6"/>
-                      <rect x="32" y="52" width="16" height="18" fill="#0E0D0B"/>
-                      <rect x="38" y="60" width="4" height="6" fill="#D6FF44"/>
-                    </svg>
-                  )}
-                  {s.icon === 'cart' && (
-                    <svg viewBox="0 0 80 80" width="100%" height="100%">
-                      <circle cx="32" cy="66" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
-                      <circle cx="56" cy="66" r="6" fill="currentColor" stroke="#0E0D0B" stroke-width="3"/>
-                      <path d="M 8 14 L 18 14 L 26 52 L 60 52 L 68 24 L 22 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                      <path d="M 42 28 L 42 38 M 37 33 L 47 33" stroke="#0E0D0B" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                  )}
-                </span>
-                <span class="h-pack__precio">{s.price}</span>
-                <h3 class="h-pack__nombre">{s.name}</h3>
-                <span class="h-pack__sub">{s.sub}</span>
-                <p class="h-pack__desc">{s.desc}</p>
-                <span class="h-pack__cta">Ver pack completo</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* PROCESO (secuencia real: numerada)                */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-proceso">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-proceso" class="cdm-cabecera__h2">Cómo hacemos tu página web.</h2>
-          <p class="cdm-cabecera__lead">
-            Cinco fases bien definidas, cada una con entregables claros, fecha y tu aprobación antes de avanzar. <strong>Sin sorpresas.</strong>
-          </p>
-        </header>
-        <ol class="h-proceso">
-          {proceso.map((p) => (
-            <li class="h-proceso__paso">
-              <span class="h-proceso__num">{p.num}</span>
-              <h3 class="h-proceso__t">{p.t}</h3>
-              <p class="h-proceso__body">{p.body}</p>
-              <span class="h-proceso__eta">{p.eta}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* PORTFOLIO CON MEDIDAS REALES                      */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" id="portfolio" aria-labelledby="h2-portfolio">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-portfolio" class="cdm-cabecera__h2">Portfolio de diseño web con resultados reales.</h2>
-          <p class="cdm-cabecera__lead">
-            Una selección de proyectos lanzados en los últimos años. Sin renders falsos ni maquetas vacías: <strong>todos en línea ahora mismo</strong>. Puedes visitarlos.
-          </p>
-        </header>
-
-        <div class="h-carrusel">
-          <PerspectiveCarousel
-            client:visible
-            items={casos.map((c) => {
-              // Versiones ligeras a 680 px (npm run optimizar:imagenes); el JPEG queda de respaldo.
-              const base = c.image.replace(/\.jpe?g$/, '');
-              return {
-                src: c.image,
-                title: `${c.cliente} · ${c.result}`,
-                alt: `${c.cliente}, ${c.sector}`,
-                sources: [
-                  { type: 'image/avif', srcSet: `${base}-680.avif` },
-                  { type: 'image/webp', srcSet: `${base}-680.webp` },
-                ],
-                width: 680,
-                height: 425,
-              };
-            })}
-            slideWidth={340}
-            rotationStep={42}
-            inactiveScale={0.8}
-            aspectClassName="aspect-[16/10]"
-            label="Proyectos publicados"
-            loop
-            imageClassName="ring-1 ring-white/10"
-            labelClassName="font-semibold"
-          />
+  <!-- PORTADA -->
+  <section class="portada">
+    <div class="contenedor portada__rejilla">
+      <div class="portada__texto">
+        <p class="antetitulo">Estudio digital en Almería · desde {CIFRAS.anioFundacion}</p>
+        <h1>Webs que traen <span class="subrayado">clientes</span> a tu negocio</h1>
+        <p class="entradilla">
+          Diseñamos webs rápidas, las posicionamos en Google y cuidamos la informática de tu empresa.
+          Un solo equipo en Vera, para negocios de toda la provincia.
+        </p>
+        <div class="portada__acciones">
+          <Boton href="/contacto/">Cuéntanos tu proyecto</Boton>
+          <Boton href="#servicios" variante="secundario" icono="flecha-abajo">Ver qué hacemos</Boton>
         </div>
-
-        <ul class="h-proyectos">
-          {casosMedidos.map((c) => (
-            <li>
-              <a href={c.url} target="_blank" rel="noopener noreferrer" class="h-proyecto">
-                <span class="h-proyecto__cliente">{c.cliente}</span>
-                <span class="h-proyecto__sector">{c.sector}, {c.result}</span>
-                <span class:list={['h-proyecto__lh', { 'is-ok': c.lighthouse !== null && c.lighthouse >= 90 }]}>
-                  {c.lighthouse === null ? 'sin medida' : `Lighthouse ${c.lighthouse}`}
-                </span>
-                <span class="sr-only">(abre en una pestaña nueva)</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <p class="h-proyectos__nota">{notaMedidas}</p>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* OPINIONES                                         */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-opiniones">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-opiniones" class="cdm-cabecera__h2">Opiniones de clientes: {String(CIFRAS.valoracion).replace('.', ',')} sobre 5.</h2>
-          <p class="cdm-cabecera__lead">Reseñas reales de empresas, autónomos y emprendedores con los que hemos trabajado. Sin filtros.</p>
-        </header>
-        <TestimonialsCard
-          client:visible
-          items={testimonios.map((t, i) => ({ id: i, title: `${t.author} · ${t.role}`, description: t.text, image: monograma(t.author, i) }))}
-          width={860}
-          autoPlay
-          autoPlayInterval={5000}
-          className="h-testimonios"
-        />
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* TECNOLOGÍA (órbita fija: solo se mueven radar y registro) */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-tecnologia">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-tecnologia" class="cdm-cabecera__h2">Tecnología web que dominamos.</h2>
-          <p class="cdm-cabecera__lead">
-            Tecnologías estándar de la industria, probadas en cientos de proyectos. Sin plataformas raras de las que no puedas escapar. <strong>Tu stack es tuyo. Para siempre.</strong>
-          </p>
-        </header>
-        <div class="h-orbita">
-          <div class="h-orbita__nucleo" aria-hidden="true"><span>P★</span></div>
-          <ul class="h-tech">
-            {tech.map((t) => (
-              <li class="h-tech__item">
-                <div class="h-tech__logo" aria-hidden="true">
-                {t.id === 'astro' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#0E0D0B" stroke="#0E0D0B" stroke-width="3"/>
-                    <path d="M 50 14 L 24 78 L 50 70 L 76 78 Z" fill="#FF6B35"/>
-                    <path d="M 38 60 Q 50 50 62 60" fill="none" stroke="#FFFCF6" stroke-width="3" stroke-linecap="round"/>
-                    <circle cx="38" cy="60" r="2.5" fill="#FFFCF6"/>
-                    <circle cx="62" cy="60" r="2.5" fill="#FFFCF6"/>
-                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" fill="#FFFCF6" letter-spacing="2.5">ASTRO</text>
-                  </svg>
-                )}
-                {t.id === 'wp' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <circle cx="50" cy="50" r="44" fill="#003B7A" stroke="#0E0D0B" stroke-width="3"/>
-                    <circle cx="50" cy="50" r="36" fill="none" stroke="#FFFCF6" stroke-width="2"/>
-                    <text x="50" y="64" text-anchor="middle" font-family="serif" font-size="44" font-weight="bold" fill="#FFFCF6">W</text>
-                    <line x1="14" y1="50" x2="86" y2="50" stroke="#FFFCF6" stroke-width="1.5" opacity="0.3"/>
-                  </svg>
-                )}
-                {t.id === 'woo' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#7F54B3" stroke="#0E0D0B" stroke-width="3"/>
-                    <path d="M 18 38 L 82 38 L 78 60 L 22 60 Z" fill="#FFFCF6"/>
-                    <text x="50" y="56" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="800" fill="#7F54B3" letter-spacing="-1">Woo</text>
-                    <circle cx="34" cy="74" r="5" fill="#0E0D0B"/>
-                    <circle cx="66" cy="74" r="5" fill="#0E0D0B"/>
-                    <circle cx="34" cy="74" r="2" fill="#FFFCF6"/>
-                    <circle cx="66" cy="74" r="2" fill="#FFFCF6"/>
-                    <text x="50" y="28" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6" letter-spacing="2">COMMERCE</text>
-                  </svg>
-                )}
-                {t.id === 'stripe' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#635BFF" stroke="#0E0D0B" stroke-width="3"/>
-                    <path d="M 38 36 L 38 28 C 38 24 42 22 48 22 C 58 22 68 26 68 26 L 68 38 C 68 38 58 32 50 32 C 46 32 46 33 46 35 C 46 37 48 38 54 40 C 64 43 70 48 70 56 C 70 66 62 72 50 72 C 42 72 32 68 32 68 L 32 56 C 32 56 44 62 50 62 C 54 62 56 60 56 58 C 56 56 54 55 48 53 C 38 50 32 46 32 38" fill="#FFFCF6"/>
-                    <text x="50" y="90" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6" letter-spacing="3">STRIPE</text>
-                  </svg>
-                )}
-                {t.id === 'bizum' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#00C3CB" stroke="#0E0D0B" stroke-width="3"/>
-                    <text x="50" y="58" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="800" fill="#FFFCF6" letter-spacing="-0.5">Bizum</text>
-                    <rect x="38" y="68" width="24" height="16" rx="2" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="1.5"/>
-                    <circle cx="50" cy="76" r="3" fill="#00C3CB"/>
-                    <text x="50" y="24" text-anchor="middle" font-family="monospace" font-size="6" font-weight="bold" fill="#FFFCF6" letter-spacing="2">PAGO MÓVIL</text>
-                  </svg>
-                )}
-                {t.id === 'vercel' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#0E0D0B" stroke="#0E0D0B" stroke-width="3"/>
-                    <path d="M 50 22 L 80 74 L 20 74 Z" fill="#FFFCF6"/>
-                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6" letter-spacing="3">VERCEL</text>
-                  </svg>
-                )}
-                {t.id === 'cloudflare' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#F38020" stroke="#0E0D0B" stroke-width="3"/>
-                    <path d="M 22 64 Q 22 50 38 50 Q 38 38 54 38 Q 74 38 74 56 Q 82 56 82 64 Q 82 70 76 70 L 26 70 Q 22 70 22 64 Z" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="2"/>
-                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#FFFCF6" letter-spacing="2">CLOUDFLARE</text>
-                  </svg>
-                )}
-                {t.id === 'ga4' && (
-                  <svg viewBox="0 0 100 100" width="100%" height="100%">
-                    <rect x="6" y="6" width="88" height="88" rx="6" fill="#FFFCF6" stroke="#0E0D0B" stroke-width="3"/>
-                    <circle cx="28" cy="70" r="8" fill="#34A853" stroke="#0E0D0B" stroke-width="2"/>
-                    <rect x="42" y="46" width="16" height="32" rx="2" fill="#FBBC04" stroke="#0E0D0B" stroke-width="2"/>
-                    <rect x="64" y="26" width="16" height="52" rx="2" fill="#4285F4" stroke="#0E0D0B" stroke-width="2"/>
-                    <path d="M 18 30 L 36 22 L 54 28 L 70 18" fill="none" stroke="#EA4335" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="18" cy="30" r="2.5" fill="#EA4335"/>
-                    <circle cx="36" cy="22" r="2.5" fill="#EA4335"/>
-                    <circle cx="54" cy="28" r="2.5" fill="#EA4335"/>
-                    <circle cx="70" cy="18" r="2.5" fill="#EA4335"/>
-                    <text x="50" y="92" text-anchor="middle" font-family="monospace" font-size="5" font-weight="bold" fill="#0E0D0B" letter-spacing="2">ANALYTICS</text>
-                  </svg>
-                )}
-                </div>
-                <h3 class="h-tech__nombre">{t.name}</h3>
-                <p class="h-tech__desc">{t.v}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* COBERTURA                                         */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" id="cobertura" aria-labelledby="h2-cobertura">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-cobertura" class="cdm-cabecera__h2">Diseño web e informática en toda Almería.</h2>
-          <p class="cdm-cabecera__lead">Trabajamos con negocios de la provincia entera. Encuentra tu localidad o pídenos cobertura en la tuya si no aparece.</p>
-        </header>
-
-        <ul class="h-localidades">
-          {localidadesDestacadas.map((p) => (
-            <li>
-              <a href={`/diseno-web/${p.slug}/`} class="h-localidad">
-                <span class="h-localidad__nombre">{p.nombre}</span>
-                <span class="h-localidad__sub">{p.sub}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* Comarcas — enlazado en cascada: cada comarca lleva al hub /diseno-web/
-            (a su sección), en lugar de volcar las ~90 localidades aquí. Concentra
-            el link equity en el hub y evita enlazar páginas noindex desde la home. */}
-        <h3 class="h-comarcas__titulo">Por comarcas</h3>
-        <div class="h-comarcas">
-          {comarcas.map((comarca) => {
-            const list = getPueblosByComarca(comarca);
-            if (!list.length) return null;
-            return (
-              <a class="h-comarca" href={`/diseno-web/#${comarcaSlug(comarca)}`}>
-                <span class="h-comarca__nombre">{comarca}</span>
-                <span class="h-comarca__num">{list.length} localidades</span>
-              </a>
-            );
-          })}
-        </div>
-        <a href="/diseno-web/" class="h-enlace">Ver todas las localidades</a>
-      </div>
-    </section>
-
-    {/* ════════════════════════════════════════════════ */}
-    {/* VERA AI — Demo de agente de IA                   */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-vera">
-      <div class="cdm-dentro h-vera">
-        <div>
-          <p class="h-vera__etq">IA para empresas</p>
-          <h2 id="h2-vera" class="cdm-cabecera__h2">IA que trabaja dentro de tu empresa</h2>
-          <p class="cdm-cabecera__lead h-vera__lead">
-            Agentes y automatizaciones conectados con tus datos y tus herramientas para atender clientes, procesar documentos y preparar propuestas. <strong>Una persona sigue aprobando lo que importa.</strong>
-          </p>
-          <a href="/ia-empresas/" class="h-vera__btn">Ver IA para empresas</a>
-        </div>
-        <ul class="h-vera__sectores" aria-label="Sectores con los que trabajamos">
-          <li>Alquiler vacacional</li>
-          <li>Inmobiliarias</li>
-          <li>Restaurantes</li>
-          <li>Clínicas y estética</li>
-          <li>Facturación y pymes</li>
+        <ul class="portada__confianza">
+          <li>
+            <span class="estrellas" aria-hidden="true">★★★★★</span>
+            <span><b>{valoracion}</b> en {CIFRAS.numResenas} reseñas de Google</span>
+          </li>
+          <li><Icono nombre="reloj" tamano={18} /><span>Respuesta en <b>&lt; {CIFRAS.respuestaHoras} h</b></span></li>
+          <li><Icono nombre="ubicacion" tamano={18} /><span><b>{aniosEnAlmeria()} años</b> en Almería</span></li>
         </ul>
       </div>
-    </section>
+      <Ilustracion nombre="web" titulo="Ilustración isométrica de una web, un móvil y una gráfica de crecimiento" class="portada__ilustracion" />
+    </div>
+  </section>
 
-    {/* ════════════════════════════════════════════════ */}
-    {/* BLOG — Últimos artículos                         */}
-    {/* ════════════════════════════════════════════════ */}
-    {recentPosts.length > 0 && (
-      <section class="cdm-seccion dark" aria-labelledby="h2-blog">
-        <div class="cdm-dentro">
-          <header class="cdm-cabecera">
-            <h2 id="h2-blog" class="cdm-cabecera__h2">Guías de diseño web y tecnología.</h2>
-            <p class="cdm-cabecera__lead">Tecnología, marketing, casos de estudio y opinión. Publicado cuando tenemos algo que decir.</p>
-          </header>
-          <ul class="h-blog">
-            {recentPosts.map((p: Post) => (
-              <li>
-                <a href={`/blog/${p.data.slug}/`} class="h-post">
-                  <time class="h-post__fecha" datetime={p.data.publishedAt.toISOString()}>{formatDateShort(p.data.publishedAt)}</time>
-                  <h3 class="h-post__titulo">{p.data.title}</h3>
-                  {p.data.excerpt && <p class="h-post__resumen">{p.data.excerpt}</p>}
-                  {p.data.categories?.[0] && <span class="h-post__cat">{p.data.categories[0]}</span>}
+  <!-- PROBLEMAS -->
+  <section class="seccion seccion--blanca" aria-labelledby="problemas-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="problemas-titulo"
+        antetitulo="Lo que nos piden"
+        titulo="Casi todos llegan con uno de estos tres problemas"
+        entradilla="Antes de hablar de tecnología, hablamos de lo que le pasa a tu negocio. Estos son los tres que más vemos en Almería."
+      />
+      <ul class="problemas">
+        {problemas.map((p, i) => (
+          <li class="problema" data-aparece style={`transition-delay:${i * 90}ms`}>
+            <span class="problema__icono"><Icono nombre={p.icono} tamano={24} /></span>
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="seccion" id="servicios" aria-labelledby="servicios-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="servicios-titulo"
+        antetitulo="Servicios"
+        titulo="Todo lo digital de tu negocio, en un mismo sitio"
+        entradilla="Puedes contratar una sola cosa o dejarnos el conjunto. Lo que no cambia es la forma de trabajar: claro, por escrito y sin permanencias."
+      />
+      {GRUPOS.map((g) => (
+        <div class="grupo">
+          <h3 class="grupo__titulo">{g.nombre}</h3>
+          <ul class="servicios">
+            {SERVICIOS.filter((s) => s.grupo === g.id).map((s, i) => (
+              <li data-aparece style={`transition-delay:${i * 70}ms`}>
+                <a href={s.href} class="servicio">
+                  <Ilustracion nombre={s.escena} class="servicio__ilustracion" />
+                  <div class="servicio__texto">
+                    <h4>{s.nombre}</h4>
+                    <p>{s.resumen}</p>
+                  </div>
+                  <span class="servicio__ir"><Icono nombre="flecha" tamano={18} /></span>
                 </a>
               </li>
             ))}
           </ul>
-          <a href="/blog/" class="h-enlace">Ver todos los artículos</a>
         </div>
-      </section>
-    )}
+      ))}
+    </div>
+  </section>
 
-    {/* ════════════════════════════════════════════════ */}
-    {/* FAQ                                              */}
-    {/* ════════════════════════════════════════════════ */}
-    <section class="cdm-seccion dark" aria-labelledby="h2-faq">
-      <div class="cdm-dentro">
-        <header class="cdm-cabecera">
-          <h2 id="h2-faq" class="cdm-cabecera__h2">Preguntas frecuentes sobre precios de páginas web.</h2>
-          <p class="cdm-cabecera__lead">Respuestas honestas. Si no está aquí, escríbenos por WhatsApp y respondemos en menos de {CIFRAS.respuestaHoras} h.</p>
-        </header>
-        <FaqAccordion client:visible title="" items={faqHome.map((f) => ({ question: f.q, answer: f.a }))} className="max-w-4xl" />
+  <!-- GUÍA DE VALOR -->
+  <Guia
+    titulo="Seis cosas que debe cumplir tu web, la haga quien la haga"
+    entradilla="Úsala para revisar la que ya tienes o para comparar presupuestos. Si falla en más de dos, está perdiendo clientes."
+    bloques={comprobaciones}
+    accion={{ href: '/marketing/auditoria/', texto: 'Pide que revisemos la tuya gratis' }}
+  />
+
+  <!-- CASOS -->
+  <section class="seccion" aria-labelledby="casos-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="casos-titulo"
+        antetitulo="Trabajos publicados"
+        titulo="Negocios reales, webs que puedes visitar"
+        entradilla="Clínicas, talleres, constructoras y tiendas de la provincia. Entra en cualquiera y mira cómo carga en tu móvil."
+      />
+      <Casos limite={6} />
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section class="seccion seccion--blanca" aria-labelledby="proceso-titulo">
+    <div class="contenedor">
+      <div class="proceso__cabeza">
+        <Encabezado
+          id="proceso-titulo"
+          antetitulo="Cómo trabajamos"
+          titulo="Sabrás en todo momento qué pasa con tu proyecto"
+          entradilla="Sin presentaciones eternas ni intermediarios. Hablas con quien diseña y programa tu web."
+        />
+        <Ilustracion nombre="proceso" class="proceso__ilustracion" />
+      </div>
+      <Pasos pasos={pasos} />
+    </div>
+  </section>
+
+  <!-- OPINIONES -->
+  <section class="seccion" aria-labelledby="opiniones-titulo">
+    <div class="contenedor">
+      <Encabezado
+        id="opiniones-titulo"
+        antetitulo="Opiniones"
+        titulo={`${valoracion} de media en ${CIFRAS.numResenas} reseñas de Google`}
+        centrado
+      />
+      <ul class="opiniones">
+        {opiniones.map((o, i) => (
+          <li class="opinion" data-aparece style={`transition-delay:${i * 90}ms`}>
+            <span class="estrellas" aria-label="5 de 5 estrellas">★★★★★</span>
+            <blockquote>«{o.texto}»</blockquote>
+            <p class="opinion__autor">
+              <span class="opinion__inicial" aria-hidden="true">{o.autor.charAt(0)}</span>
+              <span><b>{o.autor}</b><br />{o.cargo}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ZONAS -->
+  <section class="seccion seccion--blanca" aria-labelledby="zonas-titulo">
+    <div class="contenedor zonas">
+      <div>
+        <Encabezado
+          id="zonas-titulo"
+          antetitulo="Dónde trabajamos"
+          titulo="Conocemos cada comarca de Almería"
+          entradilla="No es lo mismo un restaurante en Mojácar que una cantera en Macael. Para cada municipio hemos estudiado sus sectores, su competencia y lo que buscan sus clientes."
+        />
+        <Boton href="/diseno-web/" variante="secundario">Ver todos los municipios</Boton>
+      </div>
+      <div class="zonas__lista">
+        <Ilustracion nombre="pueblo" class="zonas__ilustracion" />
+        {zonas.map((z) => (
+          <div class="zona">
+            <h3>{z.comarca}</h3>
+            <ul>
+              {z.pueblos.map((p) => <li><a href={`/diseno-web/${p.slug}/`}>{p.nombre}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS -->
+  <section class="seccion" aria-labelledby="preguntas-titulo">
+    <div class="contenedor preguntas-home">
+      <Encabezado id="preguntas-titulo" antetitulo="Preguntas frecuentes" titulo="Lo que nos preguntan antes de empezar" />
+      <Preguntas preguntas={preguntas} />
+    </div>
+  </section>
+
+  <!-- BLOG -->
+  {posts.length > 0 && (
+    <section class="seccion seccion--blanca" aria-labelledby="blog-titulo">
+      <div class="contenedor">
+        <div class="blog__cabeza">
+          <Encabezado id="blog-titulo" antetitulo="Blog" titulo="Para decidir con criterio" />
+          <Boton href="/blog/" variante="texto">Todos los artículos</Boton>
+        </div>
+        <ul class="articulos">
+          {posts.map((p) => (
+            <li>
+              <a href={`/blog/${p.data.slug}/`} class="articulo">
+                <p class="articulo__meta">{p.data.categories?.[0] ?? 'Artículo'} · <time datetime={p.data.publishedAt.toISOString()}>{fecha(p.data.publishedAt)}</time></p>
+                <h3>{p.data.title}</h3>
+                <p>{p.data.excerpt}</p>
+                <span class="articulo__leer">Leer <Icono nombre="flecha" tamano={16} /></span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
+  )}
 
-    {/* ════════════════════════════════════════════════ */}
-    {/* CONTACTO (componente existente)                  */}
-    {/* ════════════════════════════════════════════════ */}
-    <Contact tono="consola" />
-  </main>
-
-  <Footer />
-</BaseLayout>
-
+  <LlamadaFinal />
+</Sitio>
 
 <style>
-  /* ═══ CENTRO DE MANDO: secciones de la home ═══ */
-  .cdm-home { background: var(--color-cdm-suelo); }
-
-  /* Ficha clara para los iconos hechos a mano: conservan su color */
-  .h-tinta--green { color: #00b85c; }
-  .h-tinta--red { color: #dc1b2c; }
-  .h-tinta--blue { color: #003b7a; }
-  .h-tinta--magenta { color: #ff2d9a; }
-  .h-tinta--woo { color: #7f54b3; }
-  .h-tinta--gold { color: #c9a24f; }
-  .h-tinta--accent { color: #ae3f13; }
-  .h-tinta--navy { color: #003b7a; }
-
-  .h-razones {
+  /* Portada */
+  .portada {
+    padding-block: clamp(2.5rem, 1.5rem + 4vw, 5.5rem) clamp(3rem, 2rem + 4vw, 6rem);
+    overflow: hidden;
+  }
+  .portada__rejilla {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1px;
-    margin: 0;
-    padding: 0;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .portada__texto {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .portada h1 {
+    max-width: 14ch;
+  }
+  .portada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .portada__confianza {
     list-style: none;
-    background: var(--color-cdm-regla);
-    border: 1px solid var(--color-cdm-regla);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.75rem;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--linea);
+    font-size: var(--t-s);
+    color: var(--tinta-2);
   }
-  @media (min-width: 768px) { .h-razones { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1200px) { .h-razones { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .h-razones__item { padding: 1.5rem; background: var(--color-cdm-suelo); }
-  .h-razones__t { margin: 0 0 0.6rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.45rem; line-height: 1.05; }
-  .h-razones__s { margin: 0; font-size: 0.95rem; line-height: 1.6; color: #b9c5cf; }
-
-  .h-modulos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
-  @media (min-width: 700px) { .h-modulos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1100px) { .h-modulos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .h-modulo { display: flex; flex-direction: column; height: 100%; padding: 1.4rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; transition: border-color 0.15s; }
-  .h-modulo:hover { border-color: var(--color-cdm-texto); }
-  .h-modulo__icono { display: block; width: 72px; height: 72px; margin-bottom: 1.1rem; padding: 6px; background: #f5f1ea; }
-  .h-modulo__icono svg { display: block; width: 100%; height: 100%; }
-  .h-modulo__sub { font-size: 0.8rem; color: var(--color-cdm-tenue); }
-  .h-modulo__titulo { margin: 0.25rem 0 0.6rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: 1.9rem; line-height: 1; letter-spacing: -0.02em; }
-  .h-modulo__desc { margin: 0 0 1.2rem; font-size: 0.95rem; line-height: 1.55; color: #b9c5cf; }
-  .h-modulo__dato { margin-top: auto; padding-top: 0.8rem; border-top: 1px solid var(--color-cdm-regla); font-size: 0.85rem; color: var(--color-cdm-tenue); }
-  .h-modulo__dato strong { font-weight: 600; color: var(--color-cdm-texto); }
-
-  .h-packs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
-  @media (min-width: 900px) { .h-packs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .h-pack { display: flex; flex-direction: column; height: 100%; padding: 1.4rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; transition: border-color 0.15s; }
-  .h-pack:hover { border-color: var(--color-cdm-texto); }
-  .h-pack__icono { display: block; width: 88px; height: 88px; margin-bottom: 1rem; padding: 6px; background: #f5f1ea; }
-  .h-pack__icono svg { display: block; width: 100%; height: 100%; }
-  .h-pack__precio { font-weight: 600; color: var(--color-cdm-texto); }
-  .h-pack__nombre { margin: 0.3rem 0 0.15rem; font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: 2rem; line-height: 1; letter-spacing: -0.02em; }
-  .h-pack__sub { font-size: 0.85rem; color: var(--color-cdm-tenue); }
-  .h-pack__desc { margin: 0.8rem 0 1.2rem; font-size: 0.95rem; line-height: 1.55; color: #b9c5cf; }
-  .h-pack__cta { margin-top: auto; font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-cdm-senal); text-underline-offset: 4px; }
-
-  .h-proceso { display: grid; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-cdm-regla); }
-  .h-proceso__paso { display: grid; grid-template-columns: 3rem minmax(0, 1fr); gap: 0.2rem 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--color-cdm-regla); }
-  .h-proceso__num { grid-row: span 3; font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-cdm-tenue); }
-  .h-proceso__t { margin: 0; font-family: var(--font-display); font-stretch: 82%; font-weight: 700; font-size: 1.5rem; line-height: 1.05; }
-  .h-proceso__body { margin: 0.4rem 0; font-size: 0.92rem; line-height: 1.55; color: #b9c5cf; }
-  .h-proceso__eta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
-  @media (min-width: 1000px) {
-    .h-proceso { grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 0; }
-    .h-proceso__paso { grid-template-columns: minmax(0, 1fr); padding: 1.25rem 1.1rem 1.5rem 0; border-bottom: 0; border-top: 2px solid var(--color-cdm-regla-2); }
-    .h-proceso__num { grid-row: auto; }
+  .portada__confianza li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
-
-  /* El carrusel ocupa el 100 % del alto de su contenedor: sin altura, mide 0. */
-  .h-carrusel { position: relative; height: clamp(320px, 42vw, 440px); margin-bottom: 2rem; }
-  .h-proyectos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 700px) { .h-proyectos { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .h-proyecto { display: grid; gap: 0.2rem; height: 100%; padding: 1rem 1.1rem; background: var(--color-cdm-suelo); color: inherit; text-decoration: none; }
-  .h-proyecto:hover { background: var(--color-cdm-panel); }
-  .h-proyecto__cliente { font-weight: 600; }
-  .h-proyecto__sector { font-size: 0.85rem; color: var(--color-cdm-tenue); }
-  .h-proyecto__lh { margin-top: 0.3rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-texto); }
-  .h-proyecto__lh.is-ok { color: var(--color-cdm-ok); }
-  .h-proyectos__nota { margin: 0.75rem 0 0; font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
-
-  .h-tech { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0; padding: 0; list-style: none; }
-  @media (min-width: 640px) { .h-tech { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (min-width: 1024px) { .h-tech { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .h-tech__item { padding: 1.1rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); }
-  .h-tech__logo { width: 56px; height: 56px; margin-bottom: 0.75rem; }
-  .h-tech__nombre { margin: 0 0 0.3rem; font-weight: 600; font-size: 1rem; }
-  .h-tech__desc { margin: 0; font-size: 0.85rem; line-height: 1.5; color: #b9c5cf; }
-  .h-orbita { position: relative; }
-  .h-orbita__nucleo { display: none; }
-  @media (min-width: 1100px) {
-    .h-orbita { display: grid; place-items: center; height: 820px; }
-    .h-orbita::before,
-    .h-orbita::after { content: ''; position: absolute; left: 50%; top: 50%; border: 1px dashed var(--color-cdm-regla-2); border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
-    .h-orbita::before { width: 380px; height: 380px; }
-    .h-orbita::after { width: 690px; height: 690px; }
-    .h-orbita__nucleo {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      z-index: 2;
-      display: grid;
-      place-items: center;
-      width: 150px;
-      height: 150px;
-      margin: -75px 0 0 -75px;
-      border: 1px solid var(--color-cdm-senal);
-      border-radius: 50%;
-      background: var(--color-cdm-panel);
-      color: var(--color-cdm-senal);
-      font-family: var(--font-mono);
-      font-size: 2.6rem;
-      box-shadow: 0 0 0 10px rgb(255 90 0 / 0.08), 0 0 60px rgb(255 90 0 / 0.25);
+  .portada__confianza :global(.icono) {
+    color: var(--verde);
+  }
+  .portada :global(.portada__ilustracion) {
+    max-width: 560px;
+    justify-self: center;
+  }
+  @media (min-width: 960px) {
+    .portada__rejilla {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 3rem;
     }
-    .h-tech { position: absolute; inset: 0; display: block; }
-    .h-tech__item {
-      position: absolute;
-      width: 132px;
-      margin: -66px 0 0 -66px;
-      padding: 0.75rem;
-      text-align: center;
-      left: calc(50% + var(--r) * cos(var(--a0)));
-      top: calc(50% + var(--r) * sin(var(--a0)));
-    }
-    .h-tech__desc { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-    .h-tech__logo { width: 64px; height: 64px; margin: 0 auto 0.4rem; }
-    .h-tech__nombre { margin: 0; font-size: 0.85rem; }
-    /* Anillo interior (3) y exterior (5) con ángulos alternos para que no se solapen */
-    .h-tech__item:nth-child(1) { --a0: 36deg; --r: 190px; }
-    .h-tech__item:nth-child(2) { --a0: 156deg; --r: 190px; }
-    .h-tech__item:nth-child(3) { --a0: 276deg; --r: 190px; }
-    .h-tech__item:nth-child(4) { --a0: 0deg; --r: 345px; }
-    .h-tech__item:nth-child(5) { --a0: 72deg; --r: 345px; }
-    .h-tech__item:nth-child(6) { --a0: 144deg; --r: 345px; }
-    .h-tech__item:nth-child(7) { --a0: 216deg; --r: 345px; }
-    .h-tech__item:nth-child(8) { --a0: 288deg; --r: 345px; }
   }
 
-  .h-localidades { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 0 0 2.5rem; padding: 0; list-style: none; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  @media (min-width: 900px) { .h-localidades { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .h-localidad { display: grid; gap: 0.25rem; height: 100%; padding: 1.2rem; background: var(--color-cdm-suelo); color: inherit; text-decoration: none; }
-  .h-localidad:hover { background: var(--color-cdm-panel); }
-  .h-localidad__nombre { font-family: var(--font-display); font-stretch: 82%; font-weight: 740; font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1; }
-  .h-localidad__sub { font-size: 0.85rem; color: var(--color-cdm-tenue); }
-  .h-comarcas__titulo { margin: 0 0 0.75rem; font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; }
-  .h-comarcas { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
-  .h-comarca { display: inline-flex; align-items: baseline; gap: 0.6rem; padding: 0.55rem 0.85rem; border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; }
-  .h-comarca:hover { border-color: var(--color-cdm-texto); }
-  .h-comarca__nombre { font-weight: 600; }
-  .h-comarca__num { font-size: 0.8rem; color: var(--color-cdm-tenue); }
-  .h-enlace { display: inline-block; color: var(--color-cdm-texto); font-weight: 600; text-decoration: underline; text-decoration-color: var(--color-cdm-senal); text-underline-offset: 4px; }
+  /* Problemas */
+  .problemas {
+    list-style: none;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .problema {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    padding: 1.75rem;
+    border-radius: var(--radio-l);
+    background: var(--fondo);
+    border: 1px solid var(--linea);
+  }
+  .problema__icono {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.5rem;
+    border-radius: 14px;
+    background: var(--platano-suave);
+    color: var(--verde);
+  }
+  .problema p {
+    color: var(--tinta-2);
+  }
+  @media (min-width: 860px) {
+    .problemas {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 
-  .h-vera { display: grid; gap: 2rem; align-items: center; }
-  @media (min-width: 1000px) { .h-vera { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
-  .h-vera__etq { margin: 0 0 0.75rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--color-cdm-tenue); }
-  .h-vera__lead { margin-top: 1rem; }
-  .h-vera__btn { display: inline-flex; align-items: center; min-height: 2.9rem; margin-top: 1.5rem; padding: 0.7rem 1.15rem; background: var(--color-cdm-senal); color: #120600; font-weight: 600; text-decoration: none; }
-  .h-vera__btn:hover { background: #ff7a33; }
-  .h-vera__sectores { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--color-cdm-regla); border: 1px solid var(--color-cdm-regla); }
-  .h-vera__sectores li { padding: 0.85rem 1rem; background: var(--color-cdm-panel); font-size: 0.95rem; }
+  /* Servicios */
+  .grupo + .grupo {
+    margin-top: 3rem;
+  }
+  .grupo__titulo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    font-size: var(--t-s);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+  .grupo__titulo::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--linea);
+  }
+  .servicios {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .servicio {
+    position: relative;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    height: 100%;
+    padding: 1.25rem;
+    border-radius: var(--radio-l);
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+    text-decoration: none;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  }
+  .servicio:hover {
+    border-color: var(--linea-2);
+    box-shadow: var(--sombra-l);
+    transform: translateY(-2px);
+  }
+  .servicio h4 {
+    font-size: var(--t-l);
+  }
+  .servicio p {
+    margin-top: 0.3rem;
+    font-size: var(--t-s);
+    color: var(--tinta-2);
+    line-height: 1.45;
+  }
+  .servicio__ir {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: var(--verde);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .servicio:hover .servicio__ir {
+    opacity: 1;
+    transform: none;
+  }
+  @media (min-width: 700px) {
+    .servicios {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .servicios {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+    .servicio {
+      grid-template-columns: 1fr;
+      align-content: start;
+      padding: 1.5rem;
+    }
+    .servicio :global(.servicio__ilustracion) {
+      max-width: 200px;
+      margin-inline: auto;
+    }
+  }
 
-  .h-blog { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; margin: 0 0 1.75rem; padding: 0; list-style: none; }
-  @media (min-width: 900px) { .h-blog { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  .h-post { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; padding: 1.3rem; background: var(--color-cdm-panel); border: 1px solid var(--color-cdm-regla-2); color: inherit; text-decoration: none; }
-  .h-post:hover { border-color: var(--color-cdm-texto); }
-  .h-post__fecha { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-cdm-tenue); }
-  .h-post__titulo { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; line-height: 1.15; }
-  .h-post__resumen { margin: 0; font-size: 0.92rem; line-height: 1.55; color: #b9c5cf; }
-  .h-post__cat { margin-top: auto; padding-top: 0.6rem; font-size: 0.8rem; color: var(--color-cdm-tenue); }
+  /* Proceso */
+  .proceso__cabeza {
+    display: grid;
+    gap: 1rem;
+    align-items: end;
+  }
+  .proceso__cabeza :global(.proceso__ilustracion) {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .proceso__cabeza {
+      grid-template-columns: 1fr 220px;
+    }
+    .proceso__cabeza :global(.proceso__ilustracion) {
+      display: block;
+      margin-bottom: 2rem;
+    }
+  }
+
+  /* Opiniones */
+  .opiniones {
+    list-style: none;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .opinion {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    padding: 1.75rem;
+    border-radius: var(--radio-l);
+    background: var(--superficie);
+    border: 1px solid var(--linea);
+  }
+  .opinion blockquote {
+    margin: 0;
+    font-size: var(--t-l);
+    line-height: 1.5;
+  }
+  .opinion__autor {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: auto;
+    font-size: var(--t-s);
+    color: var(--tenue);
+    line-height: 1.35;
+  }
+  .opinion__autor b {
+    color: var(--tinta);
+  }
+  .opinion__inicial {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--verde-suave);
+    color: var(--verde);
+    font-weight: 750;
+  }
+  @media (min-width: 900px) {
+    .opiniones {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Zonas */
+  .zonas {
+    display: grid;
+    gap: 2rem;
+  }
+  .zonas__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1.75rem 2rem;
+  }
+  .zonas :global(.zonas__ilustracion) {
+    grid-column: 1 / -1;
+    max-width: 420px;
+  }
+  .zona h3 {
+    font-size: var(--t-m);
+    margin-bottom: 0.6rem;
+  }
+  .zona ul {
+    list-style: none;
+    display: grid;
+    gap: 0.3rem;
+    font-size: var(--t-s);
+  }
+  .zona a {
+    color: var(--tinta-2);
+    text-decoration: none;
+  }
+  .zona a:hover {
+    color: var(--verde);
+    text-decoration: underline;
+  }
+  @media (min-width: 960px) {
+    .zonas {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Preguntas */
+  .preguntas-home {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 960px) {
+    .preguntas-home {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Blog */
+  .blog__cabeza {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .articulos {
+    list-style: none;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .articulo {
+    display: grid;
+    gap: 0.75rem;
+    height: 100%;
+    padding: 1.75rem;
+    border-radius: var(--radio-l);
+    background: var(--fondo);
+    border: 1px solid var(--linea);
+    text-decoration: none;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .articulo:hover {
+    border-color: var(--linea-2);
+    transform: translateY(-2px);
+  }
+  .articulo__meta {
+    font-size: var(--t-xs);
+    font-weight: 650;
+    color: var(--tenue);
+  }
+  .articulo h3 {
+    font-size: var(--t-l);
+  }
+  .articulo p:not(.articulo__meta) {
+    color: var(--tinta-2);
+    font-size: var(--t-s);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .articulo__leer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    color: var(--verde);
+    font-weight: 680;
+    font-size: var(--t-s);
+  }
+  @media (min-width: 900px) {
+    .articulos {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 </style>

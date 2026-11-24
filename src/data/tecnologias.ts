@@ -731,7 +731,7 @@ export const TECNOLOGIAS: Record<SlugTecnologia, Tecnologia> = {
     ],
     relacionadas: ['python', 'nodejs'],
     bloques: ['intro', 'situaciones', 'servicios', 'arquitectura', 'proceso', 'cobertura', 'relacionadas', 'faq', 'cta'],
-    serviciosWeb: ['/ia-empresas/', '/laboratorio-ia/'],
+    serviciosWeb: ['/ia-empresas/', '/informatica-empresas/'],
   },
 
   apps: {

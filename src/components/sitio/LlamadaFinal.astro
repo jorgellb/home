@@ -1,0 +1,107 @@
+---
+/* Bloque de cierre: invitación a hablar, sin precios. */
+import Boton from './Boton.astro';
+import Icono from './Icono.astro';
+import Ilustracion from './Ilustracion.astro';
+import { CONTACTO } from '../../data/navegacion';
+
+interface Props {
+  titulo?: string;
+  texto?: string;
+  /** Parámetro ?servicio= para el formulario de contacto. */
+  servicio?: string;
+}
+const {
+  titulo = 'Cuéntanos qué necesitas y te decimos cómo lo haríamos',
+  texto = 'Una llamada de media hora, sin compromiso. Si no somos lo que buscas, te lo diremos y te orientaremos igual.',
+  servicio,
+} = Astro.props;
+const href = servicio ? `/contacto/?servicio=${encodeURIComponent(servicio)}` : '/contacto/';
+---
+
+<section class="llamada" aria-labelledby="llamada-titulo">
+  <div class="contenedor">
+    <div class="llamada__caja">
+      <div class="llamada__texto">
+        <h2 id="llamada-titulo">{titulo}</h2>
+        <p>{texto}</p>
+        <div class="llamada__acciones">
+          <Boton href={href} variante="claro">Pedir una llamada</Boton>
+          <a class="llamada__tel" href={CONTACTO.whatsapp} target="_blank" rel="noopener">
+            <Icono nombre="whatsapp" /> Escríbenos por WhatsApp
+          </a>
+        </div>
+        <ul class="llamada__garantias">
+          <li><Icono nombre="reloj" tamano={18} /> Respondemos en menos de 4 horas laborables</li>
+          <li><Icono nombre="usuario" tamano={18} /> Hablas con quien hará el trabajo</li>
+        </ul>
+      </div>
+      <Ilustracion nombre="contacto" class="llamada__ilustracion" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .llamada {
+    padding-block: var(--seccion);
+  }
+  .llamada__caja {
+    display: grid;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(2rem, 1.2rem + 4vw, 4rem);
+    border-radius: calc(var(--radio-l) * 1.5);
+    background: var(--verde);
+    color: #fff;
+    overflow: hidden;
+  }
+  .llamada h2 {
+    font-size: var(--t-2xl);
+    max-width: 22ch;
+  }
+  .llamada p {
+    margin-top: 1rem;
+    color: #d5ecdf;
+    max-width: 52ch;
+  }
+  .llamada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 2rem;
+  }
+  .llamada__tel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fff;
+    font-weight: 650;
+    text-underline-offset: 0.25em;
+  }
+  .llamada__garantias {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    font-size: var(--t-s);
+    color: #d5ecdf;
+  }
+  .llamada__garantias li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .llamada__garantias :global(.icono) {
+    color: var(--platano);
+  }
+  .llamada :global(.llamada__ilustracion) {
+    max-width: 380px;
+    justify-self: center;
+  }
+  @media (min-width: 900px) {
+    .llamada__caja {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+</style>

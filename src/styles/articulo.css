@@ -1,0 +1,127 @@
+/* Cuerpo de los artículos del blog.
+   Los posts traen HTML con utilidades de Tailwind, así que aquí (y solo aquí)
+   se generan esas utilidades, escaneando únicamente src/content/posts.
+   Orden de capas: la tipografía base del artículo va antes que las
+   utilidades, para que una clase del post siempre gane. */
+
+@layer theme, articulo, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@source '../content/posts';
+
+@layer articulo {
+  .articulo-cuerpo {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--tinta-2);
+  }
+  .articulo-cuerpo > :first-child {
+    margin-top: 0;
+  }
+  .articulo-cuerpo :where(p, ul, ol, blockquote, pre, table, figure) {
+    margin-block: 0 1.25em;
+  }
+  .articulo-cuerpo :where(h2) {
+    margin: 2.2em 0 0.7em;
+    font-size: var(--t-2xl);
+    color: var(--tinta);
+    scroll-margin-top: 6rem;
+  }
+  .articulo-cuerpo :where(h3) {
+    margin: 1.8em 0 0.6em;
+    font-size: var(--t-xl);
+    color: var(--tinta);
+    scroll-margin-top: 6rem;
+  }
+  .articulo-cuerpo :where(h4) {
+    margin: 1.5em 0 0.5em;
+    color: var(--tinta);
+  }
+  .articulo-cuerpo :where(a) {
+    color: var(--verde);
+    text-underline-offset: 0.2em;
+  }
+  .articulo-cuerpo :where(strong) {
+    color: var(--tinta);
+  }
+  .articulo-cuerpo :where(ul, ol) {
+    padding-left: 1.3em;
+  }
+  .articulo-cuerpo :where(li + li) {
+    margin-top: 0.4em;
+  }
+  .articulo-cuerpo :where(blockquote) {
+    margin-inline: 0;
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    border-left: 4px solid var(--platano);
+    color: var(--tinta);
+    font-size: 1.125rem;
+  }
+  .articulo-cuerpo :where(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    display: block;
+    overflow-x: auto;
+  }
+  .articulo-cuerpo :where(th, td) {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--linea);
+    text-align: left;
+    vertical-align: top;
+  }
+  .articulo-cuerpo :where(th) {
+    color: var(--tinta);
+    background: var(--fondo-2);
+  }
+  .articulo-cuerpo :where(code) {
+    font-size: 0.9em;
+    background: var(--fondo-2);
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
+  }
+  .articulo-cuerpo :where(pre) {
+    overflow-x: auto;
+    padding: 1rem 1.2rem;
+    border-radius: var(--radio);
+    background: var(--tinta);
+    color: #f3f2ec;
+    font-size: 0.875rem;
+  }
+  .articulo-cuerpo :where(pre code) {
+    background: none;
+    padding: 0;
+  }
+  .articulo-cuerpo :where(img) {
+    border-radius: var(--radio);
+  }
+  .articulo-cuerpo :where(hr) {
+    border: 0;
+    border-top: 1px solid var(--linea);
+    margin-block: 2.5rem;
+  }
+}
+
+/* Contraste del HTML de los posts: tonos 400-600 de Tailwind usados como
+   texto sobre fondo claro no llegan a 4,5:1. Se oscurecen salvo dentro de
+   tarjetas oscuras del propio post. */
+@layer utilities {
+  .articulo-cuerpo :is(.text-slate-300, .text-slate-400, .text-slate-500):not(:where(.bg-slate-900, .from-slate-900, .bg-indigo-900, .bg-indigo-700, .bg-violet-700, .bg-purple-700, .bg-cyan-700) *) { color: #45556c; }
+  .articulo-cuerpo :is(.text-amber-500, .text-amber-600):not(:where(.bg-slate-900, .from-slate-900, .bg-indigo-900) *) { color: #973c00; }
+  .articulo-cuerpo :is(.text-orange-500, .text-orange-600):not(:where(.bg-slate-900, .from-slate-900, .bg-indigo-900) *) { color: #ca3500; }
+  .articulo-cuerpo :is(.text-rose-500, .text-rose-600):not(:where(.bg-slate-900, .from-slate-900, .bg-indigo-900) *) { color: #c70036; }
+  .articulo-cuerpo :is(.text-emerald-500, .text-emerald-600):not(:where(.bg-slate-900, .from-slate-900, .bg-indigo-900) *) { color: #007a55; }
+  .articulo-cuerpo :is(.text-green-400, .text-green-600):not(:where(.bg-slate-900, .from-slate-900, .bg-indigo-900) *) { color: #016630; }
+  .articulo-cuerpo .text-yellow-600:not(:where(.bg-slate-900, .from-slate-900) *) { color: #a65f00; }
+  .articulo-cuerpo .text-teal-600:not(:where(.bg-slate-900, .from-slate-900) *) { color: #00786f; }
+  .articulo-cuerpo .text-cyan-600:not(:where(.bg-slate-900, .from-slate-900) *) { color: #007595; }
+  .articulo-cuerpo .text-violet-500:not(:where(.bg-slate-900, .from-slate-900) *) { color: #7008e7; }
+  .articulo-cuerpo .text-sky-500:not(:where(.bg-slate-900, .from-slate-900) *) { color: #0069a8; }
+  .articulo-cuerpo :is(.text-red-600, .text-red-700):not(:where(.bg-slate-900, .from-slate-900) *) { color: #9f0712; }
+  .articulo-cuerpo :is(.bg-amber-500, .bg-amber-600).text-white { background-color: #bb4d00; }
+  .articulo-cuerpo :is(.bg-orange-400, .bg-orange-500).text-white { background-color: #b33000; }
+  .articulo-cuerpo :is(.bg-teal-500, .bg-teal-600).text-white { background-color: #0f766e; }
+  .articulo-cuerpo :is(.bg-emerald-500, .bg-emerald-600, .bg-cyan-600, .bg-sky-500).text-white { background-color: #046c4e; }
+  .articulo-cuerpo .bg-green-500.text-white { background-color: #008236; }
+}

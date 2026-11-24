@@ -1,0 +1,266 @@
+---
+import Logo from './Logo.astro';
+import Icono from './Icono.astro';
+import { SERVICIOS, GRUPOS, ENLACES_PRINCIPALES } from '../../data/navegacion';
+
+const ruta = Astro.url.pathname;
+const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
+const enServicios = SERVICIOS.some((s) => activo(s.href));
+---
+
+<header class="cabecera" data-cabecera>
+  <div class="contenedor cabecera__barra">
+    <a href="/" class="cabecera__logo" aria-label="platanitorico, ir al inicio">
+      <Logo />
+    </a>
+
+    <nav class="cabecera__nav" aria-label="Principal">
+      <button
+        type="button"
+        class:list={['cabecera__enlace', 'cabecera__desplegar', { activo: enServicios }]}
+        aria-expanded="false"
+        aria-controls="menu-servicios"
+        data-desplegar
+      >
+        Servicios <Icono nombre="chevron-abajo" tamano={16} />
+      </button>
+      {ENLACES_PRINCIPALES.map((e) => (
+        <a href={e.href} class:list={['cabecera__enlace', { activo: activo(e.href) }]} aria-current={activo(e.href) ? 'page' : undefined}>
+          {e.nombre}
+        </a>
+      ))}
+    </nav>
+
+    <div class="cabecera__acciones">
+      <a href="/contacto/" class="cabecera__cta">Hablemos</a>
+      <button type="button" class="cabecera__menu" aria-expanded="false" aria-controls="menu-servicios" aria-label="Abrir menú" data-desplegar>
+        <Icono nombre="menu" tamano={22} class="abrir" />
+        <Icono nombre="cerrar" tamano={22} class="cerrar" />
+      </button>
+    </div>
+  </div>
+
+  <div class="panel" id="menu-servicios" hidden>
+    <div class="contenedor panel__rejilla">
+      {GRUPOS.map((g) => (
+        <div class="panel__grupo">
+          <p class="panel__titulo">{g.nombre}</p>
+          <ul>
+            {SERVICIOS.filter((s) => s.grupo === g.id).map((s) => (
+              <li>
+                <a href={s.href} class="panel__servicio" aria-current={activo(s.href) ? 'page' : undefined}>
+                  <span class="panel__nombre">{s.nombre}</span>
+                  <span class="panel__resumen">{s.resumen}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <div class="panel__grupo panel__movil">
+        <p class="panel__titulo">Más</p>
+        <ul>
+          {ENLACES_PRINCIPALES.map((e) => (
+            <li><a href={e.href} class="panel__servicio"><span class="panel__nombre">{e.nombre}</span></a></li>
+          ))}
+          <li><a href="/contacto/" class="panel__servicio"><span class="panel__nombre">Contacto</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const cabecera = document.querySelector<HTMLElement>('[data-cabecera]');
+  const panel = document.getElementById('menu-servicios');
+  const botones = document.querySelectorAll<HTMLButtonElement>('[data-desplegar]');
+
+  const cambiar = (abrir: boolean) => {
+    if (!panel || !cabecera) return;
+    panel.hidden = !abrir;
+    cabecera.classList.toggle('abierta', abrir);
+    botones.forEach((b) => b.setAttribute('aria-expanded', String(abrir)));
+  };
+
+  botones.forEach((b) => b.addEventListener('click', () => cambiar(panel?.hidden !== false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel && !panel.hidden) {
+      cambiar(false);
+      botones[0]?.focus();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (panel && !panel.hidden && cabecera && !cabecera.contains(e.target as Node)) cambiar(false);
+  });
+
+  // Borde inferior solo cuando hay scroll (sin escuchar scroll: un centinela).
+  const centinela = document.createElement('div');
+  centinela.style.cssText = 'position:absolute;top:0;height:1px;width:1px';
+  document.body.prepend(centinela);
+  new IntersectionObserver(([e]) => cabecera?.classList.toggle('con-scroll', !e.isIntersecting)).observe(centinela);
+</script>
+
+<style>
+  .cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 250, 247, 0.94);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .cabecera.con-scroll,
+  .cabecera.abierta {
+    border-bottom-color: var(--linea);
+  }
+  .cabecera__barra {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 4.25rem;
+  }
+  .cabecera__logo {
+    text-decoration: none;
+    margin-right: auto;
+  }
+  .cabecera__nav {
+    display: none;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .cabecera__enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.85rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    font: inherit;
+    font-size: var(--t-s);
+    font-weight: 600;
+    color: var(--tinta-2);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .cabecera__enlace:hover,
+  .cabecera__enlace.activo,
+  .cabecera__desplegar[aria-expanded='true'] {
+    color: var(--tinta);
+    background: var(--fondo-2);
+  }
+  .cabecera__desplegar :global(.icono) {
+    transition: transform 0.2s;
+  }
+  .cabecera__desplegar[aria-expanded='true'] :global(.icono) {
+    transform: rotate(180deg);
+  }
+  .cabecera__acciones {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cabecera__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.6rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    background: var(--verde);
+    color: #fff;
+    font-weight: 680;
+    font-size: var(--t-s);
+    text-decoration: none;
+  }
+  .cabecera__cta:hover {
+    background: var(--verde-2);
+  }
+  .cabecera__menu {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1.5px solid var(--linea-2);
+    border-radius: 999px;
+    background: var(--superficie);
+    color: var(--tinta);
+    cursor: pointer;
+  }
+  .cabecera__menu :global(.cerrar),
+  .cabecera__menu[aria-expanded='true'] :global(.abrir) {
+    display: none;
+  }
+  .cabecera__menu[aria-expanded='true'] :global(.cerrar) {
+    display: block;
+  }
+
+  .panel {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    max-height: calc(100dvh - 4.25rem);
+    overflow-y: auto;
+    background: var(--fondo);
+    border-bottom: 1px solid var(--linea);
+    box-shadow: var(--sombra-l);
+  }
+  .panel__rejilla {
+    display: grid;
+    gap: 1.75rem;
+    padding-block: 1.5rem 2rem;
+  }
+  .panel__titulo {
+    margin-bottom: 0.5rem;
+    font-size: var(--t-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+  .panel ul {
+    list-style: none;
+    display: grid;
+    gap: 0.15rem;
+  }
+  .panel__servicio {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.65rem 0.75rem;
+    margin-inline: -0.75rem;
+    border-radius: var(--radio);
+    text-decoration: none;
+  }
+  .panel__servicio:hover,
+  .panel__servicio[aria-current='page'] {
+    background: var(--superficie);
+  }
+  .panel__nombre {
+    font-weight: 680;
+  }
+  .panel__resumen {
+    font-size: var(--t-s);
+    color: var(--tenue);
+    line-height: 1.4;
+  }
+
+  @media (min-width: 960px) {
+    .cabecera__nav {
+      display: flex;
+    }
+    .cabecera__logo {
+      margin-right: 0;
+    }
+    .cabecera__acciones {
+      margin-left: auto;
+    }
+    .cabecera__menu,
+    .panel__movil {
+      display: none;
+    }
+    .panel__rejilla {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      padding-block: 2rem 2.5rem;
+    }
+  }
+</style>

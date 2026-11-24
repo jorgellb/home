@@ -1,0 +1,103 @@
+---
+/* Bloque oscuro de valor: una guía o lista de comprobación útil por sí misma. */
+import Icono from './Icono.astro';
+import Boton from './Boton.astro';
+
+interface Props {
+  antetitulo?: string;
+  titulo: string;
+  entradilla?: string;
+  bloques: { t: string; d: string }[];
+  accion?: { href: string; texto: string };
+  id?: string;
+}
+const { antetitulo = 'Guía rápida', titulo, entradilla, bloques, accion, id = 'guia-titulo' } = Astro.props;
+---
+
+<section class="seccion seccion--tinta" aria-labelledby={id}>
+  <div class="contenedor guia">
+    <div class="guia__cabeza">
+      <p class="antetitulo antetitulo--claro">{antetitulo}</p>
+      <h2 id={id}>{titulo}</h2>
+      {entradilla && <p class="entradilla">{entradilla}</p>}
+      {accion && <Boton href={accion.href} variante="claro">{accion.texto}</Boton>}
+    </div>
+    <ol class="comprobaciones">
+      {bloques.map((c, i) => (
+        <li data-aparece style={`transition-delay:${i * 60}ms`}>
+          <span class="comprobacion__check"><Icono nombre="check" tamano={18} /></span>
+          <div>
+            <h3>{c.t}</h3>
+            <p set:html={c.d} />
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .guia {
+    display: grid;
+    gap: 3rem;
+  }
+  .guia__cabeza {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+    justify-items: start;
+  }
+  .guia__cabeza h2 {
+    font-size: var(--t-2xl);
+  }
+  .guia .entradilla {
+    color: #c9ccc2;
+  }
+  .comprobaciones {
+    list-style: none;
+    display: grid;
+    gap: 1px;
+    background: #2c3128;
+    border: 1px solid #2c3128;
+    border-radius: var(--radio-l);
+    overflow: hidden;
+  }
+  .comprobaciones li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding: 1.4rem 1.5rem;
+    background: var(--tinta);
+  }
+  .comprobacion__check {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--platano);
+    color: var(--tinta);
+  }
+  .comprobaciones h3 {
+    font-size: var(--t-m);
+    line-height: 1.35;
+  }
+  .comprobaciones p {
+    margin-top: 0.35rem;
+    color: #b4b8ad;
+    font-size: var(--t-s);
+  }
+  .comprobaciones p :global(a) {
+    color: var(--platano);
+  }
+  @media (min-width: 960px) {
+    .guia {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 4rem;
+    }
+    .guia__cabeza {
+      position: sticky;
+      top: 6rem;
+    }
+  }
+</style>

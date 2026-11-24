@@ -1,0 +1,365 @@
+---
+/* Página de servicio completa a partir de un ContenidoServicio. */
+import Sitio from '../../layouts/Sitio.astro';
+import Boton from './Boton.astro';
+import Icono from './Icono.astro';
+import Ilustracion from './Ilustracion.astro';
+import Encabezado from './Encabezado.astro';
+import Migas from './Migas.astro';
+import Puntos from './Puntos.astro';
+import Guia from './Guia.astro';
+import Pasos from './Pasos.astro';
+import Casos from './Casos.astro';
+import Preguntas from './Preguntas.astro';
+import LlamadaFinal from './LlamadaFinal.astro';
+import type { ContenidoServicio } from '../../data/servicios/tipos';
+import { SERVICIOS } from '../../data/navegacion';
+import { PROVEEDOR, SITE } from '../../data/negocio';
+
+interface Props {
+  datos: ContenidoServicio;
+}
+const { datos: d } = Astro.props;
+const url = `${SITE}${d.ruta}`;
+const relacionados = (d.relacionados ?? []).map((s) => SERVICIOS.find((x) => x.slug === s)).filter((s) => s !== undefined);
+const contacto = `/contacto/?servicio=${encodeURIComponent(d.servicioContacto)}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: d.nombre,
+  serviceType: d.tipo,
+  description: d.seo.description,
+  url,
+  provider: PROVEEDOR,
+  areaServed: { '@type': 'AdministrativeArea', name: 'Provincia de Almería' },
+};
+---
+
+<Sitio title={d.seo.title} description={d.seo.description} canonical={url} type="service" jsonLd={jsonLd}>
+  <section class="portada">
+    <div class="contenedor portada__rejilla">
+      <div class="portada__texto">
+        <Migas items={d.migas ?? [{ nombre: d.nombre }]} />
+        <p class="antetitulo">{d.portada.antetitulo}</p>
+        <h1 set:html={d.portada.h1} />
+        <p class="entradilla" set:html={d.portada.entradilla} />
+        <ul class="portada__puntos">
+          {d.portada.puntos.map((p) => (
+            <li><Icono nombre="check" tamano={18} /> <span set:html={p} /></li>
+          ))}
+        </ul>
+        <div class="portada__acciones">
+          <Boton href={contacto}>Cuéntanos tu caso</Boton>
+          <Boton href="#incluye" variante="secundario" icono="flecha-abajo">Qué incluye</Boton>
+        </div>
+      </div>
+      <Ilustracion nombre={d.escena} class="portada__ilustracion" />
+    </div>
+  </section>
+
+  {d.paraQuien && (
+    <section class="seccion seccion--blanca" aria-labelledby="para-quien">
+      <div class="contenedor">
+        <Encabezado id="para-quien" antetitulo="Para quién" titulo={d.paraQuien.titulo} entradilla={d.paraQuien.entradilla} />
+        <Puntos items={d.paraQuien.perfiles} sobre="blanco" columnas={d.paraQuien.perfiles.length === 4 ? 4 : 3} />
+      </div>
+    </section>
+  )}
+
+  <section class="seccion" id="incluye" aria-labelledby="incluye-titulo">
+    <div class="contenedor">
+      <Encabezado id="incluye-titulo" antetitulo="Qué incluye" titulo={d.incluye.titulo} entradilla={d.incluye.entradilla} />
+      <Puntos items={d.incluye.items} columnas={d.incluye.items.length % 4 === 0 ? 4 : 3} />
+    </div>
+  </section>
+
+  {d.guia && <Guia antetitulo={d.guia.antetitulo} titulo={d.guia.titulo} entradilla={d.guia.entradilla} bloques={d.guia.bloques} />}
+
+  {d.comparativa && (
+    <section class="seccion" aria-labelledby="comparativa-titulo">
+      <div class="contenedor">
+        <Encabezado id="comparativa-titulo" antetitulo="Comparativa" titulo={d.comparativa.titulo} entradilla={d.comparativa.entradilla} />
+        <div class="tabla" role="region" aria-labelledby="comparativa-titulo" tabindex="0">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col"><span class="solo-lector">Aspecto</span></th>
+                <th scope="col" class="tabla__nosotros">{d.comparativa.columnas[0]}</th>
+                <th scope="col">{d.comparativa.columnas[1]}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {d.comparativa.filas.map((f) => (
+                <tr>
+                  <th scope="row">{f.aspecto}</th>
+                  <td class="tabla__nosotros"><Icono nombre="check" tamano={16} /> {f.nosotros}</td>
+                  <td>{f.otros}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {d.pasos && (
+    <section class="seccion seccion--blanca" aria-labelledby="pasos-titulo">
+      <div class="contenedor">
+        <Encabezado id="pasos-titulo" antetitulo="Cómo trabajamos" titulo={d.pasos.titulo ?? 'Así lo hacemos, paso a paso'} />
+        <Pasos pasos={d.pasos.items} />
+      </div>
+    </section>
+  )}
+
+  {d.casos && d.casos.length > 0 && (
+    <section class="seccion" aria-labelledby="casos-titulo">
+      <div class="contenedor">
+        <Encabezado id="casos-titulo" antetitulo="Trabajos publicados" titulo="Proyectos que puedes visitar" />
+        <Casos ids={d.casos} />
+      </div>
+    </section>
+  )}
+
+  <section class="seccion seccion--blanca" aria-labelledby="preguntas-titulo">
+    <div class="contenedor dos-columnas">
+      <Encabezado id="preguntas-titulo" antetitulo="Preguntas frecuentes" titulo="Lo que suelen preguntarnos" />
+      <Preguntas preguntas={d.preguntas} />
+    </div>
+  </section>
+
+  {d.enlaces && (
+    <section class="seccion seccion--compacta" aria-labelledby="enlaces-titulo">
+      <div class="contenedor">
+        <h2 id="enlaces-titulo" class="enlaces__titulo">{d.enlaces.titulo}</h2>
+        <ul class="enlaces">
+          {d.enlaces.items.map((e) => (
+            <li>
+              <a href={e.href}>
+                <span>{e.nombre}</span>
+                {e.d && <small>{e.d}</small>}
+                <Icono nombre="flecha" tamano={16} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {relacionados.length > 0 && (
+    <section class="seccion seccion--compacta" aria-labelledby="relacionados-titulo">
+      <div class="contenedor">
+        <h2 id="relacionados-titulo" class="enlaces__titulo">Suele ir de la mano con</h2>
+        <ul class="relacionados">
+          {relacionados.map((s) => (
+            <li>
+              <a href={s.href} class="relacionado">
+                <Ilustracion nombre={s.escena} class="relacionado__ilustracion" />
+                <span>
+                  <b>{s.nombre}</b>
+                  <small>{s.resumen}</small>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <LlamadaFinal titulo={d.llamada?.titulo} texto={d.llamada?.texto} servicio={d.servicioContacto} />
+</Sitio>
+
+<style>
+  .portada {
+    padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) clamp(3rem, 2rem + 4vw, 6rem);
+    overflow: hidden;
+  }
+  .portada__rejilla {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .portada__texto {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .portada h1 {
+    font-size: var(--t-3xl);
+    max-width: 18ch;
+  }
+  .portada__puntos {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    color: var(--tinta-2);
+  }
+  .portada__puntos li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .portada__puntos :global(.icono) {
+    margin-top: 0.25rem;
+    color: var(--verde);
+  }
+  .portada__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  .portada :global(.portada__ilustracion) {
+    max-width: 500px;
+    justify-self: center;
+  }
+  @media (min-width: 960px) {
+    .portada__rejilla {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3rem;
+    }
+  }
+
+  .tabla {
+    overflow-x: auto;
+    border-radius: var(--radio-l);
+    border: 1px solid var(--linea);
+    background: var(--superficie);
+  }
+  table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-size: var(--t-s);
+  }
+  th,
+  td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--linea);
+  }
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  thead th {
+    font-size: var(--t-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tenue);
+  }
+  tbody th {
+    font-weight: 680;
+    width: 26%;
+  }
+  td {
+    color: var(--tinta-2);
+  }
+  .tabla__nosotros {
+    background: var(--verde-suave);
+    color: var(--tinta);
+  }
+  thead .tabla__nosotros {
+    color: var(--verde);
+  }
+  td.tabla__nosotros :global(.icono) {
+    display: inline-block;
+    vertical-align: -3px;
+    color: var(--verde);
+  }
+
+  .dos-columnas {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 960px) {
+    .dos-columnas {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 4rem;
+    }
+  }
+
+  .enlaces__titulo {
+    font-size: var(--t-xl);
+    margin-bottom: 1.25rem;
+  }
+  .enlaces {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .enlaces a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.15rem 1rem;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background: var(--superficie);
+    text-decoration: none;
+    font-weight: 650;
+  }
+  .enlaces a:hover {
+    border-color: var(--verde);
+  }
+  .enlaces small {
+    grid-column: 1;
+    font-weight: 400;
+    color: var(--tenue);
+    font-size: var(--t-s);
+  }
+  .enlaces :global(.icono) {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    color: var(--verde);
+  }
+  @media (min-width: 760px) {
+    .enlaces {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .enlaces {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .relacionados {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .relacionado {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio-l);
+    background: var(--superficie);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .relacionado:hover {
+    border-color: var(--linea-2);
+    transform: translateY(-2px);
+  }
+  .relacionado span {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .relacionado small {
+    color: var(--tenue);
+    font-size: var(--t-s);
+    line-height: 1.4;
+  }
+  @media (min-width: 860px) {
+    .relacionados {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

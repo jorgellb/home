@@ -1,0 +1,80 @@
+---
+import Icono, { type NombreIcono } from './Icono.astro';
+
+interface Props {
+  href: string;
+  variante?: 'primario' | 'secundario' | 'texto' | 'claro';
+  icono?: NombreIcono | null;
+  class?: string;
+  externo?: boolean;
+}
+
+const { href, variante = 'primario', icono = 'flecha', class: clase, externo = false } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['boton', `boton--${variante}`, clase]}
+  {...(externo ? { target: '_blank', rel: 'noopener' } : {})}
+>
+  <span><slot /></span>
+  {icono && <Icono nombre={icono} tamano={18} />}
+</a>
+
+<style>
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.35rem;
+    border-radius: 999px;
+    font-weight: 680;
+    font-size: var(--t-s);
+    line-height: 1.2;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .boton :global(.icono) {
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .boton:hover :global(.icono) {
+    transform: translateX(3px);
+  }
+  .boton:active {
+    transform: scale(0.98);
+  }
+  .boton--primario {
+    background: var(--verde);
+    color: #fff;
+  }
+  .boton--primario:hover {
+    background: var(--verde-2);
+  }
+  .boton--secundario {
+    background: var(--superficie);
+    color: var(--tinta);
+    border: 1.5px solid var(--linea-2);
+  }
+  .boton--secundario:hover {
+    border-color: var(--tinta);
+  }
+  .boton--claro {
+    background: #fff;
+    color: var(--tinta);
+  }
+  .boton--claro:hover {
+    background: var(--platano);
+  }
+  .boton--texto {
+    min-height: auto;
+    padding: 0.25rem 0;
+    border-radius: 0;
+    color: var(--verde);
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.3em;
+  }
+</style>

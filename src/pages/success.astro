@@ -1,98 +1,46 @@
 ---
-import Layout from '../layouts/BaseLayout.astro';
-import Boton from '../components/cdm/Boton.astro';
+import Sitio from '../layouts/Sitio.astro';
+import Boton from '../components/sitio/Boton.astro';
+import Ilustracion from '../components/sitio/Ilustracion.astro';
+import { CONTACTO } from '../data/navegacion';
 ---
 
-<Layout
-  title="Mensaje recibido"
-  description="Tu mensaje ha sido recibido correctamente. Te respondemos en menos de 24 horas."
-  noindex={true}
->
-  <main id="main-content" class="success-page">
-    <div class="container-brutal success-page__inner">
-      <header class="success-page__head">
-        <span class="text-meta">N.º 200 / OK · Acuse de recibo</span>
-        <span class="text-meta"><span class="live-dot" style="background:var(--color-cdm-ok)"></span> Mensaje recibido</span>
-      </header>
-
-      <div class="divider-brutal-thick"></div>
-
-      <div class="success-page__hero">
-        <div class="success-page__check" aria-hidden="true">
-          <span>✓</span>
-        </div>
-
-        <span class="text-meta">★ Confirmación</span>
-        <h1 class="success-page__title heading-display">
-          Gracias.
-          <em class="heading-editorial">Lo tenemos.</em>
-        </h1>
-        <p class="success-page__lead">
-          Tu mensaje ha llegado correctamente. Te responderemos personalmente
-          en menos de <strong>24 horas</strong> con próximos pasos y un
-          presupuesto detallado.
-        </p>
-      </div>
-
-      <dl class="spec-list success-page__specs">
-        <div><dt class="spec-k">Estado</dt><dd class="spec-v">Recibido · pendiente de revisión humana</dd></div>
-        <div><dt class="spec-k">Próximo paso</dt><dd class="spec-v">Revisión interna y respuesta personal</dd></div>
-        <div><dt class="spec-k">Plazo</dt><dd class="spec-v">&lt; 24 horas laborables</dd></div>
-        <div><dt class="spec-k">Por si acaso</dt><dd class="spec-v"><a href="https://wa.me/34657085019" class="link-brutal">WhatsApp directo · +34 657 085 019</a></dd></div>
-      </dl>
-
-      <div class="success-page__cta">
-        <Boton href="/">Volver al inicio</Boton>
-        <Boton href="/blog/" variante="linea">Mientras tanto, el blog</Boton>
-      </div>
+<Sitio title="Mensaje recibido" description="Hemos recibido tu mensaje. Te respondemos en menos de 4 horas laborables." noindex>
+  <section class="contenedor gracias">
+    <Ilustracion nombre="contacto" class="gracias__ilustracion" />
+    <p class="antetitulo">Mensaje recibido</p>
+    <h1>Gracias. Lo tenemos.</h1>
+    <p class="entradilla">
+      Te respondemos en menos de 4 horas laborables. Si es urgente, llámanos al
+      <a href={CONTACTO.telefonoHref}>{CONTACTO.telefono}</a> o escríbenos por WhatsApp.
+    </p>
+    <div class="gracias__acciones">
+      <Boton href="/">Volver al inicio</Boton>
+      <Boton href="/blog/" variante="secundario">Leer el blog mientras</Boton>
     </div>
-  </main>
-</Layout>
+  </section>
+</Sitio>
 
 <style>
-  .success-page {
-    /* Utilitarios globales (text-meta, spec-list, link-brutal) en tono consola.
-       Aquí ink es sobre todo texto (spec-v, link-brutal): va en claro, y el
-       separador grueso se devuelve a regla abajo. */
-    --brutal-ink: var(--color-cdm-texto);
-    --brutal-text: var(--color-cdm-texto);
-    --brutal-text-muted: var(--color-cdm-tenue);
-    --brutal-text-secondary: #b9c5cf;
-    --brutal-accent-ink: var(--color-cdm-senal);
-    --brutal-border-soft: var(--color-cdm-regla);
-    background: var(--color-cdm-suelo);
-    color: var(--color-cdm-texto);
-    color-scheme: dark;
-    min-height: 80vh;
-    padding: 3rem 0 6rem;
+  .gracias {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    padding-block: var(--seccion);
+    text-align: center;
   }
-  .success-page :global(.divider-brutal-thick) { background: var(--color-cdm-regla-2); }
-  .success-page__head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-bottom: 1rem; }
-  .success-page__hero { padding: 3rem 0; display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; }
-  .success-page__check {
-    width: 88px;
-    height: 88px;
-    display: inline-flex;
-    align-items: center;
+  .gracias :global(.gracias__ilustracion) {
+    max-width: 300px;
+  }
+  .gracias .entradilla a {
+    color: var(--verde);
+    font-weight: 650;
+  }
+  .gracias__acciones {
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    background: var(--color-cdm-ok);
-    border: 1px solid var(--color-cdm-ok);
-    box-shadow: 6px 6px 0 0 var(--color-cdm-senal);
-    font-family: var(--font-display);
-    font-size: 3.5rem;
-    line-height: 1;
-    color: var(--color-cdm-suelo);
-    transform: rotate(-3deg);
+    gap: 0.75rem;
+    margin-top: 1rem;
   }
-  .success-page__title {
-    font-size: clamp(3rem, 8vw, 6rem);
-    line-height: .9;
-    letter-spacing: -.045em;
-    margin: 0;
-  }
-  .success-page__title em { color: var(--color-cdm-senal); font-style: italic; }
-  .success-page__lead { font-size: 1.1rem; line-height: 1.6; color: #b9c5cf; max-width: 50ch; }
-  .success-page__lead strong { color: var(--color-cdm-texto); }
-  .success-page__specs { max-width: 640px; margin: 1rem 0 3rem; }
-  .success-page__cta { display: flex; flex-wrap: wrap; gap: 1rem; }
 </style>

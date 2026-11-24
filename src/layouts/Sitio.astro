@@ -1,0 +1,119 @@
+---
+/* Layout del rediseño de 2026-11: claro, una fuente, sin chat ni banner.
+   Conserva todas las etiquetas SEO del BaseLayout anterior. */
+import '../styles/sitio.css';
+import Cabecera from '../components/sitio/Cabecera.astro';
+import Pie from '../components/sitio/Pie.astro';
+// Precarga del subconjunto latino: el H1 (LCP en casi todas las páginas) se
+// pinta ya con la fuente final.
+import jakartaLatino from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  imageAlt?: string;
+  type?: 'website' | 'article' | 'product' | 'service';
+  noindex?: boolean;
+  canonical?: string;
+  lang?: string;
+  alternates?: Array<{ hreflang: string; href: string }>;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Sin cabecera ni pie (p. ej. páginas de agradecimiento). */
+  desnudo?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  imageAlt = 'Platanito Rico, estudio digital en Almería',
+  type = 'website',
+  noindex = false,
+  canonical,
+  lang = 'es',
+  alternates,
+  jsonLd,
+  desnudo = false,
+} = Astro.props;
+
+const siteName = 'Platanito Rico';
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+const siteBase = Astro.site ? Astro.site.origin : 'https://platanitorico.com';
+const siteUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+const canonicalUrl = canonical || siteUrl;
+const ogImageRaw = image || '/imagenes/og-platanito-rico.png';
+const ogImage = ogImageRaw.startsWith('http') ? ogImageRaw : `${siteBase}${ogImageRaw}`;
+const esquemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {/* `follow` también con noindex: las landings fuera del índice siguen
+        transmitiendo el enlazado interno. */}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="preload" href={jakartaLatino} as="font" type="font/woff2" crossorigin />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+
+    <meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/imagenes/icon.png" />
+    <link rel="apple-touch-icon" href="/imagenes/icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#FAFAF7" />
+    <meta name="generator" content={Astro.generator} />
+
+    {alternates?.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    {esquemas.map((s) => <script is:inline type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  </head>
+  <body>
+    <a href="#contenido" class="salto">Saltar al contenido</a>
+    {!desnudo && <Cabecera />}
+    <main id="contenido">
+      <slot />
+    </main>
+    {!desnudo && <Pie />}
+
+    <script>
+      /* Aparición al entrar en pantalla y pausa de las ilustraciones que no se
+         ven: un solo observador para toda la página. */
+      const vistos = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            const el = e.target as HTMLElement;
+            if (el.matches('[data-aparece]')) {
+              if (e.isIntersecting) {
+                el.classList.add('visible');
+                vistos.unobserve(el);
+              }
+            } else {
+              el.toggleAttribute('data-pausa', !e.isIntersecting);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('[data-aparece], svg.iso').forEach((el) => vistos.observe(el));
+    </script>
+  </body>
+</html>

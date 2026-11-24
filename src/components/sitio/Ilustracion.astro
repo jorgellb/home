@@ -1,0 +1,27 @@
+---
+/* Escena isométrica generada en el build (SVG inline, sin JS).
+   Las animaciones en bucle se pausan cuando la escena sale de pantalla. */
+import { escena, type NombreEscena } from '../../lib/escenas';
+
+interface Props {
+  nombre: NombreEscena;
+  /** Texto alternativo. Sin él la ilustración es decorativa. */
+  titulo?: string;
+  class?: string;
+}
+
+const { nombre, titulo, class: clase = '' } = Astro.props;
+const { html, ancho, alto } = escena(nombre, { titulo });
+---
+
+<div class:list={['ilustracion', clase]} style={`aspect-ratio:${ancho}/${alto}`} set:html={html} />
+
+<style>
+  .ilustracion {
+    width: 100%;
+  }
+  .ilustracion :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+</style>
