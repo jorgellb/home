@@ -2,6 +2,8 @@
    versiones mini para iconos. Se dibujan con el motor de src/lib/iso.ts en el
    build; la animación la pone el CSS (clases iso-*). */
 import { Escena, type Punto3 } from './iso';
+import { pueblos, comarcas } from '../data/pueblos-almeria';
+import { esPuebloIndexable } from '../data/pueblos-indexables';
 
 const TINTA = '#14160F';
 const VERDE = '#0E5B3A';
@@ -14,6 +16,8 @@ const CORAL = '#FF7F5C';
 const BLANCO = '#FFFFFF';
 
 export type NombreEscena =
+  | 'portada'
+  | 'mapa'
   | 'web'
   | 'tienda'
   | 'marketing'
@@ -87,6 +91,210 @@ function movil(e: Escena, x: number, y: number, z: number, pantalla: (cara: numb
   e.caraY(x + 3, y + 6.01, z + 5, 32, 64, BLANCO);
   e.caraY(x + 14, y + 6.02, z + 70, 10, 2, '#3D4339');
   pantalla(y + 6.02, z + 5);
+}
+
+/* ── Portada: diorama vivo ────────────────────────────────────────── */
+
+function portada(e: Escena) {
+  const W = 300;
+  const D = 260;
+  e.sombraCaja(0, 0, -2, W, D, 10, 0.05);
+  e.caja({ x: 0, y: 0, w: W, d: D, h: 8, m: 'verde', brillo: false });
+  e.caja({ x: 0, y: 0, z: 8, w: W, d: D, h: 6, m: 'blanco' });
+  const z = 14;
+  // Hierba trasera, carretera y mar delantero
+  e.losa(0, 0, z + 0.2, W, 176, '#F4FAF6');
+  for (let i = 30; i < W; i += 30) e.linea([i, 4, z + 0.3], [i, 172, z + 0.3], '#E1EEE5', 1, ' stroke-dasharray="2 6"');
+  e.losa(0, 214, z + 0.3, W, 46, '#CFE6F5');
+  e.losa(0, 214, z + 0.4, W, 5, '#E3F2FC');
+  e.grupo({ clase: 'iso-ola', duracion: 6 }, (g) => {
+    g.linea([30, 236, z + 1], [80, 236, z + 1], BLANCO, 2);
+    g.linea([150, 248, z + 1], [210, 248, z + 1], BLANCO, 2);
+    g.linea([240, 230, z + 1], [280, 230, z + 1], BLANCO, 2);
+  });
+  e.losa(0, 180, z + 0.4, W, 28, '#5A6153');
+  e.linea([6, 194, z + 0.6], [W - 6, 194, z + 0.6], '#FFE68F', 1.6, ' stroke-dasharray="8 8"');
+  e.losa(0, 208, z + 0.5, W, 6, '#E9E5D7');
+
+  // Barco que navega
+  e.viajero([[-10, 238, z + 1], [W + 10, 238, z + 1]], { duracion: 26, retraso: -8 }, (g) => {
+    g.caja({ x: -16, y: -5, z: 0, w: 32, d: 10, h: 6, m: 'coral' });
+    g.caja({ x: -6, y: -3, z: 6, w: 12, d: 6, h: 6, m: 'blanco' });
+    g.linea([10, 0, 6], [10, 0, 30], TINTA, 1.6);
+    g.caraY(10, 0.01, 12, 14, 16, BLANCO, ` stroke="${GRIS_2}" stroke-width=".7"`);
+  });
+
+  // Estudio con la marca en la azotea
+  e.caja({ x: 18, y: 30, z, w: 64, d: 56, h: 70, m: 'papel', sombra: true });
+  [0, 1].forEach((f) => [0, 1, 2].forEach((c) => e.caraY(24 + c * 19, 86.01, z + 14 + f * 26, 12, 16, CIELO)));
+  e.caraX(82.01, 44, z + 40, 16, 18, CIELO);
+  e.caraY(30, 86.02, z, 14, 20, VERDE);
+  e.caja({ x: 34, y: 42, z: z + 70, w: 30, d: 30, h: 8, m: 'blanco' });
+  e.grupo({ clase: 'iso-latido', duracion: 4 }, (g) => {
+    g.caja({ x: 40, y: 48, z: z + 78, w: 18, d: 18, h: 14, m: 'verde' });
+    g.losa(40, 48, z + 92.05, 18, 18, PLATANO);
+  });
+  e.cartel([50, 58, z + 126], 'Estudio · Vera');
+
+  // Navegador gigante con la web desplazándose
+  const f = navegador(e, 104, 24, z, 150, 128);
+  const vista: Punto3[] = [[107, f, z + 4], [251, f, z + 4], [251, f, z + 114], [107, f, z + 114]];
+  e.caraY(107, f - 0.005, z + 4, 144, 110, '#FAFAF7');
+  e.recorte(vista, (c) =>
+    c.grupo({ clase: 'iso-desplaza', duracion: 11 }, (g) => {
+      g.caraY(107, f, z + 66, 144, 48, VERDE);
+      g.caraY(115, f, z + 98, 64, 6, BLANCO);
+      g.caraY(115, f, z + 88, 46, 3.5, 'rgba(255,255,255,.65)');
+      g.caraY(115, f, z + 74, 28, 8, PLATANO);
+      g.caraY(192, f, z + 70, 52, 38, CIELO);
+      g.caraY(202, f, z + 76, 32, 24, BLANCO);
+      [0, 1, 2].forEach((i) => {
+        g.caraY(113 + i * 46, f, z + 18, 42, 42, i === 1 ? '#FFF4CC' : BLANCO);
+        g.caraY(118 + i * 46, f, z + 48, 10, 7, i === 1 ? PLATANO : '#DDF4E7');
+        g.caraY(118 + i * 46, f, z + 38, 30, 3, GRIS_2);
+        g.caraY(118 + i * 46, f, z + 32, 22, 3, GRIS);
+      });
+      g.caraY(107, f, z - 34, 144, 48, '#F3F2EC');
+      g.caraY(115, f, z - 6, 70, 4, GRIS_2);
+      g.caraY(198, f, z - 26, 44, 32, BLANCO);
+      g.caraY(107, f, z - 70, 144, 34, TINTA);
+    }),
+  );
+  aviso(e, 214, 40, z + 140, VERDE, 1.2);
+  aviso(e, 96, 26, z + 122, 'blanco', 4.2, 2);
+
+  // Torre de resultados
+  [30, 48, 70].forEach((h, i) =>
+    e.grupo({ clase: 'iso-crece', retraso: i * 0.3, duracion: 5 }, (g) =>
+      g.caja({ x: 266, y: 104 + i * 22, z, w: 16, d: 16, h, m: i === 2 ? 'verde' : 'menta', sombra: true }),
+    ),
+  );
+
+  // Móvil flotando sobre la hierba
+  e.sombra(176, 150, z, 22, 0.09);
+  e.grupo({ clase: 'iso-flota', retraso: 1.2 }, (g) =>
+    movil(g, 156, 140, z + 34, (cara, base) => {
+      g.caraY(159, cara, base + 38, 32, 26, VERDE);
+      g.caraY(163, cara, base + 54, 18, 3.5, BLANCO);
+      g.caraY(163, cara, base + 44, 12, 5, PLATANO);
+      g.caraY(163, cara, base + 26, 24, 8, '#DDF4E7');
+      g.caraY(163, cara, base + 14, 24, 8, GRIS);
+    }),
+  );
+
+  // Arcos de datos: estudio, móvil y web conectados
+  e.arco([50, 58, z + 96], [150, 32, z + 128], 50, VERDE, { n: 2, duracion: 3.2 });
+  e.arco([175, 146, z + 110], [180, 32, z + 96], 46, CORAL, { n: 2, duracion: 2.8, retraso: -1 });
+  e.arco([210, 32, z + 60], [274, 148, z + 72], 34, PLATANO, { n: 1, duracion: 2.6 });
+
+  // Furgoneta que circula
+  e.viajero([[-20, 196, z + 1], [W + 20, 196, z + 1]], { duracion: 14 }, (g) => {
+    g.caja({ x: -22, y: -8, z: 2, w: 34, d: 16, h: 18, m: 'blanco' });
+    g.caja({ x: 12, y: -7, z: 2, w: 10, d: 14, h: 12, m: 'verde' });
+    g.caraX(22.01, -5, 8, 10, 5, CIELO);
+    g.caraY(-16, 8.01, 8, 20, 6, VERDE);
+    g.cilindro(-14, 8, 0, 3.4, 2, 'tinta');
+    g.cilindro(14, 8, 0, 3.4, 2, 'tinta');
+  });
+
+  // Árboles, gente y ubicación
+  arbol(e, 96, 120, z, 0.9, 0.3);
+  arbol(e, 236, 168, z, 0.8, 1.1);
+  arbol(e, 14, 160, z, 0.75, 0.6);
+  e.persona(64, 150, z, 'coral', 0.9);
+  e.persona(238, 160, z, 'azul', 0.9);
+  pin(e, 112, 150, z);
+
+  // Nubes que pasan
+  e.nube(120, 60, z + 230, z, { duracion: 38, retraso: -10, escala: 1.1 });
+  e.nube(230, 120, z + 200, z, { duracion: 46, retraso: -30, escala: 0.8 });
+}
+
+/* ── Mapa de la provincia con los municipios reales ───────────────── */
+
+const COLORES_COMARCA = ['verde', 'azul', 'coral', 'platano', 'lila', 'cielo', 'menta', 'arena'] as const;
+
+function mapa(e: Escena) {
+  const lon = (v: number) => (v + 3.2) * 190;
+  const lat = (v: number) => (37.98 - v) * 190;
+  const con = pueblos.filter((p) => p.coords);
+  const xs = con.map((p) => lon(p.coords![0]));
+  const ys = con.map((p) => lat(p.coords![1]));
+  const x0 = Math.min(...xs) - 18;
+  const y0 = Math.min(...ys) - 18;
+  const W = Math.max(...xs) - x0 + 18;
+  const D = Math.max(...ys) - y0 + 18;
+  e.sombraCaja(x0, y0, -2, W, D, 10, 0.05);
+  e.caja({ x: x0, y: y0, w: W, d: D, h: 8, m: 'verde', brillo: false });
+  e.caja({ x: x0, y: y0, z: 8, w: W, d: D, h: 6, m: 'blanco' });
+  const z = 14;
+  for (let i = x0 + 45; i < x0 + W; i += 45) e.linea([i, y0 + 4, z], [i, y0 + D - 4, z], GRIS, 1, ' stroke-dasharray="2 6"');
+  for (let j = y0 + 45; j < y0 + D; j += 45) e.linea([x0 + 4, j, z], [x0 + W - 4, j, z], GRIS, 1, ' stroke-dasharray="2 6"');
+
+  const vera = pueblos.find((p) => p.slug === 'vera')!;
+  const vx = lon(vera.coords![0]);
+  const vy = lat(vera.coords![1]);
+
+  // Conexiones desde el estudio a los municipios principales
+  const destinos = con.filter((p) => esPuebloIndexable(p.slug) && p.slug !== 'vera');
+  destinos.forEach((p, i) => {
+    const px = lon(p.coords![0]);
+    const py = lat(p.coords![1]);
+    const dist = Math.hypot(px - vx, py - vy);
+    e.arco([vx, vy, z + 46], [px, py, z + 14], 18 + dist * 0.25, i % 3 === 0 ? CORAL : VERDE, { n: 1, duracion: 2.4 + dist / 90, retraso: -i * 0.37 });
+  });
+
+  // Columnas de cada municipio (altura según población), de atrás a delante
+  const orden = [...con].sort((a, b) => lon(a.coords![0]) + lat(a.coords![1]) - (lon(b.coords![0]) + lat(b.coords![1])));
+  for (const p of orden) {
+    const px = lon(p.coords![0]);
+    const py = lat(p.coords![1]);
+    const h = p.slug === 'vera' ? 46 : 6 + Math.log10(Math.max(p.poblacion ?? 1500, 300)) * 6;
+    const i = Math.max(0, comarcas.indexOf(p.comarca as (typeof comarcas)[number]));
+    const m = p.slug === 'vera' ? 'platano' : COLORES_COMARCA[i % COLORES_COMARCA.length];
+    const lado = esPuebloIndexable(p.slug) ? 9 : 6;
+    const principal = esPuebloIndexable(p.slug);
+    e.caja({ x: px - lado / 2, y: py - lado / 2, z, w: lado, d: lado, h, m, sombra: principal, brillo: principal });
+  }
+  e.ondas(vx, vy, z, 26, CORAL);
+  ['almeria', 'el-ejido', 'mojacar', 'albox', 'macael', 'nijar', 'adra', 'huercal-overa'].forEach((slug) => {
+    const p = pueblos.find((x) => x.slug === slug);
+    if (!p?.coords) return;
+    e.cartel([lon(p.coords[0]), lat(p.coords[1]), z + 44], p.nombre);
+  });
+  e.cartel([vx, vy, z + 82], 'Vera · estudio', { color: '#fff', fondo: VERDE });
+}
+
+/* ── Proceso: recorrido por cuatro estaciones ─────────────────────── */
+
+function recorrido(e: Escena) {
+  const estaciones: [number, number][] = [[0, 150], [70, 100], [140, 50], [210, 0]];
+  const mats = ['blanco', 'menta', 'cielo', 'verde'] as const;
+  estaciones.forEach(([x, y], i) => e.caja({ x, y, z: 0, w: 60, d: 60, h: 10 + i * 10, m: mats[i], sombra: true }));
+  const camino: Punto3[] = estaciones.map(([x, y], i) => [x + 30, y + 30, 10 + i * 10 + 1] as Punto3);
+  e.ruta(camino, GRIS_2, 3, ' stroke-dasharray="2 7"');
+  const [a, b, c, d] = estaciones;
+  // 1 · Te escuchamos
+  e.caja({ x: a[0] + 16, y: a[1] + 22, z: 10, w: 28, d: 6, h: 20, m: 'verde' });
+  [0, 1, 2].forEach((k) => e.caraY(a[0] + 21 + k * 7, a[1] + 28.01, 18, 4, 4, BLANCO));
+  // 2 · Propuesta por escrito
+  [0, 1, 2].forEach((k) => e.caja({ x: b[0] + 14, y: b[1] + 14 + k * 3, z: 20 + k * 4, w: 30, d: 30, h: 3, m: k === 2 ? 'blanco' : 'arena' }));
+  // 3 · Diseño
+  e.caja({ x: c[0] + 12, y: c[1] + 24, z: 30, w: 36, d: 5, h: 28, m: 'blanco' });
+  e.caraY(c[0] + 15, c[1] + 29.01, 44, 30, 10, VERDE);
+  e.caraY(c[0] + 15, c[1] + 29.01, 34, 14, 8, PLATANO);
+  // 4 · Lanzamiento
+  e.caja({ x: d[0] + 22, y: d[1] + 22, z: 40, w: 16, d: 16, h: 34, m: 'blanco' });
+  e.caja({ x: d[0] + 24, y: d[1] + 24, z: 74, w: 12, d: 12, h: 8, m: 'coral' });
+  e.grupo({ clase: 'iso-latido', duracion: 1.6 }, (g) => g.esfera([d[0] + 30, d[1] + 30, 34], 8, PLATANO));
+  // Viajero que recorre los pasos y check en cada estación, en secuencia
+  e.flujo(camino.map(([x, y, zz]) => [x, y, zz + 10] as Punto3), PLATANO, { n: 1, duracion: 6, radio: 7 });
+  estaciones.forEach(([x, y], i) =>
+    e.grupo({ clase: 'iso-aparece', retraso: i * 1.5, duracion: 6 }, (g) => {
+      g.esfera([x + 50, y + 8, 50 + i * 10], 8, VERDE);
+      g.ruta([[x + 47, y + 8, 50 + i * 10], [x + 49.5, y + 8, 47 + i * 10], [x + 54, y + 8, 53 + i * 10]], BLANCO, 2);
+    }),
+  );
 }
 
 /* ── Escenas ──────────────────────────────────────────────────────── */
@@ -526,10 +734,10 @@ function pueblo(e: Escena) {
 }
 
 /** Escena de un municipio concreto, con sus rasgos. */
-export function escenaPueblo(rasgos: RasgosPueblo, titulo?: string) {
+export function escenaPueblo(rasgos: RasgosPueblo, titulo?: string, independiente = false) {
   const e = new Escena();
   dibujarPueblo(e, rasgos);
-  return e.svg({ titulo, clase: 'iso-pueblo' });
+  return e.svg({ titulo, clase: 'iso-pueblo', independiente });
 }
 
 /* ── Apoyo ────────────────────────────────────────────────────────── */
@@ -554,16 +762,6 @@ function contacto(e: Escena) {
   e.persona(196, 176, z, 'verde', 1);
 }
 
-function proceso(e: Escena) {
-  const mats = ['verde', 'menta', 'cielo', 'blanco'] as const;
-  [3, 2, 1, 0].forEach((i) =>
-    e.grupo({ clase: 'iso-sube', retraso: (3 - i) * 0.25 }, (g) =>
-      g.caja({ x: 0, y: (3 - i) * 46, z: 0, w: 70, d: 46, h: 20 + i * 26, m: mats[3 - i] }),
-    ),
-  );
-  e.grupo({ clase: 'iso-flota' }, (g) => g.esfera([35, 20, 124], 13, PLATANO));
-}
-
 function blog(e: Escena) {
   const z = plataforma(e, 200, 180);
   [0, 1, 2, 3].forEach((i) =>
@@ -581,13 +779,13 @@ function blog(e: Escena) {
 /* ── Registro ─────────────────────────────────────────────────────── */
 
 const DIBUJOS: Record<NombreEscena, (e: Escena) => void> = {
-  web, tienda, marketing, informatica, grafico, audiovisual, apps, ia, soporte, programador, pueblo, contacto, proceso, blog,
+  portada, mapa, web, tienda, marketing, informatica, grafico, audiovisual, apps, ia, soporte, programador, pueblo, contacto, proceso: recorrido, blog,
 };
 
-export function escena(nombre: NombreEscena, opciones: { titulo?: string } = {}) {
+export function escena(nombre: NombreEscena, opciones: { titulo?: string; independiente?: boolean } = {}) {
   const e = new Escena();
   DIBUJOS[nombre](e);
-  return e.svg({ titulo: opciones.titulo, clase: `iso-${nombre}` });
+  return e.svg({ titulo: opciones.titulo, clase: `iso-${nombre}`, independiente: opciones.independiente });
 }
 
 export const ESCENAS = Object.keys(DIBUJOS) as NombreEscena[];
@@ -665,9 +863,11 @@ const MINIS: Record<string, (e: Escena) => void> = {
   },
 };
 
-export function escenaIcono(nombre: string) {
+export function escenaIcono(nombre: string, independiente = false) {
   const dibujar = MINIS[nombre] ?? MINIS.web;
   const e = new Escena();
   dibujar(e);
-  return e.svg({ margen: 4, clase: 'iso-mini' });
+  return e.svg({ margen: 4, clase: 'iso-mini', independiente });
 }
+
+export const ICONOS_SERVICIO = Object.keys(MINIS);

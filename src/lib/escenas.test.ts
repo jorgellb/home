@@ -24,6 +24,16 @@ describe('escenas isométricas', () => {
     expect(escena('web', { titulo: 'Una web' }).html).toContain('role="img" aria-label="Una web"');
   });
 
+  it('el SVG independiente lleva su CSS y es XML válido en lo básico', () => {
+    for (const nombre of ESCENAS) {
+      const { html } = escena(nombre, { independiente: true });
+      expect(html).toContain('xmlns="http://www.w3.org/2000/svg"');
+      expect(html).toMatch(/<defs><style>[^<]*@keyframes iso-flota/);
+      // Un & suelto rompe el SVG cuando se sirve como imagen.
+      expect(html).not.toMatch(/&(?!amp;|lt;|gt;|quot;|#)/);
+    }
+  });
+
   it('solo anima con transform y opacity (clases iso-*)', () => {
     const { html } = escena('web');
     expect(html).toMatch(/class="iso-flota"/);

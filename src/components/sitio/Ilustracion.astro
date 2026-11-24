@@ -1,6 +1,7 @@
 ---
-/* Escena isométrica generada en el build (SVG inline, sin JS).
-   Las animaciones en bucle se pausan cuando la escena sale de pantalla. */
+/* Escena isométrica servida como SVG independiente (src/pages/iso/): imagen
+   cacheable y diferida, con la animación dentro del propio fichero. Las
+   medidas se calculan en el build para reservar el hueco (CLS 0). */
 import { escena, type NombreEscena } from '../../lib/escenas';
 
 interface Props {
@@ -8,20 +9,29 @@ interface Props {
   /** Texto alternativo. Sin él la ilustración es decorativa. */
   titulo?: string;
   class?: string;
+  /** Por encima del pliegue: carga inmediata. */
+  prioridad?: boolean;
 }
 
-const { nombre, titulo, class: clase = '' } = Astro.props;
-const { html, ancho, alto } = escena(nombre, { titulo });
+const { nombre, titulo = '', class: clase = '', prioridad = false } = Astro.props;
+const { ancho, alto } = escena(nombre);
 ---
 
-<div class:list={['ilustracion', clase]} style={`aspect-ratio:${ancho}/${alto}`} set:html={html} />
+<img
+  class:list={['ilustracion', clase]}
+  src={`/iso/${nombre}.svg`}
+  alt={titulo}
+  width={ancho}
+  height={alto}
+  loading={prioridad ? 'eager' : 'lazy'}
+  decoding="async"
+  {...(prioridad ? { fetchpriority: 'high' } : {})}
+/>
 
 <style>
   .ilustracion {
+    display: block;
     width: 100%;
-  }
-  .ilustracion :global(svg) {
-    width: 100%;
-    height: 100%;
+    height: auto;
   }
 </style>

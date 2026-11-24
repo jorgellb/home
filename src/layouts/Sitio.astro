@@ -95,25 +95,18 @@ const esquemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     {!desnudo && <Pie />}
 
     <script>
-      /* Aparición al entrar en pantalla y pausa de las ilustraciones que no se
-         ven: un solo observador para toda la página. */
+      /* Aparición al entrar en pantalla: un solo observador para toda la página. */
       const vistos = new IntersectionObserver(
         (entradas) => {
           for (const e of entradas) {
-            const el = e.target as HTMLElement;
-            if (el.matches('[data-aparece]')) {
-              if (e.isIntersecting) {
-                el.classList.add('visible');
-                vistos.unobserve(el);
-              }
-            } else {
-              el.toggleAttribute('data-pausa', !e.isIntersecting);
-            }
+            if (!e.isIntersecting) continue;
+            e.target.classList.add('visible');
+            vistos.unobserve(e.target);
           }
         },
         { rootMargin: '0px 0px -8% 0px' },
       );
-      document.querySelectorAll('[data-aparece], svg.iso').forEach((el) => vistos.observe(el));
+      document.querySelectorAll('[data-aparece]').forEach((el) => vistos.observe(el));
     </script>
   </body>
 </html>

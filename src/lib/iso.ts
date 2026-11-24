@@ -11,6 +11,8 @@
    suelo. El orden de pintado es el orden de llamada: de atrás (x + y
    pequeños, z bajo) hacia delante. */
 
+import { ISO_CSS } from './iso-css';
+
 const COS = Math.cos(Math.PI / 6);
 const SIN = 0.5;
 
@@ -45,7 +47,7 @@ type MaterialArg = NombreMaterial | Material;
 
 const mat = (m: MaterialArg): Material => (typeof m === 'string' ? MATERIALES[m] : m);
 
-const r = (n: number) => Math.round(n * 100) / 100;
+const r = (n: number) => Math.round(n * 10) / 10;
 
 /** Oscurece un color #RRGGBB un porcentaje. */
 function oscurecer(hex: string, f = 0.18): string {
@@ -295,6 +297,79 @@ export class Escena {
     return this;
   }
 
+  /** Arco de datos por el aire entre dos puntos (parábola), con paquetes que lo recorren. */
+  arco(a: Punto3, b: Punto3, altura: number, color: string, { n = 2, duracion = 3, guia = true, retraso = 0 }: { n?: number; duracion?: number; guia?: boolean; retraso?: number } = {}) {
+    const pasos = 12;
+    const pts: Punto3[] = [];
+    for (let i = 0; i <= pasos; i++) {
+      const t = i / pasos;
+      pts.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t + Math.sin(Math.PI * t) * altura]);
+    }
+    const d = this.camino(pts);
+    if (guia) this.partes.push(`<path d="${d}" fill="none" stroke="${color}" stroke-opacity=".35" stroke-width="1.6" stroke-linecap="round" class="iso-traza-lenta"/>`);
+    for (let i = 0; i < n; i++) {
+      this.partes.push(
+        `<circle class="iso-paquete" r="3.4" fill="${color}" stroke="#fff" stroke-width="1.2" style="offset-path:path('${d}');animation-duration:${duracion}s;animation-delay:${r(retraso - (duracion * i) / n)}s"/>`,
+      );
+    }
+    return this;
+  }
+
+  /** Algo que recorre una ruta en bucle (vehículo, barco). Se dibuja en el origen. */
+  viajero(ruta: Punto3[], { duracion = 12, retraso = 0 }: { duracion?: number; retraso?: number }, dibujar: (e: this) => void) {
+    const d = this.camino(ruta);
+    const caja = [this.minX, this.minY, this.maxX, this.maxY];
+    this.partes.push(`<g class="iso-viaja" style="offset-path:path('${d}');--dur:${duracion}s;--retraso:${retraso}s">`);
+    dibujar(this);
+    this.partes.push('</g>');
+    [this.minX, this.minY, this.maxX, this.maxY] = caja;
+    return this;
+  }
+
+  /** Nube que deriva por encima de la escena, con su sombra en el suelo. */
+  nube(x: number, y: number, z: number, suelo: number, { duracion = 32, retraso = 0, escala = 1 }: { duracion?: number; retraso?: number; escala?: number } = {}) {
+    const s = escala;
+    const caja = [this.minX, this.minY, this.maxX, this.maxY];
+    const vars = `--dur:${duracion}s;--retraso:${retraso}s`;
+    this.partes.push(`<g class="iso-deriva" style="${vars}">`);
+    this.sombra(x, y, suelo, 26 * s, 0.05);
+    this.partes.push('</g>');
+    this.partes.push(`<g class="iso-deriva" style="${vars}">`);
+    const [cx, cy] = proyectar([x, y, z]);
+    this.partes.push(
+      `<g transform="translate(${r(cx)} ${r(cy)}) scale(${s})" fill="#fff" stroke="#D8E6EF" stroke-width="1">` +
+        `<ellipse cx="0" cy="0" rx="26" ry="9"/><circle cx="-8" cy="-6" r="10"/><circle cx="7" cy="-9" r="12"/><ellipse cx="0" cy="1" rx="25" ry="7" stroke="none"/></g>`,
+    );
+    this.partes.push('</g>');
+    [this.minX, this.minY, this.maxX, this.maxY] = caja;
+    return this;
+  }
+
+  /** Texto tumbado sobre el suelo (plano z), en perspectiva isométrica. */
+  texto(p: Punto3, contenido: string, { tamano = 9, color = '#14160F', peso = 700 }: { tamano?: number; color?: string; peso?: number } = {}) {
+    const [x, y] = proyectar(p);
+    this.anotar([[x - 20, y - 10], [x + 20, y + 10]]);
+    const seguro = contenido.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    // Matriz del plano del suelo: eje x isométrico → (cos30, sin30), eje y → (-cos30, sin30).
+    this.partes.push(
+      `<text transform="matrix(${r(COS)} ${SIN} ${r(-COS)} ${SIN} ${r(x)} ${r(y)})" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="${tamano}" font-weight="${peso}" fill="${color}" text-anchor="middle">${seguro}</text>`,
+    );
+    return this;
+  }
+
+  /** Etiqueta vertical (cartel) que mira al espectador, sin perspectiva. */
+  cartel(p: Punto3, contenido: string, { color = '#14160F', fondo = '#fff' }: { color?: string; fondo?: string } = {}) {
+    const [x, y] = proyectar(p);
+    const ancho = contenido.length * 5.6 + 14;
+    this.anotar([[x - ancho / 2, y - 18], [x + ancho / 2, y + 2]]);
+    const seguro = contenido.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    this.partes.push(
+      `<g transform="translate(${r(x)} ${r(y)})"><rect x="${r(-ancho / 2)}" y="-18" width="${r(ancho)}" height="15" rx="7.5" fill="${fondo}" stroke="#D7D9CF"/>` +
+        `<text x="0" y="-7.4" font-family="system-ui,-apple-system,'Segoe UI',sans-serif" font-size="8.5" font-weight="700" fill="${color}" text-anchor="middle">${seguro}</text></g>`,
+    );
+    return this;
+  }
+
   /** Agrupa lo que dibuje `dibujar` bajo una clase de animación. */
   grupo({ clase, retraso, duracion }: Grupo, dibujar: (e: this) => void) {
     const vars = [retraso ? `--retraso:${retraso}s` : '', duracion ? `--dur:${duracion}s` : ''].filter(Boolean).join(';');
@@ -318,7 +393,7 @@ export class Escena {
   }
 
   /** SVG completo con viewBox ajustado al contenido más un margen. */
-  svg({ titulo, margen = 12, clase = '' }: { titulo?: string; margen?: number; clase?: string } = {}) {
+  svg({ titulo, margen = 12, clase = '', independiente = false }: { titulo?: string; margen?: number; clase?: string; independiente?: boolean } = {}) {
     // Margen extra arriba: los grupos que flotan suben unos píxeles.
     const x = Math.floor(this.minX - margen);
     const y = Math.floor(this.minY - margen - 10);
@@ -327,7 +402,8 @@ export class Escena {
     const accesible = titulo
       ? ` role="img" aria-label="${titulo.replace(/"/g, '&quot;')}"`
       : ' aria-hidden="true" focusable="false"';
-    const defs = this.defs.length ? `<defs>${this.defs.join('')}</defs>` : '';
+    const estilo = independiente ? `<style>${ISO_CSS.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ')}</style>` : '';
+    const defs = this.defs.length || estilo ? `<defs>${estilo}${this.defs.join('')}</defs>` : '';
     return {
       ancho: w,
       alto: h,
